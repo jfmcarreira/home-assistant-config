@@ -1,0 +1,49 @@
+substitutions:
+  devicename: sonoff_office
+  upper_devicename: Office
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret ip_sonoff_office
+    gateway: !secret wifi_network_dummy_gateway
+    subnet: !secret wifi_network_mask
+  
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+  - name: ${upper_devicename} SW
+    platform: gpio
+    pin:
+      number: GPIO3
+      mode: INPUT_PULLUP
+      inverted: True
+    on_state:
+      then:
+        - light.toggle: light_1
+      
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+    
+light:
+  - name: ${upper_devicename}
+    platform: binary
+    id: light_1
+    output: relay_1
+    

@@ -1,0 +1,17 @@
+################################################################
+## Device tracker
+################################################################
+device_tracker:
+  - platform: ping
+    interval_seconds: 30
+    new_device_defaults:
+      track_new_devices: true
+    hosts:
+      lithium: !secret joao_phone_ip
+      bianca_phone: !secret bianca_phone_ip
+      
+  - platform: mqtt
+    devices:
+      joao_beacon: 'home-assistant/location/joao_beacon'
+      bianca_beacon: 'home-assistant/location/bianca_beacon'
+  # Note: This is used in combination with NodeRed and ESPHome

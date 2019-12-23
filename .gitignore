@@ -1,0 +1,20 @@
+# General File Extensions
+secrets.yaml
+*.pid
+*.csr
+*.crt
+*.key
+*.conf
+*.db-journal
+*.log
+*.db
+*.txt
+*.deb
+*.sh
+*.pickle
+
+# Folders
+www
+lib
+deps
+tts

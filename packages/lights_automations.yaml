@@ -1,0 +1,112 @@
+################################################################
+## Automations
+################################################################
+automation old:
+  - id: Lights Hallway Turn On Door Open
+    alias: Lights Hallway Turn On Door Open
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: sun.sun
+        state: below_horizon
+      - condition: state
+        entity_id: light.hallway
+        state: "off"
+        for:
+          seconds: 120
+    action:
+      - service: light.turn_on
+        entity_id: light.hallway
+
+  - id: Lights Kitchen Turn On When Motion
+    alias: Lights Kitchen Turn On When Motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kitchen_motion
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: sun.sun
+        state: below_horizon
+    action:
+      - service: light.turn_on
+        entity_id: light.kitchen
+
+  - id: Lights Turn Kitchen Off When No Motion
+    alias: Lights Turn Kitchen Off When No Motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kitchen_motion
+        from: "on"
+        to: "off"
+        for:
+          minutes: 5
+    action:
+      - service: light.turn_off
+        entity_id: light.kitchen
+
+  - id: Lights Kitchen Pantry Turn Off Timeout
+    alias: Lights Kitchen Pantry Turn Off Timeout
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: light.kitchen_pantry
+      from: "off"
+      to: "on"
+      for:
+        hours: 0
+        minutes: 5
+        seconds: 0
+    action:
+      service: light.turn_off
+      data:
+        entity_id: light.kitchen_pantry
+
+  - id: Lights  Living Room Side Turn Off
+    alias: Lights  Living Room Side Turn Off
+    initial_state: true
+    trigger:
+      - entity_id: light.living_room_table
+        platform: state
+        to: "on"
+      - entity_id: light.living_room_window
+        platform: state
+        to: "on"
+    action:
+      - service: light.turn_off
+        entity_id: light.living_room_abajur
+      - service: light.turn_off
+        entity_id: light.living_room_tv_leds
+
+  - id: Lights Master Bedroom Side Turn Off
+    alias: Lights Master Bedroom Side Turn Off
+    initial_state: true
+    trigger:
+      - entity_id: light.master_bedroom
+        platform: state
+        to: "on"
+    action:
+      - service: light.turn_off
+        entity_id: light.master_bedroom_left_bed
+      - service: light.turn_off
+        entity_id: light.master_bedroom_right_bed
+
+  - id: Lights Turn Off Presence Light
+    alias: Lights Turn Off Presence Light
+    description: ""
+    trigger:
+      - entity_id: switch.tradfri_power_outlet
+        for: 0:02:00
+        from: "off"
+        platform: state
+        to: "on"
+    condition: []
+    action:
+      - data:
+          entity_id: switch.tradfri_power_outlet
+        service: switch.turn_off

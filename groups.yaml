@@ -1,0 +1,39 @@
+hall:
+  name: Hall
+  entities:
+    - light.hallway
+    - light.kitchen
+    - light.kitchen_pantry
+    - binary_sensor.front_door
+    - binary_sensor.browser_tf201_kyosk
+    
+living_room:
+  name: Living Room
+  entities:
+    - light.living_room_table
+    - light.living_room_window
+    - light.living_room_abajur
+    - light.living_room_tv_leds
+    - light.special_xmas_lights
+    - sensor.living_room_temperature
+    - sensor.power_usage_living_room
+    - media_player.media_center    
+    
+master_bedroom:
+  name: Master Bedroom
+  entities:
+    - light.master_bedroom
+    - light.master_bedroom_left_bed
+    - light.master_bedroom_left_bed
+    - sensor.master_bedroom_temperature
+    - sensor.master_bedroom_humidity
+    - sensor.power_usage_bedroom
+
+office:
+  name: Office
+  entities:
+    - light.office
+    - sensor.mijia_temperature
+    - sensor.mijia_humidity
+    - sensor.power_usage_office
+

@@ -1,0 +1,147 @@
+substitutions:
+  devicename: shelly25_living_room
+  
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret ip_shelly25_living_room
+    gateway: !secret wifi_network_dummy_gateway
+    subnet: !secret wifi_network_mask
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+  - name: Living Room Window Light SW
+    platform: gpio
+    pin:
+      number: GPIO5
+    #on_press:
+    #  then:
+    #    - light.toggle: light_2
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - light.toggle: light_2
+      - timing:
+          - ON for 1s to 2s
+          - OFF for at least 0.2s
+        then:
+          - binary_sensor.template.publish:
+              id: long_window_sw
+              state: ON
+          
+  - platform: template
+    name: Living Room Window Light Long SW
+    id: long_window_sw
+    on_press:
+      then:
+        - delay: 1s
+        - binary_sensor.template.publish:
+            id: long_window_sw
+            state: OFF
+        
+  - name: Living Room Table Light SW
+    platform: gpio
+    pin:
+      number: GPIO13
+    #on_press:
+    #  then:
+    #    - light.toggle: light_1
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - light.toggle: light_1
+      - timing:
+          - ON for 1s to 3s
+          - OFF for at least 0.2s
+        then:
+          - binary_sensor.template.publish:
+              id: long_table_sw
+              state: ON
+
+  - platform: template
+    name: Living Room Table Light Long SW
+    id: long_table_sw
+    on_press:
+      then:
+        - delay: 1s
+        - binary_sensor.template.publish:
+            id: long_table_sw
+            state: OFF
+      
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO04
+  - platform: gpio
+    id: relay_2
+    pin: GPIO15
+    
+light:
+  - name: Living Room Table
+    platform: binary
+    id: light_1
+    output: relay_1
+  - name: Living Room Window
+    platform: binary
+    id: light_2
+    output: relay_2
+    
+i2c:
+  sda: GPIO12
+  scl: GPIO14
+
+sensor:
+  # Voltage
+  - platform: ade7953
+    voltage:
+      id: Shelly_Voltage
+    current_a:
+      id: Shelly_Current_B
+    current_b:
+      id: Shelly_Current_A
+    active_power_a:
+      name: Power Usage Shelly Living Room Window Light 
+      filters:
+        - multiply: -1
+    active_power_b:
+      name: Power Usage Shelly Living Room Table Light 
+      filters:
+        - multiply: -1
+    update_interval: 30s
+
+  # NTC Temperature
+  - platform: ntc
+    sensor: temp_resistance_reading
+    name: Selly Living Room Temperature
+    calibration:
+      b_constant: 3350
+      reference_resistance: 10kOhm
+      reference_temperature: 298.15K
+  
+  - platform: resistance
+    id: temp_resistance_reading
+    sensor: temp_analog_reading
+    configuration: DOWNSTREAM
+    resistor: 32kOhm
+  
+  - platform: adc
+    id: temp_analog_reading
+    pin: A0
+    

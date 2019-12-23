@@ -1,0 +1,62 @@
+################################################################
+## Binary Toggles
+################################################################
+input_boolean:
+  house_guest:
+    name: Convidados
+    initial: off
+    icon: mdi:account-group
+  notify_home:
+    name: Notify House Occupied
+    initial: off
+    icon: mdi:home
+    
+################################################################
+## Persons
+################################################################
+person:
+  - name: João
+    id: per_joao
+    user_id: !secret userid_joao
+    device_trackers:
+      - device_tracker.joao_beacon
+      - device_tracker.lithium
+      - device_tracker.lithium_wifi
+      - device_tracker.lithium_bt
+
+  - name: Bianca
+    id: per_bianca
+    user_id: !secret userid_bianca
+    device_trackers:
+      - device_tracker.bianca_beacon
+      - device_tracker.bianca_phone
+      
+################################################################
+## Proximity
+################################################################
+proximity:
+  dist_home_joao:
+    zone: home
+    devices:
+      - device_tracker.lithium
+    unit_of_measurement: m
+    tolerance: 50
+
+################################################################
+## Home/Away toggles
+################################################################
+binary_sensor:
+  - platform: template
+    sensors:
+      notify_home:
+        friendly_name: Notify House Occupied
+        icon_template: "mdi:home"
+        #value_template: "{{ is_state('binary_sensor.joao_home', 'on') or is_state('binary_sensor.bianca_home', 'on') or is_state('input_boolean.house_guest', 'on') }}"
+        value_template: "{{ is_state('input_boolean.notify_home', 'on') }}"
+      bianca_home:
+        value_template: "{{ states.person.bianca.state == 'home' }}"
+      joao_home:
+        #value_template: "{{ states.sensor.joao_status.state != 'Away' }}"
+        #value_template: "{{ states.person.joao.state != 'not_home' }}"
+        value_template: "{{ states.person.joao.state == 'home' }}"
+        

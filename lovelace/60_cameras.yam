@@ -1,0 +1,44 @@
+title: House Camera
+path: cctv
+badges: []
+icon: mdi:cctv
+cards:
+  - type: vertical-stack
+    cards:
+      - type: picture-entity
+        entity: camera.webcam_livingroom
+        camera_view: auto
+        name: Living Room Webcam
+        show_state: false
+        # tap_action:
+        #   service: switch.toggle
+        #   service_data:
+        #     entity_id: switch.webcamlivingroom_state
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: switch.webcam_livingroom_state
+            name: State
+          - entity: sensor.webcam_livingroom_status
+            name: Status
+          - entity: sensor.webcam_livingroom_events
+            name: Events
+          
+  - type: vertical-stack
+    cards:
+      - type: picture-entity
+        entity: camera.camptz_office
+        camera_view: auto
+        name: Office
+        show_state: false
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: switch.camptz_office_state
+            name: State
+          - entity: sensor.camptz_office_status
+            name: Status
+          - entity: sensor.camptz_office_events
+            name: Events
+
+      

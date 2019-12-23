@@ -1,0 +1,127 @@
+################################################################
+## Google TTS
+################################################################
+tts:
+  - platform: google_translate
+    language: "pt"
+    cache: true
+    cache_dir: /tmp/tts
+    time_memory: 300
+    base_url: http://192.168.1.6:8443
+    service_name: google_say
+
+################################################################
+## Media extractor
+################################################################
+media_extractor:
+
+
+################################################################
+## Speaker
+################################################################
+#media_player:
+ # - platform: mpd
+  #  host: !secret server_ip
+   # name: Host Speakers
+
+################################################################
+## Selections
+################################################################
+input_select:
+  ## Radio Stations
+  radio_station:
+    name: "Radio Station"
+    icon: mdi:radio
+    options:  
+      - RFM
+      - Comercial
+      - Cidade FM
+      - M80
+      - TSF
+      - Mega Hits
+      - Antena 1
+      - Antena 2
+      - Antena 3
+    
+  
+  ## Speaker selection
+  speakers_selector:
+    name: "Media Player"
+    icon: mdi:speaker
+    options:  
+      - Google Home
+      - Kiosk
+      - Host
+      - TV
+      #- Pegasus
+      #- Lithium
+      #- Todos
+    
+    
+  
+
+################################################################
+## Scripts
+################################################################
+script:
+  play_radio:
+    alias: "Media Play Radio"
+    sequence:
+      #- service: media_player.play_media
+      - service: media_extractor.play_media
+        data_template:
+          media_content_type: "music"
+          entity_id: >
+            {% if is_state("input_select.speakers_selector", "TV") %} 
+              media_player.living_room_tv   
+            {% elif is_state("input_select.speakers_selector", "Host") %} 
+              media_player.host_speakers
+            {% elif is_state("input_select.speakers_selector", "Kiosk") %} 
+              media_player.browser_tf201_kyosk
+            {% elif is_state("input_select.speakers_selector", "Google Home") %} 
+              media_player.google_home_mini 
+            {% endif %}
+          media_content_id: >
+            {% if is_state("input_select.radio_station", "RFM") %} 
+              http://19613.live.streamtheworld.com:3690/RFM_SC
+            {% elif is_state("input_select.radio_station", "Cidade FM") %} 
+              http://mcrscast.mcr.iol.pt/cidadefm
+            {% elif is_state("input_select.radio_station", "TSF") %}
+              http://tsfdirecto.tsf.pt/tsfdirecto.mp3
+            {% elif is_state("input_select.radio_station", "M80") %}
+              http://mcrscast.mcr.iol.pt/m80
+            {% elif is_state("input_select.radio_station", "Comercial") %}
+              http://mcrscast1.mcr.iol.pt/comercial.mp3
+            {% elif is_state("input_select.radio_station", "Meg aHits") %}
+              http://19553.live.streamtheworld.com/MEGA_HITS_SC
+            {% elif is_state("input_select.radio_station", "Antena 1") %}
+              http://radiocast.rtp.pt/antena180a.mp3
+            {% elif is_state("input_select.radio_station", "Antena 2") %}
+              http://radiocast.rtp.pt/antena280a.mp3
+            {% elif is_state("input_select.radio_station", "Antena 3") %}
+              http://radiocast.rtp.pt/antena380a.mp3
+            {% endif %}
+  
+  stop_radio:
+    alias: "Media Stop Radio"
+    sequence:
+      #- service: media_player.media_stop
+      - service_template: >
+          {% if is_state("input_select.speakers_selector", "Host") %} 
+            media_player.clear_playlist
+          {% elif is_state("input_select.speakers_selector", "Kiosk") %} 
+            media_player.media_stop 
+          {% else %}
+            media_player.turn_off
+          {% endif %}
+        data_template:
+          entity_id: >
+            {% if is_state("input_select.speakers_selector", "TV") %} 
+              media_player.living_room_tv   
+            {% elif is_state("input_select.speakers_selector", "Host") %} 
+              media_player.host_speakers
+            {% elif is_state("input_select.speakers_selector", "Kiosk") %} 
+              media_player.browser_tf201_kyosk
+            {% elif is_state("input_select.speakers_selector", "Google Home") %} 
+              media_player.google_home_mini 
+            {% endif %}

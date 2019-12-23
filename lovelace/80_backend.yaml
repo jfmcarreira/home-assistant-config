@@ -1,0 +1,262 @@
+title: Configuration
+path: backend
+badges: []
+#icon: mdi:server
+icon: mdi:settings-outline
+panel: true
+cards:
+  - type: custom:layout-card
+    layout: vertical
+    max_columns: 3
+    cards:
+      #- type: glance
+      - type: entities
+        title: Pessoas
+        #show_state: true
+        show_header_toggle: false
+        entities:
+          - entity: binary_sensor.notify_home
+            name: Occupied
+          - entity: input_boolean.house_guest
+            name: Guests
+          - entity: person.bianca
+            name: Bianca
+          - entity: person.joao
+            name: João
+          - entity: proximity.dist_home_joao
+            name: Distância - João
+
+          
+    
+      - type: entities
+        title: Fluffy/Pluma Litter Box
+        show_header_toggle: false
+        entities:
+          - binary_sensor.litter_box_motion
+          #- binary_sensor.cat_litter_box
+          - counter.cat_litter_box_visits
+          - sensor.cat_litter_box_last_visit
+          - sensor.cat_litter_box_last_clean
+          - sensor.cat_litter_box_last_change
+      
+      - break
+      
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            title: Hydrogen
+            show_header_toggle: false
+            entities:
+              #- entity: sensor.last_boot
+                #name: Last boot
+              - entity: sensor.hydrogen_cpu_load
+                name: Load
+              - entity: sensor.hydrogen_cpu_used
+                name: CPU
+              - entity: sensor.hydrogen_ram_used_percent
+                name: RAM
+              - entity: sensor.hydrogen_swap_used_percent
+                name: SWAP
+              - entity: sensor.hydrogen_cpu_temp
+                name: CPU
+              - entity: sensor.hydrogen_disk_used_percent
+                name: Disk
+          - type: entities
+            title: Helium
+            show_header_toggle: false
+            entities:
+              - entity: sensor.helium_cpu_load
+                name: Load
+              - entity: sensor.helium_cpu_used
+                name: CPU
+              - entity: sensor.helium_ram_used_percent
+                name: RAM
+              - entity: sensor.helium_swap_used_percent
+                name: SWAP
+              - entity: sensor.helium_cpu_temperature
+                name: CPU
+              - entity: sensor.helium_disk_used_percent
+                name: Disk
+      
+      - break
+      - break
+      - type: entities
+        title: SpeedTest
+        show_header_toggle: false
+        entities:
+          - entity: sensor.speedtest_download
+            name: Download
+          - entity: sensor.speedtest_upload
+            name: Upload
+          - entity: sensor.speedtest_ping
+            name: Ping
+            
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+        filter:
+          include:
+            - entity_id: sensor.ssl_certificate_expiry_*
+     
+      - break
+      - break
+      - type: entities 
+        title: Transmission
+        show_header_toggle: false
+        entities:
+          - entity: switch.transmission_server_switch
+            name: Running
+          - entity: switch.transmission_server_turtle_mode
+            name: Turtle mode
+          - entity: sensor.transmission_server_status
+            name: Status
+          - entity: sensor.transmission_server_active_torrents
+            name: Torrents
+          - entity: sensor.transmission_server_down_speed_kbps
+            name: Download
+          - entity: sensor.transmission_server_up_speed_kbps
+            name: Upload
+      - break
+      - break
+        
+      - type: entities
+        title: Automations
+        show_header_toggle: true
+        entities:
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Heating
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.heating_*"
+          
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Lights
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.lights_*"
+          
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Multimedia
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.media_*"
+    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Cats
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.cat_*"
+                
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Control
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.ctrl_*"
+                
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Reset Sensors
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.reset_*"
+    
+      - break
+      - type: entities
+        title: House Rooms
+        show_header_toggle: false
+        entities:
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Hall
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Hall
+    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Living Room
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Living Room
+    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Kitchen
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Kitchen
+          
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Office
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Office
+    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Master Bedroom
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Master Bedroom

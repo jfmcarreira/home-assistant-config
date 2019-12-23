@@ -1,0 +1,8 @@
+################################################################
+## 17Track
+################################################################
+sensor:
+  - platform: seventeentrack
+    username: !secret seventeentrack_user
+    password: !secret seventeentrack_pass
+    show_delivered: true

@@ -1,0 +1,166 @@
+##################################################################################
+## Media players
+##################################################################################
+media_player:
+  # LGTV
+  - platform: webostv
+    host: !secret living_room_ip
+    name: Living Room TV
+    timeout: 5
+    filename: webostv.conf
+    turn_on_action:
+      service: wake_on_lan.send_magic_packet
+      data:
+        mac: !secret living_room_tv_mac
+    customize:
+      sources:
+        - MEO
+        - Kodi
+        - YouTube
+        - Netflix
+        - HBO
+
+  # Meo
+  - platform: mediaroom
+  
+  # Kodi
+  - platform: kodi
+    name: TV Kodi
+    host: !secret kodi_ip
+    port: 8080
+    username: !secret kodi_user
+    password: !secret kodi_pass
+    enable_websocket: true
+
+  #Universal
+  - platform: universal
+    name: Media Center
+    children:
+      - media_player.mediaroom_box_sala
+      - media_player.tv_kodi
+      - media_player.living_room_tv
+    state_template: >
+      {% if is_state('media_player.living_room_tv', 'off') %}
+        off
+      {% else %}
+        {% if is_state('sensor.living_room_tv_source', "Kodi") %}
+          {{ states('media_player.tv_kodi') }}
+        {% elif is_state('sensor.living_room_tv_source', "MEO") %}
+          {{ states('media_player.mediaroom_box_sala') }}
+        {% elif is_state('sensor.living_room_tv_source', "Netflix") %}
+          {{ states('media_player.living_room_tv') }}
+        {% else %}
+          {{ states('media_player.living_room_tv') }}
+        {% endif %}
+      {% endif %}
+    commands:
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.living_room_tv
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.living_room_tv
+      volume_up:
+        service: media_player.volume_up
+        data:
+          entity_id: media_player.living_room_tv
+      volume_down:
+        service: media_player.volume_down
+        data:
+          entity_id: media_player.living_room_tv
+      volume_mute:
+        service: media_player.volume_mute
+        data:
+          entity_id: media_player.living_room_tv
+      select_source:
+        service: media_player.select_source
+        data_template:
+          entity_id: media_player.living_room_tv
+          source: '{{ source }}'
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.living_room_tv
+          volume_level: '{{ volume_level }}'
+    attributes:
+      state: binary_sensor.living_room_tv_state
+      is_volume_muted: media_player.living_room_tv|is_volume_muted
+      volume_level: media_player.living_room_tv|volume_level
+      source: media_player.living_room_tv|source
+      source_list: media_player.living_room_tv|source_list
+
+##################################################################################
+## Sensors
+##################################################################################
+sensor:
+  - platform: template
+    sensors:
+      living_room_tv_source:
+        value_template: '{{ states.media_player.living_room_tv.attributes["source"] }}'
+        friendly_name: 'Living Room TV Source'
+  
+  - platform: history_stats
+    name: Daily TV Time 
+    entity_id: binary_sensor.living_room_tv_state
+    state: 'on'
+    type: time
+    start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    end: '{{ now() }}'
+  
+  - platform: history_stats
+    name: Daily TV Time MEO
+    entity_id: sensor.living_room_tv_source
+    state: 'MEO'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+  - platform: history_stats
+    name: Daily TV Time Kodi
+    entity_id: sensor.living_room_tv_source
+    state: 'Kodi'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+  - platform: history_stats
+    name: Daily TV Time Netflix
+    entity_id: sensor.living_room_tv_source
+    state: 'Netflix'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+  
+    
+binary_sensor:
+  - platform: template
+    sensors:
+      living_room_tv_state:
+        value_template: "{{ states.media_player.living_room_tv.state != 'off' }}"  
+
+##################################################################################
+## Automations
+##################################################################################
+automation old:
+  - id: Media Control MEO Box Sala based on TV
+    alias: Media Control MEO Box Sala based on TV
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_tv_state
+    - platform: state
+      entity_id: sensor.living_room_tv_source
+    action:
+    - service_template: >
+        {% if is_state('binary_sensor.living_room_tv_state', 'off') %}
+            media_player.turn_off
+        {% else %}
+            {% if is_state('sensor.living_room_tv_source', 'MEO') %}
+                media_player.turn_on
+            {% else %}
+                media_player.turn_off
+            {% endif %}
+        {% endif %}
+      entity_id: media_player.mediaroom_box_sala

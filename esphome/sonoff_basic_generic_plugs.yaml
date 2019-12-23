@@ -1,0 +1,49 @@
+substitutions:
+  devicename: sonoff_basic_generic_plugs
+
+esphome:
+  name: ${devicename} 
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret ip_sonoff_basic_generic_plug
+    gateway: !secret wifi_network_dummy_gateway
+    subnet: !secret wifi_network_mask
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Sonoff Basic Button"
+    on_press:
+      - light.toggle: relay_light
+    
+output:
+  - platform: gpio
+    id: relay
+    pin: GPIO12
+    
+light:
+  - platform: binary
+    name: Special Xmas Lights
+    id: relay_light
+    output: relay
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes

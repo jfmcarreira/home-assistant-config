@@ -1,0 +1,176 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret home_timezone
+  # Customization file
+  packages: !include_dir_named packages
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks:
+        - !secret pegasus_ip
+        - !secret bianca_phone_ip
+        - !secret joao_phone_ip
+        - !secret samsung_tab_a_ip
+        - !secret tf201_ip
+
+  customize: !include customize.yaml
+  customize_glob:
+    "sensor.*temperature":
+      device_class: temperature
+      icon: mdi:thermometer
+      unit_of_measurement: "°C"
+    "sensor.*humidity":
+      device_class: humidity
+      icon: mdi:water-percent
+      unit_of_measurement: "%"
+    "sensor.power_usage_*":
+      device_class: power
+      icon: mdi:flash
+      unit_of_measurement: "W"
+    "sensor.*_power":
+      device_class: power
+      icon: mdi:flash
+      unit_of_measurement: "W"
+      
+
+################################################################################
+## Config
+################################################################################
+## Show links to resources in log and frontend
+#introduction:
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+config:
+
+system_health:
+
+http:
+  base_url: !secret server_address
+  server_port: !secret server_port
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+  ip_ban_enabled: true
+  login_attempts_threshold: 10
+  use_x_forwarded_for: true
+  
+frontend:
+  javascript_version: auto
+  themes: !include_dir_merge_named themes
+
+lovelace:
+  mode: yaml
+
+
+################################################################################
+# Checks for available updates
+################################################################################
+#Note: This component will send some information about your system to
+#the developers to assist with development of Home Assistant.
+#For more information, please see:
+#https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  include_used_components: true
+
+
+################################################################################
+# Mobile App
+################################################################################
+mobile_app:
+
+################################################################################
+# HACS
+################################################################################
+hacs:
+  token: 593518f8a9f0dcab28be4334a6ac9ee0145f3c07
+  python_script: true
+  theme: true
+  
+################################################################################
+## Allows you to issue voice commands from the frontend in enabled browsers
+################################################################################
+conversation:
+
+################################################################################
+# Enables a map showing the location of tracked devices
+################################################################################
+map:
+
+################################################################################
+# Enables `wake_on_lan` domain
+################################################################################
+wake_on_lan: 
+
+################################################################################
+# Discover some devices automatically
+################################################################################
+discovery:
+
+################################################################
+## MQTT
+################################################################
+mqtt:
+  username: !secret mqtt_user
+  password:  !secret mqtt_password
+  broker: !secret mqtt_ip
+  port: !secret mqtt_port
+  discovery: true
+  discovery_prefix: homeassistant
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+    retain: true
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
+    retain: true
+
+
+    
+################################################################################
+## Weather and Sun
+################################################################################
+sun:
+  name: sun_tracker
+
+################################################################################
+## Browsers
+################################################################################
+browser_mod:
+  prefix: "browser_"
+  devices:
+    f6ca877f-817b8345:
+      name: Browser TF201 Kyosk
+      camera: true
+    caa64a22_4f42ada5:
+      name: Browser Pegasus
+    7375b628-8b04010d:
+      name: Browser Lithium
+
+################################################################################
+## FFmpeg
+################################################################################
+ffmpeg:
+
+
+################################################################################
+## Includes
+################################################################################
+zone: !include zones.yaml
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+python_script:

@@ -1,0 +1,79 @@
+title: Lights
+path: lights
+badges: []
+icon: mdi:lightbulb-on
+cards:
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Luzes Sazonais
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "light.special_*"
+  
+  - type: entities
+    title: Sala
+    show_header_toggle: false
+    entities:
+      - entity: light.living_room_table
+        name: Luz da Mesa
+        icon: mdi:ceiling-light
+      - entity: light.living_room_window
+        name: Luz da Janela
+        icon: mdi:ceiling-light
+      - type: custom:slider-entity-row
+        entity: light.living_room_abajur
+        name: Abajur
+        toggle: true
+      - type: custom:slider-entity-row
+        entity: light.living_room_tv_leds
+        name: TV Backlight
+        toggle: true
+    
+  - type: entities
+    title: Geral
+    show_header_toggle: false
+    entities:
+      - entity: light.hallway
+        name: Corredor
+      - entity: light.kitchen
+        name: Cozinha
+      - entity: light.kitchen_pantry
+        name: Despensa
+
+  - type: entities
+    title: Quartos
+    show_header_toggle: false
+    entities:
+      - entity: light.office
+        name: Escritório
+        icon: mdi:track-light
+      - entity: light.master_bedroom
+        name: Quarto Principal
+        icon: mdi:ceiling-light
+      - entity: light.master_bedroom_left_bed
+        name: Candeeiro Esquerda
+        icon: mdi:lamp
+      - entity: light.master_bedroom_right_bed
+        name: Candeeiro Direita
+        icon: mdi:lamp
+      
+
+  - type: entities
+    title: Tomadas
+    show_header_toggle: false
+    entities:
+      - entity: switch.tradfri_power_outlet
+        name: Luz Presença/Corredor
+        icon: mdi:power-socket-eu
+
+
+
+  #- type: entity-button
+    #entity: group.all_lights
+    #name: All Lights
+    #icon_height: 5
+    #tap_action:
+      #action: more-info

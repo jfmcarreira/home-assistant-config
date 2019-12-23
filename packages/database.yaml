@@ -1,0 +1,55 @@
+################################################################################
+## Recorder
+################################################################################
+recorder:
+  purge_keep_days: 10
+  #db_url: !secret mysql_url
+  exclude:
+    domains:
+      - updater
+      - weblink
+      - zone
+    entities:
+      - sun.sun # Don't record sun data
+      - sensor.uptime
+      - sensor.date_time
+      - sensor.date
+      - binary_sensor.updater
+      - binary_sensor.workday
+      - binary_sensor.workday_tomorrow
+      - sensor.anniversary_wedding
+      - sensor.birthday_joao
+      - sensor.birthday_bianca
+      - sensor.birthday_ricardo
+
+
+################################################################################
+## History
+################################################################################
+history:
+
+################################################################################
+## Logbook
+################################################################################
+logbook:
+
+################################################################
+## Influx DB
+################################################################
+influxdb:
+  username: jfmcarreira
+  password: !secret main_password
+  max_retries: 3
+  default_measurement: state
+  include:
+    domains:
+      - sensor
+      - binary_sensor
+   # entities:
+       #- sensor.total_power_usage
+       #- sensor.power_usage_*   
+  #exclude:
+    #entities:
+      # - binary_sensor.updater
+  tags:
+    source: hass

@@ -1,0 +1,10 @@
+################################################################
+## TrackTV
+################################################################
+sensor:
+  - platform: trakt
+    name: trakt_upcoming
+    id: !secret trakt_id
+    secret: !secret trakt_secret
+    username: jfmcarreira
+    days: 15

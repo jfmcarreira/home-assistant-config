@@ -1,0 +1,109 @@
+################################################################
+## Google
+################################################################
+#google:
+#client_id: !secret google_client_id
+#client_secret: !secret google_client_secret
+
+################################################################
+## Google Assistant
+################################################################
+google_assistant:
+  project_id: !secret google_assistant_clientid
+  api_key: !secret google_assistant_api_key
+  #report_state: true
+  expose_by_default: false
+  entity_config:    
+    input_boolean.house_guest:
+      expose: true
+      aliases:
+        - Convidados
+    script.cat_litter_clean:
+      expose: true
+      name: Cat Litter Clean
+    script.cat_litter_change:
+      expose: true
+      name: Cat Litter Change
+    script.night_away:
+      expose: true
+      name: Night/Away Routine
+    climate.heating:
+      expose: true
+      room: Corredor
+      aliases:
+        - Aquecimento
+    switch.tradfri_power_outlet:
+      expose: true
+      room: Corredor
+      name: Tradfri Power Outlet
+      aliases:
+        - Luz de Presença
+    light.special_xmas_lights:
+      expose: true
+      room: Sala de Estar
+      aliases:
+        - Luzes de Natal
+        - Christmas Lights
+    light.hallway:
+      expose: true
+      room: Corredor
+      aliases:
+        - Luz do Corredor
+        - Hallway Light
+    light.living_room_abajur:
+      expose: true
+      room: Sala de Estar
+      aliases:
+        - Luz de Apoio
+        - Living Room Side Light
+    light.living_room_tv_leds:
+      expose: true
+      room: Sala de Estar
+      aliases:
+        - Luz da Televisão
+        - TV Backlight
+    light.living_room_table:
+      expose: true
+      room: Sala de Estar
+      aliases:
+        - Luz da Mesa da Sala
+    light.living_room_window:
+      expose: true
+      room: Sala de Estar
+      aliases:
+        - Luz da Janela da Sala
+    media_player.media_center:
+      expose: true
+      room: Sala de Estar
+      name: Living Room TV
+      aliases:
+        - TV da Sala
+        - Televisão da Sala
+    light.kitchen:
+      expose: true
+      room: Cozinha
+      aliases:
+        - Luz da Cozinha
+    light.kitchen_pantry:
+      expose: true
+      room: Cozinha
+      aliases:
+        - Luz da Despensa
+    light.office:
+      expose: true
+      room: Escritório
+    light.master_bedroom:
+      expose: true
+      room: Quarto
+      aliases:
+        - Luz Principal do Quarto
+    light.master_bedroom_left_bed:
+      expose: true
+      room: Quarto
+      aliases:
+        - Luz da Cama Esquerda
+    light.master_bedroom_right_bed:
+      expose: true
+      room: Quarto
+      aliases:
+        - Luz da Cama Direita

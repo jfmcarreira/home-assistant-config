@@ -1,0 +1,24 @@
+person.bianca:
+  icon: mdi:human-female
+  entity_picture: "/local/img_bianca.jpg"
+person.joao:
+  icon: mdi:human-male
+  entity_picture: "/local/img_joao.jpg"
+device_tracker.lithium:
+  entity_picture: "/local/img_joao.jpg"
+media_player.mediaroom_box_sala:
+  name: Living Room Meo Box
+  friendly_name: Living Room Meo Box
+media_player.browser_tf201_kyosk:
+  friendly_name: Kiosk Player
+  icon: mdi:tablet-dashboard
+counter.cat_litter_box_visits:
+  friendly_name: Litter Box Visits
+light.special_xmas_lights:
+  icon: mdi:pine-tree
+light.master_bedroom:
+  icon: mdi:ceiling-light
+light.living_room_table:
+  icon: mdi:ceiling-light
+light.living_room_window:
+  icon: mdi:ceiling-light

@@ -1,0 +1,142 @@
+################################################################
+## Cat litter
+################################################################
+cat_litter_visit:
+  alias: "Litter Box Mark Visit"
+  sequence:
+    - service: counter.increment
+      data:
+        entity_id: counter.cat_litter_box_visits
+    - service: input_datetime.set_datetime
+      data_template:
+        entity_id: input_datetime.cat_litter_box_last_visit
+        date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+        time: '{{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}'
+
+cat_litter_clean:
+  alias: "Litter Box Mark Clean"
+  sequence:
+    - service: counter.reset
+      data:
+        entity_id: counter.cat_litter_box_visits
+
+    - service: input_datetime.set_datetime
+      data_template:
+        entity_id: input_datetime.cat_litter_box_last_clean
+        date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+        time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+
+cat_litter_change:
+  alias: "Litter Box Mark Change"
+  sequence:
+    - service: script.cat_litter_clean
+    - service: input_datetime.set_datetime
+      data_template:
+        entity_id: input_datetime.cat_litter_box_last_change
+        date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+
+cat_clean_notification:
+  alias: "Litter Box Clean Notification"
+  sequence:
+    - service: python_script.light_store
+      data:
+        store_name: cat_litter_flash_store
+        operation: save
+        entity_id:
+          - light.living_room_tv_leds
+
+    - service: light.turn_on
+      data:
+        entity_id: light.living_room_tv_leds
+        rgb_color: [255, 0, 0]
+        brightness: 50
+        white_value: 0
+    - delay:
+        milliseconds: 200
+    - service: light.turn_off
+      data:
+        entity_id: light.living_room_tv_leds
+    - delay:
+        milliseconds: 200
+    - service: light.turn_on
+      data:
+        entity_id: light.living_room_tv_leds
+    - delay:
+        milliseconds: 200
+    - service: light.turn_off
+      data:
+        entity_id: light.living_room_tv_leds
+    - delay:
+        seconds: 1
+
+    - service: python_script.light_store
+      data:
+        operation: restore
+        store_name: cat_litter_flash_store
+
+################################################################
+## Night/Away
+################################################################
+night_away:
+  alias: "Routines Night/Away"
+  sequence:
+    - event: LOGBOOK_ENTRY
+      event_data:
+        name: Shuting down
+
+    - service: climate.turn_off
+      data:
+        entity_id: climate.heating
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.media_center
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.living_room_speakers
+    - service: light.turn_off
+      data:
+        entity_id: group.all_lights
+
+    - service: light.turn_on
+      data:
+        entity_id: light.hallway
+
+    - delay: 00:00:40
+
+    - service: light.turn_off
+      data:
+        entity_id: group.all_lights
+
+################################################################
+## Media center
+################################################################
+# Meo remote
+change_channel_living_room_meo_box:
+  alias: "Media Channel Channel Living Room Meo Box"
+  description: "Send a pushover notification"
+  fields:
+    channel:
+      description: "Channel to switch to"
+      example: "3"
+  sequence:
+    - service: media_player.play_media
+      data_template:
+        entity_id: media_player.mediaroom_box_sala
+        media_content_id: "{{ channel }}"
+        media_content_type: "channel"
+
+# Kodi Remote
+kodi_remote_generic:
+  alias: "Media Control Kodi Instance"
+  fields:
+    kodi_instance:
+      description: "Kodi instance"
+      example: "media_player.tv_kodi"
+    command:
+      description: "Action to perform"
+      example: "Input.Up"
+  sequence:
+    service: kodi.call_method
+    data_template:
+      entity_id: "{{ kodi_instance }}"
+      method: "{{ command }}"

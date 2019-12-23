@@ -1,0 +1,83 @@
+substitutions:
+  devicename: master_bedroom
+  upper_devicename: Master Bedroom
+  
+esphome:
+  name: bhonofre_${devicename}
+  platform: ESP8266
+  board: esp07
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret ip_bhonfre_bedroom
+    gateway: !secret wifi_network_dummy_gateway
+    subnet: !secret wifi_network_mask
+
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+
+binary_sensor:
+  - name: ${upper_devicename} Left SW
+    platform: gpio
+    pin:
+      number: GPIO12
+      mode: INPUT_PULLUP
+      inverted: True
+    #on_state:
+    #  then:
+    #    - light.toggle: light_1
+      
+  - name: ${upper_devicename} Right SW
+    platform: gpio
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP
+      inverted: True
+    #on_state:
+    #  then:
+    #    - light.toggle: light_2
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: 
+      number: GPIO05
+  - platform: gpio
+    id: relay_2
+    pin: 
+      number: GPIO04
+    
+light:
+  - name: ${upper_devicename} Left Bed
+    platform: binary
+    id: light_1
+    output: relay_1
+    restore_mode: ALWAYS_OFF
+    
+  - name: ${upper_devicename} Right Bed
+    platform: binary
+    id: light_2
+    output: relay_2
+    restore_mode: ALWAYS_OFF
+
+sensor:
+  - platform: dht
+    model: DHT11
+    pin: GPIO14
+    #pin:
+    #  number: GPIO14
+    #  mode: INPUT_PULLUP
+    temperature:
+      name: ${upper_devicename} Temperature
+    humidity:
+      name: ${upper_devicename} Humidity
+    update_interval: 30s

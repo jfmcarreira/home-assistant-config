@@ -1,0 +1,67 @@
+esphome:
+  name: aluminium
+  platform: ESP32
+  board: esp32dev
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret ip_aluminium
+    gateway: !secret wifi_network_dummy_gateway
+    subnet: !secret wifi_network_mask
+    
+# Enable logging
+#logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+
+uart:
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 9600
+  stop_bits: 2
+
+
+esp32_ble_tracker:
+  #scan_interval: 10s
+  
+sensor:
+  - platform: xiaomi_lywsdcgq
+    mac_address: 58:2D:34:32:55:01
+    temperature:
+      name: "Al Xiaomi S0 Temperature"
+    humidity:
+      name: "Al Xiaomi S0 Humidity"
+    battery_level:
+      name: "Al Xiaomi S0 Battery"
+  
+  # PZEM    
+  - platform: pzemac
+    update_interval: 10s
+    current:
+      name: "PZEM Current"
+    voltage:
+      name: "PZEM Voltage"
+    power:
+      name: "PZEM Power"
+    frequency:
+      name: "PZEM Frequency"
+    power_factor:
+      name: "PZEM Power Factor"
+      
+binary_sensor:
+  - platform: ble_presence
+    mac_address: FF:FF:C1:31:51:0A
+    name: "Al Joao Beacon"
+  - platform: ble_presence
+    mac_address: FF:FF:C1:31:23:AF
+    name: "Al Bianca Beacon"
+    
+
+
+  

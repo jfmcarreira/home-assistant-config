@@ -1,0 +1,57 @@
+################################################################
+## Detect state sensors
+################################################################
+binary_sensor:
+  - platform: ping
+    name: Hydrogen
+    host: !secret hydrogen_ip
+    count: 2
+    scan_interval: 300
+  - platform: ping
+    name: Helium
+    host: !secret helium_ip
+    count: 2
+    scan_interval: 300
+  - platform: ping
+    name: Boron
+    host: !secret boron_ip  
+    count: 2
+    scan_interval: 300
+  - platform: ping
+    name: Pegasus
+    host: !secret pegasus_ip
+    count: 2
+    scan_interval: 300
+  - platform: ping
+    name: Kiosk
+    host: !secret tf201_ip
+    count: 2
+  - platform: ping
+    name: Lithium
+    host: !secret joao_phone_ip
+    count: 2
+    scan_interval: 300
+  - platform: ping
+    name: Bianca Phone
+    host: !secret bianca_phone_ip
+    count: 2
+    scan_interval: 300
+  - platform: ping
+    name: Samsung Tab A 10.5 2019
+    host: !secret samsung_tab_a_ip
+    count: 2
+
+################################################################
+## Sensors
+################################################################
+sensor:       
+  # Helium
+  - platform: mqtt
+    name: Helium CPU Temperature
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_topic: "cpu/temperature/helium"
+
+
+
+

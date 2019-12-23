@@ -1,0 +1,197 @@
+title: Power
+path: power
+badges: []
+#icon: mdi:flash
+icon: mdi:flash
+panel: true
+cards:
+  - type: custom:layout-card
+    layout: vertical
+    max_columns: 3
+    cards:
+      - type: custom:vertical-stack-in-card
+        title: Consumo Energético
+        cards:
+          - type: gauge
+            #entity: sensor.total_power_usage
+            entity: sensor.bhpzem_power
+            name: Total
+            max: 3450
+            severity:
+              green: 0
+              yellow: 2500
+              red: 3200
+
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: entities
+              #title: Power
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.bhpzem_*
+                #- entity_id: sensor.pzem_energy
+              exclude:
+                - entity_id: sensor.bhpzem_power
+                - entity_id: sensor.bhpzem_power_manual
+          
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.daily_energy
+                name: Total Diário
+              - entity: sensor.monthly_energy
+                name: Consumo
+              - entity: sensor.monthly_energy_cost
+                name: Preço
+
+      - break
+
+      - type: custom:mini-graph-card
+        name: Potência Últimas 2 Horas
+        hours_to_show: 2
+        points_per_hour: 60
+        height: 150
+        line_width: 1
+        show:
+          state: false
+          points: hover
+          average: false
+          extrema: true
+          labels_secondary: false
+          graph: line
+        entities:
+          - entity: sensor.bhpzem_power
+
+      - type: custom:mini-graph-card
+        name: Potência Média Consumida
+        hours_to_show: 120
+        points_per_hour: 6
+        aggregate_func: avg
+        group_by: date
+        show:
+          graph: bar
+        entities:
+          - entity: sensor.bhpzem_power
+
+      - type: entities
+        title: Luzes Ligadas
+        show_header_toggle: false
+        entities:
+          - entity: sensor.daily_lamps_on_time
+            name: Total      
+
+      # - type: custom:mini-graph-card
+      #   name: Power Consumption
+      #   hours_to_show: 120
+      #   points_per_hour: 6
+      #   aggregate_func: avg
+      #   group_by: date
+      #   show:
+      #     graph: bar
+      #   entities:
+      #     - entity: sensor.pzem_power
+
+      # - type: custom:mini-graph-card
+      #   name: Power Last 2 Hours
+      #   hours_to_show: 2
+      #   points_per_hour: 60
+      #   height: 150
+      #   line_width: 1
+      #   show:
+      #     state: true
+      #     points: hover
+      #     average: false
+      #     extrema: true
+      #     labels_secondary: false
+      #     graph: line
+      #   entities:
+      #     - entity: sensor.power_usage_living_room
+      #       name: Living Room
+      #     - entity: sensor.power_usage_office
+      #       name: Office
+      #     - entity: sensor.power_usage_bedroom
+      #       name: Bedroom
+      #     - entity: sensor.power_usage_kitchen
+      #       name: Kitchen
+      #     - entity: sensor.power_usage_kitchen_oven
+      #       name: Kitchen Oven
+      #     - entity: sensor.power_usage_kitchen_fridge
+      #       name: Kitchen Fridge
+      #     - entity: sensor.power_usage_laundry
+      #       name: Laundry
+
+      - break
+
+      - type: custom:vertical-stack-in-card
+        title: Informação Dispositivos
+        cards:
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: entities
+              title: Potência
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.power_usage_shelly_*
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: entities
+              title: Temperatura
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.selly_*_temperature
+                - entity_id: sensor.fuse_box_temperature
+
+
+      # - type: custom:auto-entities
+      #   show_empty: false
+      #   card:
+      #     type: entities
+      #     title: Energy/Hour
+      #     show_header_toggle: false
+      #   filter:
+      #     include:
+      #       - entity_id: sensor.energy_hour_*
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Shelly Temperature
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: sensor.shelly_*_temperature
+            #- entity_id: sensor.fuse_box_temperature
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: custom:mini-graph-card
+          name: Temperatura Dispositivos
+          hours_to_show: 2
+          points_per_hour: 60
+          height: 150
+          line_width: 1
+          show:
+            average: false
+            extrema: true
+            state: false
+        filter:
+          include:
+            - entity_id: sensor.selly_*_temperature
+            - entity_id: sensor.fuse_box_temperature
+      # - type: custom:auto-entities
+      #   show_empty: false
+      #   card:
+      #     type: entities
+      #     title: Sensors Battery
+      #     show_header_toggle: false
+      #   filter:
+      #     include:
+      #       - entity_id: sensor.*_battery_level

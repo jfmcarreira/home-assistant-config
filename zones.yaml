@@ -1,0 +1,11 @@
+################################################################
+## Zones
+################################################################
+- name: Home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  radius: 25
+  icon: mdi:home-assistant
+
+
+

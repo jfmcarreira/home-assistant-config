@@ -1,0 +1,178 @@
+################################################################
+## Power Consumption
+################################################################
+sensor power:
+  - platform: integration
+    source: sensor.bhpzem_power
+    name: pzem_energy
+    unit_prefix: k
+    round: 2
+
+utility_meter:
+  daily_energy:
+    source: sensor.pzem_energy
+    cycle: daily
+  monthly_energy:
+    source: sensor.pzem_energy
+    cycle: monthly
+    offset:
+      days: 19
+
+sensor energy_cost:
+  - platform: template
+    sensors:
+      monthly_energy_cicle_days:
+        value_template: >-
+          {{ ( as_timestamp( now() ) - as_timestamp( states.sensor.monthly_energy.attributes.last_reset ) ) | timestamp_custom("%d") }}
+      monthly_energy_cost:
+        friendly_name: "Fatura Energia"
+        value_template: >-
+          {{ ( float(states.sensor.monthly_energy.state) * 0.1494 * 1.23 + float(states.sensor.monthly_energy_cicle_days.state) * 0.1469 * 1.06 + 2.85 * 1.06 ) | round(2) }}
+        unit_of_measurement: "€"
+        
+sensor lights:
+  ## Lights
+  - platform: history_stats
+    name: Daily Lamps ON Time
+    entity_id: group.all_lights
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
+    end: "{{ now() }}"
+
+#################################################################
+### Datawatt
+#################################################################
+#sensor datawatt:
+### DataWatt
+## Power
+#- platform: mqtt
+#name: "DW Total Power Usage"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_35_3.value | float ) * 1000 }}"
+
+#- platform: mqtt
+#name: "DW Power Usage Laundry"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_35_1.value | float ) * 1000 }}"
+
+#- platform: mqtt
+#name: "DW Power Usage Kitchen"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_35_0.value | float ) * 1000 }}"
+
+#- platform: mqtt
+#name: "DW Power Usage Kitchen Oven"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_35_2.value | float ) * 1000 }}"
+
+#- platform: mqtt
+#name: "DW Power Usage Kitchen Fridge"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_60_0.value | float ) * 1000 }}"
+
+#- platform: mqtt
+#name: "DW Power Usage Office"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_60_1.value | float ) * 1000 }}"
+
+#- platform: mqtt
+#name: "DW Power Usage Living Room"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_60_2.value | float ) * 1000 }}"
+
+#- platform: mqtt
+#name: "DW Power Usage Bedroom"
+#device_class: power
+#unit_of_measurement: "W"
+#state_topic: "datawatt/power/status"
+#value_template: "{{ ( value_json.Sensor_60_3.value | float ) * 1000 }}"
+
+## Energy Hour
+#- platform: mqtt
+#name: "DW Total Energy Hour"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_35_3.value | float ) }}"
+
+#- platform: mqtt
+#name: "DW Energy Hour Laundry"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_35_1.value | float ) }}"
+
+#- platform: mqtt
+#name: "DW Energy Hour Kitchen"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_35_0.value | float ) }}"
+
+#- platform: mqtt
+#name: "DW Energy Hour Kitchen Oven"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_35_2.value | float ) }}"
+
+#- platform: mqtt
+#name: "DW Energy Hour Kitchen Fridge"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_60_0.value | float ) }}"
+
+#- platform: mqtt
+#name: "DW Energy Hour Office"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_60_1.value | float ) }}"
+
+#- platform: mqtt
+#name: "DW Energy Hour Living Room"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_60_2.value | float ) }}"
+
+#- platform: mqtt
+#name: "DW Energy Hour Bedroom"
+#device_class: power
+#unit_of_measurement: "kWh"
+#state_topic: "datawatt/energy/hour/status"
+#value_template: "{{ ( value_json.Sensor_60_3.value | float ) }}"
+
+
+#################################################################
+### Automations
+#################################################################
+automation old:
+  - id: Power Alert Max Power
+    alias: Power Alert Max Power
+    trigger:
+      platform: template
+      value_template: "{{ ( states.sensor.pzem_power.state | float ) > 3300.0 }}"
+    action:
+      - service: tts.google_say
+        data:
+          entity_id: 
+            - media_player.google_home_mini
+            -  media_player.browser_tf201_kyosk
+          message: "Atenção! Elevada potência consumida."
