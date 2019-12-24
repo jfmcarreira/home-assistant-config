@@ -154,7 +154,7 @@ cards:
               type: custom:fold-entity-row
               head:
                 type: section
-                label: Heating
+                label: Power
               show_header_toggle: false
             filter:
               include:
@@ -202,7 +202,7 @@ cards:
               type: custom:fold-entity-row
               head:
                 type: section
-                label: Heating
+                label: Discovery
               show_header_toggle: false
             filter:
               include:
