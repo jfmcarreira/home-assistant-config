@@ -154,6 +154,18 @@ cards:
               type: custom:fold-entity-row
               head:
                 type: section
+                label: Heating
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.power_*"
+          
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
                 label: Multimedia
               show_header_toggle: false
             filter:
@@ -183,6 +195,18 @@ cards:
             filter:
               include:
                 - entity_id: "automation.ctrl_*"
+          
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Heating
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: "automation.discovery_*"
                 
           - type: custom:auto-entities
             show_empty: false

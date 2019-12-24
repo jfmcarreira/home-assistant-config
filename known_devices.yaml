@@ -1,0 +1,71 @@
+hydrogen:
+  hide_if_away: false
+  icon: mdi:server
+  mac: 90:FB:A6:A8:FB:F1
+  name: Hydrogen
+  track: no
+helium:
+  hide_if_away: false
+  icon: mdi:raspberry-pi
+  mac: B8:27:EB:09:38:32
+  name: Helium
+  track: no
+boron:
+  hide_if_away: false
+  icon: mdi:laptop
+  mac: 74-2F-68-B6-CA-79
+  name: Boron
+  track: no
+pegasus:
+  name: Pegasus
+  icon: mdi:laptop
+  mac: A4:34:D9:89:DB:C2
+  hide_if_away: false
+  track: no
+pegasus_bt:
+  name: Pegasus
+  icon: mdi:laptop
+  mac: BT_A4:34:D9:89:DB:C6
+  hide_if_away: false
+  track: no
+bianca_phone:
+  name: Bianca Phone
+  picture: "/local/img_bianca.jpg"
+  icon: mdi:cellphone
+  mac: F0:43:47:CD:20:03
+  hide_if_away: no
+  track: yes
+bianca_beacon:
+  name: Bianca Beacon
+  picture: "/local/img_bianca.jpg"
+  hide_if_away: no
+  track: yes
+joao_beacon:
+  name: Joao Beacon
+  picture: "/local/img_joao.jpg"
+  hide_if_away: no
+  track: yes
+lithium:
+  name: Lithium
+  picture: "/local/img_joao.jpg"
+lithium_wifi:
+  name: Lithium
+  picture: "/local/img_joao.jpg"
+  icon: mdi:cellphone
+  mac: 98:09:CF:3A:70:2A
+  hide_if_away: no
+  track: yes
+lithium_bt:
+  name: Lithium
+  picture: "/local/img_joao.jpg"
+  icon: mdi:cellphone
+  mac: BT_98:09:CF:3A:70:29
+  hide_if_away: no
+  track: yes
+lgwebostv:
+  hide_if_away: false
+  icon:
+  mac: A0:6F:AA:9D:A3:DC
+  name: LGwebOSTV
+  picture:
+  track: false
