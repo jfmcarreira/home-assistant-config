@@ -80,7 +80,16 @@ cards:
         show_header_toggle: false
         entities:
           - entity: sensor.daily_lamps_on_time
-            name: Total      
+            name: Total 
+      
+      - type: entities
+        title: Frigorifico
+        show_header_toggle: false
+        entities:
+          - entity: binary_sensor.fridge_door
+            name: Porta
+          - entity: sensor.fridge_door_open_count_daily
+          - entity: sensor.fridge_door_open_time_daily
 
       # - type: custom:mini-graph-card
       #   name: Power Consumption

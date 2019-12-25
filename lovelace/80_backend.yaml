@@ -19,12 +19,19 @@ cards:
             name: Occupied
           - entity: input_boolean.house_guest
             name: Guests
-          - entity: person.bianca
-            name: Bianca
-          - entity: person.joao
-            name: João
-          - entity: proximity.dist_home_joao
-            name: Distância - João
+          - type: custom:fold-entity-row
+            head: person.bianca
+            entities:
+              - binary_sensor.bianca_phone
+              - binary_sensor.samsung_tab_a_10_5_2019
+          - type: custom:fold-entity-row
+            head: person.joao
+            entities:
+              - entity: proximity.dist_home_joao
+                name: Distância - João
+              - binary_sensor.lithium
+              - binary_sensor.pegasus
+              - binary_sensor.boron
 
           
     

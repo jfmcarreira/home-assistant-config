@@ -13,7 +13,15 @@ binary_sensor:
     
 sensor:
   - platform: history_stats
-    name: Count Fridge Door Open Daily
+    name: Fridge Door Open Time Daily
+    entity_id: binary_sensor.fridge_door
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
+    end: "{{ now() }}"
+
+  - platform: history_stats
+    name: Fridge Door Open Count Daily
     entity_id: binary_sensor.fridge_door
     state: "on"
     type: count

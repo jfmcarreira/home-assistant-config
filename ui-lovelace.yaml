@@ -57,6 +57,8 @@ theme: dark-mode
 
 custom_header:
   swipe: true
+  chevrons: false
+  indicator_top: true
   compact_mode: true
   hide_help: true
   hide_config: true

@@ -22,7 +22,6 @@ recorder:
       - sensor.birthday_bianca
       - sensor.birthday_ricardo
 
-
 ################################################################################
 ## History
 ################################################################################
@@ -37,19 +36,22 @@ logbook:
 ## Influx DB
 ################################################################
 influxdb:
-  username: jfmcarreira
-  password: !secret main_password
+  username: !secret influxdb_user
+  password: !secret influxdb_pass
   max_retries: 3
   default_measurement: state
   include:
     domains:
       - sensor
       - binary_sensor
-   # entities:
-       #- sensor.total_power_usage
-       #- sensor.power_usage_*   
-  #exclude:
-    #entities:
-      # - binary_sensor.updater
+      - climate
+    # entities:
+    #- sensor.total_power_usage
+    #- sensor.power_usage_*
+  exclude:
+    entities:
+      - binary_sensor.updater
+    domains:
+      - automation
   tags:
     source: hass

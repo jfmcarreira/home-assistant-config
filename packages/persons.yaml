@@ -37,6 +37,8 @@ person:
 proximity:
   dist_home_joao:
     zone: home
+    ignored_zones:
+      - home
     devices:
       - device_tracker.lithium
     unit_of_measurement: m
