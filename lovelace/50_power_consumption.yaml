@@ -50,12 +50,12 @@ cards:
 
       - type: custom:mini-graph-card
         name: Potência Últimas 2 Horas
-        hours_to_show: 2
-        points_per_hour: 60
+        hours_to_show: 48
+        points_per_hour: 5
         height: 150
         line_width: 1
         show:
-          state: false
+          state: true
           points: hover
           average: false
           extrema: true
@@ -72,24 +72,11 @@ cards:
         group_by: date
         show:
           graph: bar
+          state: false
+          extrema: true
         entities:
-          - entity: sensor.bhpzem_power
-
-      - type: entities
-        title: Luzes Ligadas
-        show_header_toggle: false
-        entities:
-          - entity: sensor.daily_lamps_on_time
-            name: Total 
+          - entity: sensor.bhpzem_power      
       
-      - type: entities
-        title: Frigorifico
-        show_header_toggle: false
-        entities:
-          - entity: binary_sensor.fridge_door
-            name: Porta
-          - entity: sensor.fridge_door_open_count_daily
-          - entity: sensor.fridge_door_open_time_daily
 
       # - type: custom:mini-graph-card
       #   name: Power Consumption
@@ -132,75 +119,39 @@ cards:
       #       name: Laundry
 
       - break
-
+      
       - type: custom:vertical-stack-in-card
-        title: Informação Dispositivos
+        title: Utilidades
         cards:
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: entities
-              title: Potência
-              show_header_toggle: false
-            filter:
-              include:
-                - entity_id: sensor.power_usage_shelly_*
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: entities
-              title: Temperatura
-              show_header_toggle: false
-            filter:
-              include:
-                - entity_id: sensor.selly_*_temperature
-                - entity_id: sensor.fuse_box_temperature
-
-
-      # - type: custom:auto-entities
-      #   show_empty: false
-      #   card:
-      #     type: entities
-      #     title: Energy/Hour
-      #     show_header_toggle: false
-      #   filter:
-      #     include:
-      #       - entity_id: sensor.energy_hour_*
-
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Shelly Temperature
-          show_header_toggle: false
-        filter:
-          include:
-            - entity_id: sensor.shelly_*_temperature
-            #- entity_id: sensor.fuse_box_temperature
-
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: custom:mini-graph-card
-          name: Temperatura Dispositivos
-          hours_to_show: 2
-          points_per_hour: 60
-          height: 150
-          line_width: 1
-          show:
-            average: false
-            extrema: true
-            state: false
-        filter:
-          include:
-            - entity_id: sensor.selly_*_temperature
-            - entity_id: sensor.fuse_box_temperature
-      # - type: custom:auto-entities
-      #   show_empty: false
-      #   card:
-      #     type: entities
-      #     title: Sensors Battery
-      #     show_header_toggle: false
-      #   filter:
-      #     include:
-      #       - entity_id: sensor.*_battery_level
+          - type: entities
+            title: Electricidade
+            show_header_toggle: false
+            entities:
+              - entity: sensor.electricity_last_meter 
+                name: Última Contagem
+              - entity: sensor.electricity_meter
+                name: Contagem Total
+              - entity: input_number.electricity_meter_offpeak
+                name: Contagem Vazio
+              - entity: input_number.electricity_meter_peak
+                name: Contagem Pontas
+              - entity: input_number.electricity_meter_full 
+                name: Contagem Cheias            
+              
+          - type: entities
+            title: Gás
+            show_header_toggle: false
+            entities:
+              - entity: sensor.gas_last_meter 
+                name: Última Contagem
+              - entity: input_number.gas_meter
+                name: Contagem Gás 
+          - type: entities
+            title: Água
+            show_header_toggle: false
+            entities:
+              - entity: sensor.water_last_meter 
+                name: Última Contagem
+              - entity: input_number.water_meter
+                name: Contagem Água 
+      

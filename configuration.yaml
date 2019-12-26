@@ -24,6 +24,8 @@ homeassistant:
 
   customize: !include customize.yaml
   customize_glob:
+    "input_number.*_meter*":
+      icon: mdi:counter
     "sensor.*temperature":
       device_class: temperature
       icon: mdi:thermometer

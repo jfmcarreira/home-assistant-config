@@ -9,44 +9,6 @@ cards:
     layout: vertical
     max_columns: 3
     cards:
-      #- type: glance
-      - type: entities
-        title: Pessoas
-        #show_state: true
-        show_header_toggle: false
-        entities:
-          - entity: binary_sensor.notify_home
-            name: Occupied
-          - entity: input_boolean.house_guest
-            name: Guests
-          - type: custom:fold-entity-row
-            head: person.bianca
-            entities:
-              - binary_sensor.bianca_phone
-              - binary_sensor.samsung_tab_a_10_5_2019
-          - type: custom:fold-entity-row
-            head: person.joao
-            entities:
-              - entity: proximity.dist_home_joao
-                name: Distância - João
-              - binary_sensor.lithium
-              - binary_sensor.pegasus
-              - binary_sensor.boron
-
-          
-    
-      - type: entities
-        title: Fluffy/Pluma Litter Box
-        show_header_toggle: false
-        entities:
-          - binary_sensor.litter_box_motion
-          #- binary_sensor.cat_litter_box
-          - counter.cat_litter_box_visits
-          - sensor.cat_litter_box_last_visit
-          - sensor.cat_litter_box_last_clean
-          - sensor.cat_litter_box_last_change
-      
-      - break
       
       - type: horizontal-stack
         cards:
@@ -98,13 +60,14 @@ cards:
           - entity: sensor.speedtest_ping
             name: Ping
             
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-        filter:
-          include:
-            - entity_id: sensor.ssl_certificate_expiry_*
+      #- type: custom:auto-entities
+      #  show_empty: false
+      #  card:
+      #    type: entities
+      #  filter:
+      #    include:
+      #      - entity_id: sensor.ssl_certificate_expiry_*
+      
      
       - break
       - break
@@ -228,6 +191,60 @@ cards:
                 - entity_id: "automation.reset_*"
     
       - break
+      
+      
+
+
+      # - type: custom:auto-entities
+      #   show_empty: false
+      #   card:
+      #     type: entities
+      #     title: Energy/Hour
+      #     show_header_toggle: false
+      #   filter:
+      #     include:
+      #       - entity_id: sensor.energy_hour_*
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Shelly Temperature
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: sensor.shelly_*_temperature
+            #- entity_id: sensor.fuse_box_temperature
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: custom:mini-graph-card
+          name: Temperatura Dispositivos
+          hours_to_show: 2
+          points_per_hour: 60
+          height: 150
+          line_width: 1
+          show:
+            average: false
+            extrema: true
+            state: false
+        filter:
+          include:
+            - entity_id: sensor.selly_*_temperature
+            - entity_id: sensor.fuse_box_temperature
+      # - type: custom:auto-entities
+      #   show_empty: false
+      #   card:
+      #     type: entities
+      #     title: Sensors Battery
+      #     show_header_toggle: false
+      #   filter:
+      #     include:
+      #       - entity_id: sensor.*_battery_level
+      
+      
+      - break 
       - type: entities
         title: House Rooms
         show_header_toggle: false
