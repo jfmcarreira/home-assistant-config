@@ -1,0 +1,89 @@
+title: Configuration
+path: automations
+badges: []
+#icon: mdi:server
+icon: mdi:home-automation
+panel: false
+cards:
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: custom:fold-entity-row
+      type: entities
+      title: Heating
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.heating_*"
+  
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Lights
+      show_header_toggle: true
+    filter:
+      include:
+        - entity_id: "automation.lights_*"
+  
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Power
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.power_*"
+  
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: custom:fold-entity-row
+      type: entities
+      title: Multimedia
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.media_*"
+
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Cats
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.cat_*"
+        
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Control
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.ctrl_*"
+  
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Discovery
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.discovery_*"
+        
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Reset Sensors
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.reset_*"
+    
