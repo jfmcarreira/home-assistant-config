@@ -45,6 +45,7 @@ influxdb:
       - sensor
       - binary_sensor
       - climate
+      - input_number
     # entities:
     #- sensor.total_power_usage
     #- sensor.power_usage_*
