@@ -1,0 +1,10 @@
+################################################################
+## Zoneminder
+################################################################
+zoneminder:
+  - host: ubuntu-zoneminder.home
+    #path: ZM_PATH
+    #path_zms: ZM_PATH_ZMS
+    ssl: false
+    username: !secret zm_user
+    password: !secret zm_pass

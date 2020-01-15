@@ -51,8 +51,8 @@ input_select:
     options:  
       - Google Home
       - Kiosk
-      - Host
-      - TV
+      #- Host
+      #- TV
       #- Pegasus
       #- Lithium
       #- Todos

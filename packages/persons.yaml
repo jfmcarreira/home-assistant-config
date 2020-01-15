@@ -1,4 +1,18 @@
 ################################################################
+## Persons
+################################################################
+homeassistant:
+  customize: 
+    person.bianca:
+      icon: mdi:human-female
+      entity_picture: /local/img_bianca.jpg
+    person.joao:
+      icon: mdi:human-male
+      entity_picture: /local/img_joao.jpg
+    proximity.dist_home_joao:
+      friendly_name: Distância a Casa João
+
+################################################################
 ## Binary Toggles
 ################################################################
 input_boolean:

@@ -9,12 +9,11 @@ esphome:
   board: esp12e
 
 wifi:
+  domain: .home
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  manual_ip:
-    static_ip: !secret ip_bhonfre_pzem
-    gateway: !secret wifi_network_dummy_gateway
-    subnet: !secret wifi_network_mask
+  fast_connect: true
+  #use_address: !secret ip_bhonfre_pzem
 
 
 # Enable logging

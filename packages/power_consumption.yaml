@@ -1,6 +1,17 @@
 ################################################################
 ## Power Consumption
 ################################################################
+homeassistant:
+  customize_glob:
+    "sensor.power_usage_*":
+      device_class: power
+      icon: mdi:flash
+      unit_of_measurement: "W"
+    "sensor.*_power":
+      device_class: power
+      icon: mdi:flash
+      unit_of_measurement: "W"
+
 sensor power:
   - platform: integration
     source: sensor.bhpzem_power

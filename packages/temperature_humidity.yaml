@@ -1,20 +1,45 @@
 ################################################################
 ## Temperature/Humidity
 ################################################################
-sensor mijia:
-  - platform: min_max
-    name: mijia_office_temperature
-    type: last
-    entity_ids:
-      - sensor.al_xiaomi_s0_temperature
-      - sensor.ba_xiaomi_s0_temperature
+homeassistant:
+  customize:  
+    climate.heating:
+      friendly_name: Aquecimento
+  customize_glob:
+    "sensor.*temperature":
+      device_class: temperature
+      icon: mdi:thermometer
+      unit_of_measurement: "°C"
+    "sensor.*humidity":
+      device_class: humidity
+      icon: mdi:water-percent
+      unit_of_measurement: "%"
 
-  - platform: min_max
-    name: mijia_office_humidity
-    type: last
-    entity_ids:
-      - sensor.al_xiaomi_s0_humidity
-      - sensor.ba_xiaomi_s0_humidity
+
+#sensor mijia:
+#  - platform: min_max
+#    name: mijia_office_temperature
+#    type: last
+#    entity_ids:
+#      - sensor.al_xiaomi_s0_temperature
+#      - sensor.ba_xiaomi_s0_temperature
+
+#  - platform: min_max
+#    name: mijia_office_humidity
+#    type: last
+#    entity_ids:
+#      - sensor.al_xiaomi_s0_humidity
+#      - sensor.ba_xiaomi_s0_humidity
+
+#  - platform: mitemp_bt
+#    mac: 58:2D:34:32:55:01
+#    name: Office Temperature
+#    force_update: false
+#    median: 3
+#    monitored_conditions:
+#      - temperature
+#      - humidity
+#      - battery
 
 sensor avg:
   - platform: min_max
@@ -22,7 +47,7 @@ sensor avg:
     type: mean
     round_digits: 1
     entity_ids:
-      - sensor.mijia_office_temperature
+      - sensor.office_temperature
       - sensor.living_room_temperature
       - sensor.master_bedroom_temperature
 
@@ -31,7 +56,7 @@ sensor avg:
     type: mean
     round_digits: 1
     entity_ids:
-      - sensor.mijia_office_humidity
+      - sensor.office_humidity
       - sensor.living_room_humidity
       - sensor.master_bedroom_humidity
 
@@ -52,7 +77,7 @@ sensor avg:
           - input_select.heating_temperature_selection
           - sensor.living_room_temperature
           - sensor.master_bedroom_temperature
-          - sensor.mijia_office_temperature
+          - sensor.office_temperature
 
 sensor mold:
   - platform: mold_indicator

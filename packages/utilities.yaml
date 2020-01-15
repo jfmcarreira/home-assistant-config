@@ -1,6 +1,11 @@
 ################################################################
 ## Utilities Meter
 ################################################################
+homeassistant:
+  customize_glob:
+    "input_number.*_meter*":
+      icon: mdi:counter
+      
 input_number:
   electricity_meter_full:
     name: Electricity Meter Full

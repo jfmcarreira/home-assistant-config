@@ -1,6 +1,11 @@
 ################################################################
 ## Device tracker
 ################################################################
+homeassistant:
+  customize:       
+    device_tracker.lithium:
+      entity_picture: /local/img_joao.jpg
+      
 device_tracker:
   - platform: ping
     interval_seconds: 30

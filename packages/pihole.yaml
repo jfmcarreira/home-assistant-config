@@ -1,4 +1,0 @@
-pi_hole:
-  host: "192.168.1.6:4865"
-  ssl: false
-  verify_ssl: false

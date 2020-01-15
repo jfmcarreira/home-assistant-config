@@ -7,13 +7,12 @@ esphome:
   board: esp01_1m
 
 wifi:
+  domain: .home
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  manual_ip:
-    static_ip: !secret ip_shelly25_living_room
-    gateway: !secret wifi_network_dummy_gateway
-    subnet: !secret wifi_network_mask
-
+  fast_connect: true
+  #use_address: !secret ip_shelly25_living_room
+  
 # Enable logging
 logger:
 

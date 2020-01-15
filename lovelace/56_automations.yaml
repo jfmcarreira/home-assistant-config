@@ -8,7 +8,6 @@ cards:
   - type: custom:auto-entities
     show_empty: false
     card:
-      type: custom:fold-entity-row
       type: entities
       title: Heating
       show_header_toggle: false
@@ -39,7 +38,6 @@ cards:
   - type: custom:auto-entities
     show_empty: false
     card:
-      type: custom:fold-entity-row
       type: entities
       title: Multimedia
       show_header_toggle: false

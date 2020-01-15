@@ -23,26 +23,6 @@ homeassistant:
         - !secret tf201_ip
 
   customize: !include customize.yaml
-  customize_glob:
-    "input_number.*_meter*":
-      icon: mdi:counter
-    "sensor.*temperature":
-      device_class: temperature
-      icon: mdi:thermometer
-      unit_of_measurement: "°C"
-    "sensor.*humidity":
-      device_class: humidity
-      icon: mdi:water-percent
-      unit_of_measurement: "%"
-    "sensor.power_usage_*":
-      device_class: power
-      icon: mdi:flash
-      unit_of_measurement: "W"
-    "sensor.*_power":
-      device_class: power
-      icon: mdi:flash
-      unit_of_measurement: "W"
-      
 
 ################################################################################
 ## Config
@@ -66,7 +46,11 @@ http:
   ip_ban_enabled: true
   login_attempts_threshold: 10
   use_x_forwarded_for: true
+#  ssl_certificate: /ssl/fullchain.pem
+#  ssl_key: /ssl/privkey.pem
   
+
+
 frontend:
   javascript_version: auto
   themes: !include_dir_merge_named themes
@@ -146,6 +130,10 @@ mqtt:
 ################################################################################
 sun:
   name: sun_tracker
+
+weather:
+  - platform: darksky
+    api_key: !secret dark_sky_api
 
 ################################################################################
 ## Browsers

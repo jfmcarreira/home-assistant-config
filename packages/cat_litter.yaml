@@ -1,6 +1,11 @@
 ################################################################
 ## Cat Litter
 ################################################################
+homeassistant:
+  customize:      
+    counter.cat_litter_box_visits:
+      friendly_name: Litter Box Visits
+      
 counter:
   cat_litter_box_visits:
     step: 1

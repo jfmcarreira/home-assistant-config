@@ -18,17 +18,17 @@ cards:
             entities:
               #- entity: sensor.last_boot
                 #name: Last boot
-              - entity: sensor.hydrogen_cpu_load
+              - entity: sensor.proxmox_cpu_load
                 name: Load
-              - entity: sensor.hydrogen_cpu_used
+              - entity: sensor.proxmox_cpu_used
                 name: CPU
-              - entity: sensor.hydrogen_ram_used_percent
+              - entity: sensor.proxmox_ram_used_percent
                 name: RAM
-              - entity: sensor.hydrogen_swap_used_percent
+              - entity: sensor.proxmox_swap_used_percent
                 name: SWAP
-              - entity: sensor.hydrogen_cpu_temp
+              - entity: sensor.proxmox_cpu_temp
                 name: CPU
-              - entity: sensor.hydrogen_disk_used_percent
+              - entity: sensor.proxmox_disk_used_percent
                 name: Disk
           - type: entities
             title: Helium

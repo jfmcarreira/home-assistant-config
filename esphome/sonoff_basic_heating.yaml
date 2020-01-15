@@ -4,12 +4,10 @@ esphome:
   board: esp01_1m
 
 wifi:
+  domain: .home
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  manual_ip:
-    static_ip: !secret ip_sonoff_basic_heating
-    gateway: !secret wifi_network_dummy_gateway
-    subnet: !secret wifi_network_mask
+  fast_connect: true
   
 
 # Enable logging
@@ -21,14 +19,30 @@ api:
 ota:
 
 binary_sensor:
+  - platform: status
+    name: "Sonoff Basic Heating Status"
+    id: connected_status
+    on_press:
+      then:
+        - logger.log: "Connected mode"
+    on_release:
+      then:
+        - logger.log: "Standalone mode"
+        - switch.turn_off: relay
   - platform: gpio
     pin:
       number: GPIO0
       mode: INPUT_PULLUP
       inverted: True
     name: sonoff_basic_heating_switch
-#    on_press:
-#      - switch.toggle: relay
+    on_press:
+      if:
+        condition:
+          api.connected:
+        then:
+          - logger.log: connected
+        else:
+          - switch.toggle: relay
 
 switch:
   - platform: gpio
@@ -37,6 +51,7 @@ switch:
     pin: 
       number: GPIO12
       inverted: True
+    restore_mode: ALWAYS_OFF
     
   - platform: gpio
     pin: 

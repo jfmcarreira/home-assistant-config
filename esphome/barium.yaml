@@ -4,12 +4,11 @@ esphome:
   board: nodemcu-32s
 
 wifi:
+  domain: .home
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  manual_ip:
-    static_ip: !secret ip_barium
-    gateway: !secret wifi_network_dummy_gateway
-    subnet: !secret wifi_network_mask
+  fast_connect: true
+  #use_address: !secret ip_barium
 
 
 # Enable logging
@@ -27,8 +26,8 @@ sensor:
   - platform: xiaomi_lywsdcgq
     mac_address: 58:2D:34:32:55:01
     temperature:
-      name: "Ba Xiaomi S0 Temperature"
+      name: Office Temperature 
     humidity:
-      name: "Ba Xiaomi S0 Humidity"
+      name: Office Humidity
     battery_level:
-      name: "Ba Xiaomi S0 Battery"
+      name: Office Mijia Batery

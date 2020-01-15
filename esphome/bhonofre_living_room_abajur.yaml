@@ -8,12 +8,11 @@ esphome:
   board: esp07
 
 wifi:
+  domain: .home
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  manual_ip:
-    static_ip: !secret ip_bhonfre_living_room_abajur
-    gateway: !secret wifi_network_dummy_gateway
-    subnet: !secret wifi_network_mask
+  fast_connect: true
+  #use_address: !secret ip_bhonfre_living_room_abajur
 
 # Enable logging
 logger:
