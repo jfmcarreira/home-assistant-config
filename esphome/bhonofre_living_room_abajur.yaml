@@ -41,6 +41,7 @@ sensor:
     pin: GPIO14
     temperature:
       name: ${upper_devicename} Temperature
+      accuracy_decimals: 1
     humidity:
       name: ${upper_devicename} Humidity
-    update_interval: 30s
+    update_interval: 5s

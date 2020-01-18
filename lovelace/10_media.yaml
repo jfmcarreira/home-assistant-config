@@ -2,12 +2,12 @@ title: Multimédia
 path: media
 badges: []
 icon: mdi:television
-panel: true
+#panel: true
 cards:
-  - type: custom:layout-card
-    layout: vertical
-    max_columns: 4
-    cards:
+  # - type: custom:layout-card
+  #   layout: vertical
+  #   max_columns: 4
+  #   cards:
       - type: vertical-stack
         cards:
           - type: custom:mini-media-player
@@ -17,38 +17,166 @@ cards:
               volume: false
               source: false
               power_state: false
-          - type: horizontal-stack
+          - type: vertical-stack
             cards:
-              - type: "custom:button-card"
-                icon: mdi:television-classic
-                tap_action:
-                  action: call-service
-                  service: media_player.select_source
-                  service_data:
-                    entity_id: media_player.media_center
-                    source: "MEO"
-              - type: "custom:button-card"
-                icon: mdi:kodi
-                tap_action:
-                  action: call-service
-                  service: media_player.select_source
-                  service_data:
-                    entity_id: media_player.media_center
-                    source: "Kodi"
-              - type: "custom:button-card"
-                icon: mdi:volume-plus
-                tap_action:
-                  action: call-service
-                  service: media_player.volume_up
-                  service_data:
-                    entity_id: media_player.living_room_tv
-              - type: "custom:button-card"
-                icon: mdi:volume-minus
-                tap_action:
-                  action: call-service
-                  service: media_player.volume_down
-                  service_data:
-                    entity_id: media_player.living_room_tv
+              - type: horizontal-stack
+                cards:
+                  - type: "custom:button-card"
+                    icon: mdi:television-classic
+                    tap_action:
+                      action: call-service
+                      service: media_player.select_source
+                      service_data:
+                        entity_id: media_player.media_center
+                        source: "MEO"
+                  - type: "custom:button-card"
+                    icon: mdi:kodi
+                    tap_action:
+                      action: call-service
+                      service: media_player.select_source
+                      service_data:
+                        entity_id: media_player.media_center
+                        source: "Kodi"
+                  - type: "custom:button-card"
+                    icon: mdi:volume-plus
+                    tap_action:
+                      action: call-service
+                      service: media_player.volume_up
+                      service_data:
+                        entity_id: media_player.living_room_tv
+                  - type: "custom:button-card"
+                    icon: mdi:volume-minus
+                    tap_action:
+                      action: call-service
+                      service: media_player.volume_down
+                      service_data:
+                        entity_id: media_player.living_room_tv
+              - type: conditional
+                conditions:
+                  - entity: sensor.living_room_tv_source
+                    state: "MEO"
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: horizontal-stack
+                      cards:
+                        # EMPTY
+                        - type: "custom:button-card"
+                          color_type: blank-card
+                        # UP
+                        - type: "custom:button-card"
+                          icon: mdi:menu-up-outline
+                          show_name: False
+                          size: 50%
+                          entity: script.living_room_tv_remote
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            service_data:
+                              entity_id: script.living_room_tv_remote
+                              variables:
+                                command: "UP"
+                          hold_action:
+                            action: none
+                        # EMPTY
+                        - type: "custom:button-card"
+                          color_type: blank-card
+                    - type: horizontal-stack
+                      cards:
+                        # LEFT
+                        - type: "custom:button-card"
+                          icon: mdi:menu-left-outline
+                          show_name: False
+                          size: 50%
+                          entity: script.living_room_tv_remote
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            service_data:
+                              entity_id: script.living_room_tv_remote
+                              variables:
+                                command: "LEFT"
+                          hold_action:
+                            action: none
+                        #SELECT
+                        - type: custom:button-card
+                          icon: mdi:circle-outline
+                          show_name: False
+                          size: 50%
+                          entity: script.living_room_tv_remote
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            service_data:
+                              entity_id: script.living_room_tv_remote
+                              variables:
+                                command: "ENTER"
+                          hold_action:
+                            action: none
+                        #RIGHT
+                        - type: custom:button-card
+                          icon: mdi:menu-right-outline
+                          show_name: False
+                          size: 50%
+                          entity: script.living_room_tv_remote
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            service_data:
+                              entity_id: script.living_room_tv_remote
+                              variables:
+                                command: "RIGHT"
+                          hold_action:
+                            action: none
+                    - type: horizontal-stack
+                      cards:
+                        #BACK
+                        - type: custom:button-card
+                          icon: mdi:undo-variant
+                          show_name: False
+                          size: 50%
+                          entity: script.living_room_tv_remote
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            service_data:
+                              entity_id: script.living_room_tv_remote
+                              variables:
+                                command: "BACK"
+                          hold_action:
+                            action: none
+                        # DOWN
+                        - type: custom:button-card
+                          icon: mdi:menu-down-outline
+                          show_name: False
+                          size: 50%
+                          entity: script.living_room_tv_remote
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            service_data:
+                              entity_id: script.living_room_tv_remote
+                              variables:
+                                command: "DOWN"
+                          hold_action:
+                            action: none
+                        #HOME
+                        - type: custom:button-card
+                          icon: mdi:home
+                          show_name: False
+                          size: 50%
+                          entity: script.living_room_tv_remote
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            service_data:
+                              entity_id: script.living_room_tv_remote
+                              variables:
+                                command: "HOME"
+                          hold_action:
+                            action: none
+                    
+          
           - type: conditional
             conditions:
               - entity: sensor.living_room_tv_source
@@ -57,7 +185,7 @@ cards:
               type: vertical-stack
               cards:
                 - type: custom:mini-media-player
-                  entity: media_player.mediaroom_box_sala
+                  entity: media_player.living_room_tv_meo_box
                   artwork: cover
                   hide:
                     volume: true
@@ -92,6 +220,8 @@ cards:
                           entity_id: script.change_channel_living_room_meo_box
                           variables:
                             channel: 4
+                            
+                            
           - type: conditional
             conditions:
               - entity: sensor.living_room_tv_source
@@ -100,7 +230,7 @@ cards:
               type: vertical-stack
               cards:
                 - type: custom:mini-media-player
-                  entity: media_player.tv_kodi
+                  entity: media_player.living_room_tv_kodi
                   artwork: cover
                   hide:
                     volume: true
@@ -115,7 +245,7 @@ cards:
                     - type: "custom:button-card"
                       icon: mdi:menu-up-outline
                       show_name: False
-                      size: 60%
+                      size: 50%
                       entity: script.kodi_remote_generic
                       tap_action:
                         action: call-service
@@ -123,7 +253,7 @@ cards:
                         service_data:
                           entity_id: script.kodi_remote_generic
                           variables:
-                            kodi_instance: media_player.tv_kodi
+                            kodi_instance: media_player.living_room_tv_kodi
                             command: Input.Up
                       hold_action:
                         action: none
@@ -136,7 +266,7 @@ cards:
                     - type: "custom:button-card"
                       icon: mdi:menu-left-outline
                       show_name: False
-                      size: 60%
+                      size: 50%
                       entity: script.kodi_remote_generic
                       tap_action:
                         action: call-service
@@ -144,7 +274,7 @@ cards:
                         service_data:
                           entity_id: script.kodi_remote_generic
                           variables:
-                            kodi_instance: media_player.tv_kodi
+                            kodi_instance: media_player.living_room_tv_kodi
                             command: Input.Left
                       hold_action:
                         action: none
@@ -152,7 +282,7 @@ cards:
                     - type: custom:button-card
                       icon: mdi:circle-outline
                       show_name: False
-                      size: 60%
+                      size: 50%
                       entity: script.kodi_remote_generic
                       tap_action:
                         action: call-service
@@ -160,7 +290,7 @@ cards:
                         service_data:
                           entity_id: script.kodi_remote_generic
                           variables:
-                            kodi_instance: media_player.tv_kodi
+                            kodi_instance: media_player.living_room_tv_kodi
                             command: Input.Select
                       hold_action:
                         action: none
@@ -168,7 +298,7 @@ cards:
                     - type: custom:button-card
                       icon: mdi:menu-right-outline
                       show_name: False
-                      size: 60%
+                      size: 50%
                       entity: script.kodi_remote_generic
                       tap_action:
                         action: call-service
@@ -176,7 +306,7 @@ cards:
                         service_data:
                           entity_id: script.kodi_remote_generic
                           variables:
-                            kodi_instance: media_player.tv_kodi
+                            kodi_instance: media_player.living_room_tv_kodi
                             command: Input.Right
                       hold_action:
                         action: none
@@ -186,7 +316,7 @@ cards:
                     - type: custom:button-card
                       icon: mdi:undo-variant
                       show_name: False
-                      size: 60%
+                      size: 50%
                       entity: script.kodi_remote_generic
                       tap_action:
                         action: call-service
@@ -194,7 +324,7 @@ cards:
                         service_data:
                           entity_id: script.kodi_remote_generic
                           variables:
-                            kodi_instance: media_player.tv_kodi
+                            kodi_instance: media_player.living_room_tv_kodi
                             command: Input.Back
                       hold_action:
                         action: none
@@ -202,7 +332,7 @@ cards:
                     - type: custom:button-card
                       icon: mdi:menu-down-outline
                       show_name: False
-                      size: 60%
+                      size: 50%
                       entity: script.kodi_remote_generic
                       tap_action:
                         action: call-service
@@ -210,7 +340,7 @@ cards:
                         service_data:
                           entity_id: script.kodi_remote_generic
                           variables:
-                            kodi_instance: media_player.tv_kodi
+                            kodi_instance: media_player.living_room_tv_kodi
                             command: Input.Down
                       hold_action:
                         action: none
@@ -218,7 +348,7 @@ cards:
                     - type: custom:button-card
                       icon: mdi:home
                       show_name: False
-                      size: 60%
+                      size: 50%
                       entity: script.kodi_remote_generic
                       tap_action:
                         action: call-service
@@ -226,12 +356,12 @@ cards:
                         service_data:
                           entity_id: script.kodi_remote_generic
                           variables:
-                            kodi_instance: media_player.tv_kodi
+                            kodi_instance: media_player.living_room_tv_kodi
                             command: 'Input.Home'
                       hold_action:
                         action: none
       
-      - break 
+      #- break 
 
       - type: custom:mini-media-player
         entity: media_player.google_home_mini
@@ -243,14 +373,6 @@ cards:
 
       - type: custom:mini-media-player
         entity: media_player.browser_tf201_kyosk
-        artwork: cover
-        hide:
-          volume: false
-          source: true
-          power_state: false
-            
-      - type: custom:mini-media-player
-        entity: media_player.host_speakers
         artwork: cover
         hide:
           volume: false
@@ -308,21 +430,21 @@ cards:
             name: Netflix
 
 
-      - break 
+      # - break 
 
-      - type: custom:upcoming-media-card
-        entity: sensor.kodi_recently_added_tv
-        title: Recently Added Episodes
-        image_style: fanart
-        #image_style: poster
-        date: ddmm
-        clock: 24
+      # - type: custom:upcoming-media-card
+      #   entity: sensor.kodi_recently_added_tv
+      #   title: Recently Added Episodes
+      #   image_style: fanart
+      #   #image_style: poster
+      #   date: ddmm
+      #   clock: 24
 
-      - break 
-      - type: custom:upcoming-media-card
-        entity: sensor.kodi_recently_added_movies
-        title: Recently Added Movies
-        image_style: fanart      
-        #image_style: poster
-        date: ddmm
-        clock: 24
+      # - break 
+      # - type: custom:upcoming-media-card
+      #   entity: sensor.kodi_recently_added_movies
+      #   title: Recently Added Movies
+      #   image_style: fanart      
+      #   #image_style: poster
+      #   date: ddmm
+      #   clock: 24

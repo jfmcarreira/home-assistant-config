@@ -89,13 +89,11 @@ night_away:
         entity_id: climate.heating
     - service: media_player.turn_off
       data:
-        entity_id: media_player.media_center
-    - service: media_player.turn_off
-      data:
-        entity_id: media_player.living_room_speakers
+        #entity_id: media_player.media_center
+        entity_id: all
     - service: light.turn_off
       data:
-        entity_id: group.all_lights
+        entity_id: all
 
     - service: light.turn_on
       data:
@@ -105,38 +103,5 @@ night_away:
 
     - service: light.turn_off
       data:
-        entity_id: group.all_lights
+        entity_id: all
 
-################################################################
-## Media center
-################################################################
-# Meo remote
-change_channel_living_room_meo_box:
-  alias: "Media Channel Channel Living Room Meo Box"
-  description: "Send a pushover notification"
-  fields:
-    channel:
-      description: "Channel to switch to"
-      example: "3"
-  sequence:
-    - service: media_player.play_media
-      data_template:
-        entity_id: media_player.mediaroom_box_sala
-        media_content_id: "{{ channel }}"
-        media_content_type: "channel"
-
-# Kodi Remote
-kodi_remote_generic:
-  alias: "Media Control Kodi Instance"
-  fields:
-    kodi_instance:
-      description: "Kodi instance"
-      example: "media_player.tv_kodi"
-    command:
-      description: "Action to perform"
-      example: "Input.Up"
-  sequence:
-    service: kodi.call_method
-    data_template:
-      entity_id: "{{ kodi_instance }}"
-      method: "{{ command }}"

@@ -81,8 +81,6 @@ mobile_app:
 ################################################################################
 hacs:
   token: 593518f8a9f0dcab28be4334a6ac9ee0145f3c07
-  python_script: true
-  theme: true
   
 ################################################################################
 ## Allows you to issue voice commands from the frontend in enabled browsers
@@ -131,9 +129,9 @@ mqtt:
 sun:
   name: sun_tracker
 
-weather:
-  - platform: darksky
-    api_key: !secret dark_sky_api
+#weather:
+#  - platform: darksky
+#    api_key: !secret dark_sky_api
 
 ################################################################################
 ## Browsers

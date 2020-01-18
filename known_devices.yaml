@@ -31,6 +31,11 @@ pegasus_bt:
 bianca_phone:
   name: Bianca Phone
   picture: "/local/img_bianca.jpg"
+  hide_if_away: no
+  track: yes
+bianca_phone_wifi:
+  name: Bianca Phone
+  picture: "/local/img_bianca.jpg"
   icon: mdi:cellphone
   mac: F0:43:47:CD:20:03
   hide_if_away: no

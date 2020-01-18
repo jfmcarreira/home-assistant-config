@@ -100,7 +100,7 @@ cards:
                           icon: mdi:shovel
                           #aspect_ratio:
                           layout: "icon_name"
-                          name: Clean
+                          name: Limpar
                           tap_action:
                             action: call-service
                             service: script.cat_litter_clean
@@ -109,7 +109,7 @@ cards:
                           icon: mdi:autorenew
                           #aspect_ratio:
                           layout: "icon_name"
-                          name: Change
+                          name: Trocar
                           tap_action:
                             action: call-service
                             service: script.cat_litter_change

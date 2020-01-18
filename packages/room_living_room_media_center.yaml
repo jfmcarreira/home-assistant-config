@@ -1,31 +1,34 @@
 ##################################################################################
-## Media players
+## Media Players Living Room
 ##################################################################################
-media_player:
-  # LGTV
-  - platform: webostv
-    host: !secret living_room_ip
-    name: Living Room TV
-    timeout: 5
-    filename: webostv.conf
-    turn_on_action:
-      service: wake_on_lan.send_magic_packet
-      data:
-        mac: !secret living_room_tv_mac
-    customize:
-      sources:
-        - MEO
-        - Kodi
-        - YouTube
-        - Netflix
-        - HBO
+homeassistant:
+  customize:       
+    media_player.living_room_tv_kodi:
+      friendly_name: Kodi TV Sala
 
+webostv:
+  name: Living Room TV
+  host: !secret living_room_ip
+  standby_connection: true
+  turn_on_action:
+    service: wake_on_lan.send_magic_packet
+    data:
+      mac: !secret living_room_tv_mac
+  customize:
+    sources:
+      - MEO
+      - Kodi
+      - YouTube
+      - Netflix
+      - HBO
+
+media_player:
   # Meo
   - platform: mediaroom
   
   # Kodi
   - platform: kodi
-    name: TV Kodi
+    name: Living Room TV Kodi
     host: !secret kodi_ip
     port: 8080
     username: !secret kodi_user
@@ -36,19 +39,17 @@ media_player:
   - platform: universal
     name: Media Center
     children:
-      - media_player.mediaroom_box_sala
-      - media_player.tv_kodi
+      - media_player.living_room_tv_meo_box
+      - media_player.living_room_tv_kodi
       - media_player.living_room_tv
     state_template: >
       {% if is_state('media_player.living_room_tv', 'off') %}
         off
       {% else %}
         {% if is_state('sensor.living_room_tv_source', "Kodi") %}
-          {{ states('media_player.tv_kodi') }}
+          {{ states('media_player.living_room_tv_kodi') }}
         {% elif is_state('sensor.living_room_tv_source', "MEO") %}
-          {{ states('media_player.mediaroom_box_sala') }}
-        {% elif is_state('sensor.living_room_tv_source', "Netflix") %}
-          {{ states('media_player.living_room_tv') }}
+          {{ states('media_player.living_room_tv_meo_box') }}
         {% else %}
           {{ states('media_player.living_room_tv') }}
         {% endif %}
@@ -164,3 +165,51 @@ automation old:
             {% endif %}
         {% endif %}
       entity_id: media_player.mediaroom_box_sala
+
+################################################################
+## Remote scripts
+################################################################
+script:
+  # TV Remote
+  living_room_tv_remote:
+    alias: "Media Control Living Room TV Instance"
+    fields:
+      command:
+        description: "Action to perform"
+        example: "HOME"
+    sequence:
+      service: webostv.button
+      data_template:
+        entity_id: media_player.living_room_tv
+        button: "{{ command }}"
+        
+  # Meo remote
+  change_channel_living_room_meo_box:
+    alias: "Media Channel Channel Living Room Meo Box"
+    description: "Send a pushover notification"
+    fields:
+      channel:
+        description: "Channel to switch to"
+        example: "3"
+    sequence:
+      - service: media_player.play_media
+        data_template:
+          entity_id: media_player.living_room_tv_meo_box
+          media_content_id: "{{ channel }}"
+          media_content_type: "channel"
+
+  # Kodi Remote
+  kodi_remote_generic:
+    alias: "Media Control Kodi Instance"
+    fields:
+      kodi_instance:
+        description: "Kodi instance"
+        example: "media_player.living_room_tv_kodi"
+      command:
+        description: "Action to perform"
+        example: "Input.Up"
+    sequence:
+      service: kodi.call_method
+      data_template:
+        entity_id: media_player.living_room_tv_kodi
+        method: "{{ command }}"
