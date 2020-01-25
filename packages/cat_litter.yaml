@@ -89,3 +89,38 @@ automation old:
     action:
     - service: script.cat_litter_visit
     initial_state: true
+
+script:
+  cat_litter_visit:
+    alias: "Litter Box Mark Visit"
+    sequence:
+      - service: counter.increment
+        data:
+          entity_id: counter.cat_litter_box_visits
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.cat_litter_box_last_visit
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}'
+
+  cat_litter_clean:
+    alias: "Litter Box Mark Clean"
+    sequence:
+      - service: counter.reset
+        data:
+          entity_id: counter.cat_litter_box_visits
+
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.cat_litter_box_last_clean
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+
+  cat_litter_change:
+    alias: "Litter Box Mark Change"
+    sequence:
+      - service: script.cat_litter_clean
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.cat_litter_box_last_change
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
