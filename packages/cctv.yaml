@@ -8,10 +8,6 @@ zoneminder:
     ssl: false
     username: !secret zm_user
     password: !secret zm_pass
-
-camera:
-  - platform: zoneminder
-
 sensor:
   - platform: zoneminder
     include_archived: false
@@ -21,3 +17,13 @@ switch:
     command_on: Modect
     command_off: Monitor
     
+    
+camera:
+  - platform: zoneminder
+
+  # - platform: onvif
+  #   host: 192.168.1.221
+  #   username: admin
+  #   password: l7j9ki
+  #   port: 8899
+
