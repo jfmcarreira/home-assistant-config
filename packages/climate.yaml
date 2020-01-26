@@ -112,5 +112,3 @@ automation old:
     action:
       - service: climate.turn_off
         entity_id: climate.heating
-      - service: light.turn_off
-        entity_id: all
