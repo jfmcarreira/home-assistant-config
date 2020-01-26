@@ -42,8 +42,7 @@ cards:
                     - entity: proximity.dist_home_joao
                       type: custom:secondaryinfo-entity-row
                       name: Distancia
-                    #- device_tracker.lithium
-                    - binary_sensor.lithium
+                    - binary_sensor.magnesium
                     - binary_sensor.pegasus
                     - binary_sensor.boron
                 deviceID:
@@ -66,7 +65,7 @@ cards:
                   entities:
                     - person.bianca
                     - binary_sensor.bianca_phone
-                    - binary_sensor.samsung_tab_a_10_5_2019
+                    - binary_sensor.strontium
                 deviceID:
                   - this
           - type: picture-entity
@@ -278,7 +277,7 @@ cards:
 
       - break
             
-      - type: vertical-stack
+      - type: custom:vertical-stack-in-card
         cards:            
           - type: horizontal-stack
             cards:
@@ -291,7 +290,16 @@ cards:
                 show_header_toggle: false
                 entities:
                   - entity: input_select.radio_station
-                    name: Radio Station
+                    name: Estação de Rádio
+          - type: conditional
+            conditions:
+              - entity: input_select.radio_station
+                state: "YouTube URL"
+            card:  
+              type: entities
+              show_header_toggle: false
+              entities:
+                - entity: input_text.youtube_url
              
 
           - type: horizontal-stack
@@ -305,6 +313,16 @@ cards:
                 tap_action:
                   action: call-service
                   service: script.play_radio
+              
+              - type: "custom:button-card"
+                icon: mdi:pause
+                #aspect_ratio:
+                layout: "icon_name"
+                size: 70%
+                name: Pause
+                tap_action:
+                  action: call-service
+                  service: script.stop_radio
           
               - type: "custom:button-card"
                 icon: mdi:stop

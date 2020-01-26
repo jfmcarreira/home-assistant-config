@@ -54,7 +54,7 @@ cards:
               - type: conditional
                 conditions:
                   - entity: sensor.living_room_tv_source
-                    state: "MEO"
+                    state: "Netflix"
                 card:
                   type: vertical-stack
                   cards:
@@ -379,21 +379,28 @@ cards:
           source: true
           power_state: false
 
-      - type: vertical-stack
+      - type: custom:vertical-stack-in-card
         cards:            
-          - type: horizontal-stack
-            cards:
-              - type: entities
-                show_header_toggle: false
-                entities:
-                  - entity: input_select.speakers_selector
-                    name: Player
-              - type: entities
-                show_header_toggle: false
-                entities:
-                  - entity: input_select.radio_station
-                    name: Radio Station
-              
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: input_select.speakers_selector
+                name: Player
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: input_select.radio_station
+                name: Estação de Rádio
+          - type: conditional
+            conditions:
+              - entity: input_select.radio_station
+                state: "YouTube URL"
+            card:  
+              type: entities
+              show_header_toggle: false
+              entities:
+                - entity: input_text.youtube_url
+             
 
           - type: horizontal-stack
             cards:
@@ -406,6 +413,16 @@ cards:
                 tap_action:
                   action: call-service
                   service: script.play_radio
+              
+              - type: "custom:button-card"
+                icon: mdi:pause
+                #aspect_ratio:
+                layout: "icon_name"
+                size: 70%
+                name: Pause
+                tap_action:
+                  action: call-service
+                  service: script.stop_radio
           
               - type: "custom:button-card"
                 icon: mdi:stop
@@ -415,7 +432,7 @@ cards:
                 name: Stop
                 tap_action:
                   action: call-service
-                  service: script.stop_radio      
+                  service: script.stop_radio   
       
       - type: entities
         show_header_toggle: false

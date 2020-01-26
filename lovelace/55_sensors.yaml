@@ -23,13 +23,13 @@ cards:
             head: person.bianca
             entities:
               - binary_sensor.bianca_phone
-              - binary_sensor.samsung_tab_a_10_5_2019
+              - binary_sensor.strontium
           - type: custom:fold-entity-row
             head: person.joao
             entities:
               - entity: proximity.dist_home_joao
                 name: Distância - João
-              - binary_sensor.lithium
+              - binary_sensor.magnesium
               - binary_sensor.pegasus
               - binary_sensor.boron
 

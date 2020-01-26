@@ -3,22 +3,22 @@ path: cctv
 badges: []
 icon: mdi:cctv
 cards:
-  - type: vertical-stack
-    cards:
-      - type: picture-entity
-        entity: camera.livingroomwebcam
-        camera_view: auto
-        name: Webcam Sala
-        show_state: false
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - entity: switch.livingroomwebcam_state
-            name: State
-          - entity: sensor.livingroomwebcam_status
-            name: Status
-          - entity: sensor.livingroomwebcam_events
-            name: Eventos
+  # - type: vertical-stack
+  #   cards:
+  #     - type: picture-entity
+  #       entity: camera.livingroomwebcam
+  #       camera_view: auto
+  #       name: Webcam Sala
+  #       show_state: false
+  #     - type: entities
+  #       show_header_toggle: false
+  #       entities:
+  #         - entity: switch.livingroomwebcam_state
+  #           name: State
+  #         - entity: sensor.livingroomwebcam_status
+  #           name: Status
+  #         - entity: sensor.livingroomwebcam_events
+  #           name: Eventos
   - type: vertical-stack
     cards:
       - type: picture-entity
