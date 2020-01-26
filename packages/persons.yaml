@@ -34,9 +34,9 @@ person:
     user_id: !secret userid_joao
     device_trackers:
       - device_tracker.joao_beacon
-      - device_tracker.lithium
-      - device_tracker.lithium_wifi
-      - device_tracker.lithium_bt
+      - device_tracker.magnesium
+      - device_tracker.magnesium_wifi
+      - device_tracker.magnesium_bt
 
   - name: Bianca
     id: per_bianca
@@ -55,7 +55,7 @@ proximity:
     ignored_zones:
       - home
     devices:
-      - device_tracker.lithium
+      - device_tracker.magnesium
     unit_of_measurement: m
     tolerance: 50
 

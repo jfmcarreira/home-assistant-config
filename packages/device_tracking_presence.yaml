@@ -3,18 +3,20 @@
 ################################################################
 homeassistant:
   customize:       
-    device_tracker.lithium:
+    device_tracker.magnesium:
       entity_picture: /local/img_joao.jpg
       
 device_tracker:
   - platform: bluetooth_tracker
+    new_device_defaults:
+      track_new_devices: true
   
   - platform: ping
     interval_seconds: 30
     new_device_defaults:
       track_new_devices: true
     hosts:
-      lithium: !secret joao_phone_ip
+      magnesium: !secret magnesium_ip
       bianca_phone: !secret bianca_phone_ip
       
   - platform: mqtt
