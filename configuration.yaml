@@ -16,11 +16,12 @@ homeassistant:
     - type: homeassistant
     - type: trusted_networks
       trusted_networks:
+        - !secret beryllium_ip
         - !secret pegasus_ip
         - !secret bianca_phone_ip
-        - !secret joao_phone_ip
-        - !secret samsung_tab_a_ip
-        - !secret tf201_ip
+        - !secret magnesium_ip
+        - !secret strontium_ip
+        
 
   customize: !include customize.yaml
 
@@ -128,24 +129,6 @@ mqtt:
 ################################################################################
 sun:
   name: sun_tracker
-
-#weather:
-#  - platform: darksky
-#    api_key: !secret dark_sky_api
-
-################################################################################
-## Browsers
-################################################################################
-browser_mod:
-  prefix: "browser_"
-  devices:
-    f6ca877f-817b8345:
-      name: Browser TF201 Kyosk
-      camera: true
-    caa64a22_4f42ada5:
-      name: Browser Pegasus
-    7375b628-8b04010d:
-      name: Browser Lithium
 
 ################################################################################
 ## FFmpeg
