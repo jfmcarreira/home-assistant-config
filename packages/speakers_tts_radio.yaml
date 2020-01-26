@@ -31,7 +31,7 @@ input_select:
   ## Radio Stations
   radio_station:
     name: "Radio Station"
-    icon: mdi:radio
+    icon: mdi:radio-fm
     options:  
       - RFM
       - Comercial
@@ -42,6 +42,7 @@ input_select:
       - Antena 1
       - Antena 2
       - Antena 3
+      - YouTube URL
     
   
   ## Speaker selection
@@ -49,6 +50,7 @@ input_select:
     name: "Media Player"
     icon: mdi:speaker
     options:  
+      #- Stopped
       - Google Home
       - Kiosk
       #- Host
@@ -56,14 +58,20 @@ input_select:
       #- Pegasus
       #- Lithium
       #- Todos
-    
-    
-  
+
+input_text:
+  youtube_url:
+    name: YouTube URL
+    icon: mdi:youtube
+
+################################################################
+## Automations
+################################################################
 
 ################################################################
 ## Scripts
 ################################################################
-script:
+script:            
   play_radio:
     alias: "Media Play Radio"
     sequence:
@@ -82,24 +90,32 @@ script:
               media_player.google_home_mini 
             {% endif %}
           media_content_id: >
-            {% if is_state("input_select.radio_station", "RFM") %} 
-              http://19613.live.streamtheworld.com:3690/RFM_SC
-            {% elif is_state("input_select.radio_station", "Cidade FM") %} 
-              http://mcrscast.mcr.iol.pt/cidadefm
-            {% elif is_state("input_select.radio_station", "TSF") %}
-              http://tsfdirecto.tsf.pt/tsfdirecto.mp3
-            {% elif is_state("input_select.radio_station", "M80") %}
-              http://mcrscast.mcr.iol.pt/m80
-            {% elif is_state("input_select.radio_station", "Comercial") %}
-              http://mcrscast1.mcr.iol.pt/comercial.mp3
-            {% elif is_state("input_select.radio_station", "Meg aHits") %}
-              http://19553.live.streamtheworld.com/MEGA_HITS_SC
-            {% elif is_state("input_select.radio_station", "Antena 1") %}
-              http://radiocast.rtp.pt/antena180a.mp3
-            {% elif is_state("input_select.radio_station", "Antena 2") %}
-              http://radiocast.rtp.pt/antena280a.mp3
-            {% elif is_state("input_select.radio_station", "Antena 3") %}
-              http://radiocast.rtp.pt/antena380a.mp3
+            {% if is_state("input_select.radio_station", "RFM") %} http://19613.live.streamtheworld.com:3690/RFM_SC
+            {% elif is_state("input_select.radio_station", "Cidade FM") %} http://mcrscast.mcr.iol.pt/cidadefm
+            {% elif is_state("input_select.radio_station", "TSF") %} http://tsfdirecto.tsf.pt/tsfdirecto.mp3
+            {% elif is_state("input_select.radio_station", "M80") %} http://mcrscast.mcr.iol.pt/m80
+            {% elif is_state("input_select.radio_station", "Comercial") %} http://mcrscast1.mcr.iol.pt/comercial.mp3
+            {% elif is_state("input_select.radio_station", "Meg aHits") %} http://19553.live.streamtheworld.com/MEGA_HITS_SC
+            {% elif is_state("input_select.radio_station", "Antena 1") %} http://radiocast.rtp.pt/antena180a.mp3
+            {% elif is_state("input_select.radio_station", "Antena 2") %} http://radiocast.rtp.pt/antena280a.mp3
+            {% elif is_state("input_select.radio_station", "Antena 3") %} http://radiocast.rtp.pt/antena380a.mp3
+            {% elif is_state("input_select.radio_station", "YouTube URL") %} {{ states.input_text.youtube_url.state }}
+            {% endif %}
+
+  pause_radio:
+    alias: "Media Pause Radio"
+    sequence:
+      - service: media_player.media_play_pause
+        data_template:
+          entity_id: >
+            {% if is_state("input_select.speakers_selector", "TV") %} 
+              media_player.living_room_tv   
+            {% elif is_state("input_select.speakers_selector", "Host") %} 
+              media_player.host_speakers
+            {% elif is_state("input_select.speakers_selector", "Kiosk") %} 
+              media_player.browser_tf201_kyosk
+            {% elif is_state("input_select.speakers_selector", "Google Home") %} 
+              media_player.google_home_mini 
             {% endif %}
   
   stop_radio:
@@ -107,9 +123,7 @@ script:
     sequence:
       #- service: media_player.media_stop
       - service_template: >
-          {% if is_state("input_select.speakers_selector", "Host") %} 
-            media_player.clear_playlist
-          {% elif is_state("input_select.speakers_selector", "Kiosk") %} 
+          {% if is_state("input_select.speakers_selector", "Kiosk") %} 
             media_player.media_stop 
           {% else %}
             media_player.turn_off
@@ -118,8 +132,6 @@ script:
           entity_id: >
             {% if is_state("input_select.speakers_selector", "TV") %} 
               media_player.living_room_tv   
-            {% elif is_state("input_select.speakers_selector", "Host") %} 
-              media_player.host_speakers
             {% elif is_state("input_select.speakers_selector", "Kiosk") %} 
               media_player.browser_tf201_kyosk
             {% elif is_state("input_select.speakers_selector", "Google Home") %} 
