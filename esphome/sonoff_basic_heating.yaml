@@ -15,7 +15,8 @@ logger:
 
 # Enable Home Assistant API
 api:
-
+  reboot_timeout: 0s
+  
 ota:
 
 binary_sensor:
