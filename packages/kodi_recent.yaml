@@ -1,9 +1,0 @@
-################################################################
-## Kodi recent
-################################################################
-sensor:
-  - platform: kodi_recently_added
-    host: !secret kodi_ip
-    port: 8080
-    username: !secret kodi_user
-    password: !secret kodi_pass
