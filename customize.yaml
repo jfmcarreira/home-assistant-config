@@ -4,7 +4,14 @@ light.master_bedroom:
   icon: mdi:ceiling-light
 light.living_room_table:
   icon: mdi:ceiling-light
+light.living_room_abajur:
+  icon: mdi:lamp
 light.living_room_window:
+  icon: mdi:ceiling-light
+light.living_room_tv_leds:
+  #icon: mdi:led-strip
+  icon: mdi:led-strip-variant
+light.hallway:
   icon: mdi:ceiling-light
 media_player.mediaroom_box_sala:
   name: Living Room Meo Box
