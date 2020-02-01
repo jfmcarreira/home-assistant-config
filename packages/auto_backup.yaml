@@ -1,0 +1,22 @@
+################################################################################
+## Browsers
+################################################################################
+auto_backup:
+  auto_purge: true
+  
+automation old:
+  - alias: Backup Daily
+    trigger:
+      - platform: time
+        at: "05:00:00"
+    action:
+      - service: auto_backup.snapshot_full
+        data_template:
+          name: "DailyBackup: {{ now().strftime('%A, %B %-d, %Y') }}"
+          keep_days: 7
+          exclude:
+            addons:
+              - Almond
+              - Visual Studio Code
+              - Configurator
+
