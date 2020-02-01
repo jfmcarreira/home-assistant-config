@@ -54,6 +54,16 @@ cards:
     filter:
       include:
         - entity_id: "automation.cat_*"
+
+  - type: custom:auto-entities
+    show_empty: false
+    card:
+      type: entities
+      title: Kyosk
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "automation.kyosk_*"
         
   - type: custom:auto-entities
     show_empty: false
