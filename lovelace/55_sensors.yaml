@@ -3,12 +3,12 @@ path: sensors
 badges: []
 #icon: mdi:server
 icon: mdi:information-outline
-panel: true
+#panel: true
 cards:
-  - type: custom:layout-card
-    layout: vertical
-    max_columns: 3
-    cards:
+  # - type: custom:layout-card
+  #   layout: vertical
+  #   max_columns: 3
+  #   cards:
       #- type: glance
       - type: entities
         title: Pessoas
@@ -33,8 +33,6 @@ cards:
               - binary_sensor.pegasus
               - binary_sensor.boron
 
-          
-      - break
       
       - type: entities
         title: Fluffy/Pluma Litter Box
@@ -63,8 +61,7 @@ cards:
         entities:
           - entity: sensor.daily_lamps_on_time
             name: Total 
-      
-      - beak 
+     
       
       - type: custom:vertical-stack-in-card
         title: Informação Dispositivos
@@ -88,3 +85,96 @@ cards:
               include:
                 - entity_id: sensor.selly_*_temperature
                 - entity_id: sensor.fuse_box_temperature
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Shelly Temperature
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: sensor.shelly_*_temperature
+            #- entity_id: sensor.fuse_box_temperature
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: custom:mini-graph-card
+          name: Temperatura Dispositivos
+          hours_to_show: 2
+          points_per_hour: 60
+          height: 150
+          line_width: 1
+          show:
+            average: false
+            extrema: true
+            state: false
+        filter:
+          include:
+            - entity_id: sensor.selly_*_temperature
+            - entity_id: sensor.fuse_box_temperature
+
+      - type: entities
+        title: House Rooms
+        show_header_toggle: false
+        entities:
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Hall
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Hall
+    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Living Room
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Living Room
+    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Kitchen
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Kitchen
+          
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Office
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Office
+    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Master Bedroom
+              show_header_toggle: false
+            filter:
+              include:
+                - area: Master Bedroom

@@ -1,54 +1,51 @@
 title: Configuration
 path: backend
 badges: []
-#icon: mdi:server
-icon: mdi:settings-outline
-panel: true
+icon: mdi:server
+#icon: mdi:settings-outline
+#panel: true
 cards:
-  - type: custom:layout-card
-    layout: vertical
-    max_columns: 3
-    cards:
+  # - type: custom:layout-card
+  #   layout: vertical
+  #   max_columns: 3
+  #   cards:
       
-      - type: horizontal-stack
-        cards:
-          - type: entities
-            title: Hydrogen
-            show_header_toggle: false
-            entities:
-              #- entity: sensor.last_boot
-                #name: Last boot
-              - entity: sensor.proxmox_cpu_load
-                name: Load
-              - entity: sensor.proxmox_cpu_used
-                name: CPU
-              - entity: sensor.proxmox_ram_used_percent
-                name: RAM
-              - entity: sensor.proxmox_swap_used_percent
-                name: SWAP
-              - entity: sensor.proxmox_cpu_temp
-                name: CPU
-              - entity: sensor.proxmox_disk_used_percent
-                name: Disk
-          - type: entities
-            title: Helium
-            show_header_toggle: false
-            entities:
-              - entity: sensor.helium_cpu_load
-                name: Load
-              - entity: sensor.helium_cpu_used
-                name: CPU
-              - entity: sensor.helium_ram_used_percent
-                name: RAM
-              - entity: sensor.helium_swap_used_percent
-                name: SWAP
-              - entity: sensor.helium_cpu_temperature
-                name: CPU
-              - entity: sensor.helium_disk_used_percent
-                name: Disk
+      - type: entities
+        title: Hydrogen
+        show_header_toggle: false
+        entities:
+          #- entity: sensor.last_boot
+            #name: Last boot
+          - entity: sensor.proxmox_cpu_load
+            name: Load
+          - entity: sensor.proxmox_cpu_used
+            name: CPU
+          - entity: sensor.proxmox_ram_used_percent
+            name: RAM
+          - entity: sensor.proxmox_swap_used_percent
+            name: SWAP
+          - entity: sensor.proxmox_cpu_temp
+            name: CPU
+          - entity: sensor.proxmox_disk_used_percent
+            name: Disk
+      - type: entities
+        title: Helium
+        show_header_toggle: false
+        entities:
+          - entity: sensor.helium_cpu_load
+            name: Load
+          - entity: sensor.helium_cpu_used
+            name: CPU
+          - entity: sensor.helium_ram_used_percent
+            name: RAM
+          - entity: sensor.helium_swap_used_percent
+            name: SWAP
+          - entity: sensor.helium_cpu_temperature
+            name: CPU
+          - entity: sensor.helium_disk_used_percent
+            name: Disk
       
-      - break
-      - break
+ 
       - type: entities
         title: SpeedTest
         show_header_toggle: false
@@ -59,18 +56,9 @@ cards:
             name: Upload
           - entity: sensor.speedtest_ping
             name: Ping
-            
-      #- type: custom:auto-entities
-      #  show_empty: false
-      #  card:
-      #    type: entities
-      #  filter:
-      #    include:
-      #      - entity_id: sensor.ssl_certificate_expiry_*
       
      
-      - break
-      - break
+
       - type: entities 
         title: Transmission
         show_header_toggle: false
@@ -87,122 +75,9 @@ cards:
             name: Download
           - entity: sensor.transmission_server_up_speed_kbps
             name: Upload
-      - break
-      - break
+
+      
+  
+
       
       
-
-
-      # - type: custom:auto-entities
-      #   show_empty: false
-      #   card:
-      #     type: entities
-      #     title: Energy/Hour
-      #     show_header_toggle: false
-      #   filter:
-      #     include:
-      #       - entity_id: sensor.energy_hour_*
-
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Shelly Temperature
-          show_header_toggle: false
-        filter:
-          include:
-            - entity_id: sensor.shelly_*_temperature
-            #- entity_id: sensor.fuse_box_temperature
-
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: custom:mini-graph-card
-          name: Temperatura Dispositivos
-          hours_to_show: 2
-          points_per_hour: 60
-          height: 150
-          line_width: 1
-          show:
-            average: false
-            extrema: true
-            state: false
-        filter:
-          include:
-            - entity_id: sensor.selly_*_temperature
-            - entity_id: sensor.fuse_box_temperature
-      # - type: custom:auto-entities
-      #   show_empty: false
-      #   card:
-      #     type: entities
-      #     title: Sensors Battery
-      #     show_header_toggle: false
-      #   filter:
-      #     include:
-      #       - entity_id: sensor.*_battery_level
-      
-      
-      - break 
-      - type: entities
-        title: House Rooms
-        show_header_toggle: false
-        entities:
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: custom:fold-entity-row
-              head:
-                type: section
-                label: Hall
-              show_header_toggle: false
-            filter:
-              include:
-                - area: Hall
-    
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: custom:fold-entity-row
-              head:
-                type: section
-                label: Living Room
-              show_header_toggle: false
-            filter:
-              include:
-                - area: Living Room
-    
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: custom:fold-entity-row
-              head:
-                type: section
-                label: Kitchen
-              show_header_toggle: false
-            filter:
-              include:
-                - area: Kitchen
-          
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: custom:fold-entity-row
-              head:
-                type: section
-                label: Office
-              show_header_toggle: false
-            filter:
-              include:
-                - area: Office
-    
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: custom:fold-entity-row
-              head:
-                type: section
-                label: Master Bedroom
-              show_header_toggle: false
-            filter:
-              include:
-                - area: Master Bedroom
