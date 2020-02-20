@@ -2,8 +2,8 @@
 ## Recorder
 ################################################################################
 recorder:
+  db_url: !secret db_url
   purge_keep_days: 10
-  #db_url: !secret mysql_url
   exclude:
     domains:
       - updater
