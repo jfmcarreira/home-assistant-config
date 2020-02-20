@@ -1,0 +1,18 @@
+################################################################
+## MQTT
+################################################################
+mqtt:
+  username: !secret mqtt_user
+  password:  !secret mqtt_password
+  broker: !secret mqtt_ip
+  port: !secret mqtt_port
+  discovery: true
+  discovery_prefix: homeassistant
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+    retain: true
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
+    retain: true
