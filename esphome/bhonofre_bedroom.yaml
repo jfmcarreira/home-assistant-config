@@ -5,17 +5,15 @@ substitutions:
 esphome:
   name: bhonofre_${devicename}
   platform: ESP8266
-  board: esp07
+  board: nodemcu
 
 wifi:
+  domain: .home
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  manual_ip:
-    static_ip: !secret ip_bhonfre_bedroom
-    gateway: !secret wifi_network_dummy_gateway
-    subnet: !secret wifi_network_mask
-
-
+  fast_connect: true
+  #use_address: !secret ip_bhonfre_bedroom
+  
 # Enable logging
 logger:
 
@@ -29,12 +27,12 @@ binary_sensor:
   - name: ${upper_devicename} Left SW
     platform: gpio
     pin:
-      number: GPIO12
+      number: GPIO03
       mode: INPUT_PULLUP
       inverted: True
-    #on_state:
-    #  then:
-    #    - light.toggle: light_1
+    on_state:
+      then:
+        - light.toggle: light_1
       
   - name: ${upper_devicename} Right SW
     platform: gpio
@@ -42,9 +40,9 @@ binary_sensor:
       number: GPIO13
       mode: INPUT_PULLUP
       inverted: True
-    #on_state:
-    #  then:
-    #    - light.toggle: light_2
+    on_state:
+      then:
+        - light.toggle: light_2
 
 output:
   - platform: gpio
@@ -73,9 +71,6 @@ sensor:
   - platform: dht
     model: DHT11
     pin: GPIO14
-    #pin:
-    #  number: GPIO14
-    #  mode: INPUT_PULLUP
     temperature:
       name: ${upper_devicename} Temperature
       accuracy_decimals: 1
