@@ -69,6 +69,7 @@ night_away:
 
     - service: light.turn_off
       data:
-        entity_id: all
+        #entity_id: all
+        entity_id: light.hallway
 
 
