@@ -16,20 +16,8 @@ browser_mod:
     f6ca877f-817b8345:
       name: Browser TF201 Kyosk
       camera: true
-
-    88005eb9-8aebd3d7:
-      name: Browser Magnesium
-      disable:
-        - light
-        - media_player
-        - binary_sensor
-
-    caa64a22-4f42ada5:
-      name: Browser Pegasus
-      disable:
-        - light
-        - media_player
-        - binary_sensor
+  disable:
+    - all
 
 ################################################################################
 ## Automations
@@ -80,6 +68,10 @@ automation old:
       - platform: state
         entity_id: light.hallway
         to: "on"
+    condition:
+      - condition: state
+        entity_id: display.tf201_kyosk
+        state: "off"
     action:
       - service: display.turn_on
         data:
@@ -114,9 +106,14 @@ automation old:
         for:
           seconds: 20
     condition:
-      - condition: state
-        entity_id: binary_sensor.browser_tf201_kyosk
-        state: "off"
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: display.tf201_kyosk
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.browser_tf201_kyosk
+          state: "off"
     action:
       - service: display.turn_off
         data:
