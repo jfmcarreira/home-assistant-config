@@ -22,19 +22,40 @@ cards:
               yellow: 2500
               red: 3200
 
+          - type: glance
+            entities:
+              - entity: sensor.bhpzem_voltage
+                name: Tensão
+              - entity: sensor.bhpzem_current
+                name: Corrente
+              - entity: sensor.bhpzem_pf
+                name: FP
+              - entity: sensor.bhpzem_frequency
+                name: Frequência
+              
           - type: custom:auto-entities
             show_empty: false
             card:
               type: entities
-              #title: Power
               show_header_toggle: false
             filter:
               include:
-                - entity_id: sensor.bhpzem_*
-                #- entity_id: sensor.pzem_energy
-              exclude:
-                - entity_id: sensor.bhpzem_power
-                - entity_id: sensor.bhpzem_power_manual
+                - entity_id: sensor.power_sensor_*
+                
+          #- type: custom:auto-entities
+            #show_empty: false
+            #card:
+              #type: entities
+              ##title: Power
+              #show_header_toggle: false
+            #filter:
+              #include:
+                #- entity_id: sensor.bhpzem_*
+                ##- entity_id: sensor.pzem_energy
+              #exclude:
+                #- entity_id: sensor.bhpzem_energy
+                #- entity_id: sensor.bhpzem_power
+                #- entity_id: sensor.bhpzem_power_manual
           
           - type: entities
             show_header_toggle: false
@@ -49,7 +70,7 @@ cards:
       - break
 
       - type: custom:mini-graph-card
-        name: Potência Últimas 2 Horas
+        name: Potência Últimas 48 Horas
         hours_to_show: 48
         points_per_hour: 5
         height: 150
@@ -118,6 +139,17 @@ cards:
       #     - entity: sensor.power_usage_laundry
       #       name: Laundry
 
+      
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Potência Dispositivos
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: sensor.power_usage_shelly_*
+                
       - break
       
       - type: custom:vertical-stack-in-card

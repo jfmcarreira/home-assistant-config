@@ -28,23 +28,7 @@ input_boolean:
 ################################################################
 ## Persons
 ################################################################
-person:
-  - name: João
-    id: per_joao
-    user_id: !secret userid_joao
-    device_trackers:
-      - device_tracker.joao_beacon
-      - device_tracker.magnesium
-      - device_tracker.magnesium_wifi
-      - device_tracker.magnesium_bt
 
-  - name: Bianca
-    id: per_bianca
-    user_id: !secret userid_bianca
-    device_trackers:
-      - device_tracker.bianca_beacon
-      - device_tracker.bianca_phone
-      - device_tracker.bianca_phone_wifi
       
 ################################################################
 ## Proximity

@@ -17,6 +17,7 @@ homeassistant:
 
 
 #sensor mijia:
+
 #  - platform: min_max
 #    name: mijia_office_temperature
 #    type: last
@@ -30,16 +31,24 @@ homeassistant:
 #    entity_ids:
 #      - sensor.al_xiaomi_s0_humidity
 #      - sensor.ba_xiaomi_s0_humidity
-
-#  - platform: mitemp_bt
-#    mac: 58:2D:34:32:55:01
-#    name: Office Temperature
-#    force_update: false
-#    median: 3
-#    monitored_conditions:
-#      - temperature
-#      - humidity
-#      - battery
+  # - platform: mitemp_bt
+  #   rounding: True
+  #   decimals: 2
+  #   period: 10
+  #   log_spikes: False
+  #   use_median: False
+  #   active_scan: False
+  #   hci_interface: 0
+  #   batt_entities: true
+  #- platform: mitemp_bt
+    #mac: 58:2D:34:32:55:01
+    #name: Office Temperature BT
+    #force_update: true
+   # median: 3
+   # monitored_conditions:
+   ##  - temperature
+   #   - humidity
+   #   - battery
 
 sensor avg:
   - platform: min_max
@@ -60,25 +69,7 @@ sensor avg:
       - sensor.living_room_humidity
       - sensor.master_bedroom_humidity
 
-  - platform: template
-    sensors:
-      heating_temperature:
-        friendly_name: "Heating Temperature"
-        device_class: temperature
-        value_template: >
-          {% if is_state("input_select.heating_temperature_selection", "Living Room") %} 
-            {{ states( 'sensor.living_room_temperature' ) }}
-          {% elif is_state("input_select.heating_temperature_selection", "Bedroom") %} 
-            {{ states( 'sensor.master_bedroom_temperature' ) }}
-          {% else %}
-            {{ states( 'sensor.mijia_office_temperature' ) }}
-          {% endif %}
-        entity_id:
-          - input_select.heating_temperature_selection
-          - sensor.living_room_temperature
-          - sensor.master_bedroom_temperature
-          - sensor.office_temperature
-
+    
 sensor mold:
   - platform: mold_indicator
     indoor_temp_sensor: sensor.mijia_temperature

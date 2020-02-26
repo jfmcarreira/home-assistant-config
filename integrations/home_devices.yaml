@@ -1,4 +1,37 @@
 ################################################################
+## Customize
+################################################################
+homeassistant:
+  customize:       
+    binary_sensor.beryllium:
+      friendly_name: Beryllium (Kiosk)
+    binary_sensor.strontium:
+      friendly_name: Strontium (Samsung Tab)
+
+
+################################################################
+## Proxmox
+################################################################
+# proxmoxve:
+#   - host: !secret hydrogen_ip
+#     username: !secret proxmox_user
+#     password: !secret proxmox_pass
+#     port: !secret proxmox_port
+#     realm: pve
+#     verify_ssl: false
+#     nodes:
+#       - node: hydrogen
+#         containers:
+#           - 100
+#           - 101
+#           - 111
+#           - 112
+#         vms:
+#           - 201
+#           - 300
+
+
+################################################################
 ## Detect state sensors
 ################################################################
 binary_sensor:
@@ -23,12 +56,12 @@ binary_sensor:
     count: 2
     scan_interval: 300
   - platform: ping
-    name: Kiosk
-    host: !secret tf201_ip
+    name: Beryllium
+    host: !secret beryllium_ip
     count: 2
   - platform: ping
-    name: Lithium
-    host: !secret joao_phone_ip
+    name: Magnesium
+    host: !secret magnesium_ip
     count: 2
     scan_interval: 300
   - platform: ping
@@ -37,8 +70,8 @@ binary_sensor:
     count: 2
     scan_interval: 300
   - platform: ping
-    name: Samsung Tab A 10.5 2019
-    host: !secret samsung_tab_a_ip
+    name: Strontium
+    host: !secret strontium_ip
     count: 2
 
 ################################################################

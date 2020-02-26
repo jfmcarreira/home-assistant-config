@@ -44,6 +44,13 @@ cards:
           - sensor.cat_litter_box_last_visit
           - sensor.cat_litter_box_last_clean
           - sensor.cat_litter_box_last_change
+        footer:
+          type: buttons
+          entities:
+            - entity: script.cat_litter_clean
+              icon: mdi:shovel
+            - entity: script.cat_litter_change
+              icon: mdi:autorenew
           
       
       - type: entities
@@ -66,15 +73,15 @@ cards:
       - type: custom:vertical-stack-in-card
         title: Informação Dispositivos
         cards:
-          - type: custom:auto-entities
-            show_empty: false
-            card:
-              type: entities
-              title: Potência
-              show_header_toggle: false
-            filter:
-              include:
-                - entity_id: sensor.power_usage_shelly_*
+          #- type: custom:auto-entities
+            #show_empty: false
+            #card:
+              #type: entities
+              #title: Potência
+              #show_header_toggle: false
+            #filter:
+              #include:
+                #- entity_id: sensor.power_usage_shelly_*
           - type: custom:auto-entities
             show_empty: false
             card:

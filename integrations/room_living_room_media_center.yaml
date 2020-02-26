@@ -9,7 +9,7 @@ homeassistant:
 webostv:
   name: Living Room TV
   host: !secret living_room_ip
-  standby_connection: true
+  #standby_connection: true
   turn_on_action:
     service: wake_on_lan.send_magic_packet
     data:
@@ -21,6 +21,7 @@ webostv:
       - YouTube
       - Netflix
       - HBO
+      - Plex
 
 media_player:
   # Meo

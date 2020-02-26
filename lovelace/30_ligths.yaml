@@ -29,7 +29,6 @@ cards:
         toggle: true
       - type: custom:slider-entity-row
         entity: light.living_room_tv_leds
-        name: TV Backlight
         toggle: true
     
   - type: entities

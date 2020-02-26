@@ -1,0 +1,14 @@
+id: Lights Turn Off Presence Light
+alias: Lights Turn Off Presence Light
+description: ""
+trigger:
+  - entity_id: switch.tradfri_power_outlet
+    for: 0:02:00
+    from: "off"
+    platform: state
+    to: "on"
+condition: []
+action:
+  - data:
+      entity_id: switch.tradfri_power_outlet
+    service: switch.turn_off

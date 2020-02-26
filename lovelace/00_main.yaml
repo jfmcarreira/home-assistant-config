@@ -1,6 +1,6 @@
-title: Kiosk
-id: kiosk
-path: kiosk
+title: Main
+id: main
+path: main
 badges: []
 icon: mdi:tablet-dashboard
 panel: true
@@ -40,7 +40,6 @@ cards:
                     - entity: person.joao
                       name: Localização
                     - entity: proximity.dist_home_joao
-                      type: custom:secondaryinfo-entity-row
                       name: Distancia
                     - binary_sensor.magnesium
                     - binary_sensor.pegasus
@@ -92,26 +91,13 @@ cards:
                         - sensor.cat_litter_box_last_visit
                         - sensor.cat_litter_box_last_clean
                         - sensor.cat_litter_box_last_change
-                    
-                    - type: horizontal-stack
-                      cards:
-                        - type: "custom:button-card"
-                          icon: mdi:shovel
-                          #aspect_ratio:
-                          layout: "icon_name"
-                          name: Limpar
-                          tap_action:
-                            action: call-service
-                            service: script.cat_litter_clean
-                        
-                        - type: "custom:button-card"
-                          icon: mdi:autorenew
-                          #aspect_ratio:
-                          layout: "icon_name"
-                          name: Trocar
-                          tap_action:
-                            action: call-service
-                            service: script.cat_litter_change
+                      footer:
+                        type: buttons
+                        entities:
+                          - entity: script.cat_litter_clean
+                            icon: mdi:shovel
+                          - entity: script.cat_litter_change
+                            icon: mdi:autorenew
                 deviceID:
                   - this
             hold_action:
@@ -149,7 +135,7 @@ cards:
       - break   
       
       - type: picture-glance
-        title: Corredor
+        title: Corredor/Cozinha
         image: /local/room_images/img_hallway_25_10.jpg
         aspect_ratio: 2.8/1
         entity: group.hall
@@ -161,8 +147,11 @@ cards:
           #- binary_sensor.kitchen_motion
           - binary_sensor.front_door
           - binary_sensor.browser_tf201_kyosk
+          - entity: display.tf201_kyosk
+            icon: mdi:tablet
           - switch.tradfri_power_outlet
-          - light.hallway
+          - entity: light.hallway
+            icon: mdi:ceiling-light
           - light.kitchen
           - light.kitchen_pantry
 
@@ -176,12 +165,10 @@ cards:
         hold_action:
           action: none
         entities:
-          - entity: light.living_room_table
-          - entity: light.living_room_abajur
-            icon: mdi:lamp
-          - entity: light.living_room_tv_leds
-            icon: mdi:led-strip
-          - entity: light.living_room_window
+          - light.living_room_table
+          - light.living_room_abajur
+          - light.living_room_tv_leds
+          - light.living_room_window
           #- entity: camera.webcam_livingroom
           - entity: media_player.media_center
             icon: mdi:television

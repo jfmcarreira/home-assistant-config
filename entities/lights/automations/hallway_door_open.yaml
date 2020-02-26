@@ -1,0 +1,19 @@
+id: Lights Hallway Turn On Door Open
+alias: Lights Hallway Turn On Door Open
+trigger:
+  - platform: state
+    entity_id: binary_sensor.front_door
+    from: "off"
+    to: "on"
+condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  - condition: state
+    entity_id: light.hallway
+    state: "off"
+    for:
+      seconds: 120
+action:
+  - service: light.turn_on
+    entity_id: light.hallway
