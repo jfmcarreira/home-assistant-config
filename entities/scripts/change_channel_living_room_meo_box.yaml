@@ -1,0 +1,12 @@
+alias: "Media Channel Channel Living Room Meo Box"
+description: "Send a pushover notification"
+fields:
+  channel:
+    description: "Channel to switch to"
+    example: "3"
+sequence:
+  - service: media_player.play_media
+    data_template:
+      entity_id: media_player.living_room_tv_meo_box
+      media_content_id: "{{ channel }}"
+      media_content_type: "channel"

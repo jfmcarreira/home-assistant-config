@@ -1,0 +1,11 @@
+id: Ctrl Toogle Living Room TV LEDs
+alias: Ctrl Toogle Living Room TV LEDs
+initial_state: true
+trigger:
+  - entity_id: binary_sensor.living_room_table_light_long_sw
+    platform: state
+    to: "on"
+action:
+  - data:
+      entity_id: light.living_room_tv_leds
+    service: light.toggle

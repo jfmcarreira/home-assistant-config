@@ -1,0 +1,5 @@
+platform: template
+sensors:
+  living_room_tv_source:
+    value_template: '{{ states.media_player.living_room_tv.attributes["source"] }}'
+    friendly_name: 'Living Room TV Source'

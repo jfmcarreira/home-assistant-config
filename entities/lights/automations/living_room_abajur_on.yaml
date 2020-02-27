@@ -1,0 +1,11 @@
+id: Ctrl Toogle Living Room Abajur Light
+alias: Ctrl Toogle Living Room Abajur Light
+initial_state: true
+trigger:
+  - entity_id: binary_sensor.living_room_window_light_long_sw
+    platform: state
+    to: "on"
+action:
+  - data:
+      entity_id: light.living_room_abajur
+    service: light.toggle

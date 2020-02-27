@@ -1,0 +1,7 @@
+platform: kodi
+name: Living Room TV Kodi
+host: !secret kodi_ip
+port: 8080
+username: !secret kodi_user
+password: !secret kodi_pass
+enable_websocket: true 

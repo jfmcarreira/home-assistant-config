@@ -1,0 +1,13 @@
+alias: "Media Control Kodi Instance"
+fields:
+  kodi_instance:
+    description: "Kodi instance"
+    example: "media_player.living_room_tv_kodi"
+  command:
+    description: "Action to perform"
+    example: "Input.Up"
+sequence:
+  service: kodi.call_method
+  data_template:
+    entity_id: media_player.living_room_tv_kodi
+    method: "{{ command }}"
