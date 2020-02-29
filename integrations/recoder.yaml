@@ -10,10 +10,11 @@ recorder:
       - weblink
       - zone
     entities:
-      - sun.sun # Don't record sun data
+      - sun.sun
       - sensor.uptime
       - sensor.date_time
       - sensor.date
+      - sensor.time
       - binary_sensor.updater
       - binary_sensor.workday
       - binary_sensor.workday_tomorrow

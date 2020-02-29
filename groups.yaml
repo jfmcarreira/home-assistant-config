@@ -1,3 +1,9 @@
+living_room_main_lights:
+  name: Living Room Main Lights
+  entities:
+    - light.living_room_table
+    - light.living_room_window
+
 hall:
   name: Hall
   entities:

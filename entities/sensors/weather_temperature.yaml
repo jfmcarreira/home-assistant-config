@@ -1,0 +1,7 @@
+platform: template
+sensors:
+  weather_temperature:
+    friendly_name: "Weather Temperature"
+    value_template: "{{ states.weather.ipma.attributes.temperature }}"
+    entity_id:
+      - weather.ipma

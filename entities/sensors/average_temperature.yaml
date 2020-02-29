@@ -1,0 +1,8 @@
+platform: min_max
+name: Average Temperature
+type: mean
+round_digits: 1
+entity_ids:
+  - sensor.office_temperature
+  - sensor.living_room_temperature
+  - sensor.master_bedroom_temperature

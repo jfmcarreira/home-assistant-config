@@ -1,0 +1,8 @@
+platform: min_max
+name: Average Humidity
+type: mean
+round_digits: 1
+entity_ids:
+  - sensor.office_humidity
+  - sensor.living_room_humidity
+  - sensor.master_bedroom_humidity

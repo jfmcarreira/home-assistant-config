@@ -2,4 +2,22 @@
 ## Logbook
 ################################################################################
 logbook:
+  exclude:
+    domains:
+      - updater
+      - weblink
+      - zone
+    entities:
+      - sun.sun
+      - sensor.uptime
+      - sensor.date_time
+      - sensor.date
+      - sensor.time
+      - binary_sensor.updater
+      - binary_sensor.workday
+      - binary_sensor.workday_tomorrow
+      - sensor.anniversary_wedding
+      - sensor.birthday_joao
+      - sensor.birthday_bianca
+      - sensor.birthday_ricardo
 

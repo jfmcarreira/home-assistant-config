@@ -9,7 +9,6 @@ light.living_room_abajur:
 light.living_room_window:
   icon: mdi:ceiling-light
 light.living_room_tv_leds:
-  #icon: mdi:led-strip
   icon: mdi:led-strip-variant
 light.hallway:
   icon: mdi:ceiling-light
@@ -19,4 +18,5 @@ media_player.mediaroom_box_sala:
 media_player.browser_tf201_kyosk:
   friendly_name: Kiosk Player
   icon: mdi:tablet-dashboard
-
+light.hallway_presence_light:
+  icon: mdi:wall-sconce-flat

@@ -1,6 +1,6 @@
 id: Ctrl Master Bedroom Bed Right Light
 alias: Ctrl Master Bedroom Bed Right Light
-initial_state: true
+initial_state: false
 trigger:
   - platform: numeric_state
     entity_id: counter.master_bedroom_right_switch_toggle_count

@@ -144,12 +144,12 @@ cards:
         hold_action:
           action: none
         entities:
-          #- binary_sensor.kitchen_motion
           - binary_sensor.front_door
           - binary_sensor.browser_tf201_kyosk
+          - binary_sensor.tradfri_hallway_motion_sensor
           - entity: display.tf201_kyosk
             icon: mdi:tablet
-          - switch.tradfri_power_outlet
+          - light.hallway_presence_light
           - entity: light.hallway
             icon: mdi:ceiling-light
           - light.kitchen

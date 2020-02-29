@@ -10,40 +10,60 @@ cards:
   #   max_columns: 3
   #   cards:
       
-      - type: entities
-        title: Hydrogen
-        show_header_toggle: false
-        entities:
-          #- entity: sensor.last_boot
-            #name: Last boot
-          - entity: sensor.proxmox_cpu_load
-            name: Load
-          - entity: sensor.proxmox_cpu_used
-            name: CPU
-          - entity: sensor.proxmox_ram_used_percent
-            name: RAM
-          - entity: sensor.proxmox_swap_used_percent
-            name: SWAP
-          - entity: sensor.proxmox_cpu_temp
-            name: CPU
-          - entity: sensor.proxmox_disk_used_percent
-            name: Disk
-      - type: entities
-        title: Helium
-        show_header_toggle: false
-        entities:
-          - entity: sensor.helium_cpu_load
-            name: Load
-          - entity: sensor.helium_cpu_used
-            name: CPU
-          - entity: sensor.helium_ram_used_percent
-            name: RAM
-          - entity: sensor.helium_swap_used_percent
-            name: SWAP
-          - entity: sensor.helium_cpu_temperature
-            name: CPU
-          - entity: sensor.helium_disk_used_percent
-            name: Disk
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Hydrogen
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: sensor.proxmox_*
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Helium
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: sensor.helium_*
+
+      # - type: entities
+      #   title: Hydrogen
+      #   show_header_toggle: false
+      #   entities:
+      #     #- entity: sensor.last_boot
+      #       #name: Last boot
+      #     - entity: sensor.proxmox_cpu_load
+      #       name: Load
+      #     - entity: sensor.proxmox_cpu_used
+      #       name: CPU
+      #     - entity: sensor.proxmox_ram_used_percent
+      #       name: RAM
+      #     - entity: sensor.proxmox_swap_used_percent
+      #       name: SWAP
+      #     - entity: sensor.proxmox_cpu_temp
+      #       name: CPU
+      #     - entity: sensor.proxmox_disk_used_percent
+      #       name: Disk
+      # - type: entities
+      #   title: Helium
+      #   show_header_toggle: false
+      #   entities:
+      #     - entity: sensor.helium_cpu_load
+      #       name: Load
+      #     - entity: sensor.helium_cpu_used
+      #       name: CPU
+      #     - entity: sensor.helium_ram_used_percent
+      #       name: RAM
+      #     - entity: sensor.helium_swap_used_percent
+      #       name: SWAP
+      #     - entity: sensor.helium_cpu_temperature
+      #       name: CPU
+      #     - entity: sensor.helium_disk_used_percent
+      #       name: Disk
       
  
       - type: entities

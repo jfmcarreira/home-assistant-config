@@ -37,6 +37,7 @@ cards:
     entities:
       - entity: light.hallway
         name: Corredor
+      - light.hallway_presence_light
       - entity: light.kitchen
         name: Cozinha
       - entity: light.kitchen_pantry
@@ -58,21 +59,4 @@ cards:
       - entity: light.master_bedroom_right_bed
         name: Candeeiro Direita
         icon: mdi:lamp
-      
 
-  - type: entities
-    title: Tomadas
-    show_header_toggle: false
-    entities:
-      - entity: switch.tradfri_power_outlet
-        name: Luz Presença/Corredor
-        icon: mdi:power-socket-eu
-
-
-
-  #- type: entity-button
-    #entity: group.all_lights
-    #name: All Lights
-    #icon_height: 5
-    #tap_action:
-      #action: more-info
