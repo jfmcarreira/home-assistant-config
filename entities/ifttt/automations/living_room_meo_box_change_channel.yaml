@@ -1,0 +1,18 @@
+# This handles the changing MEO box channel
+#
+# https://www.home-assistant.io/integrations/ifttt/
+#
+# Body configured in IFTTT: { "action": "change_meo_channel", "channel":"{{NumberField}}" }
+
+id: IFTTT Change Meo Box Channel
+alias: IFTTT Change Meo Box Channel
+trigger:
+  - event_data:
+      action: change_meo_channel
+    event_type: ifttt_webhook_received
+    platform: event
+action:
+  - data_template:
+      channel: "{{ trigger.event.data.channel }}"
+      entity_id: media_player.living_room_tv_meo_box
+    service: python_script.change_meo_box_channel

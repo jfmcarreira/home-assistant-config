@@ -1,0 +1,4 @@
+
+
+shell_command:
+  meo_box_reset_program: 'python3 /config/scripts/meo_remote_test.py'

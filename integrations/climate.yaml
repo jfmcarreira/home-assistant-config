@@ -6,8 +6,8 @@ climate:
     name: Heating
     heater: switch.sonoff_basic_heating_relay
     target_sensor: sensor.heating_temperature
-    min_temp: 10
-    max_temp: 24
+    min_temp: 14
+    max_temp: 20
     min_cycle_duration:
       minutes: 1
     initial_hvac_mode: "off"

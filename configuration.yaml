@@ -1,4 +1,13 @@
 homeassistant:
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks:
+        - !secret beryllium_ip
+        - !secret pegasus_ip
+        - !secret bianca_phone_ip
+        - !secret magnesium_ip
+        - !secret strontium_ip
   packages: !include_dir_named integrations     
   customize: !include customize.yaml
 

@@ -1,0 +1,5 @@
+# This handles the loading of IFTTT automations
+#
+# https://www.home-assistant.io/integrations/ifttt/
+#
+automation ifttt: !include_dir_list ../entities/ifttt/automations/

@@ -1,0 +1,5 @@
+platform: integration
+source: sensor.bhpzem_power
+name: pzem_energy
+unit_prefix: k
+round: 2 

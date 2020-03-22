@@ -1,0 +1,20 @@
+# This handles the launching routines from IFTTT
+#
+# https://www.home-assistant.io/integrations/ifttt/
+#
+# Body Template { "action": "routine", "service": <script_name> }
+# 
+# Body configured in IFTTT
+# { "action": "routine", "service":"script.roborock_send_kitchen" }
+# { "action": "routine", "service":"script.routines_dinner_time" }
+
+id: IFTTT Launch Routine
+alias: IFTTT Launch Routine
+description: "Send Roborock to clean; Activate Dinner Time"
+trigger:
+  - event_data:
+      action: routine
+    event_type: ifttt_webhook_received
+    platform: event
+action:
+  - service_template: '{{ trigger.event.data.service }}'

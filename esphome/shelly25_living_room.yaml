@@ -58,9 +58,6 @@ binary_sensor:
     platform: gpio
     pin:
       number: GPIO13
-    #on_press:
-    #  then:
-    #    - light.toggle: light_1
     on_multi_click:
       - timing:
           - ON for at most 0.5s

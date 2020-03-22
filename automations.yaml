@@ -1,80 +1,3 @@
-- id: '1582826974779'
-  alias: Ctrl Tradfri Switch Off Short
-  description: ''
-  trigger:
-  - device_id: 1b3557c0618c418eaac04e5d7c6f5732
-    domain: deconz
-    platform: device
-    subtype: turn_off
-    type: remote_button_short_press
-  condition: []
-  action:
-  - data: {}
-    entity_id: all
-    service: light.turn_off
-- id: '1582828054249'
-  alias: 'Lights Turn Presence Light On '
-  description: ''
-  trigger:
-  - device_id: cb99078cfd084d7bb3fa438efbf7ee88
-    domain: binary_sensor
-    entity_id: binary_sensor.tradfri_motion_sensor
-    platform: device
-    type: motion
-  - device_id: 8de51b4185b64445989d528768892704
-    domain: light
-    entity_id: light.hallway
-    platform: device
-    type: turned_off
-  condition:
-  - condition: device
-    device_id: 8de51b4185b64445989d528768892704
-    domain: light
-    entity_id: light.hallway
-    type: is_off
-  action:
-  - device_id: 0e367b4ac88f4b38a3c2682bfe305b8f
-    domain: light
-    entity_id: light.hallway_presence_light
-    type: turn_on
-- id: '1582828314655'
-  alias: Lights Turn Presence Light Off
-  description: ''
-  trigger:
-  - device_id: 0e367b4ac88f4b38a3c2682bfe305b8f
-    domain: light
-    entity_id: light.hallway_presence_light
-    for:
-      hours: 0
-      minutes: 2
-      seconds: 0
-    platform: device
-    type: turned_on
-  - device_id: 8de51b4185b64445989d528768892704
-    domain: light
-    entity_id: light.hallway
-    platform: device
-    type: turned_on
-  condition: []
-  action:
-  - device_id: 0e367b4ac88f4b38a3c2682bfe305b8f
-    domain: light
-    entity_id: light.hallway_presence_light
-    type: turn_off
-- id: '1582849873848'
-  alias: Ctrl Tradfri Switch Off Long
-  description: ''
-  trigger:
-  - device_id: 1b3557c0618c418eaac04e5d7c6f5732
-    domain: deconz
-    platform: device
-    subtype: turn_off
-    type: remote_button_long_press
-  condition: []
-  action:
-  - data: {}
-    entity_id: script.night_away
-    service: script.turn_on
 - id: '1582862344067'
   alias: Lights Hallway Light Auto On
   description: ''
@@ -109,3 +32,131 @@
     domain: light
     entity_id: light.hallway
     type: turn_on
+- id: Media Control MEO Box Sala based on TV
+  alias: Media Control MEO Box Sala based on TV
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_tv_state
+  - platform: state
+    entity_id: sensor.living_room_tv_source
+  action:
+  - service_template: "{% if is_state('binary_sensor.living_room_tv_state', 'off')\
+      \ %}\n    media_player.turn_off\n{% else %}\n    {% if is_state('sensor.living_room_tv_source',\
+      \ 'MEO') %}\n        media_player.turn_on\n    {% else %}\n        media_player.turn_off\n\
+      \    {% endif %}\n{% endif %}\n"
+    entity_id: media_player.living_room_tv_meo_box
+- id: Ctrl Tradfri Switch Off Long Press
+  alias: Ctrl Tradfri Switch Off Long Press
+  trigger:
+  - device_id: 1b3557c0618c418eaac04e5d7c6f5732
+    domain: deconz
+    platform: device
+    subtype: turn_off
+    type: remote_button_long_press
+  condition: []
+  action:
+  - data: {}
+    entity_id: script.night_away
+    service: script.turn_on
+- id: Ctrl Tradfri Switch Off Short Press
+  alias: Ctrl Tradfri Switch Off Short Press
+  trigger:
+  - device_id: 1b3557c0618c418eaac04e5d7c6f5732
+    domain: deconz
+    platform: device
+    subtype: turn_off
+    type: remote_button_short_press
+  condition: []
+  action:
+  - device_id: 8de51b4185b64445989d528768892704
+    domain: light
+    entity_id: light.hallway
+    type: toggle
+- id: Lights Hallway Turn On Door Open
+  alias: Lights Hallway Turn On Door Open
+  trigger:
+  - entity_id: binary_sensor.front_door
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  - condition: state
+    entity_id: light.hallway
+    for:
+      seconds: 10
+    state: 'off'
+  action:
+  - entity_id: light.hallway
+    service: light.turn_on
+- id: Lights Kitchen Pantry Turn Off Timeout
+  alias: Lights Kitchen Pantry Turn Off Timeout
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: light.kitchen_pantry
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  action:
+    service: light.turn_off
+    data:
+      entity_id: light.kitchen_pantry
+- id: Lights Turn Presence Light Off
+  alias: Lights Turn Presence Light Off
+  trigger:
+  - device_id: 0e367b4ac88f4b38a3c2682bfe305b8f
+    domain: light
+    entity_id: light.hallway_presence_light
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+    platform: device
+    type: turned_on
+  - device_id: 8de51b4185b64445989d528768892704
+    domain: light
+    entity_id: light.hallway
+    platform: device
+    type: turned_on
+  condition: []
+  action:
+  - device_id: 0e367b4ac88f4b38a3c2682bfe305b8f
+    domain: light
+    entity_id: light.hallway_presence_light
+    type: turn_off
+- id: Lights Turn Presence Light On
+  alias: Lights Turn Presence Light On
+  trigger:
+  - device_id: cb99078cfd084d7bb3fa438efbf7ee88
+    domain: binary_sensor
+    entity_id: binary_sensor.tradfri_motion_sensor
+    platform: device
+    type: motion
+  - device_id: 8de51b4185b64445989d528768892704
+    domain: light
+    entity_id: light.hallway
+    platform: device
+    type: turned_off
+  condition:
+  - condition: device
+    device_id: 8de51b4185b64445989d528768892704
+    domain: light
+    entity_id: light.hallway
+    type: is_off
+  action:
+  - device_id: 0e367b4ac88f4b38a3c2682bfe305b8f
+    domain: light
+    entity_id: light.hallway_presence_light
+    type: turn_on
+
+
+
+
+
+

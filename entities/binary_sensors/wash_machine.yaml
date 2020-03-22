@@ -1,0 +1,18 @@
+platform: template
+sensors:
+  washing_machine_state:
+    friendly_name: "Máquina de Lavar"
+    device_class: plug
+    delay_on:
+      minutes: 10
+    delay_off:
+      minutes: 2
+    entity_id:
+      - sensor.power_sensor_laundry
+      - sensor.power_sensor_laundry_reactive
+    value_template: >-
+      {%- if ( states("sensor.power_sensor_laundry") | int > 10 ) and ( states("sensor.power_sensor_laundry_reactive") | float | abs > 30 ) %}
+          True
+      {%- else %}     
+          False
+      {%- endif %}

@@ -8,15 +8,6 @@ homeassistant:
   elevation: !secret home_elevation
   unit_system: metric
   time_zone: !secret home_timezone
-  auth_providers:
-    - type: homeassistant
-    - type: trusted_networks
-      trusted_networks:
-        - !secret beryllium_ip
-        - !secret pegasus_ip
-        - !secret bianca_phone_ip
-        - !secret magnesium_ip
-        - !secret strontium_ip
         
         
 # Configure a default setup of Home Assistant (frontend, api, etc)

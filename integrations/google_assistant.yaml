@@ -12,8 +12,13 @@ google_assistant:
   project_id: !secret google_assistant_clientid
   service_account: !include /config/google_assistant_service_account.json
   report_state: false
-  expose_by_default: false
+  expose_by_default: true
+  exposed_domains:
+    - light
+    - vacuum
   entity_config:    
+    light.browser_tf201_kyosk:
+      expose: false
     input_boolean.house_guest:
       expose: true
       aliases:
@@ -27,83 +32,20 @@ google_assistant:
     script.night_away:
       expose: true
       name: Night/Away Routine
+    script.roborock_send_kitchen:
+      expose: true
+      name: Limpeza Aspirador
+    script.routines_dinner_time:
+      expose: true
+      name: Dinner Time
     climate.heating:
       expose: true
       room: Corredor
       aliases:
         - Aquecimento
-    switch.tradfri_power_outlet:
-      expose: true
-      room: Corredor
-      name: Tradfri Power Outlet
-      aliases:
-        - Luz de Presença
-    light.special_xmas_lights:
-      expose: true
-      room: Sala de Estar
-      aliases:
-        - Luzes de Natal
-        - Christmas Lights
-    light.hallway:
-      expose: true
-      room: Corredor
-      aliases:
-        - Luz do Corredor
-        - Hallway Light
-    light.living_room_abajur:
-      expose: true
-      room: Sala de Estar
-      aliases:
-        - Luz de Apoio
-        - Living Room Side Light
-    light.living_room_tv_leds:
-      expose: true
-      room: Sala de Estar
-      aliases:
-        - Luz da Televisão
-        - TV Backlight
-    light.living_room_table:
-      expose: true
-      room: Sala de Estar
-      aliases:
-        - Luz da Mesa da Sala
-    light.living_room_window:
-      expose: true
-      room: Sala de Estar
-      aliases:
-        - Luz da Janela da Sala
     media_player.media_center:
       expose: true
       room: Sala de Estar
       name: Living Room TV
       aliases:
-        - TV da Sala
-        - Televisão da Sala
-    light.kitchen:
-      expose: true
-      room: Cozinha
-      aliases:
-        - Luz da Cozinha
-    light.kitchen_pantry:
-      expose: true
-      room: Cozinha
-      aliases:
-        - Luz da Despensa
-    light.office:
-      expose: true
-      room: Escritório
-    light.master_bedroom:
-      expose: true
-      room: Quarto
-      aliases:
-        - Luz Principal do Quarto
-    light.master_bedroom_left_bed:
-      expose: true
-      room: Quarto
-      aliases:
-        - Luz da Cama Esquerda
-    light.master_bedroom_right_bed:
-      expose: true
-      room: Quarto
-      aliases:
-        - Luz da Cama Direita
+        - Televisão

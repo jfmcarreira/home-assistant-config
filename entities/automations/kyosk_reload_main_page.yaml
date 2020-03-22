@@ -1,0 +1,19 @@
+id: Kyosk Reload Main Page
+alias: Kyosk Reload Main Page
+trigger:
+  - platform: state
+    entity_id: light.browser_tf201_kyosk
+    to: "off"
+    for:
+      seconds: 30
+  - platform: state
+    entity_id: light.browser_tf201_kyosk
+    to: "unavailable"
+    for:
+      seconds: 30
+action:
+  - service: browser_mod.navigate
+    data:
+      navigation_path: /tablet-view/main
+      deviceID:
+      - f6ca877f-817b8345

@@ -1,22 +1,8 @@
-light.special_xmas_lights:
-  icon: mdi:pine-tree
-light.master_bedroom:
-  icon: mdi:ceiling-light
-light.living_room_table:
-  icon: mdi:ceiling-light
-light.living_room_abajur:
-  icon: mdi:lamp
-light.living_room_window:
-  icon: mdi:ceiling-light
-light.living_room_tv_leds:
-  icon: mdi:led-strip-variant
-light.hallway:
-  icon: mdi:ceiling-light
 media_player.mediaroom_box_sala:
   name: Living Room Meo Box
   friendly_name: Living Room Meo Box
 media_player.browser_tf201_kyosk:
   friendly_name: Kiosk Player
   icon: mdi:tablet-dashboard
-light.hallway_presence_light:
-  icon: mdi:wall-sconce-flat
+binary_sensor.washing_machine_state:
+  icon: mdi:washing-machine

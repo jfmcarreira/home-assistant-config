@@ -61,8 +61,8 @@ sensor:
 
 
 automation old:
-  - id: Reset PIR State
-    alias: Reset PIR State
+  - id: Cat Reset PIR State
+    alias: Cat Reset PIR State
     initial_state: true
     trigger:
     - platform: homeassistant

@@ -1,75 +1,97 @@
-################################################################
-## Cat litter
-################################################################
 cat_clean_notification:
-  alias: "Litter Box Clean Notification"
+  alias: Litter Box Clean Notification
   sequence:
-    - service: python_script.light_store
-      data:
-        store_name: cat_litter_flash_store
-        operation: save
-        entity_id:
-          - light.living_room_tv_leds
-
-    - service: light.turn_on
-      data:
-        entity_id: light.living_room_tv_leds
-        rgb_color: [255, 0, 0]
-        brightness: 50
-        white_value: 0
-    - delay:
-        milliseconds: 200
-    - service: light.turn_off
-      data:
-        entity_id: light.living_room_tv_leds
-    - delay:
-        milliseconds: 200
-    - service: light.turn_on
-      data:
-        entity_id: light.living_room_tv_leds
-    - delay:
-        milliseconds: 200
-    - service: light.turn_off
-      data:
-        entity_id: light.living_room_tv_leds
-    - delay:
-        seconds: 1
-
-    - service: python_script.light_store
-      data:
-        operation: restore
-        store_name: cat_litter_flash_store
-
-################################################################
-## Night/Away
-################################################################
+  - service: python_script.light_store
+    data:
+      store_name: cat_litter_flash_store
+      operation: save
+      entity_id:
+      - light.living_room_tv_leds
+  - service: light.turn_on
+    data:
+      entity_id: light.living_room_tv_leds
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      brightness: 50
+      white_value: 0
+  - delay:
+      milliseconds: 200
+  - service: light.turn_off
+    data:
+      entity_id: light.living_room_tv_leds
+  - delay:
+      milliseconds: 200
+  - service: light.turn_on
+    data:
+      entity_id: light.living_room_tv_leds
+  - delay:
+      milliseconds: 200
+  - service: light.turn_off
+    data:
+      entity_id: light.living_room_tv_leds
+  - delay:
+      seconds: 1
+  - service: python_script.light_store
+    data:
+      operation: restore
+      store_name: cat_litter_flash_store
 night_away:
-  alias: "Routines Night/Away"
+  alias: Routines Night/Away
   sequence:
-    - event: LOGBOOK_ENTRY
-      event_data:
-        name: Shuting down
-
-    - service: climate.turn_off
-      data:
-        entity_id: climate.heating
-    - service: media_player.turn_off
-      data:
-        #entity_id: media_player.media_center
-        entity_id: all
-    - service: light.turn_off
-      data:
-        entity_id: all
-
-    - service: light.turn_on
-      data:
-        entity_id: light.hallway
-
-    - delay: 00:00:40
-
-    - service: light.turn_off
-      data:
-        #entity_id: all
-        entity_id: light.hallway
-
-
+  - event: LOGBOOK_ENTRY
+    event_data:
+      name: Shuting down
+  - service: climate.turn_off
+    data:
+      entity_id: climate.heating
+  - service: media_player.turn_off
+    data:
+      entity_id: all
+  - service: light.turn_off
+    data:
+      entity_id: all
+  - service: light.turn_on
+    data:
+      entity_id: light.hallway
+  - delay: 00:00:40
+  - service: light.turn_off
+    data:
+      entity_id: light.hallway
+roborock_send_kitchen:
+  alias: Roborock Send to Kitchen for Empty
+  sequence:
+  - data:
+      command: app_goto_target
+      params:
+      - 26925
+      - 24435
+    entity_id: vacuum.roborock
+    service: vacuum.send_command
+  - delay: 00:02:00
+  - data: {}
+    entity_id: vacuum.roborock
+    service: vacuum.return_to_base
+routines_dinner_time:
+  alias: Routines Dinner Time
+  sequence:
+  - device_id: f4d7fd6b96dc440fa055ef18d415f973
+    domain: light
+    entity_id: light.living_room_table
+    type: turn_on
+  - data: {}
+    entity_id: media_player.media_center
+    service: media_player.turn_on
+  - delay: 00:00:03
+  - data:
+      source: MEO
+    entity_id: media_player.media_center
+    service: media_player.select_source
+  - data:
+      channel: SIC
+      entity_id: media_player.living_room_tv_meo_box
+    service: python_script.change_meo_box_channel
+  - delay: 00:00:02
+  - data: {}
+    service: shell_command.meo_box_reset_program

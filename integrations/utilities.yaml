@@ -85,8 +85,8 @@ sensor:
           
           
 automation old:
-  - id: Meter Mark Electricity Reading
-    alias: Meter Mark Electricity Reading
+  - id: Power Mark Electricity Reading
+    alias: Power Mark Electricity Reading
     initial_state: true
     trigger:
       - platform: state
@@ -102,8 +102,8 @@ automation old:
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
           
-  - id: Meter Mark Gas Reading
-    alias: Meter Mark Gas Reading
+  - id: Power Mark Gas Reading
+    alias: Power Mark Gas Reading
     initial_state: true
     trigger:
       - platform: state
@@ -115,8 +115,8 @@ automation old:
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
           
-  - id: Meter Mark Water Reading
-    alias: Meter Mark Water Reading
+  - id: Power Mark Water Reading
+    alias: Power Mark Water Reading
     initial_state: true
     trigger:
       - platform: state

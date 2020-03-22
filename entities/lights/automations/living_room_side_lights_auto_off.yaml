@@ -1,5 +1,5 @@
-id: Lights  Living Room Side Turn Off
-alias: Lights  Living Room Side Turn Off
+id: Lights Living Room Side Turn Off
+alias: Lights Living Room Side Turn Off
 initial_state: true
 trigger:
   - entity_id: light.living_room_table
