@@ -1,8 +1,5 @@
 platform: mqtt
 name: "Fridge Door"
 device_class: door
-state_topic: "tele/Sonoff_RF_Bridge/RESULT"
-value_template: "{{value_json.RfReceived.Data}}"
-payload_on: "57E10A"
-payload_off: "57E10E" 
+state_topic: 'binary_rf_sensors/fridge_door'
 qos: 1

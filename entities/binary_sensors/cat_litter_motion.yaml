@@ -1,0 +1,5 @@
+platform: mqtt
+name: "Litter Box Motion"
+device_class: occupancy
+state_topic: "binary_rf_sensors/litter_box_motion"
+qos: 1

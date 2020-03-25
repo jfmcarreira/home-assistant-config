@@ -1,0 +1,9 @@
+id: RF Brigde Demultiplexer
+alias: RF Brigde Demultiplexer
+trigger:
+  - platform: mqtt
+    topic: tele/Sonoff_RF_Bridge/RESULT
+action:
+  - service: python_script.rf_bridge_demux
+    data_template:
+      payload: "{{trigger.payload_json.RfReceived.Data}}"

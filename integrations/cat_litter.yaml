@@ -28,17 +28,6 @@ input_datetime:
     has_date: true
     has_time: false
    
-    
-binary_sensor:  
-  - platform: mqtt
-    name: "Litter Box Motion"
-    #icon: mdi:cat
-    device_class: occupancy
-    state_topic: "tele/Sonoff_RF_Bridge/RESULT"
-    value_template: "{{ value_json.RfReceived.Data }}"
-    payload_on: "F1E77E"
-    payload_off: "F1E77Eoff"
-    qos: 1
           
 sensor:
   - platform: template
@@ -76,8 +65,8 @@ automation old:
     action:
     - service: mqtt.publish
       data:
-        topic: tele/Sonoff_RF_Bridge/RESULT
-        payload: '{"RfReceived":{"Data":"F1E77Eoff"}}'
+        topic: binary_rf_sensors/litter_box_motion
+        payload: 'OFF'
 
   - id: Cat Litter Mark Visit
     alias: Cat Litter Mark Visit
