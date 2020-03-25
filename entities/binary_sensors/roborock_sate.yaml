@@ -1,0 +1,5 @@
+platform: template
+sensors:
+  roborock_state:
+    icon_template: mdi:robot-vacuum
+    value_template: "{{ states.vacuum.roborock.state != 'docked' }}"  
