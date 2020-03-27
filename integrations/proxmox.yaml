@@ -1,0 +1,18 @@
+proxmoxve:
+  - host: !secret hydrogen_ip
+    username: !secret proxmox_user
+    password: !secret proxmox_pass
+    port: !secret proxmox_port
+    verify_ssl: false
+    realm: pve
+    nodes:
+      - node: hydrogen
+        containers:
+          - 100
+          - 101
+          - 111
+        vms:
+          - 201
+          - 202
+          - 300
+        
