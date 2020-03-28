@@ -10,36 +10,9 @@ homeassistant:
 
 
 ################################################################
-## Proxmox
-################################################################
-# proxmoxve:
-#   - host: !secret hydrogen_ip
-#     username: !secret proxmox_user
-#     password: !secret proxmox_pass
-#     port: !secret proxmox_port
-#     realm: pve
-#     verify_ssl: false
-#     nodes:
-#       - node: hydrogen
-#         containers:
-#           - 100
-#           - 101
-#           - 111
-#           - 112
-#         vms:
-#           - 201
-#           - 300
-
-
-################################################################
 ## Detect state sensors
 ################################################################
 binary_sensor:
-  - platform: ping
-    name: Hydrogen
-    host: !secret hydrogen_ip
-    count: 2
-    scan_interval: 300
   - platform: ping
     name: Helium
     host: !secret helium_ip
