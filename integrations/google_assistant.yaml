@@ -12,40 +12,91 @@ google_assistant:
   project_id: !secret google_assistant_clientid
   service_account: !include /config/google_assistant_service_account.json
   report_state: false
-  expose_by_default: true
-  exposed_domains:
-    - light
-    - vacuum
-  entity_config:    
-    light.browser_tf201_kyosk:
-      expose: false
-    input_boolean.house_guest:
+  expose_by_default: false
+  entity_config:  
+    vacuum.roborock:
       expose: true
-      aliases:
-        - Convidados
+      name: Roborock
     script.cat_litter_clean:
       expose: true
-      name: Cat Litter Clean
+      name: Limpar Areia das Gatas
     script.cat_litter_change:
       expose: true
-      name: Cat Litter Change
+      name: Trocar Areia das Gatas
     script.night_away:
       expose: true
-      name: Night/Away Routine
+      name: Routina de Boa noite
     script.roborock_send_kitchen:
       expose: true
-      name: Limpeza Aspirador
+      name: Activar Limpeza Aspirador
     script.routines_dinner_time:
       expose: true
-      name: Dinner Time
+      name: Routina de Jantar
     climate.heating:
       expose: true
-      room: Corredor
       aliases:
         - Aquecimento
     media_player.media_center:
       expose: true
-      room: Sala de Estar
-      name: Living Room TV
+      name: Televisão da Sala
       aliases:
-        - Televisão
+        - TV
+        - Living Room TV
+    light.living_room_table:
+      expose: true
+      name: Luz da Mesa da Sala
+      aliases:
+        - Living Room Table Light
+    light.living_room_window:
+      expose: true
+      name: Luz da Janela da Sala
+      aliases:
+        - Living Room Window Light
+    light.living_room_abajur:
+      expose: true
+      name: Luz de Apoio
+      aliases:
+        - Living Room Side Light
+    light.hallway:
+      expose: true
+      name: Luz do Corredor
+      aliases:
+        - Hallway Light
+    light.hallway_presence_light:
+      expose: true
+      name: Luz de Presença do Corredor
+      aliases:
+        - Hallway Presence Light
+    light.kitchen:
+      expose: true
+      name: Luz da Cozinha
+      aliases:
+        - Kitchen Light
+    light.master_bedroom:
+      expose: true
+      name: Luz do Quarto
+      aliases:
+        - Bedroom Light
+    light.master_bedroom_left_bed:
+      expose: true
+      name: Luz do Candeeiro Esquerdo do Quarto
+      aliases:
+        - Bedroom Left Side Light
+    light.master_bedroom_right_bed:
+      expose: true
+      name: Luz do Candeeiro Direito do Quarto
+      aliases:
+        - Bedroom Right Side Light
+    light.office:
+      expose: true
+      name: Luz do Escritório
+      aliases:
+        - Office Light
+    light.office_desk:
+      expose: true
+      name: Luz da Mesa do Escritório
+      aliases:
+        - Office Desk Light
+
+
+        
