@@ -7,6 +7,8 @@
 # Body configured in IFTTT
 # { "action": "routine", "service":"script.roborock_send_kitchen" }
 # { "action": "routine", "service":"script.routines_dinner_time" }
+# { "action": "routine", "service":"script.cat_litter_clean" }
+# { "action": "routine", "service":"script.cat_litter_change" }
 
 id: IFTTT Launch Routine
 alias: IFTTT Launch Routine
