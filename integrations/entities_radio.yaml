@@ -1,0 +1,40 @@
+################################################################
+## Selections
+################################################################
+input_select:
+  ## Radio Stations
+  radio_station:
+    name: "Radio Station"
+    icon: mdi:radio-fm
+    options:  
+      - RFM
+      - Comercial
+      - Cidade FM
+      - M80
+      - TSF
+      - Mega Hits
+      - Antena 1
+      - Antena 2
+      - Antena 3
+      - YouTube URL
+    
+  
+  ## Speaker selection
+  speakers_selector:
+    name: "Media Player"
+    icon: mdi:speaker
+    options:  
+      #- Stopped
+      - Google Home
+      - Kiosk
+      #- Host
+      #- TV
+      #- Pegasus
+      #- Lithium
+      #- Todos
+
+input_text:
+  youtube_url:
+    name: YouTube URL
+    icon: mdi:youtube
+    
