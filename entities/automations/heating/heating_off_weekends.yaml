@@ -1,0 +1,16 @@
+id: Heating Auto Turn Off - Weekend
+alias: Heating Auto Turn Off - Weekend
+trigger:
+  - platform: template
+    value_template: "{{ states.sensor.time.state == (states.input_datetime.heating_off_weekend_days.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+condition:
+  - condition: template
+    value_template: >
+      {% if (states.input_datetime.heating_off_weekend_days.attributes.timestamp | int ) < 28800 %}
+          {{ is_state('binary_sensor.workday', 'off') }}
+      {% else %}
+          {{ is_state('binary_sensor.workday_tomorrow', 'off') }}
+      {% endif %}
+action:
+  - service: climate.turn_off
+    entity_id: climate.heating

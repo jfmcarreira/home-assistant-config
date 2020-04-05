@@ -13,6 +13,15 @@ secrets.yaml
 *.sh
 *.pickle
 
+# Files
+.uuid
+.HA_VERSION
+known_devices.yaml
+google_assistant_service_account.json
+esphome/aluminium/partitions.csv
+python_scripts/shellies_discovery.py
+esphome/barium/partitions.csv
+
 # Folders
 .storage
 www
@@ -20,21 +29,8 @@ lib
 deps
 tts
 custom_components
-
-
-
-esphome/aluminium/partitions.csv
-python_scripts/shellies_discovery.py
-known_devices.yaml
-google_assistant_service_account.json
-esphome/barium/partitions.csv
-.uuid
-.HA_VERSION
-themes/amoled.yaml
-themes/blue_night.yaml
-themes/clear-dark.yaml
-themes/grey_night.yaml
-themes/material_dark_green.yaml
-themes/material_dark_pink.yaml
-themes/midnight.yaml
-themes/teal.yaml
+themes
+integrations_disabled
+devices_config
+appdaemon
+lovelace_storage_backup

@@ -4,6 +4,11 @@
 #
 # Body Template { "action": "routine", "service": <script_name> }
 # 
+# If You say "Mark Cat Litter Clean", then Make a web request
+# If You say "Mark Cat Litter Change", then Make a web request
+# If You say "Send Roborock to clean", then Make a web request
+# If You say "Activate Dinner Time", then Make a web request
+#
 # Body configured in IFTTT
 # { "action": "routine", "service":"script.roborock_send_kitchen" }
 # { "action": "routine", "service":"script.routines_dinner_time" }

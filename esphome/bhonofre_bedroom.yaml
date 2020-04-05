@@ -22,6 +22,9 @@ api:
 
 ota:
 
+dallas:
+  - pin: GPIO14
+  
 
 binary_sensor:
   - name: ${upper_devicename} Left SW
@@ -44,6 +47,7 @@ binary_sensor:
       then:
         - light.toggle: light_2
 
+
 output:
   - platform: gpio
     id: relay_1
@@ -53,6 +57,7 @@ output:
     id: relay_2
     pin: 
       number: GPIO04
+
     
 light:
   - name: ${upper_devicename} Left Bed
@@ -68,12 +73,16 @@ light:
     restore_mode: ALWAYS_OFF
 
 sensor:
-  - platform: dht
-    model: DHT11
-    pin: GPIO14
-    temperature:
-      name: ${upper_devicename} Temperature
-      accuracy_decimals: 1
-    humidity:
-      name: ${upper_devicename} Humidity
-    update_interval: 10s
+  - platform: dallas
+    address: 0xDF031761F44FFF28
+    name: ${upper_devicename} Temperature
+    
+  #- platform: dht
+   # model: DHT11
+    #pin: GPIO14
+    #temperature:
+    #  name: ${upper_devicename} Temperature
+    #  accuracy_decimals: 1
+    #humidity:
+    #  name: ${upper_devicename} Humidity
+    #update_interval: 30s

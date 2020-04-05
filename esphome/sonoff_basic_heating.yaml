@@ -44,10 +44,27 @@ binary_sensor:
           - logger.log: connected
         else:
           - switch.toggle: relay
+          
+  
+  - platform: homeassistant
+    name: Heating boiler state from HA
+    entity_id: binary_sensor.heating_boiler_state
+    on_press:
+      - switch.turn_on: relay
+    on_release:
+      - switch.turn_off: relay
+          
+  - platform: homeassistant
+    name: Heating state from HA
+    entity_id: binary_sensor.heating_state
+    on_press:
+      - switch.turn_on: green_led
+    on_release:
+      - switch.turn_off: green_led
 
 switch:
   - platform: gpio
-    name: sonoff_basic_heating_relay
+    #name: sonoff_basic_heating_relay
     id: relay
     pin: 
       number: GPIO12
@@ -59,7 +76,7 @@ switch:
       number: GPIO13
       inverted: True
     id: green_led
-    name: sonoff_basic_heating_led
+    #name: sonoff_basic_heating_led
     
     
 dallas:
@@ -69,6 +86,7 @@ sensor:
   - platform: dallas
     address: 0xC403209779413328
     name: "Heating Ongoing Water Temperature"
+    
 
 #status_led:
 #  pin:

@@ -2,6 +2,7 @@
 #
 # https://www.home-assistant.io/integrations/ifttt/
 #
+# Change TV to Channel #
 # Body configured in IFTTT: { "action": "change_meo_channel", "channel":"{{NumberField}}" }
 
 id: IFTTT Change Meo Box Channel

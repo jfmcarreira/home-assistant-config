@@ -20,7 +20,8 @@ api:
 ota:
 
 esp32_ble_tracker:
-  #scan_interval: 120s
+  #scan_parameters:
+    #interval: 30s
   
 sensor:
   - platform: xiaomi_lywsdcgq

@@ -2,6 +2,7 @@
 #
 # https://www.home-assistant.io/integrations/ifttt/
 #
+# If You say "TV Press $ ", then Make a web request
 # Body configured in IFTTT: { "action": "remote_control_tv", "button":"{{TextField}}" }
 
 id: IFTTT LG TV Remote

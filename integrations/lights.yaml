@@ -1,5 +1,5 @@
 ################################################################
 ## Ligths
 ################################################################
-#light: !include_dir_list ../entities/lights/
-automation lights: !include_dir_list ../entities/lights/automations/
+light: !include_dir_list ../entities/lights/
+automation lights: !include_dir_list ../entities/automations/lights/
