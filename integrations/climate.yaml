@@ -25,10 +25,9 @@ climate:
     min_temp: 20
     max_temp: 70
     min_cycle_duration:
-      minutes: 1
-    cold_tolerance: 0
-    hot_tolerance: 0
+      minutes: 10
+    cold_tolerance: 3
+    hot_tolerance: 3
     keep_alive:
       seconds: 30
-
-automation climate: !include_dir_list ../entities/automations/heating/
+      

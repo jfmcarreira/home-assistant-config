@@ -13,19 +13,5 @@ switch:
   - platform: zoneminder
     command_on: Modect
     command_off: Monitor
-    
-    
 camera:
   - platform: zoneminder
-
-  #- platform: ffmpeg
-    #name: v380ipcam
-    #input: rtsp://admin:l7j9ki@192.168.1.221/live/ch00_0
-    
-  - platform: onvif
-    name: v380_onvif
-    host: 192.168.1.221
-    username: admin
-    password: l7j9ki
-    port: 8899
-

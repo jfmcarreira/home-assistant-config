@@ -51,8 +51,8 @@
   - device_id: f7f5e0cdff7e4d41ae12f5ca68867d6b
     domain: zha
     platform: device
-    subtype: turn_off
     type: remote_button_long_press
+    subtype: dim_down
   condition: []
   action:
   - data: {}

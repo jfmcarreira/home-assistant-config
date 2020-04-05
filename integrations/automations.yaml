@@ -1,0 +1,9 @@
+# This handles all automations
+#
+# https://www.home-assistant.io/integrations/automation/
+#
+automation generic: !include_dir_list ../automations/
+automation heating: !include_dir_list ../automations/heating/
+automation ifttt:   !include_dir_list ../automations/ifttt/
+automation lights:  !include_dir_list ../automations/lights/
+automation power:   !include_dir_list ../automations/power/

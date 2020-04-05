@@ -3,13 +3,14 @@
 #
 # Split entities configuration in a per file basis
 ################################################################################
-automation old: !include_dir_list ../entities/automations/
-
-sensor: !include_dir_list ../entities/sensors/
-sensor history: !include_dir_list ../entities/history_stats/
 binary_sensor: !include_dir_list ../entities/binary_sensors/
+light: !include_dir_list ../entities/lights/
 media_player: !include_dir_list ../entities/media_players/
 script: !include_dir_named ../entities/scripts/     
+sensor: !include_dir_list ../entities/sensors/
+sensor history: !include_dir_list ../entities/history_stats/
+
+
 
 
 

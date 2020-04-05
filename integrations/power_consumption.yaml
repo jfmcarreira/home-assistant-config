@@ -12,8 +12,7 @@ homeassistant:
       icon: mdi:flash
       unit_of_measurement: "W"
 
-sensor: !include_dir_list ../entities/power/sensors/
-automation old: !include_dir_list ../entities/power/automations/
+sensor power: !include_dir_list ../entities/power/sensors/
 
 
 utility_meter: 
