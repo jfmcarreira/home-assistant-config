@@ -126,10 +126,9 @@
     type: turned_on
   condition: []
   action:
-  - device_id: be756a7791d94a8d8986f2744fad5d91
-    domain: switch
-    entity_id: switch.ikea_of_sweden_tradfri_control_outlet_af68fffe_on_off
-    type: turn_off
+  - data: {}
+    entity_id: light.hallway_presence
+    service: light.turn_off
 - id: Lights Turn Presence Light On
   alias: Lights Turn Presence Light On
   trigger:
@@ -150,10 +149,9 @@
     entity_id: light.hallway
     type: is_off
   action:
-  - device_id: be756a7791d94a8d8986f2744fad5d91
-    domain: switch
-    entity_id: switch.ikea_of_sweden_tradfri_control_outlet_af68fffe_on_off
-    type: turn_on
+  - data: {}
+    entity_id: light.hallway_presence
+    service: light.turn_on
 - id: '1585009332880'
   alias: Ctrl Tradfri Switch On Short Press
   description: ''
