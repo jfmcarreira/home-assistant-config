@@ -17,7 +17,7 @@ meo_channels = {
     'sport tv plus': '9',
     'tv globe basic': '10',
     'sic woman': '11',
-    'sick woman': '11',
+    'sic woman': '11',
     "wife ' s favorite channel": '11',
     'oporto hd': '12',
     'sic faces': '14',

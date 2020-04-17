@@ -1,37 +1,3 @@
-- id: '1582862344067'
-  alias: Lights Hallway Light Auto On
-  description: ''
-  trigger:
-  - device_id: eadd184288be4306a551935de09ff2b0
-    domain: light
-    entity_id: light.office
-    platform: device
-    type: turned_off
-  - device_id: 42adac7e773448498a90882f43082d4e
-    domain: light
-    entity_id: light.master_bedroom
-    platform: device
-    type: turned_off
-  - device_id: 3efe8fa2d8d44879a73ba41528236ba6
-    domain: light
-    entity_id: light.kitchen
-    platform: device
-    type: turned_off
-  - entity_id: group.living_room_main_lights
-    from: 'on'
-    platform: state
-    to: 'off'
-  condition:
-  - condition: and
-    conditions:
-    - condition: state
-      entity_id: group.living_room_main_lights
-      state: 'off'
-  action:
-  - device_id: 8de51b4185b64445989d528768892704
-    domain: light
-    entity_id: light.hallway
-    type: turn_on
 - id: Media Control MEO Box Sala based on TV
   alias: Media Control MEO Box Sala based on TV
   trigger:
@@ -48,11 +14,11 @@
 - id: Ctrl Tradfri Switch Off Long Press
   alias: Ctrl Tradfri Switch Off Long Press
   trigger:
-  - device_id: f7f5e0cdff7e4d41ae12f5ca68867d6b
-    domain: zha
+  - device_id: 645f1d8db9264050adf7cd5a63c35a9a
+    domain: deconz
     platform: device
+    subtype: turn_off
     type: remote_button_long_press
-    subtype: dim_down
   condition: []
   action:
   - data: {}
@@ -61,8 +27,8 @@
 - id: Ctrl Tradfri Switch Off Short Press
   alias: Ctrl Tradfri Switch Off Short Press
   trigger:
-  - device_id: f7f5e0cdff7e4d41ae12f5ca68867d6b
-    domain: zha
+  - device_id: 645f1d8db9264050adf7cd5a63c35a9a
+    domain: deconz
     platform: device
     subtype: turn_off
     type: remote_button_short_press
@@ -91,76 +57,15 @@
   action:
   - entity_id: light.hallway
     service: light.turn_on
-- id: Lights Kitchen Pantry Turn Off Timeout
-  alias: Lights Kitchen Pantry Turn Off Timeout
-  initial_state: true
-  trigger:
-    platform: state
-    entity_id: light.kitchen_pantry
-    from: 'off'
-    to: 'on'
-    for:
-      hours: 0
-      minutes: 5
-      seconds: 0
-  action:
-    service: light.turn_off
-    data:
-      entity_id: light.kitchen_pantry
-- id: Lights Turn Presence Light Off
-  alias: Lights Turn Presence Light Off
-  trigger:
-  - device_id: be756a7791d94a8d8986f2744fad5d91
-    domain: switch
-    entity_id: switch.ikea_of_sweden_tradfri_control_outlet_af68fffe_on_off
-    for:
-      hours: 0
-      minutes: 2
-      seconds: 0
-    platform: device
-    type: turned_on
-  - device_id: 8de51b4185b64445989d528768892704
-    domain: light
-    entity_id: light.hallway
-    platform: device
-    type: turned_on
-  condition: []
-  action:
-  - data: {}
-    entity_id: light.hallway_presence
-    service: light.turn_off
-- id: Lights Turn Presence Light On
-  alias: Lights Turn Presence Light On
-  trigger:
-  - device_id: 3f77ccfc4aa44d268485040fa5e831d2
-    domain: binary_sensor
-    entity_id: binary_sensor.ikea_of_sweden_tradfri_motion_sensor_13acaefe_on_off
-    platform: device
-    type: opened
-  - device_id: 8de51b4185b64445989d528768892704
-    domain: light
-    entity_id: light.hallway
-    platform: device
-    type: turned_off
-  condition:
-  - condition: device
-    device_id: 8de51b4185b64445989d528768892704
-    domain: light
-    entity_id: light.hallway
-    type: is_off
-  action:
-  - data: {}
-    entity_id: light.hallway_presence
-    service: light.turn_on
 - id: '1585009332880'
   alias: Ctrl Tradfri Switch On Short Press
   description: ''
   trigger:
-  - device_id: f7f5e0cdff7e4d41ae12f5ca68867d6b
-    domain: zha
+  - device_id: 645f1d8db9264050adf7cd5a63c35a9a
+    domain: deconz
     platform: device
-    type: remote_button_short_press
     subtype: turn_on
+    type: remote_button_short_press
   condition: []
   action:
   - data: {}
@@ -216,3 +121,48 @@
     domain: light
     entity_id: light.living_room_abajur
     type: toggle
+- id: '1586374735215'
+  alias: Task Remove Laundry From Wash Machine
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.washing_machine_state
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      data:
+        sticky: 'true'
+      message: Retirar roupa da máquina de lavar
+      title: Tarefa Doméstica
+    service: notify.mobile_app
+  - data: {}
+    entity_id: input_boolean.washing_machine_wet_clothes
+    service: input_boolean.turn_on
+- id: '1586741511899'
+  alias: Frontend Set Daily Theme
+  description: ''
+  trigger:
+  - event: sunrise
+    offset: 00:30:00
+    platform: sun
+  condition: []
+  action:
+  - data:
+      name: Google Light Theme
+    service: frontend.set_theme
+- id: '1586741560002'
+  alias: Frontend Set Night Theme
+  description: ''
+  trigger:
+  - event: sunset
+    offset: 01:00:00
+    platform: sun
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      name: Google Dark Theme
+    service: frontend.set_theme

@@ -32,6 +32,8 @@ condition:
     - condition: state
       entity_id: binary_sensor.browser_tf201_kyosk
       state: "off"
+    - condition: template
+      value_template: "{{ not is_state('media_player.browser_tf201_kyosk', 'playing') }}"
 action:
   - service: display.turn_off
     data:

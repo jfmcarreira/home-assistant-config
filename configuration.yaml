@@ -8,7 +8,11 @@ homeassistant:
         - !secret bianca_phone_ip
         - !secret magnesium_ip
         - !secret strontium_ip
-  packages: !include_dir_named integrations     
+      #trusted_users:
+      #  192.168.1.9: ha_user
+      #allow_bypass_login: true
+
+  packages: !include_dir_named integrations
   customize: !include customize.yaml
 
 

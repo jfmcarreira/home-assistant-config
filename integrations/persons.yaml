@@ -26,11 +26,6 @@ input_boolean:
     icon: mdi:home
     
 ################################################################
-## Persons
-################################################################
-
-      
-################################################################
 ## Proximity
 ################################################################
 proximity:
@@ -42,22 +37,3 @@ proximity:
       - device_tracker.magnesium
     unit_of_measurement: m
     tolerance: 50
-
-################################################################
-## Home/Away toggles
-################################################################
-binary_sensor:
-  - platform: template
-    sensors:
-      notify_home:
-        friendly_name: Notify House Occupied
-        icon_template: "mdi:home"
-        #value_template: "{{ is_state('binary_sensor.joao_home', 'on') or is_state('binary_sensor.bianca_home', 'on') or is_state('input_boolean.house_guest', 'on') }}"
-        value_template: "{{ is_state('input_boolean.notify_home', 'on') }}"
-      bianca_home:
-        value_template: "{{ states.person.bianca.state == 'home' }}"
-      joao_home:
-        #value_template: "{{ states.sensor.joao_status.state != 'Away' }}"
-        #value_template: "{{ states.person.joao.state != 'not_home' }}"
-        value_template: "{{ states.person.joao.state == 'home' }}"
-        

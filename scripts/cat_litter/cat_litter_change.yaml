@@ -1,0 +1,11 @@
+cat_litter_change:
+alias: "Litter Box Mark Change"
+sequence:
+  - service: script.cat_litter_clean
+  - service: grocy.execute_chore
+    data:
+      chore_id: 2
+  - service: input_datetime.set_datetime
+    data_template:
+      entity_id: input_datetime.cat_litter_box_last_change
+      date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'

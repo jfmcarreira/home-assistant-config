@@ -9,10 +9,11 @@ proxmoxve:
       - node: hydrogen
         containers:
           - 100
-          - 101
           - 111
+          - 112
         vms:
-          - 201
+          - 102
+          - 200
           - 202
           - 300
         

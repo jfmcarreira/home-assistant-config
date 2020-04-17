@@ -1,13 +1,15 @@
 platform: template
 lights:
   hallway_presence:
+    entity_id: switch.tradfri_plug
     friendly_name: Luz de Presença do Corredor
-    value_template: "{{ is_state( 'switch.hallway_presence_light', 'on' ) }}"
+    value_template: "{{ is_state( 'switch.tradfri_plug', 'on' ) }}"
+    icon_template: mdi:wall-sconce-flat
     turn_on:
       service: homeassistant.turn_on
       data:
-        entity_id: switch.hallway_presence_light
+        entity_id: switch.tradfri_plug
     turn_off:
       service: homeassistant.turn_off
       data:
-        entity_id: switch.hallway_presence_light
+        entity_id: switch.tradfri_plug

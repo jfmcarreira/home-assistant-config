@@ -1,0 +1,17 @@
+id: Lights Turn Presence Light On
+alias: Lights Turn Presence Light On
+trigger:
+- platform: state
+  entity_id: binary_sensor.motion_sensor_hallway
+  to: 'on'
+- platform: state
+  entity_id: light.hallway
+  to: 'off'
+# condition:
+# - condition: state
+#   entity_id: light.hallway
+#   state: 'off'
+action:
+- service: light.turn_on
+  entity_id: light.hallway_presence
+  

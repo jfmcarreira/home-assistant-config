@@ -11,9 +11,18 @@ trigger:
     to: "unavailable"
     for:
       seconds: 30
+  - platform: state
+    entity_id: display.tf201_kyosk
+    to: "off"
+    for:
+      seconds: 20
 action:
-  - service: browser_mod.navigate
+  - service: display.load_url
     data:
-      navigation_path: /tablet-view/main
-      deviceID:
-      - f6ca877f-817b8345
+      entity_id: display.tf201_kyosk
+      url: http://homeassistant.home/tablet-view/main
+  # - service: browser_mod.navigate
+  #   data:
+  #     navigation_path: /tablet-view/main
+  #     deviceID:
+  #     - f6ca877f-817b8345

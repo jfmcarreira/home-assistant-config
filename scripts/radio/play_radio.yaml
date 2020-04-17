@@ -24,5 +24,12 @@ sequence:
         {% elif is_state("input_select.radio_station", "Antena 1") %} http://radiocast.rtp.pt/antena180a.mp3
         {% elif is_state("input_select.radio_station", "Antena 2") %} http://radiocast.rtp.pt/antena280a.mp3
         {% elif is_state("input_select.radio_station", "Antena 3") %} http://radiocast.rtp.pt/antena380a.mp3
-        {% elif is_state("input_select.radio_station", "YouTube URL") %} {{ states.input_text.youtube_url.state }}
+        {% elif is_state("input_select.radio_station", "YouTube URL") %} 
+          {% set youtube_url = states('input_text.youtube_url') %}
+          {% if 'www.youtube.com' in  youtube_url %}
+            {% set youtube_code = youtube_url.split('=')[-1] %}
+          {% else %}
+            {% set youtube_code = youtube_url.split('/')[-1] %}
+          {% endif %}
+          https://www.youtube.com/watch?v={{ youtube_code }}
         {% endif %}

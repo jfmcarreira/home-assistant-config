@@ -8,5 +8,4 @@ action:
     data:
       entity_id: 
         - media_player.google_home_mini
-        -  media_player.browser_tf201_kyosk
       message: "Atenção! Elevada potência consumida." 

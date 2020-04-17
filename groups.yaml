@@ -12,6 +12,14 @@ hall:
     - light.kitchen_pantry
     - binary_sensor.front_door
     - binary_sensor.browser_tf201_kyosk
+
+kitchen:
+  name: Hall
+  entities:
+    - light.kitchen
+    - light.kitchen_pantry
+    - binary_sensor.fridge_door
+    
     
 living_room:
   name: Living Room
@@ -23,7 +31,7 @@ living_room:
     - light.special_xmas_lights
     - sensor.living_room_temperature
     - sensor.power_usage_living_room
-    - media_player.media_center    
+    - media_player.media_center
     
 master_bedroom:
   name: Master Bedroom
@@ -39,7 +47,8 @@ office:
   name: Office
   entities:
     - light.office
-    - sensor.mijia_temperature
-    - sensor.mijia_humidity
+    - sensor.office_temperature
+    - sensor.office_humidity
     - sensor.power_usage_office
+    - sensor.office_mijia_batery
 

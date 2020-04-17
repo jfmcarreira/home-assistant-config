@@ -3,3 +3,20 @@ vacuum:
     name: Roborock
     host: !secret roborock_ip
     token: !secret roborock_token
+
+
+input_select:
+  house_rooms:
+    name: Divisões da Casa
+    #icon: mdi:radio-fm
+    options:  
+      - Sala
+      - Cozinha
+      - Casa de Banho Principal
+      - Escritório
+      - Quarto
+      - Casa de Banho do Quarto
+      - Escritório
+      - Quarto do Fundo
+
+

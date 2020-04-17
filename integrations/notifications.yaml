@@ -8,13 +8,8 @@ notify:
     vapid_prv_key: !secret vapid_api_prv_key
     vapid_email: !secret vapid_api_email
     
-  # - platform: webostv
-  #   host: !secret living_room_ip
-  #   name: Living Room TV
-  #   filename: webostv.conf
-  
   - platform: group
-    name: notify_all
+    name: mobile_app
     services:
-      - service: living_room_tv
+      - service: mobile_app_huawei_can_l11
       - service: mobile_app_oneplus_a6010

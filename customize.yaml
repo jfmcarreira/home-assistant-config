@@ -12,3 +12,10 @@ binary_sensor.fridge_door:
 binary_sensor.living_room_tv_state:
   friendly_name: Televisão da Sala
   icon: mdi:television
+media_player.media_center:
+  icon: mdi:television
+display.tf201_kyosk:
+  friendly_name: Kyosk Entrada
+  icon: mdi:tablet-dashboard
+binary_sensor.browser_tf201_kyosk:
+  friendly_name: Movimento Porta Entrada

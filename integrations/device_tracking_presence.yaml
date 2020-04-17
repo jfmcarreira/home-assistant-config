@@ -1,20 +1,22 @@
 ################################################################
 ## Device tracker
 ################################################################
-homeassistant:
-  customize:       
-    device_tracker.magnesium:
-      entity_picture: /local/img_joao.jpg
+#homeassistant:
+  #customize:       
+    #device_tracker.magnesium:
+      #entity_picture: /local/img_joao.jpg
+    #device_tracker.bianca_phone:
+      #entity_picture: /local/img_bianca.jpg
       
 device_tracker:
-  # - platform: bluetooth_tracker
-  #   interval_seconds: 10
-  #   consider_home: 10
-  #   new_device_defaults:
-  #     track_new_devices: false
+  #- platform: bluetooth_tracker
+    #interval_seconds: 10
+    #consider_home: 60
+    #new_device_defaults:
+      #track_new_devices: true
   
   - platform: ping
-    interval_seconds: 20
+    interval_seconds: 30
     consider_home: 60
     new_device_defaults:
       track_new_devices: true

@@ -40,25 +40,29 @@ cat_clean_notification:
 night_away:
   alias: Routines Night/Away
   sequence:
-  - event: LOGBOOK_ENTRY
-    event_data:
-      name: Shuting down
-  - service: climate.turn_off
-    data:
+  - data:
       entity_id: climate.heating
-  - service: media_player.turn_off
-    data:
+    service: climate.turn_off
+  - data:
       entity_id: all
-  - service: light.turn_off
-    data:
-      entity_id: all
-  - service: light.turn_on
-    data:
-      entity_id: light.hallway
+    service: media_player.turn_off
+  - entity_id: group.hallway
+    service: homeassistant.turn_off
+  - data: {}
+    entity_id: group.kitchen
+    service: homeassistant.turn_off
+  - data: {}
+    entity_id: group.living_room
+    service: homeassistant.turn_off
+  - data: {}
+    entity_id: group.office
+    service: homeassistant.turn_off
+  - entity_id: light.hallway
+    service: light.turn_on
   - delay: 00:00:40
-  - service: light.turn_off
-    data:
+  - data:
       entity_id: light.hallway
+    service: light.turn_off
 roborock_send_kitchen:
   alias: Roborock Send to Kitchen for Empty
   sequence:
@@ -95,3 +99,11 @@ routines_dinner_time:
   - delay: 00:00:02
   - data: {}
     service: shell_command.meo_box_reset_program
+meo_reset_current_show:
+  alias: Routines Meo Reset Current Show
+  sequence:
+  - service: shell_command.meo_box_reset_program
+meo_reset_previous_show:
+  alias: Routines Meo Reset Previous Show
+  sequence:
+  - service: shell_command.meo_box_reset_previous_program
