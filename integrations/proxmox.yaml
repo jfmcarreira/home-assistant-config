@@ -7,13 +7,12 @@ proxmoxve:
     realm: pve
     nodes:
       - node: hydrogen
+        vms:
+          - 200
+          - 201
+          - 202
+          - 300
         containers:
           - 100
           - 111
           - 112
-        vms:
-          - 102
-          - 200
-          - 202
-          - 300
-        
