@@ -1,0 +1,31 @@
+alias: Routines Meo Reset Previous Show
+sequence:
+  - service: media_player.play_media
+    data:
+      entity_id: media_player.living_room_tv_meo_box
+      media_content_id: "Exit"
+      media_content_type: "channel"
+  - delay: 00:00:01
+  - service: media_player.play_media
+    data:
+      entity_id: media_player.living_room_tv_meo_box
+      media_content_id: "Up"
+      media_content_type: "channel"
+  - delay: 00:00:02
+  - service: media_player.play_media
+    data:
+      entity_id: media_player.living_room_tv_meo_box
+      media_content_id: "Left"
+      media_content_type: "channel"
+  - delay: 00:00:01
+  - service: media_player.play_media
+    data:
+      entity_id: media_player.living_room_tv_meo_box
+      media_content_id: "OK"
+      media_content_type: "channel"
+  - delay: 00:00:01
+  - service: media_player.play_media
+    data:
+      entity_id: media_player.living_room_tv_meo_box
+      media_content_id: "OK"
+      media_content_type: "channel"
