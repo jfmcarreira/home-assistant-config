@@ -1,42 +1,4 @@
-cat_clean_notification:
-  alias: Litter Box Clean Notification
-  sequence:
-  - service: python_script.light_store
-    data:
-      store_name: cat_litter_flash_store
-      operation: save
-      entity_id:
-      - light.living_room_tv_leds
-  - service: light.turn_on
-    data:
-      entity_id: light.living_room_tv_leds
-      rgb_color:
-      - 255
-      - 0
-      - 0
-      brightness: 50
-      white_value: 0
-  - delay:
-      milliseconds: 200
-  - service: light.turn_off
-    data:
-      entity_id: light.living_room_tv_leds
-  - delay:
-      milliseconds: 200
-  - service: light.turn_on
-    data:
-      entity_id: light.living_room_tv_leds
-  - delay:
-      milliseconds: 200
-  - service: light.turn_off
-    data:
-      entity_id: light.living_room_tv_leds
-  - delay:
-      seconds: 1
-  - service: python_script.light_store
-    data:
-      operation: restore
-      store_name: cat_litter_flash_store
+
 night_away:
   alias: Routines Night/Away
   sequence:
@@ -97,13 +59,4 @@ routines_dinner_time:
       entity_id: media_player.living_room_tv_meo_box
     service: python_script.change_meo_box_channel
   - delay: 00:00:02
-  - data: {}
-    service: shell_command.meo_box_reset_program
-meo_reset_current_show:
-  alias: Routines Meo Reset Current Show
-  sequence:
-  - service: shell_command.meo_box_reset_program
-meo_reset_previous_show:
-  alias: Routines Meo Reset Previous Show
-  sequence:
-  - service: shell_command.meo_box_reset_previous_program
+  - service: scripts.meo_reset_current_show

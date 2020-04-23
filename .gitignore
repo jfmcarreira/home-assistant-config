@@ -34,3 +34,4 @@ integrations_disabled
 devices_config
 appdaemon
 lovelace_storage_backup
+node-red/

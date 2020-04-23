@@ -1,0 +1,17 @@
+################################################################################
+# Configure a default setup of Home Assistant (frontend, api, etc)
+# https://www.home-assistant.io/integrations/default_config/
+################################################################################
+#default_config:
+
+config:
+
+system_health:
+
+map:
+
+mobile_app:
+
+updater:
+
+zone:

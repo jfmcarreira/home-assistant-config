@@ -1,4 +1,14 @@
+################################################################################
+## Main configuration
+################################################################################
 homeassistant:
+  name: Home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  elevation: !secret home_elevation
+  unit_system: metric
+  time_zone: !secret home_timezone
+
   auth_providers:
     - type: homeassistant
     - type: trusted_networks
@@ -12,16 +22,15 @@ homeassistant:
       #  192.168.1.9: ha_user
       #allow_bypass_login: true
 
-  packages: !include_dir_named integrations
+  packages: !include_dir_named packages
   customize: !include customize.yaml
 
 
 ################################################################################
 ## Includes
 ################################################################################
-zone: !include zones.yaml
-group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
+group: !include groups.yaml
 scene: !include scenes.yaml
 python_script:

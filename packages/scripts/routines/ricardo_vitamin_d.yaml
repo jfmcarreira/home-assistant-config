@@ -1,0 +1,56 @@
+automation old:
+  - id: Task Vitamina D Ricardo
+    alias: Task Vitamina D Ricardo
+    trigger:
+      - platform: time_pattern
+        # Matches every hour at 5 minutes past whole
+        minutes: 30
+    condition:
+      - condition: state
+        entity_id: binary_sensor.ricardo_vitamin_d
+        state: "off"
+      - condition: time
+        after: '12:00:00'
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Saúde Ricardo"
+          message: "Administrar Vitamina D ao Ricardo"
+          notification_id: persistent_ricardo_vitamin_d
+      - service: notify.mobile_app_all
+        data:
+          title: "Saúde Ricardo"
+          message: "Administrar Vitamina D ao Ricardo"
+          data:
+            priority: high
+            actions:
+              - action: "ricardo_vitamin_d_mark_done"
+                title: "Marcar como realizado"
+
+  - id: Task Vitamina D Ricardo Done
+    alias: Task Vitamina D Ricardo Done
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: "ricardo_vitamin_d_mark_done"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.ricardo_vitamin_d
+        state: "off"
+    action:
+      - service: script.task_ricardo_vitamin_d
+
+
+script:
+  task_ricardo_vitamin_d:
+    alias: "Task Ricardo Vitamin D"
+    sequence:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: persistent_ricardo_vitamin_d
+      - service: grocy.execute_chore
+        data_template:
+          chore_id: 3
+          tracked_time: >
+            {{ now() }}

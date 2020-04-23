@@ -24,8 +24,8 @@ api:
 ota:
 
 binary_sensor:
-  - name: Kitchen Light SW
-    id: sw_1
+  - id: sw_1
+    #name: Kitchen Light SW
     platform: gpio
     pin:
       number: GPIO13
@@ -44,9 +44,9 @@ binary_sensor:
             then:
               - light.turn_off: light_1  
         
-  - name: Kitchen Panty Light SW
+  - id: sw_2
+    #name: Kitchen Panty Light SW
     platform: gpio
-    id: sw_2
     pin:
       number: GPIO5
       #mode: INPUT_PULLUP

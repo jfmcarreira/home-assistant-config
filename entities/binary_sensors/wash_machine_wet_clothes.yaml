@@ -1,0 +1,10 @@
+platform: template
+sensors:
+  wash_machine_wet_clothes:
+    entity_id:
+      - sensor.grocy_chores
+    value_template: >
+      {{ ( as_timestamp( state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time ) - as_timestamp( state_attr('sensor.grocy_chores', 'items')[3]._last_tracked_time ) ) < 0 }}
+    attribute_templates:
+      last_done: >
+        {{ state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}

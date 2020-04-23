@@ -26,12 +26,15 @@ api:
 ota:
 
 binary_sensor:
-  - name: ${upper_devicename} SW
+  - id: sw_1
+    #name: ${upper_devicename} SW
     platform: gpio
     pin:
       number: GPIO3
       mode: INPUT_PULLUP
       inverted: True
+    filters:
+      - delayed_on: 30ms
     on_state:
       then:
         - light.toggle: light_1

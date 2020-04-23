@@ -30,7 +30,6 @@ living_room:
     - light.living_room_tv_leds
     - light.special_xmas_lights
     - sensor.living_room_temperature
-    - sensor.power_usage_living_room
     - media_player.media_center
     
 master_bedroom:
@@ -38,10 +37,9 @@ master_bedroom:
   entities:
     - light.master_bedroom
     - light.master_bedroom_left_bed
-    - light.master_bedroom_left_bed
+    - light.master_bedroom_right_bed
     - sensor.master_bedroom_temperature
     - sensor.master_bedroom_humidity
-    - sensor.power_usage_bedroom
 
 office:
   name: Office

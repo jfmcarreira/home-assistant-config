@@ -1,0 +1,9 @@
+################################################################################
+## Main HA config
+################################################################################
+zone: 
+  - name: Home
+    latitude: !secret home_latitude
+    longitude: !secret home_longitude
+    radius: 20
+    icon: mdi:home

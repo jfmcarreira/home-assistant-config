@@ -14,11 +14,11 @@
 - id: Ctrl Tradfri Switch Off Long Press
   alias: Ctrl Tradfri Switch Off Long Press
   trigger:
-  - device_id: 645f1d8db9264050adf7cd5a63c35a9a
+  - device_id: de0702c868e74c1d960476c4a394f56c
     domain: deconz
     platform: device
-    subtype: turn_off
     type: remote_button_long_press
+    subtype: turn_off
   condition: []
   action:
   - data: {}
@@ -27,11 +27,11 @@
 - id: Ctrl Tradfri Switch Off Short Press
   alias: Ctrl Tradfri Switch Off Short Press
   trigger:
-  - device_id: 645f1d8db9264050adf7cd5a63c35a9a
+  - device_id: de0702c868e74c1d960476c4a394f56c
     domain: deconz
     platform: device
-    subtype: turn_off
     type: remote_button_short_press
+    subtype: turn_off
   condition: []
   action:
   - device_id: 8de51b4185b64445989d528768892704
@@ -61,11 +61,11 @@
   alias: Ctrl Tradfri Switch On Short Press
   description: ''
   trigger:
-  - device_id: 645f1d8db9264050adf7cd5a63c35a9a
+  - device_id: de0702c868e74c1d960476c4a394f56c
     domain: deconz
     platform: device
-    subtype: turn_on
     type: remote_button_short_press
+    subtype: turn_on
   condition: []
   action:
   - data: {}
@@ -121,25 +121,6 @@
     domain: light
     entity_id: light.living_room_abajur
     type: toggle
-- id: '1586374735215'
-  alias: Task Remove Laundry From Wash Machine
-  description: ''
-  trigger:
-  - entity_id: binary_sensor.washing_machine_state
-    from: 'on'
-    platform: state
-    to: 'off'
-  condition: []
-  action:
-  - data:
-      data:
-        sticky: 'true'
-      message: Retirar roupa da máquina de lavar
-      title: Tarefa Doméstica
-    service: notify.mobile_app
-  - data: {}
-    entity_id: input_boolean.washing_machine_wet_clothes
-    service: input_boolean.turn_on
 - id: '1586741511899'
   alias: Frontend Set Daily Theme
   description: ''

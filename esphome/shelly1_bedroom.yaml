@@ -24,7 +24,8 @@ api:
 ota:
 
 binary_sensor:
-  - name: ${upper_devicename} SW
+  - id: sw_1
+    #name: ${upper_devicename} SW
     platform: gpio
     pin:
       number: GPIO5

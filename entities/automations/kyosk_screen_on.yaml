@@ -1,0 +1,17 @@
+id: Kyosk Screen On
+alias: Kyosk Screen On
+trigger:
+  - platform: state
+    entity_id: group.office
+    to: "on"
+condition:
+  - condition: state
+    entity_id: display.tf201_kyosk
+    state: "off"
+action:
+  - service: display.turn_on
+    data:
+      entity_id: display.tf201_kyosk
+  - service: homeassistant.turn_on
+    data:
+      entity_id: light.browser_tf201_kyosk

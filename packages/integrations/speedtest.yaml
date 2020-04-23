@@ -1,0 +1,10 @@
+################################################################
+## Speedtest
+################################################################
+speedtestdotnet:
+  scan_interval:
+    minutes: 60
+  monitored_conditions:
+    - ping
+    - download
+    - upload
