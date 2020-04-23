@@ -22,7 +22,7 @@ homeassistant:
       #  192.168.1.9: ha_user
       #allow_bypass_login: true
 
-  packages: !include_dir_named packages
+  packages: !include_dir_named core_config/packages
   customize: !include customize.yaml
 
 

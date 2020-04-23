@@ -3,8 +3,7 @@
 #
 # Split entities configuration in a per file basis
 ################################################################################
-binary_sensor: !include_dir_list ../../entities/binary_sensors/
-sensor: !include_dir_list ../../entities/sensors/
+binary_sensor: !include_dir_list ../../binary_sensors/
 
 
 

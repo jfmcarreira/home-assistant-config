@@ -1,3 +1,18 @@
+sensor:
+  - platform: template
+    sensors:
+      ricardo_vitamin_d:
+        friendly_name: "Vitamina D Ricardo"
+        icon_template: mdi:baby-face
+        entity_id:
+          - sensor.grocy_chores
+        value_template: >
+          {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( state_attr('sensor.grocy_chores', 'items')[1]._last_tracked_time.timestamp() | timestamp_custom("%Y-%m-%d", true) ) == 0.0 }}
+        attribute_templates:
+          last_done: >
+            {{ state_attr('sensor.grocy_chores', 'items')[1]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+
 automation old:
   - id: Task Vitamina D Ricardo
     alias: Task Vitamina D Ricardo

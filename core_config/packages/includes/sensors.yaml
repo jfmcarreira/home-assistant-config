@@ -1,7 +1,9 @@
 ################################################################################
-## Entities - Lights
+## Entities
+#
+# Split entities configuration in a per file basis
 ################################################################################
-light: !include_dir_list ../../entities/lights/
+binary_sensor: !include_dir_list ../../binary_sensors/
 
 
 

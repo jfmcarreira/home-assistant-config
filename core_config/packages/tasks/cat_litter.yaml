@@ -1,3 +1,60 @@
+################################################################
+## Cat Litter
+################################################################
+homeassistant:
+  customize:
+    counter.cat_litter_box_visits:
+      friendly_name: Litter Box Visits
+
+sensor:
+  - platform: mqtt
+    name: "Litter Box Motion"
+    device_class: occupancy
+    state_topic: "binary_rf_sensors/litter_box_motion"
+    qos: 1
+
+counter:
+  cat_litter_box_visits:
+    step: 1
+    icon: "mdi:cat"
+
+input_datetime:
+  cat_litter_box_last_visit:
+    name: Litter Box Last Visit
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+  cat_litter_box_last_clean:
+    name: Litter Box Last Clean
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+  cat_litter_box_last_change:
+    name: Litter Box Last Change
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: false
+
+sensor:
+  - platform: template
+    sensors:
+      cat_litter_box_last_visit:
+        friendly_name: "Litter Box Last Visit"
+        device_class: timestamp
+        value_template: >
+          {{ state_attr('input_datetime.cat_litter_box_last_visit', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+      cat_litter_box_last_clean:
+        friendly_name: "Litter Box Last Clean"
+        device_class: timestamp
+        value_template: >
+          {{ state_attr('input_datetime.cat_litter_box_last_clean', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+      cat_litter_box_last_change:
+        friendly_name: "Litter Box Last Change"
+        device_class: timestamp
+        value_template: >
+          {{ state_attr('input_datetime.cat_litter_box_last_change', 'timestamp') | timestamp_custom("%Y-%m-%d", true) }}
+
+          
 script:
   cat_clean_notification:
     alias: Litter Box Clean Notification

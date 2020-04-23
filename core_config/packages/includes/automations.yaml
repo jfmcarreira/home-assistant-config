@@ -2,4 +2,4 @@
 #
 # https://www.home-assistant.io/integrations/automation/
 #
-automation split: !include_dir_list ../../entities/automations
+automation split: !include_dir_list ../../automations
