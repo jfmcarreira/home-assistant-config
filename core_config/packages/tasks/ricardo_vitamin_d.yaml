@@ -1,4 +1,4 @@
-sensor:
+binary_sensor:
   - platform: template
     sensors:
       ricardo_vitamin_d:
@@ -67,5 +67,3 @@ script:
       - service: grocy.execute_chore
         data_template:
           chore_id: 3
-          tracked_time: >
-            {{ now() }}
