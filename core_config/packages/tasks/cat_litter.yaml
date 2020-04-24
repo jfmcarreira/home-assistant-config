@@ -6,7 +6,7 @@ homeassistant:
     counter.cat_litter_box_visits:
       friendly_name: Litter Box Visits
 
-sensor:
+binary_sensor:
   - platform: mqtt
     name: "Litter Box Motion"
     device_class: occupancy
