@@ -147,3 +147,23 @@
   - data:
       name: Google Dark Theme
     service: frontend.set_theme
+- id: '1587779673396'
+  alias: Power Alert Max Power UI
+  description: ''
+  trigger:
+  - above: 3000
+    device_id: 0a175fa9bbd2464591e27f2014d90078
+    domain: sensor
+    entity_id: sensor.bhpzem_power
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 20
+    platform: device
+    type: power
+  condition: []
+  action:
+  - data:
+      entity_id: media_player.google_home_mini
+      message: Atenção! Elevada potência consumida.
+    service: tts.google_say
