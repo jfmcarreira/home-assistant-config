@@ -10,25 +10,73 @@ wifi:
   fast_connect: true
   #use_address: !secret ip_barium
 
-
 # Enable logging
 logger:
 
 # Enable Home Assistant API
 api:
 
+# Enable updates over-the-air
 ota:
 
+# For the DS18B20 sensor
+dallas:
+  - id: dallas_bus
+    pin: GPIO19
+    update_interval: 5s
+
+# For bluetooth devices
 esp32_ble_tracker:
-  #scan_parameters:
-    #interval: 30s
-  
+
+binary_sensor:
+  # HC-SR501
+  - platform: gpio
+    pin: GPIO05
+    name: Office Motion
+    device_class: motion
+
 sensor:
   - platform: xiaomi_lywsdcgq
     mac_address: 58:2D:34:32:55:01
     temperature:
-      name: Office Temperature 
+      name: Office Temperature
     humidity:
       name: Office Humidity
     battery_level:
       name: Office Mijia Batery
+
+  # DS18B20
+  - platform: dallas
+    address: 0xDF031761F44FFF28
+    name: Barium Temperature
+
+
+light:
+  - platform: rgb
+    name: barium_rgb
+    red: pwm_r
+    green: pwm_g
+    blue: pwm_b
+
+switch:
+  - platform: gpio
+    id: relay
+    pin:
+      number: GPIO27
+      inverted: False
+
+output:
+  - platform: ledc
+    pin: GPIO21
+    frequency: 10000 Hz
+    id: pwm_g
+
+  - platform: ledc
+    pin: GPIO22
+    frequency: 10000 Hz
+    id: pwm_r
+
+  - platform: ledc
+    pin: GPIO23
+    frequency: 10000 Hz
+    id: pwm_b
