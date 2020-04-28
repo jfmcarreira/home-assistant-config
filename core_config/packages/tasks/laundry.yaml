@@ -27,7 +27,14 @@ automation old:
         from: "on"
         platform: state
         to: "off"
-    condition: []
+
+      - platform: time_pattern
+        # Matches every hour at 5 minutes past whole
+        minutes: 30
+    condition: 
+      - condition: state
+        entity_id: binary_sensor.wash_machine_wet_clothes
+        state: "on"
     action:
       - service: grocy.execute_chore
         data_template:
