@@ -2,7 +2,7 @@
 ## Temperature/Humidity
 ################################################################
 homeassistant:
-  customize:  
+  customize:
     climate.heating:
       friendly_name: Aquecimento
   customize_glob:
@@ -14,4 +14,36 @@ homeassistant:
       device_class: humidity
       icon: mdi:water-percent
       unit_of_measurement: "%"
-      
+
+sensor:
+  - platform: template
+    sensors:
+      weather_temperature:
+        friendly_name: "Weather Temperature"
+        value_template: "{{ states.weather.ipma.attributes.temperature }}"
+        entity_id:
+          - weather.ipma
+
+  - platform: min_max
+    name: Average Temperature
+    type: mean
+    round_digits: 1
+    entity_ids:
+      - sensor.office_temperature
+      - sensor.living_room_temperature
+      - sensor.master_bedroom_temperature
+
+  - platform: min_max
+    name: Average Humidity
+    type: mean
+    round_digits: 1
+    entity_ids:
+      - sensor.office_humidity
+      - sensor.living_room_humidity
+      - sensor.master_bedroom_humidity
+
+  - platform: mold_indicator
+    indoor_temp_sensor: sensor.average_temperature
+    indoor_humidity_sensor: sensor.average_humidity
+    outdoor_temp_sensor: sensor.weather_temperature
+    calibration_factor: 2.0
