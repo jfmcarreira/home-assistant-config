@@ -7,10 +7,18 @@ homeassistant:
       device_class: power
       icon: mdi:flash
       unit_of_measurement: "W"
+    "sensor.power_sensor_*":
+      device_class: power
+      icon: mdi:flash
+      unit_of_measurement: "W"
     "sensor.*_power":
       device_class: power
       icon: mdi:flash
       unit_of_measurement: "W"
+    "sensor.power_sensor_*_reactive":
+      device_class: power
+      icon: mdi:flash-alert
+      unit_of_measurement: "VAR"
 
 sensor power: !include_dir_list ../entities/power/sensors/
 
@@ -25,6 +33,17 @@ utility_meter:
     offset:
       days: 19
 
+sensor:
+  - platform: template
+    sensors:
+      monthly_energy_cicle_days:
+        value_template: >-
+          {{ ( as_timestamp( now() ) - as_timestamp( states.sensor.monthly_energy.attributes.last_reset ) ) | timestamp_custom("%d") }}
+      monthly_energy_cost:
+        friendly_name: "Fatura Energia"
+        value_template: >-
+          {{ ( float(states.sensor.monthly_energy.state) * 0.1494 * 1.23 + float(states.sensor.monthly_energy_cicle_days.state) * 0.1469 * 1.06 + 2.85 * 1.06 ) | round(2) }}
+        unit_of_measurement: "€"
 
 #################################################################
 ### Datawatt
