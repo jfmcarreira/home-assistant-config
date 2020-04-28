@@ -1,13 +1,7 @@
 ################################################################
 ## Notifications
 ################################################################
-notify:
-  - platform: html5
-    name: notify_html5
-    vapid_pub_key: !secret vapid_api_pub_key
-    vapid_prv_key: !secret vapid_api_prv_key
-    vapid_email: !secret vapid_api_email
-    
+notify:   
   - platform: group
     name: mobile_app_all
     services:
