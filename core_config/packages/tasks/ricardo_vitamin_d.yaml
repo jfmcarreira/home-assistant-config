@@ -30,12 +30,18 @@ automation old:
       - service: persistent_notification.create
         data:
           title: "Saúde Ricardo"
-          message: "Administrar Vitamina D ao Ricardo"
+          message: "Administrar Vitamina D"
           notification_id: persistent_ricardo_vitamin_d
+
+      - service: notify.living_room_tv
+        data:
+          title: "Saúde Ricardo"
+          message: "Administrar Vitamina D"
+
       - service: notify.mobile_app_all
         data:
           title: "Saúde Ricardo"
-          message: "Administrar Vitamina D ao Ricardo"
+          message: "Administrar Vitamina D"
           data:
             sticky: true
             tag: ricardo_vitamin_d_notification
