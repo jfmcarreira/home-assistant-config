@@ -122,7 +122,7 @@ script:
           entity_id: counter.cat_litter_box_visits
       - service: grocy.execute_chore
         data:
-          chore_id: 1
+          chore_id: 7
       - service: input_datetime.set_datetime
         data_template:
           entity_id: input_datetime.cat_litter_box_last_clean
