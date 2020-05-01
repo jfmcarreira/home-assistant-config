@@ -1,0 +1,19 @@
+script:
+  routines_dinner_time:
+    alias: Routines Dinner Time
+    sequence:
+      - service: light.turn_on
+        entity_id: light.living_room_table
+      - service: media_player.turn_on
+        entity_id: media_player.media_center
+      - delay: 00:00:03
+      - service: media_player.select_source
+        entity_id: media_player.media_center
+        data:
+          source: MEO
+      - service: python_script.change_meo_box_channel
+        data:
+          channel: SIC
+          entity_id: media_player.living_room_tv_meo_box
+      - delay: 00:00:02
+      - service: scripts.meo_reset_current_show
