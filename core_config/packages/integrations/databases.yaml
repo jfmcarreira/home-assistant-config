@@ -120,18 +120,8 @@ history:
   include:
     domains:
       - lights
+      - sensor
     entities:
-      # Temperature sensors
-      - sensor.living_room_temperature
-      - sensor.master_bedroom_temperature
-      - sensor.office_temperature
-      - sensor.living_room_humidity
-      - sensor.master_bedroom_humidity
-      - sensor.office_humidity
-      # Power sensors
-      - sensor.bhpzem_power
-      - sensor.power_sensor_laundry
-      - sensor.power_sensor_office
       # Device states
       - binary_sensor.living_room_tv_state
       - binary_sensor.washing_machine_state
