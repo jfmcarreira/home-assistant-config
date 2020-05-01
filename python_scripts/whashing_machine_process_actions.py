@@ -6,7 +6,7 @@ if wet_clothes:
     service_data = { "chore_id": "4" }
     hass.services.call('grocy','execute_chore', service_data, False)
 
-    service_data = { "message": "clear_notification", "data" : { "tag": laundry_wet_clothes_notification}}
+    service_data = { "message": "clear_notification", "data" : { "tag": "laundry_wet_clothes_notification" }}
     hass.services.call('notify','mobile_app_all', service_data, False)
 
 elif dry_clothes:
