@@ -5,24 +5,21 @@ living_room_main_lights:
     - light.living_room_window
 
 hall:
-  name: Hall
+  name: Corredor
   entities:
     - light.hallway
-    - light.kitchen
-    - light.kitchen_pantry
     - binary_sensor.front_door
     - binary_sensor.browser_tf201_kyosk
 
 kitchen:
-  name: Hall
+  name: Cozinha
   entities:
     - light.kitchen
     - light.kitchen_pantry
     - binary_sensor.fridge_door
     
-    
 living_room:
-  name: Living Room
+  name: Sala de Estar
   entities:
     - light.living_room_table
     - light.living_room_window
@@ -33,7 +30,7 @@ living_room:
     - media_player.media_center
     
 master_bedroom:
-  name: Master Bedroom
+  name: Quarto
   entities:
     - light.master_bedroom
     - light.master_bedroom_left_bed
@@ -42,9 +39,11 @@ master_bedroom:
     - sensor.master_bedroom_humidity
 
 office:
-  name: Office
+  name: Escritório
   entities:
     - light.office
+    - light.office_desk
+    - binary_sensor.office_motion
     - sensor.office_temperature
     - sensor.office_humidity
     - sensor.power_usage_office
