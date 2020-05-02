@@ -1,0 +1,19 @@
+automation old:
+  - id: Lights Hallway Turn On Door Open
+    alias: Lights Hallway Turn On Door Open
+    trigger:
+      - entity_id: binary_sensor.front_door
+        from: "off"
+        platform: state
+        to: "on"
+    condition:
+      - condition: template
+        value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+      - condition: state
+        entity_id: light.hallway
+        for:
+          seconds: 10
+        state: "off"
+    action:
+      - entity_id: light.hallway
+        service: light.turn_on

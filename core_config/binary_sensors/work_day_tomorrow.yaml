@@ -1,5 +1,0 @@
-platform: workday
-name: Workday Tomorrow
-country: PT
-excludes: [sat, sun, holiday]
-days_offset: 1

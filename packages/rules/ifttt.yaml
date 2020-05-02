@@ -1,0 +1,82 @@
+# This handles the changing MEO box channel
+#
+# https://www.home-assistant.io/integrations/ifttt/
+#
+
+automation old:
+  # General rule to launch routines
+  # { "action": "routine", "service":"script.roborock_send_kitchen" }
+  # { "action": "routine", "service":"script.routines_dinner_time" }
+  # { "action": "routine", "service":"script.cat_litter_clean" }
+  # { "action": "routine", "service":"script.cat_litter_change" }
+  # { "action": "routine", "service":"script.meo_reset_current_show" }
+  # { "action": "routine", "service":"script.meo_reset_previous_show" }
+  - id: IFTTT Launch Routine
+    alias: IFTTT Launch Routine
+    description: "Send Roborock to clean; Activate Dinner Time"
+    trigger:
+      - event_data:
+          action: routine
+        event_type: ifttt_webhook_received
+        platform: event
+    action:
+      - service_template: "{{ trigger.event.data.service }}"
+
+  # Change TV to Channel #
+  # Body configured in IFTTT: { "action": "change_meo_channel", "channel":"{{NumberField}}" }
+  - id: IFTTT Change Meo Box Channel
+    alias: IFTTT Change Meo Box Channel
+    trigger:
+      - event_data:
+          action: change_meo_channel
+        event_type: ifttt_webhook_received
+        platform: event
+    action:
+      - data_template:
+          channel: "{{ trigger.event.data.channel }}"
+          entity_id: media_player.living_room_tv_meo_box
+        service: python_script.change_meo_box_channel
+
+  # If You say "Activate $ on Netflix", then Make a web request
+  # Body configured in IFTTT: { "action": "show_netflix_living_room_tv", "show_movie":"{{TextField}}" }
+  - id: IFTTT Living Room TV Netflix Show
+    alias: IFTTT Living Room TV Netflix Show
+    trigger:
+      - event_data:
+          action: show_netflix_living_room_tv
+        event_type: ifttt_webhook_received
+        platform: event
+    action:
+      - data_template:
+          entity_id: media_player.living_room_tv
+          show: "{{ trigger.event.data.show_movie }}"
+        service: python_script.netflix_play_show
+
+  # If You say "TV Press $ ", then Make a web request
+  # Body configured in IFTTT: { "action": "remote_control_tv", "button":"{{TextField}}" }
+  - id: IFTTT Living Room Media Center Remote
+    alias: IFTTT Living Room Media Center Remote
+    trigger:
+      - event_data:
+          action: remote_control_tv
+        event_type: ifttt_webhook_received
+        platform: event
+    action:
+      - data_template:
+          button: "{{ trigger.event.data.button }}"
+        service: python_script.living_room_media_center_remote
+
+  # If You say "Clean $ ", then Make a web request
+  # Body configured in IFTTT: { "action": "vacuum_room", "room":"{{TextField}}" }
+  - id: IFTTT Vacuum Room
+    alias: IFTTT Vacuum Room
+    trigger:
+      - event_data:
+          action: vacuum_room
+        event_type: ifttt_webhook_received
+        platform: event
+    action:
+      - data_template:
+          room: "{{ trigger.event.data.room }}"
+          runs: 1
+        service: python_script.vacuum_room

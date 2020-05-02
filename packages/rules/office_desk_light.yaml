@@ -1,0 +1,57 @@
+timer:
+  office_desk_auto_off:
+    duration: "00:05:00"
+
+automation old:
+  - id: Lights Desk Auto Off
+    alias: Lights Desk Auto Off
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.office_desk_auto_off
+      - entity_id: light.office
+        for: 00:00:10
+        platform: state
+        to: "off"
+      - entity_id: light.office
+        platform: state
+        to: "on"
+    action:
+      - service: light.turn_off
+        entity_id: light.office_desk
+
+  - id: Lights Desk Auto On
+    alias: Lights Desk Auto On
+    trigger:
+      - entity_id: binary_sensor.motion_sensor_office
+        from: "off"
+        platform: state
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: light.office_desk
+        state: "off"
+      - condition: state
+        entity_id: light.office
+        state: "off"
+      - condition: template
+        value_template: '{{ state_attr("sun.sun", "elevation") < 5 }}'
+    action:
+      - service: timer.start
+        data:
+          entity_id: timer.office_desk_auto_off
+          duration: "00:05:00"
+      - service: light.turn_on
+        entity_id: light.office_desk
+
+  - id: Lights Desk When Off
+    alias: Lights Desk When Off
+    trigger:
+      - platform: state 
+        entity_id: light.office_desk
+        to: "off"
+    action:
+      - service: timer.cancel
+        entity_id: timer.office_desk_auto_off
+

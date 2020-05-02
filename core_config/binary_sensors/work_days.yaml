@@ -1,4 +1,0 @@
-platform: workday
-name: Workday
-country: PT
-excludes: [sat, sun, holiday]

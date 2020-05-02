@@ -1,9 +1,0 @@
-platform: mqtt
-name: "Front Door"
-device_class: door
-state_topic: 'binary_rf_sensors/front_door'
-#state_topic: "tele/Sonoff_RF_Bridge/RESULT"
-#value_template: "{{value_json.RfReceived.Data}}"
-#payload_on: "58940A"
-#payload_off: "58940E" 
-qos: 1

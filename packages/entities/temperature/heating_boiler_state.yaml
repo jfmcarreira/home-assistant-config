@@ -1,0 +1,19 @@
+binary_sensor:
+- platform: template
+  sensors:
+    heating_boiler_state:
+      friendly_name: Estado da Caldeira
+      entity_id: 
+        - binary_sensor.heating_state
+        - input_boolean.heating_running_feedback
+        - input_boolean.heating_running_ongoing_water
+      value_template: >-
+        {{  is_state('binary_sensor.heating_state', 'on') 
+            and 
+            ( 
+              is_state('input_boolean.heating_running_feedback', 'on') 
+              or 
+              is_state('input_boolean.heating_running_ongoing_water', 'on') 
+            ) 
+        }}
+      

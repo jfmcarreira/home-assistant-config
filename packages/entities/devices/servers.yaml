@@ -1,0 +1,30 @@
+################################################################
+## Detect state of servers
+################################################################
+binary_sensor:
+  - platform: ping
+    name: Helium
+    host: !secret helium_ip
+    count: 2
+    scan_interval: 300
+  - platform: ping
+    name: Neon
+    host: !secret neon_ip
+    count: 2
+    scan_interval: 300
+ 
+
+################################################################
+## Sensors
+################################################################
+# sensor:       
+#   # Helium
+#   - platform: mqtt
+#     name: Helium CPU Temperature
+#     unit_of_measurement: "°C"
+#     device_class: temperature
+#     state_topic: "cpu/temperature/helium"
+
+
+
+
