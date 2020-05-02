@@ -32,7 +32,7 @@ if tv_source == "MEO":
 
 
     entity_id = "media_player.living_room_tv_meo_box" 
-    service_data = { "entity_id": entity_id, "media_content_id": button, "media_content_type": "channel" }
+    service_data = { "entity_id": entity_id, "media_content_id": button, "media_content_type": "mediaroom" }
     hass.services.call('media_player','play_media', service_data, False)
 
 elif tv_source == 'Kodi':
