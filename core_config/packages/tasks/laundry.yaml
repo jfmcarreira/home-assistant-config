@@ -2,6 +2,7 @@ binary_sensor:
   - platform: template
     sensors:
       wash_machine_dry_clothes:
+        friendly_name: Roupa Seca
         entity_id:
           - sensor.grocy_chores
         value_template: >
@@ -11,6 +12,7 @@ binary_sensor:
             {{ state_attr('sensor.grocy_chores', 'items')[4]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
       wash_machine_wet_clothes:
+        friendly_name: Roupa Lavada
         entity_id:
           - sensor.grocy_chores
         value_template: >
@@ -27,21 +29,29 @@ automation old:
         from: "on"
         platform: state
         to: "off"
+    action:
+      - service: grocy.execute_chore
+        data_template:
+          chore_id: 6
+      - service: notify.mobile_app_all
+        data:
+          title: Tarefa Doméstica
+          message: Retirar roupa da máquina de lavar
+          data:
+            sticky: true
+            tag: laundry_wet_clothes_notification
 
+  - id: Task Laundry Remove From Wash Machine Notification
+    alias: Task Laundry Remove From Wash Machine
+    trigger:
       - platform: time_pattern
         # Matches every hour at 5 minutes past whole
         minutes: 30
-    condition: 
+    condition:
       - condition: state
         entity_id: binary_sensor.wash_machine_wet_clothes
         state: "on"
     action:
-      - service: grocy.execute_chore
-        data_template:
-          chore_id: 5
-          tracked_time: >
-            {{ now() }}
-
       - service: notify.mobile_app_all
         data:
           title: Tarefa Doméstica
