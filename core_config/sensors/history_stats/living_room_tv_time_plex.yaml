@@ -1,8 +1,0 @@
-platform: history_stats
-name: Daily TV Time Plex
-entity_id: sensor.living_room_tv_source
-state: 'Plex'
-type: time
-end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-duration:
-  hours: 24

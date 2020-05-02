@@ -1,0 +1,15 @@
+#
+# Python install dependencies
+#
+shell_command:
+  python_install_dependencies: pip install pymysql
+
+automation old:
+  # Init dependences
+  - alias: "Python Install Dependencies at Startup"
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - service: shell_command.python_install_dependencies

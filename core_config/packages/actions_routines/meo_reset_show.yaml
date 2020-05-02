@@ -1,3 +1,8 @@
+# The MEO box IP is stored in a helper entity
+shell_command:
+  meo_box_reset_program: python3 /config/shell_scripts/meo_box_reset_program.py {{ states("input_text.helper_living_room_tv_meo_box_ip") }} 0
+  meo_box_reset_previous_program: python3 /config/shell_scripts/meo_box_reset_program.py {{ states("input_text.helper_living_room_tv_meo_box_ip") }} -1
+
 script:
   meo_reset_current_show:
     alias: Routines Meo Reset Current Show

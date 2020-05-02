@@ -44,97 +44,97 @@ sensor:
   ## 31 days (calling the script)
   - platform: command_line
     name: energy_kw_day_01
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 1
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 1
   - platform: command_line
     name: energy_kw_day_02
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 2
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 2
   - platform: command_line
     name: energy_kw_day_03
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 3
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 3
   - platform: command_line
     name: energy_kw_day_04
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 4
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 4
   - platform: command_line
     name: energy_kw_day_05
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 5
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 5
   - platform: command_line
     name: energy_kw_day_06
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 6
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 6
   - platform: command_line
     name: energy_kw_day_07
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 7
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 7
   - platform: command_line
     name: energy_kw_day_08
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 8
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 8
   - platform: command_line
     name: energy_kw_day_09
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 9
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 9
   - platform: command_line
     name: energy_kw_day_10
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 10
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 10
   - platform: command_line
     name: energy_kw_day_11
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 11
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 11
   - platform: command_line
     name: energy_kw_day_12
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 12
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 12
   - platform: command_line
     name: energy_kw_day_13
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 13
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 13
   - platform: command_line
     name: energy_kw_day_14
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 14
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 14
   - platform: command_line
     name: energy_kw_day_15
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 15
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 15
   - platform: command_line
     name: energy_kw_day_16
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 16
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 16
   - platform: command_line
     name: energy_kw_day_17
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 17
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 17
   - platform: command_line
     name: energy_kw_day_18
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 18
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 18
   - platform: command_line
     name: energy_kw_day_19
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 19
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 19
   - platform: command_line
     name: energy_kw_day_20
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 20
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 20
   - platform: command_line
     name: energy_kw_day_21
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 21
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 21
   - platform: command_line
     name: energy_kw_day_22
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 22
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 22
   - platform: command_line
     name: energy_kw_day_23
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 23
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 23
   - platform: command_line
     name: energy_kw_day_24
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 24
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 24
   - platform: command_line
     name: energy_kw_day_25
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 25
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 25
   - platform: command_line
     name: energy_kw_day_26
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 26
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 26
   - platform: command_line
     name: energy_kw_day_27
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 27
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 27
   - platform: command_line
     name: energy_kw_day_28
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 28
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 28
   - platform: command_line
     name: energy_kw_day_29
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 29
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 29
   - platform: command_line
     name: energy_kw_day_30
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 30
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 30
   - platform: command_line
     name: energy_kw_day_31
-    command: python3 /config/python_scripts/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 31
+    command: python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_read_values.py {{states.input_select.energy_daily_graph_select.state}} 31
 
 input_select:
   energy_daily_graph_select:
@@ -156,14 +156,15 @@ input_select:
       - Dezembro
 
 automation:
-  - alias: "Energy daily update total kw"
+  - alias: "Power Daily Update Total kW"
     initial_state: true
     trigger:
       - platform: state
         entity_id: sensor.daily_energy
     action:
       - service: shell_command.energy_daily_simples_insert_values
-  - alias: "Energy daily force update after input_select"
+  
+  - alias: "Power Daily Force Update After Change Selector"
     initial_state: true
     trigger:
       - platform: state
@@ -233,4 +234,18 @@ automation:
         entity_id: sensor.energy_kw_day_31
 
 shell_command:
-  energy_daily_simples_insert_values: "python3 /config/python_scripts/energy_daily_simples_insert_values.py {{ states.sensor.daily_energy.state }}"
+  energy_daily_simples_insert_values: "python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_insert_values.py {{ states.sensor.daily_energy.state }}"
+
+
+automation insert:
+  - alias: "Daily Stats Insert Value of Energy to Database"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_energy
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: daily_energy
+          value: >
+            {{ trigger.to_state.state }}

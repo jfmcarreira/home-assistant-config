@@ -1,7 +1,0 @@
-platform: history_stats
-name: Daily TV Time 
-entity_id: binary_sensor.living_room_tv_state
-state: 'on'
-type: time
-start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-end: '{{ now() }}'

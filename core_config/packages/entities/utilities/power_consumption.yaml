@@ -20,9 +20,6 @@ homeassistant:
       icon: mdi:flash-alert
       unit_of_measurement: "VAR"
 
-sensor power: !include_dir_list ../entities/power/sensors/
-
-
 utility_meter: 
   daily_energy:
     source: sensor.pzem_energy
