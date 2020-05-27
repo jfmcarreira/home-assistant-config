@@ -1,18 +1,25 @@
+group:
+  google_assistant_speakers:
+    entities:
+      - media_player.ghm_living_room
+      - media_player.ghm_kitchen
+
+
 input_number:
   google_home_volume_day:
-    name: Google Home Mini Volume Dia
+    name: Google Assistant Volume Dia
     min: 0
     max: 100
     step: 5
     unit_of_measurement: "%"
   google_home_volume_evening:
-    name: Google Home Mini Volume Final do Dia
+    name: Google Assistant Volume Final do Dia
     min: 0
     max: 100
     step: 5
     unit_of_measurement: "%"
   google_home_volume_night:
-    name: Google Home Mini Volume Night
+    name: Google Assistant Volume Night
     min: 0
     max: 100
     step: 5
@@ -35,7 +42,7 @@ automation old:
         after: '08:00:00'
         before: '21:00:00'
     action:
-      - entity_id: media_player.google_home_mini
+      - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
         data_template:
           volume_level: > 
@@ -57,7 +64,7 @@ automation old:
         after: '21:00:00'
         before: '00:00:00'
     action:
-      - entity_id: media_player.google_home_mini
+      - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
         data_template:
           volume_level: > 
@@ -78,7 +85,7 @@ automation old:
         after: '00:00:00'
         before: '08:00:00'
     action:
-      - entity_id: media_player.google_home_mini
+      - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
         data_template:
           volume_level: > 

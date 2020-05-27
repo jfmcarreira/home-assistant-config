@@ -1,169 +1,33 @@
-- id: Media Control MEO Box Sala based on TV
-  alias: Media Control MEO Box Sala based on TV
+
+
+
+- id: '1590598279734'
+  alias: Nova Automação
+  description: ''
   trigger:
-  - platform: state
-    entity_id: binary_sensor.living_room_tv_state
-  - platform: state
-    entity_id: sensor.living_room_tv_source
-  action:
-  - service_template: "{% if is_state('binary_sensor.living_room_tv_state', 'off')\
-      \ %}\n    media_player.turn_off\n{% else %}\n    {% if is_state('sensor.living_room_tv_source',\
-      \ 'MEO') %}\n        media_player.turn_on\n    {% else %}\n        media_player.turn_off\n\
-      \    {% endif %}\n{% endif %}\n"
-    entity_id: media_player.living_room_tv_meo_box
-- id: Ctrl Tradfri Switch Off Long Press
-  alias: Ctrl Tradfri Switch Off Long Press
-  trigger:
-  - device_id: de0702c868e74c1d960476c4a394f56c
-    domain: deconz
+  - device_id: ab55bb59cf914334bbd0b33a2d268959
+    domain: binary_sensor
+    entity_id: binary_sensor.openclose_8
     platform: device
-    type: remote_button_long_press
-    subtype: turn_off
+    type: opened
   condition: []
   action:
-  - data: {}
-    entity_id: script.night_away
-    service: script.turn_on
-- id: Ctrl Tradfri Switch Off Short Press
-  alias: Ctrl Tradfri Switch Off Short Press
-  trigger:
-  - device_id: de0702c868e74c1d960476c4a394f56c
-    domain: deconz
-    platform: device
-    type: remote_button_short_press
-    subtype: turn_off
-  condition: []
-  action:
-  - device_id: 8de51b4185b64445989d528768892704
+  - device_id: a6722212bd92498986f9b5a3dbb6305c
     domain: light
     entity_id: light.hallway
-    type: toggle
-- id: Lights Hallway Turn On Door Open
-  alias: Lights Hallway Turn On Door Open
+    type: turn_on
+- id: '1590598297299'
+  alias: Nova Automação
+  description: ''
   trigger:
-  - entity_id: binary_sensor.front_door
-    from: 'off'
-    platform: state
-    to: 'on'
-  condition:
-  - condition: state
-    entity_id: sun.sun
-    state: below_horizon
-  - condition: state
+  - device_id: ab55bb59cf914334bbd0b33a2d268959
+    domain: binary_sensor
+    entity_id: binary_sensor.openclose_8
+    platform: device
+    type: not_opened
+  condition: []
+  action:
+  - device_id: a6722212bd92498986f9b5a3dbb6305c
+    domain: light
     entity_id: light.hallway
-    for:
-      seconds: 10
-    state: 'off'
-  action:
-  - entity_id: light.hallway
-    service: light.turn_on
-- id: '1585009332880'
-  alias: Ctrl Tradfri Switch On Short Press
-  description: ''
-  trigger:
-  - device_id: de0702c868e74c1d960476c4a394f56c
-    domain: deconz
-    platform: device
-    type: remote_button_short_press
-    subtype: turn_on
-  condition: []
-  action:
-  - data: {}
-    entity_id: display.tf201_kyosk
-    service: display.turn_on
-- id: Media Google Home Mini Day Volume
-  alias: Media Google Home Mini Day Volume
-  trigger:
-  - at: 08:00:00
-    platform: time
-  condition: []
-  action:
-  - data:
-      volume_level: 0.4
-    entity_id: media_player.google_home_mini
-    service: media_player.volume_set
-- id: Media Google Home Mini Evening Volume
-  alias: Media Google Home Mini Evening Volume
-  trigger:
-  - platform: time
-    at: '22:00:00'
-  condition: []
-  action:
-  - data:
-      volume_level: 0.3
-    entity_id: media_player.google_home_mini
-    service: media_player.volume_set
-- id: Media Google Home Mini Night Volume
-  alias: Media Google Home Mini Night Volume
-  trigger:
-  - platform: time
-    at: 00:00:00
-  condition: []
-  action:
-  - data:
-      volume_level: 0.2
-    entity_id: media_player.google_home_mini
-    service: media_player.volume_set
-- id: '1585836212924'
-  alias: CCTV Toggle Light Event Recorded
-  description: ''
-  trigger:
-  - entity_id: sensor.v380pro_events
-    platform: state
-  condition: []
-  action:
-  - device_id: 5b0f2e7b40bd47bbb5832b807b5ec61f
-    domain: light
-    entity_id: light.living_room_abajur
-    type: toggle
-  - delay: 00:00:01
-  - device_id: 5b0f2e7b40bd47bbb5832b807b5ec61f
-    domain: light
-    entity_id: light.living_room_abajur
-    type: toggle
-- id: '1586741511899'
-  alias: Frontend Set Daily Theme
-  description: ''
-  trigger:
-  - event: sunrise
-    offset: 00:30:00
-    platform: sun
-  condition: []
-  action:
-  - data:
-      name: Google Light Theme
-    service: frontend.set_theme
-- id: '1586741560002'
-  alias: Frontend Set Night Theme
-  description: ''
-  trigger:
-  - event: sunset
-    offset: 01:00:00
-    platform: sun
-  - event: start
-    platform: homeassistant
-  condition: []
-  action:
-  - data:
-      name: Google Dark Theme
-    service: frontend.set_theme
-- id: '1587779673396'
-  alias: Power Alert Max Power UI
-  description: ''
-  trigger:
-  - above: 3000
-    device_id: 0a175fa9bbd2464591e27f2014d90078
-    domain: sensor
-    entity_id: sensor.bhpzem_power
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 20
-    platform: device
-    type: power
-  condition: []
-  action:
-  - data:
-      entity_id: media_player.google_home_mini
-      message: Atenção! Elevada potência consumida.
-    service: tts.google_say
+    type: turn_off

@@ -1,21 +1,22 @@
 substitutions:
-  devicename: master_bedroom
+  devicename: bhonofre_02
   upper_devicename: Master Bedroom
   
 esphome:
-  name: bhonofre_${devicename}
+  name: ${devicename}
   platform: ESP8266
   board: nodemcu
 
 wifi:
   domain: .home
-  ssid: !secret esp_wifi_ssid
-  password: !secret esp_wifi_pass
-  manual_ip:
-    static_ip: !secret ip_bhonfre_bedroom
-    gateway: !secret esp_gateway
-    subnet: !secret esp_subnet
-  #use_address: 10.20.0.37
+  ssid: !secret esp_wifi_new_ssid
+  password: !secret esp_wifi_new_pass
+  #manual_ip:
+  #  static_ip: !secret ip_bhonfre_bedroom
+  #  gateway: !secret esp_gateway
+  #  subnet: !secret esp_subnet
+  #use_address: 10.20.207.37
+  use_address: 10.20.107.143
   
 # Enable logging
 logger:
@@ -75,17 +76,13 @@ light:
     output: relay_2
     restore_mode: ALWAYS_OFF
 
-sensor:
-  # - platform: dallas
-  #   address: 0xDF031761F44FFF28
-  #   name: ${upper_devicename} Temperature
-    
-  - platform: dht
-    model: DHT11
-    pin: GPIO14
-    temperature:
-      name: ${upper_devicename} Temperature
-      accuracy_decimals: 1
-    humidity:
-      name: ${upper_devicename} Humidity
-    update_interval: 30s
+#sensor:
+  #- platform: dht
+  #  model: DHT11
+  #  pin: GPIO14
+  #  temperature:
+  #    name: ${upper_devicename} Temperature
+  #    accuracy_decimals: 1
+  #  humidity:
+  #    name: ${upper_devicename} Humidity
+  #  update_interval: 30s

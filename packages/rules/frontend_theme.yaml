@@ -1,0 +1,25 @@
+automation old:
+  - alias: Frontend Set Daily Theme
+    description: ''
+    trigger:
+    - event: sunrise
+      offset: 00:30:00
+      platform: sun
+    condition: []
+    action:
+    - data:
+        name: Google Light Theme
+      service: frontend.set_theme
+  - alias: Frontend Set Night Theme
+    description: ''
+    trigger:
+    - event: sunset
+      offset: 01:00:00
+      platform: sun
+    - event: start
+      platform: homeassistant
+    condition: []
+    action:
+    - data:
+        name: Google Dark Theme
+      service: frontend.set_theme

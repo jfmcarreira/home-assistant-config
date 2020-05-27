@@ -1,6 +1,0 @@
-binary_sensor:
-  - platform: mqtt
-    name: "Fridge Door"
-    device_class: door
-    state_topic: "binary_rf_sensors/fridge_door"
-    qos: 1
