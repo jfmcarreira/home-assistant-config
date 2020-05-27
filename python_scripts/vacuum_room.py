@@ -1,41 +1,63 @@
+"""
+List of rooms 
+(Lista de divisões)
+  Since these names target voice assistant a dictionary is created
+  to provide more than one name to each room, and thus support 
+  for different languages
+"""
+room_alias = {
+    'Sala': 'living_room',
+    'Living Room': 'living_room',
+    'Cozinha': 'kitchen',
+    'Kitchen': 'kitchen',
+    'Escritório': 'office',
+    'Office': 'office',
+    'Casa de Banho': 'bathroom',
+    'Casa de Banho': 'bathroom',
+    'Quarto': 'master_bedroom',
+    'Bedroom': 'master_bedroom',
+    'Casa de Banho Privada': 'private_bathroom',
+    'Private Bathroom': 'private_bathroom',
+    'Quarto do Fundo': 'guest_bedroom',
+    'Guest Bedroom': 'guest_bedroom',
+    'Bedroom and Bathroom': 'master_bedroom_bathroom'
+}
+
+"""
+Dictionary mapping id with an array of rooms in the Xiaomi app
+(Mapeamento das rooms na app da Xiaomi)
+"""
+vaccum_room_id = {
+    'living_room': [18],
+    'kitchen': [19],
+    'office': [1],
+    'bathroom': [20],
+    'master_bedroom': [17],
+    'private_bathroom' [2],
+    'master_bedroom_bathroom': [17, 2],
+    'guest_bedroom': [21]
+}
+
+"""
+In order to find the room number one can use trial and error using the following command:
+    miiocli  vacuum --ip <IP> --token <TOKEN> segment_clean <integer number>
+and check the output in the xiaomi app
+"""
+
+# This is the room name as per 'room_alias'
 room = data.get("room").lower()
+
+# Number of runs per room
 runs = int( data.get("runs", '1') )
 
-room_param = []
-if room == "sala" or room == "living room":
-    room_param.append( 18 )
-elif room == "cozinha" or room == "kitchen":
-    room_param.append( 19 )
-elif room == "escritório" or room == "office":
-    room_param.append( 1 )
-elif room == "quarto" or room == "bedroom":
-    room_param.append( 17 )
-elif room == "quarto do fundo" or room == "second bedroom":
-    room_param.append( 21 )
-elif room == "casa de banho principal" or room == "bathroom":
-    room_param.append( 20 )
-elif room == "casa de banho do quarto" or room == "private bathroom":
-    room_param.append( 2 )
-elif room == "quarto e cozinha" or room == "bedroom and bathroom":
-    room_param.append( 17 )
-    room_param.append( 2 )
-else:
-    exit(1)
+# Map from the room name to the vaccum room parameter
+vaccum_room_param = vaccum_room_id[room_alias[room]]
 
-room_array = []
-if runs > 1:
+vaccum_room_array = []
+for r in room_param:
     for i in range(runs):
-        room_array.append( room_param[0] )
-else:
-    room_array = room_param
+        vaccum_room_array.append( vaccum_room_param[r] )
 
-service_data = { "entity_id": "vacuum.roborock", "command": "app_segment_clean", "params": room_array } 
+
+service_data = { "entity_id": "vacuum.roborock", "command": "app_segment_clean", "params": vaccum_room_array } 
 hass.services.call('vacuum','send_command', service_data, False)
-
-# 1: Office
-# 2: Casa de banho quarto
-# 17: Quarto
-# 18: Sala
-# 19: Cozinha
-# 20: Casa de Banho
-# 21: Quarto do fundo

@@ -1,0 +1,99 @@
+#
+# Daily stats
+#
+sensor:
+  - platform: history_stats
+    name: Daily Fridge Door Open Count
+    entity_id: binary_sensor.fridge_door
+    state: "on"
+    type: count
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+
+  - platform: history_stats
+    name: Daily Fridge Door Open Time
+    entity_id: binary_sensor.fridge_door
+    state: "on"
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+
+  - platform: history_stats
+    name: Daily TV Time 
+    entity_id: binary_sensor.living_room_tv_state
+    state: 'on'
+    type: time
+    start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    end: '{{ now() }}'
+
+  - platform: history_stats
+    name: Daily TV Time Kodi
+    entity_id: sensor.living_room_tv_source
+    state: 'Kodi'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+
+  - platform: history_stats
+    name: Daily TV Time MEO
+    entity_id: sensor.living_room_tv_source
+    state: 'MEO'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+
+  - platform: history_stats
+    name: Daily TV Time Netflix
+    entity_id: sensor.living_room_tv_source
+    state: 'Netflix'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+
+  - platform: history_stats
+    name: Daily TV Time Jellyfin
+    entity_id: sensor.living_room_tv_source
+    state: 'Jellyfin'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+
+
+automation insert:
+  - alias: "Daily Stats Insert Value of TV State to Database"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_tv_time
+      - platform: state
+        entity_id: sensor.daily_tv_time_kodi
+      - platform: state
+        entity_id: sensor.daily_tv_time_meo
+      - platform: state
+        entity_id: sensor.daily_tv_time_netflix
+      - platform: state
+        entity_id: sensor.daily_tv_time_jellyfin  
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: tv_time
+          value: >
+            {{ trigger.to_state.state }}
+          column: >
+            {% if trigger.entity_id == "sensor.daily_tv_time" %}
+              total
+            {% elif trigger.entity_id == "sensor.daily_tv_time_kodi" %}
+              kodi
+            {% elif trigger.entity_id == "sensor.daily_tv_time_meo" %}
+              meo
+            {% elif trigger.entity_id == "sensor.daily_tv_time_jellyfin" %}
+              jellyfin
+            {% elif trigger.entity_id == "sensor.daily_tv_time_netflix" %}
+              netflix
+            {% endif %}

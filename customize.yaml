@@ -1,21 +1,3 @@
-media_player.mediaroom_box_sala:
-  name: Living Room Meo Box
-  friendly_name: Living Room Meo Box
-media_player.browser_tf201_kyosk:
-  friendly_name: Kiosk Player
-  icon: mdi:tablet-dashboard
-binary_sensor.washing_machine_state:
-  icon: mdi:washing-machine
-binary_sensor.fridge_door:
-  friendly_name: Frigorífico
-  icon: mdi:fridge
-binary_sensor.living_room_tv_state:
-  friendly_name: Televisão da Sala
-  icon: mdi:television
-media_player.media_center:
-  icon: mdi:television
-display.tf201_kyosk:
-  friendly_name: Kyosk Entrada
-  icon: mdi:tablet-dashboard
-binary_sensor.browser_tf201_kyosk:
-  friendly_name: Movimento Porta Entrada
+binary_sensor.motion_sensor_living_room:
+  device_class: motion
+

@@ -5,98 +5,96 @@ google_assistant:
   project_id: !secret google_assistant_clientid
   service_account: !include /config/google_assistant_service_account.json
   report_state: false
-  expose_by_default: false
-  entity_config:  
-    scene.television_night:
-      expose: true
-      name: Scene Television Night
-    
-    script.night_away:
-      expose: true
-      name: Routine Night Time
-      aliases:
-        - Routina de Boa noite
-    script.roborock_send_kitchen:
-      expose: true
-      name: Routine Roborock Cleaning
-    script.routines_dinner_time:
-      expose: true
-      name: Routine Dinner Time
-      
-    script.ricardo_vitamin_d:
-      expose: true
-      name: Routine Ricardo Vitamin D
-      
-    script.meo_reset_current_show:
-      expose: true
-      name: Routine MEO Reset Show
-    script.meo_reset_previous_show:
-      expose: true
-      name: Routine MEO Reset Previous Show
-      
+  expose_by_default: true
+  exposed_domains:
+    - scene
+    - script
+  entity_config:        
     vacuum.roborock:
       expose: true
       name: Roborock
       
     climate.heating:
       expose: true
-      name: Heating
+      name: Aquecimento
       aliases:
-        - Aquecimento
+        - Heating
     media_player.media_center:
       expose: true
-      name: Living Room TV
+      name: Televisão da Sala
       aliases:
-        - Televisão da Sala
+        - Living Room TV
+
     light.living_room_table:
       expose: true
-      name: Living Room Table Light
+      name: Luz da Mesa da Sala
       aliases:
-        - Luz da Mesa da Sala
+        - Living Room Table Light
     light.living_room_window:
       expose: true
-      name: Living Room Window Light
+      name: Luz da Janela da Sala
       aliases:
-        - Luz da Janela da Sala
+        - Living Room Window Light
     light.living_room_abajur:
       expose: true
-      name: Living Room Side Light
+      name: Luz de Apoio
       aliases:
-        - Luz de Apoio
+        - Living Room Side Light
+    light.living_room_tv_leds:
+      expose: true
+      name: Retro-iluminação da TV
+      aliases:
+        - Living Room TV Leds
     light.hallway:
       expose: true
-      name: Hallway Light
+      name: Luz do Corredor
       aliases:
-        - Luz do Corredor
+        - Hallway Light
     light.hallway_presence_light:
       expose: true
-      name: Hallway Presence Light
+      name: Luz de Presença do Corredor
       aliases:
-        - Luz de Presença do Corredor
+        - Hallway Presence Light
     light.kitchen:
       expose: true
-      name: Kitchen Light
+      name: Luz da Cozinha
       aliases:
-        - Luz da Cozinha
-    light.master_bedroom:
+        - Kitchen Light
+    light.kitchen_pantry:
       expose: true
-      name: Bedroom Light
+      name: Luz da Despensa
       aliases:
-        - Luz do Quarto
-    light.master_bedroom_left_bed:
-      expose: true
-      name: Bedroom Left Side Light
-      aliases:
-        - Luz do Candeeiro Esquerdo do Quarto 
-    light.master_bedroom_right_bed:
-      expose: true
-      name: Bedroom Right Side Light
-      aliases:
-        - Luz do Candeeiro Direito do Quarto
+        - Kitchen Pantry Light
     light.office:
       expose: true
-      name: Office Light
+      name: Luz do Escritório
       aliases:
-        - Luz do Escritório
+        - Office Light
+    light.office_desk:
+      expose: true
+      name: Retro-iluminação da Secretária
+      aliases:
+        - Office Desk Light
+    light.master_bedroom:
+      expose: true
+      name: Luz do Quarto
+      aliases:
+        - Bedroom Light
+    light.master_bedroom_bathroom:
+      expose: true
+      name: Luz da Casa de Banho do Quarto
+      aliases:
+        - Bathroom Light
+    light.master_bedroom_left_bed:
+      expose: true
+      name: Luz do Candeeiro Esquerdo do Quarto 
+      aliases:
+        - Bedroom Left Side Light
+    light.master_bedroom_right_bed:
+      expose: true
+      name: Luz do Candeeiro Direito do Quarto
+      aliases:
+        - Bedroom Right Side Light
+    
 
         

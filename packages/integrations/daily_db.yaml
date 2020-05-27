@@ -12,3 +12,5 @@ sensor:
       
 shell_command:
   external_my_sql_insert: python3 /config/shell_scripts/ha-daily-insert-mysql/daily_insert_mysql.py --host=core-mariadb --user={{ states("sensor.db_custom_user") }} --password={{ states("sensor.db_custom_pass") }} --db=daily_stats --table={{ table }} --value={{ value }} {{ '--col='+column if column is defined }}
+  external_my_sql_insert_with_date: python3 /config/shell_scripts/ha-daily-insert-mysql/daily_insert_mysql.py --host=core-mariadb --user={{ states("sensor.db_custom_user") }} --password={{ states("sensor.db_custom_pass") }} --db=daily_stats --table={{ table }} --value={{ value }} --date_stamp={{ date_stamp }} {{ '--col='+column if column is defined }}
+

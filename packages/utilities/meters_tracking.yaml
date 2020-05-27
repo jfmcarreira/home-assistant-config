@@ -1,0 +1,126 @@
+################################################################
+## Utilities Meter
+################################################################
+homeassistant:
+  customize_glob:
+    "input_number.*_meter*":
+      icon: mdi:counter
+      
+input_number:
+  electricity_meter_full:
+    name: Electricity Meter Full
+    min: 0
+    max: 99999
+    step: 1
+    mode: box
+  electricity_meter_peak:
+    name: Electricity Meter Peak
+    min: 0
+    max: 99999
+    step: 1
+    mode: box
+  electricity_meter_offpeak:
+    name: Electricity Meter Off-Peak
+    min: 0
+    max: 99999
+    step: 1
+    mode: box
+  gas_meter:
+    name: Gas Meter
+    min: 0
+    max: 99999
+    step: 0.01
+    mode: box
+  water_meter:
+    name: Water Meter
+    min: 0
+    max: 99999
+    step: 0.01
+    mode: box
+
+    
+input_datetime:
+  electricity_last_meter:
+    name: Electricity Last Meter
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+  gas_last_meter:
+    name: Gas Last Meter
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+  water_last_meter:
+    name: Water Last Meter
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+    
+sensor:
+  - platform: template
+    sensors:
+      electricity_meter:
+        friendly_name: Electricity Meter
+        value_template: >
+            {{ ( ( states('input_number.electricity_meter_offpeak') | float ) + ( states('input_number.electricity_meter_peak') | float ) + ( states('input_number.electricity_meter_full') | float ) ) | int }}
+        entity_id:
+          - input_number.electricity_meter_full
+          - input_number.electricity_meter_peak
+          - input_number.electricity_meter_offpeak
+      electricity_last_meter:
+        friendly_name: Electricity Last Meter
+        device_class: timestamp
+        value_template: >
+          {{ state_attr('input_datetime.electricity_last_meter', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+      gas_last_meter:
+        friendly_name: Gas Last Meter
+        device_class: timestamp
+        value_template: >
+          {{ state_attr('input_datetime.gas_last_meter', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+      water_last_meter:
+        friendly_name: Water Last Meter
+        device_class: timestamp
+        value_template: >
+          {{ state_attr('input_datetime.water_last_meter', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+          
+          
+automation old:
+  - alias: Power Mark Electricity Reading
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_number.electricity_meter_full
+      - platform: state
+        entity_id: input_number.electricity_meter_peak
+      - platform: state
+        entity_id: input_number.electricity_meter_offpeak
+    action:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.electricity_last_meter
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+          
+  - alias: Power Mark Gas Reading
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_number.gas_meter
+    action:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.gas_last_meter
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+          
+  - alias: Power Mark Water Reading
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_number.water_meter
+    action:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.water_last_meter
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'

@@ -3,7 +3,7 @@
 ################################################################################
 auto_backup:
   auto_purge: true
-  
+
 automation old:
   - alias: Backup Daily
     trigger:

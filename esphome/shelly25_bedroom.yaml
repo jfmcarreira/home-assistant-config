@@ -1,0 +1,117 @@
+substitutions:
+  devicename: shelly25_bedroom
+  LightA_Name: Master Bedroom
+  LightB_Name: Master Bedroom Bathroom
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  manual_ip:
+    static_ip: !secret ip_shelly25_master_bedroom
+    gateway: !secret esp_gateway
+    subnet: !secret esp_subnet
+  
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  #reboot_timeout: 0s
+
+ota:
+
+binary_sensor:
+  - platform: gpio
+    id: sw_2
+    pin:
+      number: GPIO5
+    on_state:
+      then:
+      - if:
+          condition:
+            - binary_sensor.is_on: sw_2
+          then:
+            - light.turn_on: light_2 
+      - if:
+          condition:
+            - binary_sensor.is_off: sw_2
+          then:
+            - light.turn_off: light_2
+
+
+  - platform: gpio
+    id: sw_1
+    pin:
+      number: GPIO13
+    on_press:
+      then:
+        - light.toggle: light_1
+      
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO04
+  - platform: gpio
+    id: relay_2
+    pin: GPIO15
+    
+light:
+  - id: light_1
+    name: ${LightA_Name}
+    platform: binary
+    output: relay_1
+  - id: light_2
+    name: ${LightB_Name}
+    platform: binary
+    output: relay_2
+    
+i2c:
+  sda: GPIO12
+  scl: GPIO14
+
+sensor:
+  # Voltage
+  - platform: ade7953
+    voltage:
+      id: shelly_voltage
+    current_a:
+      id: shelly_current_A
+    current_b:
+      id: shelly_current_B
+    active_power_a:
+      id: shelly_active_power_A
+      name: Power Usage ${LightA_Name}
+      filters:
+        - multiply: -1
+    active_power_b:
+      id: shelly_active_power_B
+      name: Power Usage ${LightB_Name}
+      filters:
+        - multiply: -1
+    update_interval: 30s
+
+  # NTC Temperature
+  - platform: ntc
+    sensor: temp_resistance_reading
+    id: shelly_temperature
+    calibration:
+      b_constant: 3350
+      reference_resistance: 10kOhm
+      reference_temperature: 298.15K
+  
+  - platform: resistance
+    id: temp_resistance_reading
+    sensor: temp_analog_reading
+    configuration: DOWNSTREAM
+    resistor: 32kOhm
+  
+  - platform: adc
+    id: temp_analog_reading
+    pin: A0
+    

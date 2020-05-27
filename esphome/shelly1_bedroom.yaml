@@ -9,17 +9,20 @@ esphome:
 
 wifi:
   domain: .home
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  fast_connect: true
-  #use_address: !secret ip_shelly1_bedroom
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  manual_ip:
+    static_ip: !secret ip_shelly1_bedroom
+    gateway: !secret esp_gateway
+    subnet: !secret esp_subnet
+  #use_address: 10.20.0.31
 
 # Enable logging
 logger:
 
 # Enable Home Assistant API
 api:
-  reboot_timeout: 0s
+  #reboot_timeout: 30s
 
 ota:
 

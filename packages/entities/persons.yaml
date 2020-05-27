@@ -20,6 +20,12 @@ homeassistant:
 
 ## Device tracker
 device_tracker:
+  - platform: bluetooth_tracker
+    interval_seconds: 30
+    consider_home: 60
+    new_device_defaults:
+      track_new_devices: true
+
   - platform: ping
     interval_seconds: 30
     consider_home: 60
@@ -42,17 +48,6 @@ device_tracker:
 
 ## Persons - Managed by UI
 person:
-
-## Binary Toggles
-input_boolean:
-  house_guest:
-    name: Convidados
-    initial: off
-    icon: mdi:account-group
-  notify_home:
-    name: Notify House Occupied
-    initial: off
-    icon: mdi:home
 
 ## Proximity
 proximity:

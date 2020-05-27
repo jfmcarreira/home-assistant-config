@@ -11,6 +11,10 @@ recorder:
       - sun
       - weat
     entities:
+      ## Constant automations
+      - automation.daily_stats_insert_value_of_energy_to_database
+      - automation.daily_stats_insert_value_to_database
+      ## Time vary sensors
       - sun.sun
       - sensor.uptime
       - sensor.date_time
@@ -37,6 +41,8 @@ recorder:
       - sensor.daily_tv_time_meo
       - sensor.daily_tv_time_plex
       - sensor.daily_tv_time_netflix
+      
+      
 
       
 
@@ -88,14 +94,19 @@ logbook:
       - media_player
       - script
     entities:
-      # Device states
+      ## Device states
       - binary_sensor.living_room_tv_state
       - binary_sensor.washing_machine_state
       - binary_sensor.roborock_state
-      # Door Sensors
+      ## Motion Sensors
+      #- binary_sensor.motion_sensor_hallway
+      #- binary_sensor.motion_sensor_office
+      #- binary_sensor.motion_sensor_living_room
+      ## Door Sensors
+      - binary_sensor.washing_machine_door
       - binary_sensor.fridge_door
       - binary_sensor.front_door
-      # Miscellaneous
+      ## Miscellaneous
       - binary_sensor.wash_machine_dry_clothes
       - binary_sensor.wash_machine_wet_clothes
   exclude:
@@ -105,6 +116,21 @@ logbook:
       - zone
       - sun
     entities:
+      # Constant automations
+      - automation.discovery_shellies_announce
+      - automation.discovery_shellies
+      - automation.daily_stats_insert_value_of_energy_to_database
+      - automation.power_daily_update_total_kw
+      - automation.daily_stats_insert_value_of_tv_state_to_database
+      - automation.daily_stats_insert_value_of_device_usage_to_database
+      - automation.power_daily_force_update_after_change_selector
+      - automation.daily_stats_insert_value_of_temperature_and_humidity_to_database
+      - automation.media_google_home_mini_day_volume
+      - automation.media_google_home_mini_evening_volume
+      - automation.media_google_home_mini_nigth_volume 
+      - automation.rf_brigde_demultiplexer
+      - automation.cat_reset_pir_state
+      ## Time vary sensors
       - sun.sun
       - sensor.uptime
       - sensor.date_time
@@ -130,14 +156,16 @@ history:
       - lights
       - sensor
     entities:
-      # Device states
+      ## Device states
       - binary_sensor.living_room_tv_state
       - binary_sensor.washing_machine_state
       - binary_sensor.roborock_state
-      # Motion sensors
+      ## Motion sensors
+      - binary_sensor.motion_sensor_living_room      
       - binary_sensor.motion_sensor_hallway
       - binary_sensor.motion_sensor_office
       # Door Sensors
+      - binary_sensor.washing_machine_door
       - binary_sensor.fridge_door
       - binary_sensor.front_door
       # Miscellaneous
@@ -150,7 +178,7 @@ history:
       - zone
       - sun
     entities:
-      - sun.sun
+      ## Time vary sensors
       - sensor.uptime
       - sensor.date_time
       - sensor.date

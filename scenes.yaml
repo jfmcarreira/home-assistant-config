@@ -8,14 +8,14 @@
       supported_features: 8
     light.kitchen_pantry:
       friendly_name: Luz da Despensa
-      icon: mdi:ceiling-light
       state: 'off'
       supported_features: 8
     light.living_room_abajur:
+      brightness: 74
       friendly_name: Luz de Apoio
       icon: mdi:lamp
       state: 'on'
-      supported_features: 8
+      supported_features: 41
     light.living_room_table:
       friendly_name: Luz da Mesa da Sala
       icon: mdi:globe-light
@@ -27,8 +27,8 @@
       - Meteor Shower
       - Gradual Change
       - Flash
-      friendly_name: Retro-iluminação da TV
-      icon: mdi:television-ambient-light
+      friendly_name: Retro-iluminação TV
+      icon: mdi:television
       state: 'off'
       supported_features: 189
     light.living_room_window:

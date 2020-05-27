@@ -33,13 +33,6 @@ input_select:
       #- Lithium
       #- Todos
 
-input_text:
-  youtube_url:
-    name: YouTube URL
-    icon: mdi:youtube
-
-
-
 script:
   play_radio:
     alias: "Media Play Radio"

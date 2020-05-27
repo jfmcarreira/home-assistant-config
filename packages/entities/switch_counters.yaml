@@ -13,8 +13,7 @@ counter:
     step: 1
 
 automation old:
-  - id: Ctrl Count Light Switches
-    alias: Ctrl Count Light Switches
+  - alias: Ctrl Count Light Switches
     initial_state: true
     trigger:
       - platform: state

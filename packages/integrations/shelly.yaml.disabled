@@ -1,0 +1,8 @@
+# This handles the Shelly devices
+#
+# https://github.com/StyraHem/ShellyForHASS
+#
+shelly:
+  version: true
+  additional_information: true
+  sensors: all

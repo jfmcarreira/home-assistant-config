@@ -1,0 +1,34 @@
+################################################################
+## Temperature
+################################################################
+homeassistant:
+  customize_glob:
+    "sensor.*temperature":
+      device_class: temperature
+      icon: mdi:thermometer
+      unit_of_measurement: "°C"
+  
+sensor:
+  - platform: template
+    sensors:
+      weather_temperature:
+        friendly_name: "Weather Temperature"
+        value_template: "{{ states.weather.ipma.attributes.temperature }}"
+        entity_id:
+          - weather.ipma
+
+  - platform: min_max
+    name: Average Temperature
+    type: mean
+    round_digits: 1
+    entity_ids:
+      - sensor.office_temperature
+      - sensor.living_room_temperature
+      - sensor.master_bedroom_temperature
+
+  - platform: statistics
+    name: daily_average_temperature
+    entity_id: sensor.average_temperature
+    max_age:
+      hours: 24
+

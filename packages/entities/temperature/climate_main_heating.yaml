@@ -2,6 +2,11 @@
 #
 # https://www.home-assistant.io/integrations/generic_thermostat/
 #
+homeassistant:
+  customize:
+    climate.heating:
+      friendly_name: Aquecimento
+
 climate:
   - platform: generic_thermostat
     name: Heating
@@ -30,12 +35,6 @@ climate:
     hot_tolerance: 5
     keep_alive:
       seconds: 30
-
-input_boolean:
-  heating_running_feedback:
-    name: Heating Running Feedback
-  heating_running_ongoing_water:
-    name: Heating Running Ongoing Water
 
 sensor:
   - platform: template

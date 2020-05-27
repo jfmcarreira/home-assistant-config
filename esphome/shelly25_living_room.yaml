@@ -1,5 +1,8 @@
 substitutions:
   devicename: shelly25_living_room
+  DeviceName: Shelly 25 Living Room
+  OutputA_Name: Living Room Window
+  OutputB_Name: Living Room Table
   
 esphome:
   name: ${devicename}
@@ -8,98 +11,23 @@ esphome:
 
 wifi:
   domain: .home
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  fast_connect: true
-  #use_address: !secret ip_shelly25_living_room
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  manual_ip:
+    static_ip: !secret ip_shelly25_living_room
+    gateway: !secret esp_gateway
+    subnet: !secret esp_subnet
+  #use_address: 10.20.0.33
   
 # Enable logging
 logger:
 
 # Enable Home Assistant API
 api:
-  reboot_timeout: 0s
+  #reboot_timeout: 0s
 
 ota:
 
-binary_sensor:
-  - name: Living Room Window Light SW
-    platform: gpio
-    pin:
-      number: GPIO5
-    #on_press:
-    #  then:
-    #    - light.toggle: light_2
-    on_multi_click:
-      - timing:
-          - ON for at most 0.5s
-          - OFF for at least 0.2s
-        then:
-          - light.toggle: light_2
-      - timing:
-          - ON for 1s to 2s
-          - OFF for at least 0.2s
-        then:
-          - binary_sensor.template.publish:
-              id: long_window_sw
-              state: ON
-          
-  - platform: template
-    name: Living Room Window Light Long SW
-    id: long_window_sw
-    on_press:
-      then:
-        - delay: 1s
-        - binary_sensor.template.publish:
-            id: long_window_sw
-            state: OFF
-        
-  - name: Living Room Table Light SW
-    platform: gpio
-    pin:
-      number: GPIO13
-    on_multi_click:
-      - timing:
-          - ON for at most 0.5s
-          - OFF for at least 0.2s
-        then:
-          - light.toggle: light_1
-      - timing:
-          - ON for 1s to 3s
-          - OFF for at least 0.2s
-        then:
-          - binary_sensor.template.publish:
-              id: long_table_sw
-              state: ON
-
-  - platform: template
-    name: Living Room Table Light Long SW
-    id: long_table_sw
-    on_press:
-      then:
-        - delay: 1s
-        - binary_sensor.template.publish:
-            id: long_table_sw
-            state: OFF
-      
-output:
-  - platform: gpio
-    id: relay_1
-    pin: GPIO04
-  - platform: gpio
-    id: relay_2
-    pin: GPIO15
-    
-light:
-  - name: Living Room Table
-    platform: binary
-    id: light_1
-    output: relay_1
-  - name: Living Room Window
-    platform: binary
-    id: light_2
-    output: relay_2
-    
 i2c:
   sda: GPIO12
   scl: GPIO14
@@ -114,11 +42,11 @@ sensor:
     current_b:
       id: Shelly_Current_A
     active_power_a:
-      name: Power Usage Shelly Living Room Window Light 
+      name: Power Usage ${OutputA_Name}
       filters:
         - multiply: -1
     active_power_b:
-      name: Power Usage Shelly Living Room Table Light 
+      name: Power Usage ${OutputB_Name}
       filters:
         - multiply: -1
     update_interval: 30s
@@ -126,7 +54,7 @@ sensor:
   # NTC Temperature
   - platform: ntc
     sensor: temp_resistance_reading
-    name: Selly Living Room Temperature
+    name: ${DeviceName} temperature
     calibration:
       b_constant: 3350
       reference_resistance: 10kOhm
@@ -141,4 +69,105 @@ sensor:
   - platform: adc
     id: temp_analog_reading
     pin: A0
+
+globals:
+ - id: var_window_dimmer_direction
+   type: int
+   restore_value: false
+   initial_value: "0"
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO15
+  - platform: gpio
+    id: relay_2
+    pin: GPIO04
+  
+light:
+  - name: ${OutputA_Name}
+    platform: binary
+    id: light_window
+    output: relay_1
+  - name: ${OutputB_Name}
+    platform: binary
+    id: light_table
+    output: relay_2
+    
+binary_sensor:
+  - id: sw_window
+    platform: gpio
+    pin:
+      number: GPIO5
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.1s
+        then:
+          - light.toggle: light_window
+      - timing:
+          #- ON for at least 1s
+          - ON for 0.5s to 1.5s
+          - OFF for at least 0.1s
+        then:
+          - homeassistant.service:
+              service: light.toggle
+              data:
+                entity_id:  light.living_room_abajur 
+      
+      - timing:
+          - ON for at least 1.5s
+        then:
+          - lambda: |-
+              if( id(var_window_dimmer_direction) ) {
+                id(var_window_dimmer_direction) = 0;
+              } else {
+                id(var_window_dimmer_direction) = 1;
+              }
+          - while:
+              condition:
+                binary_sensor.is_on: sw_window
+              then:
+                - if:
+                    condition:
+                      lambda: 'return id(var_window_dimmer_direction) == 0;'
+                    then:
+                      - logger.log: "Dimmer Down"
+                      - homeassistant.event:
+                          event: esphome.button_pressed
+                          data:
+                            action: brightness_change
+                            entity_id: "light.living_room_abajur"
+                            direction: "down"
+                    else:
+                      - logger.log: "Dimmer Up"
+                      - homeassistant.event:
+                          event: esphome.button_pressed
+                          data:
+                            action: brightness_change
+                            entity_id: "light.living_room_abajur"
+                            direction: "up"
+                - delay: 1s
+          
+
+  
+  - name: sw_table
+    platform: gpio
+    pin:
+      number: GPIO13
+    on_multi_click:
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.1s
+        then:
+          - light.toggle: light_table
+      - timing:
+          - ON for at least 1s
+        then:
+          - homeassistant.service:
+              service: light.toggle
+              data:
+                entity_id: light.living_room_tv_leds
+      
+
     

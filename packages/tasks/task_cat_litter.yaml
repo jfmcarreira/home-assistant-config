@@ -1,0 +1,93 @@
+################################################################
+## Cat Litter
+################################################################
+input_datetime:
+  cat_litter_box_last_clean:
+    name: Litter Box Last Clean
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+  cat_litter_box_last_change:
+    name: Litter Box Last Change
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: false
+
+script:
+  cat_clean_notification:
+    alias: Task Litter Box Clean Notification
+    sequence:
+      - service: python_script.light_store
+        data:
+          store_name: cat_litter_flash_store
+          operation: save
+          entity_id:
+            - light.living_room_tv_leds
+      - service: light.turn_on
+        data:
+          entity_id: light.living_room_tv_leds
+          rgb_color:
+            - 255
+            - 0
+            - 0
+          brightness: 50
+          white_value: 0
+      - delay:
+          milliseconds: 200
+      - service: light.turn_off
+        data:
+          entity_id: light.living_room_tv_leds
+      - delay:
+          milliseconds: 200
+      - service: light.turn_on
+        data:
+          entity_id: light.living_room_tv_leds
+      - delay:
+          milliseconds: 200
+      - service: light.turn_off
+        data:
+          entity_id: light.living_room_tv_leds
+      - delay:
+          seconds: 1
+      - service: python_script.light_store
+        data:
+          operation: restore
+          store_name: cat_litter_flash_store
+  cat_litter_clean:
+    alias: Task Litter Box Mark Clean
+    sequence:
+      - service: counter.reset
+        data:
+          entity_id: counter.cat_litter_box_visits
+      - service: grocy.execute_chore
+        data:
+          chore_id: 7
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.cat_litter_box_last_clean
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+      - service: vacuum.set_fan_speed
+        data:
+          entity_id: vacuum.roborock
+          fan_speed: "101"
+      - service: python_script.vacuum_room
+        data:
+          room: bathroom
+          runs: 2
+      - delay: 00:00:40
+      - service: vacuum.set_fan_speed
+        data:
+          entity_id: vacuum.roborock
+          fan_speed: "103"
+  cat_litter_change:
+    alias: Task Litter Box Mark Change
+    sequence:
+      - service: script.cat_litter_clean
+      - service: grocy.execute_chore
+        data:
+          chore_id: 2
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.cat_litter_box_last_change
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'

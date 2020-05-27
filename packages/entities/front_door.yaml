@@ -1,3 +1,8 @@
+homeassistant:
+  customize:
+    binary_sensor.front_door:
+      friendly_name: Porta da Entrada
+
 binary_sensor:
 - platform: mqtt
   name: "Front Door"

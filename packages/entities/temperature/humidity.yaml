@@ -1,0 +1,25 @@
+################################################################
+## Humidity
+################################################################
+homeassistant:
+  customize_glob:
+    "sensor.*humidity":
+      device_class: humidity
+      icon: mdi:water-percent
+      unit_of_measurement: "%"
+
+sensor:
+  - platform: min_max
+    name: Average Humidity
+    type: mean
+    round_digits: 1
+    entity_ids:
+      - sensor.office_humidity
+      - sensor.living_room_humidity
+      - sensor.master_bedroom_humidity
+
+  - platform: statistics
+    name: daily_average_humidity
+    entity_id: sensor.average_humidity
+    max_age:
+      hours: 24

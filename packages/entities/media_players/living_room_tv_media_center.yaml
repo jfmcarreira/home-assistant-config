@@ -1,3 +1,10 @@
+homeassistant:
+  customize:
+    binary_sensor.living_room_tv_state:
+      friendly_name: Televisão da Sala
+      icon: mdi:television
+    media_player.media_center:
+      icon: mdi:television
 
 sensor:
   - platform: template
@@ -6,6 +13,12 @@ sensor:
         value_template: '{{ states.media_player.living_room_tv.attributes["source"] }}'
         friendly_name: 'Living Room TV Source'
 
+binary_sensor:
+- platform: template
+  sensors:
+    living_room_tv_state:
+      icon_template: mdi:television
+      value_template: "{{ states.media_player.living_room_tv.state != 'off' }}"  
 
 media_player:
   - platform: universal

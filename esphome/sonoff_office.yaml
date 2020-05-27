@@ -10,10 +10,13 @@ esphome:
 
 wifi:
   domain: .home
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  fast_connect: true
-  #use_address: !secret ip_sonoff_office
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  manual_ip:
+    static_ip: !secret ip_sonoff_office
+    gateway: !secret esp_gateway
+    subnet: !secret esp_subnet
+  #use_address: 10.20.0.36
   
 
 # Enable logging

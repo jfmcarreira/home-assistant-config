@@ -1,0 +1,11 @@
+script:
+  task_roborock_clean:
+    alias: Task Roborock Cleaning
+    sequence:
+    - data:
+        command: app_goto_target
+        params:
+        - 26925
+        - 24435
+      entity_id: vacuum.roborock
+      service: vacuum.send_command

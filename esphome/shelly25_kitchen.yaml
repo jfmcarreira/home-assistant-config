@@ -1,5 +1,8 @@
 substitutions:
   devicename: shelly25_kitchen
+  DeviceName: Shelly 25 Kitchen
+  OutputA_Name: Kitchen Pantry
+  OutputB_Name: Kitchen
   
 esphome:
   name: ${devicename}
@@ -8,10 +11,13 @@ esphome:
 
 wifi:
   domain: .home
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  fast_connect: true
-  #use_address: !secret ip_shelly25_kitchen
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  manual_ip:
+    static_ip: !secret ip_shelly25_kitchen
+    gateway: !secret esp_gateway
+    subnet: !secret esp_subnet
+  #use_address: 10.20.0.34
   
 
 # Enable logging
@@ -19,33 +25,12 @@ logger:
 
 # Enable Home Assistant API
 api:
-  reboot_timeout: 0s
+  #reboot_timeout: 0s
 
 ota:
 
 binary_sensor:
   - id: sw_1
-    #name: Kitchen Light SW
-    platform: gpio
-    pin:
-      number: GPIO13
-      #mode: INPUT_PULLUP
-      #inverted: True
-    on_state:
-      then:
-        - if:
-            condition:
-              - binary_sensor.is_on: sw_1
-            then:
-              - light.turn_on: light_1        
-        - if:
-            condition:
-              - binary_sensor.is_off: sw_1
-            then:
-              - light.turn_off: light_1  
-        
-  - id: sw_2
-    #name: Kitchen Panty Light SW
     platform: gpio
     pin:
       number: GPIO5
@@ -55,32 +40,54 @@ binary_sensor:
       then:
       - if:
           condition:
-            - binary_sensor.is_on: sw_2
+            - binary_sensor.is_on: sw_1
           then:
-            - light.turn_on: light_2     
+            - light.turn_on: light_1     
       - if:
           condition:
-            - binary_sensor.is_off: sw_2
+            - binary_sensor.is_off: sw_1
           then:
-            - light.turn_off: light_2 
+            - light.turn_off: light_1 
+
+  - id: sw_2
+    platform: gpio
+    pin:
+      number: GPIO13
+      #mode: INPUT_PULLUP
+      #inverted: True
+    on_state:
+      then:
+        - if:
+            condition:
+              - binary_sensor.is_on: sw_2
+            then:
+              - light.turn_on: light_2     
+        - if:
+            condition:
+              - binary_sensor.is_off: sw_2
+            then:
+              - light.turn_off: light_2
+        
+
       
 output:
   - platform: gpio
-    id: relay_2
+    id: relay_1
     pin: GPIO15
   - platform: gpio
-    id: relay_1
+    id: relay_2
     pin: GPIO4
     
 light:
-  - name: Kitchen
+  - name: Kitchen Pantry
     platform: binary
     id: light_1
     output: relay_1
-  - name: Kitchen Pantry
+  - name: Kitchen
     platform: binary
     id: light_2
     output: relay_2
+  
     
 i2c:
   sda: GPIO12
@@ -96,19 +103,19 @@ sensor:
     current_b:
       id: Shelly_Current_A
     active_power_a:
-      name: Power Usage Shelly Kitchen Pantry Light
+      name: Power Usage ${OutputA_Name}
       filters:
         - multiply: -1
     active_power_b:
-      name: Power Usage Shelly Kitchen Light
+      name: Power Usage ${OutputB_Name}
       filters:
         - multiply: -1
-    update_interval: 60s
+    update_interval: 30s
 
   # NTC Temperature
   - platform: ntc
     sensor: temp_resistance_reading
-    name: Selly Kitchen Temperature
+    name: ${DeviceName} temperature
     calibration:
       b_constant: 3350
       reference_resistance: 10kOhm

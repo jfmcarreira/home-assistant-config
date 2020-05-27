@@ -1,0 +1,4 @@
+logger:
+  default: critical
+  logs:
+    homeassistant.components.onvif: debug

@@ -5,9 +5,13 @@ esphome:
 
 wifi:
   domain: .home
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  fast_connect: true
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  manual_ip:
+    static_ip: !secret ip_sonoff_basic_heating
+    gateway: !secret esp_gateway
+    subnet: !secret esp_subnet
+  #use_address: 10.20.0.35
   
 
 # Enable logging
@@ -15,7 +19,7 @@ logger:
 
 # Enable Home Assistant API
 api:
-  reboot_timeout: 0s
+  #reboot_timeout: 0s
   
 ota:
 

@@ -1,0 +1,68 @@
+################################################################
+## Ricardo Stats
+################################################################
+# homeassistant:
+#   customize:
+#     input_number.ricardo_weight:
+#       friendly_name: Peso do Ricardo
+      
+input_number:
+  ricardo_weight:
+    name: Peso do Ricardo
+    min: 0
+    max: 99999
+    step: 1
+    mode: box
+
+input_datetime:
+  ricardo_weight_last_measured:
+    name: Ricardo Weight Last Meter
+    icon: mdi:clock-outline
+    has_date: true
+
+sensor:
+  - platform: template
+    sensors:
+      ricardo_weight:
+        friendly_name: Peso do Ricardo
+        value_template: >
+            {{ states('input_number.ricardo_weight') | int }}
+        attribute_templates:
+          last_measured: >
+            {{ states('input_datetime.ricardo_weight_last_measured') | timestamp_custom("%Y-%m-%d", true) }}
+        entity_id:
+          - input_number.ricardo_weight
+         
+
+
+
+
+
+
+automation insert:
+  # - id: Ricardo Weight Input
+  #   alias: Ricardo Weight Input
+  #   initial_state: true
+  #   trigger:
+  #     - platform: state
+  #       entity_id: input_number.ricardo_weight
+  #   action:
+  #     - service: input_datetime.set_datetime
+  #       data_template:
+  #         entity_id: input_datetime.ricardo_weight_last_measured
+  #         date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+
+
+  - alias: "Daily Stats Ricardo"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.ricardo_weight
+    action:
+      - service: shell_command.external_my_sql_insert_with_date
+        data_template:
+          table: ricardo_weight
+          value: >
+            {{ states( 'sensor.ricardo_weight' ) }}
+          date_stamp: >
+            {{ states('input_datetime.ricardo_weight_last_measured') | timestamp_custom("%Y-%m-%d", true) }}

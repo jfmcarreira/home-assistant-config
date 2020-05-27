@@ -1,0 +1,85 @@
+input_number:
+  google_home_volume_day:
+    name: Google Home Mini Volume Dia
+    min: 0
+    max: 100
+    step: 5
+    unit_of_measurement: "%"
+  google_home_volume_evening:
+    name: Google Home Mini Volume Final do Dia
+    min: 0
+    max: 100
+    step: 5
+    unit_of_measurement: "%"
+  google_home_volume_night:
+    name: Google Home Mini Volume Night
+    min: 0
+    max: 100
+    step: 5
+    unit_of_measurement: "%"
+  
+
+automation old:
+  - alias: Media Google Home Mini Day Volume
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.google_home_volume_day
+      - platform: time
+        at: '08:00:00'
+      - platform: time_pattern
+        minutes: 0
+    condition: 
+      - condition: time
+        after: '08:00:00'
+        before: '21:00:00'
+    action:
+      - entity_id: media_player.google_home_mini
+        service: media_player.volume_set
+        data_template:
+          volume_level: > 
+            {{ ( states( 'input_number.google_home_volume_day' ) | int ) / 100 }}
+  
+
+  - alias: Media Google Home Mini Evening Volume
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.google_home_volume_evening
+      - platform: time
+        at: '21:00:00'
+      - platform: time_pattern
+        minutes: 0
+    condition:
+      - condition: time
+        after: '21:00:00'
+        before: '00:00:00'
+    action:
+      - entity_id: media_player.google_home_mini
+        service: media_player.volume_set
+        data_template:
+          volume_level: > 
+            {{ ( states( 'input_number.google_home_volume_evening' ) | int ) / 100 }}
+    
+  - alias: Media Google Home Mini Night Volume
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.google_home_volume_night
+      - platform: time
+        at: '00:00:00'
+      - platform: time_pattern
+        minutes: 0
+    condition: 
+      - condition: time
+        after: '00:00:00'
+        before: '08:00:00'
+    action:
+      - entity_id: media_player.google_home_mini
+        service: media_player.volume_set
+        data_template:
+          volume_level: > 
+            {{ ( states( 'input_number.google_home_volume_night' ) | int ) / 100 }}

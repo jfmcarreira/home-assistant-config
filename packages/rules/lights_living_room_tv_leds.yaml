@@ -1,0 +1,62 @@
+timer:
+  tv_leds_auto_off:
+    duration: "00:05:00"
+
+light:
+  - platform: group
+    name: Living Room Group
+    entities:
+      - light.living_room_table
+      - light.living_room_window
+      - light.living_room_abajur
+
+automation old:
+  - alias: Lights TV LEDs Auto On
+    trigger:
+      - entity_id: binary_sensor.motion_sensor_living_room
+        from: "off"
+        platform: state
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: light.living_room_group
+        state: "off"
+      - condition: template
+        value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: light.living_room_tv_leds
+            state: "off"
+          - condition: state
+            entity_id: timer.tv_leds_auto_off
+            state: active
+    action:
+      - data:
+          duration: 00:05:00
+        entity_id: timer.tv_leds_auto_off
+        service: timer.start
+      - entity_id: light.living_room_tv_leds
+        service: light.turn_on
+
+  - alias: Lights TV LEDs Auto Off
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.tv_leds_auto_off
+      - platform: state
+        entity_id: light.living_room_group      
+        to: "on"
+    action:
+      - entity_id: light.living_room_tv_leds
+        service: light.turn_off
+
+  - alias: Lights TV LEDs When Off
+    trigger:
+      - entity_id: light.living_room_tv_leds
+        platform: state
+        to: "off"
+    action:
+      - entity_id: timer.tv_leds_auto_off
+        service: timer.cancel

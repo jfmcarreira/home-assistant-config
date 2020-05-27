@@ -1,0 +1,105 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      wash_machine_wet_clothes:
+        friendly_name: Roupa Lavada
+        entity_id:
+          - sensor.grocy_chores
+        value_template: >
+          {{ ( as_timestamp( state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time ) - as_timestamp( state_attr('sensor.grocy_chores', 'items')[3]._last_tracked_time ) ) < 0 }}
+        attribute_templates:
+          last_done: >
+            {{ state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+      wash_machine_dry_clothes:
+        friendly_name: Roupa Seca
+        entity_id:
+          - sensor.grocy_chores
+        value_template: >
+          {{ ( as_timestamp( state_attr('sensor.grocy_chores', 'items')[4]._last_tracked_time ) - as_timestamp( state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time ) ) < 0 }}
+        attribute_templates:
+          last_done: >
+            {{ state_attr('sensor.grocy_chores', 'items')[4]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+script:
+  task_laundry_remove_wet_clothes:
+    alias: Task Laundry Remove Wet Clothes
+    sequence:
+      - service: notify.mobile_app_all
+        data:
+          message: clear_notification
+          data:
+            tag: laundry_wet_clothes_notification
+
+      - service: grocy.execute_chore
+        data_template:
+          chore_id: 4
+
+  task_laundry_remove_dry_clothes:
+    alias: Task Laundry Remove Dry Clothes
+    sequence:
+      - service: grocy.execute_chore
+        data_template:
+          chore_id: 6
+
+automation old:
+  - alias: Task Laundry Wash Machine Finished
+    trigger:
+      - entity_id: binary_sensor.washing_machine_state
+        from: "on"
+        platform: state
+        to: "off"
+    action:
+      - service: grocy.execute_chore
+        data_template:
+          chore_id: 5
+
+      - service: notify.mobile_app_all
+        data:
+          title: Tarefa Doméstica
+          message: Retirar roupa da máquina de lavar
+          data:
+            sticky: true
+            tag: laundry_wet_clothes_notification
+            priority: high
+            actions:
+              - action: laundry_wet_clothes_done
+                title: Registar roupa estendida
+
+  - alias: Task Laundry Reminder Remove Wet Clothes From Wash Machine
+    trigger:
+      - platform: time_pattern
+        minutes: 30
+    condition:
+      - condition: state
+        entity_id: binary_sensor.wash_machine_wet_clothes
+        state: "on"
+    action:
+      - service: notify.mobile_app_all
+        data:
+          title: Tarefa Doméstica
+          message: Retirar roupa da máquina de lavar
+          data:
+            sticky: true
+            tag: laundry_wet_clothes_notification
+            priority: high
+            actions:
+              - action: laundry_wet_clothes_done
+                title: Registar roupa estendida
+
+  - alias: Task Laundry Remove From Wash Machine Done
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.washing_machine_door
+        from: "off"
+        to: "on"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: laundry_wet_clothes_done
+    condition:
+      - condition: state
+        entity_id: binary_sensor.wash_machine_wet_clothes
+        state: "on"
+    action:
+      - service: script.task_laundry_remove_wet_clothes
