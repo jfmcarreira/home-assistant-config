@@ -1,0 +1,15 @@
+automation old:
+  - alias: Lights Kitchen Pantry Off on Timeout
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: light.kitchen_pantry
+        from: "off"
+        to: "on"
+        for:
+          hours: 0
+          minutes: 10
+          seconds: 0
+    action:
+      - service: light.turn_off
+        entity_id: light.kitchen_pantry

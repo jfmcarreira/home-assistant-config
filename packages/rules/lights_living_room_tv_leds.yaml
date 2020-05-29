@@ -11,7 +11,7 @@ light:
       - light.living_room_abajur
 
 automation old:
-  - alias: Lights TV LEDs Auto On
+  - alias: Lights Backlight TV LEDs Auto On
     trigger:
       - entity_id: binary_sensor.motion_sensor_living_room
         from: "off"
@@ -39,7 +39,7 @@ automation old:
       - entity_id: light.living_room_tv_leds
         service: light.turn_on
 
-  - alias: Lights TV LEDs Auto Off
+  - alias: Lights Backlight TV LEDs Auto Off
     trigger:
       - platform: event
         event_type: timer.finished
@@ -52,7 +52,7 @@ automation old:
       - entity_id: light.living_room_tv_leds
         service: light.turn_off
 
-  - alias: Lights TV LEDs When Off
+  - alias: Lights Backlight TV LEDs When Off
     trigger:
       - entity_id: light.living_room_tv_leds
         platform: state
