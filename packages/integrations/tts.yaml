@@ -8,3 +8,11 @@ tts:
     cache_dir: /tmp/tts
     time_memory: 300
     service_name: google_say
+
+  - platform: voicerss
+    api_key: !secret voicerss_key
+    language: "pt-pt"
+    cache: true
+    cache_dir: /tmp/tts
+    time_memory: 300
+    service_name: voicerss_say
