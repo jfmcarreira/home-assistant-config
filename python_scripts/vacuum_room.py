@@ -4,42 +4,21 @@ List of rooms
   Since these names target voice assistant a dictionary is created
   to provide more than one name to each room, and thus support 
   for different languages
+  The second position is the id in the vaccum app
 """
-room_alias = {
-    'Sala': 'living_room',
-    'Living Room': 'living_room',
-    'Cozinha': 'kitchen',
-    'Kitchen': 'kitchen',
-    'Escritório': 'office',
-    'Office': 'office',
-    'Casa de Banho': 'bathroom',
-    'Casa de Banho': 'bathroom',
-    'Quarto': 'master_bedroom',
-    'Bedroom': 'master_bedroom',
-    'Casa de Banho Privada': 'private_bathroom',
-    'Private Bathroom': 'private_bathroom',
-    'Quarto do Fundo': 'guest_bedroom',
-    'Guest Bedroom': 'guest_bedroom',
-    'Bedroom and Bathroom': 'master_bedroom_bathroom'
-}
+#    Room Name                                       Room code name    Room id
+vaccum_room_list = [                                                   
+    (['sala', 'living room'],                       'living_room',     [18]),
+    (['cozinha', 'kitchen'],                        'kitchen',         [19]),
+    (['escritório', 'office'],                      'office',          [1]),
+    (['casa de banho', 'bathroom'],                 'bathroom',        [20]),
+    (['quarto', 'bedroom'],                         'bedroom',         [17]),
+    (['casa de banho privada', 'private bathroom'], 'private_bath',    [2]),
+    (['quarto do fundo', 'guest bedroom'],          'guest_bedroom',   [21]),
+]
 
 """
-Dictionary mapping id with an array of rooms in the Xiaomi app
-(Mapeamento das rooms na app da Xiaomi)
-"""
-vaccum_room_id = {
-    'living_room': [18],
-    'kitchen': [19],
-    'office': [1],
-    'bathroom': [20],
-    'master_bedroom': [17],
-    'private_bathroom' [2],
-    'master_bedroom_bathroom': [17, 2],
-    'guest_bedroom': [21]
-}
-
-"""
-In order to find the room number one can use trial and error using the following command:
+In order to find the room id one can use trial and error using the following command:
     miiocli  vacuum --ip <IP> --token <TOKEN> segment_clean <integer number>
 and check the output in the xiaomi app
 """
@@ -50,13 +29,25 @@ room = data.get("room").lower()
 # Number of runs per room
 runs = int( data.get("runs", '1') )
 
-# Map from the room name to the vaccum room parameter
-vaccum_room_param = vaccum_room_id[room_alias[room]]
+vaccum_room_param = []
+if room == "all":
+    # Run through all room that are vaccum friendly
+    for r in vaccum_room_list:
+        should_vaccum = hass.states.get( 'input_boolean.vaccum_'+r[1] ).state == 'on'
+        if should_vaccum:
+            vaccum_room_param.extend( r[2] )
+
+else:
+    # Single run
+    for r in vaccum_room_list:
+        if room in r[0]:
+            vaccum_room_param.extend( r[2] )
+
 
 vaccum_room_array = []
-for r in room_param:
+for r in vaccum_room_param:
     for i in range(runs):
-        vaccum_room_array.append( vaccum_room_param[r] )
+        vaccum_room_array.append( r )
 
 
 service_data = { "entity_id": "vacuum.roborock", "command": "app_segment_clean", "params": vaccum_room_array } 

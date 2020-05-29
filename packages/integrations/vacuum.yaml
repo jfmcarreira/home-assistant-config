@@ -1,5 +1,0 @@
-vacuum:
-  - platform: xiaomi_miio
-    name: Roborock
-    host: !secret roborock_ip
-    token: !secret roborock_token
