@@ -1,8 +1,8 @@
-vacuum:
-  - platform: xiaomi_miio
-    name: Roborock
-    host: !secret roborock_ip
-    token: !secret roborock_token
+#vacuum:
+#  - platform: xiaomi_miio
+#    name: Roborock
+#    host: !secret roborock_ip
+#    token: !secret roborock_token
    
 binary_sensor:
   - platform: template
@@ -12,18 +12,34 @@ binary_sensor:
         value_template: "{{ states.vacuum.roborock.state != 'docked' }}"  
         friendly_name: "Aspirador Roborock"
     
+sensor:
+  - name: Roborock Map
+    platform: mqtt
+    state_topic: "valetudo/roborock/state"
+    json_attributes_topic: "valetudo/roborock/map_data"
+    value_template: 'OK'
+    scan_interval: 5
+    
+    
 input_boolean:
-  vaccum_living_room:
+  vaccum_livingroom:
+    name: Sala de Estar
     icon: mdi:sofa
+  vaccum_hallway:
+    name: Corredor
+    icon: mdi:door-open
   vaccum_kitchen:
+    name: Cozinha
     icon: mdi:stove
   vaccum_office:
+    name: Escritório
     icon: mdi:desk
   vaccum_bathroom:
+    name: Casa de Banho
     icon: mdi:toilet
   vaccum_bedroom:
+    name: Quarto
     icon: mdi:bed-double
-  vaccum_private_bath:
-    icon: mdi:shower-head
-  vaccum_guest_bedroom:
+  vaccum_guestbedroom:
+    name: Quarto do Fundo
     icon: mdi:bed-queen-outline
