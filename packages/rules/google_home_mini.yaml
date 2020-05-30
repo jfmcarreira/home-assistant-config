@@ -41,6 +41,12 @@ automation old:
       - condition: time
         after: '08:00:00'
         before: '21:00:00'
+      - condition: state
+        entity_id: media_player.ghm_kitchen
+        state: "off"
+      - condition: state
+        entity_id: media_player.ghm_living_room
+        state: "off"
     action:
       - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
@@ -63,6 +69,12 @@ automation old:
       - condition: time
         after: '21:00:00'
         before: '00:00:00'
+      - condition: state
+        entity_id: media_player.ghm_kitchen
+        state: "off"
+      - condition: state
+        entity_id: media_player.ghm_living_room
+        state: "off"
     action:
       - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
@@ -84,6 +96,12 @@ automation old:
       - condition: time
         after: '00:00:00'
         before: '08:00:00'
+      - condition: state
+        entity_id: media_player.ghm_kitchen
+        state: "off"
+      - condition: state
+        entity_id: media_player.ghm_living_room
+        state: "off"
     action:
       - entity_id: group.google_assistant_speakers
         service: media_player.volume_set

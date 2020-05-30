@@ -4,7 +4,7 @@
 input_select:
   ## Radio Stations
   radio_station:
-    name: "Radio Station"
+    name: "Estação de Rádio"
     icon: mdi:radio-fm
     options:
       - RFM
@@ -24,8 +24,8 @@ input_select:
     name: "Media Player"
     icon: mdi:speaker
     options:
-      #- Stopped
-      - Google Home
+      - Sala 
+      - Cozinha
       - Kiosk
       #- Host
       #- TV
@@ -48,8 +48,10 @@ script:
               media_player.host_speakers
             {% elif is_state("input_select.speakers_selector", "Kiosk") %}
               media_player.browser_tf201_kyosk
-            {% elif is_state("input_select.speakers_selector", "Google Home") %}
-              media_player.google_home_mini
+            {% elif is_state("input_select.speakers_selector", "Sala") %}
+              media_player.ghm_living_room
+            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
+              media_player.ghm_kitchen
             {% endif %}
           media_content_id: >
             {% if is_state("input_select.radio_station", "RFM") %} http://19613.live.streamtheworld.com:3690/RFM_SC
@@ -83,8 +85,10 @@ script:
               media_player.host_speakers
             {% elif is_state("input_select.speakers_selector", "Kiosk") %}
               media_player.browser_tf201_kyosk
-            {% elif is_state("input_select.speakers_selector", "Google Home") %}
-              media_player.google_home_mini
+            {% elif is_state("input_select.speakers_selector", "Sala") %}
+              media_player.ghm_living_room
+            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
+              media_player.ghm_kitchen
             {% endif %}
 
   stop_radio:
@@ -101,8 +105,12 @@ script:
           entity_id: >
             {% if is_state("input_select.speakers_selector", "TV") %}
               media_player.living_room_tv
+            {% elif is_state("input_select.speakers_selector", "Host") %}
+              media_player.host_speakers
             {% elif is_state("input_select.speakers_selector", "Kiosk") %}
               media_player.browser_tf201_kyosk
-            {% elif is_state("input_select.speakers_selector", "Google Home") %}
-              media_player.google_home_mini
+            {% elif is_state("input_select.speakers_selector", "Sala") %}
+              media_player.ghm_living_room
+            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
+              media_player.ghm_kitchen
             {% endif %}
