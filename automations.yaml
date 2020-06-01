@@ -1,28 +1,128 @@
-
-
-
-- id: '1590598279734'
-  alias: Nova Automação
+- id: Ctrl Tradfri Button On Short Press
+  alias: Ctrl Tradfri Button On Short Press
   description: ''
   trigger:
-  - device_id: ab55bb59cf914334bbd0b33a2d268959
-    domain: binary_sensor
-    entity_id: binary_sensor.openclose_8
+  - device_id: ce7927c0fdbe4d4db0c92d604acb22a1
+    domain: deconz
     platform: device
-    type: opened
+    type: remote_button_short_press
+    subtype: turn_on
   condition: []
   action:
-  - device_id: a6722212bd92498986f9b5a3dbb6305c
-    domain: light
+  - entity_id: light.master_bedroom_bathroom
+    service: light.turn_on
+- id: Ctrl Tradfri Button On Long Press
+  alias: Ctrl Tradfri Button On Long Press
+  trigger:
+  - device_id: ce7927c0fdbe4d4db0c92d604acb22a1
+    domain: deconz
+    platform: device
+    type: remote_button_long_press
+    subtype: turn_on
+  action:
+  - data: {}
+    entity_id: light.master_bedroom_bathroom
+    service: light.turn_on
+  - data: {}
     entity_id: light.hallway
-    type: turn_on
-- id: '1590598297299'
+    service: light.turn_on
+  - data: {}
+    entity_id: light.office
+    service: light.turn_on
+- id: Ctrl Tradfri Button Off Short Press
+  alias: Ctrl Tradfri Button Off Short Press
+  description: ''
+  trigger:
+  - device_id: ce7927c0fdbe4d4db0c92d604acb22a1
+    domain: deconz
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_off
+  condition: []
+  action:
+  - entity_id: light.master_bedroom_bathroom
+    service: light.turn_off
+- id: Ctrl Tradfri Button Off Long Press
+  alias: Ctrl Tradfri Button Off Long Press
+  trigger:
+  - device_id: ce7927c0fdbe4d4db0c92d604acb22a1
+    domain: deconz
+    platform: device
+    type: remote_button_long_press
+    subtype: turn_off
+  action:
+  - data: {}
+    entity_id: light.master_bedroom_bathroom
+    service: light.turn_off
+  - data: {}
+    entity_id: light.hallway
+    service: light.turn_off
+  - data: {}
+    entity_id: light.office
+    service: light.turn_off
+- id: TEST_DOOR_BELL
+  alias: TEST_DOOR_BELL
+  description: ''
+  trigger:
+  - device_id: d4960546e73e4b518545acd16fe5af9e
+    domain: binary_sensor
+    entity_id: binary_sensor.living_room_table_sw
+    platform: device
+    type: turned_on
+  condition: []
+  action:
+  - data:
+      media_content_id: http://10.20.30.202/local/door_bell.mp3
+      media_content_type: audio/mp3
+    entity_id: media_player.ghm_living_room
+    service: media_player.play_media
+- id: TEST_TTS_GOOGLE
+  alias: TEST_TTS_GOOGLE
+  description: ''
+  trigger:
+  - above: 3400
+    device_id: 0a175fa9bbd2464591e27f2014d90078
+    domain: sensor
+    entity_id: sensor.bhpzem_power
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 20
+    platform: device
+    type: power
+  condition: []
+  action:
+  - data:
+      entity_id: media_player.ghm_living_room
+      message: Atenção! Elevada potência consumida.
+    service: tts.google_say
+- id: TEST_TTS_VOICE_RSS
+  alias: TEST_TTS_VOICE_RSS
+  description: ''
+  trigger:
+  - above: 3400
+    device_id: 0a175fa9bbd2464591e27f2014d90078
+    domain: sensor
+    entity_id: sensor.bhpzem_power
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 20
+    platform: device
+    type: power
+  condition: []
+  action:
+  - data:
+      entity_id: media_player.ghm_living_room
+      message: Atenção! Elevada potência consumida.
+    service: tts.voicerss_say
+- id: '1590774513063'
   alias: Nova Automação
   description: ''
   trigger:
-  - device_id: ab55bb59cf914334bbd0b33a2d268959
+  - device_id: d8b044cd32714fc9987010c02d79d4d4
     domain: binary_sensor
-    entity_id: binary_sensor.openclose_8
+    entity_id: binary_sensor.openclose_9
     platform: device
     type: not_opened
   condition: []
@@ -31,3 +131,18 @@
     domain: light
     entity_id: light.hallway
     type: turn_off
+- id: '1590774530489'
+  alias: Nova Automação
+  description: ''
+  trigger:
+  - device_id: d8b044cd32714fc9987010c02d79d4d4
+    domain: binary_sensor
+    entity_id: binary_sensor.openclose_9
+    platform: device
+    type: opened
+  condition: []
+  action:
+  - device_id: a6722212bd92498986f9b5a3dbb6305c
+    domain: light
+    entity_id: light.hallway
+    type: turn_on
