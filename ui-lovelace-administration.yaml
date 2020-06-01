@@ -1,0 +1,2 @@
+title: Administração
+views: !include_dir_list lovelace/dashboard-admin

@@ -1,0 +1,68 @@
+badges: []
+cards:
+  - cards:
+      - aspect_ratio: 50%
+        camera_view: live
+        entity: camera.v380pro
+        name: V380
+        show_state: false
+        type: picture-entity
+      - entities:
+          - entity: switch.v380pro_state
+            name: State
+          - entity: sensor.v380pro_status
+            name: Status
+          - entity: sensor.v380pro_events
+            name: Eventos
+        show_header_toggle: false
+        type: entities
+      - cards:
+          - hold_action:
+              action: none
+            icon: 'mdi:menu-left-outline'
+            show_name: false
+            size: 50%
+            tap_action:
+              action: call-service
+              service: shell_command.zoneminder_ptz
+              service_data:
+                direction: Right
+            type: 'custom:button-card'
+          - hold_action:
+              action: none
+            icon: 'mdi:menu-right-outline'
+            show_name: false
+            size: 50%
+            tap_action:
+              action: call-service
+              service: shell_command.zoneminder_ptz
+              service_data:
+                direction: Left
+            type: 'custom:button-card'
+          - hold_action:
+              action: none
+            icon: 'mdi:menu-up-outline'
+            show_name: false
+            size: 50%
+            tap_action:
+              action: call-service
+              service: shell_command.zoneminder_ptz
+              service_data:
+                direction: Up
+            type: 'custom:button-card'
+          - hold_action:
+              action: none
+            icon: 'mdi:menu-down-outline'
+            show_name: false
+            size: 50%
+            tap_action:
+              action: call-service
+              service: shell_command.zoneminder_ptz
+              service_data:
+                direction: Down
+            type: 'custom:button-card'
+        type: horizontal-stack
+    type: vertical-stack
+icon: 'mdi:cctv'
+path: cctv
+title: House Camera

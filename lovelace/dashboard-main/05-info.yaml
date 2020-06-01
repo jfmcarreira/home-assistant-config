@@ -1,0 +1,73 @@
+icon: 'mdi:information-outline'
+path: info
+title: Information
+cards:
+  - entities:
+      - entity: binary_sensor.notify_home
+        name: Casa ocupada
+      - entity: input_boolean.house_guest
+        name: Convidados
+      - entity: person.bianca
+      - entity: person.joao
+      - entity: proximity.dist_home_joao
+        name: Distância - João
+    show_header_toggle: false
+    title: Ocupação Casa
+    type: entities
+  - entities:
+      - entity: sensor.ricardo_weight
+      - entity: input_number.ricardo_weight
+      - entity: input_datetime.ricardo_weight_last_measured
+      - entity: binary_sensor.ricardo_vitamin_d
+    footer:
+      entities:
+        - entity: script.task_ricardo_vitamin_d
+          icon: 'mdi:pill'
+      type: buttons
+    title: Informações Ricardo
+    type: entities
+  - entities:
+      - binary_sensor.litter_box_motion
+      - counter.cat_litter_box_visits
+      - sensor.cat_litter_box_last_visit
+      - sensor.cat_litter_box_last_clean
+      - sensor.cat_litter_box_last_change
+    footer:
+      entities:
+        - entity: script.cat_litter_clean
+          icon: 'mdi:shovel'
+        - entity: script.cat_litter_change
+          icon: 'mdi:autorenew'
+      type: buttons
+    show_header_toggle: false
+    title: Fluffy/Pluma Litter Box
+    type: entities
+  
+ 
+  - cards:
+      - entities:
+          - entity: sensor.seventeentrack_packages_ready_to_be_picked_up
+            name: Pronta a entregar
+          - entity: sensor.seventeentrack_packages_in_transit
+            name: Em transito
+          - entity: sensor.seventeentrack_packages_not_found
+            name: Não Encontradas
+          - entity: sensor.seventeentrack_packages_expired
+            name: Expiradas
+        type: entities
+      - card:
+          show_header_toggle: false
+          title: Lista
+          type: entities
+        filter:
+          include:
+            - entity_id: sensor.seventeentrack_package_*
+        show_empty: true
+        sort:
+          ignore_case: true
+          method: name
+        type: 'custom:auto-entities'
+    title: Tracking de Encomendas
+    type: 'custom:vertical-stack-in-card'
+  
+

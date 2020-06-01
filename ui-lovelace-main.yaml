@@ -1,0 +1,14 @@
+preload_cards:
+  - markdown
+  - gauge
+preload_rows:
+  - divider
+title: J&B Home
+views: !include_dir_list lovelace/dashboard-main
+  
+  
+  
+  
+  
+  
+ 

@@ -1,0 +1,228 @@
+id: media
+path: media
+title: Multimédia
+badges: []
+cards:
+  - cards:
+      - entity: media_player.media_center
+        type: media-control
+      - card:
+          cards:
+            - cards:
+                - icon: 'mdi:television-classic'
+                  tap_action:
+                    action: call-service
+                    service: media_player.select_source
+                    service_data:
+                      entity_id: media_player.media_center
+                      source: MEO
+                  type: button
+                - icon: 'mdi:netflix'
+                  tap_action:
+                    action: call-service
+                    service: media_player.select_source
+                    service_data:
+                      entity_id: media_player.media_center
+                      source: Netflix
+                  type: button
+                - icon: 'mdi:volume-plus'
+                  tap_action:
+                    action: call-service
+                    service: media_player.volume_up
+                    service_data:
+                      entity_id: media_player.living_room_tv
+                  type: button
+                - icon: 'mdi:volume-minus'
+                  tap_action:
+                    action: call-service
+                    service: media_player.volume_down
+                    service_data:
+                      entity_id: media_player.living_room_tv
+                  type: button
+              type: horizontal-stack
+            - cards:
+                - cards:
+                    - icon: 'mdi:information-outline'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: INFO
+                      type: 'custom:button-card'
+                    - icon: 'mdi:menu-up-outline'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: UP
+                      type: 'custom:button-card'
+                    - icon: 'mdi:home'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: HOME
+                      type: 'custom:button-card'
+                  type: horizontal-stack
+                - cards:
+                    - icon: 'mdi:menu-left-outline'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: LEFT
+                      type: 'custom:button-card'
+                    - icon: 'mdi:circle-outline'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: ENTER
+                      type: 'custom:button-card'
+                    - icon: 'mdi:menu-right-outline'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: RIGHT
+                      type: 'custom:button-card'
+                  type: horizontal-stack
+                - cards:
+                    - icon: 'mdi:undo-variant'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: BACK
+                      type: 'custom:button-card'
+                    - icon: 'mdi:menu-down-outline'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: DOWN
+                      type: 'custom:button-card'
+                    - icon: 'mdi:exit-to-app'
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: python_script.living_room_media_center_remote
+                        service_data:
+                          button: EXIT
+                      type: 'custom:button-card'
+                  type: horizontal-stack
+              type: vertical-stack
+            - card:
+                cards:
+                  - entity: media_player.living_room_tv_meo_box
+                    type: media-control
+                  - cards:
+                      - name: RTP1
+                        tap_action:
+                          action: call-service
+                          service: python_script.change_meo_box_channel
+                          service_data:
+                            channel: RTP1
+                            entity_id: media_player.living_room_tv_meo_box
+                        type: button
+                      - name: SIC
+                        tap_action:
+                          action: call-service
+                          service: python_script.change_meo_box_channel
+                          service_data:
+                            channel: SIC
+                            entity_id: media_player.living_room_tv_meo_box
+                        type: button
+                      - name: TVI
+                        tap_action:
+                          action: call-service
+                          service: python_script.change_meo_box_channel
+                          service_data:
+                            channel: TVI
+                            entity_id: media_player.living_room_tv_meo_box
+                        type: button
+                    type: horizontal-stack
+                type: vertical-stack
+              conditions:
+                - entity: sensor.living_room_tv_source
+                  state: MEO
+              type: conditional
+          type: vertical-stack
+        conditions:
+          - entity: binary_sensor.living_room_tv_state
+            state: 'on'
+        type: conditional
+    type: vertical-stack
+  - cards:
+      - entities:
+          - entity: input_select.speakers_selector
+            name: Player
+        show_header_toggle: false
+        type: entities
+      - entities:
+          - entity: input_select.radio_station
+            name: Estação de Rádio
+        show_header_toggle: false
+        type: entities
+      - card:
+          entities:
+            - entity: input_text.youtube_url
+          show_header_toggle: false
+          type: entities
+        conditions:
+          - entity: input_select.radio_station
+            state: YouTube URL
+        type: conditional
+      - cards:
+          - icon: 'mdi:play'
+            layout: icon_name
+            name: Play
+            size: 70%
+            tap_action:
+              action: call-service
+              service: script.play_radio
+            type: 'custom:button-card'
+          - icon: 'mdi:pause'
+            layout: icon_name
+            name: Pause
+            size: 70%
+            tap_action:
+              action: call-service
+              service: script.stop_radio
+            type: 'custom:button-card'
+          - icon: 'mdi:stop'
+            layout: icon_name
+            name: Stop
+            size: 70%
+            tap_action:
+              action: call-service
+              service: script.stop_radio
+            type: 'custom:button-card'
+        type: horizontal-stack
+    type: 'custom:vertical-stack-in-card'
+  - cards:
+      - entity: media_player.ghm_living_room
+        type: media-control
+      - entity: media_player.ghm_kitchen
+        type: media-control
+      - entity: media_player.browser_tf201_kyosk
+        type: media-control
+    type: vertical-stack
+  - entities:
+      - entity: input_number.google_home_volume_day
+        name: Dia
+      - entity: input_number.google_home_volume_evening
+        name: Final do Dia
+      - entity: input_number.google_home_volume_night
+        name: Noite
+    title: Volume Google Home
+    type: entities
+icon: 'mdi:audio-video'

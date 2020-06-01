@@ -1,0 +1,346 @@
+custom_header:
+  chevrons: false
+  compact_mode: true
+  hide_header: true
+  swipe: false
+title: Tablet
+views:
+  - badges: []
+    cards:
+      - cards:
+          - type: 'custom:clock-card'
+          - details: true
+            entity: weather.ipma
+            forecast: true
+            name: ''
+            type: weather-forecast
+          - cards:
+              - aspect_ratio: 1.3/1
+                entity: person.joao
+                image: /local/img_joao.jpg
+                show_name: false
+                state_filter:
+                  away: grayscale(100%)
+                  home: grayscale(0%)
+                type: picture-entity
+              - aspect_ratio: 1.3/1
+                entity: person.bianca
+                image: /local/img_bianca.jpg
+                show_name: false
+                state_filter:
+                  away: grayscale(100%)
+                  home: grayscale(0%)
+                type: picture-entity
+              - aspect_ratio: 1.3/1
+                entity: binary_sensor.ricardo_vitamin_d
+                image: /local/img_ricardo.jpg
+                show_name: false
+                state_filter:
+                  away: grayscale(100%)
+                  home: grayscale(0%)
+                type: picture-entity
+              - aspect_ratio: 1.3/1
+                entity: binary_sensor.litter_box_motion
+                hold_action:
+                  action: call-service
+                  service: python_script.catlitter_reset
+                image: /local/img_cats.jpg
+                show_name: false
+                state_filter:
+                  'off': grayscale(0%)
+                  'on': grayscale(72%)
+                type: picture-entity
+            type: horizontal-stack
+          - entities:
+              - entity: sensor.birthday_ricardo
+                icon: 'mdi:baby-face'
+                name: Push Day
+              - entity: sensor.birthday_joao
+                icon: 'mdi:cake-variant'
+                name: João
+              - entity: sensor.birthday_bianca
+                icon: 'mdi:cake-variant'
+                name: Bianca
+              - entity: sensor.anniversary_wedding
+                icon: 'mdi:ring'
+                name: Casamento
+            type: glance
+          - entities:
+              - calendar.b_j_events
+            hideHeader: true
+            progressBar: true
+            type: 'custom:calendar-card'
+          - break
+          - control: false
+            entity: climate.heating
+            label:
+              temperature: Temp
+            name: Aquecimento
+            sensors:
+              - entity: sensor.heating_ongoing_water_temperature
+                name: Water
+            step_layout: row
+            type: 'custom:simple-thermostat'
+          - cards:
+              - agregate_func: avg
+                entities:
+                  - sensor.average_temperature
+                group_by: 1h
+                height: 90
+                hour24: true
+                hours_to_show: 24
+                line_width: 3
+                name: Temperatura
+                points_per_hour: 1
+                show:
+                  average: false
+                  extrema: false
+                  points: hover
+                type: 'custom:mini-graph-card'
+              - agregate_func: avg
+                entities:
+                  - sensor.average_humidity
+                group_by: 1h
+                height: 90
+                hour24: true
+                hours_to_show: 24
+                line_width: 3
+                name: Humidade
+                points_per_hour: 1
+                show:
+                  average: false
+                  extrema: false
+                  points: hover
+                type: 'custom:mini-graph-card'
+            type: horizontal-stack
+          - cards:
+              - agregate_func: avg
+                entities:
+                  - sensor.bhpzem_power
+                group_by: 1800s
+                height: 90
+                hour24: true
+                hours_to_show: 24
+                line_width: 2
+                name: Potência Consumida
+                points_per_hour: 2
+                show:
+                  average: false
+                  extrema: false
+                  points: hover
+                type: 'custom:mini-graph-card'
+              - entities:
+                  - entity: sensor.daily_energy
+                    name: Diário
+                  - entity: sensor.monthly_energy
+                    name: Mensal
+                  - entity: sensor.monthly_energy_cost
+                    name: Factura
+                show_icon: false
+                type: glance
+            type: 'custom:vertical-stack-in-card'
+          - cards:
+              - aspect_ratio: 6/2
+                custom_fields:
+                  dry_clothes: |
+                    [[[
+                      if (states['binary_sensor.wash_machine_dry_clothes'].state == "on")
+                        return `<ha-icon icon="mdi:tshirt-crew"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                  wet_clothes: |
+                    [[[
+                      if (states['binary_sensor.wash_machine_wet_clothes'].state == "on")
+                        return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                entity: binary_sensor.washing_machine_state
+                hold_action:
+                  action: call-service
+                  service: python_script.whashing_machine_process_actions
+                size: 100%
+                styles:
+                  custom_fields:
+                    dry_clothes:
+                      - border-radius: 50%
+                      - position: absolute
+                      - right: 10%
+                      - top: 10%
+                      - height: 20px
+                      - width: 20px
+                      - font-size: 8px
+                      - line-height: 20px
+                    wet_clothes:
+                      - border-radius: 50%
+                      - position: absolute
+                      - left: 10%
+                      - top: 10%
+                      - height: 20px
+                      - width: 20px
+                      - font-size: 8px
+                      - line-height: 20px
+                  grid:
+                    - position: relative
+                type: 'custom:button-card'
+              - aspect_ratio: 6/2
+                entity: binary_sensor.ricardo_vitamin_d
+                hold_action:
+                  action: call-service
+                  service: script.task_ricardo_vitamin_d
+                name: Vitamina D
+                type: 'custom:button-card'
+            type: horizontal-stack
+          - cards:
+              - aspect_ratio: 6/2
+                custom_fields:
+                  notification: |
+                    [[[
+                      if (states['binary_sensor.notify_home'].state == "on")
+                        return `<ha-icon icon="mdi:home"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                entity: input_boolean.house_guest
+                size: 100%
+                styles:
+                  custom_fields:
+                    notification:
+                      - border-radius: 50%
+                      - position: absolute
+                      - right: 10%
+                      - top: 10%
+                      - height: 20px
+                      - width: 20px
+                      - font-size: 8px
+                      - line-height: 20px
+                      - icon: 'mdi:home'
+                  grid:
+                    - position: relative
+                type: 'custom:button-card'
+              - aspect_ratio: 6/2
+                custom_fields:
+                  playing_state: |
+                    [[[
+                      if (states['media_player.browser_tf201_kyosk'].state == "playing")
+                        return `<ha-icon icon="mdi:play"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                entity: display.tf201_kyosk
+                size: 100%
+                styles:
+                  custom_fields:
+                    playing_state:
+                      - border-radius: 50%
+                      - position: absolute
+                      - right: 10%
+                      - top: 10%
+                      - height: 20px
+                      - width: 20px
+                      - font-size: 8px
+                      - line-height: 20px
+                  grid:
+                    - position: relative
+                type: 'custom:button-card'
+            type: horizontal-stack
+          - break
+          - card:
+              aspect_ratio: 3/1
+              entity: group.living_room
+              hold_action:
+                action: none
+              image: /local/room_images/img_living_room_25_10.jpg
+              tap_action:
+                action: more-info
+              title: Sala de Estar
+              type: picture-glance
+            filter:
+              include:
+                - entity_id: light.living_room_*
+                - entity_id: media_player.media_center
+                - entity_id: media_player.ghm_living_room
+            show_empty: true
+            sort:
+              ignore_case: true
+              method: name
+            type: 'custom:auto-entities'
+          - card:
+              aspect_ratio: 3/1
+              entity: group.hall
+              hold_action:
+                action: none
+              image: /local/room_images/img_hallway_25_10.jpg
+              tap_action:
+                action: more-info
+              title: Corredor
+              type: picture-glance
+            filter:
+              include:
+                - entity_id: binary_sensor.front_door
+                - entity_id: binary_sensor.browser_tf201_kyosk
+                - entity_id: binary_sensor.motion_sensor_hallway
+                - entity_id: display.tf201_kyosk
+                - entity_id: light.hallway*
+            show_empty: true
+            sort:
+              ignore_case: true
+              method: name
+            type: 'custom:auto-entities'
+          - card:
+              aspect_ratio: 3/1
+              entity: group.kitchen
+              hold_action:
+                action: none
+              image: /local/room_images/img_kitchen_25_10.jpg
+              tap_action:
+                action: more-info
+              title: Cozinha
+              type: picture-glance
+            filter:
+              include:
+                - entity_id: binary_sensor.fridge_door
+                - entity_id: light.kitchen*
+                - entity_id: media_player.*kitchen
+            show_empty: true
+            sort:
+              ignore_case: true
+              method: name
+            type: 'custom:auto-entities'
+          - card:
+              aspect_ratio: 3/1
+              entity: group.office
+              hold_action:
+                action: none
+              image: /local/room_images/img_office_25_10.jpg
+              tap_action:
+                action: more-info
+              title: Escritório
+              type: picture-glance
+            filter:
+              include:
+                - entity_id: light.office*
+            show_empty: true
+            sort:
+              ignore_case: true
+              method: name
+            type: 'custom:auto-entities'
+          - card:
+              aspect_ratio: 3/1
+              entity: group.master_bedroom
+              hold_action:
+                action: none
+              image: /local/room_images/img_bedroom_25_10.jpg
+              tap_action:
+                action: more-info
+              title: Quarto
+              type: picture-glance
+            filter:
+              include:
+                - entity_id: light.master_bedroom*
+            show_empty: true
+            sort:
+              ignore_case: true
+              method: name
+            type: 'custom:auto-entities'
+        layout: vertical
+        max_columns: 3
+        type: 'custom:layout-card'
+    icon: 'mdi:tablet-dashboard'
+    id: main
+    panel: true
+    path: main
+    title: Main

@@ -2,4 +2,65 @@
 ## Lovelace
 ################################################################################
 lovelace:
-  #mode: yaml
+  mode: yaml
+  resources:
+    - url: /hacsfiles/button-card/button-card.js
+      type: module
+    - url: /hacsfiles/calendar-card/calendar-card.js
+      type: module
+    - url: /hacsfiles/custom-header/custom-header.js
+      type: module
+    - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
+      type: module
+    - url: /hacsfiles/lovelace-card-mod/card-mod.js
+      type: module
+    - url: /hacsfiles/lovelace-card-preloader/lovelace-card-preloader.js
+      type: module
+    - url: /hacsfiles/lovelace-card-tools/card-tools.js
+      type: module
+    - url: /hacsfiles/lovelace-grocy-chores-card/grocy-chores-card.js
+      type: module
+    - url: /hacsfiles/lovelace-layout-card/layout-card.js
+      type: module
+    - url: /hacsfiles/lovelace-swipe-navigation/swipe-navigation.js
+      type: module
+    - url: /hacsfiles/lovelace-valetudo-map-card/valetudo-map-card.js
+      type: module
+    - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+      type: module
+    - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
+      type: module
+    - url: /hacsfiles/secondaryinfo-entity-row/secondaryinfo-entity-row.js
+      type: module
+    - url: /hacsfiles/simple-thermostat/simple-thermostat.js
+      type: module
+    - url: /hacsfiles/vacuum-card/vacuum-card.js
+      type: module
+    - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
+      type: module
+
+    - url: /local/custom_cards/clock-card/clock-card.js
+      type: js
+    - url: https://unpkg.com/moment@2.22.2/min/moment.min.js
+      type: js
+  # Add yaml dashboards
+  dashboards:
+    lovelace-main:
+      mode: yaml
+      title: Visão Geral
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
+      filename: ui-lovelace-main.yaml
+    lovelace-admin:
+      mode: yaml
+      title: Administração
+      icon: mdi:settings-outline
+      show_in_sidebar: true
+      filename: ui-lovelace-administration.yaml
+      require_admin: true
+    lovelace-tablet:
+      mode: yaml
+      title: Tablet
+      icon: mdi:tablet-dashboard
+      show_in_sidebar: true
+      filename: ui-lovelace-tablet.yaml
