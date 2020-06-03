@@ -3,6 +3,7 @@ group:
     entities:
       - media_player.ghm_living_room
       - media_player.ghm_kitchen
+      - media_player.gh_clock_bedroom
 
 
 input_number:
@@ -24,7 +25,7 @@ input_number:
     max: 100
     step: 5
     unit_of_measurement: "%"
-  
+
 
 automation old:
   - alias: Media Google Home Mini Day Volume
@@ -37,7 +38,7 @@ automation old:
         at: '08:00:00'
       - platform: time_pattern
         minutes: 0
-    condition: 
+    condition:
       - condition: time
         after: '08:00:00'
         before: '21:00:00'
@@ -51,9 +52,9 @@ automation old:
       - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
         data_template:
-          volume_level: > 
+          volume_level: >
             {{ ( states( 'input_number.google_home_volume_day' ) | int ) / 100 }}
-  
+
 
   - alias: Media Google Home Mini Evening Volume
     trigger:
@@ -79,9 +80,9 @@ automation old:
       - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
         data_template:
-          volume_level: > 
+          volume_level: >
             {{ ( states( 'input_number.google_home_volume_evening' ) | int ) / 100 }}
-    
+
   - alias: Media Google Home Mini Night Volume
     trigger:
       - platform: homeassistant
@@ -92,7 +93,7 @@ automation old:
         at: '00:00:00'
       - platform: time_pattern
         minutes: 0
-    condition: 
+    condition:
       - condition: time
         after: '00:00:00'
         before: '08:00:00'
@@ -106,5 +107,5 @@ automation old:
       - entity_id: group.google_assistant_speakers
         service: media_player.volume_set
         data_template:
-          volume_level: > 
+          volume_level: >
             {{ ( states( 'input_number.google_home_volume_night' ) | int ) / 100 }}
