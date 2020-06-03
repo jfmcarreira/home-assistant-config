@@ -91,7 +91,7 @@ cards:
               - input_boolean.vaccum_bedroom
               - input_boolean.vaccum_guestbedroom
             state_color: true
-            title: Aspirador-Ready
+            title: Aspirador-Ready (5 máx.)
           - type: horizontal-stack
             cards:
               - aspect_ratio: 6/2

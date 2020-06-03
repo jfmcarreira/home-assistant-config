@@ -2,6 +2,7 @@ id: media
 path: media
 title: Multimédia
 badges: []
+icon: 'mdi:audio-video'
 cards:
   - cards:
       - entity: media_player.media_center
@@ -208,21 +209,26 @@ cards:
             type: 'custom:button-card'
         type: horizontal-stack
     type: 'custom:vertical-stack-in-card'
-  - cards:
-      - entity: media_player.ghm_living_room
-        type: media-control
-      - entity: media_player.ghm_kitchen
-        type: media-control
-      - entity: media_player.browser_tf201_kyosk
-        type: media-control
-    type: vertical-stack
-  - entities:
+  - type: vertical-stack
+    cards:
+      - type: media-control
+        entity: media_player.ghm_living_room
+      - type: media-control
+        entity: media_player.ghm_kitchen
+      - type: media-control
+        entity: media_player.gh_clock_bedroom
+      - type: media-control
+        entity: media_player.browser_tf201_kyosk
+
+  - type: entities
+    title: Volume Google Home
+    entities:
       - entity: input_number.google_home_volume_day
         name: Dia
       - entity: input_number.google_home_volume_evening
         name: Final do Dia
       - entity: input_number.google_home_volume_night
         name: Noite
-    title: Volume Google Home
-    type: entities
-icon: 'mdi:audio-video'
+
+
+

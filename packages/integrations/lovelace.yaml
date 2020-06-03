@@ -50,7 +50,7 @@ lovelace:
       title: Visão Geral
       icon: mdi:view-dashboard
       show_in_sidebar: true
-      filename: ui-lovelace-main.yaml
+      filename: ui-lovelace.yaml
     lovelace-admin:
       mode: yaml
       title: Administração

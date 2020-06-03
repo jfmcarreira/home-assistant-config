@@ -2,317 +2,341 @@ id: main
 title: Main 
 path: main
 icon: 'mdi:home'  
+panel: true
 cards:
-  - details: true
-    entity: weather.ipma
-    forecast: true
-    name: ''
-    type: weather-forecast
-  - cards:
-      - agregate_func: avg
-        entities:
-          - sensor.average_temperature
-        group_by: 1h
-        height: 100
-        hour24: true
-        hours_to_show: 24
-        line_width: 3
-        name: Temperatura
-        points_per_hour: 1
-        show:
-          average: false
-          extrema: false
-          points: hover
-        type: 'custom:mini-graph-card'
-      - agregate_func: avg
-        entities:
-          - sensor.average_humidity
-        group_by: 1h
-        height: 110
-        hour24: true
-        hours_to_show: 24
-        line_width: 3
-        name: Humidade
-        points_per_hour: 1
-        show:
-          average: false
-          extrema: false
-          points: hover
-        type: 'custom:mini-graph-card'
-    type: horizontal-stack
-  - cards:
-      - aspect_ratio: 1.3/1
-        entity: person.joao
-        image: /local/img_joao.jpg
-        show_name: false
-        state_filter:
-          away: grayscale(100%)
-          home: grayscale(0%)
-        tap_action:
-          action: call-service
-          service: browser_mod.popup
-          service_data:
-            card:
-              entities:
-                - entity: person.joao
-                  name: Localização
-                - entity: proximity.dist_home_joao
-                  name: Distancia
-                - binary_sensor.magnesium
-                - binary_sensor.pegasus
-                - binary_sensor.boron
-              type: entities
-            deviceID:
-              - this
-            title: João
-        type: picture-entity
-      - aspect_ratio: 1.3/1
-        entity: person.bianca
-        image: /local/img_bianca.jpg
-        show_name: false
-        state_filter:
-          away: grayscale(100%)
-          home: grayscale(0%)
-        tap_action:
-          action: call-service
-          service: browser_mod.popup
-          service_data:
-            card:
-              entities:
-                - person.bianca
-                - binary_sensor.bianca_phone
-                - binary_sensor.strontium
-              type: entities
-            deviceID:
-              - this
-            title: Bianca
-        type: picture-entity
-      - aspect_ratio: 1.3/1
-        entity: binary_sensor.ricardo_vitamin_d
-        image: /local/img_ricardo.jpg
-        show_name: false
-        state_filter:
-          away: grayscale(100%)
-          home: grayscale(0%)
-        tap_action:
-          action: call-service
-          service: browser_mod.popup
-          service_data:
-            card:
-              entities:
-                - entity: sensor.ricardo_weight
-                - entity: binary_sensor.ricardo_vitamin_d
-                  name: Vitamina D
-                - entity: sensor.office_water_sensor
-                  name: Água do banho
-              footer:
-                entities:
-                  - entity: script.task_ricardo_vitamin_d
-                    icon: 'mdi:pill'
-                type: buttons
-              type: entities
-            deviceID:
-              - this
-            title: Ricardo
-        type: picture-entity
-      - aspect_ratio: 1.3/1
-        entity: binary_sensor.litter_box_motion
-        hold_action:
-          action: call-service
-          service: python_script.catlitter_reset
-        image: /local/img_cats.jpg
-        show_name: false
-        state_filter:
-          'off': grayscale(0%)
-          'on': grayscale(72%)
-        tap_action:
-          action: call-service
-          service: browser_mod.popup
-          service_data:
-            card:
-              cards:
-                - entities:
-                    - binary_sensor.litter_box_motion
-                    - counter.cat_litter_box_visits
-                    - sensor.cat_litter_box_last_visit
-                    - sensor.cat_litter_box_last_clean
-                    - sensor.cat_litter_box_last_change
+  - type: "custom:layout-card"
+    layout: vertical
+    max_columns: 4
+    cards:
+      - details: true
+        entity: weather.ipma
+        forecast: true
+        name: ''
+        type: weather-forecast
+      
+      - break 
+      
+      - cards:
+          - aspect_ratio: 1.3/1
+            entity: person.joao
+            image: /local/img_joao.jpg
+            show_name: false
+            state_filter:
+              away: grayscale(100%)
+              home: grayscale(0%)
+            tap_action:
+              action: call-service
+              service: browser_mod.popup
+              service_data:
+                card:
+                  entities:
+                    - entity: person.joao
+                      name: Localização
+                    - entity: proximity.dist_home_joao
+                      name: Distancia
+                    - binary_sensor.magnesium
+                    - binary_sensor.pegasus
+                    - binary_sensor.boron
+                  type: entities
+                deviceID:
+                  - this
+                title: João
+            type: picture-entity
+          - aspect_ratio: 1.3/1
+            entity: person.bianca
+            image: /local/img_bianca.jpg
+            show_name: false
+            state_filter:
+              away: grayscale(100%)
+              home: grayscale(0%)
+            tap_action:
+              action: call-service
+              service: browser_mod.popup
+              service_data:
+                card:
+                  entities:
+                    - person.bianca
+                    - binary_sensor.bianca_phone
+                    - binary_sensor.strontium
+                  type: entities
+                deviceID:
+                  - this
+                title: Bianca
+            type: picture-entity
+          - aspect_ratio: 1.3/1
+            entity: binary_sensor.ricardo_vitamin_d
+            image: /local/img_ricardo.jpg
+            show_name: false
+            state_filter:
+              away: grayscale(100%)
+              home: grayscale(0%)
+            tap_action:
+              action: call-service
+              service: browser_mod.popup
+              service_data:
+                card:
+                  entities:
+                    - entity: sensor.ricardo_weight
+                    - entity: binary_sensor.ricardo_vitamin_d
+                      name: Vitamina D
+                    - entity: sensor.office_water_sensor
+                      name: Água do banho
                   footer:
                     entities:
-                      - entity: script.cat_litter_clean
-                        icon: 'mdi:shovel'
-                      - entity: script.cat_litter_change
-                        icon: 'mdi:autorenew'
+                      - entity: script.task_ricardo_vitamin_d
+                        icon: 'mdi:pill'
                     type: buttons
                   type: entities
-              type: 'custom:vertical-stack-in-card'
-            deviceID:
-              - this
-            title: Fluffy/Pluma
-        type: picture-entity
-    type: horizontal-stack
-  - cards:
-      - aspect_ratio: 6/2
-        custom_fields:
-          notification: |
-            [[[
-              if (states['binary_sensor.notify_home'].state == "on")
-                return `<ha-icon icon="mdi:home"      style="width: 18px; height: 18px;"> </ha-icon>`
-            ]]]
-        entity: input_boolean.house_guest
-        size: 100%
-        styles:
-          custom_fields:
-            notification:
-              - border-radius: 0%
-              - position: absolute
-              - left: 10%
-              - top: 10%
-              - height: 20px
-              - width: 20px
-              - font-size: 8px
-              - line-height: 20px
-              - icon: 'mdi:home'
-          grid:
-            - position: relative
-        type: 'custom:button-card'
-      - aspect_ratio: 6/2
-        entity: script.night_away
-        hold_action:
-          action: call-service
-          service: script.turn_on
-          service_data:
-            entity_id: script.night_away
-        icon: 'mdi:weather-night'
-        name: Night/Away
-        size: 100%
-        tap_action:
-          action: none
-        type: 'custom:button-card'
-    type: horizontal-stack
-  - cards:
-      - aspect_ratio: 6/2
-        custom_fields:
-          dry_clothes: |
-            [[[
-              if (states['binary_sensor.wash_machine_dry_clothes'].state == "on")
-                return `<ha-icon icon="mdi:tshirt-crew"      style="width: 18px; height: 18px;"> </ha-icon>`
-            ]]]
-          wet_clothes: |
-            [[[
-              if (states['binary_sensor.wash_machine_wet_clothes'].state == "on")
-                return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
-            ]]]
-        entity: binary_sensor.washing_machine_state
-        hold_action:
-          action: call-service
-          service: python_script.whashing_machine_process_actions
-        size: 100%
-        styles:
-          custom_fields:
-            dry_clothes:
-              - position: absolute
-              - right: 10%
-              - top: 10%
-            wet_clothes:
-              - position: absolute
-              - left: 10%
-              - top: 10%
-          grid:
-            - position: relative
-        type: 'custom:button-card'
-      - aspect_ratio: 6/2
-        entity: binary_sensor.ricardo_vitamin_d
-        hold_action:
-          action: call-service
-          service: script.task_ricardo_vitamin_d
-        name: Vitamina D
-        type: 'custom:button-card'
-    type: horizontal-stack
-  - control:
-      _names: 'off'
-    entity: climate.heating
-    modes:
-      heat:
-        icon: false
-        include: true
-        name: Quente
-    name: Aquecimento
-    sensors:
-      - entity: sensor.heating_ongoing_water_temperature
-        name: Water
-    type: 'custom:simple-thermostat'
-  - card:
-      show_header_toggle: false
-      title: Luzes
-      type: entities
-    filter:
-      exclude:
-        - entity_id: light.browser*
-        - entity_id: light.configuration_tool_1
-        - entity_id: light.*_group
-      include:
-        - entity_id: light.*
-    show_empty: true
-    sort:
-      ignore_case: true
-      method: entity_id
-    type: 'custom:auto-entities'
-  - cards:
-      - agregate_func: avg
-        entities:
-          - sensor.bhpzem_power
-        group_by: 1800s
-        height: 60
-        hour24: true
-        hours_to_show: 24
-        line_width: 2
-        name: Potência Consumida
-        points_per_hour: 2
-        show:
-          average: false
-          extrema: false
-          points: hover
-        type: 'custom:mini-graph-card'
-      - entities:
-          - entity: sensor.daily_energy
-            name: Diário
-          - entity: sensor.monthly_energy
-            name: Mensal
-          - entity: sensor.monthly_energy_cost
-            name: Factura
-        show_icon: false
-        type: glance
-    type: 'custom:vertical-stack-in-card'
-  - custom_translation:
-      due: Data
-      empty: Vazio
-      last_tracked: Última
-      more: 'Det finns {number} fler göromål i Grocy'
-      overdue: Com Atraso
-      today: Hoje
-      track: Realizar
-    entity: sensor.grocy_chores
-    show_days: 15
-    title: Tarefas
-    type: 'custom:grocy-chores-card'
-  - card:
-      columns: 3
-      state_color: true
-      title: Portas/Movimento
-      type: glance
-    filter:
-      exclude:
-        - entity_id: binary_sensor.motion_sensor_*_sw
-        - state: unavailable
-        - entity_id: binary_sensor.wash*_door
-        - entity_id: binary_sensor.fridge_door
-      include:
-        - entity_id: binary_sensor.*_door
-        - entity_id: binary_sensor.motion_sensor_*
-        - entity_id: binary_sensor.*browser*
-    show_empty: true
-    sort:
-      ignore_case: true
-      method: name
-    type: 'custom:auto-entities'
+                deviceID:
+                  - this
+                title: Ricardo
+            type: picture-entity
+          - aspect_ratio: 1.3/1
+            entity: binary_sensor.litter_box_motion
+            hold_action:
+              action: call-service
+              service: python_script.catlitter_reset
+            image: /local/img_cats.jpg
+            show_name: false
+            state_filter:
+              'off': grayscale(0%)
+              'on': grayscale(72%)
+            tap_action:
+              action: call-service
+              service: browser_mod.popup
+              service_data:
+                card:
+                  cards:
+                    - entities:
+                        - binary_sensor.litter_box_motion
+                        - counter.cat_litter_box_visits
+                        - sensor.cat_litter_box_last_visit
+                        - sensor.cat_litter_box_last_clean
+                        - sensor.cat_litter_box_last_change
+                      footer:
+                        entities:
+                          - entity: script.cat_litter_clean
+                            icon: 'mdi:shovel'
+                          - entity: script.cat_litter_change
+                            icon: 'mdi:autorenew'
+                        type: buttons
+                      type: entities
+                  type: 'custom:vertical-stack-in-card'
+                deviceID:
+                  - this
+                title: Fluffy/Pluma
+            type: picture-entity
+        type: horizontal-stack
+      - cards:
+          - aspect_ratio: 6/2
+            custom_fields:
+              notification: |
+                [[[
+                  if (states['binary_sensor.notify_home'].state == "on")
+                    return `<ha-icon icon="mdi:home"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+            entity: input_boolean.house_guest
+            size: 100%
+            styles:
+              custom_fields:
+                notification:
+                  - border-radius: 0%
+                  - position: absolute
+                  - left: 10%
+                  - top: 10%
+                  - height: 20px
+                  - width: 20px
+                  - font-size: 8px
+                  - line-height: 20px
+                  - icon: 'mdi:home'
+              grid:
+                - position: relative
+            type: 'custom:button-card'
+          - aspect_ratio: 6/2
+            entity: script.night_away
+            hold_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.night_away
+            icon: 'mdi:weather-night'
+            name: Night/Away
+            size: 100%
+            tap_action:
+              action: none
+            type: 'custom:button-card'
+        type: horizontal-stack
+      - cards:
+          - aspect_ratio: 6/2
+            custom_fields:
+              dry_clothes: |
+                [[[
+                  if (states['binary_sensor.wash_machine_dry_clothes'].state == "on")
+                    return `<ha-icon icon="mdi:tshirt-crew"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+              wet_clothes: |
+                [[[
+                  if (states['binary_sensor.wash_machine_wet_clothes'].state == "on")
+                    return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+            entity: binary_sensor.washing_machine_state
+            hold_action:
+              action: call-service
+              service: python_script.whashing_machine_process_actions
+            size: 100%
+            styles:
+              custom_fields:
+                dry_clothes:
+                  - position: absolute
+                  - right: 10%
+                  - top: 10%
+                wet_clothes:
+                  - position: absolute
+                  - left: 10%
+                  - top: 10%
+              grid:
+                - position: relative
+            type: 'custom:button-card'
+          - aspect_ratio: 6/2
+            entity: binary_sensor.ricardo_vitamin_d
+            hold_action:
+              action: call-service
+              service: script.task_ricardo_vitamin_d
+            name: Vitamina D
+            type: 'custom:button-card'
+        type: horizontal-stack
+      
+      - break 
+      
+      - card:
+          show_header_toggle: false
+          title: Luzes
+          type: entities
+        filter:
+          exclude:
+            - entity_id: light.browser*
+            - entity_id: light.configuration_tool_1
+            - entity_id: light.*_group
+          include:
+            - entity_id: light.*
+        show_empty: true
+        sort:
+          ignore_case: true
+          method: entity_id
+        type: 'custom:auto-entities'
+      
+      - break 
+      - break 
+      
+      - cards:
+          - agregate_func: avg
+            entities:
+              - sensor.average_temperature
+            group_by: 1h
+            height: 100
+            hour24: true
+            hours_to_show: 24
+            line_width: 3
+            name: Temperatura
+            points_per_hour: 1
+            show:
+              average: false
+              extrema: false
+              points: hover
+            type: 'custom:mini-graph-card'
+          - agregate_func: avg
+            entities:
+              - sensor.average_humidity
+            group_by: 1h
+            height: 110
+            hour24: true
+            hours_to_show: 24
+            line_width: 3
+            name: Humidade
+            points_per_hour: 1
+            show:
+              average: false
+              extrema: false
+              points: hover
+            type: 'custom:mini-graph-card'
+        type: horizontal-stack
+        
+      - control:
+          _names: 'off'
+        entity: climate.heating
+        modes:
+          heat:
+            icon: false
+            include: true
+            name: Quente
+        name: Aquecimento
+        sensors:
+          - entity: sensor.heating_ongoing_water_temperature
+            name: Water
+        type: 'custom:simple-thermostat'
+      
+      - break 
+      
+      
+      - cards:
+          - agregate_func: avg
+            entities:
+              - sensor.bhpzem_power
+            group_by: 1800s
+            height: 60
+            hour24: true
+            hours_to_show: 24
+            line_width: 2
+            name: Potência Consumida
+            points_per_hour: 2
+            show:
+              average: false
+              extrema: false
+              points: hover
+            type: 'custom:mini-graph-card'
+          - entities:
+              - entity: sensor.daily_energy
+                name: Diário
+              - entity: sensor.monthly_energy
+                name: Mensal
+              - entity: sensor.monthly_energy_cost
+                name: Factura
+            show_icon: false
+            type: glance
+        type: 'custom:vertical-stack-in-card'
+      
+      - card:
+          columns: 3
+          state_color: true
+          title: Portas/Movimento
+          type: glance
+        filter:
+          exclude:
+            - entity_id: binary_sensor.motion_sensor_*_sw
+            - state: unavailable
+            - entity_id: binary_sensor.wash*_door
+            - entity_id: binary_sensor.fridge_door
+          include:
+            - entity_id: binary_sensor.*_door
+            - entity_id: binary_sensor.motion_sensor_*
+            - entity_id: binary_sensor.*browser*
+        show_empty: true
+        sort:
+          ignore_case: true
+          method: name
+        type: 'custom:auto-entities'
+        
+      - break 
+      - custom_translation:
+          due: Data
+          empty: Vazio
+          last_tracked: Última
+          more: 'Det finns {number} fler göromål i Grocy'
+          overdue: Com Atraso
+          today: Hoje
+          track: Realizar
+        entity: sensor.grocy_chores
+        show_days: 15
+        title: Tarefas
+        type: 'custom:grocy-chores-card'
+      
