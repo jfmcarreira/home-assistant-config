@@ -1,0 +1,20 @@
+motion_light_living_room:
+  module: motion_lights
+  class: MotionLight
+  motion_sensor: binary_sensor.motion_sensor_living_room
+  light: light.living_room_tv_leds
+  other_lights:
+    - light.living_room_table
+    - light.living_room_window
+    - light.living_room_abajur
+  timeout: 180
+
+
+motion_light_office:
+  module: motion_lights
+  class: MotionLight
+  motion_sensor: binary_sensor.motion_sensor_office
+  light: light.office_desk
+  other_lights:
+    - light.office
+  timeout: 180
