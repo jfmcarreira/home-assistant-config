@@ -17,6 +17,8 @@ homeassistant:
       entity_picture: /local/img_joao.jpg
     proximity.dist_home_joao:
       friendly_name: Distância a Casa João
+    proximity.dist_home_bianca:
+      friendly_name: Distância a Casa Bianca
 
 ## Device tracker
 device_tracker:
@@ -24,7 +26,7 @@ device_tracker:
     interval_seconds: 30
     consider_home: 60
     new_device_defaults:
-      track_new_devices: true
+      track_new_devices: false
 
   - platform: ping
     interval_seconds: 30
@@ -35,11 +37,6 @@ device_tracker:
       magnesium_wifi: !secret magnesium_ip
       bianca_phone_wifi: !secret bianca_phone_ip
 
-  #- platform: bluetooth_tracker
-  #interval_seconds: 10
-  #consider_home: 60
-  #new_device_defaults:
-  #track_new_devices: true
   #- platform: mqtt
   #  devices:
   #    joao_beacon: 'home-assistant/location/joao_beacon'
@@ -57,6 +54,14 @@ proximity:
       - home
     devices:
       - device_tracker.magnesium
+    unit_of_measurement: m
+    tolerance: 50
+  dist_home_bianca:
+    zone: home
+    ignored_zones:
+      - home
+    devices:
+      - device_tracker.bianca_phone
     unit_of_measurement: m
     tolerance: 50
 
