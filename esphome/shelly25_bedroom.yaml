@@ -1,5 +1,6 @@
 substitutions:
   devicename: shelly25_bedroom
+  DeviceName: Shelly 25 Bedroom
   LightA_Name: Master Bedroom
   LightB_Name: Master Bedroom Bathroom
 
@@ -100,6 +101,7 @@ sensor:
   - platform: ntc
     sensor: temp_resistance_reading
     id: shelly_temperature
+    name: ${DeviceName} Temperature
     calibration:
       b_constant: 3350
       reference_resistance: 10kOhm

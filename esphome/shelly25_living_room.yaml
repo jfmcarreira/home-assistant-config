@@ -54,7 +54,7 @@ sensor:
   # NTC Temperature
   - platform: ntc
     sensor: temp_resistance_reading
-    name: ${DeviceName} temperature
+    name: ${DeviceName} Temperature
     calibration:
       b_constant: 3350
       reference_resistance: 10kOhm
@@ -96,6 +96,7 @@ light:
     
 binary_sensor:
   - id: sw_window
+    name: ${OutputA_Name} SW
     platform: gpio
     pin:
       number: GPIO5
@@ -151,7 +152,8 @@ binary_sensor:
           
 
   
-  - name: sw_table
+  - id: sw_table
+    name: ${OutputB_Name} SW
     platform: gpio
     pin:
       number: GPIO13

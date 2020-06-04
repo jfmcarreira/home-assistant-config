@@ -9,14 +9,14 @@ esphome:
 
 wifi:
   domain: .home
-  ssid: !secret esp_wifi_new_ssid
-  password: !secret esp_wifi_new_pass
-  #manual_ip:
-  #  static_ip: !secret ip_bhonfre_bedroom
-  #  gateway: !secret esp_gateway
-  #  subnet: !secret esp_subnet
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  manual_ip:
+    static_ip: !secret ip_bhonfre_02
+    gateway: !secret esp_gateway
+    subnet: !secret esp_subnet
   #use_address: 10.20.207.37
-  use_address: 10.20.107.143
+  #use_address: 10.20.207.143
   
 # Enable logging
 logger:
@@ -31,17 +31,22 @@ ota:
   
 
 binary_sensor:
-  - name: ${upper_devicename} Left SW
+  - id: sw_left
+    #name: ${upper_devicename} Left SW
     platform: gpio
     pin:
       number: GPIO03
       mode: INPUT_PULLUP
       inverted: True
+    filters:
+      - delayed_on: 25ms
+      - delayed_off: 25ms
     on_state:
       then:
         - light.toggle: light_1
       
-  - name: ${upper_devicename} Right SW
+  - id: sw_right
+    #name: ${upper_devicename} Right SW
     platform: gpio
     pin:
       number: GPIO13
