@@ -4,3 +4,8 @@ sensor:
     - 'time'
     - 'date'
     - 'date_time'
+
+- platform: template
+  sensors:
+    date_time_frontend:
+      value_template: "{{ as_timestamp(now()) | timestamp_custom('%d/%m/2020 %H:%M') }}"

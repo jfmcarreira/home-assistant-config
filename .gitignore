@@ -17,12 +17,17 @@ secrets.yaml
 .uuid
 .HA_VERSION
 known_devices.yaml
+.google.token
+.omv_cookies.json
+.shopping_list.json
+google_calendars.yaml
 google_assistant_service_account.json
 esphome/aluminium/partitions.csv
 python_scripts/shellies_discovery.py
 esphome/barium/partitions.csv
 
 # Folders
+__pycache__
 .storage
 www
 lib
@@ -30,8 +35,7 @@ deps
 tts
 custom_components
 themes
-integrations_disabled
-devices_config
-appdaemon
-lovelace_storage_backup
-node-red/
+node-red
+disabled_configs
+data
+

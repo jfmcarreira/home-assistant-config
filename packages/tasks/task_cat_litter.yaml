@@ -75,11 +75,11 @@ script:
         data:
           room: bathroom
           runs: 2
-      - delay: 00:00:40
-      - service: vacuum.set_fan_speed
-        data:
-          entity_id: vacuum.roborock
-          fan_speed: "103"
+      #- delay: 00:00:40
+      #- service: vacuum.set_fan_speed
+        #data:
+          #entity_id: vacuum.roborock
+          #fan_speed: "103"
   cat_litter_change:
     alias: Task Litter Box Mark Change
     sequence:

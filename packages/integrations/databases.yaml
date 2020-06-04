@@ -3,6 +3,7 @@
 ################################################################################
 recorder:
   db_url: !secret db_url
+  purge_keep_days: 5
   exclude:
     domains:
       - updater
@@ -20,6 +21,7 @@ recorder:
       - sensor.date_time
       - sensor.date
       - sensor.time
+      - sensor.date_time_frontend
       - sensor.anniversary_wedding
       - sensor.birthday_joao
       - sensor.birthday_bianca
@@ -43,47 +45,6 @@ recorder:
       - sensor.daily_tv_time_netflix
       # Roborock Map
       - sensor.roborock_map
-      
-      
-
-      
-
-
-################################################################
-## Influx DB
-################################################################
-influxdb:
-  username: !secret influxdb_user
-  password: !secret influxdb_pass
-  max_retries: 3
-  default_measurement: state
-  include:
-    domains:
-      - sensor
-      - binary_sensor
-      - climate
-      - input_number
-      - switch
-    entities:
-      - sensor.uptime
-      - sensor.date_time
-      - sensor.date
-      - sensor.time
-      - sensor.anniversary_wedding
-      - sensor.birthday_joao
-      - sensor.birthday_bianca
-      - sensor.birthday_ricardo
-      - binary_sensor.updater 
-      - binary_sensor.workday
-      - binary_sensor.workday_tomorrow
-  exclude:
-    entities:
-      - binary_sensor.updater
-    domains:
-      - automation
-  tags:
-    source: hass
-
 
 ################################################################################
 ## Logbook
@@ -140,6 +101,7 @@ logbook:
       - sensor.date_time
       - sensor.date
       - sensor.time
+      - sensor.date_time_frontend
       - binary_sensor.updater
       - binary_sensor.workday
       - binary_sensor.workday_tomorrow
@@ -183,10 +145,12 @@ history:
       - sun
     entities:
       ## Time vary sensors
+      - sun.sun
       - sensor.uptime
       - sensor.date_time
       - sensor.date
       - sensor.time
+      - sensor.date_time_frontend
       - binary_sensor.updater
       - binary_sensor.workday
       - binary_sensor.workday_tomorrow
@@ -194,3 +158,4 @@ history:
       - sensor.birthday_joao
       - sensor.birthday_bianca
       - sensor.birthday_ricardo
+      - sensor.roborock_map
