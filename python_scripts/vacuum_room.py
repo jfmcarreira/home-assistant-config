@@ -31,7 +31,7 @@ vaccum_room_list = [
 application_name = "valetudo"
 
 vaccum_room_list = [                                                   
-    (['sala', 'living room'],                       'LivingRoom'  ),
+    (['sala', 'living room'],                       'LivingRoom'   ),
     (['corredo', 'hallway'],                        'Hallway'      ),
     (['cozinha', 'kitchen'],                        'Kitchen'      ),
     (['escritório', 'office'],                      'Office'       ),
@@ -46,16 +46,20 @@ room = data.get("room").lower()
 # Number of runs per room
 runs = int( data.get("runs", '1') )
 
+# Start with delay
+delay = int( data.get("delay", '0') )
+
 vaccum_room_param = []
-if room == "all":
+if room == "switch_based":
     # Run through all room that are vacuum friendly
     for r in vaccum_room_list:
-        should_vaccum = hass.states.get( 'input_boolean.vaccum_'+r[1].lower ).state == 'on'
+        entity_name = ('input_boolean.vaccum_'+r[1]).lower()
+        should_vaccum = ( hass.states.get( entity_name ).state == 'on' )
         if should_vaccum:
             if application_name == "xiaomi":
                 vaccum_room_param.extend( r[2] )
             else:
-                vaccum_room_param.extend( r[1] )
+                vaccum_room_param.append( r[1] )
 
 else:
     # Single run
@@ -64,7 +68,7 @@ else:
             if application_name == "xiaomi":
                 vaccum_room_param.extend( r[2] )
             else:
-                vaccum_room_param.extend( r[1] )
+                vaccum_room_param.append( r[1] )
 
 
 vaccum_room_array = []
@@ -72,6 +76,8 @@ for r in vaccum_room_param:
     for i in range(runs):
         vaccum_room_array.append( r )
 
+# TODO: Check how to do this
+#time.sleep( delay * 60 )
 
 if application_name == "xiaomi":
     # Service call when using the original xiaomi app
@@ -80,4 +86,5 @@ else:
     # Service call when using the valetudo app
     service_data = { "entity_id": "vacuum.roborock", "command": "zoned_cleanup", "params": { 'zone_ids': vaccum_room_array } } 
 
+logger.info('vacuum.send_command {}'.format(service_data))
 hass.services.call('vacuum','send_command', service_data, False)
