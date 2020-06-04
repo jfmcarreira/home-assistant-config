@@ -1,0 +1,40 @@
+################################################################
+## Influx DB
+################################################################
+influxdb:
+  username: !secret influxdb_user
+  password: !secret influxdb_pass
+  max_retries: 3
+  default_measurement: state
+  tags:
+    source: hass
+  include:
+    entities:
+      # Power
+      - sensor.bhpzem_power
+      - sensor.bhpzem_voltage
+      - sensor.bhpzem_current
+      - sensor.bhpzem_pf
+      - sensor.power_sensor_laundry
+      - sensor.power_sensor_office
+      - sensor.power_sensor_laundry_reactive
+      - sensor.power_sensor_office_reactive
+      # Utilities
+      - input_number.water_meter
+      - input_number.gas_meter
+      - input_number.electricity_meter_peak
+      - input_number.electricity_meter_offpeak
+      - input_number.electricity_meter_full
+      - sensor.electricity_meter
+      # Temperature / Humidity
+      - sensor.average_temperature
+      - sensor.average_humidity
+      - sensor.living_room_temperature
+      - sensor.living_room_humidity
+      - sensor.office_temperature
+      - sensor.office_humidity
+      - sensor.bedroom_temperature
+      - sensor.bedroom_humidity
+      
+
+ 
