@@ -7,8 +7,9 @@ homeassistant:
     - type: trusted_networks
       trusted_networks:
         - !secret home_network
+        - !secret beryllium_ip
       trusted_users:
-        10.20.107.22:  !secret userid_ha
+        10.20.207.10:  !secret userid_ha
       allow_bypass_login: true
   packages: !include_dir_named packages
   customize: !include customize.yaml
