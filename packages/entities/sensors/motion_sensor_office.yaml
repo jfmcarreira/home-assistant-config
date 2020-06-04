@@ -27,7 +27,7 @@ automation old:
       from: "off"
       to: "on"
       for:
-        seconds: 30
+        seconds: 10
   action:
     - service: mqtt.publish
       data:

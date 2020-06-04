@@ -34,7 +34,10 @@ class MotionLight(hass.Hass):
 
         # Only start this is the light is off
         turnOn = turnOn and self.get_state( self.light ) == "off"
-
+        
+        if self.timer is not None:
+            turnOn = turnOn or True
+        
         if turnOn:
             self.turn_on(self.light)
             self.set_timer(self.timeout)

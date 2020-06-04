@@ -7,7 +7,7 @@ motion_light_living_room:
     - light.living_room_table
     - light.living_room_window
     - light.living_room_abajur
-  timeout: 180
+  timeout: 300
 
 
 motion_light_office:
@@ -17,4 +17,4 @@ motion_light_office:
   light: light.office_desk
   other_lights:
     - light.office
-  timeout: 180
+  timeout: 300
