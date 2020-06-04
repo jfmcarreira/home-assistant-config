@@ -4,6 +4,8 @@
 lovelace:
   mode: yaml
   resources:
+    - url: /hacsfiles/bignumber-card/bignumber-card.js
+      type: module
     - url: /hacsfiles/button-card/button-card.js
       type: module
     - url: /hacsfiles/calendar-card/calendar-card.js
@@ -38,11 +40,6 @@ lovelace:
       type: module
     - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
       type: module
-
-    - url: /local/custom_cards/clock-card/clock-card.js
-      type: js
-    - url: https://unpkg.com/moment@2.22.2/min/moment.min.js
-      type: js
   # Add yaml dashboards
   dashboards:
     lovelace-main:

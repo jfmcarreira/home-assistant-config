@@ -3,12 +3,21 @@ custom_header:
   compact_mode: true
   hide_header: true
   swipe: false
+preload_cards:
+  - markdown
+  - gauge
+preload_rows:
+  - divider
 title: Tablet
 views:
   - badges: []
     cards:
       - cards:
-          - type: 'custom:clock-card'
+      
+          - type: custom:bignumber-card
+            entity: sensor.date_time_frontend
+            scale: 34px
+
           - details: true
             entity: weather.ipma
             forecast: true
@@ -65,12 +74,15 @@ views:
                 icon: 'mdi:ring'
                 name: Casamento
             type: glance
-          - entities:
-              - calendar.b_j_events
-            hideHeader: true
+          - type: 'custom:calendar-card'
+            title: "Eventos"
+            hideHeader: false
             progressBar: true
-            type: 'custom:calendar-card'
+            entities:
+              - calendar.b_j_events
+
           - break
+          
           - control: false
             entity: climate.heating
             label:
@@ -189,7 +201,7 @@ views:
                 type: 'custom:button-card'
             type: horizontal-stack
           - cards:
-              - aspect_ratio: 6/2
+              - aspect_ratio: 10/2
                 custom_fields:
                   notification: |
                     [[[
@@ -213,61 +225,69 @@ views:
                   grid:
                     - position: relative
                 type: 'custom:button-card'
-              - aspect_ratio: 6/2
-                custom_fields:
-                  playing_state: |
-                    [[[
-                      if (states['media_player.browser_tf201_kyosk'].state == "playing")
-                        return `<ha-icon icon="mdi:play"      style="width: 18px; height: 18px;"> </ha-icon>`
-                    ]]]
-                entity: display.tf201_kyosk
-                size: 100%
-                styles:
-                  custom_fields:
-                    playing_state:
-                      - border-radius: 50%
-                      - position: absolute
-                      - right: 10%
-                      - top: 10%
-                      - height: 20px
-                      - width: 20px
-                      - font-size: 8px
-                      - line-height: 20px
-                  grid:
-                    - position: relative
-                type: 'custom:button-card'
+              #- aspect_ratio: 6/2
+                #custom_fields:
+                  #playing_state: |
+                    #[[[
+                      #if (states['media_player.browser_tf201_kyosk'].state == "playing")
+                        #return `<ha-icon icon="mdi:play"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    #]]]
+                #entity: display.tf201_kyosk
+                #size: 100%
+                #styles:
+                  #custom_fields:
+                    #playing_state:
+                      #- border-radius: 50%
+                      #- position: absolute
+                      #- right: 10%
+                      #- top: 10%
+                      #- height: 20px
+                      #- width: 20px
+                      #- font-size: 8px
+                      #- line-height: 20px
+                  #grid:
+                    #- position: relative
+                #type: 'custom:button-card'
             type: horizontal-stack
           - break
-          - card:
+          
+          - type: 'custom:auto-entities'
+            card:
+              type: picture-glance
               aspect_ratio: 3/1
-              entity: group.living_room
-              hold_action:
-                action: none
-              image: /local/room_images/img_living_room_25_10.jpg
               tap_action:
                 action: more-info
-              title: Sala de Estar
-              type: picture-glance
+              hold_action:
+                action: none
+              entity: group.living_room
+              image: /local/room_images/img_living_room_25_10.jpg
+              title: Sala de Estar  
+            sort:
+              ignore_case: true
+              method: name
             filter:
               include:
                 - entity_id: light.living_room_*
                 - entity_id: media_player.media_center
                 - entity_id: media_player.ghm_living_room
             show_empty: true
+            
+            
+          - type: 'custom:auto-entities'
+            card:
+              type: picture-glance
+              aspect_ratio: 3/1
+              tap_action:
+                action: more-info
+              hold_action:
+                action: none
+              entity: group.hall
+              image: /local/room_images/img_hallway_25_10.jpg
+              title: Corredor
             sort:
               ignore_case: true
               method: name
-            type: 'custom:auto-entities'
-          - card:
-              aspect_ratio: 3/1
-              entity: group.hall
-              hold_action:
-                action: none
-              image: /local/room_images/img_hallway_25_10.jpg
-              tap_action:
-                action: more-info
-              title: Corredor
-              type: picture-glance
+            show_empty: true
             filter:
               include:
                 - entity_id: binary_sensor.front_door
@@ -275,67 +295,69 @@ views:
                 - entity_id: binary_sensor.motion_sensor_hallway
                 - entity_id: display.tf201_kyosk
                 - entity_id: light.hallway*
+            
+          - type: 'custom:auto-entities'
+            card:
+              type: picture-glance
+              aspect_ratio: 3/1
+              tap_action:
+                action: more-info
+              hold_action:
+                action: none
+              entity: group.kitchen 
+              image: /local/room_images/img_kitchen_25_10.jpg
+              title: Cozinha
             show_empty: true
             sort:
               ignore_case: true
               method: name
-            type: 'custom:auto-entities'
-          - card:
-              aspect_ratio: 3/1
-              entity: group.kitchen
-              hold_action:
-                action: none
-              image: /local/room_images/img_kitchen_25_10.jpg
-              tap_action:
-                action: more-info
-              title: Cozinha
-              type: picture-glance
             filter:
               include:
                 - entity_id: binary_sensor.fridge_door
                 - entity_id: light.kitchen*
                 - entity_id: media_player.*kitchen
+            
+            
+          - type: 'custom:auto-entities'
+            card:
+              type: picture-glance
+              aspect_ratio: 3/1
+              tap_action:
+                action: more-info
+              hold_action:
+                action: none
+              entity: group.office
+              image: /local/room_images/img_office_25_10.jpg
+              title: Escritório
             show_empty: true
             sort:
               ignore_case: true
               method: name
-            type: 'custom:auto-entities'
-          - card:
-              aspect_ratio: 3/1
-              entity: group.office
-              hold_action:
-                action: none
-              image: /local/room_images/img_office_25_10.jpg
-              tap_action:
-                action: more-info
-              title: Escritório
-              type: picture-glance
             filter:
               include:
                 - entity_id: light.office*
+            
+            
+          - type: 'custom:auto-entities'
+            card:
+              type: picture-glance
+              aspect_ratio: 3/1
+              tap_action:
+                action: more-info
+              hold_action:
+                action: none
+              entity: group.master_bedroom
+              image: /local/room_images/img_bedroom_25_10.jpg
+              title: Quarto
             show_empty: true
             sort:
               ignore_case: true
               method: name
-            type: 'custom:auto-entities'
-          - card:
-              aspect_ratio: 3/1
-              entity: group.master_bedroom
-              hold_action:
-                action: none
-              image: /local/room_images/img_bedroom_25_10.jpg
-              tap_action:
-                action: more-info
-              title: Quarto
-              type: picture-glance
             filter:
               include:
                 - entity_id: light.master_bedroom*
-            show_empty: true
-            sort:
-              ignore_case: true
-              method: name
-            type: 'custom:auto-entities'
+            
+            
         layout: vertical
         max_columns: 3
         type: 'custom:layout-card'

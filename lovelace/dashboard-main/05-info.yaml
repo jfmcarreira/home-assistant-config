@@ -8,9 +8,21 @@ cards:
       - entity: input_boolean.house_guest
         name: Convidados
       - entity: person.bianca
+      - type: conditional
+        conditions:
+          - entity: person.bianca
+            state_not: "home"
+        row:
+          entity: proximity.dist_home_bianca
+          name: Distância - Bianca
       - entity: person.joao
-      - entity: proximity.dist_home_joao
-        name: Distância - João
+      - type: conditional
+        conditions:
+          - entity: person.joao
+            state_not: "home"
+        row:
+          entity: proximity.dist_home_joao
+          name: Distância - João
     show_header_toggle: false
     title: Ocupação Casa
     type: entities
