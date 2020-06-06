@@ -6,6 +6,7 @@ custom_header:
 preload_cards:
   - markdown
   - gauge
+  - picture-glance
 preload_rows:
   - divider
 title: Tablet

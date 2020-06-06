@@ -131,4 +131,18 @@ cards:
         min_height: 0
         rotate: 0
         title: Mapa de Limpeza
-        
+      
+      - break
+      - break
+      - type: "custom:button-card"
+        aspect_ratio: 12/2
+        entity: script.task_roborock_clean
+        icon: "mdi:broom"
+        layout: icon_name_state
+        name: Limpar Aspirador
+        size: 100%
+        tap_action:
+          action: none
+        hold_action:
+          action: call-service
+          service: script.task_roborock_clean

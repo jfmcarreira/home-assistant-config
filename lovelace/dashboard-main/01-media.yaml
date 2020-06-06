@@ -209,15 +209,21 @@ cards:
             type: 'custom:button-card'
         type: horizontal-stack
     type: 'custom:vertical-stack-in-card'
-  - type: vertical-stack
-    cards:
-      - type: media-control
+  - type: entities
+    entities:
+      - type: custom:mini-media-player
+        group: true
         entity: media_player.ghm_living_room
-      - type: media-control
+        hide:
+          volume: false
+      - type: custom:mini-media-player
+        group: true
         entity: media_player.ghm_kitchen
-      - type: media-control
+      - type: custom:mini-media-player
+        group: true
         entity: media_player.gh_clock_bedroom
-      - type: media-control
+      - type: custom:mini-media-player
+        group: true
         entity: media_player.browser_tf201_kyosk
 
   - type: entities

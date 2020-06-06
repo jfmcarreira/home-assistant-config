@@ -26,6 +26,7 @@ input_select:
     options:
       - Sala 
       - Cozinha
+      - Quarto
       - Kiosk
       #- Host
       #- TV
@@ -52,6 +53,8 @@ script:
               media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
               media_player.ghm_kitchen
+            {% elif is_state("input_select.speakers_selector", "Quarto") %}
+              media_player.gh_clock_bedroom
             {% endif %}
           media_content_id: >
             {% if is_state("input_select.radio_station", "RFM") %} http://19613.live.streamtheworld.com:3690/RFM_SC
@@ -89,6 +92,8 @@ script:
               media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
               media_player.ghm_kitchen
+            {% elif is_state("input_select.speakers_selector", "Quarto") %}
+              media_player.gh_clock_bedroom
             {% endif %}
 
   stop_radio:
@@ -113,4 +118,6 @@ script:
               media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
               media_player.ghm_kitchen
+            {% elif is_state("input_select.speakers_selector", "Quarto") %}
+              media_player.gh_clock_bedroom
             {% endif %}
