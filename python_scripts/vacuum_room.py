@@ -34,9 +34,9 @@ vaccum_room_list = [
     (['sala', 'living room'],                       'LivingRoom'   ),
     (['corredo', 'hallway'],                        'Hallway'      ),
     (['cozinha', 'kitchen'],                        'Kitchen'      ),
-    (['escritório', 'office'],                      'Office'       ),
     (['casa de banho', 'bathroom'],                 'Bathroom'     ),
     (['quarto', 'bedroom'],                         'Bedroom'      ),
+    (['escritório', 'office'],                      'Office'       ),
     (['quarto do fundo', 'guest bedroom'],          'GuestBedroom' )
 ]
 
