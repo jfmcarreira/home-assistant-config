@@ -26,7 +26,7 @@ binary_sensor:
       number: GPIO0
       mode: INPUT_PULLUP
       inverted: True
-    name: sw_0
+    id: sw_0
     on_press:
       - light.toggle: relay_light
     
@@ -37,7 +37,7 @@ output:
     
 light:
   - platform: binary
-    name: Living Room Abajur
+    name: Hallway Mirror
     id: relay_light
     output: relay
 
