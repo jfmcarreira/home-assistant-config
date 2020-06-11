@@ -54,3 +54,31 @@ automation old:
           room: "{{ trigger.event.data.room }}"
           runs: 1
         service: python_script.vacuum_room
+
+script:
+  task_roborock_clean:
+    alias: Task Roborock Cleaning
+    sequence:
+    
+    ## For original firmware and xiaomi app
+    ## Trial and error for the position
+    #- service: vacuum.set_fan_speed
+      #data:
+        #entity_id: vacuum.roborock
+        #fan_speed: "105"
+    #- service: vacuum.send_command 
+      #data:
+        #command: app_goto_target
+        #params:
+        #- 26925
+        #- 24435
+      #entity_id: vacuum.roborock
+    
+    ## For valetudo app
+    ## Position is configured within the webapp
+    - service: vacuum.send_command
+      entity_id: vacuum.roborock
+      data:
+        command: 'go_to'
+        params:
+          'spot_id': 'KitchenBin'

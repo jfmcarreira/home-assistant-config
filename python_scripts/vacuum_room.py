@@ -1,8 +1,8 @@
 """
-List of rooms 
 LIST OF ROOMS / LISTA DE DIVISÔES
 
-Since these names target voice assistant a dictionary is created
+The first position is the name of the room. 
+These names target voice assistant, therefore a dictionary is created
 to provide more than one name to each room, and thus support 
 for different languages
   
@@ -28,7 +28,7 @@ vaccum_room_list = [
 ]
 """
 
-application_name = "valetudo"
+application_name = "valetudo" # or "xiaomi"
 
 vaccum_room_list = [                                                   
     (['sala', 'living room'],                       'LivingRoom'   ),
@@ -76,8 +76,6 @@ for r in vaccum_room_param:
     for i in range(runs):
         vaccum_room_array.append( r )
 
-# TODO: Check how to do this
-#time.sleep( delay * 60 )
 
 if application_name == "xiaomi":
     # Service call when using the original xiaomi app
@@ -86,5 +84,4 @@ else:
     # Service call when using the valetudo app
     service_data = { "entity_id": "vacuum.roborock", "command": "zoned_cleanup", "params": { 'zone_ids': vaccum_room_array } } 
 
-logger.info('vacuum.send_command {}'.format(service_data))
 hass.services.call('vacuum','send_command', service_data, False)
