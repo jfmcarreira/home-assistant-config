@@ -4,11 +4,9 @@ custom_header:
   hide_header: true
   swipe: false
 preload_cards:
-  #- markdown
-  #- gauge
   - picture-glance
-#preload_rows:
-  #- divider
+preload_rows:
+  - divider
 title: Tablet
 views:
   - badges: []
