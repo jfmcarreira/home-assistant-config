@@ -158,7 +158,7 @@ cards:
               action: call-service
               service: script.turn_on
               service_data:
-                entity_id: script.night_away
+                entity_id: script.routine_night_away
             icon: 'mdi:weather-night'
             name: Night/Away
             size: 100%

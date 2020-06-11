@@ -10,8 +10,9 @@ appdaemon:
       type: hass
 
 http:
+  url: http://10.20.30.202:5050
 
-#hadashboard:
+hadashboard:
 
 admin:
 

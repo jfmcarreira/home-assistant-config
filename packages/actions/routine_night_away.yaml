@@ -2,17 +2,35 @@ script:
   routine_night_away:
     alias: Routine Night/Away
     sequence:
-    - data:
+    - service: climate.turn_off
+      data:
         entity_id: climate.heating
-      service: climate.turn_off
-    - entity_id: media_player.living_room_tv
-      service: media_player.turn_off
-    - data: {}
-      entity_id: scene.modo_noite
-      service: scene.turn_on
-    - entity_id: light.hallway
-      service: light.turn_on
+      
+    - service: media_player.turn_off
+      entity_id: media_player.living_room_tv
+     
+    - service: scene.turn_on
+      entity_id: scene.night_time
+      
+    - service: light.turn_on
+      entity_id: light.hallway
     - delay: 00:00:40
-    - data:
-        entity_id: light.hallway
-      service: light.turn_off
+    - service: light.turn_off
+      entity_id: light.hallway
+      
+  routine_away:
+    alias: Routine Leave Home
+    sequence:
+    - service: climate.turn_off
+      data:
+        entity_id: climate.heating
+    - service: media_player.turn_off
+      entity_id: media_player.living_room_tv
+    - service: light.turn_off
+      entity_id: all
+    - service: light.turn_on
+      entity_id: light.hallway
+    - delay: 00:00:40
+    - service: light.turn_off
+      entity_id: light.hallway
+      

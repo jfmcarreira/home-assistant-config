@@ -1,3 +1,11 @@
+light:
+  - platform: group
+    name: hallway_presence_group
+    entities:
+      - light.hallway_presence
+      - light.hallway_mirror
+
+
 automation old:
   - alias: Lights Hallway Presence Light On
     trigger:
@@ -14,11 +22,20 @@ automation old:
       - condition: template
         value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
     action:
-      - entity_id: light.hallway_presence
-        service: light.turn_on
+      - service: light.turn_on
+        entity_id: light.hallway_presence
+      - service: light.turn_on
+        entity_id: light.hallway_mirror
 
   - alias: Lights Hallway Presence Light Off
     trigger:
+      - platform: state
+        entity_id: light.hallway_presence_group
+        to: "on"
+        for:
+          hours: 0
+          minutes: 2
+          seconds: 0
       - platform: state
         entity_id: light.hallway_presence
         to: "on"
@@ -33,3 +50,5 @@ automation old:
     action:
       - service: light.turn_off
         entity_id: light.hallway_presence
+      - service: light.turn_off
+        entity_id: light.hallway_mirror

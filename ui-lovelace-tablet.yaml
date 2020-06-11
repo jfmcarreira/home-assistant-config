@@ -4,10 +4,11 @@ custom_header:
   hide_header: true
   swipe: false
 preload_cards:
-  - markdown
-  - gauge
-preload_rows:
-  - divider
+  #- markdown
+  #- gauge
+  - picture-glance
+#preload_rows:
+  #- divider
 title: Tablet
 views:
   - badges: []
@@ -78,6 +79,7 @@ views:
             title: "Eventos"
             hideHeader: false
             progressBar: true
+            highlightToday: true
             entities:
               - calendar.b_j_events
 
@@ -289,6 +291,8 @@ views:
               method: name
             show_empty: true
             filter:
+              exclude:
+                - entity_id: light.*_group
               include:
                 - entity_id: binary_sensor.front_door
                 - entity_id: binary_sensor.browser_tf201_kyosk
@@ -356,6 +360,7 @@ views:
             filter:
               include:
                 - entity_id: light.master_bedroom*
+                - entity_id: media_player.*bedroom
             
             
         layout: vertical

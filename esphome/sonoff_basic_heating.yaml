@@ -68,7 +68,6 @@ binary_sensor:
 
 switch:
   - platform: gpio
-    #name: sonoff_basic_heating_relay
     id: relay
     pin: 
       number: GPIO12
@@ -80,7 +79,6 @@ switch:
       number: GPIO13
       inverted: True
     id: green_led
-    #name: sonoff_basic_heating_led
     
     
 dallas:

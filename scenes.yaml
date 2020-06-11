@@ -1,3 +1,61 @@
+- id: night_time
+  name: Modo Dormir
+  entities:
+    light.hallway_mirror:
+      friendly_name: Retro-iluminação do Espelho
+      icon: mdi:led-strip
+      state: 'off'
+      supported_features: 8
+    light.kitchen:
+      friendly_name: Luz da Cozinha
+      icon: mdi:square
+      state: 'off'
+      supported_features: 8
+    light.kitchen_pantry:
+      friendly_name: Luz da Despensa
+      icon: mdi:ceiling-light
+      state: 'off'
+      supported_features: 8
+    light.living_room_abajur:
+      friendly_name: Luz de Apoio
+      icon: mdi:lamp
+      state: 'off'
+      supported_features: 41
+    light.living_room_table:
+      friendly_name: Luz da Mesa da Sala
+      icon: mdi:globe-light
+      state: 'off'
+      supported_features: 8
+    light.living_room_tv_leds:
+      effect_list:
+      - 'Off'
+      - Meteor Shower
+      - Gradual Change
+      - Flash
+      friendly_name: Retro-iluminação da Televisão
+      icon: mdi:television-ambient-light
+      state: 'off'
+      supported_features: 189
+    light.living_room_window:
+      friendly_name: Luz da Janela da Sala
+      icon: mdi:globe-light
+      state: 'off'
+      supported_features: 8
+    light.office:
+      friendly_name: Luz Escritório
+      icon: mdi:track-light
+      state: 'off'
+      supported_features: 8
+    light.office_desk:
+      effect_list:
+      - 'Off'
+      - Meteor Shower
+      - Gradual Change
+      - Flash
+      friendly_name: Retro-iluminação da Secretária
+      icon: mdi:led-strip
+      state: 'off'
+      supported_features: 189
 - id: '1587517004044'
   name: Televisão Noite
   entities:
@@ -8,6 +66,7 @@
       supported_features: 8
     light.kitchen_pantry:
       friendly_name: Luz da Despensa
+      icon: mdi:ceiling-light
       state: 'off'
       supported_features: 8
     light.living_room_abajur:
@@ -27,12 +86,17 @@
       - Meteor Shower
       - Gradual Change
       - Flash
-      friendly_name: Retro-iluminação TV
-      icon: mdi:television
+      friendly_name: Retro-iluminação da Televisão
+      icon: mdi:television-ambient-light
       state: 'off'
       supported_features: 189
     light.living_room_window:
       friendly_name: Luz da Janela da Sala
       icon: mdi:globe-light
+      state: 'off'
+      supported_features: 8
+    light.office:
+      friendly_name: Luz Escritório
+      icon: mdi:track-light
       state: 'off'
       supported_features: 8

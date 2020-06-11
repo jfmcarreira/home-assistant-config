@@ -15,14 +15,9 @@ class MotionLight(hass.Hass):
 
         for l in self.other_lights:
             self.listen_state(self.other_light_callback, l)
-
-    def set_timer(self, timeout):
-        if self.timer is not None:
-            self.cancel_timer(self.timer)
-        self.timer = self.run_in(self.timeout_callback, timeout)
-
-    def motion_callback(self, entity, attribute, old, new, kwargs):
-
+    
+    def should_light_turn_on(self):
+      
         turnOn = True
 
         # Sun condition - Below horizon
@@ -37,8 +32,17 @@ class MotionLight(hass.Hass):
         
         if self.timer is not None:
             turnOn = turnOn or True
-        
-        if turnOn:
+            
+        return turnOn
+      
+    def set_timer(self, timeout):
+        if self.timer is not None:
+            self.cancel_timer(self.timer)
+        self.timer = self.run_in(self.timeout_callback, timeout)
+
+    def motion_callback(self, entity, attribute, old, new, kwargs):
+       
+        if self.should_light_turn_on():
             self.turn_on(self.light)
             self.set_timer(self.timeout)
 
@@ -53,7 +57,8 @@ class MotionLight(hass.Hass):
 
     def other_light_callback(self, entity, attribute, old, new, kwargs):
         if new == "off":
-            self.turn_on(self.light)
-            self.set_timer(self.short_timeout)
+            if self.should_light_turn_on():
+                self.turn_on(self.light)
+                self.set_timer(self.short_timeout)
         else:
             self.turn_off(self.light)

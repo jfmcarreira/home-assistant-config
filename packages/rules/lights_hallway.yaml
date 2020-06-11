@@ -16,6 +16,8 @@ automation old:
   action:
   - service: light.turn_on
     entity_id: light.hallway
+  - service: light.turn_on
+    entity_id: light.hallway_mirror
     
 
 

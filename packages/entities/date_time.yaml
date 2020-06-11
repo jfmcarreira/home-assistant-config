@@ -8,4 +8,6 @@ sensor:
 - platform: template
   sensors:
     date_time_frontend:
-      value_template: "{{ as_timestamp(now()) | timestamp_custom('%d/%m/2020 %H:%M') }}"
+      value_template: "{{ as_timestamp( now() ) | timestamp_custom('%d/%m/2020 %H:%M') }}"
+      entity_id:
+        - sensor.date_time

@@ -21,9 +21,10 @@ google_assistant:
         - Heating
     media_player.media_center:
       expose: true
-      name: Televisão da Sala
+      name: Televisão
       aliases:
-        - Living Room TV
+        - Media Center
+        - TV
 
     light.living_room_table:
       expose: true
@@ -50,6 +51,11 @@ google_assistant:
       name: Luz do Corredor
       aliases:
         - Hallway Light
+    light.hallway_mirror:
+      expose: true
+      name: Retro-iluminação do Espelho do Corredo
+      aliases:
+        - Hallway Mirror Light
     light.hallway_presence_light:
       expose: true
       name: Luz de Presença do Corredor

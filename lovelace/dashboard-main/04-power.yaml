@@ -38,17 +38,22 @@ cards:
         title: Potência Instantânea
         type: "custom:vertical-stack-in-card"
 
-      - cards:
-          - entities:
+      - type: "custom:vertical-stack-in-card"
+        cards:
+          - type: entities
+            title: Facturação
+            show_header_toggle: false
+            entities:
               - entity: sensor.daily_energy
                 name: Consumo Diário
               - entity: sensor.monthly_energy
                 name: Facturação Consumo
               - entity: sensor.monthly_energy_cost
                 name: Facturação Preço
-            show_header_toggle: false
-            type: entities
-          - entities:
+
+          - type: entities
+            title: Consumos
+            entities:
               - input_select.energy_daily_graph_select
               - bar_spacing: 1
                 entities:
@@ -171,9 +176,7 @@ cards:
                     font-size: 9px;
                   }
                 type: "custom:hui-markdown-card"
-            type: entities
-        title: Consumos
-        type: "custom:vertical-stack-in-card"
+            
       
       - type: vertical-stack
         cards:
