@@ -2,6 +2,10 @@ script:
   task_roborock_clean:
     alias: Task Roborock Cleaning
     sequence:
+    #- service: vacuum.set_fan_speed
+      #data:
+        #entity_id: vacuum.roborock
+        #fan_speed: "105"
     #- service: vacuum.send_command 
       #data:
         #command: app_goto_target
