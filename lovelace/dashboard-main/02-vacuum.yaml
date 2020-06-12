@@ -7,78 +7,90 @@ cards:
     layout: horizontal
     max_columns: 3
     cards:
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: "custom:vacuum-card"
+            actions:
+              - icon: "mdi:sofa"
+                name: Aspirar Sala
+                service: python_script.vacuum_room
+                service_data:
+                  room: Living Room
+                  runs: 1
+              - icon: "mdi:door-open"
+                name: Aspirar Corredor
+                service: python_script.vacuum_room
+                service_data:
+                  room: Hallway
+                  runs: 1
+              - icon: "mdi:stove"
+                name: Aspirar Cozinha
+                service: python_script.vacuum_room
+                service_data:
+                  room: Kitchen
+                  runs: 1
+              - icon: "mdi:toilet"
+                name: Aspirar Casa de Banho Principal
+                service: python_script.vacuum_room
+                service_data:
+                  room: Bathroom
+                  runs: 1
+              - icon: "mdi:desk"
+                name: Aspirar Escritório
+                service: python_script.vacuum_room
+                service_data:
+                  room: Office
+                  runs: 1
+              - icon: "mdi:bed-double"
+                name: Aspirar Quarto
+                service: python_script.vacuum_room
+                service_data:
+                  room: Bedroom
+                  runs: 1
+              - icon: "mdi:bed-queen-outline"
+                name: Aspirar Quarto do Fundo
+                service: python_script.vacuum_room
+                service_data:
+                  room: Guest Bedroom
+                  runs: 1
+            compact_view: false
+            entity: vacuum.roborock
+            show_name: true
+            map: camera.roborock_map
+            show_toolbar: true
+            stats:
+              cleaning:
+                - attribute: currentCleanArea
+                  subtitle: Área Limpa
+                  unit: m2
+                - attribute: currentCleanTime
+                  subtitle: Tempo de Limpeza
+                  unit: minutes
+              default:
+                - attribute: filter
+                  subtitle: Filtro
+                  unit: hours
+                - attribute: sideBrush
+                  subtitle: Escova Lateral
+                  unit: hours
+                - attribute: mainBrush
+                  subtitle: Escova Principal
+                  unit: hours
+                - attribute: sensor
+                  subtitle: Sensores
+                  unit: hours     
+          
+          - type: conditional
+            conditions:
+              - entity: sensor.roborock_state
+                state: "error"
+            card:
+              type: markdown
+              title: Erro do Aspirador
+              content: |
+                 {{ states.sensor.roborock_state.attributes.Error }}
 
-      - type: "custom:vacuum-card"
-        actions:
-          - icon: "mdi:sofa"
-            name: Aspirar Sala
-            service: python_script.vacuum_room
-            service_data:
-              room: Living Room
-              runs: 1
-          - icon: "mdi:door-open"
-            name: Aspirar Corredor
-            service: python_script.vacuum_room
-            service_data:
-              room: Hallway
-              runs: 1
-          - icon: "mdi:stove"
-            name: Aspirar Cozinha
-            service: python_script.vacuum_room
-            service_data:
-              room: Kitchen
-              runs: 1
-          - icon: "mdi:toilet"
-            name: Aspirar Casa de Banho Principal
-            service: python_script.vacuum_room
-            service_data:
-              room: Bathroom
-              runs: 1
-          - icon: "mdi:desk"
-            name: Aspirar Escritório
-            service: python_script.vacuum_room
-            service_data:
-              room: Office
-              runs: 1
-          - icon: "mdi:bed-double"
-            name: Aspirar Quarto
-            service: python_script.vacuum_room
-            service_data:
-              room: Bedroom
-              runs: 1
-          - icon: "mdi:bed-queen-outline"
-            name: Aspirar Quarto do Fundo
-            service: python_script.vacuum_room
-            service_data:
-              room: Guest Bedroom
-              runs: 1
-        compact_view: false
-        entity: vacuum.roborock
-        show_name: true
-        show_toolbar: true
-        stats:
-          cleaning:
-            - attribute: cleaned_area
-              subtitle: Área Limpa
-              unit: m2
-            - attribute: cleaning_time
-              subtitle: Tempo de Limpeza
-              unit: minutes
-          default:
-            - attribute: filter_left
-              subtitle: Filtro
-              unit: hours
-            - attribute: side_brush_left
-              subtitle: Escova Lateral
-              unit: hours
-            - attribute: main_brush_left
-              subtitle: Escova Principal
-              unit: hours
-            - attribute: sensor_dirty_left
-              subtitle: Sensores
-              unit: hours
-            
-
+          
       - type: vertical-stack  
         cards:
           - type: entities
@@ -108,9 +120,13 @@ cards:
                     runs: 1
                 type: "custom:button-card"
 
-      - type: "custom:valetudo-map-card"
-        entity: sensor.roborock_map
-        title: Mapa de Limpeza
+      #- type: "custom:valetudo-map-card"
+        #title: Mapa de Limpeza
+        #entity: sensor.roborock_map
+        #floor_color: "#56affc"
+        #path_color: white
+        #vacuum_color: white
+            
       - break
       - break
       - type: "custom:button-card"

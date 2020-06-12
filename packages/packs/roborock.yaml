@@ -1,4 +1,21 @@
-  
+
+      
+sensor:
+  - platform: mqtt
+    name: Roborock State
+    state_topic: "valetudo/Roborock/state"
+    value_template: "{{ value_json.state }}"
+    json_attributes_topic: "valetudo/Roborock/state"
+    json_attributes_template: "{{ {'Error message': value_json.error } | tojson }}"
+        
+  #- name: Roborock Map
+    #platform: mqtt
+    #state_topic: "valetudo/Roborock/state"
+    #json_attributes_topic: "valetudo/Roborock/map_data_parsed"
+    #value_template: 'OK'
+    #scan_interval: 5
+     
+
 binary_sensor:
   - platform: template
     sensors:
@@ -7,13 +24,6 @@ binary_sensor:
         value_template: "{{ states.vacuum.roborock.state != 'docked' }}"  
         friendly_name: "Aspirador Roborock"
     
-sensor:
-  - name: Roborock Map
-    platform: mqtt
-    state_topic: "valetudo/Roborock/state"
-    json_attributes_topic: "valetudo/Roborock/map_data_parsed"
-    value_template: 'OK'
-    scan_interval: 5
     
     
 input_boolean:
