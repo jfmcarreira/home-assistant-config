@@ -27,28 +27,33 @@ binary_sensor:
     
     
 input_boolean:
-  vaccum_livingroom:
+  vacuum_livingroom:
     name: Sala de Estar
     icon: mdi:sofa
-  vaccum_hallway:
+  vacuum_hallway:
     name: Corredor
     icon: mdi:door-open
-  vaccum_kitchen:
+  vacuum_kitchen:
     name: Cozinha
     icon: mdi:stove
-  vaccum_office:
+  vacuum_office:
     name: Escritório
     icon: mdi:desk
-  vaccum_bathroom:
+  vacuum_bathroom:
     name: Casa de Banho
     icon: mdi:toilet
-  vaccum_bedroom:
+  vacuum_bedroom:
     name: Quarto
     icon: mdi:bed-double
-  vaccum_guestbedroom:
+  vacuum_bedroombath:
+    name: Casa de Banho do Quarto
+    icon: mdi:shower-head
+  vacuum_guestbedroom:
     name: Quarto do Fundo
     icon: mdi:bed-queen-outline
-
+  vacuum_livingroomwithcarpet:
+    name: Sala Com Tapetes (Zona)
+    icon: mdi:sofa
     
 automation old:
   # If You say "Clean $ ", then Make a web request
