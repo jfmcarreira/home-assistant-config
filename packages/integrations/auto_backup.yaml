@@ -13,7 +13,7 @@ automation old:
       - service: auto_backup.snapshot_full
         data_template:
           name: "DailyBackup: {{ now().strftime('%A, %B %-d, %Y') }}"
-          keep_days: 7
+          keep_days: 2
           exclude:
             addons:
               - Almond
