@@ -71,15 +71,26 @@ script:
         data:
           entity_id: vacuum.roborock
           fan_speed: "101"
-      - service: python_script.vacuum_room
+      - service: vacuum.send_command
+        data:  
+          entity_id: vacuum.roborock
+          command: zoned_cleanup
+          params:
+            zone_ids:
+              - id: CatLitterClean-1-Box
+                repeats: 2
+              - id: CatLitterClean-2-Bath
+                repeats: 3
+      - delay: 00:00:40
+      - service: vacuum.set_fan_speed
         data:
-          room: bathroom
-          runs: 2
-      #- delay: 00:00:40
-      #- service: vacuum.set_fan_speed
-        #data:
-          #entity_id: vacuum.roborock
-          #fan_speed: "103"
+          entity_id: vacuum.roborock
+          fan_speed: "max"
+      - wait_template: "{{ is_state('vacuum.roborock', 'docked') }}"
+      - service: vacuum.set_fan_speed
+        data:
+          entity_id: vacuum.roborock
+          fan_speed: "medium"
   cat_litter_change:
     alias: Task Litter Box Mark Change
     sequence:
