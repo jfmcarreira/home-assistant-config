@@ -55,9 +55,9 @@ lovelace:
       show_in_sidebar: true
       filename: ui-lovelace-administration.yaml
       require_admin: true
-    lovelace-tablet:
-      mode: yaml
-      title: Tablet
-      icon: mdi:tablet-dashboard
-      show_in_sidebar: true
-      filename: ui-lovelace-tablet.yaml
+    #lovelace-tablet:
+      #mode: yaml
+      #title: Tablet
+      #icon: mdi:tablet-dashboard
+      #show_in_sidebar: true
+      #filename: ui-lovelace-tablet.yaml
