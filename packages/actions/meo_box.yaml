@@ -1,6 +1,6 @@
 script:
   action_meo_reset_current_show:
-    alias: Routines Meo Reset Current Show
+    alias: Routine Meo Reset Current Show
     sequence:
       - service: media_player.play_media
         data:
@@ -20,7 +20,7 @@ script:
           media_content_id: OK
           media_content_type: mediaroom
   action_meo_reset_previous_show:
-    alias: Routines Meo Reset Previous Show
+    alias: Routine Meo Reset Previous Show
     sequence:
       - service: media_player.play_media
         data:
