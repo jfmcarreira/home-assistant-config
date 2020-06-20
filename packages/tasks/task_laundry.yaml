@@ -1,25 +1,72 @@
+################################################################
+## Laundry Tasks
+################################################################
+input_datetime:
+  task_washing_clothes_last_done:
+    name: Lavar Roupa
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+  task_washing_clothes_dry_last_done:
+    name: Estender Roupa
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+  task_washing_clothes_remove_last_done:
+    name: Apanhar Roupa
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+    
+    
+sensor:
+  - platform: template
+    sensors:
+      task_washing_clothes_last_done:
+        friendly_name: Lavar Roupa
+        device_class: timestamp
+        icon_template: mdi:washing-machine
+        value_template: >
+          {{ state_attr('input_datetime.task_washing_clothes_last_done', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+      task_washing_clothes_dry_last_done:
+        friendly_name: Estender Roupa
+        device_class: timestamp
+        icon_template: mdi:hanger
+        value_template: >
+          {{ state_attr('input_datetime.task_washing_clothes_dry_last_done', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+      task_washing_clothes_remove_last_done:
+        friendly_name: Apanhar Roupa
+        device_class: timestamp
+        icon_template: mdi:tshirt-crew
+        value_template: >
+          {{ state_attr('input_datetime.task_washing_clothes_remove_last_done', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+          
+          
+
 binary_sensor:
   - platform: template
     sensors:
       wash_machine_wet_clothes:
-        friendly_name: Roupa Lavada
+        friendly_name: Existe Roupa Lavada na Máquina
         entity_id:
-          - sensor.grocy_chores
+          - input_datetime.task_washing_clothes_last_done
+          - input_datetime.task_washing_clothes_dry_last_done
         value_template: >
-          {{ ( as_timestamp( state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time ) - as_timestamp( state_attr('sensor.grocy_chores', 'items')[3]._last_tracked_time ) ) < 0 }}
+          {{ as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) - as_timestamp( states('input_datetime.task_washing_clothes_last_done') ) > 0 }} 
         attribute_templates:
           last_done: >
-            {{ state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+            {{ as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
       wash_machine_dry_clothes:
-        friendly_name: Roupa Seca
+        friendly_name: Existe Roupa Seca Para Apanhar
         entity_id:
-          - sensor.grocy_chores
+          - input_datetime.task_washing_clothes_dry_last_done
+          - input_datetime.task_washing_clothes_remove_last_done
         value_template: >
-          {{ ( as_timestamp( state_attr('sensor.grocy_chores', 'items')[4]._last_tracked_time ) - as_timestamp( state_attr('sensor.grocy_chores', 'items')[2]._last_tracked_time ) ) < 0 }}
+          {{ as_timestamp( states('input_datetime.task_washing_clothes_remove_last_done') ) - as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) > 0 }} 
         attribute_templates:
           last_done: >
-            {{ state_attr('sensor.grocy_chores', 'items')[4]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+            {{ as_timestamp( states('input_datetime.task_washing_clothes_remove_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
 script:
   task_laundry_remove_wet_clothes:
@@ -30,7 +77,13 @@ script:
           message: clear_notification
           data:
             tag: laundry_wet_clothes_notification
-
+            
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.task_washing_clothes_dry_last_done
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+          
       - service: grocy.execute_chore
         data_template:
           chore_id: 4
@@ -38,6 +91,11 @@ script:
   task_laundry_remove_dry_clothes:
     alias: Task Laundry Remove Dry Clothes
     sequence:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.task_washing_clothes_remove_last_done
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
       - service: grocy.execute_chore
         data_template:
           chore_id: 6
@@ -50,6 +108,11 @@ automation old:
         platform: state
         to: "off"
     action:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.task_washing_clothes_last_done
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
       - service: grocy.execute_chore
         data_template:
           chore_id: 5
