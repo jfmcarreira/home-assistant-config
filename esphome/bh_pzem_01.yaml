@@ -1,0 +1,42 @@
+substitutions:
+  devicename: bh_pzem_01
+  upper_devicename: BHPZEM
+  
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: nodemcu
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  use_address: 10.20.207.124
+  
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+uart:
+  rx_pin: GPIO4
+  tx_pin: GPIO5
+  baud_rate: 9600
+  stop_bits: 1
+
+sensor:
+  - platform: pzemac
+    current:
+      name: ${upper_devicename} Current
+    voltage:
+      name: ${upper_devicename} Voltage
+    power:
+      name: ${upper_devicename} Power
+    frequency:
+      name: ${upper_devicename} Frequency
+    power_factor:
+      name: ${upper_devicename} Power Factor
+    update_interval: 5s
