@@ -57,7 +57,7 @@
       state: 'off'
       supported_features: 189
 - id: '1587517004044'
-  name: Televisão Noite
+  name: Modo Televisão
   entities:
     light.kitchen:
       friendly_name: Luz da Cozinha
