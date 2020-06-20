@@ -30,7 +30,7 @@ binary_sensor:
           {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d", true) ) == 0 }} 
         attribute_templates:
           last_done: >
-            {{ as_timestamp( states('sensor.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+            {{ as_timestamp( states('input_datetime.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
 script:
   task_ricardo_vitamin_d:
