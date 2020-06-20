@@ -1,3 +1,23 @@
+################################################################
+## Ricardo Vitamin D Task
+################################################################
+input_datetime:
+  ricardo_vitamin_d_last_done:
+    name: Administração Vitamin D Ricardo 
+    icon: mdi:clock-outline
+    has_date: true
+    has_time: true
+    
+sensor:
+  - platform: template
+    sensors:
+      ricardo_vitamin_d_last_done:
+        friendly_name: Administração Vitamina D Ricardo 
+        device_class: timestamp
+        icon_template: mdi:baby-face
+        value_template: >
+          {{ state_attr('input_datetime.ricardo_vitamin_d_last_done', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+
 binary_sensor:
   - platform: template
     sensors:
@@ -5,12 +25,12 @@ binary_sensor:
         friendly_name: "Vitamina D Ricardo"
         icon_template: mdi:baby-face
         entity_id:
-          - sensor.grocy_chores
+          - sensor.ricardo_vitamin_d_last_done
         value_template: >
-          {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( state_attr('sensor.grocy_chores', 'items')[1]._last_tracked_time.timestamp() | timestamp_custom("%Y-%m-%d", true) ) == 0.0 }}
+          {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d", true) ) == 0 }} 
         attribute_templates:
           last_done: >
-            {{ state_attr('sensor.grocy_chores', 'items')[1]._last_tracked_time | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+            {{ as_timestamp( states('sensor.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
 script:
   task_ricardo_vitamin_d:
@@ -24,6 +44,11 @@ script:
           message: clear_notification
           data:
             tag: ricardo_vitamin_d_notification
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.ricardo_vitamin_d_last_done
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
       - service: grocy.execute_chore
         data_template:
           chore_id: 3
