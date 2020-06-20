@@ -47,6 +47,12 @@ cards:
                 service_data:
                   room: Bedroom
                   runs: 1
+              - icon: "mdi:shower-head"
+                name: Aspirar Casa de Banho Privada
+                service: python_script.vacuum_room
+                service_data:
+                  room: BedroomBath
+                  runs: 1
               - icon: "mdi:bed-queen-outline"
                 name: Aspirar Quarto do Fundo
                 service: python_script.vacuum_room
@@ -95,21 +101,23 @@ cards:
         cards:
           - type: entities
             entities:
-              - input_boolean.vaccum_livingroom
-              - input_boolean.vaccum_hallway
-              - input_boolean.vaccum_kitchen
-              - input_boolean.vaccum_bathroom
-              - input_boolean.vaccum_office
-              - input_boolean.vaccum_bedroom
-              - input_boolean.vaccum_guestbedroom
+              - input_boolean.vacuum_livingroom
+              - input_boolean.vacuum_hallway
+              - input_boolean.vacuum_kitchen
+              - input_boolean.vacuum_bathroom
+              - input_boolean.vacuum_office
+              - input_boolean.vacuum_bedroom
+              - input_boolean.vacuum_bedroombath
+              - input_boolean.vacuum_guestbedroom
+              - input_boolean.vacuum_livingroomwithcarpet
             state_color: true
             title: Aspirador-Ready (5 máx.)
           - type: horizontal-stack
             cards:
-              - aspect_ratio: 12/2
+              - aspect_ratio: 6/2
                 entity: python_script.vacuum_room
                 icon: "mdi:send"
-                name: Aspirar Agora
+                name: Aspirar Divisões
                 layout: icon_name_state
                 size: 100%
                 tap_action:
@@ -117,6 +125,21 @@ cards:
                   service: python_script.vacuum_room
                   service_data:
                     room: switch_based
+                    is_zone: 0
+                    runs: 1
+                type: "custom:button-card"
+              - aspect_ratio: 6/2
+                entity: python_script.vacuum_room
+                icon: "mdi:send"
+                name: Aspirar Zonas
+                layout: icon_name_state
+                size: 100%
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: switch_based
+                    is_zone: 1
                     runs: 1
                 type: "custom:button-card"
 

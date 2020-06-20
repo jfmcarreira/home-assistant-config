@@ -6,14 +6,15 @@ cards:
   - type: "custom:layout-card"
     layout: horizontal
     max_columns: 4
-    cards:
+    cards:          
       - entities:
           - entity: binary_sensor.living_room_tv_state
           - entity: binary_sensor.roborock_state
           - entity: binary_sensor.washing_machine_state
           - entity: binary_sensor.washing_machine_door
+          - entity: binary_sensor.dish_washing_machine_door
           - entity: binary_sensor.fridge_door
-          - entity: display.tf201_kyosk
+          #- entity: display.tf201_kyosk
         show_header_toggle: false
         state_color: true
         title: Electrodomésticos

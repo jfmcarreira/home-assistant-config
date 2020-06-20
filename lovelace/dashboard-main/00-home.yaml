@@ -316,6 +316,7 @@ cards:
             - state: unavailable
             - entity_id: binary_sensor.wash*_door
             - entity_id: binary_sensor.fridge_door
+            - entity_id: binary_sensor.dish_washing_machine_door
           include:
             - entity_id: binary_sensor.*_door
             - entity_id: binary_sensor.motion_sensor_*
