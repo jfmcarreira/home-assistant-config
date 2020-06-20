@@ -10,22 +10,73 @@ google_assistant:
     - scene
     - script
   entity_config:        
+    # Routines
+    script.routine_night_away:
+      expose: true
+      name: Modo Noite
+      aliases:
+        - Modo Noite
+        - Night mode
+    script.routine_away:
+      expose: true
+      name: Modo Ausente
+      aliases:
+        - Away mode
+    script.routine_dinner_time:
+      expose: true
+      name: Modo Refeição
+      aliases:
+        - Modo de jantar
+        - Modo de almoço
+        - Modo de refeição
+        - Jantar
+        - Refeição
+        - Almoço
+        - Dinner time
+        - Lunch time
+    script.task_roborock_clean:
+      expose: true
+      name: Limpeza do Aspirador
+      aliases:
+        - Limpar aspirador
+    script.cat_litter_clean:
+      expose: true
+      name: Limpeza da Areia das Gatas
+      aliases:
+        - Limpeza da areia
+        - Cat litter clean
+    script.cat_litter_change:
+      expose: true
+      name: Substituição Areia das Gatas
+      aliases:
+        - Substituição da areia
+        - Cat litter change
+    script.task_ricardo_vitamin_d:
+      expose: true
+      name: Administração da Vitamina D ao Ricardo
+      aliases:
+        - Vitamina D ricardo
+        - Vitamina D
+        - Vitamin D
+  
+    # Entities
     vacuum.roborock:
       expose: true
       name: Roborock
-      
     climate.heating:
       expose: true
       name: Aquecimento
       aliases:
+        - Aquecimento central
         - Heating
+        - Central heating
     media_player.media_center:
       expose: true
-      name: Televisão
+      name: Televisão da Sala
       aliases:
-        - Media Center
+        - Televisão
+        - Media center
         - TV
-
     light.living_room_table:
       expose: true
       name: Luz da Mesa da Sala
@@ -46,6 +97,7 @@ google_assistant:
       name: Retro-iluminação da TV
       aliases:
         - Living Room TV Leds
+        - Luz dã televisão
     light.hallway:
       expose: true
       name: Luz do Corredor
@@ -76,6 +128,7 @@ google_assistant:
       name: Luz do Escritório
       aliases:
         - Office Light
+        - Luz da secretária
     light.office_desk:
       expose: true
       name: Retro-iluminação da Secretária
