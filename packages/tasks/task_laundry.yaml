@@ -52,7 +52,7 @@ binary_sensor:
           - input_datetime.task_washing_clothes_last_done
           - input_datetime.task_washing_clothes_dry_last_done
         value_template: >
-          {{ as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) - as_timestamp( states('input_datetime.task_washing_clothes_last_done') ) > 0 }} 
+          {{ as_timestamp( states('input_datetime.task_washing_clothes_last_done') ) - as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) > 0 }} 
         attribute_templates:
           last_done: >
             {{ as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
@@ -63,7 +63,7 @@ binary_sensor:
           - input_datetime.task_washing_clothes_dry_last_done
           - input_datetime.task_washing_clothes_remove_last_done
         value_template: >
-          {{ as_timestamp( states('input_datetime.task_washing_clothes_remove_last_done') ) - as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) > 0 }} 
+          {{ as_timestamp( states('input_datetime.task_washing_clothes_dry_last_done') ) - as_timestamp( states('input_datetime.task_washing_clothes_remove_last_done') ) > 0 }} 
         attribute_templates:
           last_done: >
             {{ as_timestamp( states('input_datetime.task_washing_clothes_remove_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
@@ -84,9 +84,9 @@ script:
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
           
-      - service: grocy.execute_chore
-        data_template:
-          chore_id: 4
+      #- service: grocy.execute_chore
+        #data_template:
+          #chore_id: 4
 
   task_laundry_remove_dry_clothes:
     alias: Task Laundry Remove Dry Clothes
@@ -96,9 +96,9 @@ script:
           entity_id: input_datetime.task_washing_clothes_remove_last_done
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-      - service: grocy.execute_chore
-        data_template:
-          chore_id: 6
+      #- service: grocy.execute_chore
+        #data_template:
+          #chore_id: 6
 
 automation old:
   - alias: Task Laundry Wash Machine Finished
@@ -113,9 +113,9 @@ automation old:
           entity_id: input_datetime.task_washing_clothes_last_done
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-      - service: grocy.execute_chore
-        data_template:
-          chore_id: 5
+      #- service: grocy.execute_chore
+        #data_template:
+          #chore_id: 5
 
       - service: notify.mobile_app_all
         data:
