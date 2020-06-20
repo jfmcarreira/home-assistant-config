@@ -4,9 +4,11 @@
 input_select:
   ## Radio Stations
   radio_station:
-    name: "Estação de Rádio"
+    name: "Source"
     icon: mdi:radio-fm
     options:
+      - Mopidy
+      - YouTube URL
       - RFM
       - Comercial
       - Cidade FM
@@ -16,7 +18,6 @@ input_select:
       - Antena 1
       - Antena 2
       - Antena 3
-      - YouTube URL
 
 
   ## Speaker selection
@@ -57,7 +58,8 @@ script:
               media_player.gh_clock_bedroom
             {% endif %}
           media_content_id: >
-            {% if is_state("input_select.radio_station", "RFM") %} http://19613.live.streamtheworld.com:3690/RFM_SC
+            {% if is_state("input_select.radio_station", "Mopidy") %} http://potassium.home:8000/mopidy.mp3
+            {% elif is_state("input_select.radio_station", "RFM") %} http://19613.live.streamtheworld.com:3690/RFM_SC
             {% elif is_state("input_select.radio_station", "Cidade FM") %} http://mcrscast.mcr.iol.pt/cidadefm
             {% elif is_state("input_select.radio_station", "TSF") %} http://tsfdirecto.tsf.pt/tsfdirecto.mp3
             {% elif is_state("input_select.radio_station", "M80") %} http://mcrscast.mcr.iol.pt/m80
