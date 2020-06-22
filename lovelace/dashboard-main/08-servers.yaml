@@ -1,6 +1,22 @@
 badges: []
 cards:
-  - entities:
+    
+  - type: entities
+    title: SpeedTest
+    show_header_toggle: false
+    entities:
+      - entity: sensor.speedtest_download
+        name: Download
+      - entity: sensor.speedtest_upload
+        name: Upload
+      - entity: sensor.speedtest_ping
+        name: Ping
+    
+  - type: entities
+    show_header_toggle: false
+    state_color: true
+    title: Transmission
+    entities:
       - entity: switch.transmission_server_switch
         name: Running
       - entity: switch.transmission_server_turtle_mode
@@ -12,12 +28,33 @@ cards:
       - entity: sensor.transmission_server_down_speed_kbps
         name: Download
       - entity: sensor.transmission_server_up_speed_kbps
-        name: Upload
+        name: Upload  
+    
+  - type: entities
     show_header_toggle: false
     state_color: true
-    title: Transmission
-    type: entities
-  - card:
+    title: NZBGet
+    entities:
+      - entity: sensor.nzbget_down_speed_kbps
+        name: Download
+      - entity: sensor.nzbget_queue_size
+        name: Lista de espera
+        
+  - type: entities
+    show_header_toggle: false
+    state_color: true
+    title: Home Assistant 
+    entities:
+      - entity: sensor.disk_use_percent
+        name: Utilização de disco
+      - entity: sensor.load_5m
+        name: Load CPU
+      - entity: sensor.memory_use_percent
+        name: Memória
+    
+  - type: 'custom:auto-entities'
+    show_empty: true
+    card:
       show_header_toggle: false
       state_color: true
       title: Open Media Vault
@@ -27,10 +64,11 @@ cards:
         - entity_id: sensor.omv_cpu_load
         - entity_id: sensor.omv_memory
         - entity_id: binary_sensor.omv_*
-        - entity_id: sensor.omv_s*
+        - entity_id: sensor.omv_disk_*
+    
+  - type: 'custom:auto-entities'
     show_empty: true
-    type: 'custom:auto-entities'
-  - card:
+    card:
       show_header_toggle: false
       state_color: true
       title: Proxmox - Container/VMs
@@ -38,18 +76,9 @@ cards:
     filter:
       include:
         - entity_id: binary_sensor.hydrogen_*_running
-    show_empty: true
-    type: 'custom:auto-entities'
-  - entities:
-      - entity: sensor.speedtest_download
-        name: Download
-      - entity: sensor.speedtest_upload
-        name: Upload
-      - entity: sensor.speedtest_ping
-        name: Ping
-    show_header_toggle: false
-    title: SpeedTest
-    type: entities
+    
+    
+
   - card:
       show_header_toggle: false
       title: Glances - Hydrogen

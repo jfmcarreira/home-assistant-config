@@ -116,33 +116,3 @@
       entity_id: media_player.ghm_living_room
       message: Atenção! Elevada potência consumida.
     service: tts.voicerss_say
-- id: '1590774513063'
-  alias: Nova Automação
-  description: ''
-  trigger:
-  - device_id: d8b044cd32714fc9987010c02d79d4d4
-    domain: binary_sensor
-    entity_id: binary_sensor.openclose_9
-    platform: device
-    type: not_opened
-  condition: []
-  action:
-  - device_id: a6722212bd92498986f9b5a3dbb6305c
-    domain: light
-    entity_id: light.hallway
-    type: turn_off
-- id: '1590774530489'
-  alias: Nova Automação
-  description: ''
-  trigger:
-  - device_id: d8b044cd32714fc9987010c02d79d4d4
-    domain: binary_sensor
-    entity_id: binary_sensor.openclose_9
-    platform: device
-    type: opened
-  condition: []
-  action:
-  - device_id: a6722212bd92498986f9b5a3dbb6305c
-    domain: light
-    entity_id: light.hallway
-    type: turn_on

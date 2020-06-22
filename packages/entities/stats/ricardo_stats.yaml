@@ -16,7 +16,7 @@ input_number:
 
 input_datetime:
   ricardo_weight_last_measured:
-    name: Ricardo Weight Last Meter
+    name: Última Pesagem do Ricardo
     icon: mdi:clock-outline
     has_date: true
 
@@ -25,6 +25,7 @@ sensor:
     sensors:
       ricardo_weight:
         friendly_name: Peso do Ricardo
+        unit_of_measurement: 'g'
         value_template: >
             {{ states('input_number.ricardo_weight') | int }}
         attribute_templates:

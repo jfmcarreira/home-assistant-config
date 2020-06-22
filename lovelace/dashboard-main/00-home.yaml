@@ -16,7 +16,8 @@ cards:
       
       - break 
       
-      - cards:
+      - type: horizontal-stack
+        cards:
           - aspect_ratio: 1.3/1
             entity: person.joao
             image: /local/img_joao.jpg
@@ -79,8 +80,9 @@ cards:
                     - entity: sensor.ricardo_weight
                     - entity: binary_sensor.ricardo_vitamin_d
                       name: Vitamina D
-                    - entity: sensor.office_water_sensor
-                      name: Água do banho
+                    - entity: sensor.ricardo_vitamin_d_last_done
+                    #- entity: sensor.office_water_sensor
+                      #name: Água do banho
                   footer:
                     entities:
                       - entity: script.task_ricardo_vitamin_d
@@ -126,9 +128,13 @@ cards:
                   - this
                 title: Fluffy/Pluma
             type: picture-entity
-        type: horizontal-stack
-      - cards:
-          - aspect_ratio: 6/2
+        
+        
+        
+      - type: horizontal-stack
+        cards:
+          - type: 'custom:button-card'
+            aspect_ratio: 4/2
             custom_fields:
               notification: |
                 [[[
@@ -151,8 +157,20 @@ cards:
                   - icon: 'mdi:home'
               grid:
                 - position: relative
-            type: 'custom:button-card'
-          - aspect_ratio: 6/2
+            
+          - type: 'custom:button-card'
+            aspect_ratio: 4/2
+            entity: binary_sensor.notification_non_disturb
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.notification_active_non_disturb
+            name: Não Incomodar
+            size: 100%
+            
+          - type: 'custom:button-card'
+            aspect_ratio: 4/2
             entity: script.night_away
             hold_action:
               action: call-service
@@ -164,10 +182,11 @@ cards:
             size: 100%
             tap_action:
               action: none
-            type: 'custom:button-card'
-        type: horizontal-stack
-      - cards:
-          - aspect_ratio: 6/2
+            
+        
+      - type: horizontal-stack
+        cards:
+          - aspect_ratio: 4/2
             custom_fields:
               dry_clothes: |
                 [[[
@@ -180,6 +199,7 @@ cards:
                     return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
                 ]]]
             entity: binary_sensor.washing_machine_state
+            name: Máquina da Roupa
             hold_action:
               action: call-service
               service: python_script.whashing_machine_process_actions
@@ -197,14 +217,35 @@ cards:
               grid:
                 - position: relative
             type: 'custom:button-card'
-          - aspect_ratio: 6/2
+          - aspect_ratio: 4/2
+            entity: binary_sensor.dish_wash_machine_state
+            name: Máquina da Loiça
+            hold_action:
+              action: call-service
+              service: script.task_dish_wash_machine_empty
+            size: 100%
+            custom_fields:
+              clean_dishes: |
+                [[[
+                  if (states['binary_sensor.dish_wash_machine_need_emtpy'].state == "on")
+                    return `<ha-icon icon="mdi:silverware-clean"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+            styles:
+              custom_fields:
+                clean_dishes:
+                  - position: absolute
+                  - left: 10%
+                  - top: 10%
+              grid:
+                - position: relative
+            type: 'custom:button-card'
+          - aspect_ratio: 4/2
             entity: binary_sensor.ricardo_vitamin_d
             hold_action:
               action: call-service
               service: script.task_ricardo_vitamin_d
             name: Vitamina D
             type: 'custom:button-card'
-        type: horizontal-stack
       
       - break 
       
@@ -315,6 +356,8 @@ cards:
             - entity_id: binary_sensor.motion_sensor_*_sw
             - state: unavailable
             - entity_id: binary_sensor.wash*_door
+            - entity_id: binary_sensor.*_sw
+            - entity_id: binary_sensor.*_rf
             - entity_id: binary_sensor.fridge_door
             - entity_id: binary_sensor.dish_washing_machine_door
           include:
@@ -326,18 +369,6 @@ cards:
           ignore_case: true
           method: name
         type: 'custom:auto-entities'
-        
-      - break 
-      - custom_translation:
-          due: Data
-          empty: Vazio
-          last_tracked: Última
-          more: 'Det finns {number} fler göromål i Grocy'
-          overdue: Com Atraso
-          today: Hoje
-          track: Realizar
-        entity: sensor.grocy_chores
-        show_days: 15
-        title: Tarefas
-        type: 'custom:grocy-chores-card'
+      
+
       

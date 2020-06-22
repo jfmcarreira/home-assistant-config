@@ -41,23 +41,23 @@ lovelace:
     - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
       type: module
   # Add yaml dashboards
-  dashboards:
-    lovelace-main:
-      mode: yaml
-      title: Visão Geral
-      icon: mdi:view-dashboard
-      show_in_sidebar: true
-      filename: ui-lovelace.yaml
-    lovelace-admin:
-      mode: yaml
-      title: Administração
-      icon: mdi:settings-outline
-      show_in_sidebar: true
-      filename: ui-lovelace-administration.yaml
-      require_admin: true
-    #lovelace-tablet:
+  #dashboards:
+    ##lovelace-main:
+      ##mode: yaml
+      ##title: Visão Geral
+      ##icon: mdi:view-dashboard
+      ##show_in_sidebar: true
+      ##filename: ui-lovelace.yaml
+    #lovelace-admin:
       #mode: yaml
-      #title: Tablet
-      #icon: mdi:tablet-dashboard
+      #title: Administração
+      #icon: mdi:settings-outline
       #show_in_sidebar: true
-      #filename: ui-lovelace-tablet.yaml
+      #filename: ui-lovelace-administration.yaml
+      #require_admin: true
+    ##lovelace-tablet:
+      ##mode: yaml
+      ##title: Tablet
+      ##icon: mdi:tablet-dashboard
+      ##show_in_sidebar: true
+      ##filename: ui-lovelace-tablet.yaml

@@ -159,6 +159,18 @@ cards:
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
+      title: Sistema
+      type: entities
+    filter:
+      include:
+        - entity_id: automation.system_*
+    show_empty: false
+    sort:
+      ignore_case: true
+      method: name
+    type: 'custom:auto-entities'
+  - card:
+      show_header_toggle: false
       title: Outras
       type: entities
     filter:
@@ -177,6 +189,7 @@ cards:
         - entity_id: automation.task_*
         - entity_id: automation.frontend_*
         - entity_id: automation.daily_stats_*
+        - entity_id: automation.system_*
       include:
         - entity_id: automation.*
     show_empty: true

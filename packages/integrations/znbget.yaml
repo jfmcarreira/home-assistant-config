@@ -1,4 +1,2 @@
 nzbget:
   host: !secret nzbget_host
-  username: !secret nzbget_user
-  password: !secret nzbget_pass

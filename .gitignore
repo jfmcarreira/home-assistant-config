@@ -12,6 +12,7 @@ secrets.yaml
 *.deb
 *.sh
 *.pickle
+*.disabled
 
 # Files
 .uuid

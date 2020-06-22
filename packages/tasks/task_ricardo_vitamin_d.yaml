@@ -44,6 +44,11 @@ script:
           message: clear_notification
           data:
             tag: ricardo_vitamin_d_notification
+      
+      - condition: state
+        entity_id: binary_sensor.ricardo_vitamin_d
+        state: "off"
+        
       - service: input_datetime.set_datetime
         data_template:
           entity_id: input_datetime.ricardo_vitamin_d_last_done
