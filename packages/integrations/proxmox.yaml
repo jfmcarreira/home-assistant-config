@@ -13,7 +13,7 @@ proxmoxve:
         vms:
           - 200
           - 201
-          #- 202
+          - 202
           - 203
           - 204
           - 300
@@ -23,3 +23,69 @@ proxmoxve:
           - 112
           - 113
           
+
+sensor:
+  - platform: template
+    sensors:
+      proxmox_ip:
+        value_template: !secret hydrogen_ip
+      proxmox_user:
+        value_template: !secret proxmox_user
+      proxmox_pass:
+        value_template: !secret proxmox_pass
+        
+        
+shell_command:
+  proxmox_control_vm: bash /config/shell_scripts/proxmox_control_vm.bash {{ states("sensor.proxmox_ip") }} hydrogen {{ states("sensor.proxmox_user") }} {{ states("sensor.proxmox_pass") }} {{ command }} {{ type }} {{ vm }} 
+  
+switch:
+  - platform: template
+    switches:
+      proxmox_zoneminder_vm:
+        value_template: "{{ is_state('binary_sensor.hydrogen_zoneminder_running', 'on') }}"
+        turn_on:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: lxc
+            vm: 112
+            command: start
+        turn_off:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: lxc
+            vm: 112
+            command: stop
+            
+  - platform: template
+    switches:
+      proxmox_unifi_controller_vm:
+        value_template: "{{ is_state('binary_sensor.hydrogen_unifi_controller_running', 'on') }}"
+        turn_on:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: lxc
+            vm: 113
+            command: start
+        turn_off:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: lxc
+            vm: 113
+            command: stop
+            
+  - platform: template
+    switches:
+      proxmox_francium_vm:
+        value_template: "{{ is_state('binary_sensor.hydrogen_francium_running', 'on') }}"
+        turn_on:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: qemu
+            vm: 300
+            command: start
+        turn_off:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: qemu
+            vm: 300
+            command: stop
