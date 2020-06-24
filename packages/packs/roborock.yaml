@@ -6,8 +6,13 @@ sensor:
     state_topic: "valetudo/Roborock/state"
     value_template: "{{ value_json.state }}"
     json_attributes_topic: "valetudo/Roborock/state"
-    json_attributes_template: "{{ {'Error message': value_json.error } | tojson }}"
-        
+    json_attributes_template: >-
+      {% if is_state('vacuum.roborock', 'error') %}
+        {{ {'Error message': value_json.error } | tojson }}
+      {% else %}
+        {{ {'Error message': 'No error' } | tojson }}
+      {% endif %}
+       
   #- name: Roborock Map
     #platform: mqtt
     #state_topic: "valetudo/Roborock/state"
