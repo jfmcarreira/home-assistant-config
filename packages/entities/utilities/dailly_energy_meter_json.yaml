@@ -237,21 +237,3 @@ automation:
 
 shell_command:
   energy_daily_simples_insert_values: "python3 /config/shell_scripts/ha-energy-json-storage/energy_daily_simples_insert_values.py {{ states.sensor.daily_energy.state }}"
-
-
-automation insert:
-  - id: "Daily Stats Insert Value of Energy to Database"
-    alias: "Daily Stats Insert Value of Energy to Database"
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: sensor.daily_energy
-    action:
-      - service: shell_command.external_my_sql_insert
-        data_template:
-          table: daily_energy
-          value: >
-            {{ states.sensor.daily_energy.state }}
-            
-            
-            
