@@ -5,8 +5,11 @@ badges: []
 icon: 'mdi:audio-video'
 cards:
   - cards:
-      - entity: media_player.media_center
-        type: media-control
+      - type: custom:mini-media-player
+        #type: media-control
+        entity: media_player.media_center
+        hide: 
+          volume: true
       - card:
           cards:
             - cards:

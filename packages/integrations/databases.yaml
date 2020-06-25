@@ -45,6 +45,9 @@ recorder:
       - sensor.daily_tv_time_netflix
       # Roborock Map
       - sensor.roborock_map
+      # Queries
+      - sensor.query_daily_energy_current_month
+      - sensor.query_daily_energy_current_year
 
 ################################################################################
 ## Logbook

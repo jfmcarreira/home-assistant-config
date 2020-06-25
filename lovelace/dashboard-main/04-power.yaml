@@ -54,6 +54,53 @@ cards:
           - type: entities
             title: Consumos
             entities:
+              - type: 'custom:chartjs-card'
+                chart: bar
+                custom_options:
+                  showLegend: false
+                data:
+                  datasets:
+                    - backgroundColor: '${states["sensor.query_daily_energy_current_month"].attributes.colors}'
+                      borderWidth: 1
+                      data: '${states["sensor.query_daily_energy_current_month"].attributes.data}'
+                      label: Eletricidade
+                  labels: '${states["sensor.query_daily_energy_current_month"].attributes.labels}'
+                entity_row: false
+                options:
+                  scales:
+                    yAxes:
+                      - ticks:
+                          beginAtZero: true
+                  title:
+                    display: false
+                    text: Consumo Energético Mês Corrente
+                    #text: >
+                      #${"Consumo energético Mês Corrente -> " +
+                      #states["sensor.query_daily_energy_current_month"].attributes.total_eur + "€"}
+              
+              - type: 'custom:chartjs-card'
+                chart: bar
+                custom_options:
+                  showLegend: false
+                data:
+                  datasets:
+                    - backgroundColor: var(--accent-color)
+                      borderWidth: 1
+                      data: '${states["sensor.query_daily_energy_current_year"].attributes.data}'
+                      label: Eletricidade
+                  labels: '${states["sensor.query_daily_energy_current_year"].attributes.labels}'
+                entity_row: false
+                options:
+                  scales:
+                    yAxes:
+                      - ticks:
+                          beginAtZero: true
+                  title:
+                    display: true
+                    text: Consumo energético (últimos 12 meses)
+              
+                      
+                  
               - input_select.energy_daily_graph_select
               - bar_spacing: 1
                 entities:
@@ -176,7 +223,6 @@ cards:
                     font-size: 9px;
                   }
                 type: "custom:hui-markdown-card"
-            
       
       - type: vertical-stack
         cards:
@@ -204,8 +250,12 @@ cards:
 
     
 
-      - cards:
-          - entities:
+      - type: "custom:vertical-stack-in-card"
+        cards:
+          - type: entities
+            show_header_toggle: false
+            title: Electricidade
+            entities:
               - entity: sensor.electricity_last_meter
                 name: Última Contagem
               - entity: sensor.electricity_meter
@@ -216,18 +266,20 @@ cards:
                 name: Contagem Pontas
               - entity: input_number.electricity_meter_full
                 name: Contagem Cheias
+            
+            
+          - type: entities
             show_header_toggle: false
-            title: Electricidade
-            type: entities
-          - entities:
+            title: Gás
+            entities:
               - entity: sensor.gas_last_meter
                 name: Última Contagem
               - entity: input_number.gas_meter
                 name: Contagem Gás
-            show_header_toggle: false
-            title: Gás
-            type: entities
-          - entities:
+            
+            
+          - title: Utilidades
+            entities:
               - entity: sensor.water_last_meter
                 name: Última Contagem
               - entity: input_number.water_meter
@@ -235,6 +287,6 @@ cards:
             show_header_toggle: false
             title: Água
             type: entities
-        title: Utilidades
-        type: "custom:vertical-stack-in-card"
-
+        
+      
+ 
