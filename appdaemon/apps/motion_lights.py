@@ -15,6 +15,8 @@ class MotionLight(hass.Hass):
 
         for l in self.other_lights:
             self.listen_state(self.other_light_callback, l)
+            
+        self.set_timer(self.timeout)
     
     def should_light_turn_on(self):
       
