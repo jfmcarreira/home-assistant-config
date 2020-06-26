@@ -65,7 +65,7 @@ cards:
                       data: '${states["sensor.query_daily_energy_current_month"].attributes.data}'
                       label: Eletricidade
                   labels: '${states["sensor.query_daily_energy_current_month"].attributes.labels}'
-                entity_row: false
+                entity_row: true
                 options:
                   scales:
                     yAxes:
@@ -89,140 +89,140 @@ cards:
                       data: '${states["sensor.query_daily_energy_current_year"].attributes.data}'
                       label: Eletricidade
                   labels: '${states["sensor.query_daily_energy_current_year"].attributes.labels}'
-                entity_row: false
+                entity_row: true
                 options:
                   scales:
                     yAxes:
                       - ticks:
                           beginAtZero: true
                   title:
-                    display: true
+                    display: false
                     text: Consumo energético (últimos 12 meses)
               
                       
                   
-              - input_select.energy_daily_graph_select
-              - bar_spacing: 1
-                entities:
-                  - entity: sensor.energy_month_consumption_kw
-                    show_graph: false
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_01
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_02
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_03
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_04
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_05
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_06
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_07
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_08
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_09
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_10
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_11
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_12
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_13
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_14
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_15
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_16
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_17
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_18
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_19
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_20
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_21
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_22
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_23
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_24
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_25
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_26
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_27
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_28
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_29
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_30
-                  - color: var(--light-primary-color)
-                    entity: sensor.energy_kw_day_31
-                fixed_value: true
-                font_size: 80
-                font_size_header: 14px
-                group_by: date
-                height: 120
-                name: Consumo do mês
-                show:
-                  average: false
-                  extrema: false
-                  graph: bar
-                  icon: false
-                  labels: false
-                  labels_secondary: false
-                  legend: false
-                style: |
-                  .state__time {
-                    display: none;
-                  }
-                type: "custom:mini-graph-card"
-                unit: kW
-              - content: >
-                  | | | | | | | | | |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
-                  |  |  |  |  |  |  |  |
+              #- input_select.energy_daily_graph_select
+              #- bar_spacing: 1
+                #entities:
+                  #- entity: sensor.energy_month_consumption_kw
+                    #show_graph: false
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_01
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_02
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_03
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_04
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_05
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_06
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_07
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_08
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_09
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_10
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_11
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_12
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_13
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_14
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_15
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_16
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_17
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_18
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_19
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_20
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_21
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_22
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_23
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_24
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_25
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_26
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_27
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_28
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_29
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_30
+                  #- color: var(--light-primary-color)
+                    #entity: sensor.energy_kw_day_31
+                #fixed_value: true
+                #font_size: 80
+                #font_size_header: 14px
+                #group_by: date
+                #height: 120
+                #name: Consumo do mês
+                #show:
+                  #average: false
+                  #extrema: false
+                  #graph: bar
+                  #icon: false
+                  #labels: false
+                  #labels_secondary: false
+                  #legend: false
+                #style: |
+                  #.state__time {
+                    #display: none;
+                  #}
+                #type: "custom:mini-graph-card"
+                #unit: kW
+              #- content: >
+                  #| | | | | | | | | |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+                  #|  |  |  |  |  |  |  |
 
-                  |-|-|-|-|-|-|-|-|-|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
+                  #|-|-|-|-|-|-|-|-|-|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
 
-                  |1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|
-                style: |
-                  .markdown {
-                    padding: 0px 0px !important;
-                  }
+                  #|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|
+                #style: |
+                  #.markdown {
+                    #padding: 0px 0px !important;
+                  #}
 
-                  table {
-                    table-layout: fixed;
-                    width: 100%;
-                    border-spacing: 1.014px 0 !important;
-                  }
+                  #table {
+                    #table-layout: fixed;
+                    #width: 100%;
+                    #border-spacing: 1.014px 0 !important;
+                  #}
 
-                  table td:first-child {
-                      border-left: 0;
-                  }
+                  #table td:first-child {
+                      #border-left: 0;
+                  #}
 
-                  table td:last-child {
-                      border-right: 0;
-                  }
+                  #table td:last-child {
+                      #border-right: 0;
+                  #}
 
-                  thead {
-                    display: none;
-                  }
+                  #thead {
+                    #display: none;
+                  #}
 
-                  td {
-                    text-align: center;
-                    font-size: 9px;
-                  }
-                type: "custom:hui-markdown-card"
+                  #td {
+                    #text-align: center;
+                    #font-size: 9px;
+                  #}
+                #type: "custom:hui-markdown-card"
       
       - type: vertical-stack
         cards:
@@ -251,6 +251,7 @@ cards:
     
 
       - type: "custom:vertical-stack-in-card"
+        title: Utilidades
         cards:
           - type: entities
             show_header_toggle: false
@@ -278,8 +279,8 @@ cards:
                 name: Contagem Gás
             
             
-          - title: Utilidades
-            entities:
+  
+          - entities:
               - entity: sensor.water_last_meter
                 name: Última Contagem
               - entity: input_number.water_meter

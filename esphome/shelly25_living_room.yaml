@@ -70,11 +70,6 @@ sensor:
     id: temp_analog_reading
     pin: A0
 
-globals:
- - id: var_window_dimmer_direction
-   type: int
-   restore_value: false
-   initial_value: "0"
 
 output:
   - platform: gpio
@@ -85,70 +80,24 @@ output:
     pin: GPIO04
   
 light:
-  - name: ${OutputA_Name}
-    platform: binary
+  - platform: binary
     id: light_window
     output: relay_1
-  - name: ${OutputB_Name}
-    platform: binary
+  - platform: binary
     id: light_table
     output: relay_2
     
 binary_sensor:
   - id: sw_window
-    name: ${OutputA_Name} SW
     platform: gpio
     pin:
       number: GPIO5
-    on_multi_click:
-      - timing:
-          - ON for at most 0.5s
-          - OFF for at least 0.1s
-        then:
-          - light.toggle: light_window
-      - timing:
-          #- ON for at least 1s
-          - ON for 0.5s to 1.5s
-          - OFF for at least 0.1s
-        then:
-          - homeassistant.service:
-              service: light.toggle
-              data:
-                entity_id:  light.living_room_abajur 
-      
-      - timing:
-          - ON for at least 1.5s
-        then:
-          - lambda: |-
-              if( id(var_window_dimmer_direction) ) {
-                id(var_window_dimmer_direction) = 0;
-              } else {
-                id(var_window_dimmer_direction) = 1;
-              }
-          - while:
-              condition:
-                binary_sensor.is_on: sw_window
-              then:
-                - if:
-                    condition:
-                      lambda: 'return id(var_window_dimmer_direction) == 0;'
-                    then:
-                      - logger.log: "Dimmer Down"
-                      - homeassistant.event:
-                          event: esphome.button_pressed
-                          data:
-                            action: brightness_change
-                            entity_id: "light.living_room_abajur"
-                            direction: "down"
-                    else:
-                      - logger.log: "Dimmer Up"
-                      - homeassistant.event:
-                          event: esphome.button_pressed
-                          data:
-                            action: brightness_change
-                            entity_id: "light.living_room_abajur"
-                            direction: "up"
-                - delay: 1s
+    on_press:
+      then:
+        - light.turn_on: light_window
+    on_release:
+      then:
+        - light.turn_off: light_window
           
 
   
@@ -157,19 +106,114 @@ binary_sensor:
     platform: gpio
     pin:
       number: GPIO13
-    on_multi_click:
-      - timing:
-          - ON for at most 1s
-          - OFF for at least 0.1s
-        then:
-          - light.toggle: light_table
-      - timing:
-          - ON for at least 1s
-        then:
-          - homeassistant.service:
-              service: light.toggle
-              data:
-                entity_id: light.living_room_tv_leds
+    on_press:
+      then:
+        - light.turn_on: light_table
+    on_release:
+      then:
+        - light.turn_off: light_table
+      
+      
+#globals:
+ #- id: var_window_dimmer_direction
+   #type: int
+   #restore_value: false
+   #initial_value: "0"
+
+#output:
+  #- platform: gpio
+    #id: relay_1
+    #pin: GPIO15
+  #- platform: gpio
+    #id: relay_2
+    #pin: GPIO04
+  
+#light:
+  #- name: ${OutputA_Name}
+    #platform: binary
+    #id: light_window
+    #output: relay_1
+  #- name: ${OutputB_Name}
+    #platform: binary
+    #id: light_table
+    #output: relay_2
+    
+#binary_sensor:
+  #- id: sw_window
+    #name: ${OutputA_Name} SW
+    #platform: gpio
+    #pin:
+      #number: GPIO5
+    #on_multi_click:
+      #- timing:
+          #- ON for at most 0.5s
+          #- OFF for at least 0.1s
+        #then:
+          #- light.toggle: light_window
+      #- timing:
+          ##- ON for at least 1s
+          #- ON for 0.5s to 1.5s
+          #- OFF for at least 0.1s
+        #then:
+          #- homeassistant.service:
+              #service: light.toggle
+              #data:
+                #entity_id:  light.living_room_abajur 
+      
+      #- timing:
+          #- ON for at least 1.5s
+        #then:
+          #- lambda: |-
+              #if( id(var_window_dimmer_direction) ) {
+                #id(var_window_dimmer_direction) = 0;
+              #} else {
+                #id(var_window_dimmer_direction) = 1;
+              #}
+          #- while:
+              #condition:
+                #binary_sensor.is_on: sw_window
+              #then:
+                #- if:
+                    #condition:
+                      #lambda: 'return id(var_window_dimmer_direction) == 0;'
+                    #then:
+                      #- logger.log: "Dimmer Down"
+                      #- homeassistant.event:
+                          #event: esphome.button_pressed
+                          #data:
+                            #action: brightness_change
+                            #entity_id: "light.living_room_abajur"
+                            #direction: "down"
+                    #else:
+                      #- logger.log: "Dimmer Up"
+                      #- homeassistant.event:
+                          #event: esphome.button_pressed
+                          #data:
+                            #action: brightness_change
+                            #entity_id: "light.living_room_abajur"
+                            #direction: "up"
+                #- delay: 1s
+          
+
+  
+  #- id: sw_table
+    #name: ${OutputB_Name} SW
+    #platform: gpio
+    #pin:
+      #number: GPIO13
+    #on_multi_click:
+      #- timing:
+          #- ON for at most 1s
+          #- OFF for at least 0.1s
+        #then:
+          #- light.toggle: light_table
+      #- timing:
+          #- ON for at least 1s
+        #then:
+          #- homeassistant.service:
+              #service: light.toggle
+              #data:
+                #entity_id: light.living_room_tv_leds
       
 
     

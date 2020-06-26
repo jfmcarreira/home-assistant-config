@@ -61,8 +61,8 @@ logbook:
       - script
     entities:
       ## Device states
-      - binary_sensor.living_room_tv_state
       - binary_sensor.washing_machine_state
+      - binary_sensor.dish_wash_machine_state
       - binary_sensor.roborock_state
       ## Motion Sensors
       #- binary_sensor.motion_sensor_hallway
@@ -112,8 +112,12 @@ logbook:
       - sensor.birthday_joao
       - sensor.birthday_bianca
       - sensor.birthday_ricardo
+      # Aux entities
       - media_player.browser_tf201_kyosk
       - media_player.google_home_mini
+      - light.configuration_tool_1
+      - media_player.living_room_tv
+      - media_player.living_room_tv
 
 
 ################################################################################
@@ -123,11 +127,19 @@ history:
   include:
     domains:
       - lights
-      - sensor
+      - media_player
     entities:
+      ## Sensor
+      - sensor.living_room_temperature
+      - sensor.master_bedroom_temperature
+      - sensor.office_temperature
+      - sensor.living_room_humidity
+      - sensor.master_bedroom_humidity
+      - sensor.office_humidity
       ## Device states
       - binary_sensor.living_room_tv_state
       - binary_sensor.washing_machine_state
+      - binary_sensor.dsh_wash_machine_state
       - binary_sensor.roborock_state
       ## Motion sensors
       - binary_sensor.motion_sensor_living_room      
@@ -135,11 +147,13 @@ history:
       - binary_sensor.motion_sensor_office
       # Door Sensors
       - binary_sensor.washing_machine_door
+      - binary_sensor.dish_wash_machine_door
       - binary_sensor.fridge_door
       - binary_sensor.front_door
       # Miscellaneous
       - binary_sensor.wash_machine_dry_clothes
       - binary_sensor.wash_machine_wet_clothes
+      - binary_sensor.dish_wash_machine_need_emtpy
   exclude:
     domains:
       - updater
@@ -162,3 +176,6 @@ history:
       - sensor.birthday_bianca
       - sensor.birthday_ricardo
       - sensor.roborock_map
+      - light.configuration_tool_1
+      - media_player.living_room_tv
+      - media_player.living_room_tv

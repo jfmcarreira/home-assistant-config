@@ -58,9 +58,10 @@ class MotionLight(hass.Hass):
         self.timer = None
 
     def other_light_callback(self, entity, attribute, old, new, kwargs):
-        if new == "off":
-            if self.should_light_turn_on():
-                self.turn_on(self.light)
-                self.set_timer(self.short_timeout)
-        else:
+        if new == "on":
             self.turn_off(self.light)
+        #else:
+            #if self.should_light_turn_on():
+                #self.turn_on(self.light)
+                #self.set_timer(self.short_timeout)
+            
