@@ -9,6 +9,7 @@ webostv:
     data:
       mac: !secret living_room_tv_mac
       broadcast_address: !secret living_room_ip
+      broadcast_port: 7
   customize:
     sources:
       - MEO
