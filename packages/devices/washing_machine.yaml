@@ -1,6 +1,57 @@
 ################################################################
-## Laundry Tasks
+## Washing Machine and Laundry Tasks
 ################################################################
+homeassistant:
+  customize:
+    binary_sensor.washing_machine_door:
+      icon: mdi:washing-machine
+      friendly_name: Porta da Máquina de Lavar
+    binary_sensor.washing_machine_state:
+      icon: mdi:washing-machine
+
+binary_sensor state:
+  - platform: mqtt
+    name: "Washing Machine Door"
+  
+    device_class: door
+    state_topic: "binary_rf_sensors/wash_machine_door"
+    qos: 1
+
+  - platform: template
+    sensors:
+      washing_machine_state:
+        friendly_name: "Máquina de Lavar"
+        device_class: plug
+        delay_off:
+          minutes: 5
+        entity_id:
+          - sensor.power_sensor_laundry
+          - sensor.power_sensor_laundry_reactive
+        value_template: >-
+          {%- if ( states("sensor.power_sensor_laundry") | int > 25 ) and ( states("sensor.power_sensor_laundry_reactive") | float | abs > 50 ) %}
+              True
+          {%- else %}
+              False
+          {%- endif %}
+  
+
+automation state:
+- alias: Reset PIR State Washing Machine Door
+  initial_state: true
+  trigger:
+    - platform: homeassistant
+      event: start
+    - platform: state
+      entity_id: binary_sensor.washing_machine_door
+      to: "on"
+      for:
+        seconds: 60
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "binary_rf_sensors/wash_machine_door"
+        payload: "OFF"
+
 input_datetime:
   task_washing_clothes_last_done:
     name: Lavar Roupa
@@ -19,7 +70,7 @@ input_datetime:
     has_time: true
     
     
-sensor:
+sensor clothes:
   - platform: template
     sensors:
       task_washing_clothes_last_done:
@@ -43,7 +94,7 @@ sensor:
           
           
 
-binary_sensor:
+binary_sensor clothes:
   - platform: template
     sensors:
       wash_machine_wet_clothes:
@@ -76,7 +127,8 @@ script:
         data:
           message: clear_notification
           data:
-            tag: laundry_wet_clothes_notification
+            tag: 20
+            dismiss: true
       
       - condition: state
         entity_id: binary_sensor.wash_machine_wet_clothes
@@ -98,7 +150,7 @@ script:
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
 
 
-automation old:
+automation clothes:
   - alias: Task Laundry Wash Machine Finished
     trigger:
       - entity_id: binary_sensor.washing_machine_state
@@ -140,7 +192,7 @@ automation old:
           message: Retirar roupa da máquina de lavar
           data:
             sticky: true
-            tag: laundry_wet_clothes_notification
+            tag: 20
             priority: high
             actions:
               - action: laundry_wet_clothes_done

@@ -6,7 +6,8 @@ notify:
     name: mobile_app_all
     services:
       - service: mobile_app_huawei_can_l11
-      - service: mobile_app_oneplus_a6010
+      #- service: mobile_app_oneplus_a6010
+      - service: mobile_app_magnesium
 
 input_boolean:
   notification_active_non_disturb:

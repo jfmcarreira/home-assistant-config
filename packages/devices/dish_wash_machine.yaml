@@ -1,6 +1,67 @@
 ################################################################
 ## Dish Wash Task
 ################################################################
+homeassistant:
+  customize:
+    binary_sensor.dish_wash_machine_door:
+      friendly_name: "Porta da Máquina de Lavar Loiça"
+      icon: mdi:dishwasher
+    binary_sensor.dish_wash_machine_state:
+      friendly_name: "Máquina de Lavar Loiça"
+      icon: mdi:dishwasher
+     
+binary_sensor:
+  - platform: mqtt
+    name: "Dish Wash Machine Door"
+    device_class: door
+    state_topic: "binary_rf_sensors/dish_wash_machine_door"
+    qos: 1
+    
+  #- platform: template
+    #sensors:
+      #dish_wash_machine_state:
+        #friendly_name: "Máquina de Lavar Loiça"
+        #device_class: plug
+        #delay_on:
+          #minutes: 5
+        #delay_off:
+          #minutes: 2
+        #entity_id:
+          #- sensor.power_usage_dish_wash_machine
+        #value_template: >-
+          #{%- if ( states("sensor.power_usage_dish_wash_machine") | int > 10 ) %}
+              #True
+          #{%- else %}
+              #False
+          #{%- endif %}
+          
+  - platform: template
+    sensors:
+      dish_wash_machine_state:
+        device_class: plug
+        delay_on:
+          minutes: 1
+        delay_off:
+          minutes: 1
+        entity_id:
+          - sensor.power_usage_dish_wash_machine
+        value_template: >-
+          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+              {%- if states("sensor.power_usage_dish_wash_machine") | int < 3 %}
+                  False
+              {%- else %}
+                  True
+              {%- endif %}
+          {%- else %}
+              {%- if states("sensor.power_usage_dish_wash_machine") | int > 10 %}
+                  True
+              {%- else %}
+                  False
+              {%- endif %}
+          {%- endif %}
+  
+
+
 input_datetime:
   task_dish_washing_last_done:
     name: Lavar Loiça
@@ -14,7 +75,7 @@ input_datetime:
     has_time: true
     
     
-sensor:
+sensor dishes:
   - platform: template
     sensors:
       task_dish_washing_last_done:
@@ -32,7 +93,7 @@ sensor:
           
           
 
-binary_sensor:
+binary_sensor dishes:
   - platform: template
     sensors:
       dish_wash_machine_need_emtpy:
@@ -54,7 +115,8 @@ script:
         data:
           message: clear_notification
           data:
-            tag: dish_wash_finish_notification
+            tag: 30
+            dismiss: true
             
       - condition: state
         entity_id: binary_sensor.dish_wash_machine_need_emtpy
@@ -66,7 +128,7 @@ script:
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
 
-automation old:
+automation dishes:
   - alias: Task Dish Wash Machine Finished
     trigger:
       - entity_id: binary_sensor.dish_wash_machine_state
@@ -108,7 +170,7 @@ automation old:
           message: Retirar loiça da máquina de lavar
           data:
             sticky: true
-            tag: dish_wash_finish_notification
+            tag: 30
             priority: high
             actions:
               - action: dish_wash_remove_done
@@ -120,6 +182,8 @@ automation old:
         entity_id: binary_sensor.dish_wash_machine_door
         from: "off"
         to: "on"
+        for: 
+          minutes: 3
       - platform: event
         event_type: mobile_app_notification_action
         event_data:

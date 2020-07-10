@@ -72,9 +72,9 @@ google_assistant:
         - Central heating
     media_player.media_center:
       expose: true
-      name: Televisão da Sala
+      name: Televisão
       aliases:
-        - Televisão
+        - Televisão da Sala
         - Media center
         - TV
     light.living_room_table:

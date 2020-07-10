@@ -1,5 +1,5 @@
-d = { '58940A':['fridge_door','ON','true'],
-      '58940E':['fridge_door','OFF','true'],
+d = { '58940A':['dish_wash_machine_door','ON','true'],
+      '58940E':['dish_wash_machine_door','OFF','true'],
       '57E10A':['wash_machine_door','ON','true'],
       '57E10E':['wash_machine_door','OFF','true'],
       #'F1E77E':['litter_box_motion','ON','false'],

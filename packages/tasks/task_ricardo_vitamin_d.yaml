@@ -43,7 +43,8 @@ script:
         data:
           message: clear_notification
           data:
-            tag: ricardo_vitamin_d_notification
+            tag: 10
+            dismiss: true
       
       - condition: state
         entity_id: binary_sensor.ricardo_vitamin_d
@@ -54,9 +55,7 @@ script:
           entity_id: input_datetime.ricardo_vitamin_d_last_done
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-      - service: grocy.execute_chore
-        data_template:
-          chore_id: 3
+
 
 automation old:
   - alias: Task Vitamina D Ricardo Reminder
@@ -70,7 +69,7 @@ automation old:
       - condition: time
         after: "12:00:00"
       - condition: time
-        before: "22:00:00"
+        before: "21:00:00"
     action:
       - service: persistent_notification.create
         data:
@@ -87,7 +86,7 @@ automation old:
           message: Administrar Vitamina D
           data:
             sticky: true
-            tag: ricardo_vitamin_d_notification
+            tag: 10
             priority: high
             actions:
               - action: ricardo_vitamin_d_mark_done
