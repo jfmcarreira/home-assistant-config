@@ -35,11 +35,11 @@ binary_sensor:
           {% if is_state("input_boolean.notification_active_non_disturb", "on") or is_state("input_boolean.magnesium_non_disturb", "on") %}
               True
           {% else %}
-              False
+              {% if is_state('calendar.home_automation', "on") and is_state_attr('calendar.home_automation', 'message', 'DnD') %}
+                  True
+              {% else %}
+                  False
+              {% endif %}
           {% endif %}
           
-#{% if is_state('calendar.home_automation', "on") and is_state_attr('calendar.home_automation', 'message', 'DnD') %}
-    #True
-#{% else %}
-    #False
-#{% endif %}
+

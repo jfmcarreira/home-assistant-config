@@ -33,8 +33,8 @@ binary_sensor:
             {{ as_timestamp( states('input_datetime.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
 script:
-  task_ricardo_vitamin_d:
-    alias: Task Ricardo Vitamin D
+  task_ricardo_vitamin_d_dismiss_notification:
+    alias: Task Ricardo Vitamin D Dismiss Notification
     sequence:
       - service: persistent_notification.dismiss
         data:
@@ -45,6 +45,11 @@ script:
           data:
             tag: 10
             dismiss: true
+            
+  task_ricardo_vitamin_d:
+    alias: Task Ricardo Vitamin D
+    sequence:
+      - service: script.task_ricardo_vitamin_d_dismiss_notification
       
       - condition: state
         entity_id: binary_sensor.ricardo_vitamin_d
@@ -104,3 +109,10 @@ automation old:
         state: "off"
     action:
       - service: script.task_ricardo_vitamin_d
+  
+  - alias: Task Vitamina D Ricardo Dismiss Notification
+    trigger:
+      - platform: time
+        at: "22:00:00"
+    action:
+      - service: script.task_ricardo_vitamin_d_dismiss_notification

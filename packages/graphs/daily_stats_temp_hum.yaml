@@ -1,0 +1,26 @@
+automation insert:
+  - alias: "Daily Stats Insert Value of Temperature to Database"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_average_temperature
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: temperature_humidity
+          value: >
+            {{ trigger.to_state.state }}
+          column: temperature
+            
+  - alias: "Daily Stats Insert Value of Humidity to Database"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_average_humidity
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: temperature_humidity
+          value: >
+            {{ trigger.to_state.state }}
+          column: humidity

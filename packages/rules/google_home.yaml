@@ -37,7 +37,7 @@ automation old:
       - platform: time
         at: '08:00:00'
       - platform: time_pattern
-        minutes: 0
+        minutes: 30
     condition:
       - condition: time
         after: '08:00:00'
@@ -65,7 +65,7 @@ automation old:
       - platform: time
         at: '21:00:00'
       - platform: time_pattern
-        minutes: 0
+        minutes: 30
     condition:
       - condition: time
         after: '21:00:00'
@@ -92,7 +92,7 @@ automation old:
       - platform: time
         at: '00:00:00'
       - platform: time_pattern
-        minutes: 0
+        minutes: 30
     condition:
       - condition: time
         after: '00:00:00'

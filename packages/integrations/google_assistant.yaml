@@ -11,11 +11,10 @@ google_assistant:
     - script
   entity_config:        
     # Routines
-    script.routine_night_away:
+    script.routine_night_time:
       expose: true
       name: Modo Noite
       aliases:
-        - Modo Noite
         - Night mode
     script.routine_away:
       expose: true
@@ -146,14 +145,12 @@ google_assistant:
         - Bathroom Light
     light.master_bedroom_left_bed:
       expose: true
-      name: Luz do Candeeiro Esquerdo do Quarto 
+      name: Luz da Cama Lado Esquerdo
       aliases:
         - Bedroom Left Side Light
     light.master_bedroom_right_bed:
       expose: true
-      name: Luz do Candeeiro Direito do Quarto
+      name: Luz da Cama Lado Direito
       aliases:
         - Bedroom Right Side Light
     
-
-        

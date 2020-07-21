@@ -10,7 +10,7 @@ recorder:
       - weblink
       - zone
       - sun
-      - weat
+      - weather
     entities:
       ## Constant automations
       - automation.daily_stats_insert_value_of_energy_to_database
@@ -59,6 +59,7 @@ logbook:
       - light
       - media_player
       - script
+      - vacuum
     entities:
       ## Device states
       - binary_sensor.washing_machine_state
@@ -81,6 +82,7 @@ logbook:
       - weblink
       - zone
       - sun
+      - weather
     entities:
       # Constant automations
       - automation.discovery_shellies_announce
@@ -160,6 +162,7 @@ history:
       - weblink
       - zone
       - sun
+      - weather
     entities:
       ## Time vary sensors
       - sun.sun

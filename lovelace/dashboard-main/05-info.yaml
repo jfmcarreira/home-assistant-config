@@ -121,8 +121,8 @@ cards:
       - entity: binary_sensor.washing_machine_state
       - entity: binary_sensor.washing_machine_door
       - entity: binary_sensor.dish_wash_machine_state
-      - entity: binary_sensor.dish_washing_machine_door
-      - entity: binary_sensor.fridge_door
+      - entity: binary_sensor.dish_wash_machine_door
+      #- entity: binary_sensor.fridge_door
       #- entity: display.tf201_kyosk
     show_header_toggle: false
     state_color: true
@@ -156,7 +156,24 @@ cards:
     title: Tempo de Utilização de Dispositivos
     type: entities
 
+    
+  - type: 'custom:auto-entities'
+    card:
+      show_header_toggle: false
+      title: Bateria dos dispositivoos
+      type: entities
+    filter:
+      include:
+        - entity_id: sensor.*_battery_level
+    show_empty: true
+    sort:
+      ignore_case: true
+      method: name
+      
 
+
+
+      
   - card:
       agregate_func: avg
       group_by: 3600s
@@ -179,5 +196,3 @@ cards:
         - entity_id: sensor.shelly_*_temperature
     show_empty: true
     type: "custom:auto-entities"
-  
-

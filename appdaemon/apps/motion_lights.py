@@ -5,10 +5,11 @@ class MotionLight(hass.Hass):
     def initialize(self):
         self.motion_sensor = self.args['motion_sensor']
         self.other_lights = self.args['other_lights']
+        self.master_sw = self.args['master_sw']
         self.light = self.args['light']
         self.timeout = self.args['timeout']
         self.short_timeout = 10
-
+        
         self.timer = None
         self.listen_state(self.motion_callback, self.motion_sensor, new = "on")
         self.listen_state(self.light_callback, self.light, new = "off")
@@ -21,6 +22,9 @@ class MotionLight(hass.Hass):
     def should_light_turn_on(self):
       
         turnOn = True
+        
+        if self.get_state( self.master_sw ) == "off":
+          return False
 
         # Sun condition - Below horizon
         turnOn = turnOn and ( self.get_state( "sun.sun", "elevation" ) < 0 )

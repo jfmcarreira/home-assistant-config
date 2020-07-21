@@ -1,0 +1,8 @@
+ 
+input_boolean:
+  automation_appdaemon_motion_lights_living_room:
+    name: Lights Motion Living Room
+    icon: mdi:light
+  automation_appdaemon_motion_lights_office:
+    name: Lights Motion Office
+    icon: mdi:light

@@ -8,6 +8,7 @@ motion_light_living_room:
     - light.living_room_window
     - light.living_room_abajur
   timeout: 300
+  master_sw: input_boolean.automation_appdaemon_motion_lights_living_room
 
 
 motion_light_office:
@@ -18,3 +19,4 @@ motion_light_office:
   other_lights:
     - light.office
   timeout: 300
+  master_sw: input_boolean.automation_appdaemon_motion_lights_office

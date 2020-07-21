@@ -64,6 +64,15 @@ script:
           entity_id: input_datetime.cat_litter_box_last_clean
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+      #- service: script.vacuum_command
+        #data:
+          #vacuum_command_args: zoned_cleanup
+          #vacuum_params_args: 
+            #zone_ids:
+              #- id: CatLitterClean-1-Box
+                #repeats: 2
+              #- id: CatLitterClean-2-Bath
+                #repeats: 2
       - service: vacuum.set_fan_speed
         data:
           entity_id: vacuum.roborock
@@ -77,7 +86,7 @@ script:
               - id: CatLitterClean-1-Box
                 repeats: 2
               - id: CatLitterClean-2-Bath
-                repeats: 3
+                repeats: 2
       - delay: 00:00:40
       - service: vacuum.set_fan_speed
         data:
