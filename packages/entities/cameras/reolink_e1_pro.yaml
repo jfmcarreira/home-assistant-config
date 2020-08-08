@@ -1,0 +1,14 @@
+################################################################
+## Zoneminder
+################################################################
+
+camera:
+  - platform: ffmpeg
+    name: Baby Monitor FFMPEG
+    input: rtsp://admin:l7j9ki@10.20.207.125:554/h264Preview_01_main
+  #- platform: generic
+    #name: Baby Monitor 
+    #stream_source: rtsp://admin:l7j9ki@10.20.207.125:554/h264Preview_01_main
+
+    
+#rtmp://admin:l7j9ki@10.20.207.125:554/h264Preview_01_main

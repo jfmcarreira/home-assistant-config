@@ -1,4 +1,16 @@
 automation old:
+  - alias: Media TV Off If No Motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_sensor_living_room
+        from: "on"
+        to: "off"
+        for:
+          minutes: 90
+    action:
+      - service: media_player.turn_off
+        entity_id: media_player.media_center
+        
   - alias: Media Control MEO Box Sala based on TV
     trigger:
       - platform: state

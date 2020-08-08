@@ -33,6 +33,15 @@ google_assistant:
         - Almoço
         - Dinner time
         - Lunch time
+    script.action_meo_play_main_channel:
+      expose: true
+      name: Canal SIC
+    script.action_meo_play_kids_channel:
+      expose: true
+      name: Bonecos na Televisão
+      aliases:
+        - Bonecos na TV
+        - Bonecos
     script.task_roborock_clean:
       expose: true
       name: Limpeza do Aspirador

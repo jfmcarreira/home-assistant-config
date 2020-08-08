@@ -33,6 +33,9 @@ binary_sensor state:
           {%- else %}
               False
           {%- endif %}
+        attribute_templates:
+          Última Lavagem: >
+            {{ as_timestamp( states('input_datetime.task_washing_clothes_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
   
 
 automation state:
@@ -172,7 +175,7 @@ automation clothes:
       - service: automation.trigger
         data:
           entity_id: automation.task_laundry_remove_from_wash_machine_remainder
-          skip_condition: false
+          skip_condition: true
 
   - alias: Task Laundry Remove From Wash Machine Remainder
     trigger:

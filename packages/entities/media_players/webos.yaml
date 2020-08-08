@@ -8,8 +8,8 @@ webostv:
     service: wake_on_lan.send_magic_packet
     data:
       mac: !secret living_room_tv_mac
-      broadcast_address: !secret living_room_ip
-      broadcast_port: 7
+      #broadcast_address: !secret living_room_ip
+      broadcast_port: 9
   customize:
     sources:
       - MEO

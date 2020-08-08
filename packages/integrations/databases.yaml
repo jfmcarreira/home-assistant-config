@@ -11,10 +11,12 @@ recorder:
       - zone
       - sun
       - weather
+      - automation
+    entity_globs:
+      - sensor.birthday_*
+      - sensor.daily_*
+      - sensor.query_*
     entities:
-      ## Constant automations
-      - automation.daily_stats_insert_value_of_energy_to_database
-      - automation.daily_stats_insert_value_to_database
       ## Time vary sensors
       - sun.sun
       - sensor.uptime
@@ -23,9 +25,6 @@ recorder:
       - sensor.time
       - sensor.date_time_frontend
       - sensor.anniversary_wedding
-      - sensor.birthday_joao
-      - sensor.birthday_bianca
-      - sensor.birthday_ricardo
       - binary_sensor.updater 
       - binary_sensor.workday
       - binary_sensor.workday_tomorrow
@@ -35,19 +34,8 @@ recorder:
       - sensor.monthly_energy
       - sensor.monthly_energy_cost
       - sensor.monthly_energy_cicle_days
-      - sensor.daily_fridge_door_open_count
-      - sensor.daily_fridge_door_open_time
-      - sensor.daily_lamps_on_time
-      - sensor.daily_tv_time
-      - sensor.daily_tv_time_kodi
-      - sensor.daily_tv_time_meo
-      - sensor.daily_tv_time_plex
-      - sensor.daily_tv_time_netflix
       # Roborock Map
       - sensor.roborock_map
-      # Queries
-      - sensor.query_daily_energy_current_month
-      - sensor.query_daily_energy_current_year
 
 ################################################################################
 ## Logbook
@@ -83,23 +71,22 @@ logbook:
       - zone
       - sun
       - weather
+    entity_globs:
+      - automation.daily_stats_*
+      - automation.reset_*
+      - sensor.birthday_*
+      - sensor.daily_*
+      - sensor.query_*
     entities:
       # Constant automations
       - automation.discovery_shellies_announce
       - automation.discovery_shellies
-      - automation.daily_stats_insert_value_of_energy_to_database
       - automation.power_daily_update_total_kw
-      - automation.daily_stats_insert_value_of_tv_state_to_database
-      - automation.daily_stats_insert_value_of_device_usage_to_database
       - automation.power_daily_force_update_after_change_selector
-      - automation.daily_stats_insert_value_of_temperature_and_humidity_to_database
       - automation.media_google_home_mini_day_volume
       - automation.media_google_home_mini_evening_volume
       - automation.media_google_home_mini_nigth_volume 
       - automation.rf_brigde_demultiplexer
-      - automation.reset_pir_state_cat_litter
-      - automation.reset_pir_state_office
-      - automation.reset_pir_state_washing_machine_door
       ## Time vary sensors
       - sun.sun
       - sensor.uptime
@@ -111,14 +98,10 @@ logbook:
       - binary_sensor.workday
       - binary_sensor.workday_tomorrow
       - sensor.anniversary_wedding
-      - sensor.birthday_joao
-      - sensor.birthday_bianca
-      - sensor.birthday_ricardo
       # Aux entities
       - media_player.browser_tf201_kyosk
       - media_player.google_home_mini
       - light.configuration_tool_1
-      - media_player.living_room_tv
       - media_player.living_room_tv
 
 
@@ -164,21 +147,6 @@ history:
       - sun
       - weather
     entities:
-      ## Time vary sensors
-      - sun.sun
-      - sensor.uptime
-      - sensor.date_time
-      - sensor.date
-      - sensor.time
-      - sensor.date_time_frontend
-      - binary_sensor.updater
-      - binary_sensor.workday
-      - binary_sensor.workday_tomorrow
-      - sensor.anniversary_wedding
-      - sensor.birthday_joao
-      - sensor.birthday_bianca
-      - sensor.birthday_ricardo
-      - sensor.roborock_map
       - light.configuration_tool_1
       - media_player.living_room_tv
       - media_player.living_room_tv

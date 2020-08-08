@@ -160,12 +160,21 @@ cards:
             
           - type: 'custom:button-card'
             aspect_ratio: 4/2
-            entity: binary_sensor.notification_non_disturb
+            entity: input_boolean.notification_active_non_disturb
+            state:
+              - operator: template
+                value: >
+                  [[[ return states['binary_sensor.notification_non_disturb'].state === 'on' ]]] 
+                icon: mdi:bell-off
+              - operator: default
+                icon: mdi:bell
             tap_action:
               action: call-service
               service: input_boolean.toggle
               service_data:
                 entity_id: input_boolean.notification_active_non_disturb
+            hold_action:
+              action: more-info
             name: Não Incomodar
             size: 100%
             
@@ -258,6 +267,7 @@ cards:
             - entity_id: light.browser*
             - entity_id: light.configuration_tool_1
             - entity_id: light.*_group
+            - entity_id: light.*_output
           include:
             - entity_id: light.*
         show_empty: true
@@ -265,6 +275,15 @@ cards:
           ignore_case: true
           method: entity_id
         type: 'custom:auto-entities'
+        
+      #- type: entities
+        #show_header_toggle: false
+        #entities:
+          #- light.living_room_abajur
+          #- type: 'custom:slider-entity-row'
+            #entity: light.living_room_abajur
+            #name: Brilho Luz de Apoio
+
       
       - break 
       - break 
@@ -369,6 +388,9 @@ cards:
           ignore_case: true
           method: name
         type: 'custom:auto-entities'
-      
+      #- type: map
+        #entities:
+          #- device_tracker.magnesium
+        #hours_to_show: 48
 
       

@@ -16,6 +16,7 @@ proxmoxve:
           - 202
           - 203
           - 204
+          - 205
           - 300
         containers:
           - 100
@@ -71,6 +72,23 @@ switch:
           data:
             type: lxc
             vm: 113
+            command: stop
+  
+  - platform: template
+    switches:
+      proxmox_mineos_vm:
+        value_template: "{{ is_state('binary_sensor.hydrogen_mineos_running', 'on') }}"
+        turn_on:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: qemu
+            vm: 205
+            command: start
+        turn_off:
+          service: shell_command.proxmox_control_vm
+          data:
+            type: qemu
+            vm: 205
             command: stop
             
   - platform: template

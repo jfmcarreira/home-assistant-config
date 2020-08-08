@@ -1,4 +1,36 @@
 script:
+  action_meo_play_main_channel:
+    alias: Routine Meo Play SIC Channel
+    sequence:
+      - service: media_player.turn_on
+        entity_id: media_player.living_room_tv  
+      - service: media_player.turn_on
+        entity_id: media_player.living_room_tv_meo_box
+      - delay: 00:00:04
+      - service: media_player.select_source
+        entity_id: media_player.media_center
+        data:
+          source: MEO      
+      - service: python_script.change_meo_box_channel
+        data:
+          channel: SIC
+          entity_id: media_player.living_room_tv_meo_box
+  action_meo_play_kids_channel:
+    alias: Routine Meo Play Kids Channel
+    sequence:
+      - service: media_player.turn_on
+        entity_id: media_player.living_room_tv  
+      - service: media_player.turn_on
+        entity_id: media_player.living_room_tv_meo_box
+      - delay: 00:00:04
+      - service: media_player.select_source
+        entity_id: media_player.media_center
+        data:
+          source: MEO      
+      - service: python_script.change_meo_box_channel
+        data:
+          channel: Baby TV
+          entity_id: media_player.living_room_tv_meo_box
   action_meo_reset_current_show:
     alias: Routine Meo Reset Current Show
     sequence:

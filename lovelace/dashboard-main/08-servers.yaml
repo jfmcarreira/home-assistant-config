@@ -10,6 +10,8 @@ cards:
         name: Unify Controller
       - entity: switch.proxmox_zoneminder_vm
         name: ZoneMinder
+      - entity: switch.proxmox_mineos_vm
+        name: Minecraft Server
         
   - type: entities
     title: SpeedTest
@@ -21,6 +23,20 @@ cards:
         name: Upload
       - entity: sensor.speedtest_ping
         name: Ping
+        
+  - type: entities
+    show_header_toggle: false
+    state_color: true
+    title: Minecraft
+    entities:
+      - entity: binary_sensor.minecraft_alderaan_status
+        name: Estado
+      - entity: sensor.minecraft_alderaan_players_online
+        name: Jogadores
+      - entity: sensor.minecraft_alderaan_version
+        name: Versão
+      - entity: sensor.minecraft_alderaan_latency_time
+        name: Letência
     
   - type: entities
     show_header_toggle: false

@@ -1,0 +1,5 @@
+media_player:
+  - platform: mpd
+    name: mpd
+    host: !secret mopidy_ip
+    port: 6600 
