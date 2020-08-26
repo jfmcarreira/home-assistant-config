@@ -3,6 +3,18 @@ badges: []
 cards:
   - card:
       show_header_toggle: false
+      title: Controlador Geral
+      type: entities
+    filter:
+      include:
+        - entity_id: input_boolean.automation_sw_*
+    show_empty: true
+    sort:
+      ignore_case: true
+      method: name
+    type: 'custom:auto-entities'
+  - card:
+      show_header_toggle: false
       title: App Daemon
       type: entities
     filter:

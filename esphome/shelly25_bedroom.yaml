@@ -99,7 +99,7 @@ binary_sensor:
                             action: brightness_change
                             entity_id: "light.master_bedroom"
                             direction: "up"
-                - delay: 1s
+                - delay: 0.5s
       
 output:
   - platform: gpio

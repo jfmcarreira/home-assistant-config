@@ -10,6 +10,7 @@ google_assistant:
     - scene
     - script
   entity_config:        
+    
     # Routines
     script.routine_night_time:
       expose: true
@@ -66,8 +67,7 @@ google_assistant:
         - Vitamina D ricardo
         - Vitamina D
         - Vitamin D
-  
-    # Entities
+          
     vacuum.roborock:
       expose: true
       name: Roborock

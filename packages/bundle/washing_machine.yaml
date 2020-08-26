@@ -126,6 +126,10 @@ script:
   task_laundry_remove_wet_clothes:
     alias: Tarefa Retirar Roupa da Máquina
     sequence:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: persistent_washing_maching
+          
       - service: notify.mobile_app_all
         data:
           message: clear_notification
@@ -189,6 +193,12 @@ automation clothes:
         entity_id: binary_sensor.notification_non_disturb
         state: "off"
     action:
+      - service: persistent_notification.create
+        data:
+          title: Tarefa Doméstica
+          message: Retirar roupa da máquina de lavar
+          notification_id: persistent_washing_maching
+          
       - service: notify.mobile_app_all
         data:
           title: Tarefa Doméstica

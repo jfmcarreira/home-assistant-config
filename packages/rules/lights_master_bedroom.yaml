@@ -24,7 +24,7 @@ automation old:
       - domain: light
         type: brightness_increase
         device_id: 6287c6f7b25e42bb858017e7d78c00e5
-        entity_id: light.master_bedroom_dim
+        entity_id: light.master_bedroom
         
         
   - alias: 'Lights  Phillips Hue Bedroom Dim DOWN'
@@ -39,7 +39,7 @@ automation old:
       - domain: light
         type: brightness_decrease
         device_id: 6287c6f7b25e42bb858017e7d78c00e5
-        entity_id: light.master_bedroom_dim
+        entity_id: light.master_bedroom
         
 
 
@@ -50,7 +50,7 @@ automation old:
         domain: deconz
         platform: device
         subtype: turn_on
-        type: remote_button_short_press
+        type: remote_button_short_release
     action:
       - service: light.turn_on
         entity_id: light.master_bedroom_bathroom
@@ -58,14 +58,16 @@ automation old:
   - alias: 'Lights  Phillips Hue Bedroom Short Press OFF '
     mode: single
     trigger:
-    - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
-      domain: deconz
-      platform: device
-      subtype: turn_off
-      type: remote_button_short_press
+      - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
+        domain: deconz
+        platform: device
+        subtype: turn_off
+        type: remote_button_short_release
     action:
       - service: light.turn_off
         entity_id: light.master_bedroom_bathroom
+      - service: light.turn_off
+        entity_id: light.master_bedroom
         
     
   - alias: 'Lights  Phillips Hue Bedroom Long Press ON'
@@ -77,33 +79,34 @@ automation old:
         subtype: turn_on
         type: remote_button_long_press
     action:
-      - data: {}
-        entity_id: light.master_bedroom_bathroom
-        service: light.turn_on
-      - data: {}
-        entity_id: light.hallway
-        service: light.turn_on
-      - data: {}
-        entity_id: light.office
-        service: light.turn_on
+      - service: light.turn_on
+        entity_id: light.master_bedroom
+      #- data: {}
+        #entity_id: light.master_bedroom_bathroom
+        #service: light.turn_on
+      #- data: {}
+        #entity_id: light.hallway
+        #service: light.turn_on
+      #- data: {}
+        #entity_id: light.office
+        #service: light.turn_on
         
   - alias: 'Lights Phillips Hue Bedroom Long Press OFF '
     mode: single
     trigger:
-    - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
-      domain: deconz
-      platform: device
-      subtype: turn_off
-      type: remote_button_long_press
+      - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
+        domain: deconz
+        platform: device
+        subtype: turn_off
+        type: remote_button_long_press
     action:
-      - data: {}
+      - service: light.turn_off
+        entity_id: light.master_bedroom
+      - service: light.turn_off
         entity_id: light.master_bedroom_bathroom
-        service: light.turn_off
-      - data: {}
+      - service: light.turn_off
         entity_id: light.hallway
-        service: light.turn_off
-      - data: {}
+      - service: light.turn_off
         entity_id: light.office
-        service: light.turn_off
         
         

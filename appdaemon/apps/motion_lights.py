@@ -5,7 +5,8 @@ class MotionLight(hass.Hass):
     def initialize(self):
         self.motion_sensor = self.args['motion_sensor']
         self.other_lights = self.args['other_lights']
-        self.master_sw = self.args['master_sw']
+        self.curr_sw = self.args['curr_sw']
+        
         self.light = self.args['light']
         self.timeout = self.args['timeout']
         self.short_timeout = 10
@@ -23,7 +24,13 @@ class MotionLight(hass.Hass):
       
         turnOn = True
         
-        if self.get_state( self.master_sw ) == "off":
+        if not self.get_state( "binary_sensor.notify_home" )  == "on":
+          return False
+        
+        if self.get_state( "input_boolean.automation_sw_all_motion_lights" ) == "off":
+          return False
+        
+        if self.get_state( self.curr_sw ) == "off":
           return False
 
         # Sun condition - Below horizon

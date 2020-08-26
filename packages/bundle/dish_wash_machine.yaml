@@ -114,6 +114,10 @@ script:
   task_dish_wash_machine_empty:
     alias: Tarefa Retirar Loiça da Máquina
     sequence:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: persistent_dish_washing
+          
       - service: notify.mobile_app_all
         data:
           message: clear_notification
@@ -167,6 +171,11 @@ automation dishes:
         entity_id: binary_sensor.dish_wash_machine_need_emtpy
         state: "on"
     action:  
+      - service: persistent_notification.create
+        data:
+          title: Tarefa Doméstica
+          message: Retirar loiça da máquina de lavar
+          notification_id: persistent_dish_washing
       - service: notify.mobile_app_all
         data:
           title: Tarefa Doméstica

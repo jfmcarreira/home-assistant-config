@@ -17,6 +17,12 @@ automation old:
         to: "off"
     condition:
       - condition: state
+        entity_id: input_boolean.automation_sw_all_motion_lights
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.notify_home
+        state: "on"
+      - condition: state
         entity_id: light.hallway
         state: "off"
       - condition: template

@@ -1,8 +1,10 @@
- 
-input_boolean:
+ input_boolean:
   automation_appdaemon_motion_lights_living_room:
-    name: Lights Motion Living Room
+    name: Ativar Luz de Presença da Sala
     icon: mdi:light
   automation_appdaemon_motion_lights_office:
-    name: Lights Motion Office
+    name: Ativar Luz de Presença do Escritório
+    icon: mdi:light
+  automation_sw_all_motion_lights:
+    name: Controlador das Luzes Automáticas
     icon: mdi:light
