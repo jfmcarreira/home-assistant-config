@@ -2,37 +2,6 @@ icon: 'mdi:information-outline'
 path: info
 title: Information
 cards:
-
-  - type: custom:vertical-stack-in-card
-    title: Tarefas Domésticas
-    cards:
-      - type: entities
-        show_header_toggle: false
-        state_color: true
-        entities:
-          - entity: sensor.ricardo_vitamin_d_last_done
-        footer:
-          type: buttons
-          entities:
-            - entity: script.task_ricardo_vitamin_d
-              icon: 'mdi:pill'
-          
-      
-      - type: entities
-        show_header_toggle: false
-        state_color: true
-        entities:
-          - entity: sensor.task_washing_clothes_last_done
-          - entity: sensor.task_washing_clothes_dry_last_done
-          - entity: sensor.task_washing_clothes_remove_last_done
-        footer:
-          type: buttons
-          entities:
-            - entity: script.task_laundry_remove_wet_clothes
-              icon: mdi:hanger
-            - entity: script.task_laundry_remove_dry_clothes
-              icon: mdi:tshirt-crew
-
   - entities:
       - entity: binary_sensor.notify_home
         name: Casa ocupada
@@ -71,22 +40,7 @@ cards:
       #type: buttons
     
     
-  - entities:
-      - binary_sensor.litter_box_motion
-      - counter.cat_litter_box_visits
-      - sensor.cat_litter_box_last_visit
-      - sensor.cat_litter_box_last_clean
-      - sensor.cat_litter_box_last_change
-    footer:
-      entities:
-        - entity: script.cat_litter_clean
-          icon: 'mdi:shovel'
-        - entity: script.cat_litter_change
-          icon: 'mdi:autorenew'
-      type: buttons
-    show_header_toggle: false
-    title: Fluffy/Pluma Litter Box
-    type: entities
+
   
  
   - cards:
@@ -119,9 +73,7 @@ cards:
       - entity: binary_sensor.living_room_tv_state
       - entity: binary_sensor.roborock_state
       - entity: binary_sensor.washing_machine_state
-      - entity: binary_sensor.washing_machine_door
       - entity: binary_sensor.dish_wash_machine_state
-      - entity: binary_sensor.dish_wash_machine_door
       #- entity: binary_sensor.fridge_door
       #- entity: display.tf201_kyosk
     show_header_toggle: false

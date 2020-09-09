@@ -35,12 +35,7 @@ cards:
                 service_data:
                   room: Bathroom
                   runs: 1
-              - icon: "mdi:desk"
-                name: Aspirar Escritório
-                service: python_script.vacuum_room
-                service_data:
-                  room: Office
-                  runs: 1
+              
               - icon: "mdi:bed-double"
                 name: Aspirar Quarto
                 service: python_script.vacuum_room
@@ -53,11 +48,17 @@ cards:
                 service_data:
                   room: BedroomBath
                   runs: 1
-              - icon: "mdi:bed-queen-outline"
-                name: Aspirar Quarto do Fundo
+              - icon: "mdi:baby-face-outline"
+                name: Aspirar Quarto do Ricardo
                 service: python_script.vacuum_room
                 service_data:
-                  room: Guest Bedroom
+                  room: BedroomRicardo
+                  runs: 1
+              - icon: "mdi:desk"
+                name: Aspirar Escritório
+                service: python_script.vacuum_room
+                service_data:
+                  room: Office
                   runs: 1
             compact_view: false
             entity: vacuum.roborock
@@ -105,10 +106,10 @@ cards:
               - input_boolean.vacuum_hallway
               - input_boolean.vacuum_kitchen
               - input_boolean.vacuum_bathroom
-              - input_boolean.vacuum_office
               - input_boolean.vacuum_bedroom
               - input_boolean.vacuum_bedroombath
-              - input_boolean.vacuum_guestbedroom
+              - input_boolean.vacuum_bedroomricardo
+              - input_boolean.vacuum_office
               - input_boolean.vacuum_livingroomwithcarpet
             state_color: true
             title: Aspirador-Ready (5 máx.)

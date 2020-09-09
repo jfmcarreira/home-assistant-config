@@ -8,11 +8,11 @@ cards:
     layout: vertical
     max_columns: 4
     cards:
-      - details: true
+      - type: weather-forecast
         entity: weather.ipma
+        details: true
         forecast: true
-        name: ''
-        type: weather-forecast
+        
       
       - break 
       
@@ -269,11 +269,32 @@ cards:
             - entity_id: light.*_group
             - entity_id: light.*_output
           include:
-            - entity_id: light.*
+            - entity_id: light.hallway*
+              sort:
+                ignore_case: true
+                method: entity_id
+            - entity_id: light.living_room*
+              sort:
+                ignore_case: true
+                method: entity_id
+            - entity_id: light.kitchen*
+              sort:
+                ignore_case: true
+                method: entity_id
+            - entity_id: light.master_bedroom*
+              sort:
+                ignore_case: true
+                method: entity_id
+            - entity_id: light.bedroom*
+              sort:
+                ignore_case: true
+                method: entity_id
+            - entity_id: light.office*
+              sort:
+                ignore_case: true
+                method: entity_id
         show_empty: true
-        sort:
-          ignore_case: true
-          method: entity_id
+        
         type: 'custom:auto-entities'
         
       #- type: entities

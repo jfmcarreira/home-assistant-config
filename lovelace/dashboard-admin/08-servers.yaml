@@ -36,7 +36,7 @@ cards:
       - entity: sensor.minecraft_alderaan_version
         name: Versão
       - entity: sensor.minecraft_alderaan_latency_time
-        name: Letência
+        name: Latência
     
   - type: entities
     show_header_toggle: false

@@ -165,6 +165,52 @@ cards:
             state: 'on'
         type: conditional
     type: vertical-stack
+    
+  - type: horizontal-stack
+    cards:
+      - type: 'custom:button-card'
+        name: Modo Jantar
+        icon: mdi:silverware-fork-knife
+        entity: script.routine_dinner_time
+        aspect_ratio: 4/2
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.routine_dinner_time
+        
+        size: 100%
+        hold_action:
+          action: none
+      - type: 'custom:button-card'
+        name: Modo SIC
+        icon: mdi:newspaper
+        entity: script.action_meo_play_main_channel
+        aspect_ratio: 4/2
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.action_meo_play_main_channel
+        
+        size: 100%
+        hold_action:
+          action: none
+      - type: 'custom:button-card'
+        name: Modo Bonecos
+        icon: mdi:baby
+        entity: script.action_meo_play_kids_channel
+        aspect_ratio: 4/2
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.action_meo_play_kids_channel
+        
+        size: 100%
+        hold_action:
+          action: none
+              
   - cards:
       - entities:
           - entity: input_select.speakers_selector

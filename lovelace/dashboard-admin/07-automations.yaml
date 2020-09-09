@@ -1,6 +1,14 @@
 
 badges: []
 cards:
+  - type: 'custom:button-card'
+    name: Recarregar Automações
+    icon: mdi:reload
+    layout: icon_name
+    aspect_ratio: 10/2
+    tap_action:
+      action: call-service
+      service: automation.reload
   - card:
       show_header_toggle: false
       title: Controlador Geral

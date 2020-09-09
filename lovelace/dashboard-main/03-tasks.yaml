@@ -1,0 +1,71 @@
+icon: 'mdi:calendar-check-outline'
+path: task
+title: Tarefas Domésticas
+cards:
+  - type: entities
+    show_header_toggle: false
+    title: Ricardo
+    state_color: true
+    entities:
+      - entity: sensor.ricardo_vitamin_d_last_done
+    footer:
+      type: buttons
+      entities:
+        - entity: script.task_ricardo_vitamin_d
+          icon: 'mdi:pill'
+          
+      
+  - type: entities
+    show_header_toggle: false
+    state_color: true
+    title: Máquina da Roupa
+    entities:
+      - entity: binary_sensor.washing_machine_state
+        name: Estado da máquina
+      - entity: binary_sensor.washing_machine_door
+        name: Porta
+      - entity: sensor.task_washing_clothes_last_done
+      - entity: sensor.task_washing_clothes_dry_last_done
+      - entity: sensor.task_washing_clothes_remove_last_done
+    footer:
+      type: buttons
+      entities:
+        - entity: script.task_laundry_remove_wet_clothes
+          icon: mdi:hanger
+        - entity: script.task_laundry_remove_dry_clothes
+          icon: mdi:tshirt-crew
+          
+          
+  - type: entities
+    show_header_toggle: false
+    state_color: true
+    title: Máquina da Loiça
+    entities:
+      - entity: binary_sensor.dish_wash_machine_state
+        name: Estado da máquina
+      - entity: binary_sensor.dish_wash_machine_door
+        name: Porta
+      - entity: sensor.task_dish_washing_last_done
+      - entity: sensor.task_dish_wash_empty_last_done
+    footer:
+      type: buttons
+      entities:
+        - entity: script.task_dish_wash_machine_empty
+          icon: mdi:silverware-clean
+          
+  - type: entities
+    footer:
+      entities:
+        - entity: script.cat_litter_clean
+          icon: 'mdi:shovel'
+        - entity: script.cat_litter_change
+          icon: 'mdi:autorenew'
+      type: buttons
+    show_header_toggle: false
+    title: Caixa da Areia Fluffy/Pluma
+    entities:
+      - entity: sensor.cat_litter_box_last_clean
+        name: Limpeza
+      - entity: sensor.cat_litter_box_last_change
+        name: Substituição
+    
