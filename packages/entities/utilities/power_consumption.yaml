@@ -29,14 +29,61 @@ utility_meter:
     cycle: monthly
     offset:
       days: 19
+      
+  daily_energy_living_room:
+    source: sensor.energy_living_room
+    cycle: daily
+  daily_energy_laundry:
+    source: sensor.energy_laundry
+    cycle: daily
+  daily_energy_dish_wash_machine:
+    source: sensor.energy_dish_wash_machine
+    cycle: daily
+  daily_energy_fridge:
+    source: sensor.energy_fridge
+    cycle: daily
+  daily_energy_office_desk:
+    source: sensor.energy_office_desk
+    cycle: daily
 
-sensor:
+sensor energy:
   - platform: integration
     source: sensor.bhpzem_power
     name: pzem_energy
     unit_prefix: k
     round: 2 
+  
+  - platform: integration
+    source: sensor.power_sensor_living_room
+    name: energy_living_room
+    unit_prefix: k
+    round: 2
+  
+  - platform: integration
+    source: sensor.power_sensor_laundry
+    name: energy_laundry
+    unit_prefix: k
+    round: 2 
+    
+  - platform: integration
+    source: sensor.power_usage_dish_wash_machine
+    name: energy_dish_wash_machine
+    unit_prefix: k
+    round: 2 
+    
+  - platform: integration
+    source: sensor.power_usage_fridge
+    name: energy_fridge
+    unit_prefix: k
+    round: 2
 
+  - platform: integration
+    source: sensor.power_usage_office_desk
+    name: energy_office_desk
+    unit_prefix: k
+    round: 2 
+
+sensor bill:
   - platform: template
     sensors:
       monthly_energy_cicle_days:
@@ -45,131 +92,7 @@ sensor:
       monthly_energy_cost:
         friendly_name: "Fatura Energia"
         value_template: >-
-          {{ ( float(states.sensor.monthly_energy.state) * 0.1494 * 1.23 + float(states.sensor.monthly_energy_cicle_days.state) * 0.1469 * 1.06 + 2.85 * 1.06 ) | round(2) }}
+          {{ ( float(states.sensor.monthly_energy.state) * (0.1456+0.001) * 1.23 + float(states.sensor.monthly_energy_cicle_days.state) * 0.2292 * 1.23 + 2.85 * 1.06 ) | round(2) }}
         unit_of_measurement: "€"
-
-#################################################################
-### Datawatt
-#################################################################
-#sensor datawatt:
-### DataWatt
-## Power
-#- platform: mqtt
-#name: "DW Total Power Usage"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_35_3.value | float ) * 1000 }}"
-
-#- platform: mqtt
-#name: "DW Power Usage Laundry"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_35_1.value | float ) * 1000 }}"
-
-#- platform: mqtt
-#name: "DW Power Usage Kitchen"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_35_0.value | float ) * 1000 }}"
-
-#- platform: mqtt
-#name: "DW Power Usage Kitchen Oven"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_35_2.value | float ) * 1000 }}"
-
-#- platform: mqtt
-#name: "DW Power Usage Kitchen Fridge"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_60_0.value | float ) * 1000 }}"
-
-#- platform: mqtt
-#name: "DW Power Usage Office"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_60_1.value | float ) * 1000 }}"
-
-#- platform: mqtt
-#name: "DW Power Usage Living Room"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_60_2.value | float ) * 1000 }}"
-
-#- platform: mqtt
-#name: "DW Power Usage Bedroom"
-#device_class: power
-#unit_of_measurement: "W"
-#state_topic: "datawatt/power/status"
-#value_template: "{{ ( value_json.Sensor_60_3.value | float ) * 1000 }}"
-
-## Energy Hour
-#- platform: mqtt
-#name: "DW Total Energy Hour"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_35_3.value | float ) }}"
-
-#- platform: mqtt
-#name: "DW Energy Hour Laundry"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_35_1.value | float ) }}"
-
-#- platform: mqtt
-#name: "DW Energy Hour Kitchen"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_35_0.value | float ) }}"
-
-#- platform: mqtt
-#name: "DW Energy Hour Kitchen Oven"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_35_2.value | float ) }}"
-
-#- platform: mqtt
-#name: "DW Energy Hour Kitchen Fridge"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_60_0.value | float ) }}"
-
-#- platform: mqtt
-#name: "DW Energy Hour Office"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_60_1.value | float ) }}"
-
-#- platform: mqtt
-#name: "DW Energy Hour Living Room"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_60_2.value | float ) }}"
-
-#- platform: mqtt
-#name: "DW Energy Hour Bedroom"
-#device_class: power
-#unit_of_measurement: "kWh"
-#state_topic: "datawatt/energy/hour/status"
-#value_template: "{{ ( value_json.Sensor_60_3.value | float ) }}"
-
-
-#################################################################
-### Automations
-#################################################################
 
   

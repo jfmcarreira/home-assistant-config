@@ -1,0 +1,65 @@
+substitutions:
+  devicename: sonoff_ricardo_bedroom
+  upper_devicename: Ricardo Bedroom
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  reboot_timeout: 0s
+
+ota:
+
+binary_sensor:
+  - id: sw_1
+    #name: ${upper_devicename} SW
+    platform: gpio
+    pin:
+      number: GPIO3
+      mode: INPUT_PULLUP
+      inverted: True
+    filters:
+      - delayed_on: 30ms
+    #on_press:
+      #then:
+        #- light.toggle: light_1
+    
+    on_multi_click:
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.1s
+        then:
+          - light.toggle: light_1
+      - timing:
+          - ON for at least 1s
+          - OFF for at least 0.1s
+        then:
+          - homeassistant.service:
+              service: light.toggle
+              data:
+                entity_id: light.bedroom_ricardo_lamp
+      
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+    
+light:
+  - name: ${upper_devicename}
+    platform: binary
+    id: light_1
+    output: relay_1
+    

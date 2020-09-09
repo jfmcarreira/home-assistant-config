@@ -3,7 +3,7 @@ d = { '58940A':['dish_wash_machine_door','ON','true'],
       '57E10A':['wash_machine_door','ON','true'],
       '57E10E':['wash_machine_door','OFF','true'],
       #'F1E77E':['litter_box_motion','ON','false'],
-      'F1E77E':['motion_sensor_office','ON','false'],
+      'F1E77E':['motion_sensor_ricardo_bedroom','ON','false'],
       #'BDA5B9':['sonoff_door_sensor','ON','false'],
     }
 

@@ -11,7 +11,6 @@ script:
     #  entity_id: media_player.living_room_tv_meo_box
       
     - delay: 00:00:04
-
     
     - service: media_player.select_source
       entity_id: media_player.media_center
@@ -29,5 +28,7 @@ script:
       data:
         channel: SIC
         entity_id: media_player.living_room_tv_meo_box
-    - delay: 00:00:03
+        
+    - delay: 00:00:04
+    
     - service: script.action_meo_reset_current_show

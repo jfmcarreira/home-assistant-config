@@ -53,9 +53,9 @@ input_boolean:
   vacuum_bedroombath:
     name: Casa de Banho do Quarto
     icon: mdi:shower-head
-  vacuum_guestbedroom:
-    name: Quarto do Fundo
-    icon: mdi:bed-queen-outline
+  vacuum_bedroomricardo:
+    name: Quarto do Ricardo
+    icon: mdi:baby-face-outline
   vacuum_livingroomwithcarpet:
     name: Sala Com Tapetes (Zona)
     icon: mdi:sofa

@@ -39,7 +39,7 @@ script:
           entity_id: media_player.living_room_tv_meo_box
           media_content_id: Info
           media_content_type: mediaroom
-      - delay: 00:00:01
+      - delay: 00:00:02
       - service: media_player.play_media
         data:
           entity_id: media_player.living_room_tv_meo_box
@@ -59,7 +59,7 @@ script:
           entity_id: media_player.living_room_tv_meo_box
           media_content_id: Exit
           media_content_type: mediaroom
-      - delay: 00:00:01
+      - delay: 00:00:02
       - service: media_player.play_media
         data:
           entity_id: media_player.living_room_tv_meo_box

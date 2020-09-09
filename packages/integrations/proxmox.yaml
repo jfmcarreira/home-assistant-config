@@ -15,7 +15,6 @@ proxmoxve:
           - 201
           - 202
           - 203
-          - 204
           - 205
           - 300
         containers:

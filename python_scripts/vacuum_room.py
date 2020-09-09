@@ -37,7 +37,7 @@ vaccum_room_list = [
     (['quarto', 'bedroom'],                             'Bedroom',                 ["Bedroom"],                   False ),
     (['casa de banho privada', 'bedroom bathroom'],     'BedroomBath',             ["PrivateBathroom"],           False ),
     (['escritório', 'office'],                          'Office',                  ["Office"],                    False ),
-    (['quarto do fundo', 'guest bedroom'],              'GuestBedroom',            ["GuestBedroom"],              False ),
+    (['quarto do ricardo', 'ricardo bedroom'],          'BedroomRicardo',          ["BedroomRicardo"],            False ),
     (['casa de banho centro', 'bathroom center'],       'BathroomCenter',          ["BathroomSemBalanca"],        True  ),
     (['sala com tapetes', 'living room with carpet'],   'LivingRoomWithCarpet',    ["LivingRoomWithCarpet"],      True  ),
 ]

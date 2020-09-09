@@ -1,6 +1,5 @@
 automation insert:
-  - id: "Daily Stats Insert Value of Energy to Database"
-    alias: "Daily Stats Insert Value of Energy to Database"
+  - alias: "Daily Stats Insert Value of Energy to Database"
     initial_state: true
     trigger:
       - platform: state
@@ -11,6 +10,40 @@ automation insert:
           table: daily_energy
           value: >
             {{ states.sensor.daily_energy.state }}
+            
+            
+  - alias: "Daily Stats Insert Value of Partial Energy of to Database"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_energy_living_room
+      - platform: state
+        entity_id: sensor.daily_energy_laundry
+      - platform: state
+        entity_id: sensor.daily_energy_dish_wash_machine
+      - platform: state
+        entity_id: sensor.daily_energy_fridge
+      - platform: state
+        entity_id: sensor.daily_energy_office_desk
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: daily_energy_partial
+          value: >
+            {{ trigger.to_state.state }}
+          column: >
+            {% if trigger.entity_id == "sensor.daily_energy_living_room" %}
+              daily_energy_living_room
+            {% elif trigger.entity_id == "sensor.daily_energy_laundry" %}
+              daily_energy_laundry
+            {% elif trigger.entity_id == "sensor.daily_energy_dish_wash_machine" %}
+              daily_energy_dish_wash_machine
+            {% elif trigger.entity_id == "sensor.daily_energy_fridge" %}
+              daily_energy_fridge
+            {% elif trigger.entity_id == "sensor.daily_energy_office_desk" %}
+              daily_energy_office_desk
+            {% endif %}
+
             
             
 sensor:

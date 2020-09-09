@@ -1,7 +1,7 @@
 substitutions:
   devicename: shelly25_bedroom
   DeviceName: Shelly 25 Bedroom
-  LightA_Name: Master Bedroom
+  LightA_Name: Master Bedroom Output
   LightB_Name: Master Bedroom Bathroom
 
 esphome:
@@ -61,7 +61,6 @@ binary_sensor:
           - ON for at most 1s
           - OFF for at least 0.2s
         then:
-          #- light.toggle: light_bedroom
           - homeassistant.service:
               service: light.toggle
               data:
@@ -100,20 +99,27 @@ binary_sensor:
                             entity_id: "light.master_bedroom"
                             direction: "up"
                 - delay: 0.5s
-      
-output:
+
+switch:
   - platform: gpio
-    id: relay_1
+    id: light_bedroom
     pin: GPIO04
+    name: ${LightA_Name}
+    restore_mode: ALWAYS_ON
+    
+output:
+  #- platform: gpio
+  #  id: relay_1
+  #  pin: GPIO04
   - platform: gpio
     id: relay_2
     pin: GPIO15
     
 light:
-  - id: light_bedroom
-    name: ${LightA_Name}
-    platform: binary
-    output: relay_1
+  #- id: light_bedroom
+  #  name: ${LightA_Name}
+  #  platform: binary
+  #  output: relay_1
   - id: light_bathroom
     name: ${LightB_Name}
     platform: binary
