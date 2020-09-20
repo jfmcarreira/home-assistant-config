@@ -32,18 +32,18 @@ automation old:
         #service: light.toggle
       
 
-  - alias: Lights Toogle Living Room Window Light
-    initial_state: true
-    trigger:
-      - device_id: b4ce41c93bf7479ca8878d0c59ec4d5e
-        discovery_id: 00C71D_BTN_2_SINGLE
-        domain: mqtt
-        platform: device
-        subtype: button_2
-        type: button_short_press
-    action:
-      - entity_id: light.living_room_window
-        service: light.toggle
+  #- alias: Lights Toogle Living Room Window Light
+    #initial_state: true
+    #trigger:
+      #- device_id: b4ce41c93bf7479ca8878d0c59ec4d5e
+        #discovery_id: 00C71D_BTN_2_SINGLE
+        #domain: mqtt
+        #platform: device
+        #subtype: button_2
+        #type: button_short_press
+    #action:
+      #- entity_id: light.living_room_window
+        #service: light.toggle
 
   - alias: Lights Toogle Living Room Abajur
     initial_state: true

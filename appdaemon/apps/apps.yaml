@@ -18,5 +18,5 @@ motion_light_office:
   light: light.office_desk
   other_lights:
     - light.office
-  timeout: 300
+  timeout: 120
   curr_sw: input_boolean.automation_appdaemon_motion_lights_office

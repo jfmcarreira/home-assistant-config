@@ -7,12 +7,12 @@ homeassistant:
   customize:
     person.bianca:
       icon: mdi:human-female
-      entity_picture: /local/img_bianca.jpg
+      #entity_picture: /local/img_bianca.jpg
     device_tracker.bianca_phone:
       entity_picture: /local/img_bianca.jpg
     person.joao:
       icon: mdi:human-male
-      entity_picture: /local/img_joao.jpg
+      #entity_picture: /local/img_joao.jpg
     device_tracker.magnesium:
       entity_picture: /local/img_joao.jpg
     proximity.dist_home_joao:

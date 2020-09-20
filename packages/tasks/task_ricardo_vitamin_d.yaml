@@ -24,9 +24,9 @@ binary_sensor:
       ricardo_vitamin_d:
         friendly_name: "Vitamina D Ricardo"
         icon_template: mdi:baby-face
-        entity_id:
-          - sensor.ricardo_vitamin_d_last_done
-          - sensor.date
+        #entity_id:
+          #- sensor.ricardo_vitamin_d_last_done
+          #- sensor.date
         value_template: >
           {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d", true) ) == 0 }} 
         attribute_templates:

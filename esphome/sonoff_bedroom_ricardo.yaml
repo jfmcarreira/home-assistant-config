@@ -45,7 +45,7 @@ binary_sensor:
           - light.toggle: light_1
       - timing:
           - ON for at least 1s
-          - OFF for at least 0.1s
+          #- OFF for at least 0.1s
         then:
           - homeassistant.service:
               service: light.toggle

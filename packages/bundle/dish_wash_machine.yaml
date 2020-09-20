@@ -43,8 +43,8 @@ binary_sensor:
           minutes: 1
         delay_off:
           minutes: 1
-        entity_id:
-          - sensor.power_usage_dish_wash_machine
+        #entity_id:
+          #- sensor.power_usage_dish_wash_machine
         value_template: >-
           {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
               {%- if states("sensor.power_usage_dish_wash_machine") | int < 3 %}
@@ -101,9 +101,9 @@ binary_sensor dishes:
     sensors:
       dish_wash_machine_need_emtpy:
         friendly_name: Existe Loiça Lavada na Máquina
-        entity_id:
-          - input_datetime.task_dish_washing_last_done
-          - input_datetime.task_dish_wash_empty_last_done
+        #entity_id:
+          #- input_datetime.task_dish_washing_last_done
+          #- input_datetime.task_dish_wash_empty_last_done
         value_template: >
           {{ as_timestamp( states('input_datetime.task_dish_washing_last_done') ) - as_timestamp( states('input_datetime.task_dish_wash_empty_last_done') ) > 0 }} 
         attribute_templates:

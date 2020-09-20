@@ -1,0 +1,9 @@
+
+spotify:
+  client_id: !secret spotfy_client_id
+  client_secret: !secret spotfy_client_secret
+
+  
+spotcast:
+  sp_dc: !secret spotfy_client_id
+  sp_key: !secret spotfy_client_secret

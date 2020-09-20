@@ -1,0 +1,6 @@
+input_boolean:
+  ricardo_sleeping:
+    name: Ricardo a dormir
+    icon: mdi:bell-sleep
+
+ 

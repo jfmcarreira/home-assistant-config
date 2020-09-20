@@ -1,2 +1,0 @@
-nzbget:
-  host: !secret nzbget_host

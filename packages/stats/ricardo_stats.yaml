@@ -31,8 +31,8 @@ sensor:
         attribute_templates:
           last_measured: >
             {{ states('input_datetime.ricardo_weight_last_measured') | timestamp_custom("%Y-%m-%d", true) }}
-        entity_id:
-          - input_number.ricardo_weight
+        #entity_id:
+          #- input_number.ricardo_weight
          
 
 

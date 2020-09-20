@@ -1,17 +1,6 @@
 badges: []
 cards:
-  - type: entities
-    title: VMs
-    show_header_toggle: false
-    entities:
-      - entity: switch.proxmox_francium_vm
-        name: Francium (Windows)
-      - entity: switch.proxmox_unifi_controller_vm
-        name: Unify Controller
-      - entity: switch.proxmox_zoneminder_vm
-        name: ZoneMinder
-      - entity: switch.proxmox_mineos_vm
-        name: Minecraft Server
+
         
   - type: entities
     title: SpeedTest

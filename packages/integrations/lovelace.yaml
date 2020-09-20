@@ -42,6 +42,8 @@ lovelace:
       type: module
     - url: /hacsfiles/simple-thermostat/simple-thermostat.js
       type: module
+    - url: /hacsfiles/spotify-card/spotify-card.js
+      type: module
     - url: /hacsfiles/vacuum-card/vacuum-card.js
       type: module
     - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
@@ -57,7 +59,7 @@ lovelace:
     lovelace-admin:
       mode: yaml
       title: Administração
-      icon: mdi:settings-outline
+      icon: mdi:cog-outline
       show_in_sidebar: true
       filename: ui-lovelace-administration.yaml
       require_admin: true

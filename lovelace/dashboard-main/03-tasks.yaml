@@ -64,8 +64,11 @@ cards:
     show_header_toggle: false
     title: Caixa da Areia Fluffy/Pluma
     entities:
-      - entity: sensor.cat_litter_box_last_clean
+      - entity: binary_sensor.cat_litter_box_need_clean
+      - entity: binary_sensor.cat_litter_box_need_change
         name: Limpeza
+      - entity: sensor.cat_litter_box_last_clean
+        name: Última Limpeza
       - entity: sensor.cat_litter_box_last_change
-        name: Substituição
+        name: Última Substituição
     

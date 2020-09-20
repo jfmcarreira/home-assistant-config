@@ -21,6 +21,10 @@ api:
 
 ota:
 
+captive_portal:
+
+web_server:
+
 uart:
   rx_pin: GPIO4
   tx_pin: GPIO5

@@ -34,6 +34,7 @@ automation old:
         entity_id: light.hallway_mirror
 
   - alias: Lights Hallway Presence Light Off
+    id: Lights Hallway Presence Light Off
     trigger:
       - platform: state
         entity_id: light.hallway_presence_group

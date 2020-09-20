@@ -63,10 +63,10 @@ sensor:
         friendly_name: Electricity Meter
         value_template: >
             {{ ( ( states('input_number.electricity_meter_offpeak') | float ) + ( states('input_number.electricity_meter_peak') | float ) + ( states('input_number.electricity_meter_full') | float ) ) | int }}
-        entity_id:
-          - input_number.electricity_meter_full
-          - input_number.electricity_meter_peak
-          - input_number.electricity_meter_offpeak
+        #entity_id:
+          #- input_number.electricity_meter_full
+          #- input_number.electricity_meter_peak
+          #- input_number.electricity_meter_offpeak
       electricity_last_meter:
         friendly_name: Electricity Last Meter
         device_class: timestamp

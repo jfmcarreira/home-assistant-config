@@ -22,7 +22,7 @@ script:
       #data:
         #volume_level: 10
     
-    - delay: 00:00:04
+    - delay: 00:00:06
     
     - service: python_script.change_meo_box_channel
       data:

@@ -30,16 +30,6 @@ sensor:
         device_class: timestamp
         value_template: >
           {{ state_attr('input_datetime.cat_litter_box_last_visit', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-      cat_litter_box_last_clean:
-        friendly_name: "Litter Box Last Clean"
-        device_class: timestamp
-        value_template: >
-          {{ state_attr('input_datetime.cat_litter_box_last_clean', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
-      cat_litter_box_last_change:
-        friendly_name: "Litter Box Last Change"
-        device_class: timestamp
-        value_template: >
-          {{ state_attr('input_datetime.cat_litter_box_last_change', 'timestamp') | timestamp_custom("%Y-%m-%d", true) }}
 
 automation old:
 - alias: Reset PIR State Cat Litter

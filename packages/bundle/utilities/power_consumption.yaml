@@ -19,6 +19,12 @@ homeassistant:
       device_class: power
       icon: mdi:flash-alert
       unit_of_measurement: "VAR"
+    "sensor.*_energy":
+      unit_of_measurement: "kWh"
+    "sensor.energy_*":
+      unit_of_measurement: "kWh"
+    "sensor.daily_energy_*":
+      unit_of_measurement: "kWh"
 
 utility_meter: 
   daily_energy:
@@ -45,6 +51,9 @@ utility_meter:
   daily_energy_office_desk:
     source: sensor.energy_office_desk
     cycle: daily
+  daily_energy_iron:
+    source: sensor.energy_iron
+    cycle: daily
 
 sensor energy:
   - platform: integration
@@ -66,22 +75,34 @@ sensor energy:
     round: 2 
     
   - platform: integration
-    source: sensor.power_usage_dish_wash_machine
+    source: sensor.power_usage_device_dish_wash_machine
     name: energy_dish_wash_machine
     unit_prefix: k
     round: 2 
     
   - platform: integration
-    source: sensor.power_usage_fridge
+    source: sensor.power_usage_device_fridge
     name: energy_fridge
     unit_prefix: k
     round: 2
 
   - platform: integration
-    source: sensor.power_usage_office_desk
+    source: sensor.power_usage_device_office_desk
     name: energy_office_desk
     unit_prefix: k
+    round: 2
+  
+  - platform: integration
+    source: sensor.power_usage_device_iron
+    name: energy_iron
+    unit_prefix: k
     round: 2 
+    
+  - platform: template
+    sensors:
+      daily_energy_remaining:
+        unit_of_measurement: "khW"
+        value_template: "{{ ( states.sensor.daily_energy.state | float ) - ( states.sensor.daily_energy_living_room.state | float ) - ( states.sensor.daily_energy_laundry.state | float ) - ( states.sensor.daily_energy_dish_wash_machine.state | float ) - ( states.sensor.daily_energy_fridge.state | float ) - ( states.sensor.daily_energy_office_desk.state | float ) - ( states.sensor.daily_energy_iron.state | float ) }}"
 
 sensor bill:
   - platform: template

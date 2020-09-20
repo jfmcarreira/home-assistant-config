@@ -78,13 +78,19 @@ google_assistant:
         - Aquecimento central
         - Heating
         - Central heating
-    media_player.media_center:
+    #media_player.media_center:
+    media_player.living_room_tv:
       expose: true
       name: Televisão
       aliases:
         - Televisão da Sala
         - Media center
         - TV
+    light.front_door:
+      expose: true
+      name: Luz da Porta
+      aliases:
+        - Front Door Light
     light.living_room_table:
       expose: true
       name: Luz da Mesa da Sala
@@ -105,7 +111,7 @@ google_assistant:
       name: Retro-iluminação da TV
       aliases:
         - Living Room TV Leds
-        - Luz dã televisão
+        - Luz da televisão
     light.hallway:
       expose: true
       name: Luz do Corredor
@@ -162,4 +168,14 @@ google_assistant:
       name: Luz da Cama Lado Direito
       aliases:
         - Bedroom Right Side Light
+    light.bedroom_ricardo:
+      expose: true
+      name: Luz do Quarto do Ricardo
+      aliases:
+        - Baby Room Light
+    light.bedroom_ricardo_lamp:
+      expose: true
+      name: Luz do Candeeiro do Quarto do Ricardo
+      aliases:
+        - Baby Room Side Light
     

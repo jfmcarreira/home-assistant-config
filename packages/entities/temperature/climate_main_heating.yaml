@@ -52,9 +52,9 @@ sensor:
           {% else %}
             {{ states( 'sensor.average_temperature' ) }}
           {% endif %}
-        entity_id:
-          - input_select.heating_temperature_selection
-          - sensor.average_temperature
-          - sensor.living_room_temperature
-          - sensor.master_bedroom_temperature
-          - sensor.office_temperature
+        #entity_id:
+          #- input_select.heating_temperature_selection
+          #- sensor.average_temperature
+          #- sensor.living_room_temperature
+          #- sensor.master_bedroom_temperature
+          #- sensor.office_temperature

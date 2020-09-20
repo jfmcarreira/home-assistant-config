@@ -14,8 +14,8 @@ sensor:
       weather_temperature:
         friendly_name: "Weather Temperature"
         value_template: "{{ states.weather.ipma.attributes.temperature }}"
-        entity_id:
-          - weather.ipma
+        #entity_id:
+          #- weather.ipma
 
   - platform: min_max
     name: Average Temperature

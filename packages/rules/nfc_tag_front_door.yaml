@@ -1,0 +1,25 @@
+automation old:
+  - alias: NFC Tag Front Door
+    trigger:
+      - platform: event
+        event_type: tag_scanned
+        event_data:
+          device_id: d38450c73488e515
+          tag_id: bc6345fb-4f1c-4fcf-a6b0-74b3894635ac
+    action:
+      - service: light.toggle
+        entity_id: light.hallway
+        
+  - alias: NFC Tag Office Desk
+    trigger:
+      - platform: event
+        event_type: tag_scanned
+        event_data:
+          device_id: d38450c73488e515
+          tag_id: 32df48d0-584a-4225-aff2-27d9ccad5d2d
+    action:
+      - service: light.toggle
+        entity_id: light.office_desk
+        
+        
+        

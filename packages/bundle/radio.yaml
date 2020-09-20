@@ -7,7 +7,7 @@ input_select:
     name: "Source"
     icon: mdi:radio-fm
     options:
-      - Mopidy
+      #- Mopidy
       - YouTube URL
       - RFM
       - Comercial
@@ -28,7 +28,7 @@ input_select:
       - Sala 
       - Cozinha
       - Quarto
-      - Kiosk
+      #- Kiosk
       #- Host
       #- TV
       #- Pegasus
