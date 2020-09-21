@@ -211,16 +211,18 @@ cards:
         hold_action:
           action: none
           
-          
-  - type: 'custom:spotify-card'
-    #spotify_entity: media_player.spotify_joao_carreira
-    #country_code: PT
-    #height: <optional pixels height for the playlist element. If content is larger scrolling will be enabled>      
-    #name: <optional name> Custom title. Leave empty to hide.
-    #display_style: <optional Grid> Change default display style.
-    
-  - type: media-control
-    entity: media_player.spotify_joao_carreira
+  - type: "custom:vertical-stack-in-card"
+    cards:
+      - type: 'custom:spotify-card'
+        spotify_entity: media_player.spotify_joao_carreira
+        country_code: PT
+        #limit: 0
+        #height: <optional pixels height for the playlist element. If content is larger scrolling will be enabled>      
+        #name: <optional name> Custom title. Leave empty to hide.
+        #display_style: <optional Grid> Change default display style.
+
+      - type: media-control
+        entity: media_player.spotify_joao_carreira
   
         
   - type: entities
