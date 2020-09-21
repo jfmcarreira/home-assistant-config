@@ -112,7 +112,7 @@ cards:
   - type: 'custom:auto-entities'
     card:
       show_header_toggle: false
-      title: Bateria dos dispositivoos
+      title: Bateria dos dispositivos
       type: entities
     filter:
       include:

@@ -16,3 +16,4 @@ tts:
     cache_dir: /tmp/tts
     time_memory: 300
     service_name: voicerss_say
+    format: 44khz_8bit_mono

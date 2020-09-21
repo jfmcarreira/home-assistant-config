@@ -11,7 +11,7 @@ recorder:
       - zone
       - sun
       - weather
-      - automation
+      #- automation
     entity_globs:
       - sensor.birthday_*
       - sensor.daily_*
@@ -73,6 +73,7 @@ logbook:
     entity_globs:
       - automation.daily_stats_*
       - automation.reset_*
+      - automation.discovery_*
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.query_*

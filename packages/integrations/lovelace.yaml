@@ -8,8 +8,6 @@ lovelace:
       type: module
     - url: /hacsfiles/button-card/button-card.js
       type: module
-    - url: /hacsfiles/calendar-card/calendar-card.js
-      type: module
     - url: /hacsfiles/chartjs-card/chartjs-card.js
       type: module
     - url: /hacsfiles/custom-header/custom-header.js
