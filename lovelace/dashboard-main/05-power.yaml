@@ -86,13 +86,13 @@ cards:
                 data:
                   datasets:
                     - data:
-                        - '${states["sensor.daily_energy_living_room"].state}'
-                        - '${states["sensor.daily_energy_laundry"].state}'
-                        - '${states["sensor.daily_energy_dish_wash_machine"].state}'
-                        - '${states["sensor.daily_energy_fridge"].state}'
-                        - '${states["sensor.daily_energy_iron"].state}'
-                        - '${states["sensor.daily_energy_office_desk"].state}'
-                        - '${states["sensor.daily_energy_remaining"].state}'
+                        - '${states["sensor.query_month_energy_living_room"].state}'
+                        - '${states["sensor.query_month_energy_laundry"].state}'
+                        - '${states["sensor.query_month_energy_dish_wash_machine"].state}'
+                        - '${states["sensor.query_month_energy_fridge"].state}'
+                        - '${states["sensor.query_month_energy_iron"].state}'
+                        - '${states["sensor.query_month_energy_office_desk"].state}'
+                        - '${states["sensor.query_month_energy_remaining"].state}'
                       backgroundColor:                        
                         - '#003f5c'
                         - '#2f4b7c'
@@ -126,62 +126,62 @@ cards:
                     #text: Consumo energético (hoje)
               
                     
-              - type: 'custom:chartjs-card'
-                chart: bar
-                custom_options:
-                  showLegend: false
-                data:
-                  datasets:
-                    #- label: Total
+              #- type: 'custom:chartjs-card'
+                #chart: bar
+                #custom_options:
+                  #showLegend: false
+                #data:
+                  #datasets:
+                    ##- label: Total
+                      ##borderWidth: 1
+                      ##data: '${states["sensor.query_daily_energy_current_month"].attributes.data}'
+                      ##backgroundColor: var(--accent-color)
+                    
+                    #- label: Centro Multimédia
                       #borderWidth: 1
-                      #data: '${states["sensor.query_daily_energy_current_month"].attributes.data}'
+                      #data: '${states["sensor.query_daily_energy_living_room"].attributes.data}'
+                      #backgroundColor: var(--accent-color)
+                      
+                    #- label: Lavandaria
+                      #borderWidth: 1
+                      #data: '${states["sensor.query_daily_energy_laundry"].attributes.data}'
+                      #backgroundColor: var(--accent-color)
+                      
+                    #- label: Frigorífico
+                      #borderWidth: 1
+                      #data: '${states["sensor.query_daily_energy_fridge"].attributes.data}'
+                      #backgroundColor: var(--accent-color)
+                      
+                    #- label: Máquina de Lavar Loiça
+                      #borderWidth: 1
+                      #data: '${states["sensor.daily_energy_dish_wash_machine"].attributes.data}'
+                      #backgroundColor: var(--accent-color)
+                      
+                    #- label: Ferro/AP
+                      #borderWidth: 1
+                      #data: '${states["sensor.query_daily_energy_iron"].attributes.data}'
                       #backgroundColor: var(--accent-color)
                     
-                    - label: Centro Multimédia
-                      borderWidth: 1
-                      data: '${states["sensor.query_daily_energy_living_room"].attributes.data}'
-                      backgroundColor: var(--accent-color)
+                    #- label: Secretária Escritório
+                      #borderWidth: 1
+                      #data: '${states["sensor.query_daily_energy_office_desk"].attributes.data}'
+                      #backgroundColor: var(--accent-color)
                       
-                    - label: Lavandaria
-                      borderWidth: 1
-                      data: '${states["sensor.query_daily_energy_laundry"].attributes.data}'
-                      backgroundColor: var(--accent-color)
-                      
-                    - label: Frigorífico
-                      borderWidth: 1
-                      data: '${states["sensor.query_daily_energy_fridge"].attributes.data}'
-                      backgroundColor: var(--accent-color)
-                      
-                    - label: Máquina de Lavar Loiça
-                      borderWidth: 1
-                      data: '${states["sensor.daily_energy_dish_wash_machine"].attributes.data}'
-                      backgroundColor: var(--accent-color)
-                      
-                    - label: Ferro/AP
-                      borderWidth: 1
-                      data: '${states["sensor.query_daily_energy_iron"].attributes.data}'
-                      backgroundColor: var(--accent-color)
-                    
-                    - label: Secretária Escritório
-                      borderWidth: 1
-                      data: '${states["sensor.query_daily_energy_office_desk"].attributes.data}'
-                      backgroundColor: var(--accent-color)
-                      
-                    - label: Outros
-                      borderWidth: 1
-                      data: '${states["sensor.query_daily_energy_remaining"].attributes.data}'
-                      backgroundColor: var(--accent-color)
+                    #- label: Outros
+                      #borderWidth: 1
+                      #data: '${states["sensor.query_daily_energy_remaining"].attributes.data}'
+                      #backgroundColor: var(--accent-color)
 
-                  labels: '${states["sensor.query_daily_energy_living_room"].attributes.labels}'
-                entity_row: true
-                options:
-                  scales:
-                    yAxes:
-                      - ticks:
-                          beginAtZero: true
-                  title:
-                    display: false
-                    text: Consumo Energético Mês Corrente
+                  #labels: '${states["sensor.query_daily_energy_living_room"].attributes.labels}'
+                #entity_row: true
+                #options:
+                  #scales:
+                    #yAxes:
+                      #- ticks:
+                          #beginAtZero: true
+                  #title:
+                    #display: false
+                    #text: Consumo Energético Mês Corrente
               
               - type: 'custom:chartjs-card'
                 chart: bar
@@ -191,9 +191,9 @@ cards:
                   datasets:
                     - backgroundColor: var(--accent-color)
                       borderWidth: 1
-                      data: '${states["sensor.query_daily_energy_current_year"].attributes.data}'
+                      data: '${states["sensor.query_month_energy_current_year"].attributes.data}'
                       label: Eletricidade
-                  labels: '${states["sensor.query_daily_energy_current_year"].attributes.labels}'
+                  labels: '${states["sensor.query_month_energy_current_year"].attributes.labels}'
                 entity_row: true
                 options:
                   scales:
@@ -204,131 +204,6 @@ cards:
                     display: false
                     text: Consumo energético (últimos 12 meses)
               
-                      
-                  
-              #- input_select.energy_daily_graph_select
-              #- bar_spacing: 1
-                #entities:
-                  #- entity: sensor.energy_month_consumption_kw
-                    #show_graph: false
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_01
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_02
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_03
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_04
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_05
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_06
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_07
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_08
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_09
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_10
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_11
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_12
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_13
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_14
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_15
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_16
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_17
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_18
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_19
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_20
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_21
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_22
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_23
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_24
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_25
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_26
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_27
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_28
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_29
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_30
-                  #- color: var(--light-primary-color)
-                    #entity: sensor.energy_kw_day_31
-                #fixed_value: true
-                #font_size: 80
-                #font_size_header: 14px
-                #group_by: date
-                #height: 120
-                #name: Consumo do mês
-                #show:
-                  #average: false
-                  #extrema: false
-                  #graph: bar
-                  #icon: false
-                  #labels: false
-                  #labels_secondary: false
-                  #legend: false
-                #style: |
-                  #.state__time {
-                    #display: none;
-                  #}
-                #type: "custom:mini-graph-card"
-                #unit: kW
-              #- content: >
-                  #| | | | | | | | | |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
-                  #|  |  |  |  |  |  |  |
-
-                  #|-|-|-|-|-|-|-|-|-|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
-
-                  #|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|
-                #style: |
-                  #.markdown {
-                    #padding: 0px 0px !important;
-                  #}
-
-                  #table {
-                    #table-layout: fixed;
-                    #width: 100%;
-                    #border-spacing: 1.014px 0 !important;
-                  #}
-
-                  #table td:first-child {
-                      #border-left: 0;
-                  #}
-
-                  #table td:last-child {
-                      #border-right: 0;
-                  #}
-
-                  #thead {
-                    #display: none;
-                  #}
-
-                  #td {
-                    #text-align: center;
-                    #font-size: 9px;
-                  #}
-                #type: "custom:hui-markdown-card"
-      
       - type: vertical-stack
         cards:
         - card:

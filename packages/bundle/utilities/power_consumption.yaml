@@ -42,18 +42,6 @@ utility_meter:
   daily_energy_laundry:
     source: sensor.energy_laundry
     cycle: daily
-  daily_energy_dish_wash_machine:
-    source: sensor.energy_dish_wash_machine
-    cycle: daily
-  daily_energy_fridge:
-    source: sensor.energy_fridge
-    cycle: daily
-  daily_energy_office_desk:
-    source: sensor.energy_office_desk
-    cycle: daily
-  daily_energy_iron:
-    source: sensor.energy_iron
-    cycle: daily
 
 sensor energy:
   - platform: integration
@@ -73,30 +61,7 @@ sensor energy:
     name: energy_laundry
     unit_prefix: k
     round: 2 
-    
-  - platform: integration
-    source: sensor.power_usage_device_dish_wash_machine
-    name: energy_dish_wash_machine
-    unit_prefix: k
-    round: 2 
-    
-  - platform: integration
-    source: sensor.power_usage_device_fridge
-    name: energy_fridge
-    unit_prefix: k
-    round: 2
 
-  - platform: integration
-    source: sensor.power_usage_device_office_desk
-    name: energy_office_desk
-    unit_prefix: k
-    round: 2
-  
-  - platform: integration
-    source: sensor.power_usage_device_iron
-    name: energy_iron
-    unit_prefix: k
-    round: 2 
     
   - platform: template
     sensors:
@@ -115,5 +80,8 @@ sensor bill:
         value_template: >-
           {{ ( float(states.sensor.monthly_energy.state) * (0.1456+0.001) * 1.23 + float(states.sensor.monthly_energy_cicle_days.state) * 0.2292 * 1.23 + 2.85 * 1.06 ) | round(2) }}
         unit_of_measurement: "€"
+        attribute_templates:
+          Factura Anterior: "{{ ( float(states.sensor.monthly_energy.attributes.last_period) * (0.1456+0.001) * 1.23 + 30.0 * 0.2292 * 1.23 + 2.85 * 1.06 ) | round(2) }} €"
+     
 
   
