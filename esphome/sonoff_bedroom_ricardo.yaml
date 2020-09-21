@@ -24,6 +24,10 @@ api:
 ota:
 
 binary_sensor:
+  - platform: homeassistant
+    id: bedroom_ricardo_lamp_state
+    entity_id: light.bedroom_ricardo_lamp
+    
   - id: sw_1
     #name: ${upper_devicename} SW
     platform: gpio
@@ -35,14 +39,26 @@ binary_sensor:
       - delayed_on: 30ms
     #on_press:
       #then:
-        #- light.toggle: light_1
+        #- light.toggle: light_bedroom_ricardo
     
     on_multi_click:
       - timing:
           - ON for at most 1s
           - OFF for at least 0.1s
         then:
-          - light.toggle: light_1
+          - if:
+              condition:
+                or:
+                  - binary_sensor.is_on: bedroom_ricardo_lamp_state
+                  - light.is_on: light_bedroom_ricardo
+              then:
+                - light.turn_off: light_bedroom_ricardo
+                - homeassistant.service:
+                    service: light.turn_off
+                    data:
+                      entity_id: light.bedroom_ricardo_lamp
+              else:
+                - light.toggle: light_bedroom_ricardo
       - timing:
           - ON for at least 1s
           #- OFF for at least 0.1s
@@ -60,6 +76,6 @@ output:
 light:
   - name: ${upper_devicename}
     platform: binary
-    id: light_1
+    id: light_bedroom_ricardo
     output: relay_1
     
