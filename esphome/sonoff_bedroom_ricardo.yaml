@@ -48,17 +48,24 @@ binary_sensor:
         then:
           - if:
               condition:
-                or:
-                  - binary_sensor.is_on: bedroom_ricardo_lamp_state
-                  - light.is_on: light_bedroom_ricardo
+                api.connected:
               then:
-                - light.turn_off: light_bedroom_ricardo
-                - homeassistant.service:
-                    service: light.turn_off
-                    data:
-                      entity_id: light.bedroom_ricardo_lamp
+                - if:
+                    condition:
+                      or:
+                        - binary_sensor.is_on: bedroom_ricardo_lamp_state
+                        - light.is_on: light_bedroom_ricardo
+                    then:
+                      - light.turn_off: light_bedroom_ricardo
+                      - homeassistant.service:
+                          service: light.turn_off
+                          data:
+                            entity_id: light.bedroom_ricardo_lamp
+                    else:
+                      - light.toggle: light_bedroom_ricardo
               else:
                 - light.toggle: light_bedroom_ricardo
+
       - timing:
           - ON for at least 1s
           #- OFF for at least 0.1s

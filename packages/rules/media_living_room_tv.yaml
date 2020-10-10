@@ -1,5 +1,6 @@
 automation old:
   - alias: Media TV Off If No Motion
+    mode: restart
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_sensor_living_room
@@ -12,6 +13,7 @@ automation old:
         entity_id: media_player.media_center
         
   - alias: Media Control MEO Box Sala based on TV
+    mode: restart
     trigger:
       - platform: state
         entity_id: binary_sensor.living_room_tv_state

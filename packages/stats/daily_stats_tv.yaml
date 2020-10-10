@@ -68,6 +68,8 @@ sensor:
 automation insert:
   - alias: "Daily Stats Insert Value of TV State to Database"
     initial_state: true
+    mode: queued
+    max: 10
     trigger:
       - platform: state
         entity_id: sensor.daily_tv_time

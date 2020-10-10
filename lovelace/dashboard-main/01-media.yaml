@@ -4,15 +4,22 @@ title: Multimédia
 badges: []
 icon: 'mdi:audio-video'
 cards:
-  - cards:
+  - type: vertical-stack
+    cards:
       - type: custom:mini-media-player
         #type: media-control
         entity: media_player.media_center
         hide: 
           volume: true
-      - card:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.living_room_tv_state
+            state: 'on'
+        card:
+          type: vertical-stack
           cards:
-            - cards:
+            - type: horizontal-stack
+              cards:
                 - icon: 'mdi:television-classic'
                   tap_action:
                     action: call-service
@@ -43,8 +50,9 @@ cards:
                     service_data:
                       entity_id: media_player.living_room_tv
                   type: button
-              type: horizontal-stack
-            - cards:
+              
+            - type: vertical-stack
+              cards:
                 - cards:
                     - icon: 'mdi:information-outline'
                       show_name: false
@@ -123,12 +131,27 @@ cards:
                           button: EXIT
                       type: 'custom:button-card'
                   type: horizontal-stack
-              type: vertical-stack
-            - card:
+              
+            - type: conditional
+              conditions:
+                - entity: sensor.living_room_tv_source
+                  state: Plex
+              card:
+                type: media-control
+                entity: media_player.living_room_tv_plex
+                    
+                    
+            - type: conditional
+              conditions:
+                - entity: sensor.living_room_tv_source
+                  state: MEO
+              card:
+                type: vertical-stack
                 cards:
                   - entity: media_player.living_room_tv_meo_box
                     type: media-control
-                  - cards:
+                  - type: horizontal-stack
+                    cards:
                       - name: RTP1
                         tap_action:
                           action: call-service
@@ -153,18 +176,12 @@ cards:
                             channel: TVI
                             entity_id: media_player.living_room_tv_meo_box
                         type: button
-                    type: horizontal-stack
-                type: vertical-stack
-              conditions:
-                - entity: sensor.living_room_tv_source
-                  state: MEO
-              type: conditional
-          type: vertical-stack
-        conditions:
-          - entity: binary_sensor.living_room_tv_state
-            state: 'on'
-        type: conditional
-    type: vertical-stack
+                    
+                
+              
+              
+          
+    
     
   - type: horizontal-stack
     cards:

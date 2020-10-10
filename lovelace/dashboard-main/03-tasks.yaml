@@ -54,6 +54,15 @@ cards:
           icon: mdi:silverware-clean
           
   - type: entities
+    show_header_toggle: false
+    state_color: true
+    title: Ferro de Engomar
+    entities:
+      - entity: binary_sensor.device_iron_state
+        name: Estado do Ferro
+        
+        
+  - type: entities
     footer:
       entities:
         - entity: script.cat_litter_clean
@@ -66,7 +75,7 @@ cards:
     entities:
       - entity: binary_sensor.cat_litter_box_need_clean
       - entity: binary_sensor.cat_litter_box_need_change
-        name: Limpeza
+        #name: Limpeza
       - entity: sensor.cat_litter_box_last_clean
         name: Última Limpeza
       - entity: sensor.cat_litter_box_last_change

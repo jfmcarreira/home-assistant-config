@@ -1,0 +1,4 @@
+sensor:
+  - platform: radarr
+    host: potassium.home
+    api_key: !secret radarr_api

@@ -3,12 +3,38 @@ icon: 'mdi:cctv'
 path: cctv
 badges: []
 cards:
-  - type: picture-entity
-    name: Monitor Ricardo
-    entity: camera.baby_monitor_main
-    aspect_ratio: 50%
-    camera_view: auto
-    show_state: false
+  - type: custom:vertical-stack-in-card
+    cards:
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: input_boolean.baby_monitor_high_quality
+            name: State
+      - type: conditional
+        conditions:
+          - entity: input_boolean.baby_monitor_high_quality
+            state: "on"
+        card:
+          type: picture-entity
+          name: Monitor Ricardo
+          entity: camera.baby_monitor_main
+          aspect_ratio: 50%
+          camera_view: auto
+          show_state: false
+      
+      - type: conditional
+        conditions:
+          - entity: input_boolean.baby_monitor_high_quality
+            state: "off"
+        card:
+          type: picture-entity
+          name: Monitor Ricardo
+          entity: camera.baby_monitor_main
+          aspect_ratio: 50%
+          camera_view: auto
+          show_state: false
+    
+  
 
   
   

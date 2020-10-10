@@ -2,6 +2,9 @@
 ## Power Consumption
 ################################################################
 homeassistant:
+  customize:
+    sensor.power_usage_lights:
+      friendly_name: Potência Total das Luzes
   customize_glob:
     "sensor.power_usage_*":
       device_class: power
@@ -43,6 +46,13 @@ utility_meter:
     source: sensor.energy_laundry
     cycle: daily
 
+sensor power:
+  - platform: template
+    sensors:
+      power_usage_lights:
+        unit_of_measurement: "khW"
+        value_template: "{{ ( states.sensor.power_usage_light_bedroom_ricardo_lamp.state | float ) + ( states.sensor.power_usage_light_kitchen.state | float ) + ( states.sensor.power_usage_light_kitchen_pantry.state | float ) + ( states.sensor.power_usage_light_living_room_abajur.state | float ) + ( states.sensor.power_usage_light_living_room_table.state | float ) + ( states.sensor.power_usage_light_living_room_tv_leds.state | float ) + ( states.sensor.power_usage_light_living_room_window.state | float ) + ( states.sensor.power_usage_master_bedroom.state | float ) + ( states.sensor.power_usage_light_master_bedroom_bathroom.state | float ) + ( states.sensor.power_usage_light_office_desk.state | float ) }}"
+        
 sensor energy:
   - platform: integration
     source: sensor.bhpzem_power
@@ -68,6 +78,7 @@ sensor energy:
       daily_energy_remaining:
         unit_of_measurement: "khW"
         value_template: "{{ ( states.sensor.daily_energy.state | float ) - ( states.sensor.daily_energy_living_room.state | float ) - ( states.sensor.daily_energy_laundry.state | float ) - ( states.sensor.daily_energy_dish_wash_machine.state | float ) - ( states.sensor.daily_energy_fridge.state | float ) - ( states.sensor.daily_energy_office_desk.state | float ) - ( states.sensor.daily_energy_iron.state | float ) }}"
+
 
 sensor bill:
   - platform: template

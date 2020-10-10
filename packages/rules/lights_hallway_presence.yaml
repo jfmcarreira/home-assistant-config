@@ -8,12 +8,17 @@ light:
 
 automation old:
   - alias: Lights Hallway Presence Light On
+    mode: restart
     trigger:
       - entity_id: binary_sensor.motion_sensor_hallway
         platform: state
         to: "on"
       - entity_id: light.hallway
         platform: state
+        to: "off"
+      - entity_id: light.office
+        platform: state
+        from: "on"
         to: "off"
     condition:
       - condition: state
@@ -35,6 +40,7 @@ automation old:
 
   - alias: Lights Hallway Presence Light Off
     id: Lights Hallway Presence Light Off
+    mode: restart
     trigger:
       - platform: state
         entity_id: light.hallway_presence_group

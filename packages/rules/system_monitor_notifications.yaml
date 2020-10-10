@@ -3,6 +3,7 @@
 ################################################################
 automation old:
   - alias: System Alert Disk Full
+    mode: restart
     initial_state: true
     trigger:
       - platform: numeric_state

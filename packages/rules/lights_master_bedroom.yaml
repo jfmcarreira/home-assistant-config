@@ -1,6 +1,6 @@
 automation old:
   - alias: Lights Master Bedroom Side Turn Off
-    mode: single
+    mode: restart
     initial_state: true
     trigger:
       - entity_id: light.master_bedroom

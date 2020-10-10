@@ -1,0 +1,168 @@
+
+sensor per_day:
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: query_daily_energy_current_month
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(value SEPARATOR ','),']') AS data,
+              CONCAT('["', GROUP_CONCAT(IF(`value` > 10, 'red', IF(`value` > 7, 'orange', 'green')) SEPARATOR '","'),'"]') AS colors,
+              ROUND(SUM(value), 2) AS total,
+              'info in attributes' AS value
+          FROM daily_energy
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);        
+          
+      - name: query_daily_energy_living_room
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_living_room SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      
+      - name: query_daily_energy_laundry
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_laundry SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+          
+      - name: query_daily_energy_dish_wash_machine
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_dish_wash_machine SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      
+      - name: query_daily_energy_fridge
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_fridge SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+          
+      - name: query_daily_energy_office_desk
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_office_desk SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      
+      - name: query_daily_energy_iron
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_iron SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      
+      - name: query_daily_energy_remaining
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_remaining SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+
+          
+     
+
+sensor per_month:
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: query_month_energy_current_year
+        column: "attributes"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(month SEPARATOR ','), ']') AS labels,
+              CONCAT('[', GROUP_CONCAT(total SEPARATOR ','), ']') AS data,
+              'info in attributes' AS 'attributes'
+          FROM
+          (
+            SELECT
+              ROUND(SUM(`value`), 2) AS total,
+              CONCAT('"',MONTHNAME(date), ' ', YEAR(date),'"') AS month
+            FROM `daily_energy`
+            GROUP BY MONTH(date)
+            ORDER BY date
+            LIMIT 12
+          ) AS json;
+          
+      - name: query_month_energy_total
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_total`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_living_room
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_living_room`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_laundry
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_laundry`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_dish_wash_machine
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_dish_wash_machine`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_fridge
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_fridge`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_office_desk
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_office_desk`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_iron
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_iron`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+            
+      
+  - platform: template
+    sensors:
+      query_month_energy_remaining:
+        unit_of_measurement: "khW"
+        value_template: "{{ ( states.sensor.query_month_energy_total.state | float ) - ( states.sensor.query_month_energy_living_room.state | float ) - ( states.sensor.query_month_energy_laundry.state | float ) - ( states.sensor.query_month_energy_dish_wash_machine.state | float ) - ( states.sensor.query_month_energy_fridge.state | float ) - ( states.sensor.query_month_energy_office_desk.state | float ) - ( states.sensor.query_month_energy_iron.state | float ) }}"

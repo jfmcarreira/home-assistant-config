@@ -5,6 +5,7 @@
 automation old:
   - alias: Lights Living Room Side Turn Off
     initial_state: true
+    mode: restart
     trigger:
       - entity_id: light.living_room_table
         platform: state
@@ -47,6 +48,7 @@ automation old:
 
   - alias: Lights Toogle Living Room Abajur
     initial_state: true
+    mode: restart
     trigger:
       - platform: device
         domain: mqtt

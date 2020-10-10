@@ -1,6 +1,14 @@
 ################################################################
 ## Cat Litter
 ################################################################
+homeassistant:
+  customize:
+    sensor.cat_litter_box_last_clean:
+      icon: mdi:clock-outline
+    sensor.cat_litter_box_last_change:
+      icon: mdi:clock-outline
+      
+      
 input_datetime:
   cat_litter_box_last_clean:
     name: Limpeza da Areia das Gatas
@@ -31,25 +39,25 @@ binary_sensor cleaning:
   - platform: template
     sensors:
       cat_litter_box_need_clean:
-        friendly_name: Necessário Limpeza da Areia das Gatas
+        friendly_name: Limpeza da Areia das Gatas
         device_class: problem
         #entity_id:
           #- input_datetime.cat_litter_box_last_clean
           #- sensor.date
         value_template: >
-          {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d", true) ) == 0 }} 
+          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d %H", true) ) - as_timestamp( as_timestamp( states('input_datetime.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H", true) ) ) / 60.0 / 60.0 ) > 20 }}
         attribute_templates:
           last_done: >
             {{ as_timestamp( states('input_datetime.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
             
       cat_litter_box_need_change:
-        friendly_name: Necessário Mudança da Areia das Gatas
+        friendly_name: Mudança da Areia das Gatas
         device_class: problem
         #entity_id:
           #- input_datetime.cat_litter_box_last_change
           #- sensor.date
         value_template: >
-          {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d", true) ) == 0 }} 
+          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M", true) ) ) / 24.0 / 60.0 / 60.0 ) > 8 }} 
         attribute_templates:
           last_done: >
             {{ as_timestamp( states('input_datetime.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
@@ -94,6 +102,7 @@ script:
         data:
           operation: restore
           store_name: cat_litter_flash_store
+          
   cat_litter_clean:
     alias: Task Litter Box Mark Clean
     sequence:
@@ -138,11 +147,13 @@ script:
         data:
           entity_id: vacuum.roborock
           fan_speed: "medium"
+          
   cat_litter_change:
     alias: Task Litter Box Mark Change
     sequence:
-      - service: script.cat_litter_clean
       - service: input_datetime.set_datetime
         data_template:
           entity_id: input_datetime.cat_litter_box_last_change
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      - service: script.cat_litter_clean
+      

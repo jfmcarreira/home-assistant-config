@@ -1,5 +1,6 @@
 automation old:
   - alias: Lights Kitchen Pantry Off on Timeout
+    mode: restart
     initial_state: true
     trigger:
       - platform: state

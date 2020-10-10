@@ -1,5 +1,6 @@
 automation old:
 - alias: Lights Front Door Turn On Door Open
+  mode: restart
   trigger:
   - entity_id: binary_sensor.front_door
     from: 'off'

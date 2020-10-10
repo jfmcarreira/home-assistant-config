@@ -13,7 +13,9 @@ webostv:
   customize:
     sources:
       - MEO
-      - Kodi
+      #- Kodi
+      #- Jellyfin
+      - Plex
       - YouTube
       - Netflix
-      - Jellyfin
+      - Spotify

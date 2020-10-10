@@ -1,5 +1,6 @@
 automation old:
 - alias: Lights Hallway Turn On Door Open
+  mode: restart
   trigger:
   - entity_id: binary_sensor.front_door
     from: 'off'
@@ -22,6 +23,7 @@ automation old:
 
 
 - alias: Lights Hallway Turn Off No Motion
+  mode: restart
   trigger:
   - platform: state
     entity_id: binary_sensor.motion_sensor_hallway

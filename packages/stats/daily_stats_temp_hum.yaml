@@ -1,6 +1,8 @@
 automation insert:
   - alias: "Daily Stats Insert Value of Temperature to Database"
     initial_state: true
+    mode: queued
+    max: 10
     trigger:
       - platform: state
         entity_id: sensor.daily_average_temperature
@@ -14,6 +16,8 @@ automation insert:
             
   - alias: "Daily Stats Insert Value of Humidity to Database"
     initial_state: true
+    mode: queued
+    max: 10
     trigger:
       - platform: state
         entity_id: sensor.daily_average_humidity

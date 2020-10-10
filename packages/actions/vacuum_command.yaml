@@ -4,8 +4,10 @@ script:
     fields:
       vacuum_command_args:
         description: Command to send to the vacuum
+        example: bla bla
       vacuum_params_args:
         description: Parameters to send
+        example: bla bla
     sequence:
       - service: vacuum.send_command
         data:  

@@ -1,5 +1,7 @@
 automation old:
 - alias: RF Brigde Demultiplexer
+  mode: queued
+  max: 10
   trigger:
     - platform: mqtt
       topic: tele/Sonoff_RF_Bridge/RESULT

@@ -114,5 +114,6 @@
   action:
   - data:
       entity_id: media_player.ghm_living_room
-      message: "Routina de aspiração automática vai começar dentro de 20 minutos. Para cancelar diga: Desligar aspiração automática."
+      message: 'Routina de aspiração automática vai começar dentro de 20 minutos.
+        Para cancelar diga: Desligar aspiração automática.'
     service: tts.voicerss_say

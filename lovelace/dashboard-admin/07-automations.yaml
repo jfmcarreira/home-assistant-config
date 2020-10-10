@@ -154,30 +154,30 @@ cards:
       ignore_case: true
       method: name
     type: 'custom:auto-entities'
-  - card:
-      show_header_toggle: false
-      title: IFTTT
-      type: entities
-    filter:
-      include:
-        - entity_id: automation.ifttt_*
-    show_empty: true
-    sort:
-      ignore_case: true
-      method: name
-    type: 'custom:auto-entities'
-  - card:
-      show_header_toggle: false
-      title: CCTV
-      type: entities
-    filter:
-      include:
-        - entity_id: automation.cctv_*
-    show_empty: false
-    sort:
-      ignore_case: true
-      method: name
-    type: 'custom:auto-entities'
+  #- card:
+      #show_header_toggle: false
+      #title: IFTTT
+      #type: entities
+    #filter:
+      #include:
+        #- entity_id: automation.ifttt_*
+    #show_empty: true
+    #sort:
+      #ignore_case: true
+      #method: name
+    #type: 'custom:auto-entities'
+  #- card:
+      #show_header_toggle: false
+      #title: CCTV
+      #type: entities
+    #filter:
+      #include:
+        #- entity_id: automation.cctv_*
+    #show_empty: false
+    #sort:
+      #ignore_case: true
+      #method: name
+    #type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
       title: Discovery
@@ -204,6 +204,18 @@ cards:
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
+      title: Backup
+      type: entities
+    filter:
+      include:
+        - entity_id: automation.backup_*
+    show_empty: false
+    sort:
+      ignore_case: true
+      method: name
+    type: 'custom:auto-entities'
+  - card:
+      show_header_toggle: false
       title: Outras
       type: entities
     filter:
@@ -217,7 +229,8 @@ cards:
         - entity_id: automation.kyosk_*
         - entity_id: automation.ctrl_*
         - entity_id: automation.discovery_*
-        - entity_id: automation.ifttt_*
+        #- entity_id: automation.ifttt_*
+        - entity_id: automation.backup_*
         - entity_id: automation.cctv_*
         - entity_id: automation.task_*
         - entity_id: automation.frontend_*
