@@ -159,12 +159,12 @@ google_assistant:
       aliases:
         - Bathroom Light
     light.master_bedroom_left_bed:
-      expose: true
+      expose: false
       name: Luz da Cama Lado Esquerdo
       aliases:
         - Bedroom Left Side Light
     light.master_bedroom_right_bed:
-      expose: true
+      expose: false
       name: Luz da Cama Lado Direito
       aliases:
         - Bedroom Right Side Light

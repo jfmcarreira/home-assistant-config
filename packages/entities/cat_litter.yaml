@@ -31,38 +31,38 @@ sensor:
         value_template: >
           {{ state_attr('input_datetime.cat_litter_box_last_visit', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
-automation old:
-- alias: Reset PIR State Cat Litter
-  initial_state: true
-  trigger:
-    - platform: homeassistant
-      event: start
-    - platform: state
-      entity_id: binary_sensor.litter_box_motion
-      from: "off"
-      to: "on"
-      for:
-        seconds: 120
-  action:
-    - service: mqtt.publish
-      data:
-        topic: binary_rf_sensors/litter_box_motion
-        payload: "OFF"
+#automation old:
+#- alias: Reset PIR State Cat Litter
+  #initial_state: true
+  #trigger:
+    #- platform: homeassistant
+      #event: start
+    #- platform: state
+      #entity_id: binary_sensor.litter_box_motion
+      #from: "off"
+      #to: "on"
+      #for:
+        #seconds: 120
+  #action:
+    #- service: mqtt.publish
+      #data:
+        #topic: binary_rf_sensors/litter_box_motion
+        #payload: "OFF"
 
-- id: Cat Litter Mark Visit
-  alias: Cat Litter Mark Visit
-  initial_state: true
-  trigger:
-  - entity_id: binary_sensor.litter_box_motion
-    from: 'off'
-    platform: state
-    to: 'on'
-  action:
-  - service: counter.increment
-    data:
-      entity_id: counter.cat_litter_box_visits
-  - service: input_datetime.set_datetime
-    data_template:
-      entity_id: input_datetime.cat_litter_box_last_visit
-      date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-      time: '{{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}'
+#- id: Cat Litter Mark Visit
+  #alias: Cat Litter Mark Visit
+  #initial_state: true
+  #trigger:
+  #- entity_id: binary_sensor.litter_box_motion
+    #from: 'off'
+    #platform: state
+    #to: 'on'
+  #action:
+  #- service: counter.increment
+    #data:
+      #entity_id: counter.cat_litter_box_visits
+  #- service: input_datetime.set_datetime
+    #data_template:
+      #entity_id: input_datetime.cat_litter_box_last_visit
+      #date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      #time: '{{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}'

@@ -33,17 +33,14 @@ utility_meter:
   daily_energy:
     source: sensor.pzem_energy
     cycle: daily
-  monthly_energy:
-    source: sensor.pzem_energy
-    cycle: monthly
-    offset:
-      days: 19
-      
   daily_energy_living_room:
     source: sensor.energy_living_room
     cycle: daily
   daily_energy_laundry:
     source: sensor.energy_laundry
+    cycle: daily
+  daily_energy_lights:
+    source: sensor.energy_lights
     cycle: daily
 
 sensor power:
@@ -71,28 +68,19 @@ sensor energy:
     name: energy_laundry
     unit_prefix: k
     round: 2 
+  
+  - platform: integration
+    source: sensor.power_usage_lights
+    name: energy_lights
+    unit_prefix: k
+    round: 2 
 
     
   - platform: template
     sensors:
       daily_energy_remaining:
         unit_of_measurement: "khW"
-        value_template: "{{ ( states.sensor.daily_energy.state | float ) - ( states.sensor.daily_energy_living_room.state | float ) - ( states.sensor.daily_energy_laundry.state | float ) - ( states.sensor.daily_energy_dish_wash_machine.state | float ) - ( states.sensor.daily_energy_fridge.state | float ) - ( states.sensor.daily_energy_office_desk.state | float ) - ( states.sensor.daily_energy_iron.state | float ) }}"
-
-
-sensor bill:
-  - platform: template
-    sensors:
-      monthly_energy_cicle_days:
-        value_template: >-
-          {{ ( as_timestamp( now() ) - as_timestamp( states.sensor.monthly_energy.attributes.last_reset ) ) | timestamp_custom("%d") }}
-      monthly_energy_cost:
-        friendly_name: "Fatura Energia"
-        value_template: >-
-          {{ ( float(states.sensor.monthly_energy.state) * (0.1456+0.001) * 1.23 + float(states.sensor.monthly_energy_cicle_days.state) * 0.2292 * 1.23 + 2.85 * 1.06 ) | round(2) }}
-        unit_of_measurement: "€"
-        attribute_templates:
-          Factura Anterior: "{{ ( float(states.sensor.monthly_energy.attributes.last_period) * (0.1456+0.001) * 1.23 + 30.0 * 0.2292 * 1.23 + 2.85 * 1.06 ) | round(2) }} €"
+        value_template: "{{ ( states.sensor.daily_energy.state | float ) - ( states.sensor.daily_energy_living_room.state | float ) - ( states.sensor.daily_energy_laundry.state | float ) - ( states.sensor.daily_energy_dish_wash_machine.state | float ) - ( states.sensor.daily_energy_fridge.state | float ) - ( states.sensor.daily_energy_office_desk.state | float ) - ( states.sensor.daily_energy_iron.state | float ) - ( states.sensor.daily_energy_lights.state | float ) }}"
      
 
   

@@ -1,0 +1,8 @@
+light:
+  - platform: group
+    name: Group Living Room
+    entities:
+      - light.living_room_abajur
+      - light.living_room_table
+      - light.living_room_tv_leds
+      - light.living_room_window

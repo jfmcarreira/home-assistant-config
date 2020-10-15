@@ -263,6 +263,11 @@ cards:
       
       - break 
       
+      - type: custom:mini-media-player
+        entity: media_player.media_center
+        hide: 
+          volume: true
+      
       - card:
           show_header_toggle: false
           title: Luzes

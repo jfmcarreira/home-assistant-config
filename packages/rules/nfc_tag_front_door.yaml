@@ -7,8 +7,7 @@ automation old:
           device_id: d38450c73488e515
           tag_id: bc6345fb-4f1c-4fcf-a6b0-74b3894635ac
     action:
-      - service: light.toggle
-        entity_id: light.hallway
+      - service: script.routine_away
         
   - alias: NFC Tag Office Desk
     trigger:
@@ -16,10 +15,7 @@ automation old:
         event_type: tag_scanned
         event_data:
           device_id: d38450c73488e515
-          tag_id: 32df48d0-584a-4225-aff2-27d9ccad5d2d
+          tag_id: 94a59e6e-62d6-469c-a133-d59f37545f55
     action:
       - service: light.toggle
         entity_id: light.office_desk
-        
-        
-        

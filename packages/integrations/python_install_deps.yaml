@@ -2,7 +2,7 @@
 # Python install dependencies
 #
 shell_command:
-  python_install_dependencies: pip install pymysql
+  python_install_dependencies: pip install pymysql python-zeep
 
 automation old:
   # Init dependences

@@ -8,7 +8,8 @@ cards:
     cards:
       - type: custom:mini-media-player
         #type: media-control
-        entity: media_player.media_center
+        entity: media_player.living_room_tv
+        name: Televisão da Sala
         hide: 
           volume: true
       - type: conditional
@@ -252,10 +253,10 @@ cards:
           volume: false
       - type: custom:mini-media-player
         group: true
-        entity: media_player.ghm_kitchen
+        entity: media_player.ghm_office
       - type: custom:mini-media-player
         group: true
-        entity: media_player.gh_clock_bedroom
+        entity: media_player.gh_clock_kitchen
       - type: custom:mini-media-player
         group: true
         entity: media_player.browser_tf201_kyosk

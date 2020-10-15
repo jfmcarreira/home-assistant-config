@@ -74,6 +74,16 @@ sensor per_day:
               'info in attributes' AS value
           FROM daily_energy_partial
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
+          
+       #- name: query_daily_energy_portable_heater
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_portable_heater SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
       
       - name: query_daily_energy_remaining
         column: "value"
@@ -152,11 +162,25 @@ sensor per_month:
             ROUND(SUM(`daily_energy_office_desk`), 2) AS value
           FROM `daily_energy_partial`
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_portable_heater
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_portable_heater`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
       - name: query_month_energy_iron
         column: "value"
         query: >-
           SELECT
             ROUND(SUM(`daily_energy_iron`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_lights
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_lights`), 2) AS value
           FROM `daily_energy_partial`
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
             
@@ -165,4 +189,4 @@ sensor per_month:
     sensors:
       query_month_energy_remaining:
         unit_of_measurement: "khW"
-        value_template: "{{ ( states.sensor.query_month_energy_total.state | float ) - ( states.sensor.query_month_energy_living_room.state | float ) - ( states.sensor.query_month_energy_laundry.state | float ) - ( states.sensor.query_month_energy_dish_wash_machine.state | float ) - ( states.sensor.query_month_energy_fridge.state | float ) - ( states.sensor.query_month_energy_office_desk.state | float ) - ( states.sensor.query_month_energy_iron.state | float ) }}"
+        value_template: "{{ ( states.sensor.query_month_energy_total.state | float ) - ( states.sensor.query_month_energy_living_room.state | float ) - ( states.sensor.query_month_energy_laundry.state | float ) - ( states.sensor.query_month_energy_dish_wash_machine.state | float ) - ( states.sensor.query_month_energy_fridge.state | float ) - ( states.sensor.query_month_energy_office_desk.state | float ) - ( states.sensor.query_month_energy_iron.state | float ) - ( states.sensor.query_month_energy_portable_heater.state | float ) - ( states.sensor.query_month_energy_lights.state | float ) }}"

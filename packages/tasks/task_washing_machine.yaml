@@ -214,6 +214,10 @@ automation clothes:
   - alias: Task Laundry Remove From Wash Machine Done
     trigger:
       - platform: state
+        entity_id: binary_sensor.washing_machine_state
+        from: "off"
+        to: "on"
+      - platform: state
         entity_id: binary_sensor.washing_machine_door
         from: "off"
         to: "on"

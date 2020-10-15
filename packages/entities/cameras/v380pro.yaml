@@ -1,8 +1,9 @@
 ################################################################
-## Reolink E1 Pro Camera
+## V380Pro Camera
 ################################################################
 camera:
   - platform: ffmpeg
-    name: Baby Monitor
-    input: !secret reolinke1pro
-    #extra_arguments: -probesize 32 -sync ext -rtsp_transport tcp
+    name: Living Room 
+    input: !secret v380pro
+
+  

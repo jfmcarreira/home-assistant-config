@@ -92,6 +92,7 @@ cards:
                         - '${states["sensor.query_month_energy_fridge"].state}'
                         - '${states["sensor.query_month_energy_iron"].state}'
                         - '${states["sensor.query_month_energy_office_desk"].state}'
+                        - '${states["sensor.query_month_energy_lights"].state}'
                         - '${states["sensor.query_month_energy_remaining"].state}'
                       backgroundColor:                        
                         - '#003f5c'
@@ -110,6 +111,7 @@ cards:
                         - var(--secondary-background-color)
                         - var(--secondary-background-color)
                         - var(--secondary-background-color)
+                        - var(--secondary-background-color)
                   labels:
                     - Centro Multimédia
                     - Lavandaria 
@@ -117,6 +119,7 @@ cards:
                     - Frigorifico
                     - Ferro de Engomar
                     - Secretária
+                    - Iluminação
                     - Outros
                 options:
                   legend:

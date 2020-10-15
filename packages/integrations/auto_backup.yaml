@@ -5,7 +5,7 @@ auto_backup:
   auto_purge: true
 
 automation old:
-  - alias: Backup Notify Snapshot Failure
+  - alias: System backup Notify Snapshot Failure
     trigger:
       platform: event
       event_type: auto_backup.snapshot_failed
@@ -15,22 +15,22 @@ automation old:
         title: "Snapshot Failed."
         message: "Name: {{ trigger.event.data.name }}\nError: {{ trigger.event.data.error }}"
         
-  - alias: Backup Run Daily
+  - alias: System backup Run Daily
     trigger:
       - platform: time
         at: "05:00:00"
     action:
       - service: auto_backup.snapshot_full
-        data_template:
+        data:
           name: "DailyBackup: {{ now().strftime('%A, %B %-d, %Y') }}"
           keep_days: 2
-          exclude:
-            addons:
-              - Almond
-              - Visual Studio Code
-              - File Editor
-              - Glances
-              - Portainer
-              - SSH & Web Terminal
-              - phpMyAdmin
+          #exclude:
+            #addons:
+              #- Almond
+              #- Visual Studio Code
+              #- File Editor
+              #- Glances
+              #- Portainer
+              #- SSH & Web Terminal
+              #- phpMyAdmin
 

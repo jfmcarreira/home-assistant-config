@@ -2,8 +2,9 @@ group:
   google_assistant_speakers:
     entities:
       - media_player.ghm_living_room
-      - media_player.ghm_kitchen
-      - media_player.gh_clock_bedroom
+      - media_player.ghm_office
+      - media_player.gh_clock_kitchen
+
 
 
 input_number:
@@ -26,9 +27,17 @@ input_number:
     step: 5
     unit_of_measurement: "%"
 
-
+homeassistant:
+  customize:
+    automation.media_google_home_day_volume:
+      friendly_name: Google Home Definição Volume de Dia
+    automation.media_google_home_evening_volume:
+      friendly_name: Google Home Definição Volume de Fim de Dia
+    automation.media_google_home_night_volume:
+      friendly_name: Google Home Definição Volume de Noite
+      
 automation old:
-  - alias: Media Google Home Mini Day Volume
+  - alias: media_google_home_day_volume
     trigger:
       - platform: homeassistant
         event: start
@@ -43,10 +52,7 @@ automation old:
         after: '08:00:00'
         before: '21:00:00'
       - condition: state
-        entity_id: media_player.ghm_kitchen
-        state: "off"
-      - condition: state
-        entity_id: media_player.ghm_living_room
+        entity_id: group.google_assistant_speakers
         state: "off"
     action:
       - entity_id: group.google_assistant_speakers
@@ -56,7 +62,7 @@ automation old:
             {{ ( states( 'input_number.google_home_volume_day' ) | int ) / 100 }}
 
 
-  - alias: Media Google Home Mini Evening Volume
+  - alias: media_google_home_evening_volume
     trigger:
       - platform: homeassistant
         event: start
@@ -71,10 +77,7 @@ automation old:
         after: '21:00:00'
         before: '00:00:00'
       - condition: state
-        entity_id: media_player.ghm_kitchen
-        state: "off"
-      - condition: state
-        entity_id: media_player.ghm_living_room
+        entity_id: group.google_assistant_speakers
         state: "off"
     action:
       - entity_id: group.google_assistant_speakers
@@ -83,7 +86,7 @@ automation old:
           volume_level: >
             {{ ( states( 'input_number.google_home_volume_evening' ) | int ) / 100 }}
 
-  - alias: Media Google Home Mini Night Volume
+  - alias: media_google_home_night_volume
     trigger:
       - platform: homeassistant
         event: start
@@ -98,10 +101,7 @@ automation old:
         after: '00:00:00'
         before: '08:00:00'
       - condition: state
-        entity_id: media_player.ghm_kitchen
-        state: "off"
-      - condition: state
-        entity_id: media_player.ghm_living_room
+        entity_id: group.google_assistant_speakers
         state: "off"
     action:
       - entity_id: group.google_assistant_speakers

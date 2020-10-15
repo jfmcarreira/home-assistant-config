@@ -50,6 +50,10 @@ automation insert:
         entity_id: sensor.daily_energy_office_desk
       - platform: state
         entity_id: sensor.daily_energy_iron
+      #- platform: state
+        #entity_id: sensor.daily_energy_portable_heater
+      - platform: state
+        entity_id: sensor.daily_energy_lights
       - platform: state
         entity_id: sensor.daily_energy_remaining
     action:
@@ -73,6 +77,10 @@ automation insert:
               daily_energy_office_desk
             {% elif trigger.entity_id == "sensor.daily_energy_iron" %}
               daily_energy_iron
+            {% elif trigger.entity_id == "sensor.daily_energy_portable_heater" %}
+              daily_energy_portable_heater
+            {% elif trigger.entity_id == "sensor.daily_energy_lights" %}
+              daily_energy_lights
             {% elif trigger.entity_id == "sensor.daily_energy_remaining" %}
               daily_energy_remaining
             {% endif %}
