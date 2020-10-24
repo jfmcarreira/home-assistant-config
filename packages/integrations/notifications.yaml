@@ -24,7 +24,7 @@ binary_sensor:
                 is_state("sensor.magnesium_do_not_disturb", "on") %}
               True
           {% else %}
-              {% if is_state('calendar.home_automation', "on") and is_state_attr('calendar.home_automation', 'message', 'DnD') %}
+              {% if is_state('calendar.home_automation_do_not_disturb', "on") %}
                   True
               {% else %}
                   False
