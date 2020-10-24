@@ -1,0 +1,62 @@
+substitutions:
+  devicename: shellyrgbw2_office
+  upper_devicename: Office Desk
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+# Unused pins    
+# Status LED: GPIO02
+# Button: GPIO13
+
+binary_sensor:
+  # Office Motion Sensor
+  - id: motion_sw
+    name: Motion Sensor Office
+    device_class: motion
+    platform: gpio
+    pin:
+      number: GPIO5
+      #mode: INPUT_PULLUP
+      inverted: True
+
+light:
+  # Office Desk Light
+  - platform: rgbw
+    name: ${upper_devicename}
+    id: rgbw_light
+    color_interlock: true
+    red: output_r
+    green: output_g
+    blue: output_b
+    white: output_w
+
+output:
+  - platform: esp8266_pwm
+    id: output_r
+    pin: GPIO12
+  - platform: esp8266_pwm
+    id: output_g
+    pin: GPIO15
+  - platform: esp8266_pwm
+    id: output_b
+    pin: GPIO14
+  - platform: esp8266_pwm
+    id: output_w
+    pin: GPIO4
+    

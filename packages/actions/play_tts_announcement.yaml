@@ -18,7 +18,7 @@ script:
         data:
           entity_id: "{{ media_player_for_tts }}"
       
-      - wait_template: "{{ is_state( media_player_for_tts , 'off' )  == False }}"
+      - wait_template: "{{ not is_state( media_player_for_tts , 'off' ) }}"
       
       - variables:
           current_volume: "{{ state_attr( media_player_for_tts, 'volume_level' ) }}"
@@ -30,15 +30,22 @@ script:
       - service: media_player.volume_set
         data:
           entity_id: "{{ media_player_for_tts }}"
-          volume_level: 0.2
+          volume_level: >
+            {% if now().strftime("%H")|int < 23 %}
+              {{ ( states( 'input_number.google_home_volume_tts_day' ) | int ) / 100 }}
+            {% else %}
+              {{ ( states( 'input_number.google_home_volume_tts_night' ) | int ) / 100 }}
+            {% endif %}
       
       - delay: 00:00:01
       
       - service: tts.polly_say
         data:
           entity_id: "{{ media_player_for_tts }}"
-          message: "{{ message_to_play }}"
-    
+          message: >
+            <speak><amazon:auto-breaths frequency='medium'>
+              {{ message_to_play }}"
+            </amazon:auto-breaths></speak>
       
       - delay: "{{ message_duration }}"
       

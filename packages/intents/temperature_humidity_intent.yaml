@@ -1,0 +1,11 @@
+
+#Error:  Não é possível comunicar com o Home Assistant!
+
+intent_script:
+  GetTemperature:
+    speech:
+      text: A temperatura em casa é de {{ states('sensor.average_temperature') | int }} graus
+
+  GetHumidity:
+    speech:
+      text: A humidade em casa é de {{ states('sensor.average_humidity') | int }} por cento

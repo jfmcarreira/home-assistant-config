@@ -1,8 +1,0 @@
-################################################################
-## Control switch for baby monitor
-################################################################
-input_boolean:
-  baby_monitor_high_quality:
-    name: Qualidade Baby Monitor
-  v380pro_high_quality:
-    name: Qualidade V380 Pro

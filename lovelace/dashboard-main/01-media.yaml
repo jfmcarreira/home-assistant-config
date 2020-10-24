@@ -253,13 +253,20 @@ cards:
           volume: false
       - type: custom:mini-media-player
         group: true
-        entity: media_player.ghm_office
-      - type: custom:mini-media-player
-        group: true
         entity: media_player.gh_clock_kitchen
       - type: custom:mini-media-player
         group: true
-        entity: media_player.browser_tf201_kyosk
+        entity: media_player.ghm_office
+      - type: custom:mini-media-player
+        group: true
+        entity: media_player.ghm_master_bedroom
+      - type: custom:mini-media-player
+        group: true
+        entity: media_player.ghm_bedroom_ricardo
+
+      #- type: custom:mini-media-player
+        #group: true
+        #entity: media_player.browser_tf201_kyosk
         
   - type: 'custom:vertical-stack-in-card'
     cards:
@@ -311,7 +318,20 @@ cards:
     
     
   
-
+  - entities:
+      - entity: sensor.daily_tv_time
+        name: Televisão - Total
+      - entity: sensor.daily_tv_time_meo
+        name: Televisão - MEO
+      - entity: sensor.daily_tv_time_kodi
+        name: Televisão - Kodi
+      - entity: sensor.daily_tv_time_netflix
+        name: Televisão - Netflix
+      - entity: sensor.daily_tv_time_plex
+        name: Televisão - Plex
+    show_header_toggle: false
+    title: Utilização da Televisão
+    type: entities
 
 
 

@@ -1,4 +1,12 @@
 image_processing:
+  #- platform: dlib_face_identify
+    #source:
+      #- entity_id: camera.living_room
+        #name: Camera Living Room DLib
+    #faces:
+      #Joao: /config/faces/joao20.jpg
+      #Bianca: /config/faces/bianca13.jpg
+
   - platform: facebox
     scan_interval: 10000
     ip_address: !secret facebox_ip

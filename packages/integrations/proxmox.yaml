@@ -20,8 +20,8 @@ proxmoxve:
         containers:
           - 100
           - 111
-          - 112
           - 113
+          - 114
           
 
 sensor:
@@ -47,13 +47,13 @@ switch:
           service: shell_command.proxmox_control_vm
           data:
             type: lxc
-            vm: 112
+            vm: 114
             command: start
         turn_off:
           service: shell_command.proxmox_control_vm
           data:
             type: lxc
-            vm: 112
+            vm: 114
             command: stop
             
   - platform: template

@@ -1,0 +1,33 @@
+################################################################
+## Reolink E1 Pro Camera
+################################################################
+input_boolean:
+  baby_monitor_high_quality:
+    name: Qualidade Baby Monitor
+
+#camera:
+  #- platform: ffmpeg
+    #name: Baby Monitor
+    #input: !secret reolinke1pro
+    ##extra_arguments: -probesize 32 -sync ext -rtsp_transport tcp
+
+    
+#camera:
+  #- platform: reolink_dev
+    #host: !secret reolinke1pro_ip
+    #username: !secret reolinke1pro_user
+    #password: !secret reolinke1pro_pass
+    #name: Baby Monitor Reolink
+    #stream: main
+    #protocol: rtmp
+    #scan_interval: 5 
+
+#binary_sensor:
+  #- platform: template
+    #sensors:
+      #motion_baby_monitor:
+        #friendly_name:  Baby Monitor
+        #device_class: motion
+        #value_template: "{{ is_state('camera.baby_monitor_reolink', 'motion') }}"
+        #delay_off: 
+            #seconds: 15

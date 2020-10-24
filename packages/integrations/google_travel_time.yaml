@@ -1,7 +1,7 @@
 sensor:
   - platform: google_travel_time
     name: Home to Work
-    api_key: AIzaSyDQ2vB43gBU0T8SjpClyK359QlpzJYImKI
+    api_key: !secret google_travel_api_key
     origin: zone.home
     destination: Leiria, Portugal
-    scan_interval: 1800
+    scan_interval: 3600

@@ -1,150 +1,135 @@
 icon: 'mdi:information-outline'
 path: info
-title: Information
+title: Informação
+panel: true
 cards:
-  - entities:
-      - entity: binary_sensor.notify_home
-        name: Casa ocupada
-      - entity: input_boolean.house_guest
-        name: Convidados
-      - entity: person.bianca
-      - type: conditional
-        conditions:
-          - entity: person.bianca
-            state_not: "home"
-        row:
-          entity: proximity.dist_home_bianca
-          name: Distância - Bianca
-      - entity: person.joao
-      - type: conditional
-        conditions:
+  - type: "custom:layout-card"
+    layout: horizontal
+    max_columns: 4
+    cards:
+      - type: entities
+        show_header_toggle: false
+        title: Casa
+        entities:
+          - entity: binary_sensor.notify_home
+            name: Casa ocupada
+          - entity: input_boolean.house_guest
+            name: Convidados
+      
+      - type: entities
+        show_header_toggle: false
+        title: João
+        entities:
           - entity: person.joao
-            state_not: "home"
-        row:
-          entity: proximity.dist_home_joao
-          name: Distância - João
-    show_header_toggle: false
-    title: Ocupação Casa
-    type: entities
-  - type: entities
-    title: Informações Ricardo
-    entities:
-      - entity: sensor.ricardo_weight
-      - entity: input_number.ricardo_weight
-      - entity: input_datetime.ricardo_weight_last_measured
-      - entity: binary_sensor.ricardo_vitamin_d
-    #footer:
-      #entities:
-        #- entity: script.task_ricardo_vitamin_d
-          #icon: 'mdi:pill'
-      #type: buttons
-    
-    
-
-  
- 
-  - cards:
-      - entities:
-          - entity: sensor.seventeentrack_packages_ready_to_be_picked_up
-            name: Pronta a entregar
-          - entity: sensor.seventeentrack_packages_in_transit
-            name: Em transito
-          - entity: sensor.seventeentrack_packages_not_found
-            name: Não Encontradas
-          - entity: sensor.seventeentrack_packages_expired
-            name: Expiradas
-        type: entities
-      - card:
-          show_header_toggle: false
-          title: Lista
-          type: entities
-        filter:
-          include:
-            - entity_id: sensor.seventeentrack_package_*
-        show_empty: true
-        sort:
-          ignore_case: true
-          method: name
-        type: 'custom:auto-entities'
-    title: Tracking de Encomendas
-    type: 'custom:vertical-stack-in-card'
+          - type: conditional
+            conditions:
+              - entity: person.joao
+                state_not: "home"
+            row:
+              entity: proximity.dist_home_joao
+              name: Distância a Casa
+          - entity: sensor.magnesium_next_alarm
+            name: Alarme
+          - entity: sensor.magnesium_phone_state
+            name: Estado da Chamada
+          - entity: sensor.magnesium_do_not_disturb
+            name: Não Incomodar
+          - entity: sensor.magnesium_device_battery_level
+            name: Bateria Smartphone
+          - entity: sensor.magnesium_battery_state
+            name: Estado do Smartphone
+          - entity: sensor.magnesium_detected_activity
+            name: Actividade
             
-  - entities:
-      - entity: binary_sensor.living_room_tv_state
-      - entity: binary_sensor.roborock_state
-      - entity: binary_sensor.washing_machine_state
-      - entity: binary_sensor.dish_wash_machine_state
-      #- entity: binary_sensor.fridge_door
-      #- entity: display.tf201_kyosk
-    show_header_toggle: false
-    state_color: true
-    title: Electrodomésticos
-    type: entities
-  
-  - entities:
-      - entity: binary_sensor.beryllium
-      - entity: binary_sensor.strontium
-      - entity: binary_sensor.pegasus
-      - entity: binary_sensor.boron
-      - entity: binary_sensor.magnesium
-      - entity: binary_sensor.bianca_phone
-    state_color: true
-    title: Home Devices
-    type: entities
+      - type: entities
+        show_header_toggle: false
+        title: Bianca
+        entities:
+          - entity: person.bianca
+          - type: conditional
+            conditions:
+              - entity: person.bianca
+                state_not: "home"
+            row:
+              entity: proximity.dist_home_bianca
+              name: Distância - Bianca
+          - entity: sensor.calcium_next_alarm
+            name: Alarme
+          - entity: sensor.calcium_phone_state
+            name: Estado da Chamada
+          - entity: sensor.calcium_do_not_disturb
+            name: Não Incomodar
+          - entity: sensor.calcium_device_battery_level
+            name: Bateria Smartphone
+          - entity: sensor.calcium_battery_state
+            name: Estado do Smartphone
+              
+        
+      - type: entities
+        title: Ricardo
+        entities:
+          - entity: sensor.ricardo_weight
+          - entity: input_number.ricardo_weight
+          - entity: input_datetime.ricardo_weight_last_measured
+          - entity: binary_sensor.ricardo_vitamin_d
+        #footer:
+          #entities:
+            #- entity: script.task_ricardo_vitamin_d
+              #icon: 'mdi:pill'
+          #type: buttons
+        
+        
 
-
-  - entities:
-      - entity: sensor.daily_tv_time
-        name: Televisão - Total
-      - entity: sensor.daily_tv_time_meo
-        name: Televisão - MEO
-      - entity: sensor.daily_tv_time_kodi
-        name: Televisão - Kodi
-      - entity: sensor.daily_tv_time_netflix
-        name: Televisão - Netflix
-      - entity: sensor.daily_tv_time_jellyfin
-        name: Televisão - Plex
-    show_header_toggle: false
-    title: Tempo de Utilização de Dispositivos
-    type: entities
-
+      
     
-  - type: 'custom:auto-entities'
-    card:
-      show_header_toggle: false
-      title: Bateria dos dispositivos
-      type: entities
-    filter:
-      include:
-        - entity_id: sensor.*_battery_level
-    show_empty: true
-    sort:
-      ignore_case: true
-      method: name
+      - cards:
+          - entities:
+              - entity: sensor.seventeentrack_packages_ready_to_be_picked_up
+                name: Pronta a entregar
+              - entity: sensor.seventeentrack_packages_in_transit
+                name: Em transito
+              - entity: sensor.seventeentrack_packages_not_found
+                name: Não Encontradas
+              - entity: sensor.seventeentrack_packages_expired
+                name: Expiradas
+            type: entities
+          - card:
+              show_header_toggle: false
+              title: Lista
+              type: entities
+            filter:
+              include:
+                - entity_id: sensor.seventeentrack_package_*
+            show_empty: false
+            sort:
+              ignore_case: true
+              method: name
+            type: 'custom:auto-entities'
+        title: Tracking de Encomendas
+        type: 'custom:vertical-stack-in-card'
+                
+      - entities:
+          - entity: binary_sensor.living_room_tv_state
+          - entity: binary_sensor.roborock_state
+          - entity: binary_sensor.washing_machine_state
+          - entity: binary_sensor.dish_wash_machine_state
+          #- entity: binary_sensor.fridge_door
+          #- entity: display.tf201_kyosk
+        show_header_toggle: false
+        state_color: true
+        title: Electrodomésticos
+        type: entities
       
+      - entities:
+          - entity: binary_sensor.pegasus
+          - entity: binary_sensor.boron
+          - entity: binary_sensor.beryllium
+          - entity: binary_sensor.strontium
+          - entity: binary_sensor.magnesium
+          - entity: binary_sensor.calcium
+          - entity: binary_sensor.barium
+        state_color: true
+        title: Home Devices
+        type: entities
 
 
-
-      
-  - card:
-      agregate_func: avg
-      group_by: 3600s
-      height: 200
-      hour24: true
-      hours_to_show: 120
-      line_width: 2
-      name: Temperatura Dispositivos
-      points_per_hour: 1
-      show:
-        average: true
-        extrema: true
-        labels: true
-        labels_secondary: true
-        points: hover
-        state: false
-      type: "custom:mini-graph-card"
-    filter:
-      include:
-        - entity_id: sensor.shelly_*_temperature
-    show_empty: true
-    type: "custom:auto-entities"

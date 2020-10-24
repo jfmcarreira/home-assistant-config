@@ -1,4 +1,3 @@
-
 sensor per_day:
   - platform: sql
     db_url: !secret db_custom_url

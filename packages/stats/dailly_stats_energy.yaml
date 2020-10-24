@@ -50,8 +50,8 @@ automation insert:
         entity_id: sensor.daily_energy_office_desk
       - platform: state
         entity_id: sensor.daily_energy_iron
-      #- platform: state
-        #entity_id: sensor.daily_energy_portable_heater
+      - platform: state
+        entity_id: sensor.daily_energy_portable_heater
       - platform: state
         entity_id: sensor.daily_energy_lights
       - platform: state

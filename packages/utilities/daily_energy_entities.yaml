@@ -48,8 +48,9 @@ sensor power:
     sensors:
       power_usage_lights:
         unit_of_measurement: "khW"
-        value_template: "{{ ( states.sensor.power_usage_light_bedroom_ricardo_lamp.state | float ) + ( states.sensor.power_usage_light_kitchen.state | float ) + ( states.sensor.power_usage_light_kitchen_pantry.state | float ) + ( states.sensor.power_usage_light_living_room_abajur.state | float ) + ( states.sensor.power_usage_light_living_room_table.state | float ) + ( states.sensor.power_usage_light_living_room_tv_leds.state | float ) + ( states.sensor.power_usage_light_living_room_window.state | float ) + ( states.sensor.power_usage_master_bedroom.state | float ) + ( states.sensor.power_usage_light_master_bedroom_bathroom.state | float ) + ( states.sensor.power_usage_light_office_desk.state | float ) }}"
-        
+        value_template: "{{ ( states.sensor.power_usage_light_bedroom_ricardo_lamp.state | float ) + ( states.sensor.power_usage_light_kitchen.state | float ) + ( states.sensor.power_usage_light_kitchen_pantry.state | float ) + ( states.sensor.power_usage_light_living_room_abajur.state | float ) + ( states.sensor.power_usage_light_living_room_table.state | float ) + ( states.sensor.power_usage_light_living_room_window.state | float ) + ( states.sensor.power_usage_master_bedroom.state | float ) + ( states.sensor.power_usage_light_master_bedroom_bathroom.state | float ) + ( states.sensor.power_usage_light_hallway.state | float ) + ( states.sensor.power_usage_light_front_door.state | float )| round(2) }}"
+         
+        #( states.sensor.power_usage_light_living_room_tv_leds.state | float )+ ( states.sensor.power_usage_light_office_desk.state | float )
 sensor energy:
   - platform: integration
     source: sensor.bhpzem_power

@@ -25,6 +25,7 @@ sensor:
       - sensor.office_temperature
       - sensor.living_room_temperature
       - sensor.master_bedroom_temperature
+      - sensor.bedroom_ricardo_temperature
 
   - platform: statistics
     name: daily_average_temperature

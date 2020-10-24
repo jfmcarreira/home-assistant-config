@@ -14,9 +14,10 @@ sensor:
     type: mean
     round_digits: 1
     entity_ids:
-      - sensor.office_humidity
       - sensor.living_room_humidity
+      - sensor.office_humidity
       - sensor.master_bedroom_humidity
+      - sensor.bedroom_ricardo_humidity
 
   - platform: statistics
     name: daily_average_humidity

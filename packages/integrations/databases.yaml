@@ -114,6 +114,9 @@ history:
       - lights
       - media_player
     entities:
+      ## Energy
+      - sensor.monthly_energy
+      - sensor.monthly_energy_cost
       ## Sensor
       - sensor.living_room_temperature
       - sensor.master_bedroom_temperature

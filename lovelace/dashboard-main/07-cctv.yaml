@@ -16,12 +16,21 @@ cards:
           - entity: input_boolean.baby_monitor_high_quality
             state: "on"
         card:
-          type: picture-entity
-          #name: Monitor Ricardo
-          entity: camera.baby_monitor
-          aspect_ratio: 50%
+          type: picture-glance
+          title: Monitor Ricardo
+          camera_image: camera.baby_monitor
+          #aspect_ratio: 50%
           camera_view: auto
           show_state: false
+          entities:
+            - entity: camera.baby_monitor
+              icon: mdi:cast
+              tap_action:
+                action: call-service
+                service: camera.play_stream
+                service_data:
+                  entity_id: camera.baby_monitor
+                  media_player: media_player.gh_clock_kitchen
       
       #- type: conditional
         #conditions:
@@ -34,7 +43,7 @@ cards:
           #aspect_ratio: 50%
           #camera_view: auto
           #show_state: false
-          
+                    
       - type: horizontal-stack 
         cards:
           - hold_action:
@@ -46,7 +55,7 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.baby_monitor_onvif
+                entity_id: camera.baby_monitor
                 pan: LEFT
                 distance: 0.1
                 speed: 0.1
@@ -62,7 +71,7 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.baby_monitor_onvif
+                entity_id: camera.baby_monitor
                 pan: RIGHT
                 distance: 0.1
                 speed: 0.1
@@ -78,7 +87,7 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.baby_monitor_onvif
+                entity_id: camera.baby_monitor
                 tilt: UP
                 distance: 0.1
                 speed: 0.1
@@ -94,14 +103,14 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.baby_monitor_onvif
+                entity_id: camera.baby_monitor
                 tilt: DOWN
                 distance: 0.1
                 speed: 0.1
                 continuous_duration: 0.1
                 move_mode: ContinuousMove
             type: 'custom:button-card'
-    
+        
   
   - type: custom:vertical-stack-in-card
     cards:
@@ -116,12 +125,32 @@ cards:
           - entity: input_boolean.v380pro_high_quality
             state: "on"
         card:
-          type: picture-entity
-          #name: Monitor Ricardo
-          entity: camera.living_room
-          aspect_ratio: 50%
+          type: picture-glance
+          title: Camera Sala
+          camera_image: camera.living_room
+          #aspect_ratio: 50%
           camera_view: auto
           show_state: false
+          entities:
+            - entity: image_processing.camera_living_room
+              prefix: Pessoas
+            - entity: image_processing.camera_living_room
+              icon: mdi:face-recognition
+              tap_action:
+                action: call-service
+                service: image_processing.scan
+                service_data:
+                  entity_id: image_processing.camera_living_room
+            - entity: camera.living_room
+              icon: mdi:cast
+              tap_action:
+                action: call-service
+                service: camera.play_stream
+                service_data:
+                  entity_id: camera.baby_monitor
+                  media_player: media_player.gh_clock_kitchen
+      
+      
       
       #- type: conditional
         #conditions:
@@ -134,26 +163,6 @@ cards:
           #aspect_ratio: 50%
           #camera_view: auto
           #show_state: false
-      - type: horizontal-stack 
-        cards:
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - entity: image_processing.camera_living_room
-                name: Pessoas detectadas
-          - type: 'custom:button-card' 
-            hold_action:
-              action: none
-            icon: mdi:face-recognition
-            show_name: false
-            aspect_ratio: 4/1
-            name: Scan
-            #layout: icon_name
-            tap_action:
-              action: call-service
-              service: image_processing.scan
-              service_data:
-                entity_id: image_processing.camera_living_room
             
     
       - type: horizontal-stack 
@@ -167,7 +176,7 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.living_room_onvif
+                entity_id: camera.living_room
                 pan: LEFT
                 distance: 0.1
                 speed: 0.1
@@ -183,7 +192,7 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.living_room_onvif
+                entity_id: camera.living_room
                 pan: RIGHT
                 distance: 0.1
                 speed: 0.1
@@ -199,7 +208,7 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.living_room_onvif
+                entity_id: camera.living_room
                 tilt: UP
                 distance: 0.1
                 speed: 0.1
@@ -215,7 +224,7 @@ cards:
               action: call-service
               service: onvif.ptz
               service_data:
-                entity_id: camera.living_room_onvif
+                entity_id: camera.living_room
                 tilt: DOWN
                 distance: 0.1
                 speed: 0.1

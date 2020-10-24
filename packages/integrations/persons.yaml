@@ -8,7 +8,9 @@ homeassistant:
     person.bianca:
       icon: mdi:human-female
       #entity_picture: /local/img_bianca.jpg
-    device_tracker.bianca_phone:
+    device_tracker.calcium:
+      entity_picture: /local/img_bianca.jpg
+    device_tracker.barium:
       entity_picture: /local/img_bianca.jpg
     person.joao:
       icon: mdi:human-male
@@ -35,7 +37,8 @@ device_tracker:
       track_new_devices: true
     hosts:
       magnesium_wifi: !secret magnesium_ip
-      bianca_phone_wifi: !secret bianca_phone_ip
+      calcium_wifi: !secret calcium_ip
+      #barium_wifi: !secret barium_ip
 
   #- platform: mqtt
   #  devices:
@@ -61,7 +64,7 @@ proximity:
     ignored_zones:
       - home
     devices:
-      - device_tracker.bianca_phone
+      - device_tracker.calcium
     unit_of_measurement: m
     tolerance: 50
 

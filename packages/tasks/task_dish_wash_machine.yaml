@@ -115,29 +115,29 @@ binary_sensor dishes:
   #dish_wash_machine_need_emtpy:
     #name: dish_wash_machine_need_emtpy
     
-alert:
-  dish_wash_machine_need_emtpy:
-    title: Tarefa Doméstica
-    name: Retirar loiça da máquina de lavar
-    #done_message: Garage is closed
-    entity_id: binary_sensor.dish_wash_machine_need_emtpy
-    state: 'on'
-    repeat:
-      - 15
-      - 30
-      - 60
-    can_acknowledge: true
-    skip_first: false
-    notifiers:
-      - mobile_app_all
-      - living_room_tv
-    data:
-      sticky: true
-      tag: 30
-      priority: high
-      actions:
-        - action: dish_wash_remove_done
-          title: Registar loiça retirada da máquina
+#alert:
+  #dish_wash_machine_need_emtpy:
+    #title: Tarefa Doméstica
+    #name: Retirar loiça da máquina de lavar
+    ##done_message: Garage is closed
+    #entity_id: binary_sensor.dish_wash_machine_need_emtpy
+    #state: 'on'
+    #repeat:
+      #- 15
+      #- 30
+      #- 60
+    #can_acknowledge: true
+    #skip_first: false
+    #notifiers:
+      #- mobile_app_all
+      #- living_room_tv
+    #data:
+      #sticky: true
+      #tag: 30
+      #priority: high
+      #actions:
+        #- action: dish_wash_remove_done
+          #title: Registar loiça retirada da máquina
 
 script:
   task_dish_wash_machine_empty:
@@ -205,17 +205,17 @@ automation dishes:
           title: Tarefa Doméstica
           message: Retirar loiça da máquina de lavar
           notification_id: persistent_dish_washing
-      #- service: notify.mobile_app_all
-        #data:
-          #title: Tarefa Doméstica
-          #message: Retirar loiça da máquina de lavar
-          #data:
-            #sticky: true
-            #tag: 30
-            #priority: high
-            #actions:
-              #- action: dish_wash_remove_done
-                #title: Registar loiça retirada da máquina
+      - service: notify.mobile_app_all
+        data:
+          title: Tarefa Doméstica
+          message: Retirar loiça da máquina de lavar
+          data:
+            sticky: true
+            tag: 30
+            priority: high
+            actions:
+              - action: dish_wash_remove_done
+                title: Registar loiça retirada da máquina
 
   - alias: Task Dish Wash Machine Empty Done
     trigger:

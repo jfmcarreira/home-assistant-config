@@ -8,22 +8,24 @@ google_assistant:
   expose_by_default: true
   exposed_domains:
     - scene
-    - script
   entity_config:        
-    
     # Routines
     script.routine_night_time:
       expose: true
+      room: Misc
       name: Modo Noite
       aliases:
         - Night mode
     script.routine_away:
       expose: true
+      room: Misc
       name: Modo Ausente
       aliases:
         - Away mode
+        
     script.routine_dinner_time:
       expose: true
+      room: Sala
       name: Modo Refeição
       aliases:
         - Modo de jantar
@@ -34,148 +36,188 @@ google_assistant:
         - Almoço
         - Dinner time
         - Lunch time
+        
     script.action_meo_play_main_channel:
       expose: true
+      room: Sala
       name: Canal SIC
+    
     script.action_meo_play_kids_channel:
       expose: true
+      room: Sala
       name: Bonecos na Televisão
       aliases:
         - Bonecos na TV
         - Bonecos
     script.task_roborock_clean:
       expose: true
+      room: Sala
       name: Limpeza do Aspirador
-      aliases:
-        - Limpar aspirador
     script.cat_litter_clean:
       expose: true
+      room: Casa de Banho
       name: Limpeza da Areia das Gatas
       aliases:
         - Limpeza da areia
         - Cat litter clean
     script.cat_litter_change:
       expose: true
+      room: Casa de Banho
       name: Substituição Areia das Gatas
       aliases:
         - Substituição da areia
         - Cat litter change
-    script.task_ricardo_vitamin_d:
-      expose: true
-      name: Administração da Vitamina D ao Ricardo
-      aliases:
-        - Vitamina D ricardo
-        - Vitamina D
-        - Vitamin D
-          
+   
     vacuum.roborock:
       expose: true
+      room: Sala
       name: Roborock
     climate.heating:
       expose: true
       name: Aquecimento
+      room: Misc
       aliases:
         - Aquecimento central
         - Heating
         - Central heating
-    #media_player.media_center:
+        
     media_player.living_room_tv:
       expose: true
+      room: Sala
       name: Televisão
       aliases:
         - Televisão da Sala
         - Media center
         - TV
+        
+    sensor.living_room_temperature:
+      expose: true
+      room: Sala
+      name: Temperatura da Sala
+    sensor.master_bedroom_temperature:
+      expose: true
+      room: Quarto Principal
+      name: Temperatura da Quarto
+    
+    camera.baby_monitor:
+      expose: true
+      room: Quarto do Ricardo
+      name: Baby Monitor
+      
     light.front_door:
       expose: true
+      room: Corredor
       name: Luz da Porta
       aliases:
         - Front Door Light
-    light.living_room_table:
-      expose: true
-      name: Luz da Mesa da Sala
-      aliases:
-        - Living Room Table Light
-    light.living_room_window:
-      expose: true
-      name: Luz da Janela da Sala
-      aliases:
-        - Living Room Window Light
-    light.living_room_abajur:
-      expose: true
-      name: Luz de Apoio
-      aliases:
-        - Living Room Side Light
-    light.living_room_tv_leds:
-      expose: true
-      name: Retro-iluminação da TV
-      aliases:
-        - Living Room TV Leds
-        - Luz da televisão
     light.hallway:
       expose: true
+      room: Corredor
       name: Luz do Corredor
       aliases:
+        - Luz do Teto do Corredor
         - Hallway Light
     light.hallway_mirror:
       expose: true
+      room: Corredor
       name: Retro-iluminação do Espelho do Corredo
       aliases:
         - Hallway Mirror Light
     light.hallway_presence_light:
       expose: true
+      room: Corredor
       name: Luz de Presença do Corredor
       aliases:
         - Hallway Presence Light
+    light.living_room_table:
+      expose: true
+      room: Sala
+      name: Luz da Mesa da Sala
+      aliases:
+        - Living Room Table Light
+    light.living_room_window:
+      expose: true
+      room: Sala
+      name: Luz da Janela da Sala
+      aliases:
+        - Living Room Window Light
+    light.living_room_abajur:
+      expose: true
+      room: Sala
+      name: Candeeiro da Sala 
+      aliases:
+        - Luz do Candeeiro da Sala
+        - Luz de Apoio da Sala
+        - Living Room Side Light
+    light.living_room_tv_leds:
+      expose: true
+      room: Sala
+      name: Retro-iluminação da TV
+      aliases:
+        - Living Room TV Leds
+        - Luz da televisão
     light.kitchen:
       expose: true
+      room: Cozinha
       name: Luz da Cozinha
       aliases:
         - Kitchen Light
     light.kitchen_pantry:
       expose: true
+      room: Cozinha
       name: Luz da Despensa
       aliases:
         - Kitchen Pantry Light
     light.office:
       expose: true
+      room: Escritório
       name: Luz do Escritório
       aliases:
         - Office Light
         - Luz da secretária
     light.office_desk:
       expose: true
+      room: Escritório
       name: Retro-iluminação da Secretária
       aliases:
         - Office Desk Light
     light.master_bedroom:
       expose: true
-      name: Luz do Quarto
+      room: Quarto Principal
+      name: Luz do Teto do Quarto
       aliases:
         - Bedroom Light
     light.master_bedroom_bathroom:
       expose: true
-      name: Luz da Casa de Banho do Quarto
+      room: Quarto Principal
+      name: Luz da Casa de Banho do Quarto Principal
       aliases:
         - Bathroom Light
     light.master_bedroom_left_bed:
       expose: false
+      room: Quarto Principal
       name: Luz da Cama Lado Esquerdo
       aliases:
         - Bedroom Left Side Light
     light.master_bedroom_right_bed:
       expose: false
+      room: Quarto Principal
       name: Luz da Cama Lado Direito
       aliases:
         - Bedroom Right Side Light
     light.bedroom_ricardo:
       expose: true
-      name: Luz do Quarto do Ricardo
+      room: Quarto do Ricardo
+      name: Luz do Teto do Quarto do Ricardo
       aliases:
+        - Luz do Teto do Ricardo
         - Baby Room Light
     light.bedroom_ricardo_lamp:
       expose: true
+      room: Quarto do Ricardo
       name: Luz do Candeeiro do Quarto do Ricardo
       aliases:
+        - Luz de Apoio do Quarto do Ricardo
+        - Luz do Candeeiro do Quarto do Ricardo
         - Baby Room Side Light
     

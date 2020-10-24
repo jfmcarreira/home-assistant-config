@@ -1,32 +1,3 @@
-group:
-  google_assistant_speakers:
-    entities:
-      - media_player.ghm_living_room
-      - media_player.ghm_office
-      - media_player.gh_clock_kitchen
-
-
-
-input_number:
-  google_home_volume_day:
-    name: Google Assistant Volume Dia
-    min: 0
-    max: 100
-    step: 5
-    unit_of_measurement: "%"
-  google_home_volume_evening:
-    name: Google Assistant Volume Final do Dia
-    min: 0
-    max: 100
-    step: 5
-    unit_of_measurement: "%"
-  google_home_volume_night:
-    name: Google Assistant Volume Night
-    min: 0
-    max: 100
-    step: 5
-    unit_of_measurement: "%"
-
 homeassistant:
   customize:
     automation.media_google_home_day_volume:
@@ -50,7 +21,7 @@ automation old:
     condition:
       - condition: time
         after: '08:00:00'
-        before: '21:00:00'
+        before: '20:00:00'
       - condition: state
         entity_id: group.google_assistant_speakers
         state: "off"
@@ -60,8 +31,8 @@ automation old:
         data_template:
           volume_level: >
             {{ ( states( 'input_number.google_home_volume_day' ) | int ) / 100 }}
-
-
+      
+    
   - alias: media_google_home_evening_volume
     trigger:
       - platform: homeassistant
@@ -69,18 +40,18 @@ automation old:
       - platform: state
         entity_id: input_number.google_home_volume_evening
       - platform: time
-        at: '21:00:00'
+        at: '20:00:00'
       - platform: time_pattern
         minutes: 30
     condition:
       - condition: time
-        after: '21:00:00'
-        before: '00:00:00'
+        after: '20:00:00'
+        before: '23:00:00'
       - condition: state
-        entity_id: group.google_assistant_speakers
+        entity_id: group.google_assistant_speakers_main_volume
         state: "off"
     action:
-      - entity_id: group.google_assistant_speakers
+      - entity_id: group.google_assistant_speakers_main_volume
         service: media_player.volume_set
         data_template:
           volume_level: >
@@ -93,19 +64,43 @@ automation old:
       - platform: state
         entity_id: input_number.google_home_volume_night
       - platform: time
-        at: '00:00:00'
+        at: '23:00:00'
       - platform: time_pattern
         minutes: 30
     condition:
       - condition: time
-        after: '00:00:00'
+        after: '23:00:00'
         before: '08:00:00'
       - condition: state
-        entity_id: group.google_assistant_speakers
+        entity_id: group.google_assistant_speakers_main_volume
         state: "off"
     action:
-      - entity_id: group.google_assistant_speakers
+      - entity_id: group.google_assistant_speakers_main_volume
         service: media_player.volume_set
         data_template:
           volume_level: >
             {{ ( states( 'input_number.google_home_volume_night' ) | int ) / 100 }}
+
+            
+  - alias: media_google_home_night_volume_ricardo
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.google_home_volume_evening
+      - platform: time
+        at: '20:00:00'
+      - platform: time_pattern
+        minutes: 30
+    condition:
+      - condition: time
+        after: '20:00:00'
+        before: '08:00:00'
+      - condition: state
+        entity_id: media_player.ghm_bedroom_ricardo
+        state: "off"
+    action:
+      - entity_id: media_player.ghm_bedroom_ricardo
+        service: media_player.volume_set
+        data_template:
+          volume_level: 0

@@ -12,12 +12,12 @@ automation old:
       current_media_player: 'media_player.ghm_living_room'
     trigger:
       - platform: template
-        value_template: "{{ states.sensor.samsung_tab_a_battery.state | int < 15 }}"
+        value_template: "{{ states.sensor.stromium_device_battery_level.state | int < 15 }}"
     condition:
       condition: and
       conditions:
         - condition: state
-          entity_id: sensor.samsung_tab_a_battery_state
+          entity_id: sensor.stromium_battery_state
           state: "discharging"
         - condition: state
           entity_id: light.group_living_room
@@ -31,6 +31,4 @@ automation old:
           media_player_for_tts: "{{ current_media_player }}"
           message_duration: 00:00:06
           message_to_play: >
-            <speak><amazon:auto-breaths frequency='medium'>
               Atenção! Bateria do táblete fraca 
-            </amazon:auto-breaths></speak>

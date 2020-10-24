@@ -25,4 +25,61 @@ cards:
         name: Final do Dia
       - entity: input_number.google_home_volume_night
         name: Noite
+      - entity: input_number.google_home_volume_tts_day
+        name: TTS Dia
+      - entity: input_number.google_home_volume_tts_night
+        name: TTS Noite
 
+  - type: 'custom:auto-entities'
+    card:
+      show_header_toggle: false
+      title: Bateria dos Dispositivos
+      type: entities
+    filter:
+      include:
+        - entity_id: sensor.*_device_battery_level
+    show_empty: true
+    sort:
+      ignore_case: true
+      method: name
+        
+
+  - type: 'custom:auto-entities'
+    card:
+      show_header_toggle: false
+      title: Bateria dos Sensores
+      type: entities
+    filter:
+      include:
+        - entity_id: sensor.*_sensor_battery_level
+    show_empty: true
+    sort:
+      ignore_case: true
+      method: name
+      
+
+
+
+      
+  - card:
+      agregate_func: avg
+      group_by: 3600s
+      height: 200
+      hour24: true
+      hours_to_show: 120
+      line_width: 2
+      name: Temperatura Dispositivos
+      points_per_hour: 1
+      show:
+        average: true
+        extrema: true
+        labels: true
+        labels_secondary: true
+        points: hover
+        state: false
+      type: "custom:mini-graph-card"
+    filter:
+      include:
+        - entity_id: sensor.*_device_temperature
+    show_empty: true
+    type: "custom:auto-entities"

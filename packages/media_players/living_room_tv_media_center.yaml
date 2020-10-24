@@ -1,24 +1,7 @@
 homeassistant:
   customize:
-    binary_sensor.living_room_tv_state:
-      friendly_name: Televisão da Sala
-      icon: mdi:television
     media_player.media_center:
       icon: mdi:television
-
-sensor:
-  - platform: template
-    sensors:
-      living_room_tv_source:
-        value_template: '{{ states.media_player.living_room_tv.attributes["source"] }}'
-        friendly_name: 'Living Room TV Source'
-
-binary_sensor:
-- platform: template
-  sensors:
-    living_room_tv_state:
-      icon_template: mdi:television
-      value_template: "{{ states.media_player.living_room_tv.state != 'off' }}"  
 
 media_player:
   - platform: universal
@@ -26,18 +9,17 @@ media_player:
     children:
       - media_player.living_room_tv_meo_box
       #- media_player.living_room_tv_kodi
+      - media_player.living_room_tv_plex
       - media_player.living_room_tv
     state_template: >
       {% if is_state('media_player.living_room_tv', 'off') %}
-        off
-      {% else %}
-        {% if is_state('sensor.living_room_tv_source', "Kodi") %}
-          {{ states('media_player.living_room_tv_kodi') }}
-        {% elif is_state('sensor.living_room_tv_source', "MEO") %}
+          off
+      {% elif is_state('sensor.living_room_tv_source', "MEO") and ( not is_state('media_player.living_room_tv_meo_box', 'unavailable') ) %}
           {{ states('media_player.living_room_tv_meo_box') }}
-        {% else %}
+      {% elif is_state('sensor.living_room_tv_source', "Plex") %}    
+          {{ states('media_player.living_room_tv_plex') }}
+      {% else %}
           {{ states('media_player.living_room_tv') }}
-        {% endif %}
       {% endif %}
     commands:
       turn_on:
