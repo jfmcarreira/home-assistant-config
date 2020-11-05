@@ -5,6 +5,9 @@
   automation_appdaemon_motion_lights_office:
     name: Ativar Luz de Presença do Escritório
     icon: mdi:light
+  automation_appdaemon_motion_lights_hallway:
+    name: Ativar Luz de Presença do Corredor
+    icon: mdi:light
   automation_sw_all_motion_lights:
     name: Controlador das Luzes Automáticas
     icon: mdi:light

@@ -1,0 +1,5 @@
+logger:
+  default: error
+  logs:
+    #homeassistant.components.onvif: debug
+    homeassistant.components.shell_command: debug

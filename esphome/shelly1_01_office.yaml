@@ -11,12 +11,7 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  #manual_ip:
-    #static_ip: !secret ip_shelly1_bedroom
-    #gateway: !secret esp_gateway
-    #subnet: !secret esp_subnet
-  #use_address: !secret ip_shelly1_bedroom
-
+  
 # Enable logging
 logger:
 
@@ -28,12 +23,9 @@ ota:
 
 binary_sensor:
   - id: sw_1
-    #name: ${upper_devicename} SW
     platform: gpio
     pin:
       number: GPIO5
-      #mode: INPUT_PULLUP
-      #inverted: True
     on_state:
       then:
         - light.toggle: light_1

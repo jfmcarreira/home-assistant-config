@@ -1,6 +1,12 @@
+homeassistant:
+  customize:
+    automation.heating_auto_off_weekend:
+      friendly_name: Desligar Aquecimento Fim de Semana por Horário
+    automation.heating_auto_off_weekdays:
+      friendly_name: Desligar Aquecimento Dias de Trabalho por Horário
+
 automation old:
-  - id: Heating Auto Turn Off - Weekend
-    alias: Heating Auto Turn Off - Weekend
+  - alias: heating_auto_off_weekend
     trigger:
       - platform: template
         value_template: >
@@ -17,7 +23,7 @@ automation old:
       - service: climate.turn_off
         entity_id: climate.heating
 
-  - alias: Heating Auto Turn Off - Working Days
+  - alias: heating_auto_off_weekdays
     trigger:
       - platform: template
         value_template: >

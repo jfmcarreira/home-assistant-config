@@ -1,0 +1,5 @@
+# https://www.home-assistant.io/integrations/nextcloud/
+nextcloud:
+  url: !secret nextcloud_url
+  username: !secret nextcloud_user
+  password: !secret nextcloud_pass

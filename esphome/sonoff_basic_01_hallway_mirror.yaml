@@ -1,5 +1,6 @@
 substitutions:
   devicename: sonoff_basic_01
+  device_friendly_name: Hallway Mirror
 
 esphome:
   name: ${devicename} 
@@ -37,7 +38,7 @@ output:
     
 light:
   - platform: binary
-    name: Hallway Mirror
+    name: ${device_friendly_name}
     id: relay_light
     output: relay
 

@@ -7,11 +7,6 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  manual_ip:
-    static_ip: !secret ip_sonoff_basic_heating
-    gateway: !secret esp_gateway
-    subnet: !secret esp_subnet
-  #use_address: 10.20.0.35
   
 
 # Enable logging
@@ -33,7 +28,8 @@ binary_sensor:
     on_release:
       then:
         - logger.log: "Standalone mode"
-        - switch.turn_off: relay
+        #- switch.turn_off: relay
+        
   - platform: gpio
     pin:
       number: GPIO0
@@ -41,13 +37,25 @@ binary_sensor:
       inverted: True
     name: sonoff_basic_heating_switch
     on_press:
-      if:
-        condition:
-          api.connected:
-        then:
-          - logger.log: connected
-        else:
-          - switch.toggle: relay
+      - if:
+          condition:
+            api.connected:
+          then:
+            - if:
+                condition:
+                  - binary_sensor.is_on: ha_heating_boiler_state
+                then:
+                  - homeassistant.service:
+                      service: climate.turn_off
+                      data:
+                        entity_id: climate.heating
+                else:
+                  - homeassistant.service:
+                      service: climate.turn_on
+                      data:
+                        entity_id: climate.heating
+          else:
+            - switch.toggle: relay
           
   
   - platform: homeassistant
@@ -60,6 +68,7 @@ binary_sensor:
           
   - platform: homeassistant
     name: Heating state from HA
+    id: ha_heating_boiler_state
     entity_id: binary_sensor.heating_state
     on_press:
       - switch.turn_on: green_led
@@ -88,10 +97,3 @@ sensor:
   - platform: dallas
     address: 0xC403209779413328
     name: "Heating Ongoing Water Temperature"
-    
-
-#status_led:
-#  pin:
-#    number: GPIO13
-#    inverted: yes
-    

@@ -11,14 +11,15 @@ automation old:
       current_volume: 0.1
       current_media_player: 'media_player.ghm_living_room'
     trigger:
-      - platform: template
-        value_template: "{{ states.sensor.stromium_device_battery_level.state | int < 15 }}"
+      - platform: numeric_state
+        entity_id: sensor.stromium_device_battery_level
+        below: 15
     condition:
       condition: and
       conditions:
         - condition: state
-          entity_id: sensor.stromium_battery_state
-          state: "discharging"
+          entity_id: binary_sensor.stromium_is_charging
+          state: "off"
         - condition: state
           entity_id: light.group_living_room
           state: "on"

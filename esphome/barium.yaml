@@ -1,0 +1,33 @@
+esphome:
+  name: barium
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Enable updates over-the-air
+ota:
+
+
+# For bluetooth devices
+esp32_ble_tracker:
+
+sensor:
+  - platform: xiaomi_lywsdcgq
+    mac_address: 58:2D:34:32:55:01
+    temperature:
+      name: Bedroom Ricardo Mijia Temperature
+    humidity:
+      name: Bedroom Ricardo Mijia Humidity
+    battery_level:
+      name: Bedroom Ricardo Mijia Batery
+

@@ -1,5 +1,0 @@
-binary_sensor:
-- platform: template
-  sensors:
-    heating_state:
-      value_template: '{{ states.climate.heating.state  == "heat" }}'

@@ -1,0 +1,77 @@
+substitutions:
+  devicename: bhonfre_01
+  
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: nodemcu
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+captive_portal:
+
+web_server:
+
+
+binary_sensor:
+  # HC-SR501
+  - platform: gpio
+    id: sw_1
+    pin:
+      number: GPIO14
+      mode: INPUT_PULLUP
+    on_press:
+      - light.toggle: light_2
+    
+  - platform: gpio
+    id: sw_2
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP
+    
+  - platform: gpio
+    id: sw_3
+    pin:
+      number: GPIO2
+      mode: INPUT_PULLUP
+    on_press:
+      - light.toggle: light_1
+    
+  - platform: gpio
+    id: sw_4
+    pin:
+      number: GPIO12
+      mode: INPUT_PULLUP
+    
+    
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: 
+      number: GPIO05
+  - platform: gpio
+    id: relay_2
+    pin: 
+      number: GPIO04
+      
+light:
+  - platform: binary
+    id: light_1
+    output: relay_1
+  - platform: binary
+    id: light_2
+    output: relay_2
+  

@@ -112,6 +112,18 @@ cards:
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
+      title: Comandos Sem Fios
+      type: entities
+    filter:
+      include:
+        - entity_id: automation.remote_*
+    show_empty: false
+    sort:
+      ignore_case: true
+      method: name
+    type: 'custom:auto-entities'
+  - card:
+      show_header_toggle: false
       title: Frontend
       type: entities
     filter:
@@ -141,6 +153,18 @@ cards:
     filter:
       include:
         - entity_id: automation.daily_stats_*
+    show_empty: false
+    sort:
+      ignore_case: true
+      method: name
+    type: 'custom:auto-entities'
+  - card:
+      show_header_toggle: false
+      title: Gerador de Eventos
+      type: entities
+    filter:
+      include:
+        - entity_id: automation.event_*
     show_empty: false
     sort:
       ignore_case: true
@@ -233,7 +257,7 @@ cards:
         - entity_id: automation.kyosk_*
         - entity_id: automation.ctrl_*
         - entity_id: automation.discovery_*
-        #- entity_id: automation.ifttt_*
+        - entity_id: automation.event_*
         - entity_id: automation.backup_*
         - entity_id: automation.cctv_*
         - entity_id: automation.task_*
@@ -241,6 +265,7 @@ cards:
         - entity_id: automation.daily_stats_*
         - entity_id: automation.system_*
         - entity_id: automation.tts_*
+        - entity_id: automation.remote_*
       include:
         - entity_id: automation.*
     show_empty: false

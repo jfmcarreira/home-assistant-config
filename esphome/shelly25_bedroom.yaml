@@ -13,10 +13,6 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  manual_ip:
-    static_ip: !secret ip_shelly25_master_bedroom
-    gateway: !secret esp_gateway
-    subnet: !secret esp_subnet
   
 # Enable logging
 logger:
@@ -61,10 +57,16 @@ binary_sensor:
           - ON for at most 1s
           - OFF for at least 0.2s
         then:
-          - homeassistant.service:
-              service: light.toggle
+          #- homeassistant.service:
+              #service: light.toggle
+              #data:
+                #entity_id: light.master_bedroom
+          - logger.log: "Dimmer Down"
+          - homeassistant.event:
+              event: esphome.button_pressed
               data:
-                entity_id: light.master_bedroom
+                action: master_bedroom_toggle
+                            
       
       - timing:
           - ON for at least 1s
@@ -98,7 +100,7 @@ binary_sensor:
                             action: brightness_change
                             entity_id: "light.master_bedroom"
                             direction: "up"
-                - delay: 0.5s
+                - delay: 0.3s
 
 switch:
   - platform: gpio
@@ -140,12 +142,12 @@ sensor:
       id: shelly_current_B
     active_power_a:
       id: shelly_active_power_A
-      name: Power Usage ${LightA_Name}
+      name: Power Usage Light ${LightA_Name}
       filters:
         - multiply: -1
     active_power_b:
       id: shelly_active_power_B
-      name: Power Usage ${LightB_Name}
+      name: Power Usage Light ${LightB_Name}
       filters:
         - multiply: -1
     update_interval: 30s

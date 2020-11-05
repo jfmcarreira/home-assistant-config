@@ -1,22 +1,4 @@
-script:   
-  routine_night_time:
-    alias: Routine Night Time
-    sequence:
-    - service: climate.turn_off
-      entity_id: climate.heating
-      
-    - service: media_player.turn_off
-      entity_id: media_player.living_room_tv
-      
-    - service: scene.turn_on
-      entity_id: scene.night_time
-      
-    - service: light.turn_on
-      entity_id: light.hallway
-    - delay: 00:00:40
-    - service: light.turn_off
-      entity_id: light.hallway
-      
+script:        
   routine_away:
     alias: Routine Leave Home
     sequence:
@@ -33,6 +15,12 @@ script:
       entity_id: light.hallway
     
     - wait_template: "{{ is_state('binary_sensor.front_door', 'on') }}"
+    
+    - service: python_script.vacuum_room
+      data:
+        room: switch_based
+        is_zone: 0
+        runs: 1
     
     - wait_template: "{{ is_state('binary_sensor.front_door', 'off') }}"
     

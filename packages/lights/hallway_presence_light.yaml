@@ -14,3 +14,10 @@ light:
           service: homeassistant.turn_off
           data:
             entity_id: switch.plug_tradfri_hallway
+
+            
+  - platform: group
+    name: hallway_presence_group
+    entities:
+      - light.hallway_presence
+      - light.hallway_mirror

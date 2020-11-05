@@ -33,6 +33,7 @@ sensor bill:
       monthly_energy_cicle_days:
         value_template: >-
           {{ ( as_timestamp( now() ) - as_timestamp( states.sensor.monthly_energy.attributes.last_reset ) ) | timestamp_custom("%d") }}
+      
       monthly_energy_cost:
         friendly_name: "Fatura Energia"
         icon_template: "mdi:currency-eur"
@@ -42,11 +43,15 @@ sensor bill:
         attribute_templates:
           Factura Anterior: >-
             {{ ( float(states.sensor.monthly_energy.attributes.last_period) * (0.1456+0.001) * 1.23 + 30.0 * 0.2292 * 1.23 + 2.85 * 1.06 ) | round(2) }} €
+          Estimativa em Simples: >-
+            {{ ( ( float(states.sensor.monthly_energy.state) * 0.1456 + float(states.sensor.monthly_energy_cicle_days.state) * 0.2292 ) * 1.23 ) | round(2) }} €
           Estimativa em Bi-horario: >-
             {{ ( ( float(states.sensor.monthly_energy_bi_tariff_fora_de_vazio.state) * 0.1875 + float(states.sensor.monthly_energy_bi_tariff_vazio.state) * 0.1008 + float(states.sensor.monthly_energy_cicle_days.state) * 0.2409 ) * 1.23 ) | round(2) }} €
           Estimativa em Tri-horario: >-
             {{ ( ( float(states.sensor.monthly_energy_tri_tariff_cheias.state) * 0.1565 + float(states.sensor.monthly_energy_tri_tariff_ponta.state) * 0.2720 + float(states.sensor.monthly_energy_tri_tariff_vazio.state) * 0.0967 + float(states.sensor.monthly_energy_cicle_days.state) * 0.2343 ) * 1.23 ) | round(2) }} €
           
+          Estimativa Factura Anterior em Simples: >-
+            {{ ( ( float(states.sensor.monthly_energy.attributes.last_period) * 0.1456 + 30.0 * 0.2292 ) * 1.23 ) | round(2) }} €
           Estimativa Factura Anterior em Bi-horario: >-
             {{ ( ( float(states.sensor.monthly_energy_bi_tariff_fora_de_vazio.attributes.last_period) * 0.1875 + float(states.sensor.monthly_energy_bi_tariff_vazio.attributes.last_period) * 0.1008 + 30 * 0.2409 ) * 1.23 ) | round(2) }} €
           Estimativa Factura Anterior em Tri-horario: >-

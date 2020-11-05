@@ -71,6 +71,7 @@ if room == "switch_based":
               if is_zone == -1: # overwrite is_zone information
                   is_zone = int(r[3])
               vaccum_room_ids.extend( r[2] )
+          hass.states.set( entity_name, 'off' )
 
 else:
     # Single room

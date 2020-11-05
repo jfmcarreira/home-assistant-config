@@ -6,19 +6,21 @@ class MotionLight(hass.Hass):
         self.motion_sensor = self.args['motion_sensor']
         self.other_lights = self.args['other_lights']
         self.curr_sw = self.args['curr_sw']
+        self.turn_on_when_others_off = self.args['turn_on_when_others_off']
+        
         
         self.light = self.args['light']
         self.timeout = self.args['timeout']
         self.short_timeout = 10
         
         self.timer = None
-        self.listen_state(self.motion_callback, self.motion_sensor, new = "on")
+        self.listen_state(self.motion_callback, self.motion_sensor, old = "off", new = "on")
         self.listen_state(self.light_callback, self.light, new = "off")
 
         for l in self.other_lights:
             self.listen_state(self.other_light_callback, l)
             
-        self.set_timer(self.timeout)
+        #self.set_timer(self.timeout)
     
     def should_light_turn_on(self):
       
@@ -54,7 +56,6 @@ class MotionLight(hass.Hass):
         self.timer = self.run_in(self.timeout_callback, timeout)
 
     def motion_callback(self, entity, attribute, old, new, kwargs):
-       
         if self.should_light_turn_on():
             self.turn_on(self.light)
             self.set_timer(self.timeout)
@@ -71,8 +72,8 @@ class MotionLight(hass.Hass):
     def other_light_callback(self, entity, attribute, old, new, kwargs):
         if new == "on":
             self.turn_off(self.light)
-        #else:
-            #if self.should_light_turn_on():
-                #self.turn_on(self.light)
-                #self.set_timer(self.short_timeout)
+        else:            
+            if self.turn_on_when_others_off and self.should_light_turn_on():
+                self.turn_on(self.light)
+                self.set_timer(self.timeout)
             

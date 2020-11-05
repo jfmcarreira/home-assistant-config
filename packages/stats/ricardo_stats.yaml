@@ -60,10 +60,10 @@ automation insert:
       - platform: state
         entity_id: sensor.ricardo_weight
     action:
-      - service: shell_command.external_my_sql_insert_with_date
-        data_template:
+      - service: shell_command.external_my_sql_insert
+        data:
           table: ricardo_weight
           value: >
             {{ states( 'sensor.ricardo_weight' ) }}
           date_stamp: >
-            {{ states('input_datetime.ricardo_weight_last_measured') | timestamp_custom("%Y-%m-%d", true) }}
+            "{{ states('input_datetime.ricardo_weight_last_measured') | timestamp_custom("%Y-%m-%d", true) }}"

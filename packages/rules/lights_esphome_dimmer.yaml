@@ -1,10 +1,10 @@
 automation old:
   - alias: Lights ESPHome Dimmer
     trigger:
-      - event_data:
-          action: brightness_change
+      - platform: event
         event_type: esphome.button_pressed
-        platform: event
+        event_data:
+          action: brightness_change
     action:
       - service: light.turn_on
         data_template:

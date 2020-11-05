@@ -1,0 +1,27 @@
+scene:
+  - id: sleeping_time
+    name: Modo Dormir
+    entities:
+      light.front_doo:
+        state: 'off'
+      light.hallway_mirror:
+        state: 'off'
+      light.hallway:
+        state: 'off'
+      light.living_room_abajur:
+        state: 'off'
+      light.living_room_table:
+        state: 'off'
+      light.living_room_tv_leds:
+        state: 'off'
+      light.living_room_window:
+        state: 'off'
+      light.office:
+        state: 'off'
+      light.office_desk:
+        state: 'off'
+      light.kitchen:
+        state: 'off'
+      light.kitchen_pantry:
+        state: 'off'
+      

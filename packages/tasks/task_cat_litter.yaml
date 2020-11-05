@@ -9,6 +9,8 @@ homeassistant:
       icon: mdi:clock-outline
     counter.cat_litter_box_visits:
       friendly_name: Litter Box Visits
+    automation.task_keep_register_time_cat_litter:
+      friendly_name: Guardar Data da Execução das Tarefas da Areia das Gatas
 
 binary_sensor motion:
   - platform: mqtt
@@ -22,9 +24,6 @@ counter:
     step: 1
     icon: "mdi:cat"
    
-
-
-      
 input_datetime:
   cat_litter_box_last_visit:
     name: Litter Box Last Visit
@@ -130,7 +129,7 @@ script:
           operation: restore
           store_name: cat_litter_flash_store
           
-  cat_litter_clean:
+  cat_litter_clean_no_vaccum:
     alias: Task Litter Box Mark Clean
     sequence:
       - service: counter.reset
@@ -141,6 +140,11 @@ script:
           entity_id: input_datetime.cat_litter_box_last_clean
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+          
+  cat_litter_clean:
+    alias: Task Litter Box Mark Clean and Vaccum
+    sequence:
+      - service: script.cat_litter_clean_no_vaccum      
       #- service: script.vacuum_command
         #data:
           #vacuum_command_args: zoned_cleanup
@@ -184,6 +188,36 @@ script:
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
       - service: script.cat_litter_clean
       
+homeassistant:
+  customize:
+    
+      
+automation old:
+  - alias: task_keep_register_time_cat_litter
+    initial_state: true
+    mode: queued
+    max: 20
+    trigger:
+      - platform: state
+        entity_id: input_datetime.cat_litter_box_last_clean
+      - platform: state
+        entity_id: input_datetime.cat_litter_box_last_change
+    action:
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: >
+            {% if trigger.entity_id == "input_datetime.cat_litter_box_last_clean" %}
+              "Cat_Litter_Clean"
+            {% elif trigger.entity_id == "input_datetime.cat_litter_box_last_change" %}
+              "Cat_Litter_Change"
+            {% endif %}
+          column: task_name
+          date_stamp: >
+            "{{ trigger.to_state.state | as_timestamp | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"
+            
 #automation old:
 #- alias: Reset PIR State Cat Litter
   #initial_state: true

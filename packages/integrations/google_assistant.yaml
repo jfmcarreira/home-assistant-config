@@ -13,9 +13,9 @@ google_assistant:
     script.routine_night_time:
       expose: true
       room: Misc
-      name: Modo Noite
+      name: Modo Dormir
       aliases:
-        - Night mode
+        - Sleep mode
     script.routine_away:
       expose: true
       room: Misc

@@ -1,0 +1,64 @@
+input_number:
+  brightness_master_bedroom_light_day:
+    name: Brilho Luz do Quarto Dia
+    min: 0
+    max: 255
+    step: 1
+  brightness_master_bedroom_light_evening:
+    name: Brilho Luz do Quarto Fim de Dia
+    min: 0
+    max: 255
+    step: 1
+  brightness_master_bedroom_light_night:
+    name: Brilho Luz do Quarto Noite
+    min: 0
+    max: 255
+    step: 1
+
+automation old:
+  - alias: Lights Master Bedroom Ceilling Light Toggle
+    mode: single
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: esphome.button_pressed
+        event_data:
+          action: master_bedroom_toggle
+    action:
+      - service: light.toggle
+        data:
+          entity_id: light.master_bedroom
+          brightness: >
+            {% set brightness = states.input_number.brightness_master_bedroom_light_day.state %}
+            {% if now().strftime("%H")|int >= 20 and ( now().strftime("%H")|int < 23 ) %}
+              {% set brightness = states.input_number.brightness_master_bedroom_light_evening.state %}
+            {% elif ( now().strftime("%H")|int >= 23 ) or ( now().strftime("%H")|int < 7 ) %}
+              {% set brightness = states.input_number.brightness_master_bedroom_light_night.state %}
+            {% endif %}
+            {{ brightness | int }}
+            
+  - alias: Lights Master Bedroom Ceilling Liht Save Brightness
+    mode: restart
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: light.master_bedroom
+    condition:
+      - condition: state
+        entity_id: light.master_bedroom
+        state: "on"
+    action:
+      - service: input_number.set_value
+        data:
+          value: > 
+            {{ state_attr( 'light.master_bedroom' , 'brightness') }}
+          entity_id: >
+            {% if now().strftime("%H")|int >= 20 and ( now().strftime("%H")|int < 23 ) %}
+              input_number.brightness_master_bedroom_light_evening
+            {% elif ( now().strftime("%H")|int >= 23 ) or ( now().strftime("%H")|int < 7 ) %}
+              input_number.brightness_master_bedroom_light_night
+            {% else %}
+              input_number.brightness_master_bedroom_light_day
+            {% endif %}
+      
+  

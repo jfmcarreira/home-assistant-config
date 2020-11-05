@@ -1,18 +1,5 @@
-automation old:
-  - alias: Lights Master Bedroom Side Turn Off
-    mode: restart
-    initial_state: true
-    trigger:
-      - entity_id: light.master_bedroom
-        platform: state
-        to: "on"
-    action:
-      - service: light.turn_off
-        entity_id: light.master_bedroom_left_bed
-      - service: light.turn_off
-        entity_id: light.master_bedroom_right_bed
-  
-  - alias: 'Lights Phillips Hue Bedroom Dim UP'
+automation old:   
+  - alias: 'Remote Phillips Hue Bedroom Dim UP'
     mode: single
     trigger:
       - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
@@ -27,7 +14,7 @@ automation old:
         entity_id: light.master_bedroom
         
         
-  - alias: 'Lights  Phillips Hue Bedroom Dim DOWN'
+  - alias: 'Remote  Phillips Hue Bedroom Dim DOWN'
     mode: single
     trigger:
       - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
@@ -43,7 +30,7 @@ automation old:
         
 
 
-  - alias: 'Lights  Phillips Hue Bedroom Short Press ON'
+  - alias: 'Remote  Phillips Hue Bedroom Short Press ON'
     mode: single
     trigger:
       - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
@@ -55,7 +42,7 @@ automation old:
       - service: light.turn_on
         entity_id: light.master_bedroom_bathroom
         
-  - alias: 'Lights  Phillips Hue Bedroom Short Press OFF '
+  - alias: 'Remote  Phillips Hue Bedroom Short Press OFF '
     mode: single
     trigger:
       - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
@@ -70,7 +57,7 @@ automation old:
         entity_id: light.master_bedroom
         
     
-  - alias: 'Lights  Phillips Hue Bedroom Long Press ON'
+  - alias: 'Remote  Phillips Hue Bedroom Long Press ON'
     mode: single
     trigger:
       - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5
@@ -91,7 +78,7 @@ automation old:
         #entity_id: light.office
         #service: light.turn_on
         
-  - alias: 'Lights Phillips Hue Bedroom Long Press OFF '
+  - alias: 'Remote Phillips Hue Bedroom Long Press OFF '
     mode: single
     trigger:
       - device_id: 6a3c6f1bc02e44578aa88696fd93aaf5

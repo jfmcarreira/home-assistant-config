@@ -30,6 +30,30 @@ cards:
       - entity: input_number.google_home_volume_tts_night
         name: TTS Noite
 
+  - entities:
+      - entity: binary_sensor.living_room_tv_state
+      - entity: binary_sensor.roborock_state
+      - entity: binary_sensor.washing_machine_state
+      - entity: binary_sensor.dish_wash_machine_state
+      #- entity: binary_sensor.fridge_door
+      #- entity: display.tf201_kyosk
+    show_header_toggle: false
+    state_color: true
+    title: Electrodomésticos
+    type: entities
+  
+  - entities:
+      - entity: binary_sensor.pegasus
+      - entity: binary_sensor.boron
+      - entity: binary_sensor.beryllium
+      - entity: binary_sensor.strontium
+      - entity: binary_sensor.magnesium
+      - entity: binary_sensor.calcium
+      - entity: binary_sensor.barium
+    state_color: true
+    title: Home Devices
+    type: entities
+        
   - type: 'custom:auto-entities'
     card:
       show_header_toggle: false

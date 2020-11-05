@@ -5,35 +5,27 @@ homeassistant:
   customize:
     binary_sensor.dish_wash_machine_door:
       friendly_name: "Porta da Máquina de Lavar Loiça"
-      icon: mdi:dishwasher
+      #icon: mdi:dishwasher
     binary_sensor.dish_wash_machine_state:
       friendly_name: "Máquina de Lavar Loiça"
       icon: mdi:dishwasher
+    sensor.task_dish_washing_last_done:
+      icon: mdi:silverware-clean
+      friendly_name: Lavagem da Loiça
+      device_class: timestamp
+    sensor.task_dish_wash_empty_last_done:
+      icon: mdi:silverware
+      friendly_name: Retir a Loiça da Máquina
+      device_class: timestamp
+    automation.task_keep_register_time_dish_wash_machine:
+      friendly_name: Guardar Data da Execução das Tarefas da Máq. da Loiça
      
-binary_sensor:
+binary_sensor state:
   - platform: mqtt
     name: "Dish Wash Machine Door"
     device_class: door
     state_topic: "binary_rf_sensors/dish_wash_machine_door"
     qos: 1
-    
-  #- platform: template
-    #sensors:
-      #dish_wash_machine_state:
-        #friendly_name: "Máquina de Lavar Loiça"
-        #device_class: plug
-        #delay_on:
-          #minutes: 5
-        #delay_off:
-          #minutes: 2
-        #entity_id:
-          #- sensor.power_usage_dish_wash_machine
-        #value_template: >-
-          #{%- if ( states("sensor.power_usage_dish_wash_machine") | int > 10 ) %}
-              #True
-          #{%- else %}
-              #False
-          #{%- endif %}
           
   - platform: template
     sensors:
@@ -43,8 +35,6 @@ binary_sensor:
           minutes: 1
         delay_off:
           minutes: 1
-        #entity_id:
-          #- sensor.power_usage_device_dish_wash_machine
         value_template: >-
           {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
               {%- if states("sensor.power_usage_device_dish_wash_machine") | int < 3 %}
@@ -63,7 +53,15 @@ binary_sensor:
           Última Lavagem: >
             {{ as_timestamp( states('input_datetime.task_dish_washing_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
   
-
+      dish_wash_machine_need_emtpy:
+        friendly_name: Existe Loiça Lavada na Máquina
+        #device_class: problem
+        value_template: >
+          {{ as_timestamp( states('input_datetime.task_dish_washing_last_done') ) - as_timestamp( states('input_datetime.task_dish_wash_empty_last_done') ) > 0 }} 
+        attribute_templates:
+          last_done: >
+            {{ as_timestamp( states('input_datetime.task_dish_wash_empty_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+    
 
 input_datetime:
   task_dish_washing_last_done:
@@ -81,65 +79,65 @@ input_datetime:
 sensor dishes:
   - platform: template
     sensors:
-      task_dish_washing_last_done:
-        friendly_name: Última Lavagem da Lavar Loiça
-        device_class: timestamp
-        icon_template: mdi:washing-machine
-        value_template: >
-          {{ state_attr('input_datetime.task_dish_washing_last_done', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
-      task_dish_wash_empty_last_done:
-        friendly_name: Última Vez Retirada a Loiça da Máquina
-        device_class: timestamp
-        icon_template: mdi:silverware-clean
-        value_template: >
-          {{ state_attr('input_datetime.task_dish_wash_empty_last_done', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+      dish_wash_machine_state:
+        value_template: >-
+          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %} 
+            A Lavar
+          {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %} 
+            Loiça Lavada
+          {% else %}
+            Desligada
+          {% endif %}
+        icon_template: >-
+          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %} 
+            mdi:dishwasher
+          {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %} 
+            mdi:dishwasher-alert
+          {% else %}
+            mdi:dishwasher-off
+          {% endif %}
+        
           
-          
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: task_dish_washing_last_done
+        query: >-
+          SELECT * FROM tasks
+          WHERE task_name LIKE 'Dish_Wash_Machine_Empty'
+          ORDER BY date  DESC LIMIT 1;
+        column: date
+      
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: task_dish_wash_empty_last_done
+        query: >-
+          SELECT * FROM tasks
+          WHERE task_name LIKE 'Dish_Wash_Machine_Clean'
+          ORDER BY date  DESC LIMIT 1;
+        column: date
 
-binary_sensor dishes:
-  - platform: template
-    sensors:
-      dish_wash_machine_need_emtpy:
-        friendly_name: Existe Loiça Lavada na Máquina
-        #entity_id:
-          #- input_datetime.task_dish_washing_last_done
-          #- input_datetime.task_dish_wash_empty_last_done
-        value_template: >
-          {{ as_timestamp( states('input_datetime.task_dish_washing_last_done') ) - as_timestamp( states('input_datetime.task_dish_wash_empty_last_done') ) > 0 }} 
-        attribute_templates:
-          last_done: >
-            {{ as_timestamp( states('input_datetime.task_dish_wash_empty_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-            
-          
-#input_boolean:
-  #dish_wash_machine_need_emtpy:
-    #name: dish_wash_machine_need_emtpy
-    
-#alert:
-  #dish_wash_machine_need_emtpy:
-    #title: Tarefa Doméstica
-    #name: Retirar loiça da máquina de lavar
-    ##done_message: Garage is closed
-    #entity_id: binary_sensor.dish_wash_machine_need_emtpy
-    #state: 'on'
-    #repeat:
-      #- 15
-      #- 30
-      #- 60
-    #can_acknowledge: true
-    #skip_first: false
-    #notifiers:
-      #- mobile_app_all
-      #- living_room_tv
-    #data:
-      #sticky: true
-      #tag: 30
-      #priority: high
-      #actions:
-        #- action: dish_wash_remove_done
-          #title: Registar loiça retirada da máquina
-
+      
 script:
+  task_dish_wash_machine_notification:
+    fields:
+      notification_method:
+        description: Notification method
+        example: mobile_app_magnesium
+    sequence:
+      - service: "notify.{{ notification_method }}"
+        data:
+          title: Tarefa Doméstica
+          message: Retirar loiça da máquina de lavar
+          data:
+            sticky: true
+            tag: 30
+            priority: high
+            actions:
+              - action: dish_wash_remove_done
+                title: Registar loiça retirada da máquina
+  
   task_dish_wash_machine_empty:
     alias: Tarefa Retirar Loiça da Máquina
     sequence:
@@ -164,7 +162,33 @@ script:
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
 
+                      
 automation dishes:
+  - alias: task_keep_register_time_dish_wash_machine
+    initial_state: true
+    mode: queued
+    max: 20
+    trigger:
+      - platform: state
+        entity_id: input_datetime.task_dish_washing_last_done
+      - platform: state
+        entity_id: input_datetime.task_dish_wash_empty_last_done
+    action:
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: >
+            {% if trigger.entity_id == "input_datetime.task_dish_washing_last_done" %}
+              "Dish_Wash_Machine_Clean"
+            {% elif trigger.entity_id == "input_datetime.task_dish_wash_empty_last_done" %}
+              "Dish_Wash_Machine_Empty"
+            {% endif %}
+          column: task_name
+          date_stamp: >
+            "{{ trigger.to_state.state | as_timestamp | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"
+            
   - alias: Task Dish Wash Machine Finished
     trigger:
       - entity_id: binary_sensor.dish_wash_machine_state
@@ -190,8 +214,8 @@ automation dishes:
           
   - alias:  Task Dish Wash Machine Empty Remainder
     trigger:
-      - platform: time_pattern
-        minutes: 30
+      - platform: event
+        event_type: event_remaind_task_todo
     condition:
       - condition: state
         entity_id: binary_sensor.notification_non_disturb
@@ -205,17 +229,23 @@ automation dishes:
           title: Tarefa Doméstica
           message: Retirar loiça da máquina de lavar
           notification_id: persistent_dish_washing
-      - service: notify.mobile_app_all
-        data:
-          title: Tarefa Doméstica
-          message: Retirar loiça da máquina de lavar
-          data:
-            sticky: true
-            tag: 30
-            priority: high
-            actions:
-              - action: dish_wash_remove_done
-                title: Registar loiça retirada da máquina
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: person.joao
+                state: home
+            sequence:
+              - service: script.task_dish_wash_machine_notification 
+                data:
+                  notification_method: mobile_app_magnesium
+          - conditions:
+              - condition: state
+                entity_id: person.bianca
+                state: home
+            sequence:
+              - service: script.task_dish_wash_machine_notification 
+                data:
+                  notification_method: mobile_app_calcium
 
   - alias: Task Dish Wash Machine Empty Done
     trigger:

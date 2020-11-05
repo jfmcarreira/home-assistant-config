@@ -1,3 +1,16 @@
+input_bolean_vaccum_max_rooms:
+  module: input_bolean_vaccum
+  class: VacuumBooleans
+  input_boolean_switches:
+    - input_boolean.vacuum_livingroom
+    - input_boolean.vacuum_hallway
+    - input_boolean.vacuum_kitchen
+    - input_boolean.vacuum_office
+    - input_boolean.vacuum_bathroom
+    - input_boolean.vacuum_bedroom
+    - input_boolean.vacuum_bedroombath
+    - input_boolean.vacuum_bedroomricardo
+
 motion_light_living_room:
   module: motion_lights
   class: MotionLight
@@ -9,7 +22,18 @@ motion_light_living_room:
     - light.living_room_abajur
   timeout: 300
   curr_sw: input_boolean.automation_appdaemon_motion_lights_living_room
-
+  turn_on_when_others_off: false
+  
+motion_light_hallway:
+  module: motion_lights
+  class: MotionLight
+  motion_sensor: binary_sensor.motion_sensor_hallway
+  light:  light.hallway_presence_group
+  other_lights:
+    - light.hallway
+  timeout: 300
+  curr_sw: input_boolean.automation_appdaemon_motion_lights_hallway
+  turn_on_when_others_off: on
 
 motion_light_office:
   module: motion_lights
@@ -20,3 +44,4 @@ motion_light_office:
     - light.office
   timeout: 120
   curr_sw: input_boolean.automation_appdaemon_motion_lights_office
+  turn_on_when_others_off: false
