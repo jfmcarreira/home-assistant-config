@@ -22,7 +22,7 @@ motion_light_living_room:
     - light.living_room_abajur
   timeout: 300
   curr_sw: input_boolean.automation_appdaemon_motion_lights_living_room
-  turn_on_when_others_off: false
+  turn_on_when_room_off: off
   
 motion_light_hallway:
   module: motion_lights
@@ -31,9 +31,12 @@ motion_light_hallway:
   light:  light.hallway_presence_group
   other_lights:
     - light.hallway
+    - name: light.office
+      master_light: false
+      turn_on_when_off: true
   timeout: 300
   curr_sw: input_boolean.automation_appdaemon_motion_lights_hallway
-  turn_on_when_others_off: on
+  turn_on_when_room_off: on
 
 motion_light_office:
   module: motion_lights
@@ -41,7 +44,9 @@ motion_light_office:
   motion_sensor: binary_sensor.motion_sensor_office
   light: light.office_desk
   other_lights:
-    - light.office
+    - name: light.office
+      master_light: true
+      turn_on_when_off: false
   timeout: 120
   curr_sw: input_boolean.automation_appdaemon_motion_lights_office
-  turn_on_when_others_off: false
+  turn_on_when_room_off: off

@@ -1,24 +1,43 @@
 import hassapi as hass
 
+class ControllingLight:
+    def __init__(self, name ):
+        self.name = name
+        self.master_light = True
+        self.turn_on_when_off = False
+        
+    def init_based_on_dict(self, light_dict ):
+        self.master_light = light_dict["master_light"]
+        self.turn_on_when_off = light_dict["turn_on_when_off"]
+      
+
 class MotionLight(hass.Hass):
 
     def initialize(self):
-        self.motion_sensor = self.args['motion_sensor']
-        self.other_lights = self.args['other_lights']
-        self.curr_sw = self.args['curr_sw']
-        self.turn_on_when_others_off = self.args['turn_on_when_others_off']
-        
         
         self.light = self.args['light']
         self.timeout = self.args['timeout']
         self.short_timeout = 10
-        
+        self.motion_sensor = self.args['motion_sensor']
+        self.curr_sw = self.args['curr_sw']
+        self.turn_on_when_room_off = self.args['turn_on_when_room_off']
+         
+        self.other_lights = []
+        for light in self.args['other_lights']:
+            if type(light) == dict:
+                light_class = ControllingLight( light["name"] )
+                light_class.init_based_on_dict( light ) 
+            else:
+                light_class = ControllingLight( light )
+            self.other_lights.append( light_class )
+              
         self.timer = None
         self.listen_state(self.motion_callback, self.motion_sensor, old = "off", new = "on")
         self.listen_state(self.light_callback, self.light, new = "off")
 
         for l in self.other_lights:
-            self.listen_state(self.other_light_callback, l)
+            self.listen_state(self.other_light_callback, l.name)
+        
             
         #self.set_timer(self.timeout)
     
@@ -40,7 +59,8 @@ class MotionLight(hass.Hass):
 
         # Only turn on this light if others are off
         for l in self.other_lights:
-           turnOn = turnOn and self.get_state( l ) == "off"
+            if l.master_light:
+                turnOn = turnOn and self.get_state( l.name ) == "off"
 
         # Only start this is the light is off
         turnOn = turnOn and self.get_state( self.light ) == "off"
@@ -71,9 +91,16 @@ class MotionLight(hass.Hass):
 
     def other_light_callback(self, entity, attribute, old, new, kwargs):
         if new == "on":
-            self.turn_off(self.light)
-        else:            
-            if self.turn_on_when_others_off and self.should_light_turn_on():
+            for l in self.other_lights:
+                if l.name == entity and l.master_light == True:
+                    self.turn_off(self.light)
+        else:     
+            trigger_on = self.turn_on_when_room_off
+            for l in self.other_lights:
+                if l.name == entity and l.turn_on_when_off == True:
+                    trigger_on = True
+                      
+            if trigger_on and self.should_light_turn_on():
                 self.turn_on(self.light)
                 self.set_timer(self.timeout)
-            
+
