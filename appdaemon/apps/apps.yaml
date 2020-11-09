@@ -20,7 +20,7 @@ motion_light_living_room:
     - light.living_room_table
     - light.living_room_window
     - light.living_room_abajur
-  timeout: 300
+  timeout: 180
   curr_sw: input_boolean.automation_appdaemon_motion_lights_living_room
   turn_on_when_room_off: off
   
@@ -34,7 +34,7 @@ motion_light_hallway:
     - name: light.office
       master_light: false
       turn_on_when_off: true
-  timeout: 300
+  timeout: 180
   curr_sw: input_boolean.automation_appdaemon_motion_lights_hallway
   turn_on_when_room_off: on
 
@@ -47,6 +47,6 @@ motion_light_office:
     - name: light.office
       master_light: true
       turn_on_when_off: false
-  timeout: 120
+  timeout: 180
   curr_sw: input_boolean.automation_appdaemon_motion_lights_office
   turn_on_when_room_off: off

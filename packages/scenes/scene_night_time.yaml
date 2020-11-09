@@ -1,12 +1,13 @@
 scene:
-  - id: sleeping_time
-    name: Modo Dormir
+  - name: sleeping_away_time
     entities:
-      light.front_doo:
+      climate.heating:
+        state: 'off'
+      media_player.living_room_tv:
+        state: 'off'
+      light.front_door:
         state: 'off'
       light.hallway_mirror:
-        state: 'off'
-      light.hallway:
         state: 'off'
       light.living_room_abajur:
         state: 'off'
@@ -23,5 +24,9 @@ scene:
       light.kitchen:
         state: 'off'
       light.kitchen_pantry:
+        state: 'off'
+      light.bathroom:
+        state: 'off'
+      light.bathroom_mirror:
         state: 'off'
       

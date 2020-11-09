@@ -129,6 +129,18 @@ google_assistant:
       name: Luz de Presença do Corredor
       aliases:
         - Hallway Presence Light
+    light.bathroom:
+      expose: true
+      room: Casa de Banho
+      name: Luz da Casa de Banho
+      aliases:
+        - Bathroom Light
+    light.bathroom_mirror:
+      expose: true
+      room: Casa de Banho
+      name: Luz do Espelho da Casa de Banho
+      aliases:
+        - Bathroom Mirro Light
     light.living_room_table:
       expose: true
       room: Sala

@@ -31,9 +31,4 @@ automation old:
           id: '{{ trigger.payload_json.id }}'
           mac: '{{ trigger.payload_json.mac }}'
           fw_ver: '{{ trigger.payload_json.fw_ver }}'
-          shellyswitch25-D8F15B1324C1:
-            relay-0: "light"
-            relay-0-name: "Hallway"
-            relay-1: "light"  
-            relay-1-name: "Front door"
       

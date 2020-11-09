@@ -1,6 +1,5 @@
 automation old:
-  - id: Ctrl Hallway Light
-    alias: Ctrl Hallway Light
+  - alias: Switch Hallway Light
     initial_state: true
     trigger:
       platform: numeric_state

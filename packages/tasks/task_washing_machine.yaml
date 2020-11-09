@@ -22,6 +22,8 @@ homeassistant:
       device_class: timestamp
     automation.task_keep_register_time_washing_machine:
       friendly_name: Guardar Data da Execução das Tarefas da Máq. da Roupa
+    automation.task_laundry_remove_clothes_from_wash_machine_reminder:
+      friendly_name: Relembrar de Retirar a Roupa da Máq. de Lavar
       
 
 binary_sensor state:
@@ -262,7 +264,7 @@ automation clothes:
           entity_id: automation.task_laundry_remove_from_wash_machine_remainder
           skip_condition: true
 
-  - alias: Task Laundry Remove From Wash Machine Remainder
+  - alias: task_laundry_remove_clothes_from_wash_machine_reminder
     trigger:
       - platform: event
         event_type: event_remaind_task_todo
@@ -273,6 +275,9 @@ automation clothes:
       - condition: state
         entity_id: binary_sensor.notification_non_disturb
         state: "off"
+      - condition: template
+        value_template: >
+          {{ (as_timestamp( now() | timestamp_custom("%Y-%m-%d %H", true) ) - as_timestamp( state_attr( "automation.task_laundry_remove_clothes_from_wash_machine_reminder", "last_triggered" ) | timestamp_custom("%Y-%m-%d %H", true ) ) ) / 60 > 50 }}
     action:
       - service: persistent_notification.create
         data:

@@ -12,7 +12,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -24,7 +24,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -36,7 +36,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -48,7 +48,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: true
@@ -60,7 +60,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -72,7 +72,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -84,7 +84,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -96,7 +96,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -108,7 +108,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -120,7 +120,19 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
+    type: 'custom:auto-entities'
+  - card:
+      show_header_toggle: false
+      title: Interruptores
+      type: entities
+    filter:
+      include:
+        - entity_id: automation.switch_*
+    show_empty: false
+    sort:
+      ignore_case: true
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -132,7 +144,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -144,7 +156,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -156,7 +168,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -168,20 +180,9 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
-  - card:
-      show_header_toggle: false
-      title: Controlo
-      type: entities
-    filter:
-      include:
-        - entity_id: automation.ctrl_*
-    show_empty: false
-    sort:
-      ignore_case: true
-      method: name
-    type: 'custom:auto-entities'
+  
   #- card:
       #show_header_toggle: false
       #title: IFTTT
@@ -192,7 +193,7 @@ cards:
     #show_empty: false
     #sort:
       #ignore_case: true
-      #method: name
+      #method: entity_id
     #type: 'custom:auto-entities'
   #- card:
       #show_header_toggle: false
@@ -204,7 +205,7 @@ cards:
     #show_empty: false
     #sort:
       #ignore_case: true
-      #method: name
+      #method: entity_id
     #type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -216,7 +217,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -228,7 +229,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -240,7 +241,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
   - card:
       show_header_toggle: false
@@ -255,7 +256,7 @@ cards:
         - entity_id: automation.media_*
         - entity_id: automation.cat_*
         - entity_id: automation.kyosk_*
-        - entity_id: automation.ctrl_*
+        - entity_id: automation.switch_*
         - entity_id: automation.discovery_*
         - entity_id: automation.event_*
         - entity_id: automation.backup_*
@@ -271,7 +272,7 @@ cards:
     show_empty: false
     sort:
       ignore_case: true
-      method: name
+      method: entity_id
     type: 'custom:auto-entities'
     
   - type: 'custom:button-card'

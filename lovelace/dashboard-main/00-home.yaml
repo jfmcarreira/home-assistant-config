@@ -2,20 +2,18 @@ id: main
 title: Main 
 path: main
 icon: 'mdi:home'  
-panel: true
+#panel: true
 cards:
-  - type: "custom:layout-card"
-    layout: vertical
-    max_columns: 4
-    cards:
-      
+  #- type: "custom:layout-card"
+    #layout: vertical
+    #max_columns: 3
+    #cards:
       - type: weather-forecast
         entity: weather.ipma
         details: true
         forecast: true
         
-      
-      - break 
+      #- break 
       
       - type: horizontal-stack
         cards:
@@ -275,7 +273,7 @@ cards:
             name: Vitamina D
             type: 'custom:button-card'
       
-      - break 
+      #- break 
       
       - type: custom:mini-media-player
         #type: media-control
@@ -284,56 +282,157 @@ cards:
         hide: 
           volume: true
       
-      - card:
-          show_header_toggle: false
-          title: Luzes
-          type: entities
-        filter:
-          include:
-            - entity_id: light.front_door*
-              sort:
-                ignore_case: true
-                method: entity_id
-            - entity_id: light.hallway*
-              sort:
-                ignore_case: true
-                method: entity_id
-            - entity_id: light.living_room*
-              sort:
-                ignore_case: true
-                method: entity_id
-            - entity_id: light.kitchen*
-              sort:
-                ignore_case: true
-                method: entity_id
-            - entity_id: light.master_bedroom*
-              sort:
-                ignore_case: true
-                method: entity_id
-            - entity_id: light.bedroom*
-              sort:
-                ignore_case: true
-                method: entity_id
-            - entity_id: light.office*
-              sort:
-                ignore_case: true
-                method: entity_id
-          exclude:
-            - entity_id: light.browser*
-            - entity_id: light.configuration_tool_1
-            - entity_id: light.*_group
-            - entity_id: light.*_output   
-            - state: "unavailable"
-          #template: |
-            #{%if is_state('input_boolean.ricardo_sleeping', 'off' )%}light.bedroom_ricardo{% endif %}
-          #entity_ids:
-            #- input_boolean.ricardo_sleeping
-          #sort:
-            #ignore_case: true
-            #method: entity_id
-        show_empty: true
+      - type: vertical-stack
+        cards:
+          - cards:
+              - agregate_func: avg
+                entities:
+                  - sensor.average_temperature
+                group_by: 1h
+                height: 100
+                hour24: true
+                hours_to_show: 24
+                line_width: 3
+                name: Temperatura
+                points_per_hour: 1
+                show:
+                  average: false
+                  extrema: false
+                  points: hover
+                type: 'custom:mini-graph-card'
+              - agregate_func: avg
+                entities:
+                  - sensor.average_humidity
+                group_by: 1h
+                height: 110
+                hour24: true
+                hours_to_show: 24
+                line_width: 3
+                name: Humidade
+                points_per_hour: 1
+                show:
+                  average: false
+                  extrema: false
+                  points: hover
+                type: 'custom:mini-graph-card'
+            type: horizontal-stack
+            
+          - control:
+              _names: 'off'
+            entity: climate.heating
+            modes:
+              heat:
+                icon: false
+                include: true
+                name: Quente
+            name: Aquecimento
+            sensors:
+              - entity: sensor.heating_ongoing_water_temperature
+                name: Water
+            type: 'custom:simple-thermostat'
+      
+      #- break
+      
+      - type: entities
+        title: Luzes
+        entities:
+          - type: custom:fold-entity-row
+            head: light.front_door
+            entities:
+              - light.front_door
+          - type: custom:fold-entity-row
+            head: light.hallway
+            entities:
+              - light.hallway_mirror
+              - light.hallway_presence
+          - type: custom:fold-entity-row
+            head: light.living_room
+            entities:
+              - light.living_room_table
+              - light.living_room_window
+              - light.living_room_abajur
+              - light.living_room_tv_leds
+          - type: custom:fold-entity-row
+            head: light.kitchen
+            entities:
+              - light.kitchen_pantry
+          - type: custom:fold-entity-row
+            head: light.bathroom
+            entities:
+              - light.bathroom_mirror
+          - type: custom:fold-entity-row
+            head: light.office
+            entities:
+              - light.office_desk
+          
+          - type: custom:fold-entity-row
+            head: light.master_bedroom
+            entities:
+              - light.master_bedroom_bathroom
+              - light.master_bedroom_left_bed
+              - light.master_bedroom_right_bed
+          - type: custom:fold-entity-row
+            head: light.bedroom_ricardo
+            entities:
+              - light.bedroom_ricardo_lamp
+              
+      
+      #- card:
+          #show_header_toggle: false
+          #title: Luzes
+          #type: entities
+        #filter:
+          #include:
+            #- entity_id: light.front_door*
+              #sort:
+                #ignore_case: true
+                #method: entity_id
+            #- entity_id: light.hallway*
+              #sort:
+                #ignore_case: true
+                #method: entity_id
+            #- entity_id: light.living_room*
+              #sort:
+                #ignore_case: true
+                #method: entity_id
+            #- type: custom:fold-entity-row
+              #head: light.bed_light
+              #entities:
+                #- light.bed_light
+                #- light.ceiling_lights
+                #- light.kitchen_lights
+            #- entity_id: light.kitchen*
+              #sort:
+                #ignore_case: true
+                #method: entity_id
+            #- entity_id: light.master_bedroom*
+              #sort:
+                #ignore_case: true
+                #method: entity_id
+            #- entity_id: light.bedroom*
+              #sort:
+                #ignore_case: true
+                #method: entity_id
+            #- entity_id: light.office*
+              #sort:
+                #ignore_case: true
+                #method: entity_id
+          #exclude:
+            #- entity_id: light.browser*
+            #- entity_id: light.configuration_tool_1
+            #- entity_id: light.*_group
+            #- entity_id: light.*_output   
+            #- state: "unavailable"
+          ##template: |
+            ##{%if is_state('input_boolean.ricardo_sleeping', 'off' )%}light.bedroom_ricardo{% endif %}
+          ##entity_ids:
+            ##- input_boolean.ricardo_sleeping
+          ##sort:
+            ##ignore_case: true
+            ##method: entity_id
+        #show_empty: true
         
-        type: 'custom:auto-entities'
+        #type: 'custom:auto-entities'
         
       #- type: entities
         #show_header_toggle: false
@@ -344,58 +443,7 @@ cards:
             #name: Brilho Luz de Apoio
 
       
-      - break 
-      - break 
-      
-      - cards:
-          - agregate_func: avg
-            entities:
-              - sensor.average_temperature
-            group_by: 1h
-            height: 100
-            hour24: true
-            hours_to_show: 24
-            line_width: 3
-            name: Temperatura
-            points_per_hour: 1
-            show:
-              average: false
-              extrema: false
-              points: hover
-            type: 'custom:mini-graph-card'
-          - agregate_func: avg
-            entities:
-              - sensor.average_humidity
-            group_by: 1h
-            height: 110
-            hour24: true
-            hours_to_show: 24
-            line_width: 3
-            name: Humidade
-            points_per_hour: 1
-            show:
-              average: false
-              extrema: false
-              points: hover
-            type: 'custom:mini-graph-card'
-        type: horizontal-stack
-        
-      - control:
-          _names: 'off'
-        entity: climate.heating
-        modes:
-          heat:
-            icon: false
-            include: true
-            name: Quente
-        name: Aquecimento
-        sensors:
-          - entity: sensor.heating_ongoing_water_temperature
-            name: Water
-        type: 'custom:simple-thermostat'
-      
-      - break 
-      
+      #- break       
       
       - cards:
           - agregate_func: avg
@@ -423,6 +471,8 @@ cards:
             show_icon: false
             type: glance
         type: 'custom:vertical-stack-in-card'
+      
+      #- break 
       
       - card:
           columns: 3

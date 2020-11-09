@@ -93,7 +93,7 @@ sensor energy:
     sensors:
       daily_energy_remaining:
         unit_of_measurement: "khW"
-        value_template: "{{ ( states.sensor.daily_energy.state | float ) - ( states.sensor.daily_energy_living_room.state | float ) - ( states.sensor.daily_energy_laundry.state | float ) - ( states.sensor.daily_energy_dish_wash_machine.state | float ) - ( states.sensor.daily_energy_fridge.state | float ) - ( states.sensor.daily_energy_office_desk.state | float ) - ( states.sensor.daily_energy_iron.state | float ) - ( states.sensor.daily_energy_lights.state | float ) }}"
+        value_template: "{{ ( states.sensor.daily_energy.state | float ) - ( states.sensor.daily_energy_living_room.state | float ) - ( states.sensor.daily_energy_laundry.state | float ) - ( states.sensor.daily_energy_dish_wash_machine.state | float ) - ( states.sensor.daily_energy_fridge.state | float ) - ( states.sensor.daily_energy_office_desk.state | float ) - ( states.sensor.daily_energy_iron.state | float ) - ( states.sensor.daily_energy_lights.state | float ) - ( states.sensor.daily_energy_portable_heater.state | float )  }}"
      
 
-  
+ 

@@ -73,21 +73,11 @@ light:
     platform: binary
     id: light_1
     output: relay_1
-    restore_mode: ALWAYS_OFF
+    restore_mode: RESTORE_DEFAULT_OFF
     
   - name: ${upper_devicename} Right Bed
     platform: binary
     id: light_2
     output: relay_2
-    restore_mode: ALWAYS_OFF
-
-#sensor:
-  #- platform: dht
-  #  model: DHT11
-  #  pin: GPIO14
-  #  temperature:
-  #    name: ${upper_devicename} Temperature
-  #    accuracy_decimals: 1
-  #  humidity:
-  #    name: ${upper_devicename} Humidity
-  #  update_interval: 30s
+    restore_mode: RESTORE_DEFAULT_OFF
+    

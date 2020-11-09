@@ -74,15 +74,15 @@ sensor per_day:
           FROM daily_energy_partial
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
           
-       #- name: query_daily_energy_portable_heater
-        #column: "value"
-        #query: >-
-          #SELECT
-              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              #CONCAT('[', GROUP_CONCAT(daily_energy_portable_heater SEPARATOR ','),']') AS data,
-              #'info in attributes' AS value
-          #FROM daily_energy_partial
-          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_daily_energy_portable_heater
+        column: "value"
+        query: >-
+          SELECT
+              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              CONCAT('[', GROUP_CONCAT(daily_energy_portable_heater SEPARATOR ','),']') AS data,
+              'info in attributes' AS value
+          FROM daily_energy_partial
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
       
       - name: query_daily_energy_remaining
         column: "value"

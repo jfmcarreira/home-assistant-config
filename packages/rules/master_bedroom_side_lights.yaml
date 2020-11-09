@@ -1,6 +1,5 @@
 automation old:
-  - id: Ctrl Master Bedroom Bed Left Light
-    alias: Ctrl Master Bedroom Bed Left Light
+  - alias: Switch Master Bedroom Bed Left Light
     initial_state: false
     trigger:
       - platform: numeric_state
@@ -20,8 +19,7 @@ automation old:
       - service: counter.reset
         entity_id: counter.master_bedroom_left_switch_toggle_count
 
-  - id: Ctrl Master Bedroom Bed Right Light
-    alias: Ctrl Master Bedroom Bed Right Light
+  - alias: Switch Master Bedroom Bed Right Light
     initial_state: false
     trigger:
       - platform: numeric_state

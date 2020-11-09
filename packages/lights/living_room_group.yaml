@@ -1,4 +1,14 @@
+homeassistant:
+  customize:
+    light.living_room:
+      friendly_name: Luzes da Sala
+
 light:
+  - platform: group
+    name: Living Room
+    entities:
+      - light.living_room_table
+      - light.living_room_window
   - platform: group
     name: Group Living Room
     entities:

@@ -11,7 +11,6 @@ wifi:
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
   
-
 # Enable logging
 logger:
 
@@ -24,9 +23,7 @@ captive_portal:
 
 web_server:
 
-
 binary_sensor:
-  # HC-SR501
   - platform: gpio
     id: sw_1
     pin:
@@ -40,6 +37,14 @@ binary_sensor:
     pin:
       number: GPIO13
       mode: INPUT_PULLUP
+    on_multi_click:
+      - timing:
+          - ON for at least 1s
+        then:
+          - homeassistant.event:
+              event: esphome.hallway_button_pressed
+              data:
+                action: long_press_bottom_left
     
   - platform: gpio
     id: sw_3
@@ -54,6 +59,14 @@ binary_sensor:
     pin:
       number: GPIO12
       mode: INPUT_PULLUP
+    on_multi_click:
+      - timing:
+          - ON for at least 1s
+        then:
+          - homeassistant.event:
+              event: esphome.hallway_button_pressed
+              data:
+                action: long_press_bottom_right
     
     
 
@@ -62,6 +75,7 @@ output:
     id: relay_1
     pin: 
       number: GPIO05
+      
   - platform: gpio
     id: relay_2
     pin: 
@@ -71,7 +85,11 @@ light:
   - platform: binary
     id: light_1
     output: relay_1
+    restore_mode: RESTORE_DEFAULT_OFF
+    name: Bathroom 
+    
   - platform: binary
     id: light_2
     output: relay_2
-  
+    restore_mode: RESTORE_DEFAULT_OFF
+    name: Bathroom Mirror

@@ -91,19 +91,22 @@ cards:
                         - '${states["sensor.query_month_energy_dish_wash_machine"].state}'
                         - '${states["sensor.query_month_energy_fridge"].state}'
                         - '${states["sensor.query_month_energy_iron"].state}'
+                        - '${states["sensor.query_month_energy_portable_heater"].state}'
                         - '${states["sensor.query_month_energy_office_desk"].state}'
                         - '${states["sensor.query_month_energy_lights"].state}'
                         - '${states["sensor.query_month_energy_remaining"].state}'
                       backgroundColor:                        
-                        - '#003f5c'
-                        - '#2f4b7c'
-                        - '#665191'
-                        - '#a05195'
-                        - '#d45087'
-                        - '#f95d6a'
-                        - '#ff7c43'
-                        - '#ffa600'
+                        - '#325b21'
+                        - '#3e7128'
+                        - '#49862e'
+                        - '#549c35'
+                        - '#5fb23c'
+                        - '#6cc247'
+                        - '#7dca5c'
+                        - '#8ed171'
+                        - '#9fd986'
                       borderColor: 
+                        - var(--secondary-background-color)
                         - var(--secondary-background-color)
                         - var(--secondary-background-color)
                         - var(--secondary-background-color)
@@ -118,6 +121,7 @@ cards:
                     - Máq. lavar loiça
                     - Frigorifico
                     - Ferro de Engomar
+                    - Termoventilador
                     - Secretária
                     - Iluminação
                     - Outros
@@ -233,7 +237,7 @@ cards:
           type: "custom:auto-entities"
         - card:
             show_header_toggle: false
-            title: Potência Dispositivos
+            title: Potência das Luzes
             type: entities
           filter:
             include:
@@ -283,4 +287,6 @@ cards:
             type: entities
         
       
+ 
+
  

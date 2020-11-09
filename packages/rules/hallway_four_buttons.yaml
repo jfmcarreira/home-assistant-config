@@ -1,0 +1,11 @@
+automation old:
+  - alias: Switch Hallway Bottom Left
+    mode: single
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: esphome.hallway_button_pressed
+        event_data:
+          action: long_press_bottom_left
+    action:
+      - service: script.routine_night_time

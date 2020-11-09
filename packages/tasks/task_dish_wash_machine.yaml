@@ -19,6 +19,8 @@ homeassistant:
       device_class: timestamp
     automation.task_keep_register_time_dish_wash_machine:
       friendly_name: Guardar Data da Execução das Tarefas da Máq. da Loiça
+    automation.task_dish_wash_empty_machine_reminder:
+      friendly_name: Relembrar de Retirar a Loiça da Máq. de Lavar
      
 binary_sensor state:
   - platform: mqtt
@@ -212,7 +214,8 @@ automation dishes:
           entity_id: automation.task_dish_wash_machine_empty_remainder
           skip_condition: true
           
-  - alias:  Task Dish Wash Machine Empty Remainder
+      
+  - alias:  task_dish_wash_empty_machine_reminder
     trigger:
       - platform: event
         event_type: event_remaind_task_todo
@@ -223,6 +226,9 @@ automation dishes:
       - condition: state
         entity_id: binary_sensor.dish_wash_machine_need_emtpy
         state: "on"
+      - condition: template
+        value_template: >
+          {{ (as_timestamp( now() | timestamp_custom("%Y-%m-%d %H", true) ) - as_timestamp( state_attr( "automation.task_dish_wash_empty_machine_reminder", "last_triggered" ) | timestamp_custom("%Y-%m-%d %H", true ) ) ) / 60 > 50 }}
     action:  
       - service: persistent_notification.create
         data:
