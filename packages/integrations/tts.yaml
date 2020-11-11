@@ -1,19 +1,130 @@
 ################################################################
-## Google TTS
+## TTS
 ################################################################
 tts:
-  - platform: google_translate
-    language: "pt"
-    cache: true
-    cache_dir: /tmp/tts
-    time_memory: 300
-    service_name: google_say
+  #- platform: google_translate
+    #language: "pt"
+    #cache: true
+    #cache_dir: /tmp/tts
+    #time_memory: 300
+    #service_name: google_say
 
-  - platform: voicerss
-    api_key: !secret voicerss_key
-    language: "pt-pt"
-    cache: true
-    cache_dir: /tmp/tts
-    time_memory: 300
-    service_name: voicerss_say
-    format: 44khz_8bit_mono
+  #- platform: voicerss
+    #api_key: !secret voicerss_key
+    #language: "pt-pt"
+    #cache: true
+    #cache_dir: /tmp/tts
+    #time_memory: 300
+    #service_name: voicerss_say
+    #format: 44khz_8bit_mono
+
+  - platform: amazon_polly
+    service_name: polly_say
+    aws_access_key_id: !secret aws_key_id
+    aws_secret_access_key: !secret aws_access_key
+    #voice: Ines
+    voice: Cristiano
+    text_type: ssml
+
+    
+script:   
+  broadcast_tts_announcement:
+    alias: Reproduzir Mensagem para a Casa
+    fields:
+      message_to_play:
+        description: "Message to play"
+        example: "Hello"
+      message_duration:
+        description: "Duration of the message"
+        example: "30"
+    sequence:
+      - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.office
+              state: "on"
+          sequence:
+            - service: script.play_tts_announcement
+              data:
+                media_player_for_tts: media_player.ghm_office
+                message_duration: "{{ message_duration }}"
+                message_to_play: "{{ message_to_play }}"
+                
+      - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.group_living_room
+              state: "on"
+          sequence:
+            - service: script.play_tts_announcement
+              data:
+                media_player_for_tts: media_player.ghm_living_room
+                message_duration: "{{ message_duration }}"
+                message_to_play: "{{ message_to_play }}"
+      - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.office
+              state: "on"
+          sequence:
+            - service: script.play_tts_announcement
+              data:
+                media_player_for_tts: media_player.ghm_office
+                message_duration: "{{ message_duration }}"
+                message_to_play: "{{ message_to_play }}"
+                
+                
+  play_tts_announcement:
+    alias: Reproduzir Mensagem num Smart Speaker
+    fields:
+      media_player_for_tts:
+        description: 'Media player'
+        example: 'media_player.ghm_office'
+      message_to_play:
+        description: "Message to play"
+        example: "Hello"
+      message_duration:
+        description: "Duration of the message"
+        example: "30"
+    variables:
+      current_volume: 0.1
+    sequence:
+      - service: media_player.turn_on
+        data:
+          entity_id: "{{ media_player_for_tts }}"
+      
+      - wait_template: "{{ not is_state( media_player_for_tts , 'off' ) }}"
+      
+      - variables:
+          current_volume: "{{ state_attr( media_player_for_tts, 'volume_level' ) }}"
+      
+      - service: media_player.media_pause
+        data:
+          entity_id:  "{{ media_player_for_tts }}"
+        
+      - service: media_player.volume_set
+        data:
+          entity_id: "{{ media_player_for_tts }}"
+          volume_level: >
+            {% if now().strftime("%H")|int < 23 %}
+              {{ ( states( 'input_number.google_home_volume_tts_day' ) | int ) / 100 }}
+            {% else %}
+              {{ ( states( 'input_number.google_home_volume_tts_night' ) | int ) / 100 }}
+            {% endif %}
+      
+      - delay: 00:00:01
+      
+      - service: tts.polly_say
+        data:
+          entity_id: "{{ media_player_for_tts }}"
+          message: >
+            <speak><amazon:auto-breaths frequency='medium'>
+              {{ message_to_play }}"
+            </amazon:auto-breaths></speak>
+      
+      - delay: "{{ message_duration }}"
+      
+      - service: media_player.volume_set
+        data:
+          entity_id: "{{ media_player_for_tts }}"
+          volume_level: "{{ current_volume }}"

@@ -32,3 +32,28 @@ binary_sensor:
           {% endif %}
           
 
+script:   
+  notify_households:
+    alias: Notifcar Membros da Casa usando Script
+    fields:
+      script_to_call:
+        description: Script to notify
+    sequence:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: person.joao
+                state: home
+            sequence:
+              - service: "{{ script_to_call }}"
+                data:
+                  notification_method: mobile_app_magnesium
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: person.bianca
+                state: home
+            sequence:
+              - service: "{{ script_to_call }}"
+                data:
+                  notification_method: mobile_app_calcium
