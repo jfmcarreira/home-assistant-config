@@ -11,7 +11,13 @@ homeassistant:
       device_class: timestamp
       icon: mdi:baby-face
     automation.task_keep_register_time_vitamin_d:
-      friendly_name: Guardar Data da Administração da Vitamina D
+      friendly_name: Vitamina D - Guardar Data da Administração
+    automation.task_vitamin_d_reminder:
+      friendly_name: Vitamina D - Relembrar
+    automation.task_vitamin_d_ricardo_done:
+      friendly_name: Vitamina D - Realizar Tarefa
+    automation.task_vitamin_d_ricardo_dismiss_notification:
+      friendly_name: Vitamina D - Limpar Notificações
       
 
 sensor:
@@ -30,10 +36,10 @@ binary_sensor:
     sensors:
       ricardo_vitamin_d:
         value_template: >
-          {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d", true) ) == 0 }} 
+          {{ as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('sensor.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d", true) ) == 0 }} 
         attribute_templates:
           last_done: >
-            {{ as_timestamp( states('input_datetime.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+            {{ as_timestamp( states('sensor.ricardo_vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
 script:
   task_ricardo_vitamin_d_dismiss_notification:
@@ -70,7 +76,7 @@ script:
 
 
 automation old:       
-  - alias: Task Vitamina D Ricardo Reminder
+  - alias: task_vitamin_d_reminder
     trigger:
       - platform: time_pattern
         minutes: 30
@@ -104,7 +110,7 @@ automation old:
               - action: ricardo_vitamin_d_mark_done
                 title: Marcar como realizado
 
-  - alias: Task Vitamina D Ricardo Done
+  - alias: task_vitamin_d_ricardo_done
     trigger:
       - platform: event
         event_type: mobile_app_notification_action
@@ -117,7 +123,7 @@ automation old:
     action:
       - service: script.task_ricardo_vitamin_d
   
-  - alias: Task Vitamina D Ricardo Dismiss Notification
+  - alias: task_vitamin_d_ricardo_dismiss_notification
     trigger:
       - platform: time
         at: "21:00:00"

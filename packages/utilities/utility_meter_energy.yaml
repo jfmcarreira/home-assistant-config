@@ -1,6 +1,14 @@
 ################################################################
 ## Monthly Energy Meter
 ################################################################
+sensor energy:
+  - platform: integration
+    source: sensor.bhpzem_power
+    name: pzem_energy
+    unit_prefix: k
+    unit_time: h
+    round: 2 
+    
 utility_meter: 
   monthly_energy:
     source: sensor.pzem_energy

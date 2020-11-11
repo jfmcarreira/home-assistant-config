@@ -34,7 +34,7 @@ binary_sensor:
 
 script:   
   notify_households:
-    alias: Notifcar Membros da Casa usando Script
+    alias: Notifcar Quem Está em Casa
     fields:
       script_to_call:
         description: Script to notify

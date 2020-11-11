@@ -41,12 +41,12 @@ script:
       - choose:
         - conditions:
             - condition: state
-              entity_id: light.office
+              entity_id: light.kitchen
               state: "on"
           sequence:
             - service: script.play_tts_announcement
               data:
-                media_player_for_tts: media_player.ghm_office
+                media_player_for_tts: media_player.gh_clock_kitchen
                 message_duration: "{{ message_duration }}"
                 message_to_play: "{{ message_to_play }}"
                 
@@ -61,6 +61,7 @@ script:
                 media_player_for_tts: media_player.ghm_living_room
                 message_duration: "{{ message_duration }}"
                 message_to_play: "{{ message_to_play }}"
+                
       - choose:
         - conditions:
             - condition: state

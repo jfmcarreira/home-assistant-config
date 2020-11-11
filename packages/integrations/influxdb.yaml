@@ -10,15 +10,18 @@ influxdb:
     source: hass
   include:
     entity_globs:
+      # Power
+      - sensor.bhpzem*
       - sensor.power_sensor_*
       - sensor.power_usage_*
       - sensor.*coronavirus*
+      - sensor.daily_energy_*
+      # Temperature / Humidity
+      - sensor.*_temperature
+      - sensor.*_humidity
     entities:
       # Power
-      - sensor.bhpzem_power
-      - sensor.bhpzem_voltage
-      - sensor.bhpzem_current
-      - sensor.bhpzem_pf
+      - sensor.pzem_energy
       # Devices
       - binary_sensor.dish_wash_machine_state
       - binary_sensor.washing_machine_state
@@ -30,15 +33,7 @@ influxdb:
       - input_number.electricity_meter_offpeak
       - input_number.electricity_meter_full
       - sensor.electricity_meter
-      # Temperature / Humidity
-      - sensor.average_temperature
-      - sensor.average_humidity
-      - sensor.living_room_temperature
-      - sensor.living_room_humidity
-      - sensor.office_temperature
-      - sensor.office_humidity
-      - sensor.bedroom_temperature
-      - sensor.bedroom_humidity
-      
-
+      # Misc
+      - climate.heating
+      - binary_sensor.heating_boiler_state
  

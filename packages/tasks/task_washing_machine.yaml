@@ -20,11 +20,15 @@ homeassistant:
       icon: mdi:tshirt-crew
       friendly_name: Apanhar Roupa
       device_class: timestamp
+    
     automation.task_keep_register_time_washing_machine:
-      friendly_name: Guardar Data da Execução das Tarefas da Máq. da Roupa
+      friendly_name: Máq. da Roupa - Guardar Data de Execução
+    automation.task_laundry_wash_machine_finished:
+      friendly_name: Máq. de Roupa - Lavagem Terminou
     automation.task_laundry_remove_clothes_from_wash_machine_reminder:
-      friendly_name: Relembrar de Retirar a Roupa da Máq. de Lavar
-      
+      friendly_name: Máq. de Roupa - Relembrar de Retirar a Roupa
+    automation.task_laundry_remove_clothes_done:
+      friendly_name: Máq. de Roupa - Roupa Retirada da Máquina
 
 binary_sensor state:
   - platform: mqtt
@@ -241,7 +245,10 @@ automation clothes:
           save_string: "true"
           save_date_time: "true"
             
-  - alias: Task Laundry Wash Machine Finished
+  - alias: task_laundry_wash_machine_finished
+    variables:
+      tts_message: "A máquina de lavar roupa terminou! Pode retirar a roupa da máquina."
+      tts_message_timming: "00:00:10"
     trigger:
       - entity_id: binary_sensor.washing_machine_state
         from: "on"
@@ -253,16 +260,18 @@ automation clothes:
           entity_id: input_datetime.task_washing_clothes_last_done
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-          
       - service: notify.living_room_tv
         data:
           title: Tarefa Doméstica
           message: Máquina de Lavar Roupa Terminou
-          
       - service: automation.trigger
         data:
           entity_id: automation.task_laundry_remove_from_wash_machine_remainder
-          skip_condition: true
+          skip_condition: true            
+      - service: script.broadcast_tts_announcement
+        data:
+          message_duration: "{{ tts_message_timming }}"
+          message_to_play: "{{ tts_message }}"
 
   - alias: task_laundry_remove_clothes_from_wash_machine_reminder
     trigger:
@@ -284,26 +293,11 @@ automation clothes:
           title: Tarefa Doméstica
           message: Retirar roupa da máquina de lavar
           notification_id: persistent_washing_maching
-      - choose:
-          - conditions:
-              - condition: state
-                entity_id: person.joao
-                state: home
-            sequence:
-              - service: script.task_laundry_wash_machine_notification 
-                data:
-                  notification_method: mobile_app_magnesium
-      - choose:
-          - conditions:
-              - condition: state
-                entity_id: person.bianca
-                state: home
-            sequence:
-              - service: script.task_laundry_wash_machine_notification 
-                data:
-                  notification_method: mobile_app_calcium
-
-  - alias: Task Laundry Remove From Wash Machine Done
+      - service: script.notify_households
+        data:
+          script_to_call: script.task_laundry_wash_machine_notification 
+          
+  - alias: task_laundry_remove_clothes_done
     trigger:
       - platform: state
         entity_id: binary_sensor.washing_machine_state

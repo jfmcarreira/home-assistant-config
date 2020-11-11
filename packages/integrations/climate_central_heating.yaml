@@ -21,6 +21,7 @@ climate:
     hot_tolerance: 0
     keep_alive:
       seconds: 30
+    precision: 0.1
 
   - platform: generic_thermostat
     name: Heating Ongoing Water

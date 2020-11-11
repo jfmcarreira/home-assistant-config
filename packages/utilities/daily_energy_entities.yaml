@@ -49,7 +49,8 @@ sensor power:
       power_usage_lights:
         unit_of_measurement: "khW"
         value_template: >
-         {{ ( states.sensor.power_usage_light_bedroom_ricardo_lamp.state | float ) + 
+         {{ (( 
+            ( states.sensor.power_usage_light_bedroom_ricardo_lamp.state | float ) + 
             ( states.sensor.power_usage_light_kitchen.state | float ) + 
             ( states.sensor.power_usage_light_kitchen_pantry.state | float ) + 
             ( states.sensor.power_usage_light_living_room_abajur.state | float ) + 
@@ -59,33 +60,31 @@ sensor power:
             ( states.sensor.power_usage_light_master_bedroom_bathroom.state | float ) + 
             ( states.sensor.power_usage_light_hallway.state | float ) + 
             ( states.sensor.power_usage_light_front_door.state | float ) 
-          | round(2) }}
+            ) * 100 | int | float ) / 100
+           }}
          
         #( states.sensor.power_usage_light_living_room_tv_leds.state | float )+ ( states.sensor.power_usage_light_office_desk.state | float )
         
-sensor energy:
-  - platform: integration
-    source: sensor.bhpzem_power
-    name: pzem_energy
-    unit_prefix: k
-    round: 2 
-  
+sensor energy: 
   - platform: integration
     source: sensor.power_sensor_living_room
     name: energy_living_room
     unit_prefix: k
+    unit_time: h
     round: 2
   
   - platform: integration
     source: sensor.power_sensor_laundry
     name: energy_laundry
     unit_prefix: k
+    unit_time: h
     round: 2 
   
   - platform: integration
     source: sensor.power_usage_lights
     name: energy_lights
     unit_prefix: k
+    unit_time: h
     round: 2 
 
     
@@ -93,7 +92,18 @@ sensor energy:
     sensors:
       daily_energy_remaining:
         unit_of_measurement: "khW"
-        value_template: "{{ ( states.sensor.daily_energy.state | float ) - ( states.sensor.daily_energy_living_room.state | float ) - ( states.sensor.daily_energy_laundry.state | float ) - ( states.sensor.daily_energy_dish_wash_machine.state | float ) - ( states.sensor.daily_energy_fridge.state | float ) - ( states.sensor.daily_energy_office_desk.state | float ) - ( states.sensor.daily_energy_iron.state | float ) - ( states.sensor.daily_energy_lights.state | float ) - ( states.sensor.daily_energy_portable_heater.state | float )  }}"
+        value_template: >
+          {{ 
+            ( states.sensor.daily_energy.state | float ) - 
+            ( states.sensor.daily_energy_living_room.state | float ) - 
+            ( states.sensor.daily_energy_laundry.state | float ) - 
+            ( states.sensor.daily_energy_dish_wash_machine.state | float ) - 
+            ( states.sensor.daily_energy_fridge.state | float ) - 
+            ( states.sensor.daily_energy_office_desk.state | float ) - 
+            ( states.sensor.daily_energy_iron.state | float ) - 
+            ( states.sensor.daily_energy_lights.state | float ) - 
+            ( states.sensor.daily_energy_portable_heater.state | float )
+          }}
      
 
  

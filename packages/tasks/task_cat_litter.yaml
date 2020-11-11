@@ -10,7 +10,7 @@ homeassistant:
     counter.cat_litter_box_visits:
       friendly_name: Litter Box Visits
     automation.task_keep_register_time_cat_litter:
-      friendly_name: Guardar Data da Execução das Tarefas da Areia das Gatas
+      friendly_name: Areia das Gatas - Guardar Data da Execução
 
 binary_sensor motion:
   - platform: mqtt
@@ -187,11 +187,7 @@ script:
           entity_id: input_datetime.cat_litter_box_last_change
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
       - service: script.cat_litter_clean
-      
-homeassistant:
-  customize:
-    
-      
+       
 automation old:
   - alias: task_keep_register_time_cat_litter
     initial_state: true

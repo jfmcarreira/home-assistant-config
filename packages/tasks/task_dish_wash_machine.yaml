@@ -17,10 +17,15 @@ homeassistant:
       icon: mdi:silverware
       friendly_name: Retir a Loiça da Máquina
       device_class: timestamp
+      
     automation.task_keep_register_time_dish_wash_machine:
-      friendly_name: Guardar Data da Execução das Tarefas da Máq. da Loiça
+      friendly_name: Máq. da Loiça - Guardar Data de Execução
     automation.task_dish_wash_empty_machine_reminder:
-      friendly_name: Relembrar de Retirar a Loiça da Máq. de Lavar
+      friendly_name: Máq. da Loiça - Relembrar de Retirar a Loiça
+    automation.task_dish_wash_machine_finished:
+      friendly_name: Máq. da Loiça - Lavagem Terminou
+    automation.task_dish_wash_remove_dish_done:
+      friendly_name: Máq. da Loiça - Loiça Retirada
      
 binary_sensor state:
   - platform: mqtt
@@ -191,7 +196,10 @@ automation dishes:
           save_string: "true"
           save_date_time: "true"
             
-  - alias: Task Dish Wash Machine Finished
+  - alias: task_dish_wash_machine_finished
+    variables:
+      tts_message: "A máquina de lavar loiça terminou! Pode retirar a loiça."
+      tts_message_timming: "00:00:10"
     trigger:
       - entity_id: binary_sensor.dish_wash_machine_state
         from: "on"
@@ -203,16 +211,18 @@ automation dishes:
           entity_id: input_datetime.task_dish_washing_last_done
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-
       - service: notify.living_room_tv
         data:
           title: Tarefa Doméstica
           message: Máquina de Lavar Loiça Terminou
-      
       - service: automation.trigger
         data:
           entity_id: automation.task_dish_wash_machine_empty_remainder
           skip_condition: true
+      - service: script.broadcast_tts_announcement
+        data:
+          message_duration: "{{ tts_message_timming }}"
+          message_to_play: "{{ tts_message }}"
           
       
   - alias:  task_dish_wash_empty_machine_reminder
@@ -235,26 +245,16 @@ automation dishes:
           title: Tarefa Doméstica
           message: Retirar loiça da máquina de lavar
           notification_id: persistent_dish_washing
-      - choose:
-          - conditions:
-              - condition: state
-                entity_id: person.joao
-                state: home
-            sequence:
-              - service: script.task_dish_wash_machine_notification 
-                data:
-                  notification_method: mobile_app_magnesium
-          - conditions:
-              - condition: state
-                entity_id: person.bianca
-                state: home
-            sequence:
-              - service: script.task_dish_wash_machine_notification 
-                data:
-                  notification_method: mobile_app_calcium
+      - service: script.notify_households
+        data:
+          script_to_call: script.task_dish_wash_machine_notification 
 
-  - alias: Task Dish Wash Machine Empty Done
+  - alias: task_dish_wash_remove_dish_done
     trigger:
+      - entity_id: binary_sensor.dish_wash_machine_state
+        from: "off"
+        platform: state
+        to: "on"
       - platform: state
         entity_id: binary_sensor.dish_wash_machine_door
         from: "off"
