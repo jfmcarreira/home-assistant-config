@@ -4,8 +4,7 @@
 homeassistant:
   customize:
     binary_sensor.dish_wash_machine_door:
-      friendly_name: "Porta da Máquina de Lavar Loiça"
-      #icon: mdi:dishwasher
+      device_class: door
     binary_sensor.dish_wash_machine_state:
       friendly_name: "Máquina de Lavar Loiça"
       icon: mdi:dishwasher
@@ -27,13 +26,7 @@ homeassistant:
     automation.task_dish_wash_remove_dish_done:
       friendly_name: Máq. da Loiça - Loiça Retirada
      
-binary_sensor state:
-  - platform: mqtt
-    name: "Dish Wash Machine Door"
-    device_class: door
-    state_topic: "binary_rf_sensors/dish_wash_machine_door"
-    qos: 1
-          
+binary_sensor state:          
   - platform: template
     sensors:
       dish_wash_machine_state:
@@ -88,12 +81,16 @@ sensor dishes:
     sensors:
       dish_wash_machine_state:
         value_template: >-
-          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %} 
-            A Lavar
-          {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %} 
-            Loiça Lavada
+          {% if is_state( 'binary_sensor.dish_wash_machine_door', 'on' )  %} 
+            Aberta
           {% else %}
-            Desligada
+              {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %} 
+                A Lavar
+              {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %} 
+                Loiça Lavada
+              {% else %}
+                Desligada
+              {% endif %}
           {% endif %}
         icon_template: >-
           {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %} 
@@ -217,12 +214,12 @@ automation dishes:
           message: Máquina de Lavar Loiça Terminou
       - service: automation.trigger
         data:
-          entity_id: automation.task_dish_wash_machine_empty_remainder
+          entity_id: automation.task_dish_wash_empty_machine_reminder
           skip_condition: true
-      - service: script.broadcast_tts_announcement
-        data:
-          message_duration: "{{ tts_message_timming }}"
-          message_to_play: "{{ tts_message }}"
+      #- service: script.broadcast_tts_announcement
+        #data:
+          #message_duration: "{{ tts_message_timming }}"
+          #message_to_play: "{{ tts_message }}"
           
       
   - alias:  task_dish_wash_empty_machine_reminder

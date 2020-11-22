@@ -5,8 +5,8 @@ http:
   server_port: !secret server_port
   trusted_proxies:
     - 10.20.110.200
-    - 127.0.0.1
-    - ::1
+    #- 127.0.0.1
+    #- ::1
   ip_ban_enabled: false
   login_attempts_threshold: 10
   use_x_forwarded_for: true

@@ -4,11 +4,35 @@ homeassistant:
       friendly_name: Luzes da Sala
 
 light:
-  - platform: group
-    name: Living Room
-    entities:
-      - light.living_room_table
-      - light.living_room_window
+  - platform: template
+    lights:
+      living_room:
+        friendly_name: Luzes da Sala
+        value_template: > 
+          {{ 
+            is_state('light.living_room_table', 'on') or
+            is_state('light.living_room_window', 'on') or
+            is_state('light.living_room_tv_leds', 'on') or
+            is_state('light.living_room_abajur', 'on')
+          }}
+        turn_on:
+          - service: light.turn_on
+            entity_id: light.living_room_table
+          - service: light.turn_on
+            entity_id: light.living_room_window
+            
+        turn_off:
+          - service: light.turn_off
+            entity_id: light.living_room_table
+          - service: light.turn_off
+            entity_id: light.living_room_window
+          - service: light.turn_off
+            entity_id: light.living_room_abajur
+          - service: light.turn_off
+            entity_id: light.living_room_tv_leds
+            
+            
+
   - platform: group
     name: Group Living Room
     entities:
@@ -16,3 +40,7 @@ light:
       - light.living_room_table
       - light.living_room_tv_leds
       - light.living_room_window
+      
+      
+      
+

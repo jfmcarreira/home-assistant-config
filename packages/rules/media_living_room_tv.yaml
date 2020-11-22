@@ -1,5 +1,12 @@
+homeassistant:
+  customize:     
+    automation.media_living_room_tv_off_when_no_motion:
+      friendly_name: Desligar Televisão Sem Presença
+    automation.media_meo_box_control_based_on_tv:
+      friendly_name: Controlar Box do MEO Com a TV
+      
 automation old:
-  - alias: Media TV Off If No Motion
+  - alias: media_living_room_tv_off_when_no_motion
     mode: restart
     trigger:
       - platform: state
@@ -10,9 +17,9 @@ automation old:
           minutes: 90
     action:
       - service: media_player.turn_off
-        entity_id: media_player.media_center
+        entity_id: media_player.living_room_tv
         
-  - alias: Media Control MEO Box Sala based on TV
+  - alias: media_meo_box_control_based_on_tv
     mode: restart
     trigger:
       - platform: state

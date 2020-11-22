@@ -29,6 +29,7 @@ binary_sensor:
     pin:
       number: GPIO14
       mode: INPUT_PULLUP
+      inverted: true
     on_press:
       - light.toggle: light_2
     
@@ -37,9 +38,10 @@ binary_sensor:
     pin:
       number: GPIO13
       mode: INPUT_PULLUP
+      inverted: true
     on_multi_click:
       - timing:
-          - ON for at least 1s
+          - ON for at least 2s
         then:
           - homeassistant.event:
               event: esphome.hallway_button_pressed
@@ -51,6 +53,7 @@ binary_sensor:
     pin:
       number: GPIO2
       mode: INPUT_PULLUP
+      inverted: true
     on_press:
       - light.toggle: light_1
     
@@ -59,6 +62,7 @@ binary_sensor:
     pin:
       number: GPIO12
       mode: INPUT_PULLUP
+      inverted: true
     on_multi_click:
       - timing:
           - ON for at least 1s

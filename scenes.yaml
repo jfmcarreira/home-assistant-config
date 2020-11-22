@@ -27,17 +27,3 @@
       icon: mdi:globe-light
       supported_features: 0
       state: 'off'
-- id: '1604720290956'
-  name: Nova Cena
-  entities:
-    media_player.living_room_tv:
-      source_list:
-      - MEO
-      - Netflix
-      - Plex
-      - Spotify - Músicas e podcasts
-      - YouTube
-      friendly_name: Living Room TV
-      supported_features: 20413
-      device_class: tv
-      state: 'off'

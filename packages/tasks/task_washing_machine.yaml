@@ -46,7 +46,7 @@ binary_sensor state:
         delay_off:
           minutes: 5
         value_template: >-
-          {%- if ( states("sensor.power_sensor_laundry") | int > 25 ) and ( states("sensor.power_sensor_laundry_reactive") | float | abs > 50 ) %}
+          {%- if ( states("sensor.power_usage_device_washing_machine") | int > 10 ) and ( states("sensor.power_usage_reactive_device_washing_machine") | float | abs > 30 ) %}
               True
           {%- else %}
               False
@@ -266,12 +266,12 @@ automation clothes:
           message: Máquina de Lavar Roupa Terminou
       - service: automation.trigger
         data:
-          entity_id: automation.task_laundry_remove_from_wash_machine_remainder
+          entity_id: automation.task_laundry_remove_clothes_from_wash_machine_reminder
           skip_condition: true            
-      - service: script.broadcast_tts_announcement
-        data:
-          message_duration: "{{ tts_message_timming }}"
-          message_to_play: "{{ tts_message }}"
+      #- service: script.broadcast_tts_announcement
+        #data:
+          #message_duration: "{{ tts_message_timming }}"
+          #message_to_play: "{{ tts_message }}"
 
   - alias: task_laundry_remove_clothes_from_wash_machine_reminder
     trigger:
@@ -307,6 +307,8 @@ automation clothes:
         entity_id: binary_sensor.washing_machine_door
         from: "off"
         to: "on"
+        for: 
+          minutes: 1
       - platform: event
         event_type: mobile_app_notification_action
         event_data:

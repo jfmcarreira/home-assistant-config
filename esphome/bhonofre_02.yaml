@@ -11,12 +11,7 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  manual_ip:
-    static_ip: !secret ip_bhonfre_02
-    gateway: !secret esp_gateway
-    subnet: !secret esp_subnet
-  #use_address: 10.20.207.37
-  #use_address: 10.20.207.143
+  #use_address: 10.20.207.41
   
 # Enable logging
 logger:

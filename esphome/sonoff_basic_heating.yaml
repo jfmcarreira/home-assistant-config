@@ -59,7 +59,7 @@ binary_sensor:
           
   
   - platform: homeassistant
-    name: Heating boiler state from HA
+    id: heating_boiler_state_from_ha
     entity_id: binary_sensor.heating_boiler_state
     on_press:
       - switch.turn_on: relay
@@ -67,7 +67,6 @@ binary_sensor:
       - switch.turn_off: relay
           
   - platform: homeassistant
-    name: Heating state from HA
     id: ha_heating_boiler_state
     entity_id: binary_sensor.heating_state
     on_press:

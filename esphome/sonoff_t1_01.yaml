@@ -13,7 +13,6 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  fast_connect: true
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "${devicename}_fallback_hotspot"

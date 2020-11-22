@@ -11,7 +11,6 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  fast_connect: true
 
 # Enable logging
 logger:

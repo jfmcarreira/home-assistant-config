@@ -35,7 +35,8 @@ recorder:
       - sensor.monthly_energy_cicle_days
       # Roborock Map
       - sensor.roborock_map
-
+      # MobileAPP
+      - sensor.magnesium_last_notification
 
 
 
