@@ -1,0 +1,20 @@
+light:
+  - platform: template
+    lights:
+      office_group:
+        friendly_name: Luzes do Escritório
+        icon_template: mdi:lightbulb-group
+        value_template: > 
+            {% if is_state('light.office', 'on') or is_state('light.office_desk', 'on') %}
+              on
+            {% else %}
+              off
+            {% endif %}
+        turn_on:
+          - service: light.turn_on
+            entity_id: light.office       
+        turn_off:
+          - service: light.turn_off
+            entity_id: light.office
+          - service: light.turn_off
+            entity_id: light.office_desk

@@ -1,0 +1,22 @@
+light:
+  - platform: template
+    lights:
+      hallway_group:
+        friendly_name: Luzes do Corredor
+        icon_template: mdi:lightbulb-group
+        value_template: > 
+          {{ 
+            is_state('light.hallway', 'on') or
+            is_state('light.hallway_presence', 'on') or
+            is_state('light.hallway_mirror', 'on')            
+          }}
+        turn_on:
+          - service: light.turn_on
+            entity_id: light.hallway       
+        turn_off:
+          - service: light.turn_off
+            entity_id: light.hallway
+          - service: light.turn_off
+            entity_id: light.hallway_mirror
+          - service: light.turn_off
+            entity_id: light.hallway_presence
