@@ -8,6 +8,11 @@ shortcut_list = {
 }
 
 
+series_requiring_pin = [
+    "blacklist",
+]
+
+
 def send_button( entity_id, button):
     service_data = { "entity_id": entity_id, "button": button }
     ret = hass.services.call('webostv','button', service_data, blocking=True)
@@ -45,7 +50,10 @@ def get_letter_coordinates( letter ):
     x = letter_idx - y * 6
     return x,y
   
-
+requires_pin = False
+if show_name in series_requiring_pin:    
+    requires_pin = True
+  
 # Change source if not in Netflix
 tv_source = hass.states.get(entity_id).attributes.get('source')
 if not tv_source == "Netflix":
@@ -61,15 +69,19 @@ for cmd in common_button_seq:
     send_button( entity_id, cmd )
 
 
-# Enter show name
+# Send backspace 20 times to clear possible buffer
 #logger.info("Enter show name")
 move_cursor( entity_id, 1, -1 )
-for i in range(0,20):
+for i in range(0,25):
     send_button( entity_id, "ENTER" )
 move_cursor( entity_id, -1, 1)
 
+
+# Enter show name
 if show_name in shortcut_list:
     show_name = shortcut_list[show_name]
+
+
 
 x_pos, y_pos = 0,0
 for letter in show_name:
@@ -77,6 +89,10 @@ for letter in show_name:
     move_cursor( entity_id, x-x_pos, y-y_pos )
     x_pos, y_pos = x,y
     send_button( entity_id, "ENTER" )
+    
+
+
+    
   
 # Return to letter 'a'
 move_cursor( entity_id, 0-x_pos, 0-y_pos )
@@ -86,7 +102,25 @@ send_button( entity_id, "ENTER" )
 time.sleep(1)
 send_button( entity_id, "ENTER" )
 
-
-
+if requires_pin:
+    time.sleep(1)
     
-
+    send_button( entity_id, "ENTER" )
+    
+    send_button( entity_id, "RIGHT" )
+    send_button( entity_id, "RIGHT" )
+    send_button( entity_id, "DOWN" )
+    send_button( entity_id, "DOWN" )
+    send_button( entity_id, "ENTER" )
+    
+    send_button( entity_id, "LEFT" )
+    send_button( entity_id, "LEFT" )
+    send_button( entity_id, "ENTER" )
+    
+    send_button( entity_id, "RIGHT" )
+    send_button( entity_id, "RIGHT" )
+    send_button( entity_id, "ENTER" )
+    
+    send_button( entity_id, "DOWN" )
+    send_button( entity_id, "DOWN" )
+    send_button( entity_id, "ENTER" )

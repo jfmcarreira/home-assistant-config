@@ -28,7 +28,7 @@ recorder:
       - binary_sensor.updater 
       - binary_sensor.workday
       - binary_sensor.workday_tomorrow
-      - sensor.pzem_energy
+      - sensor.bhpzem_energy
       #- sensor.daily_energy
       - sensor.monthly_energy
       - sensor.monthly_energy_cost

@@ -40,8 +40,10 @@ automation insert:
         entity_id: sensor.daily_energy
       - platform: state
         entity_id: sensor.daily_energy_living_room
+      #- platform: state
+        #entity_id: sensor.daily_energy_laundry
       - platform: state
-        entity_id: sensor.daily_energy_laundry
+        entity_id: sensor.daily_energy_kitchen_oven
       - platform: state
         entity_id: sensor.daily_energy_dish_wash_machine
       - platform: state
@@ -71,6 +73,8 @@ automation insert:
               daily_energy_living_room
             {% elif trigger.entity_id == "sensor.daily_energy_laundry" %}
               daily_energy_laundry
+            {% elif trigger.entity_id == "sensor.daily_energy_kitchen_oven" %}
+              daily_energy_kitchen_oven
             {% elif trigger.entity_id == "sensor.daily_energy_dish_wash_machine" %}
               daily_energy_dish_wash_machine
             {% elif trigger.entity_id == "sensor.daily_energy_washing_machine" %}

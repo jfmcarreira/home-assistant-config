@@ -1,0 +1,14 @@
+sensor:
+  - platform: template
+    sensors:
+      nextcloud_disk_usage:
+        unit_of_measurement: '%'
+        value_template:  "{{ ((65793580-( (states.sensor.nextcloud_system_freespace.state | float )/1024))/65793580*100 ) | round(0) }}"
+
+
+
+
+        
+        
+        
+       

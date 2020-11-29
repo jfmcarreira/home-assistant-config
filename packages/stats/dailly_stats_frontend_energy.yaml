@@ -14,85 +14,95 @@ sensor per_day:
           FROM daily_energy
           WHERE MONTH(date) = MONTH(CURRENT_DATE);        
           
-      - name: query_daily_energy_living_room
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_living_room SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
-      
-      - name: query_daily_energy_laundry
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_laundry SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      #- name: query_daily_energy_living_room
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_living_room SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
           
-      - name: query_daily_energy_dish_wash_machine
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_dish_wash_machine SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      #- name: query_daily_energy_kitchen_oven
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_kitchen_oven SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
       
-      - name: query_daily_energy_fridge
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_fridge SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      ##- name: query_daily_energy_laundry
+        ##column: "value"
+        ##query: >-
+          ##SELECT
+              ##CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              ##CONCAT('[', GROUP_CONCAT(daily_energy_laundry SEPARATOR ','),']') AS data,
+              ##'info in attributes' AS value
+          ##FROM daily_energy_partial
+          ##WHERE MONTH(date) = MONTH(CURRENT_DATE);
           
-      - name: query_daily_energy_office_desk
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_office_desk SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      #- name: query_daily_energy_dish_wash_machine
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_dish_wash_machine SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
       
-      - name: query_daily_energy_iron
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_iron SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      #- name: query_daily_energy_fridge
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_fridge SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
           
-      - name: query_daily_energy_portable_heater
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_portable_heater SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      #- name: query_daily_energy_office_desk
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_office_desk SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
       
-      - name: query_daily_energy_remaining
-        column: "value"
-        query: >-
-          SELECT
-              CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
-              CONCAT('[', GROUP_CONCAT(daily_energy_remaining SEPARATOR ','),']') AS data,
-              'info in attributes' AS value
-          FROM daily_energy_partial
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      #- name: query_daily_energy_iron
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_iron SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
+          
+      #- name: query_daily_energy_portable_heater
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_portable_heater SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      
+      #- name: query_daily_energy_remaining
+        #column: "value"
+        #query: >-
+          #SELECT
+              #CONCAT('[', GROUP_CONCAT(DAY(date) SEPARATOR ','),']') AS labels,
+              #CONCAT('[', GROUP_CONCAT(daily_energy_remaining SEPARATOR ','),']') AS data,
+              #'info in attributes' AS value
+          #FROM daily_energy_partial
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
 
           
      
@@ -140,6 +150,20 @@ sensor per_month:
             ROUND(SUM(`daily_energy_laundry`), 2) AS value
           FROM `daily_energy_partial`
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_kitchen_oven
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_kitchen_oven`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_washing_machine
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_washing_machine`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
       - name: query_month_energy_dish_wash_machine
         column: "value"
         query: >-
@@ -182,10 +206,17 @@ sensor per_month:
             ROUND(SUM(`daily_energy_lights`), 2) AS value
           FROM `daily_energy_partial`
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_remaining
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_remaining`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
             
       
-  - platform: template
-    sensors:
-      query_month_energy_remaining:
-        unit_of_measurement: "khW"
-        value_template: "{{ ( states.sensor.query_month_energy_total.state | float ) - ( states.sensor.query_month_energy_living_room.state | float ) - ( states.sensor.query_month_energy_laundry.state | float ) - ( states.sensor.query_month_energy_dish_wash_machine.state | float ) - ( states.sensor.query_month_energy_fridge.state | float ) - ( states.sensor.query_month_energy_office_desk.state | float ) - ( states.sensor.query_month_energy_iron.state | float ) - ( states.sensor.query_month_energy_portable_heater.state | float ) - ( states.sensor.query_month_energy_lights.state | float ) }}"
+  #- platform: template
+    #sensors:
+      #query_month_energy_remaining:
+        #unit_of_measurement: "khW"
+        #value_template: "{{ ( states.sensor.query_month_energy_total.state | float ) - ( states.sensor.query_month_energy_living_room.state | float ) - ( states.sensor.query_month_energy_laundry.state | float ) - ( states.sensor.query_month_energy_dish_wash_machine.state | float ) - ( states.sensor.query_month_energy_fridge.state | float ) - ( states.sensor.query_month_energy_office_desk.state | float ) - ( states.sensor.query_month_energy_iron.state | float ) - ( states.sensor.query_month_energy_portable_heater.state | float ) - ( states.sensor.query_month_energy_lights.state | float ) }}"

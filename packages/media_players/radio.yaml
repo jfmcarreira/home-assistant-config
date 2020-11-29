@@ -27,7 +27,9 @@ input_select:
     options:
       - Sala 
       - Cozinha
-      - Quarto
+      - Escritório
+      - Quarto Principal
+      - Quarto do Ricardo
       #- Kiosk
       #- Host
       #- TV
@@ -53,9 +55,13 @@ script:
             {% elif is_state("input_select.speakers_selector", "Sala") %}
               media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-              media_player.ghm_kitchen
-            {% elif is_state("input_select.speakers_selector", "Quarto") %}
-              media_player.gh_clock_bedroom
+              media_player.gh_clock_kitchen
+            {% elif is_state("input_select.speakers_selector", "Escritório") %}
+              media_player.ghm_office
+            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
+              media_player.ghm_master_bedroom
+            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
+              media_player.ghm_bedroom_ricardo
             {% endif %}
           media_content_id: >
             {% if is_state("input_select.radio_station", "Mopidy") %} http://potassium.home:8000/mopidy.mp3
@@ -93,9 +99,13 @@ script:
             {% elif is_state("input_select.speakers_selector", "Sala") %}
               media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-              media_player.ghm_kitchen
-            {% elif is_state("input_select.speakers_selector", "Quarto") %}
-              media_player.gh_clock_bedroom
+              media_player.gh_clock_kitchen
+            {% elif is_state("input_select.speakers_selector", "Escritório") %}
+              media_player.ghm_office
+            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
+              media_player.ghm_master_bedroom
+            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
+              media_player.ghm_bedroom_ricardo
             {% endif %}
 
   stop_radio:
@@ -119,7 +129,11 @@ script:
             {% elif is_state("input_select.speakers_selector", "Sala") %}
               media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-              media_player.ghm_kitchen
-            {% elif is_state("input_select.speakers_selector", "Quarto") %}
-              media_player.gh_clock_bedroom
+              media_player.gh_clock_kitchen
+            {% elif is_state("input_select.speakers_selector", "Escritório") %}
+              media_player.ghm_office
+            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
+              media_player.ghm_master_bedroom
+            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
+              media_player.ghm_bedroom_ricardo
             {% endif %}

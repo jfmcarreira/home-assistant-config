@@ -1,0 +1,18 @@
+script:   
+  browser_mod_cast_camera_tablet:
+    sequence:
+      - service: browser_mod.more_info
+        data:
+          entity_id: camera.baby_monitor_sub_stream
+          deviceID:
+            - b0de1b03-4aadaefb
+            
+        
+  browser_mod_cast_camera_tablet_off:
+    sequence:
+      - service: browser_mod.close_popup
+        data:
+          deviceID:
+            - b0de1b03-4aadaefb
+    
+

@@ -1,0 +1,16 @@
+binary_sensor:
+  - platform: template
+    sensors:
+        main_lights_state:
+          friendly_name: Estado das Luzes Principais
+          icon_template: mdi:lightbulb-group
+          value_template: > 
+            {{ 
+              is_state('light.hallway', 'on') or
+              is_state('light.living_room_table', 'on') or
+              is_state('light.living_room_window', 'on') or
+              is_state('light.kitchen', 'on') or
+              is_state('light.office', 'on') or
+              is_state('light.master_bedroom', 'on') or
+              is_state('light.bedroom_ricardo', 'on')
+            }}

@@ -1,0 +1,35 @@
+homeassistant:
+  customize:
+    binary_sensor.browser_tf201_kyosk:
+      friendly_name: Movimento Tablet
+    media_player.browser_tf201_kyosk:
+      friendly_name: Kyosk Entrada
+      icon: mdi:tablet-dashboard
+    light.browser_tf201_kyosk:
+      friendly_name: Luz do Kyosk Entrada
+    display.tf201_kyosk:
+      friendly_name: Kyosk Entrada
+      icon: mdi:tablet-dashboard
+
+################################################################################
+## Fully kyosk
+################################################################################
+display:
+  - platform: fully_kiosk
+    name: TF201 Kyosk
+    host: !secret kyosk_ip
+    password: !secret kyosk_pass
+
+################################################################################
+## Browser mod
+################################################################################
+browser_mod:
+  prefix: "browser_"
+  devices:
+    b0de1b03-4aadaefb:
+      name: Browser TF201 Kyosk
+      camera: true
+      force_stay_awake: true
+  disable:
+    - all
+  

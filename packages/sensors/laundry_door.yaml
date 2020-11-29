@@ -1,0 +1,11 @@
+homeassistant:
+  customize:
+    binary_sensor.laundry_door:
+      friendly_name: Porta do Sotão
+
+binary_sensor:
+  - platform: mqtt
+    name: "Laundry Door"
+    device_class: door
+    state_topic: "binary_rf_sensors/laundry_door"
+    qos: 1

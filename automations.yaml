@@ -1,0 +1,144 @@
+- id: '1606263615723'
+  alias: Routine Ricardo Awake Up
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00:00
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data:
+      entity_id: input_boolean.ricardo_sleeping
+  mode: single
+- id: '1606263648109'
+  alias: Routine Ricardo Go To Sleep
+  description: ''
+  trigger:
+  - platform: time
+    at: '21:00:00'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data:
+      entity_id: input_boolean.ricardo_sleeping
+  mode: single
+- alias: 'Remote Phillips Hue Bedroom Dim UP'
+  id:  'Remote Phillips Hue Bedroom Dim UP'
+  mode: single
+  trigger:
+    - device_id: af5a0f838ba115521f343e38da7b566c
+      domain: deconz
+      platform: device
+      subtype: dim_up
+      type: remote_button_short_press
+  action:
+    - domain: light
+      type: brightness_increase
+      device_id: c041ba87a274b3acbd69f3f290c65e17
+      entity_id: light.master_bedroom
+      
+- alias: 'Remote  Phillips Hue Bedroom Dim DOWN'
+  id: 'Remote  Phillips Hue Bedroom Dim DOWN'
+  mode: single
+  trigger:
+    - device_id: af5a0f838ba115521f343e38da7b566c
+      domain: deconz
+      platform: device
+      subtype: dim_down
+      type: remote_button_short_press
+  action:
+    - domain: light
+      type: brightness_decrease
+      device_id: c041ba87a274b3acbd69f3f290c65e17
+      entity_id: light.master_bedroom
+      
+
+
+- alias: 'Remote  Phillips Hue Bedroom Short Press ON'
+  id: 'Remote  Phillips Hue Bedroom Short Press ON'
+  mode: single
+  trigger:
+    - device_id: af5a0f838ba115521f343e38da7b566cs
+      domain: deconz
+      platform: device
+      subtype: turn_on
+      type: remote_button_short_release
+  action:
+    - service: light.turn_on
+      entity_id: light.master_bedroom_bathroom
+      
+- alias: 'Remote  Phillips Hue Bedroom Short Press OFF '
+  id: 'Remote  Phillips Hue Bedroom Short Press OFF '
+  mode: single
+  trigger:
+    - device_id: af5a0f838ba115521f343e38da7b566c
+      domain: deconz
+      platform: device
+      subtype: turn_off
+      type: remote_button_short_release
+  action:
+    - service: light.turn_off
+      entity_id: light.master_bedroom_bathroom
+    - service: light.turn_off
+      entity_id: light.master_bedroom
+      
+  
+- alias: 'Remote  Phillips Hue Bedroom Long Press ON'
+  id: 'Remote  Phillips Hue Bedroom Long Press ON'
+  mode: single
+  trigger:
+    - device_id: af5a0f838ba115521f343e38da7b566c
+      domain: deconz
+      platform: device
+      subtype: turn_on
+      type: remote_button_long_press
+  action:
+    - service: light.turn_on
+      entity_id: light.master_bedroom
+      
+- alias: 'Remote Phillips Hue Bedroom Long Press OFF '
+  id: 'Remote Phillips Hue Bedroom Long Press OFF '
+  mode: single
+  trigger:
+    - device_id: af5a0f838ba115521f343e38da7b566c
+      domain: deconz
+      platform: device
+      subtype: turn_off
+      type: remote_button_long_press
+  action:
+    - service: light.turn_off
+      entity_id: light.master_bedroom
+    - service: light.turn_off
+      entity_id: light.master_bedroom_bathroom
+    - service: light.turn_off
+      entity_id: light.hallway
+    - service: light.turn_off
+      entity_id: light.office
+        
+      
+- alias:  Activar Tema de Modo Dia
+  id: frontend_set_day_theme
+  trigger:
+    - event: sunrise
+      offset: 00:30:00
+      platform: sun
+  action:
+    - service: frontend.set_theme
+      data:
+        name: Google Light Theme
+    
+    
+- alias: Activar Tema de Modo Noite
+  id: frontend_set_night_theme
+  trigger:
+    - event: sunset
+      offset: 01:00:00
+      platform: sun
+    - event: start
+      platform: homeassistant
+  condition: []
+  action:
+    - service: frontend.set_theme
+      data:
+        name: Google Dark Theme
+      

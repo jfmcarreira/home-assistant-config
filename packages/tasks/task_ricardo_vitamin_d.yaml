@@ -85,7 +85,7 @@ automation old:
         entity_id: binary_sensor.ricardo_vitamin_d
         state: "off"
       - condition: time
-        after: "17:00:00"
+        after: "19:30:00"
       - condition: time
         before: "22:00:00"
     action:

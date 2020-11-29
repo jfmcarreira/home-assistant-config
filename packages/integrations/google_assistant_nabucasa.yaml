@@ -1,0 +1,128 @@
+################################################################
+## Google Assistant
+################################################################
+cloud:
+  google_actions:
+    #filter:
+      #include_entities:
+        #- vacuum.roborock
+        #- climate.heating
+        #- media_player.living_room_tv
+        #- sensor.average_temperature
+      #include_domains:
+        #- switch
+        #- script
+        #- light
+        #- scene
+      #exclude_entities:
+        #- light.group_living_room
+        #- light.hallway_presence_group
+        
+    entity_config:        
+      
+      vacuum.roborock:
+        room: Sala
+        name: Roborock
+      climate.heating:
+        name: Aquecimento
+        room: Misc
+        aliases:
+          - Aquecimento central
+          - Heating
+          - Central heating
+          
+      media_player.living_room_tv:
+        room: Sala
+        name: Televisão
+        aliases:
+          - Televisão da Sala
+          - Media center
+          - TV
+          
+      sensor.average_temperature:
+        room: Misc
+        name: Temperatura da Casa
+        
+      
+      # Routines
+      script.routine_night_time:
+        room: Misc
+        name: Modo Dormir
+        aliases:
+          - Sleep mode
+      script.routine_away:
+        room: Misc
+        name: Modo Ausente
+        aliases:
+          - Away mode
+          
+      script.routine_dinner_time:
+        room: Sala
+        name: Modo Refeição
+        aliases:
+          - Modo de jantar
+          - Modo de almoço
+          - Modo de refeição
+          - Jantar
+          - Refeição
+          - Almoço
+          - Dinner time
+          - Lunch time
+          
+      script.action_meo_play_main_channel:
+        room: Sala
+        name: Canal SIC
+      
+      script.action_meo_play_kids_channel:
+        room: Sala
+        name: Bonecos na Televisão
+        aliases:
+          - Bonecos na TV
+          - Bonecos
+      script.task_roborock_clean:
+        room: Sala
+        name: Limpeza do Aspirador
+      script.cat_litter_clean:
+        room: Casa de Banho
+        name: Limpeza da Areia das Gatas
+        aliases:
+          - Limpeza da areia
+          - Cat litter clean
+      script.cat_litter_change:
+        room: Casa de Banho
+        name: Substituição Areia das Gatas
+        aliases:
+          - Substituição da areia
+          - Cat litter change
+      script.task_ricardo_vitamin_d:
+        room: Misc
+        name: Administração da Vitamina D 
+        aliases:
+          - Vitamina D
+          
+      light.living_room_abajur:
+        room: Sala
+        name: Candeeiro da Sala 
+        aliases:
+          - Luz do Candeeiro da Sala
+          - Luz de Apoio da Sala
+          - Living Room Side Light
+      light.master_bedroom:
+        room: Quarto Principal
+        name: Luz do Teto do Quarto
+        aliases:
+          - Bedroom Light
+      light.master_bedroom_bathroom:
+        room: Quarto Principal
+        name: Luz da Casa de Banho do Quarto Principal
+        aliases:
+          - Bathroom Light
+      light.bedroom_ricardo:
+        room: Quarto do Ricardo
+        name: Luz do Teto do Quarto do Ricardo
+        aliases:
+          - Luz do Teto do Ricardo        
+      light.bedroom_ricardo_lamp:
+        room: Quarto do Ricardo
+        name: Luz do Candeeiro do Quarto do Ricardo
+    

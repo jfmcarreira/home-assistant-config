@@ -1,9 +1,7 @@
-d = { '58940A':['dish_wash_machine_door','ON','true'],
-      '58940E':['dish_wash_machine_door','OFF','true'],
-      '57E10A':['wash_machine_door','ON','true'],
+d = { '57E10A':['wash_machine_door','ON','true'],
       '57E10E':['wash_machine_door','OFF','true'],
-      #'F1E77E':['litter_box_motion','ON','false'],
-      'F1E77E':['motion_sensor_ricardo_bedroom','ON','false'],
+      '58940A':['laundry_door','ON','true'],
+      '58940E':['laundry_door','OFF','true'],
       #'BDA5B9':['sonoff_door_sensor','ON','false'],
     }
 

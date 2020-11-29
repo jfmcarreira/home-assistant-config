@@ -2,22 +2,22 @@
 ## Monthly Energy Meter
 ################################################################
 sensor energy:
-  - platform: integration
-    source: sensor.bhpzem_power
-    name: pzem_energy
-    unit_prefix: k
-    unit_time: h
-    round: 2 
+  #- platform: integration
+    #source: sensor.bhpzem_power
+    #name: pzem_energy
+    #unit_prefix: k
+    #unit_time: h
+    #round: 2 
     
 utility_meter: 
   monthly_energy:
-    source: sensor.pzem_energy
+    source: sensor.bhpzem_energy
     cycle: monthly
     offset:
       days: 19
       
   monthly_energy_bi_tariff:
-    source: sensor.pzem_energy
+    source: sensor.bhpzem_energy
     cycle: monthly
     offset:
       days: 19
@@ -26,7 +26,7 @@ utility_meter:
       - Fora de Vazio
   
   monthly_energy_tri_tariff:
-    source: sensor.pzem_energy
+    source: sensor.bhpzem_energy
     cycle: monthly
     offset:
       days: 19

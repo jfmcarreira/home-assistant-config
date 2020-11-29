@@ -20,8 +20,6 @@ influxdb:
       - sensor.*_temperature
       - sensor.*_humidity
     entities:
-      # Power
-      - sensor.pzem_energy
       # Devices
       - binary_sensor.dish_wash_machine_state
       - binary_sensor.washing_machine_state

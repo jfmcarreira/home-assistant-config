@@ -167,7 +167,7 @@ script:
               - id: CatLitterClean-1-Box
                 repeats: 2
               - id: CatLitterClean-2-Bath
-                repeats: 2
+                repeats: 1
       - delay: 00:00:40
       - service: vacuum.set_fan_speed
         data:
