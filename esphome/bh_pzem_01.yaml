@@ -32,6 +32,10 @@ uart:
 
 sensor:
   - platform: pzemac
+    energy:
+      name: ${upper_devicename} Energy
+      filters:
+        - multiply: 0.001
     current:
       name: ${upper_devicename} Current
     voltage:

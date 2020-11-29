@@ -60,7 +60,7 @@ light:
     
 binary_sensor:
   - id: button_1
-    name: ${OutputA_Name} SW
+    #name: ${OutputA_Name} SW
     platform: gpio
     pin:
       number: GPIO0
@@ -68,7 +68,16 @@ binary_sensor:
       inverted: True
     on_click:
       then:
-          - light.toggle: light_1
+        if:
+            condition:
+              or:
+                - light.is_on: light_1
+                - light.is_on: light_3
+            then:
+              - light.turn_off: light_1
+              - light.turn_off: light_3
+            else:
+              - light.turn_on: light_1
           
   - id: button_2
     platform: gpio
@@ -79,7 +88,7 @@ binary_sensor:
     
   
   - id: button_3
-    name: ${OutputB_Name} SW
+    #name: ${OutputB_Name} SW
     platform: gpio
     pin:
       number: GPIO10

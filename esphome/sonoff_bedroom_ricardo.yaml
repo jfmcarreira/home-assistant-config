@@ -40,7 +40,7 @@ binary_sensor:
     on_multi_click:
       - timing:
           - ON for at most 1s
-          - OFF for at least 0.1s
+          - OFF for at least 0.05s
         then:
           - if:
               condition:
@@ -64,7 +64,7 @@ binary_sensor:
 
       - timing:
           - ON for at least 1s
-          - OFF for at least 0.1s
+          #- OFF for at least 0.1s
         then:
           - if:
               condition:
