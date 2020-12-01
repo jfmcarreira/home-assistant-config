@@ -3,21 +3,6 @@
 ################################################################
 cloud:
   google_actions:
-    #filter:
-      #include_entities:
-        #- vacuum.roborock
-        #- climate.heating
-        #- media_player.living_room_tv
-        #- sensor.average_temperature
-      #include_domains:
-        #- switch
-        #- script
-        #- light
-        #- scene
-      #exclude_entities:
-        #- light.group_living_room
-        #- light.hallway_presence_group
-        
     entity_config:        
       
       vacuum.roborock:
@@ -112,11 +97,11 @@ cloud:
         name: Luz do Teto do Quarto
         aliases:
           - Bedroom Light
-      light.master_bedroom_bathroom:
-        room: Quarto Principal
-        name: Luz da Casa de Banho do Quarto Principal
-        aliases:
-          - Bathroom Light
+
+
+
+
+
       light.bedroom_ricardo:
         room: Quarto do Ricardo
         name: Luz do Teto do Quarto do Ricardo

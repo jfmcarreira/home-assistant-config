@@ -22,123 +22,224 @@
     data:
       entity_id: input_boolean.ricardo_sleeping
   mode: single
-- alias: 'Remote Phillips Hue Bedroom Dim UP'
-  id:  'Remote Phillips Hue Bedroom Dim UP'
+- alias: Remote Phillips Hue Bedroom Dim UP
+  id: Remote Phillips Hue Bedroom Dim UP
   mode: single
   trigger:
-    - device_id: af5a0f838ba115521f343e38da7b566c
-      domain: deconz
-      platform: device
-      subtype: dim_up
-      type: remote_button_short_press
+  - device_id: af5a0f838ba115521f343e38da7b566c
+    domain: deconz
+    platform: device
+    subtype: dim_up
+    type: remote_button_short_press
   action:
-    - domain: light
-      type: brightness_increase
-      device_id: c041ba87a274b3acbd69f3f290c65e17
-      entity_id: light.master_bedroom
-      
-- alias: 'Remote  Phillips Hue Bedroom Dim DOWN'
-  id: 'Remote  Phillips Hue Bedroom Dim DOWN'
+  - domain: light
+    type: brightness_increase
+    device_id: c041ba87a274b3acbd69f3f290c65e17
+    entity_id: light.master_bedroom
+- alias: Remote  Phillips Hue Bedroom Dim DOWN
+  id: Remote  Phillips Hue Bedroom Dim DOWN
   mode: single
   trigger:
-    - device_id: af5a0f838ba115521f343e38da7b566c
-      domain: deconz
-      platform: device
-      subtype: dim_down
-      type: remote_button_short_press
+  - device_id: af5a0f838ba115521f343e38da7b566c
+    domain: deconz
+    platform: device
+    subtype: dim_down
+    type: remote_button_short_press
   action:
-    - domain: light
-      type: brightness_decrease
-      device_id: c041ba87a274b3acbd69f3f290c65e17
-      entity_id: light.master_bedroom
-      
-
-
-- alias: 'Remote  Phillips Hue Bedroom Short Press ON'
-  id: 'Remote  Phillips Hue Bedroom Short Press ON'
+  - domain: light
+    type: brightness_decrease
+    device_id: c041ba87a274b3acbd69f3f290c65e17
+    entity_id: light.master_bedroom
+- alias: Remote  Phillips Hue Bedroom Short Press ON
+  id: Remote  Phillips Hue Bedroom Short Press ON
   mode: single
   trigger:
-    - device_id: af5a0f838ba115521f343e38da7b566cs
-      domain: deconz
-      platform: device
-      subtype: turn_on
-      type: remote_button_short_release
+  - device_id: af5a0f838ba115521f343e38da7b566c
+    domain: deconz
+    platform: device
+    subtype: turn_on
+    type: remote_button_short_release
   action:
-    - service: light.turn_on
-      entity_id: light.master_bedroom_bathroom
-      
-- alias: 'Remote  Phillips Hue Bedroom Short Press OFF '
-  id: 'Remote  Phillips Hue Bedroom Short Press OFF '
+  - service: light.turn_on
+    entity_id: light.master_bedroom_bathroom
+- alias: Remote  Phillips Hue Bedroom Short Press OFF
+  id: Remote  Phillips Hue Bedroom Short Press OFF
   mode: single
   trigger:
-    - device_id: af5a0f838ba115521f343e38da7b566c
-      domain: deconz
-      platform: device
-      subtype: turn_off
-      type: remote_button_short_release
+  - device_id: af5a0f838ba115521f343e38da7b566c
+    domain: deconz
+    platform: device
+    subtype: turn_off
+    type: remote_button_short_release
   action:
-    - service: light.turn_off
-      entity_id: light.master_bedroom_bathroom
-    - service: light.turn_off
-      entity_id: light.master_bedroom
-      
-  
-- alias: 'Remote  Phillips Hue Bedroom Long Press ON'
-  id: 'Remote  Phillips Hue Bedroom Long Press ON'
+  - service: light.turn_off
+    entity_id: light.master_bedroom_bathroom
+  - service: light.turn_off
+    entity_id: light.master_bedroom
+- alias: Remote  Phillips Hue Bedroom Long Press ON
+  id: Remote  Phillips Hue Bedroom Long Press ON
   mode: single
   trigger:
-    - device_id: af5a0f838ba115521f343e38da7b566c
-      domain: deconz
-      platform: device
-      subtype: turn_on
-      type: remote_button_long_press
+  - device_id: af5a0f838ba115521f343e38da7b566c
+    domain: deconz
+    platform: device
+    subtype: turn_on
+    type: remote_button_long_press
   action:
-    - service: light.turn_on
-      entity_id: light.master_bedroom
-      
+  - service: light.turn_on
+    entity_id: light.master_bedroom
 - alias: 'Remote Phillips Hue Bedroom Long Press OFF '
   id: 'Remote Phillips Hue Bedroom Long Press OFF '
   mode: single
   trigger:
-    - device_id: af5a0f838ba115521f343e38da7b566c
-      domain: deconz
-      platform: device
-      subtype: turn_off
-      type: remote_button_long_press
+  - device_id: af5a0f838ba115521f343e38da7b566c
+    domain: deconz
+    platform: device
+    subtype: turn_off
+    type: remote_button_long_press
   action:
-    - service: light.turn_off
-      entity_id: light.master_bedroom
-    - service: light.turn_off
-      entity_id: light.master_bedroom_bathroom
-    - service: light.turn_off
-      entity_id: light.hallway
-    - service: light.turn_off
-      entity_id: light.office
-        
-      
-- alias:  Activar Tema de Modo Dia
-  id: frontend_set_day_theme
+  - service: light.turn_off
+    entity_id: light.master_bedroom
+  - service: light.turn_off
+    entity_id: light.master_bedroom_bathroom
+  - service: light.turn_off
+    entity_id: light.hallway
+  - service: light.turn_off
+    entity_id: light.office
+- id: frontend_set_day_theme
+  alias: frontend_set_day_theme
   trigger:
-    - event: sunrise
-      offset: 00:30:00
-      platform: sun
+  - event: sunrise
+    offset: 00:30:00
+    platform: sun
   action:
-    - service: frontend.set_theme
-      data:
-        name: Google Light Theme
-    
-    
-- alias: Activar Tema de Modo Noite
-  id: frontend_set_night_theme
+  - service: frontend.set_theme
+    data:
+      name: Google Light Theme
+- id: frontend_set_night_theme
+  alias: frontend_set_night_theme
   trigger:
-    - event: sunset
-      offset: 01:00:00
-      platform: sun
-    - event: start
-      platform: homeassistant
+  - event: sunset
+    offset: 01:00:00
+    platform: sun
+  - event: start
+    platform: homeassistant
   condition: []
   action:
-    - service: frontend.set_theme
-      data:
-        name: Google Dark Theme
+  - service: frontend.set_theme
+    data:
+      name: Google Dark Theme
+- id: lights_turn_on_laundry_when_door_open
+  alias: Sotão Ligar Luz Quando a Porta Abre
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.laundry_door
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.hallway
+    state: 'off'
+    for:
+      seconds: 15
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.laundry_inside
+  mode: restart
+- id: lights_front_door_turn_on_door_open
+  alias: Porta da Entrada Ligar Luz
+  trigger:
+  - entity_id: binary_sensor.front_door
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 35 }}'
+  action:
+  - service: light.turn_on
+    entity_id: light.front_door
+  mode: restart
+- id: lights_front_door_turn_off_door_close
+  alias: Porta da Entrada  Desligar a Luz
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.front_door
+    from: 'on'
+    to: 'off'
+    for: 00:00:10
+  - platform: state
+    entity_id: light.front_door
+    to: 'on'
+    for: 00:02:00
+  action:
+  - service: light.turn_off
+    entity_id: light.front_door
+  mode: single
+- id: Lights Hallway Turn On Door Open
+  alias: Lights Hallway Turn On Door Open
+  mode: restart
+  trigger:
+  - entity_id: binary_sensor.front_door
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+  - condition: state
+    entity_id: light.hallway
+    for:
+      seconds: 10
+    state: 'off'
+  action:
+  - service: light.turn_on
+    entity_id: light.hallway
+- id: Lights Hallway Turn Off No Motion
+  alias: Lights Hallway Turn Off No Motion
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_hallway
+    from: 'on'
+    to: 'off'
+    for: 00:10:00
+  action:
+  - service: input_boolean.turn_off
+    data:
+      entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+  - delay: 00:00:02
+  - service: light.turn_off
+    entity_id: light.hallway
+  - delay: 00:00:02
+  - service: input_boolean.turn_on
+    data:
+      entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+  mode: restart
+- id: Lights Xmas Auto On
+  alias: Lights Xmas Auto On
+  mode: restart
+  trigger:
+    - platform: template
+      value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+    - platform: template
+      value_template: "{{ is_state('binary_sensor.notify_home', 'on') }}"
+  condition:
+    - condition: template
+      value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+    - condition: template
+      value_template: "{{ is_state('binary_sensor.notify_home', 'on') }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.xmas_light
+
+- id: Lights Xmas Auto Off
+  alias: Lights Xmas Auto Off
+  mode: restart
+  trigger:
+    - platform: time
+      at: '01:30:00'
+  action:
+    - service: light.turn_off
+      entity_id: light.xmas_light
       

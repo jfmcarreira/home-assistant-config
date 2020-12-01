@@ -16,26 +16,26 @@ input_number:
     step: 1
 
 automation old:
-  - alias: Lights Master Bedroom Ceilling Light Toggle
-    mode: single
-    initial_state: true
-    trigger:
-      - platform: event
-        event_type: esphome.button_pressed
-        event_data:
-          action: master_bedroom_toggle
-    action:
-      - service: light.toggle
-        data:
-          entity_id: light.master_bedroom
-          brightness: >
-            {% set brightness = states.input_number.brightness_master_bedroom_light_day.state %}
-            {% if now().strftime("%H")|int >= 20 and ( now().strftime("%H")|int < 23 ) %}
-              {% set brightness = states.input_number.brightness_master_bedroom_light_evening.state %}
-            {% elif ( now().strftime("%H")|int >= 23 ) or ( now().strftime("%H")|int < 7 ) %}
-              {% set brightness = states.input_number.brightness_master_bedroom_light_night.state %}
-            {% endif %}
-            {{ brightness | int }}
+  #- alias: Lights Master Bedroom Ceilling Light Toggle
+    #mode: single
+    #initial_state: true
+    #trigger:
+      #- platform: event
+        #event_type: esphome.button_pressed
+        #event_data:
+          #action: master_bedroom_toggle
+    #action:
+      #- service: light.toggle
+        #data:
+          #entity_id: light.master_bedroom
+          #brightness: >
+            #{% set brightness = states.input_number.brightness_master_bedroom_light_day.state %}
+            #{% if now().strftime("%H")|int >= 20 and ( now().strftime("%H")|int < 23 ) %}
+              #{% set brightness = states.input_number.brightness_master_bedroom_light_evening.state %}
+            #{% elif ( now().strftime("%H")|int >= 23 ) or ( now().strftime("%H")|int < 7 ) %}
+              #{% set brightness = states.input_number.brightness_master_bedroom_light_night.state %}
+            #{% endif %}
+            #{{ brightness | int }}
             
   - alias: Lights Master Bedroom Ceilling Liht Save Brightness
     mode: restart

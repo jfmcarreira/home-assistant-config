@@ -157,6 +157,13 @@ sensor per_month:
             ROUND(SUM(`daily_energy_kitchen_oven`), 2) AS value
           FROM `daily_energy_partial`
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      - name: query_month_energy_microwave
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_microwave`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
       - name: query_month_energy_washing_machine
         column: "value"
         query: >-

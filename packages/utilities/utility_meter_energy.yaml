@@ -66,4 +66,35 @@ sensor bill:
             {{ ( ( float(states.sensor.monthly_energy_tri_tariff_cheias.attributes.last_period) * 0.1565 + float(states.sensor.monthly_energy_tri_tariff_ponta.attributes.last_period) * 0.2720 + float(states.sensor.monthly_energy_tri_tariff_vazio.attributes.last_period) * 0.0967 + 30 * 0.2343 ) * 1.23 ) | round(2) }} €
           
 
-  
+automation insert:
+  - alias: "Record Monthly Consumption to Database"
+    initial_state: true
+    mode: queued
+    max: 10
+    trigger:
+      - platform: state
+        entity_id: sensor.monthly_energy
+        attribute: last_period
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: monthly_energy_bill
+          value: >
+            {{ states.sensor.monthly_energy.attributes.last_period }}
+
+    
+
+  - alias: "Daily Stats Insert Value of Energy to Database"
+    initial_state: true
+    mode: queued
+    max: 10
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_energy
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: daily_energy
+          value: >
+            {{ states.sensor.daily_energy.state }}
+            

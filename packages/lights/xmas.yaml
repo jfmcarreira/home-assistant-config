@@ -1,0 +1,21 @@
+light:
+  - platform: template
+    lights:
+      xmas_light:
+        friendly_name: Luzes de Natal
+        value_template: > 
+          {{ 
+            is_state('light.xmas_tree', 'on') or
+            is_state('light.xmas_outside', 'on')
+          }}
+        turn_on:
+          - service: light.turn_on
+            entity_id: light.xmas_tree
+          - service: light.turn_on
+            entity_id: light.xmas_outside
+            
+        turn_off:
+          - service: light.turn_off
+            entity_id: light.xmas_tree
+          - service: light.turn_off
+            entity_id: light.xmas_outside

@@ -95,7 +95,7 @@ automation old:
         at: '21:00:00'
       - platform: time_pattern
         minutes: 30
-      - platform: states
+      - platform: state
         entity_id: media_player.ghm_bedroom_ricardo
     condition:
       - condition: time

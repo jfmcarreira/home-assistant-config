@@ -8,12 +8,17 @@ homeassistant:
   customize_glob:
     "sensor.power_usage_reactive_*":
       device_class: power
-      icon: mdi:flash
+      icon: mdi:flash-outline
       #unit_of_measurement: "VAR"
     "sensor.power_usage_*":
       device_class: power
       icon: mdi:flash
       #unit_of_measurement: "W"
+    "sensor.daily_energy_*":
+      icon: mdi:flash-circle
+    "sensor.energy_*":
+      icon: mdi:flash-circle
+      
 
 utility_meter: 
   daily_energy:
@@ -27,6 +32,12 @@ utility_meter:
     #cycle: daily
   daily_energy_kitchen_oven:
     source: sensor.energy_kitchen_oven
+    cycle: daily
+  daily_energy_microwave:
+    source: sensor.energy_microwave
+    cycle: daily
+  daily_energy_office_desk:
+    source: sensor.energy_office_desk
     cycle: daily
   daily_energy_lights:
     source: sensor.energy_lights
@@ -92,15 +103,78 @@ sensor energy:
             ( states.sensor.daily_energy.state | float ) - 
             ( states.sensor.daily_energy_living_room.state | float ) - 
             ( states.sensor.daily_energy_kitchen_oven.state | float ) - 
-            ( states.sensor.daily_energy_lights.state | float ) - 
+            ( states.sensor.daily_energy_microwave.state | float ) -
             ( states.sensor.daily_energy_washing_machine.state | float ) - 
             ( states.sensor.daily_energy_dish_wash_machine.state | float ) - 
             ( states.sensor.daily_energy_fridge.state | float ) -   
             ( states.sensor.daily_energy_iron.state | float ) - 
-            ( states.sensor.daily_energy_portable_heater.state | float )
+            ( states.sensor.daily_energy_portable_heater.state | float ) -
+            ( states.sensor.daily_energy_lights.state | float )
           }}
           
-#( states.sensor.daily_energy_laundry.state | float ) - 
-#( states.sensor.daily_energy_office_desk.state | float ) - 
-
- 
+automation insert:
+  - alias: "Daily Stats Insert Value of Partial Energy of to Database"
+    initial_state: true
+    mode: queued
+    max: 20
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_energy
+      - platform: state
+        entity_id: sensor.daily_energy_living_room
+      #- platform: state
+        #entity_id: sensor.daily_energy_laundry
+      - platform: state
+        entity_id: sensor.daily_energy_kitchen_oven
+      - platform: state
+        entity_id: sensor.daily_energy_microwave
+      - platform: state
+        entity_id: sensor.daily_energy_dish_wash_machine
+      - platform: state
+        entity_id: sensor.daily_energy_washing_machine
+      - platform: state
+        entity_id: sensor.daily_energy_fridge
+      - platform: state
+        entity_id: sensor.daily_energy_office_desk
+      - platform: state
+        entity_id: sensor.daily_energy_iron
+      - platform: state
+        entity_id: sensor.daily_energy_portable_heater
+      - platform: state
+        entity_id: sensor.daily_energy_lights
+      - platform: state
+        entity_id: sensor.daily_energy_remaining
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: daily_energy_partial
+          value: >
+            {{ trigger.to_state.state }}
+          column: >
+            {% if trigger.entity_id == "sensor.daily_energy" %}
+              daily_energy_total
+            {% elif trigger.entity_id == "sensor.daily_energy_living_room" %}
+              daily_energy_living_room
+            {% elif trigger.entity_id == "sensor.daily_energy_laundry" %}
+              daily_energy_laundry
+            {% elif trigger.entity_id == "sensor.daily_energy_kitchen_oven" %}
+              daily_energy_kitchen_oven
+            {% elif trigger.entity_id == "sensor.daily_energy_microwave" %}
+              daily_energy_microwave
+            {% elif trigger.entity_id == "sensor.daily_energy_dish_wash_machine" %}
+              daily_energy_dish_wash_machine
+            {% elif trigger.entity_id == "sensor.daily_energy_washing_machine" %}
+              daily_energy_washing_machine
+            {% elif trigger.entity_id == "sensor.daily_energy_fridge" %}
+              daily_energy_fridge
+            {% elif trigger.entity_id == "sensor.daily_energy_office_desk" %}
+              daily_energy_office_desk
+            {% elif trigger.entity_id == "sensor.daily_energy_iron" %}
+              daily_energy_iron
+            {% elif trigger.entity_id == "sensor.daily_energy_portable_heater" %}
+              daily_energy_portable_heater
+            {% elif trigger.entity_id == "sensor.daily_energy_lights" %}
+              daily_energy_lights
+            {% elif trigger.entity_id == "sensor.daily_energy_remaining" %}
+              daily_energy_remaining
+            {% endif %}
