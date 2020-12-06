@@ -36,6 +36,7 @@ sensor:
       name: ${upper_devicename} Energy
       filters:
         - multiply: 0.001
+      unit_of_measurement: "kWh"
     current:
       name: ${upper_devicename} Current
     voltage:
