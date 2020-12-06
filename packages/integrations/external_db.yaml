@@ -11,4 +11,4 @@ sensor:
         value_template: !secret db_custom_pass
       
 shell_command:
-  external_my_sql_insert: python3 /config/shell_scripts/ha-daily-insert-mysql/daily_insert_mysql.py --host=core-mariadb --user={{ states("sensor.db_custom_user") }} --password={{ states("sensor.db_custom_pass") }} --db=daily_stats --table={{ table }} --value={{ value }} {{ '--date='+date_stamp if date_stamp is defined }} {{ '--col='+column if column is defined }} {{ '--write_str='+save_string if save_string is defined }} {{ '--use_date_time='+save_date_time if save_date_time is defined }}
+  external_my_sql_insert: python3 /config/shell_scripts/daily_insert_mysql.py --host=core-mariadb --user={{ states("sensor.db_custom_user") }} --password={{ states("sensor.db_custom_pass") }} --db=daily_stats --table={{ table }} --value={{ value }} {{ '--date='+date_stamp if date_stamp is defined }} {{ '--col='+column if column is defined }} {{ '--write_str='+save_string if save_string is defined }} {{ '--use_date_time='+save_date_time if save_date_time is defined }}

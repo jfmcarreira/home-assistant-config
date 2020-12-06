@@ -9,8 +9,6 @@ homeassistant:
       icon: mdi:clock-outline
     counter.cat_litter_box_visits:
       friendly_name: Litter Box Visits
-    automation.task_keep_register_time_cat_litter:
-      friendly_name: Areia das Gatas - Guardar Data da Execução
 
 binary_sensor motion:
   - platform: mqtt
@@ -188,31 +186,7 @@ script:
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
       - service: script.cat_litter_clean
        
-automation old:
-  - alias: task_keep_register_time_cat_litter
-    initial_state: true
-    mode: queued
-    max: 20
-    trigger:
-      - platform: state
-        entity_id: input_datetime.cat_litter_box_last_clean
-      - platform: state
-        entity_id: input_datetime.cat_litter_box_last_change
-    action:
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: >
-            {% if trigger.entity_id == "input_datetime.cat_litter_box_last_clean" %}
-              "Cat_Litter_Clean"
-            {% elif trigger.entity_id == "input_datetime.cat_litter_box_last_change" %}
-              "Cat_Litter_Change"
-            {% endif %}
-          column: task_name
-          date_stamp: >
-            "{{ trigger.to_state.state | as_timestamp | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
+#automation old:
             
 #automation old:
 #- alias: Reset PIR State Cat Litter

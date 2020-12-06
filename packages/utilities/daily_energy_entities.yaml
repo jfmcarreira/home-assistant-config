@@ -25,13 +25,13 @@ utility_meter:
     source: sensor.bhpzem_energy
     cycle: daily
   daily_energy_living_room:
-    source: sensor.energy_living_room
+    source: sensor.living_room_energy
     cycle: daily
   #daily_energy_laundry:
     #source: sensor.energy_laundry
     #cycle: daily
   daily_energy_kitchen_oven:
-    source: sensor.energy_kitchen_oven
+    source: sensor.kitchen_oven_energy
     cycle: daily
   #daily_energy_microwave:
     #source: sensor.energy_microwave
@@ -59,7 +59,7 @@ sensor power:
               ( states.sensor.power_usage_light_master_bedroom_bathroom_mirror.state | float ) + 
               ( states.sensor.power_usage_light_hallway.state | float ) + 
               ( states.sensor.power_usage_light_front_door.state | float ) 
-              ) * 100 | int | float ) / 100
+              ) | int )
             }}
          
         #( states.sensor.power_usage_light_living_room_tv_leds.state | float )+ ( states.sensor.power_usage_light_office_desk.state | float )

@@ -1,0 +1,50 @@
+homeassistant:
+  customize:   
+    automation.task_register_times_in_db:
+      friendly_name: Guardar Data de Execução das Tarefas
+
+automation keep_dates:  
+  - alias: task_register_times_in_db
+    initial_state: true
+    mode: queued
+    max: 20
+    trigger:
+      - platform: state
+        entity_id: input_datetime.task_washing_clothes_last_done
+      - platform: state
+        entity_id: input_datetime.task_washing_clothes_dry_last_done
+      - platform: state
+        entity_id: input_datetime.task_washing_clothes_remove_last_done
+      - platform: state
+        entity_id: input_datetime.task_dish_washing_last_done
+      - platform: state
+        entity_id: input_datetime.task_dish_wash_empty_last_done
+      - platform: state
+        entity_id: input_datetime.cat_litter_box_last_clean
+      - platform: state
+        entity_id: input_datetime.cat_litter_box_last_change
+    action:
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: >
+            {% if trigger.entity_id == "input_datetime.task_washing_clothes_last_done" %}
+              "Washing_Machine_Wash_Clothes"
+            {% elif trigger.entity_id == "input_datetime.task_washing_clothes_dry_last_done" %}
+              "Washing_Machine_Clothes_Off"
+            {% elif trigger.entity_id == "input_datetime.task_washing_clothes_remove_last_done" %}
+              "Washing_Machine_Dry_Clothes_Off"
+            {% elif trigger.entity_id == "input_datetime.task_dish_washing_last_done" %}
+              "Dish_Wash_Machine_Clean"
+            {% elif trigger.entity_id == "input_datetime.task_dish_wash_empty_last_done" %}
+              "Dish_Wash_Machine_Empty"
+            {% elif trigger.entity_id == "input_datetime.cat_litter_box_last_clean" %}
+              "Cat_Litter_Clean"
+            {% elif trigger.entity_id == "input_datetime.cat_litter_box_last_change" %}
+              "Cat_Litter_Change"
+            {% endif %}
+          column: task_name
+          date_stamp: >
+            "{{ trigger.to_state.state | as_timestamp | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"

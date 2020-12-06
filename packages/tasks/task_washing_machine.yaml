@@ -20,9 +20,6 @@ homeassistant:
       icon: mdi:tshirt-crew
       friendly_name: Apanhar Roupa
       device_class: timestamp
-    
-    automation.task_keep_register_time_washing_machine:
-      friendly_name: Máq. da Roupa - Guardar Data de Execução
     automation.task_laundry_wash_machine_finished:
       friendly_name: Máq. de Roupa - Lavagem Terminou
     automation.task_laundry_remove_clothes_from_wash_machine_reminder:
@@ -33,7 +30,6 @@ homeassistant:
 binary_sensor state:
   - platform: mqtt
     name: "Washing Machine Door"
-  
     device_class: door
     state_topic: "binary_rf_sensors/wash_machine_door"
     qos: 1
@@ -57,22 +53,22 @@ binary_sensor state:
           
   
 
-automation state:
-- alias: Reset PIR State Washing Machine Door
-  initial_state: true
-  trigger:
-    - platform: homeassistant
-      event: start
-    - platform: state
-      entity_id: binary_sensor.washing_machine_door
-      to: "on"
-      for:
-        seconds: 60
-  action:
-    - service: mqtt.publish
-      data:
-        topic: "binary_rf_sensors/wash_machine_door"
-        payload: "OFF"
+#automation state:
+#- alias: Reset PIR State Washing Machine Door
+  #initial_state: true
+  #trigger:
+    #- platform: homeassistant
+      #event: start
+    #- platform: state
+      #entity_id: binary_sensor.washing_machine_door
+      #to: "on"
+      #for:
+        #seconds: 60
+  #action:
+    #- service: mqtt.publish
+      #data:
+        #topic: "binary_rf_sensors/wash_machine_door"
+        #payload: "OFF"
 
 input_datetime:
   task_washing_clothes_last_done:
@@ -215,36 +211,7 @@ script:
           time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
 
 
-automation clothes:  
-  - alias: task_keep_register_time_washing_machine
-    initial_state: true
-    mode: queued
-    max: 20
-    trigger:
-      - platform: state
-        entity_id: input_datetime.task_washing_clothes_last_done
-      - platform: state
-        entity_id: input_datetime.task_washing_clothes_dry_last_done
-      - platform: state
-        entity_id: input_datetime.task_washing_clothes_remove_last_done
-    action:
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: >
-            {% if trigger.entity_id == "input_datetime.task_washing_clothes_last_done" %}
-              "Washing_Machine_Wash_Clothes"
-            {% elif trigger.entity_id == "input_datetime.task_washing_clothes_dry_last_done" %}
-              "Washing_Machine_Clothes_Off"
-            {% elif trigger.entity_id == "input_datetime.task_washing_clothes_remove_last_done" %}
-              "Washing_Machine_Dry_Clothes_Off"
-            {% endif %}
-          column: task_name
-          date_stamp: >
-            "{{ trigger.to_state.state | as_timestamp | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
-            
+automation clothes:             
   - alias: task_laundry_wash_machine_finished
     variables:
       tts_message: "A máquina de lavar roupa terminou! Pode retirar a roupa da máquina."
@@ -319,3 +286,9 @@ automation clothes:
         state: "on"
     action:
       - service: script.task_laundry_remove_wet_clothes
+
+      
+      
+
+          
+          

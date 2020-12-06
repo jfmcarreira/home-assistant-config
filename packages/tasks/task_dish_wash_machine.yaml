@@ -17,8 +17,6 @@ homeassistant:
       friendly_name: Retir a Loiça da Máquina
       device_class: timestamp
       
-    automation.task_keep_register_time_dish_wash_machine:
-      friendly_name: Máq. da Loiça - Guardar Data de Execução
     automation.task_dish_wash_empty_machine_reminder:
       friendly_name: Máq. da Loiça - Relembrar de Retirar a Loiça
     automation.task_dish_wash_machine_finished:
@@ -168,31 +166,6 @@ script:
 
                       
 automation dishes:
-  - alias: task_keep_register_time_dish_wash_machine
-    initial_state: true
-    mode: queued
-    max: 20
-    trigger:
-      - platform: state
-        entity_id: input_datetime.task_dish_washing_last_done
-      - platform: state
-        entity_id: input_datetime.task_dish_wash_empty_last_done
-    action:
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: >
-            {% if trigger.entity_id == "input_datetime.task_dish_washing_last_done" %}
-              "Dish_Wash_Machine_Clean"
-            {% elif trigger.entity_id == "input_datetime.task_dish_wash_empty_last_done" %}
-              "Dish_Wash_Machine_Empty"
-            {% endif %}
-          column: task_name
-          date_stamp: >
-            "{{ trigger.to_state.state | as_timestamp | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
-            
   - alias: task_dish_wash_machine_finished
     variables:
       tts_message: "A máquina de lavar loiça terminou! Pode retirar a loiça."

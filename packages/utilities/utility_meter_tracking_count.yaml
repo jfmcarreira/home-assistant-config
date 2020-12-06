@@ -2,10 +2,49 @@
 ## Utilities Meter
 ################################################################
 homeassistant:
-  customize_glob:
-    "input_number.*_meter*":
-      icon: mdi:counter
-      
+  customize:
+    automation.meters_save_meters_counter_to_db:
+      friendly_name: Guardar Contagens na BD
+    sensor.electricity_last_meter:
+      friendly_name: Última Contagem da Electrecidade
+      device_class: timestamp
+    sensor.gas_last_meter:
+      friendly_name: Última Contagem do Gás
+      device_class: timestamp
+    sensor.water_last_meter:
+      friendly_name: Última Contagem da Água
+      device_class: timestamp
+    
+sensor:        
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: electricity_last_meter
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE electricity_meter_full IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: date
+      - name: gas_last_meter
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE gas_meter IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: date
+      - name: water_last_meter
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE water_meter IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: date
+
+  - platform: template
+    sensors:
+      electricity_meter:
+        friendly_name: Electricity Meter
+        value_template: >
+            {{ ( ( states('input_number.electricity_meter_offpeak') | float ) + ( states('input_number.electricity_meter_peak') | float ) + ( states('input_number.electricity_meter_full') | float ) ) | int }}
+  
 input_number:
   electricity_meter_full:
     name: Electricity Meter Full
@@ -37,56 +76,12 @@ input_number:
     max: 99999
     step: 0.01
     mode: box
-
-    
-input_datetime:
-  electricity_last_meter:
-    name: Electricity Last Meter
-    icon: mdi:clock-outline
-    has_date: true
-    has_time: true
-  gas_last_meter:
-    name: Gas Last Meter
-    icon: mdi:clock-outline
-    has_date: true
-    has_time: true
-  water_last_meter:
-    name: Water Last Meter
-    icon: mdi:clock-outline
-    has_date: true
-    has_time: true
-    
-sensor:
-  - platform: template
-    sensors:
-      electricity_meter:
-        friendly_name: Electricity Meter
-        value_template: >
-            {{ ( ( states('input_number.electricity_meter_offpeak') | float ) + ( states('input_number.electricity_meter_peak') | float ) + ( states('input_number.electricity_meter_full') | float ) ) | int }}
-        #entity_id:
-          #- input_number.electricity_meter_full
-          #- input_number.electricity_meter_peak
-          #- input_number.electricity_meter_offpeak
-      electricity_last_meter:
-        friendly_name: Electricity Last Meter
-        device_class: timestamp
-        value_template: >
-          {{ state_attr('input_datetime.electricity_last_meter', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
-      gas_last_meter:
-        friendly_name: Gas Last Meter
-        device_class: timestamp
-        value_template: >
-          {{ state_attr('input_datetime.gas_last_meter', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
-      water_last_meter:
-        friendly_name: Water Last Meter
-        device_class: timestamp
-        value_template: >
-          {{ state_attr('input_datetime.water_last_meter', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
           
-          
-automation old:
-  - alias: Power Mark Electricity Reading
+automation old:          
+  - alias: meters_save_meters_counter_to_db
     initial_state: true
+    mode: queued
+    max: 20
     trigger:
       - platform: state
         entity_id: input_number.electricity_meter_full
@@ -94,33 +89,29 @@ automation old:
         entity_id: input_number.electricity_meter_peak
       - platform: state
         entity_id: input_number.electricity_meter_offpeak
-    action:
-      - service: input_datetime.set_datetime
-        data_template:
-          entity_id: input_datetime.electricity_last_meter
-          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-          
-  - alias: Power Mark Gas Reading
-    initial_state: true
-    trigger:
+      - platform: state
+        entity_id: input_number.water_meter
       - platform: state
         entity_id: input_number.gas_meter
     action:
-      - service: input_datetime.set_datetime
+      - service: shell_command.external_my_sql_insert
         data_template:
-          entity_id: input_datetime.gas_last_meter
-          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-          
-  - alias: Power Mark Water Reading
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: input_number.water_meter
-    action:
-      - service: input_datetime.set_datetime
-        data_template:
-          entity_id: input_datetime.water_last_meter
-          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+          table: meters_tracking
+          value: >
+            {{ trigger.to_state.state }}
+          date_stamp: >
+            "{{ now().timestamp()  | timestamp_custom("%Y-%m-%d %H:00:00") }}"
+          save_date_time: "true" 
+          column: >
+            {% if trigger.entity_id   == "input_number.electricity_meter_full" %}
+              electricity_meter_full
+            {% elif trigger.entity_id == "input_number.electricity_meter_peak" %}
+              electricity_meter_peak
+            {% elif trigger.entity_id == "input_number.electricity_meter_offpeak" %}
+              electricity_meter_offpeak
+            {% elif trigger.entity_id == "input_number.water_meter" %}
+              water_meter
+            {% elif trigger.entity_id == "input_number.gas_meter" %}
+              gas_meter
+            {% endif %}
+

@@ -24,6 +24,9 @@ cloud:
           - Media center
           - TV
           
+      switch.hallway_office_motion_lights:
+        room: Misc
+        
       sensor.average_temperature:
         room: Misc
         name: Temperatura da Casa
@@ -85,6 +88,9 @@ cloud:
         aliases:
           - Vitamina D
           
+      light.hallway_presence:
+        room: Corredor
+        
       light.living_room_abajur:
         room: Sala
         name: Candeeiro da Sala 
@@ -97,10 +103,6 @@ cloud:
         name: Luz do Teto do Quarto
         aliases:
           - Bedroom Light
-
-
-
-
 
       light.bedroom_ricardo:
         room: Quarto do Ricardo
