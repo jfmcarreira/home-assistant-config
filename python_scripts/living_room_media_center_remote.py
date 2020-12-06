@@ -29,7 +29,16 @@ if tv_source == "MEO":
         button = "Exit"
     elif button == "INFO":
         button = "Info"
+    elif button == "PLAY":
+        button = "PlayPause"
+    elif button == "PAUSE":
+        button = "PlayPause"
+    elif button == "SKIP-BACKWARD":
+        button = "Rewind"
+    elif button == "SKIP-FOWARD":
+        button = "Forward"
 
+        
 
     entity_id = "media_player.living_room_tv_meo_box" 
     service_data = { "entity_id": entity_id, "media_content_id": button, "media_content_type": "mediaroom" }
