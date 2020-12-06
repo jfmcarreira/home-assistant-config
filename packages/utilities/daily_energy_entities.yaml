@@ -33,9 +33,9 @@ utility_meter:
   daily_energy_kitchen_oven:
     source: sensor.energy_kitchen_oven
     cycle: daily
-  daily_energy_microwave:
-    source: sensor.energy_microwave
-    cycle: daily
+  #daily_energy_microwave:
+    #source: sensor.energy_microwave
+    #cycle: daily
   daily_energy_office_desk:
     source: sensor.energy_office_desk
     cycle: daily

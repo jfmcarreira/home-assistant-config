@@ -31,8 +31,6 @@
 - id: sleeping_away_time  
   name: sleeping_away_time
   entities:
-    climate.heating:
-      state: 'off'
     media_player.living_room_tv:
       state: 'off'
     light.front_door:

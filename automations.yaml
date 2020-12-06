@@ -50,9 +50,8 @@
     type: brightness_decrease
     device_id: c041ba87a274b3acbd69f3f290c65e17
     entity_id: light.master_bedroom
-- alias: Remote  Phillips Hue Bedroom Short Press ON
-  id: Remote  Phillips Hue Bedroom Short Press ON
-  mode: single
+- id: Remote  Phillips Hue Bedroom Short Press ON
+  alias: Remote  Phillips Hue Bedroom Short Press ON
   trigger:
   - device_id: af5a0f838ba115521f343e38da7b566c
     domain: deconz
@@ -61,10 +60,10 @@
     type: remote_button_short_release
   action:
   - service: light.turn_on
-    entity_id: light.master_bedroom_bathroom
-- alias: Remote  Phillips Hue Bedroom Short Press OFF
-  id: Remote  Phillips Hue Bedroom Short Press OFF
+    entity_id: light.master_bedroom_bathroom_ceilling
   mode: single
+- id: Remote  Phillips Hue Bedroom Short Press OFF
+  alias: Remote  Phillips Hue Bedroom Short Press OFF
   trigger:
   - device_id: af5a0f838ba115521f343e38da7b566c
     domain: deconz
@@ -73,9 +72,12 @@
     type: remote_button_short_release
   action:
   - service: light.turn_off
-    entity_id: light.master_bedroom_bathroom
+    entity_id: light.master_bedroom_bathroom_ceilling
   - service: light.turn_off
     entity_id: light.master_bedroom
+  - service: light.turn_off
+    entity_id: light.master_bedroom_bathroom_mirror
+  mode: single
 - alias: Remote  Phillips Hue Bedroom Long Press ON
   id: Remote  Phillips Hue Bedroom Long Press ON
   mode: single
@@ -136,12 +138,7 @@
     entity_id: binary_sensor.laundry_door
     from: 'off'
     to: 'on'
-  condition:
-  - condition: state
-    entity_id: light.hallway
-    state: 'off'
-    for:
-      seconds: 15
+  condition: []
   action:
   - service: light.turn_on
     data: {}
@@ -217,29 +214,41 @@
       entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
   mode: restart
 - id: Lights Xmas Auto On
-  alias: Lights Xmas Auto On
-  mode: restart
+  alias: Ligar Luzes da Arvore de Natal
   trigger:
-    - platform: template
-      value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
-    - platform: template
-      value_template: "{{ is_state('binary_sensor.notify_home', 'on') }}"
+  - platform: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+  - platform: template
+    value_template: '{{ is_state(''binary_sensor.notify_home'', ''on'') }}'
   condition:
-    - condition: template
-      value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
-    - condition: template
-      value_template: "{{ is_state('binary_sensor.notify_home', 'on') }}"
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.notify_home'', ''on'') }}'
+  - condition: time
+    after: '16:00:00'
+    before: '23:30:00'
   action:
-    - service: light.turn_on
-      entity_id: light.xmas_light
-
-- id: Lights Xmas Auto Off
-  alias: Lights Xmas Auto Off
+  - service: light.turn_on
+    entity_id: light.xmas_tree
   mode: restart
+- id: Lights Xmas Auto Off
+  alias: Desligar Luzes de Natal
   trigger:
-    - platform: time
-      at: '01:30:00'
+  - platform: time
+    at: 01:30:00
   action:
-    - service: light.turn_off
-      entity_id: light.xmas_light
-      
+  - service: light.turn_off
+    entity_id: light.xmas_light
+  mode: restart
+- id: '1606961825991'
+  alias: Ligar Luzes de Natal da Varanda
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - service: light.turn_on
+    entity_id: light.xmas_outside
+  mode: restart

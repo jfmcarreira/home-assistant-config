@@ -22,6 +22,7 @@ climate:
     keep_alive:
       seconds: 30
     precision: 0.1
+    away_temp: 16
 
   - platform: generic_thermostat
     name: Heating Ongoing Water
@@ -36,6 +37,7 @@ climate:
     hot_tolerance: 5
     keep_alive:
       seconds: 30
+    away_temp: 30
 
 input_boolean:
   heating_running_feedback:

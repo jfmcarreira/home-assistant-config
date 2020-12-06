@@ -15,6 +15,7 @@ script:
         data:
           channel: SIC
           entity_id: media_player.living_room_tv_meo_box
+  
   action_meo_play_kids_channel:
     alias: Routine Meo Play Kids Channel
     sequence:
@@ -31,6 +32,7 @@ script:
         data:
           channel: Baby TV
           entity_id: media_player.living_room_tv_meo_box
+  
   action_meo_reset_current_show:
     alias: Routine Meo Reset Current Show
     sequence:

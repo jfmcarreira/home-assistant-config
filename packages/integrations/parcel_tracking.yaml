@@ -15,8 +15,8 @@ binary_sensor:
           {{ 
             not is_state( "sensor.seventeentrack_packages_in_transit", "0" ) or 
             not is_state( "sensor.seventeentrack_packages_not_found", "0" ) or
-            not is_state( "sensor.seventeentrack_packages_ready_to_be_picked_up	", "0" ) or
-            not is_state( "sensor.seventeentrack_packages_returned	", "0" ) or
+            not is_state( "sensor.seventeentrack_packages_ready_to_be_picked_up", "0" ) or
+            not is_state( "sensor.seventeentrack_packages_returned", "0" ) or
             not is_state( "sensor.seventeentrack_packages_undelivered", "0" ) or
             not is_state( "sensor.seventeentrack_packages_delivered", "0" )
           }}
