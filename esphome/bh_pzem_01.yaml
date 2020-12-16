@@ -37,14 +37,20 @@ sensor:
       filters:
         - multiply: 0.001
       unit_of_measurement: "kWh"
+      accuracy_decimals: 2
     current:
       name: ${upper_devicename} Current
+      accuracy_decimals: 2
     voltage:
       name: ${upper_devicename} Voltage
+      accuracy_decimals: 0
     power:
       name: ${upper_devicename} Power
+      accuracy_decimals: 2
     frequency:
       name: ${upper_devicename} Frequency
+      accuracy_decimals: 1
     power_factor:
       name: ${upper_devicename} Power Factor
+      accuracy_decimals: 2
     update_interval: 5s
