@@ -11,12 +11,16 @@ recorder:
       - zone
       - sun
       - weather
+      - device_tracker
       #- automation
     entity_globs:
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.query_*
     entities:
+      ##
+      - person.bianca
+      - person.joao
       ## Time vary sensors
       - sun.sun
       - sensor.uptime

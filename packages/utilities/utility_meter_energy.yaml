@@ -38,10 +38,14 @@ utility_meter:
 sensor bill:
   - platform: template
     sensors:
+      monthly_energy_fronted:
+        unit_of_measurement: "kWh"
+        value_template: >-
+          {{ float(states.sensor.monthly_energy.state) | int }}
       monthly_energy_cicle_days:
+        unit_of_measurement: "days"
         value_template: >-
           {{ ( as_timestamp( now() ) - as_timestamp( states.sensor.monthly_energy.attributes.last_reset ) ) | timestamp_custom("%d") }}
-      
       monthly_energy_cost:
         friendly_name: "Fatura Energia"
         icon_template: "mdi:currency-eur"

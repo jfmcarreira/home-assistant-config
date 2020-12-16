@@ -15,8 +15,7 @@ climate:
     min_temp: 14
     max_temp: 22
     min_cycle_duration:
-      minutes: 1
-    #initial_hvac_mode: "off"
+      minutes: 5
     cold_tolerance: 0
     hot_tolerance: 0
     keep_alive:

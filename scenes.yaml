@@ -2,10 +2,16 @@
   name: Modo Televisão
   entities:
     light.living_room_abajur:
-      brightness: 79
-      friendly_name: Luz de Apoio
+      min_mireds: 140
+      max_mireds: 650
+      effect_list:
+      - colorloop
+      brightness: 28
+      color_temp: 601
+      is_deconz_group: false
+      friendly_name: Candeeiro da Sala
       icon: mdi:lamp
-      supported_features: 41
+      supported_features: 63
       state: 'on'
     light.living_room_table:
       friendly_name: Luz da Mesa da Sala
@@ -13,49 +19,367 @@
       supported_features: 0
       state: 'off'
     light.living_room_tv_leds:
-      effect_list:
-      - 'Off'
-      - Meteor Shower
-      - Gradual Change
-      - Flash
-      friendly_name: Retro-iluminação Televisão
-      icon: mdi:led-strip
-      supported_features: 189
+      friendly_name: Retro-iluminação da Televisão
+      icon: mdi:television-ambient-light
+      supported_features: 185
       state: 'off'
     light.living_room_window:
       friendly_name: Luz da Janela da Sala
       icon: mdi:globe-light
       supported_features: 0
       state: 'off'
-
-- id: sleeping_away_time  
-  name: sleeping_away_time
+- id: away_time
+  name: away_time
   entities:
     media_player.living_room_tv:
+      source_list:
+      - MEO
+      - Netflix
+      - Plex
+      - Spotify - Músicas e podcasts
+      - YouTube
+      sound_output: tv_speaker
+      friendly_name: Living Room TV
+      supported_features: 20413
+      device_class: tv
       state: 'off'
     light.front_door:
+      friendly_name: Luz da Porta
+      icon: mdi:outdoor-lamp
+      supported_features: 0
       state: 'off'
     light.hallway_mirror:
+      friendly_name: Retro-iluminação do Espelho
+      icon: mdi:led-strip
+      supported_features: 0
       state: 'off'
     light.living_room_abajur:
+      min_mireds: 140
+      max_mireds: 650
+      effect_list:
+      - colorloop
+      is_deconz_group: false
+      friendly_name: Candeeiro da Sala
+      icon: mdi:lamp
+      supported_features: 63
       state: 'off'
     light.living_room_table:
+      friendly_name: Luz da Mesa da Sala
+      icon: mdi:globe-light
+      supported_features: 0
       state: 'off'
     light.living_room_tv_leds:
+      friendly_name: Retro-iluminação da Televisão
+      icon: mdi:television-ambient-light
+      supported_features: 185
       state: 'off'
     light.living_room_window:
+      friendly_name: Luz da Janela da Sala
+      icon: mdi:globe-light
+      supported_features: 0
       state: 'off'
     light.office:
+      friendly_name: Luz do Escritório
+      icon: mdi:globe-light
+      supported_features: 8
       state: 'off'
     light.office_desk:
+      friendly_name: Retro-iluminação da Secretária
+      icon: mdi:led-strip-variant
+      supported_features: 185
       state: 'off'
     light.kitchen:
+      friendly_name: Luz da Cozinha
+      icon: mdi:wall-sconce-flat
+      supported_features: 0
       state: 'off'
     light.kitchen_pantry:
+      friendly_name: Luz da Despensa
+      icon: mdi:wall-sconce-round
+      supported_features: 0
       state: 'off'
     light.bathroom:
+      friendly_name: Luz da Casa de Banho Principal
+      icon: mdi:square-outline
+      supported_features: 8
       state: 'off'
     light.bathroom_mirror:
+      friendly_name: Luz do Espelho da Casa de Banho
+      icon: mdi:vanity-light
+      supported_features: 8
+      state: 'off'
+    switch.office_desk:
+      friendly_name: Secretária
+      icon: mdi:desk
+      state: 'off'
+    light.laundry_inside:
+      friendly_name: Luz do Sótão/Lavandaria
+      icon: mdi:track-light
+      supported_features: 8
+      state: 'off'
+    light.laundry_outside:
+      friendly_name: Luz da Varanda do Sótão
+      icon: mdi:dome-light
+      supported_features: 8
+      state: 'off'
+    light.bedroom_ricardo:
+      friendly_name: Luz do Quarto do Ricardo
+      icon: mdi:track-light
+      supported_features: 8
+      state: 'off'
+    switch.portable_heater:
+      friendly_name: Termoventilador
+      icon: mdi:hvac
+      state: 'off'
+    light.bedroom_ricardo_lamp:
+      min_mireds: 140
+      max_mireds: 650
+      is_deconz_group: false
+      friendly_name: Candeeiro do Quarto do Ricardo
+      icon: hass:lamp
+      supported_features: 43
+      state: 'off'
+    light.master_bedroom_bathroom_ceilling:
+      friendly_name: Luz da Casa de Banho do Quarto
+      icon: mdi:square-outline
+      supported_features: 8
+      state: 'off'
+    light.master_bedroom_bathroom_mirror:
+      friendly_name: Luz do Espelho da Casa de Banho do Quarto
+      icon: mdi:vanity-light
+      supported_features: 8
+      state: 'off'
+- id: sleeping_time
+  name: sleeping_time
+  entities:
+    media_player.living_room_tv:
+      source_list:
+      - MEO
+      - Netflix
+      - Plex
+      - Spotify - Músicas e podcasts
+      - YouTube
+      friendly_name: Living Room TV
+      supported_features: 20413
+      device_class: tv
+      state: 'off'
+    light.front_door:
+      friendly_name: Luz da Porta
+      icon: mdi:outdoor-lamp
+      supported_features: 0
+      state: 'off'
+    light.hallway_mirror:
+      friendly_name: Retro-iluminação do Espelho
+      icon: mdi:led-strip
+      supported_features: 0
+      state: 'off'
+    light.living_room_abajur:
+      min_mireds: 140
+      max_mireds: 650
+      effect_list:
+      - colorloop
+      is_deconz_group: false
+      friendly_name: Candeeiro da Sala
+      icon: mdi:lamp
+      supported_features: 63
+      state: 'off'
+    light.living_room_table:
+      friendly_name: Luz da Mesa da Sala
+      icon: mdi:globe-light
+      supported_features: 0
+      state: 'off'
+    light.living_room_tv_leds:
+      friendly_name: Retro-iluminação da Televisão
+      icon: mdi:television-ambient-light
+      supported_features: 185
+      state: 'off'
+    light.living_room_window:
+      friendly_name: Luz da Janela da Sala
+      icon: mdi:globe-light
+      supported_features: 0
+      state: 'off'
+    light.office:
+      friendly_name: Luz do Escritório
+      icon: mdi:globe-light
+      supported_features: 8
+      state: 'off'
+    light.office_desk:
+      friendly_name: Retro-iluminação da Secretária
+      icon: mdi:led-strip-variant
+      supported_features: 185
+      state: 'off'
+    light.kitchen:
+      friendly_name: Luz da Cozinha
+      icon: mdi:wall-sconce-flat
+      supported_features: 0
+      state: 'off'
+    light.kitchen_pantry:
+      friendly_name: Luz da Despensa
+      icon: mdi:wall-sconce-round
+      supported_features: 0
+      state: 'off'
+    light.bathroom:
+      friendly_name: Luz da Casa de Banho Principal
+      icon: mdi:square-outline
+      supported_features: 8
+      state: 'off'
+    light.bathroom_mirror:
+      friendly_name: Luz do Espelho da Casa de Banho
+      icon: mdi:vanity-light
+      supported_features: 8
       state: 'off'
     light.xmas_light:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - Bouncing Balls
+      - Halloween Eyes
+      - Colorwaves
+      - Strobe Mega
+      - Flow
+      - Scanner
+      - Palette
+      - Running
+      - Juggle
+      - Solid Pattern
+      - Red & Blue
+      - Solid
+      - Tri Fade
+      - Noise 2
+      - Police
+      - Stream 2
+      - Sweep
+      - Theater
+      - Fireworks Starburst
+      - Strobe Rainbow
+      - Colorful
+      - Dynamic
+      - Railway
+      - Sinelon
+      - Two Dots
+      - Dissolve Rnd
+      - Halloween
+      - Gradient
+      - Multi Comet
+      - Lake
+      - Pacifica
+      - Meteor Smooth
+      - Twinkleup
+      - Sparkle
+      - Spots
+      - Pride 2015
+      - Drip
+      - Plasma
+      - Dancing Shadows
+      - Android
+      - Saw
+      - Chunchun
+      - Fireworks 1D
+      - Chase Flash Rnd
+      - Traffic Light
+      - Percent
+      - Glitter
+      - Noise 1
+      - Loading
+      - Tri Chase
+      - Chase Random
+      - Scan
+      - Wipe
+      - Colortwinkles
+      - Fire 2012
+      - Fade
+      - Breathe
+      - Merry Christmas
+      - Blink Rainbow
+      - Noise 4
+      - Wipe Random
+      - Theater Rainbow
+      - Fire Flicker
+      - Police All
+      - Sweep Random
+      - Dissolve
+      - Two Areas
+      - Circus
+      - Chase
+      - Heartbeat
+      - Twinklecat
+      - Fireworks
+      - Scan Dual
+      - Scanner Dual
+      - Twinkle
+      - Oscillate
+      - Sparkle Dark
+      - Popcorn
+      - Sinelon Rainbow
+      - Lighthouse
+      - Rain
+      - Ripple
+      - Candle
+      - Phased
+      - Solid Pattern Tri
+      - Rainbow
+      - Meteor
+      - Twinklefox
+      - Strobe
+      - Chase Rainbow
+      - Sunrise
+      - Bpm
+      - Candle Multi
+      - Lightning
+      - Phased Noise
+      - Tri Wipe
+      - Noise 3
+      - Solid Glitter
+      - Stream
+      - Running 2
+      - Sparkle+
+      - Colorloop
+      - Ripple Rainbow
+      - Sinelon Dual
+      - Fill Noise
+      - Rainbow Runner
+      - Washing Machine
+      - Chase Flash
+      - Spots Fade
+      - ICU
+      - Blink
+      - Sine
+      - Random Colors
+      - Noise Pal
+      entity_id:
+      - light.xmas_tree
+      - light.xmas_outside
+      friendly_name: Xmas Light
+      icon: mdi:lightbulb-group
+      supported_features: 55
+      state: 'off'
+    light.laundry_inside:
+      friendly_name: Luz do Sótão/Lavandaria
+      icon: mdi:track-light
+      supported_features: 8
+      state: 'off'
+    light.laundry_outside:
+      friendly_name: Luz da Varanda do Sótão
+      icon: mdi:dome-light
+      supported_features: 8
+      state: 'off'
+    climate.heating:
+      hvac_modes:
+      - heat
+      - 'off'
+      min_temp: 14
+      max_temp: 22
+      preset_modes:
+      - none
+      - away
+      current_temperature: 17.9
+      temperature: 18.5
+      hvac_action: 'off'
+      preset_mode: none
+      friendly_name: Aquecimento
+      supported_features: 17
+      state: 'off'
+    switch.portable_heater:
+      friendly_name: Termoventilador
+      icon: mdi:hvac
       state: 'off'

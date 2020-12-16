@@ -1,0 +1,30 @@
+homeassistant:
+  customize:
+    automation.heating_away_house_empty:
+      friendly_name: Mudar Aquecimento Para Modo Away
+    automation.heating_normal_house_occupied:
+      friendly_name: Mudar Aquecimento Para Modo Normal
+
+automation old:
+  - alias: heating_away_house_empty
+    trigger:
+      - platform: state
+        entity_id:  binary_sensor.notify_home
+        from: 'on'
+        to: 'off'
+    action:
+      - service: climate.set_preset_mode
+        data:
+          entity_id: climate.heating
+          preset_mode: away
+  - alias: heating_normal_house_occupied
+    trigger:
+      - platform: state
+        entity_id:  binary_sensor.notify_home
+        from: 'off'
+        to: 'on'
+    action:
+      - service: climate.set_preset_mode
+        data:
+          entity_id: climate.heating
+          preset_mode: none

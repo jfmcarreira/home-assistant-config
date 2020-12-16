@@ -252,3 +252,200 @@
   - service: light.turn_on
     entity_id: light.xmas_outside
   mode: restart
+- id: '1607310492779'
+  alias: heating_calendar_toggle
+  description: ''
+  use_blueprint:
+    path: rules/calendar_based_on_off.yaml
+    input:
+      check_calendar: calendar.home_automation_heating
+      action_entity: climate.heating
+      keyword: Aquecimento
+- id: NFC Tag Front Door
+  alias: NFC Tag Front Door
+  trigger:
+  - platform: tag
+    tag_id: bc6345fb-4f1c-4fcf-a6b0-74b3894635ac
+  action:
+  - service: script.routine_away
+- id: NFC Tag Office Desk
+  alias: NFC Tag Office Desk
+  trigger:
+  - platform: tag
+    tag_id: 94a59e6e-62d6-469c-a133-d59f37545f55
+  action:
+  - service: switch.toggle
+    entity_id: switch.office_desk
+- id: '1607546629623'
+  alias: lights disable wled sonoff
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.xmas_outside
+  condition: []
+  action:
+  - service: "{% if states.light.xmas_outside.state == 'on' %}\n  light.turn_on\n\
+      {% else %}\n  light.turn_off\n{% endif %}\n"
+    data:
+      entity_id: light.xmas_outside_sonoff_switch
+  mode: single
+- id: '1607644322432'
+  alias: meters reset edit button
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.meter_tracking_edit
+    from: 'off'
+    to: 'on'
+    for: 00:10:00
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    entity_id: input_boolean.meter_tracking_edit
+  mode: single
+- id: '1607997278089'
+  alias: Lights Turno Bathroom Mirror Off When Main Is On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.bathroom
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.master_bedroom_bathroom_mirror
+  mode: single
+- id: '1608077590801'
+  alias: Lights Toogle Living Room Abajur
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: d3c3d43a7eaacb8c077f3c3a1a8934d7
+    type: button_long_press
+    subtype: button_1
+    discovery_id: 00C71D_BTN_2_HOLD
+  action:
+  - entity_id: light.living_room_abajur
+    service: light.toggle
+  initial_state: true
+  mode: restart
+- id: '1608077612193'
+  alias: Lights Toogle Living Room TV Leds
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: d3c3d43a7eaacb8c077f3c3a1a8934d7
+    type: button_long_press
+    subtype: button_1
+    discovery_id: 00C71D_BTN_1_HOLD
+  action:
+  - entity_id: light.living_room_tv_leds
+    service: light.toggle
+  initial_state: true
+- id: '1608077634916'
+  alias: Lights Living Room Side Turn Off
+  trigger:
+  - entity_id: light.living_room_table
+    platform: state
+    to: 'on'
+  - entity_id: light.living_room_window
+    platform: state
+    to: 'on'
+  action:
+  - service: light.turn_off
+    entity_id: light.living_room_abajur
+  - service: light.turn_off
+    entity_id: light.living_room_tv_leds
+  initial_state: true
+  mode: restart
+- id: '1608077774037'
+  alias: Lights Kitchen Pantry Off on Timeout
+  trigger:
+  - platform: state
+    entity_id: light.kitchen_pantry
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  action:
+  - service: light.turn_off
+    entity_id: light.kitchen_pantry
+  mode: restart
+  initial_state: true
+- id: '1608077888561'
+  alias: Lights Master Bedroom Side Turn Off
+  trigger:
+  - entity_id: light.master_bedroom
+    platform: state
+    to: 'on'
+  action:
+  - service: light.turn_off
+    entity_id: light.master_bedroom_left_bed
+  - service: light.turn_off
+    entity_id: light.master_bedroom_right_bed
+  mode: restart
+  initial_state: true
+- id: '1608085163574'
+  alias: media_living_room_tv_off_when_no_motion
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_living_room
+    from: 'on'
+    to: 'off'
+    for:
+      minutes: 90
+  action:
+  - service: media_player.turn_off
+    entity_id: media_player.living_room_tv
+  mode: restart
+- id: '1608085379268'
+  alias: media_meo_box_control_based_on_tv
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_tv_state
+  - platform: state
+    entity_id: sensor.living_room_tv_source
+  action:
+  - entity_id: media_player.living_room_tv_meo_box
+    service_template: "{% if is_state('binary_sensor.living_room_tv_state', 'off')\
+      \ %}\n  media_player.turn_off\n{% else %}\n  {% if is_state('sensor.living_room_tv_source',\
+      \ 'MEO') %}\n    media_player.turn_on\n  {% else %}\n    media_player.turn_off\n\
+      \  {% endif %}\n{% endif %}\n"
+  mode: restart
+- id: '1608085667348'
+  alias: tts_alert_tablet_low_battery
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.stromium_device_battery_level
+    below: '15'
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.stromium_is_charging
+      state: 'off'
+    - condition: state
+      entity_id: light.group_living_room
+      state: 'on'
+    - condition: template
+      value_template: '{{ (as_timestamp( now() | timestamp_custom("%Y-%m-%d %H", true)
+        ) - as_timestamp( state_attr( "automation.tts_alert_tablet_low_battery", "last_triggered"
+        ) | timestamp_custom("%Y-%m-%d %H", true ) ) ) / 60 > 10 }}
+
+        '
+  action:
+  - service: script.play_tts_announcement
+    data:
+      media_player_for_tts: '{{ current_media_player }}'
+      message_duration: 00:00:06
+      message_to_play: "Atenção! Bateria do táblete fraca \n"
+  initial_state: true
+  mode: single
+  variables:
+    current_volume: 0.1
+    current_media_player: media_player.ghm_living_room

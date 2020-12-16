@@ -19,6 +19,7 @@ webostv:
       - YouTube
       - Netflix
       - Spotify
+      - Browser
 
 homeassistant:
   customize:

@@ -98,17 +98,13 @@ automation old:
         data:
           title: Saúde Ricardo
           message: Administrar Vitamina D
-      - service: notify.mobile_app_all
+
+      - service: script.task_notification
         data:
-          title: Saúde Ricardo
-          message: Administrar Vitamina D
-          data:
-            sticky: true
-            tag: 10
-            priority: high
-            actions:
-              - action: ricardo_vitamin_d_mark_done
-                title: Marcar como realizado
+          task_message: Administrar Vitamina D ao Ricardo
+          task_action: ricardo_vitamin_d_mark_done
+          task_action_message: Marcar como realizado
+          task_id: 10
 
   - alias: task_vitamin_d_ricardo_done
     trigger:

@@ -33,6 +33,63 @@ binary_sensor:
           
 
 script:   
+  task_notification:
+    fields:
+      task_message:
+        description: Message indentifying the task
+        example: Retirar loiça da máquina de lavar
+      task_action:
+        description: Action to be trigger
+        example: dish_wash_remove_done
+      task_action_message:
+        description: Message to show on the action to be trigger
+        example: Registar loiça retirada da máquina
+      task_id: 
+        description: Task id
+        example: 20
+    sequence:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: person.joao
+                state: home
+            sequence:
+              - service: notify.mobile_app_magnesium
+                data:
+                  title: Tarefa Doméstica
+                  message: "{{ task_message }}"
+                  data:
+                    tag: "{{ task_id }}"
+                    priority: high
+                    persistent: true
+                    channel: Tasks
+                    sticky: true
+                    clickAction: "/lovelace/task"
+                    actions:
+                      - action: "{{ task_action }}"
+                        title: "{{ task_action_message }}" 
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: person.bianca
+                state: home
+            sequence:
+              - service: notify.mobile_app_calcium
+                data:
+                  title: Tarefa Doméstica
+                  message: "{{ task_message }}"
+                  data:
+                    tag: "{{ task_id }}"
+                    priority: high
+                    persistent: true
+                    channel: Tasks
+                    sticky: true
+                    clickAction: "/lovelace/task"
+                    actions:
+                      - action: "{{ task_action }}"
+                        title: "{{ task_action_message }}" 
+                  
+                
   notify_households:
     alias: Notifcar Quem Está em Casa
     fields:

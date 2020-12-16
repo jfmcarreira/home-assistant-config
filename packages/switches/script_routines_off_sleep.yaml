@@ -1,0 +1,24 @@
+switch:
+  - platform: template
+    switches:
+      script_routines_off_sleep_running:
+        friendly_name: Estados das Routinas de Desligar
+        value_template: >
+          {{ 
+              is_state('script.routine_all_off_away', 'on') or
+              is_state('script.routine_away', 'on') or
+              is_state('script.routine_night_time', 'on') 
+          }}
+        turn_on:
+          - service: system_log.write
+            data:
+              message: 'Switch for routine scripts turned on. Nothing done!'
+              level: info
+        turn_off:
+          - service: script.turn_off
+            entity_id: script.routine_all_off_away
+          - service: script.turn_off
+            entity_id: script.routine_away
+          - service: script.turn_off
+            entity_id: script.routine_night_time
+        

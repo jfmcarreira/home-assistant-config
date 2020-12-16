@@ -39,9 +39,12 @@ logbook:
       - automation.event_*
       - automation.discovery_*
       - automation.image_processing_*
+      - automation.switch_*
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.query_*
+      - light.*_group
+      - light.group_*
     entities:
       # Constant automations
       - automation.discovery_shellies_announce

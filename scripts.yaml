@@ -1,72 +1,71 @@
 routine_away:
   alias: Routina Sair de Casa
   sequence:
-    - service: scene.turn_on
-      entity_id: scene.sleeping_away_time
-    
-    - service: light.turn_off
-      entity_id: all
-      
-    - service: light.turn_on
-      entity_id: light.hallway
-    
-    - wait_template: "{{ is_state('binary_sensor.front_door', 'on') }}"
-    
-    - service: python_script.vacuum_room
-      data:
-        room: switch_based
-        is_zone: 0
-        runs: 1
-    
-    - wait_template: "{{ is_state('binary_sensor.front_door', 'off') }}"
-    
-    - service: light.turn_off
-      entity_id: light.hallway
-      
-      
+  - service: browser_mod.close_popup
+  - service: scene.turn_on
+    entity_id: scene.away_time
+  - service: light.turn_on
+    entity_id: light.hallway
+  - wait_template: '{{ is_state(''binary_sensor.front_door'', ''on'') }}'
+  - service: python_script.vacuum_room
+    data:
+      room: switch_based
+      is_zone: 0
+      runs: 1
+  - wait_template: '{{ is_state(''binary_sensor.front_door'', ''off'') }}'
+  - service: light.turn_off
+    entity_id: light.hallway
+routine_all_off_away:
+  alias: Routina Sair de Casa (Desligar Tudo)
+  sequence:
+  - service: light.turn_off
+    entity_id: all
+  - service: climate.turn_off
+    entity_id: climate.heating
+  - service: script.routine_away
 routine_night_time:
   alias: Routine de Boa Noite
   sequence:
-    - service: scene.turn_on
-      entity_id: scene.sleeping_away_time
-    - service: light.turn_on
-      entity_id: light.hallway
-    - delay: 00:00:40
-    - service: light.turn_off
-      entity_id: light.hallway
-
-
+  - service: browser_mod.close_popup
+  - service: scene.turn_on
+    entity_id: scene.sleeping_time
+  - service: light.turn_on
+    entity_id: light.hallway
+  - delay: 00:00:40
+  - service: light.turn_off
+    entity_id: light.hallway
 routine_dinner_time:
   alias: Routina Modo de Refeição
   sequence:
-    - service: light.turn_on
-      entity_id: light.living_room_table
-      
-    - service: media_player.turn_on
-      entity_id: media_player.living_room_tv  
-      
-    - service: media_player.turn_on
+  - service: light.turn_on
+    entity_id: light.living_room_table
+  - service: media_player.turn_on
+    entity_id: media_player.living_room_tv
+  - service: media_player.turn_on
+    entity_id: media_player.living_room_tv_meo_box
+  - delay: 00:00:04
+  - service: media_player.select_source
+    entity_id: media_player.media_center
+    data:
+      source: MEO
+  - service: media_player.volume_set
+    entity_id: media_player.living_room_tv
+    data:
+      volume_level: 0.1
+  - delay: 00:00:10
+  - service: python_script.change_meo_box_channel
+    data:
+      channel: SIC
       entity_id: media_player.living_room_tv_meo_box
-      
-    - delay: 00:00:04
-    
-    - service: media_player.select_source
-      entity_id: media_player.media_center
-      data:
-        source: MEO      
-        
-    - service: media_player.volume_set
-      entity_id: media_player.living_room_tv 
-      data:
-        volume_level: 0.1
-    
-    - delay: 00:00:10
-    
-    - service: python_script.change_meo_box_channel
-      data:
-        channel: SIC
-        entity_id: media_player.living_room_tv_meo_box
-        
-    - delay: 00:00:03
-    
-    - service: script.action_meo_reset_current_show
+  - delay: 00:00:03
+  - service: script.action_meo_reset_current_show
+test_tv_home_assistant:
+  alias: test_tv_home_assistant
+  sequence:
+  - service: webostv.command
+    data:
+      entity_id: media_player.living_room_tv
+      command: system.launcher/open
+      payload:
+        target: http://homeassistant.home/lovelace/main
+  mode: single

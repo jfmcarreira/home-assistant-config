@@ -98,18 +98,10 @@ cloud:
           - Luz do Candeeiro da Sala
           - Luz de Apoio da Sala
           - Living Room Side Light
-      light.master_bedroom:
-        room: Quarto Principal
-        name: Luz do Teto do Quarto
-        aliases:
-          - Bedroom Light
-
-      light.bedroom_ricardo:
-        room: Quarto do Ricardo
-        name: Luz do Teto do Quarto do Ricardo
-        aliases:
-          - Luz do Teto do Ricardo        
+      
       light.bedroom_ricardo_lamp:
         room: Quarto do Ricardo
-        name: Luz do Candeeiro do Quarto do Ricardo
-    
+        name: Candeeiro do Quarto do Ricardo
+        aliases:
+          - Luz do Candeeiro do Quarto do Ricardo
+          - Luz de Apoio do Quarto do Ricardo

@@ -3,64 +3,17 @@
 ################################################################################
 lovelace:
   mode: storage
-  #mode: yaml
-  #resources: 
-    #- url: /hacsfiles/bignumber-card/bignumber-card.js
-      #type: module
-    #- url: /hacsfiles/button-card/button-card.js
-      #type: module
-    #- url: /hacsfiles/chartjs-card/chartjs-card.js
-      #type: module
-    #- url: /hacsfiles/lovelace-auto-entities/auto-entities.js
-      #type: module
-    #- url: /hacsfiles/lovelace-card-mod/card-mod.js
-      #type: module
-    #- url: /hacsfiles/lovelace-card-preloader/lovelace-card-preloader.js
-      #type: module
-    #- url: /hacsfiles/lovelace-card-tools/card-tools.js
-      #type: module
-    #- url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
-      #type: module
-    #- url: /hacsfiles/lovelace-grocy-chores-card/grocy-chores-card.js
-      #type: module
-    #- url: /hacsfiles/lovelace-layout-card/layout-card.js
-      #type: module
-    #- url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
-      #type: module
-    #- url: /hacsfiles/lovelace-valetudo-map-card/valetudo-map-card.js
-      #type: module
-    #- url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
-      #type: module
-    #- url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
-      #type: module
-    #- url: /hacsfiles/secondaryinfo-entity-row/secondaryinfo-entity-row.js
-      #type: module
-    #- url: /hacsfiles/simple-thermostat/simple-thermostat.js
-      #type: module
-    #- url: /hacsfiles/spotify-card/spotify-card.js
-      #type: module
-    #- url: /hacsfiles/vacuum-card/vacuum-card.js
-      #type: module
-    #- url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
-      #type: module
   ## Add yaml dashboards
-  #dashboards:
-    ###lovelace-main:
-      ###mode: yaml
-      ###title: Visão Geral
-      ###icon: mdi:view-dashboard
-      ###show_in_sidebar: true
-      ###filename: ui-lovelace.yaml
-    #lovelace-admin:
+  dashboards:
+    #lovelace-tablet:
       #mode: yaml
-      #title: Administração
-      #icon: mdi:cog-outline
+      #title: TF201 Dashboard
+      #icon: mdi:tablet-dashboard
       #show_in_sidebar: true
-      #filename: ui-lovelace-administration.yaml
-      #require_admin: true
-    ##lovelace-tablet:
-      ##mode: yaml
-      ##title: Tablet
-      ##icon: mdi:tablet-dashboard
-      ##show_in_sidebar: true
-      ##filename: ui-lovelace-tablet.yaml
+      #filename: ui-lovelace-tablet.yaml
+    fire-tablet:
+      mode: yaml
+      title: Fire Tablet Dashboard
+      icon: mdi:tablet-dashboard
+      show_in_sidebar: true
+      filename: ui-lovelace-fire-tablet.yaml

@@ -3,8 +3,10 @@
 ################################################################
 homeassistant:
   customize:
-    automation.meters_save_meters_counter_to_db:
-      friendly_name: Guardar Contagens na BD
+    automation.meters_save_water_gas_meters_counter_to_db:
+      friendly_name: Guardar Contagens da Água/Gás na BD
+    automation.meters_save_electricity_meters_counter_to_db:
+      friendly_name: Guardar Contagens da Electrecidade na BD
     sensor.electricity_last_meter:
       friendly_name: Última Contagem da Electrecidade
       device_class: timestamp
@@ -37,13 +39,47 @@ sensor:
           WHERE water_meter IS NOT null
           ORDER BY date  DESC LIMIT 1;
         column: date
+      
+      - name: electricity_meter_full
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE electricity_meter_full IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: electricity_meter_full  
+      - name: electricity_meter_peak
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE electricity_meter_peak IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: electricity_meter_peak  
+      - name: electricity_meter_offpeak
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE electricity_meter_offpeak IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: electricity_meter_offpeak  
+        
+      - name: gas_meter
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE gas_meter IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: gas_meter  
+        
+      - name: water_meter
+        query: >-
+          SELECT * FROM meters_tracking
+          WHERE water_meter IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: water_meter  
+      
 
   - platform: template
     sensors:
       electricity_meter:
         friendly_name: Electricity Meter
         value_template: >
-            {{ ( ( states('input_number.electricity_meter_offpeak') | float ) + ( states('input_number.electricity_meter_peak') | float ) + ( states('input_number.electricity_meter_full') | float ) ) | int }}
+            {{ ( ( states('sensor.electricity_meter_offpeak') | float ) + ( states('sensor.electricity_meter_peak') | float ) + ( states('sensor.electricity_meter_full') | float ) ) | int }}
   
 input_number:
   electricity_meter_full:
@@ -77,8 +113,33 @@ input_number:
     step: 0.01
     mode: box
           
-automation old:          
-  - alias: meters_save_meters_counter_to_db
+automation old:     
+  - alias: meters_save_water_gas_meters_counter_to_db
+    initial_state: true
+    mode: queued
+    max: 20
+    trigger:
+      - platform: state
+        entity_id: input_number.water_meter
+      - platform: state
+        entity_id: input_number.gas_meter
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: meters_tracking
+          value: >
+            {{ trigger.to_state.state }}
+          date_stamp: >
+            "{{ now().timestamp()  | timestamp_custom("%Y-%m-%d %H:00:00") }}"
+          save_date_time: "true" 
+          column: >
+            {% if trigger.entity_id == "input_number.water_meter" %}
+              water_meter
+            {% elif trigger.entity_id == "input_number.gas_meter" %}
+              gas_meter
+            {% endif %}
+            
+  - alias: meters_save_electricity_meters_counter_to_db
     initial_state: true
     mode: queued
     max: 20
@@ -89,10 +150,6 @@ automation old:
         entity_id: input_number.electricity_meter_peak
       - platform: state
         entity_id: input_number.electricity_meter_offpeak
-      - platform: state
-        entity_id: input_number.water_meter
-      - platform: state
-        entity_id: input_number.gas_meter
     action:
       - service: shell_command.external_my_sql_insert
         data_template:
@@ -109,9 +166,15 @@ automation old:
               electricity_meter_peak
             {% elif trigger.entity_id == "input_number.electricity_meter_offpeak" %}
               electricity_meter_offpeak
-            {% elif trigger.entity_id == "input_number.water_meter" %}
-              water_meter
-            {% elif trigger.entity_id == "input_number.gas_meter" %}
-              gas_meter
             {% endif %}
+            
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: meters_tracking
+          value: >
+            {{ states.sensor.bhpzem_energy.state }}
+          date_stamp: >
+            "{{ now().timestamp()  | timestamp_custom("%Y-%m-%d %H:00:00") }}"
+          save_date_time: "true" 
+          column: "electricity_energy_monitoring"
 

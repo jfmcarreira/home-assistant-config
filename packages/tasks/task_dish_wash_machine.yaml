@@ -136,6 +136,7 @@ script:
             sticky: true
             tag: 30
             priority: high
+            persistent: true
             actions:
               - action: dish_wash_remove_done
                 title: Registar loiça retirada da máquina
@@ -214,10 +215,17 @@ automation dishes:
         data:
           title: Tarefa Doméstica
           message: Retirar loiça da máquina de lavar
-          notification_id: persistent_dish_washing
-      - service: script.notify_households
+          notification_id: persistent_dish_wash_remove_dishes
+          
+      - service: script.task_notification
         data:
-          script_to_call: script.task_dish_wash_machine_notification 
+          task_message: Retirar loiça da máquina de lavar
+          task_action: dish_wash_remove_dishes
+          task_action_message: Registar loiça retirada da máquina
+          
+      #- service: script.notify_households
+        #data:
+          #script_to_call: script.task_dish_wash_machine_notification 
 
   - alias: task_dish_wash_remove_dish_done
     trigger:
