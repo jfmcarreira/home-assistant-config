@@ -4,48 +4,42 @@ living_room_main_lights:
     - light.living_room_table
     - light.living_room_window
 
-#hall:
-  #name: Corredor
-  #entities:
-    #- light.hallway
-    #- binary_sensor.front_door
-    #- binary_sensor.browser_tf201_kyosk
-
-#kitchen:
-  #name: Cozinha
-  #entities:
-    #- light.kitchen
-    #- light.kitchen_pantry
-    #- binary_sensor.fridge_door
+kitchen:
+  name: Cozinha/Lavandaria
+  entities:
+    - light.kitchen
+    - light.kitchen_pantry
+    - light.laundry_inside
+    - light.laundry_outside
     
-#living_room:
-  #name: Sala de Estar
-  #entities:
-    #- light.living_room_table
-    #- light.living_room_window
-    #- light.living_room_abajur
-    #- light.living_room_tv_leds
-    #- light.special_xmas_lights
-    #- sensor.living_room_temperature
-    #- media_player.media_center
+living_room_hallway:
+  name: Sala de Estar / Corredor
+  entities:
+    - light.hallway
+    - light.hallway_mirror
+    - light.hallway_presence
+    - light.living_room_table
+    - light.living_room_window
+    - light.living_room_abajur
+    - light.living_room_tv_leds
+    - media_player.living_room_tv
     
-#master_bedroom:
-  #name: Quarto
-  #entities:
-    #- light.master_bedroom
-    #- light.master_bedroom_left_bed
-    #- light.master_bedroom_right_bed
-    #- sensor.master_bedroom_temperature
-    #- sensor.master_bedroom_humidity
-
-#office:
-  #name: Escritório
-  #entities:
-    #- light.office
-    #- light.office_desk
-    #- binary_sensor.office_motion
-    #- sensor.office_temperature
-    #- sensor.office_humidity
-    #- sensor.power_usage_office
-    #- sensor.office_mijia_batery
+all_bedrooms:
+  name: Quartos/Casas de Banho
+  entities:
+        - light.bathroom
+        - light.bathroom_mirror
+        - light.master_bedroom
+        - light.master_bedroom_bathroom_ceilling
+        - light.master_bedroom_bathroom_mirror
+        - light.master_bedroom_left_bed
+        - light.master_bedroom_right_bed
+        - light.bedroom_ricardo
+        - light.bedroom_ricardo_lamp
+office:
+  name: Escritório
+  entities:
+    - light.office
+    - light.office_desk
+    - switch.office_desk
 
