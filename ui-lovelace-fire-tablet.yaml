@@ -1,0 +1,1176 @@
+preload_cards:
+  - picture-glance
+preload_rows:
+  - divider
+title: Ambiente Principal
+views:
+  - badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: 'custom:bignumber-card'
+            entity: sensor.date_time_frontend
+            scale: 27px
+          - entity: weather.ipma
+            name: ''
+            type: weather-forecast
+          - type: horizontal-stack
+            cards:
+              - agregate_func: avg
+                entities:
+                  - sensor.average_temperature
+                group_by: 1h
+                hour24: true
+                height: 65
+                hours_to_show: 24
+                line_width: 3
+                name: Temp.
+                points_per_hour: 1
+                show:
+                  average: false
+                  extrema: true
+                  points: hover
+                type: 'custom:mini-graph-card'
+                tap_action:
+                  action: navigate
+                  navigation_path: /fire-tablet/temp
+              - type: vertical-stack
+                cards:
+                  - type: horizontal-stack
+                    cards:
+                      - type: picture-entity
+                        aspect_ratio: 1.05/1
+                        entity: person.joao
+                        image: /local/img_joao.jpg
+                        show_name: false
+                        state_filter:
+                          away: grayscale(100%)
+                          home: grayscale(0%)
+                        tap_action:
+                          action: call-service
+                          service: browser_mod.popup
+                          service_data:
+                            title: João
+                            card:
+                              type: entities
+                              entities:
+                                - entity: person.joao
+                                - type: conditional
+                                  conditions:
+                                    - entity: person.joao
+                                      state_not: home
+                                  row:
+                                    entity: proximity.dist_home_joao
+                                    name: Distância a Casa
+                                - entity: sensor.magnesium_next_alarm
+                                  name: Alarme
+                                - entity: sensor.magnesium_phone_state
+                                  name: Estado da Chamada
+                                - entity: sensor.magnesium_do_not_disturb
+                                  name: Não Incomodar
+                                - entity: sensor.magnesium_device_battery_level
+                                  name: Bateria Smartphone
+                                - entity: sensor.magnesium_battery_state
+                                  name: Estado do Smartphone
+                                - entity: sensor.magnesium_detected_activity
+                                  name: Actividade
+                            deviceID:
+                              - this
+                      - type: picture-entity
+                        aspect_ratio: 1.05/1
+                        entity: person.bianca
+                        image: /local/img_bianca.jpg
+                        show_name: false
+                        state_filter:
+                          away: grayscale(100%)
+                          home: grayscale(0%)
+                        tap_action:
+                          action: call-service
+                          service: browser_mod.popup
+                          service_data:
+                            title: Bianca
+                            card:
+                              type: entities
+                              entities:
+                                - entity: person.bianca
+                                - type: conditional
+                                  conditions:
+                                    - entity: person.bianca
+                                      state_not: home
+                                  row:
+                                    entity: proximity.dist_home_bianca
+                                    name: Distância - Bianca
+                                - entity: sensor.calcium_next_alarm
+                                  name: Alarme
+                                - entity: sensor.calcium_phone_state
+                                  name: Estado da Chamada
+                                - entity: sensor.calcium_do_not_disturb
+                                  name: Não Incomodar
+                                - entity: sensor.calcium_device_battery_level
+                                  name: Bateria Smartphone
+                                - entity: sensor.calcium_battery_state
+                                  name: Estado do Smartphone
+                            deviceID:
+                              - this
+                  - type: horizontal-stack
+                    cards:
+                      - type: picture-entity
+                        aspect_ratio: 1.05/1
+                        entity: binary_sensor.ricardo_vitamin_d
+                        image: /local/img_ricardo.jpg
+                        show_name: false
+                        state_filter:
+                          away: grayscale(100%)
+                          home: grayscale(0%)
+                        hold_action:
+                          action: call-service
+                          service: script.task_ricardo_vitamin_d
+                        tap_action:
+                          action: call-service
+                          service: browser_mod.popup
+                          service_data:
+                            title: Ricardo
+                            card:
+                              type: entities
+                              footer:
+                                entities:
+                                  - entity: script.browser_mod_cast_camera_tablet
+                                    icon: 'mdi:camera'
+                                  - entity: script.browser_mod_cast_camera_tablet_off
+                                    icon: 'mdi:camera-off'
+                                type: buttons
+                              entities:
+                                - entity: binary_sensor.ricardo_vitamin_d
+                                  name: Vitamina D
+                                - entity: input_boolean.ricardo_sleeping
+                                  name: Marcar Ricardo a Dormir
+                            deviceID:
+                              - this
+                      - type: picture-entity
+                        aspect_ratio: 1.05/1
+                        entity: binary_sensor.cat_litter_box_need_clean
+                        hold_action:
+                          action: call-service
+                          service: python_script.catlitter_reset
+                        image: /local/img_cats.jpg
+                        show_name: false
+                        state_filter:
+                          'off': grayscale(0%)
+                          'on': grayscale(72%)
+                        tap_action:
+                          action: call-service
+                          service: browser_mod.popup
+                          service_data:
+                            title: Gatas
+                            card:
+                              type: entities
+                              header:
+                                entities:
+                                  - entity: script.cat_litter_clean
+                                    icon: 'mdi:shovel'
+                                  - entity: script.cat_litter_clean_no_vaccum
+                                    icon: 'mdi:shovel'
+                                    name: (s/ aspirar)
+                                  - entity: script.cat_litter_change
+                                    icon: 'mdi:autorenew'
+                                type: buttons
+                              show_header_toggle: false
+                              entities:
+                                - entity: binary_sensor.cat_litter_box_need_clean
+                                - entity: binary_sensor.cat_litter_box_need_change
+                                - entity: sensor.cat_litter_box_last_clean
+                                  name: Última Limpeza
+                                - entity: sensor.cat_litter_box_last_change
+                                  name: Última Substituição
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - entity: sensor.bhpzem_power
+                min: 0
+                name: Potência
+                type: gauge
+                max: 3450
+                severity:
+                  green: 0
+                  yellow: 2000
+                  red: 3000
+                tap_action:
+                  action: navigate
+                  navigation_path: /fire-tablet/power
+                hold_action:
+                  action: more-info
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.daily_energy
+                    name: Consu. Diário
+                    tap_action:
+                      action: navigate
+                      navigation_path: /fire-tablet/power
+                    hold_action:
+                      action: more-info
+                  - entity: sensor.monthly_energy_fronted
+                    name: Consu. Mensal
+                    tap_action:
+                      action: navigate
+                      navigation_path: /fire-tablet/power
+                    hold_action:
+                      action: more-info
+                    icon: 'mdi:counter'
+                  - entity: sensor.monthly_energy_cost
+                    name: Factura
+                    tap_action:
+                      action: navigate
+                      navigation_path: /fire-tablet/power
+                    hold_action:
+                      action: more-info
+          - type: horizontal-stack
+            cards:
+              - type: 'custom:button-card'
+                name: Entrada
+                icon: 'mdi:door-open'
+                entity: group.living_room_hallway
+                hold_action:
+                  action: call-service
+                  service: homeassistant.turn_off
+                  service_data:
+                    entity_id: group.living_room_hallway
+                tap_action:
+                  action: call-service
+                  service: browser_mod.popup
+                  service_data:
+                    deviceID:
+                      - this
+                    title: Controlo da Entrada/Especiais
+                    card:
+                      type: entities
+                      show_header_toggle: false
+                      entities:
+                        - light.hallway
+                        - light.hallway_mirror
+                        - light.hallway_presence
+                        - light.xmas_light
+              - type: 'custom:button-card'
+                name: Cozinha
+                icon: 'mdi:stove'
+                entity: group.kitchen
+                hold_action:
+                  action: call-service
+                  service: homeassistant.turn_off
+                  service_data:
+                    entity_id: group.kitchen
+                tap_action:
+                  action: call-service
+                  service: browser_mod.popup
+                  service_data:
+                    deviceID:
+                      - this
+                    title: Controlo da Cozinha/Lavandaria
+                    card:
+                      type: entities
+                      show_header_toggle: false
+                      entities:
+                        - light.kitchen
+                        - light.kitchen_pantry
+                        - light.laundry_inside
+                        - light.laundry_outside
+              - type: 'custom:button-card'
+                name: Sala
+                icon: 'mdi:sofa'
+                entity: group.living_room_hallway
+                hold_action:
+                  action: call-service
+                  service: homeassistant.turn_off
+                  service_data:
+                    entity_id: group.living_room_hallway
+                tap_action:
+                  action: call-service
+                  service: browser_mod.popup
+                  service_data:
+                    deviceID:
+                      - this
+                    title: Controlo da Sala
+                    card:
+                      type: entities
+                      show_header_toggle: false
+                      entities:
+                        - light.living_room_table
+                        - light.living_room_window
+                        - light.living_room_abajur
+                        - light.living_room_tv_leds
+                        - media_player.living_room_tv
+              - type: 'custom:button-card'
+                name: Quartos
+                icon: 'mdi:bed-king'
+                entity: group.all_bedrooms
+                hold_action:
+                  action: call-service
+                  service: homeassistant.turn_off
+                  service_data:
+                    entity_id: group.all_bedrooms
+                tap_action:
+                  action: call-service
+                  service: browser_mod.popup
+                  service_data:
+                    deviceID:
+                      - this
+                    title: Controlo dos Quartos
+                    card:
+                      type: entities
+                      show_header_toggle: false
+                      entities:
+                        - light.bathroom
+                        - light.bathroom_mirror
+                        - light.master_bedroom
+                        - light.master_bedroom_bathroom_ceilling
+                        - light.master_bedroom_bathroom_mirror
+                        - light.bedroom_ricardo
+                        - light.bedroom_ricardo_lamp
+              - type: 'custom:button-card'
+                name: Escritório
+                icon: 'mdi:desk'
+                hold_action:
+                  action: call-service
+                  service: homeassistant.turn_off
+                  service_data:
+                    entity_id: group.office
+                entity: group.office
+                tap_action:
+                  action: call-service
+                  service: browser_mod.popup
+                  service_data:
+                    deviceID:
+                      - this
+                    title: Controlo do Escritório
+                    card:
+                      type: entities
+                      show_header_toggle: false
+                      entities:
+                        - light.office
+                        - light.office_desk
+                        - switch.office_desk
+          - type: horizontal-stack
+            cards:
+              - aspect_ratio: 5/3.8
+                custom_fields:
+                  dry_clothes: |
+                    [[[
+                      if (states['binary_sensor.wash_machine_dry_clothes'].state == "on")
+                        return `<ha-icon icon="mdi:tshirt-crew"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                  wet_clothes: |
+                    [[[
+                      if (states['binary_sensor.wash_machine_wet_clothes'].state == "on")
+                        return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                entity: binary_sensor.washing_machine_state
+                name: Máq. Roupa
+                hold_action:
+                  action: call-service
+                  service: python_script.whashing_machine_process_actions
+                size: 100%
+                state:
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.wash_machine_wet_clothes'].state ===
+                      'off' ]]] 
+                    icon: 'mdi:washing-machine'
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.wash_machine_wet_clothes'].state ===
+                      'on' ]]] 
+                    icon: 'mdi:washing-machine-alert'
+                styles:
+                  custom_fields:
+                    dry_clothes:
+                      - position: absolute
+                      - right: 10%
+                      - top: 10%
+                    wet_clothes:
+                      - position: absolute
+                      - left: 10%
+                      - top: 10%
+                  grid:
+                    - position: relative
+                type: 'custom:button-card'
+                tap_action:
+                  action: call-service
+                  service: browser_mod.popup
+                  service_data:
+                    deviceID:
+                      - this
+                    title: Máquina de Lavar Roupa
+                    card:
+                      type: entities
+                      show_header_toggle: false
+                      state_color: true
+                      entities:
+                        - entity: sensor.washing_machine_state
+                          name: Estado
+                        - entity: binary_sensor.washing_machine_door
+                          name: Porta
+                        - entity: sensor.task_washing_clothes_last_done
+                        - entity: sensor.task_washing_clothes_dry_last_done
+                        - entity: sensor.task_washing_clothes_remove_last_done
+                      header:
+                        type: buttons
+                        entities:
+                          - entity: script.task_laundry_remove_wet_clothes
+                            icon: 'mdi:hanger'
+                          - entity: script.task_laundry_remove_dry_clothes
+                            icon: 'mdi:tshirt-crew'
+              - aspect_ratio: 5/3.8
+                entity: binary_sensor.dish_wash_machine_state
+                name: Máq. da Loiça
+                hold_action:
+                  action: call-service
+                  service: script.task_dish_wash_machine_empty
+                size: 100%
+                state:
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.dish_wash_machine_need_emtpy'].state
+                      === 'off' ]]] 
+                    icon: 'mdi:dishwasher'
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.dish_wash_machine_need_emtpy'].state
+                      === 'on' ]]] 
+                    icon: 'mdi:dishwasher-alert'
+                custom_fields:
+                  clean_dishes: |
+                    [[[
+                      if (states['binary_sensor.dish_wash_machine_need_emtpy'].state == "on")
+                        return `<ha-icon icon="mdi:silverware-clean"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                styles:
+                  custom_fields:
+                    clean_dishes:
+                      - position: absolute
+                      - left: 10%
+                      - top: 10%
+                  grid:
+                    - position: relative
+                type: 'custom:button-card'
+                tap_action:
+                  action: call-service
+                  service: browser_mod.popup
+                  service_data:
+                    deviceID:
+                      - this
+                    title: Máquina de Lavar da Loiça
+                    card:
+                      type: entities
+                      show_header_toggle: false
+                      state_color: true
+                      entities:
+                        - entity: sensor.dish_wash_machine_state
+                          name: Estado
+                        - entity: binary_sensor.dish_wash_machine_door
+                          name: Porta
+                        - entity: sensor.task_dish_washing_last_done
+                        - entity: sensor.task_dish_wash_empty_last_done
+                      header:
+                        type: buttons
+                        entities:
+                          - entity: script.task_dish_wash_machine_empty
+                            icon: 'mdi:silverware'
+              - type: 'custom:button-card'
+                layout: vertical
+                aspect_ratio: 5/3.8
+                entity: binary_sensor.heating_state
+                name: Aquecimento
+                icon_height: 60px
+                show_state: false
+                show_name: true
+                color_type: icon
+                icon: |
+                  [[[
+                    if (states['climate.heating'].state == "heat")
+                      if (states['climate.heating'].attributes.hvac_action == "heating")
+                        return `mdi:radiator`
+                      else
+                        return `mdi:radiator-disabled`
+                    else
+                      return `mdi:radiator-off`
+                  ]]]
+                tap_action:
+                  action: more-info
+                  entity: climate.heating
+                hold_action:
+                  action: more-info
+                  entity: climate.heating
+              - type: 'custom:button-card'
+                aspect_ratio: 5/3.8
+                tap_action:
+                  action: more-info
+                entity: switch.portable_heater
+                icon_height: 60px
+                show_state: false
+                hold_action:
+                  action: toggle
+          - type: vertical-stack
+            columns: 2
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: 'custom:button-card'
+                    aspect_ratio: 10/4
+                    layout: icon_name
+                    hold_action:
+                      action: more-info
+                    tap_action:
+                      action: navigate
+                      navigation_path: /fire-tablet/vacuum
+                    entity: vacuum.roborock
+                  - type: 'custom:button-card'
+                    aspect_ratio: 10/4
+                    layout: icon_name
+                    name: Multimédia
+                    icon: 'mdi:cast-audio'
+                    tap_action:
+                      action: navigate
+                      navigation_path: /fire-tablet/media
+              - type: horizontal-stack
+                cards:
+                  - type: 'custom:button-card'
+                    layout: icon_name
+                    color_type: blank-card
+                  - type: 'custom:button-card'
+                    layout: icon_name
+                    aspect_ratio: 10/4
+                    name: Desligar/Sair
+                    icon: 'mdi:exit-to-app'
+                    entity: switch.script_routines_off_sleep_running
+                    hold_action:
+                      action: call-service
+                      service: switch.turn_off
+                      service_data:
+                        entity_id: switch.script_routines_off_sleep_running
+                    tap_action:
+                      action: call-service
+                      service: browser_mod.popup
+                      service_data:
+                        auto_close: true
+                        large: true
+                        deviceID:
+                          - this
+                        title: Routinas para Desligar Casa
+                        card:
+                          type: grid
+                          cards:
+                            - type: button
+                              name: Modo de Dormir      (desligar tudo)
+                              icon: 'mdi:sleep'
+                              tap_action:
+                                action: call-service
+                                service: script.routine_night_time
+                            - type: button
+                              name: Sair
+                              icon: 'mdi:exit-run'
+                              tap_action:
+                                action: call-service
+                                service: script.routine_all_off_away
+                            - type: button
+                              name: Desligar Tudo e Sair
+                              icon: 'mdi:power'
+                              tap_action:
+                                action: call-service
+                                service: script.routine_away
+    icon: 'mdi:tablet-dashboard'
+    id: main
+    panel: false
+    path: main
+    title: Main
+  - title: Roborock
+    path: vacuum
+    icon: 'mdi:robot-vacuum'
+    panel: true
+    badges: []
+    cards:
+      - type: 'custom:layout-card'
+        max_columns: 2
+        layout: vertical
+        cards:
+          - type: 'custom:button-card'
+            aspect_ratio: 10/2
+            entity: script.task_roborock_clean
+            icon: 'mdi:arrow-left'
+            layout: icon_name_state
+            name: Voltar
+            tap_action:
+              action: navigate
+              navigation_path: /fire-tablet/main
+            hold_action: none
+          - type: conditional
+            conditions:
+              - entity: sensor.roborock_state
+                state: error
+            card:
+              type: markdown
+              title: Erro do Aspirador
+              content: |
+                {{ states.sensor.roborock_state.attributes.Error }}
+          - type: 'custom:vacuum-card'
+            actions:
+              - icon: 'mdi:sofa'
+                name: Aspirar Sala
+                service: python_script.vacuum_room
+                service_data:
+                  room: Living Room
+                  runs: 1
+              - icon: 'mdi:door-open'
+                name: Aspirar Corredor
+                service: python_script.vacuum_room
+                service_data:
+                  room: Hallway
+                  runs: 1
+              - icon: 'mdi:stove'
+                name: Aspirar Cozinha
+                service: python_script.vacuum_room
+                service_data:
+                  room: Kitchen
+                  runs: 1
+              - icon: 'mdi:toilet'
+                name: Aspirar Casa de Banho Principal
+                service: python_script.vacuum_room
+                service_data:
+                  room: Bathroom
+                  runs: 1
+              - icon: 'mdi:bed-double'
+                name: Aspirar Quarto
+                service: python_script.vacuum_room
+                service_data:
+                  room: Bedroom
+                  runs: 1
+              - icon: 'mdi:shower-head'
+                name: Aspirar Casa de Banho Privada
+                service: python_script.vacuum_room
+                service_data:
+                  room: Bedroom Bath
+                  runs: 1
+              - icon: 'mdi:baby-face-outline'
+                name: Aspirar Quarto do Ricardo
+                service: python_script.vacuum_room
+                service_data:
+                  room: Ricardo Bedroom
+                  runs: 1
+              - icon: 'mdi:desk'
+                name: Aspirar Escritório
+                service: python_script.vacuum_room
+                service_data:
+                  room: Office
+                  runs: 1
+            compact_view: false
+            entity: vacuum.roborock
+            show_name: true
+            map: camera.roborock_map
+            show_toolbar: true
+            stats:
+              error:
+                - subtitle: Mensagem de erro
+                  entity_id: sensor.roborock_error
+              cleaning:
+                - attribute: currentCleanArea
+                  subtitle: Área Limpa
+                  unit: m2
+                - attribute: currentCleanTime
+                  subtitle: Tempo de Limpeza
+                  unit: minutes
+              default:
+                - attribute: filter
+                  subtitle: Filtro
+                  unit: hours
+                - attribute: sideBrush
+                  subtitle: Escova Lateral
+                  unit: hours
+                - attribute: mainBrush
+                  subtitle: Escova Principal
+                  unit: hours
+                - attribute: sensor
+                  subtitle: Sensores
+                  unit: hours
+          - break
+          - type: entities
+            state_color: true
+            show_header_toggle: false
+            title: Aspirador-Ready (5 máx.)
+            entities:
+              - type: buttons
+                entities:
+                  - entity: vacuum.roborock
+                    name: Aspirar Divisões
+                    icon: 'mdi:floor-plan'
+                    hold_action: none
+                    tap_action:
+                      action: call-service
+                      service: python_script.vacuum_room
+                      service_data:
+                        room: switch_based
+                        is_zone: 0
+                        runs: 1
+                  - entity: vacuum.roborock
+                    name: Aspirar Zonas
+                    hold_action: none
+                    icon: 'mdi:map'
+                    tap_action:
+                      action: call-service
+                      service: python_script.vacuum_room
+                      service_data:
+                        room: switch_based
+                        is_zone: 1
+                        runs: 1
+              - input_boolean.vacuum_livingroom
+              - input_boolean.vacuum_hallway
+              - input_boolean.vacuum_kitchen
+              - input_boolean.vacuum_bathroom
+              - input_boolean.vacuum_bedroom
+              - input_boolean.vacuum_bedroombath
+              - input_boolean.vacuum_bedroomricardo
+              - input_boolean.vacuum_office
+              - input_boolean.vacuum_livingroomwithcarpet
+          - type: 'custom:button-card'
+            aspect_ratio: 12/2
+            entity: script.task_roborock_clean
+            icon: 'mdi:broom'
+            layout: icon_name_state
+            name: Limpar Aspirador
+            tap_action:
+              action: none
+            hold_action:
+              action: call-service
+              service: script.task_roborock_clean
+  - title: Multimedia
+    path: media
+    icon: 'mdi:cast-audio'
+    badges: []
+    cards:
+      - type: 'custom:button-card'
+        aspect_ratio: 10/2
+        entity: script.task_roborock_clean
+        icon: 'mdi:arrow-left'
+        layout: icon_name_state
+        name: Voltar
+        tap_action:
+          action: navigate
+          navigation_path: /fire-tablet/main
+        hold_action: none
+      - type: entities
+        title: Smart Speakers
+        entities:
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_living_room
+            hide:
+              volume: false
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.gh_clock_kitchen
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_office
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_master_bedroom
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_bedroom_ricardo
+      - type: vertical-stack
+        cards:
+          - type: 'custom:vertical-stack-in-card'
+            cards:
+              - type: media-control
+                entity: media_player.spotify_joao_carreira
+          - type: 'custom:spotify-card'
+            limit: 10
+            spotify_entity: media_player.spotify_joao_carreira
+            playlist_type: default
+            account: default
+      - type: 'custom:vertical-stack-in-card'
+        cards:
+          - entities:
+              - entity: input_select.speakers_selector
+                name: Player
+            show_header_toggle: false
+            type: entities
+          - entities:
+              - entity: input_select.radio_station
+                name: Estação de Rádio
+            show_header_toggle: false
+            type: entities
+          - card:
+              entities:
+                - entity: input_text.youtube_url
+              show_header_toggle: false
+              type: entities
+            conditions:
+              - entity: input_select.radio_station
+                state: YouTube URL
+            type: conditional
+          - cards:
+              - icon: 'mdi:play'
+                layout: icon_name
+                name: Play
+                size: 70%
+                tap_action:
+                  action: call-service
+                  service: script.play_radio
+                type: 'custom:button-card'
+              - icon: 'mdi:pause'
+                layout: icon_name
+                name: Pause
+                size: 70%
+                tap_action:
+                  action: call-service
+                  service: script.stop_radio
+                type: 'custom:button-card'
+              - icon: 'mdi:stop'
+                layout: icon_name
+                name: Stop
+                size: 70%
+                tap_action:
+                  action: call-service
+                  service: script.stop_radio
+                type: 'custom:button-card'
+            type: horizontal-stack
+  - title: Potência
+    path: power
+    panel: true
+    icon: 'mdi:flash'
+    badges: []
+    cards:
+      - type: 'custom:layout-card'
+        max_columns: 2
+        layout: vertical
+        cards:
+          - type: 'custom:button-card'
+            aspect_ratio: 10/2
+            entity: script.task_roborock_clean
+            icon: 'mdi:arrow-left'
+            layout: icon_name_state
+            name: Voltar
+            tap_action:
+              action: navigate
+              navigation_path: /fire-tablet/main
+            hold_action: none
+          - type: 'custom:vertical-stack-in-card'
+            title: Potência Instantânea
+            cards:
+              - entity: sensor.bhpzem_power
+                max: 3400
+                min: 0
+                name: Potência
+                type: gauge
+              - entities:
+                  - entity: sensor.bhpzem_voltage
+                  - entity: sensor.bhpzem_current
+                  - entity: sensor.bhpzem_pf
+                  - entity: sensor.bhpzem_frequency
+                show_icon: false
+                type: glance
+              - entities:
+                  - entity: sensor.bhpzem_power
+                height: 150
+                hours_to_show: 24
+                line_width: 1
+                name: Últimas 24 Horas
+                points_per_hour: 10
+                show:
+                  average: false
+                  extrema: true
+                  graph: line
+                  labels_secondary: false
+                  points: hover
+                  state: true
+                type: 'custom:mini-graph-card'
+          - type: entities
+            title: Consumo Anual
+            entities:
+              - type: 'custom:chartjs-card'
+                chart: bar
+                custom_options:
+                  showLegend: false
+                data:
+                  datasets:
+                    - backgroundColor: var(--accent-color)
+                      borderWidth: 1
+                      data: >-
+                        ${states["sensor.query_month_energy_current_year"].attributes.data}
+                      label: Eletricidade
+                  labels: >-
+                    ${states["sensor.query_month_energy_current_year"].attributes.labels}
+                entity_row: true
+                options:
+                  scales:
+                    yAxes:
+                      - ticks:
+                          beginAtZero: true
+                  title:
+                    display: false
+                    text: Consumo energético (últimos 12 meses)
+          - break
+          - type: entities
+            title: Consumo Mês Corrente
+            entities:
+              - type: 'custom:chartjs-card'
+                chart: bar
+                custom_options:
+                  showLegend: false
+                data:
+                  datasets:
+                    - backgroundColor: >-
+                        ${states["sensor.query_daily_energy_current_month"].attributes.colors}
+                      borderWidth: 1
+                      data: >-
+                        ${states["sensor.query_daily_energy_current_month"].attributes.data}
+                      label: Eletricidade
+                  labels: >-
+                    ${states["sensor.query_daily_energy_current_month"].attributes.labels}
+                entity_row: true
+                options:
+                  scales:
+                    yAxes:
+                      - ticks:
+                          beginAtZero: true
+                  title:
+                    display: false
+                    text: Consumo Energético Mês Corrente
+              - type: 'custom:chartjs-card'
+                chart: doughnut
+                entity_row: true
+                data:
+                  datasets:
+                    - data:
+                        - >-
+                          ${states["sensor.query_month_energy_living_room"].state}
+                        - >-
+                          ${states["sensor.query_month_energy_office_desk"].state}
+                        - >-
+                          ${states["sensor.query_month_energy_kitchen_oven"].state}
+                        - '${states["sensor.query_month_energy_microwave"].state}'
+                        - >-
+                          ${states["sensor.query_month_energy_washing_machine"].state}
+                        - >-
+                          ${states["sensor.query_month_energy_dish_wash_machine"].state}
+                        - '${states["sensor.query_month_energy_fridge"].state}'
+                        - '${states["sensor.query_month_energy_iron"].state}'
+                        - >-
+                          ${states["sensor.query_month_energy_portable_heater"].state}
+                        - '${states["sensor.query_month_energy_lights"].state}'
+                        - '${states["sensor.query_month_energy_remaining"].state}'
+                      backgroundColor:
+                        - '#D3321D'
+                        - '#D74224'
+                        - '#DC512C'
+                        - '#E06133'
+                        - '#E5713B'
+                        - '#E98142'
+                        - '#ED9049'
+                        - '#F2A051'
+                        - '#F6B058'
+                        - '#FBBF60'
+                        - '#FFCF67'
+                      borderColor:
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                  labels:
+                    - Centro Multimédia
+                    - Secretária do Escritório
+                    - Fogão/Forno
+                    - Micro-ondas/Torradeira
+                    - Máq. Lavar Roup
+                    - Máq. Lavar Loiça
+                    - Frigorifico
+                    - Ferro de Engomar
+                    - Termoventilador
+                    - Iluminação
+                    - Outros
+                options:
+                  aspectRatio: 1.6
+                  legend:
+                    position: left
+          - break
+          - type: entities
+            entities:
+              - entity: sensor.daily_energy_lights
+                name: Luzes
+              - entity: sensor.daily_energy_living_room
+                name: Sala de Estar / Multimédia
+              - entity: sensor.daily_energy_office_desk
+                name: Secretária do Escritório
+              - entity: sensor.daily_energy_kitchen_oven
+                name: Forno / Fogão
+              - entity: sensor.daily_energy_microwave
+                name: Microondas/Torradeira
+              - entity: sensor.daily_energy_fridge
+                name: Frigorifico
+              - entity: sensor.daily_energy_dish_wash_machine
+                name: Máquina de Lavar Loiça
+              - entity: sensor.daily_energy_washing_machine
+                name: Máquina de Lavar Roupa
+              - entity: sensor.daily_energy_portable_heater
+                name: Termoventilador
+              - entity: sensor.daily_energy_iron
+                name: Ferro de Engomar
+              - entity: sensor.daily_energy_remaining
+                name: Outros
+                icon: 'mdi:flash-circle'
+            title: Energia Diária
+          - break
+          - card:
+              show_header_toggle: false
+              title: Potência Consumida
+              type: entities
+            filter:
+              include:
+                - entity_id: sensor.power_sensor_*
+                - entity_id: sensor.power_usage_device_*
+                - entity_id: sensor.power_usage_lights
+            show_empty: false
+            sort:
+              ignore_case: true
+              method: entity_id
+            type: 'custom:auto-entities'
+          - break
+  - title: Temperatura
+    path: temp
+    panel: true
+    icon: 'mdi:thermometer'
+    badges: []
+    cards:
+      - type: 'custom:layout-card'
+        cards:
+          - type: 'custom:vertical-stack-in-card'
+            title: Temperatura
+            cards:
+              - agregate_func: avg
+                entities:
+                  - entity: sensor.living_room_temperature
+                    name: Sala de Estar
+                    show_state: false
+                  - entity: sensor.master_bedroom_temperature
+                    name: Quarto
+                    show_state: false
+                  - entity: sensor.bedroom_ricardo_temperature
+                    name: Quarto do Ricardo
+                    show_state: false
+                  - entity: sensor.office_temperature
+                    name: Escritório
+                    show_state: false
+                group_by: 900s
+                height: 120
+                hour24: true
+                hours_to_show: 24
+                line_width: 2
+                name: Últimas 24 Horas
+                points_per_hour: 4
+                show:
+                  average: false
+                  extrema: false
+                  labels_secondary: false
+                  points: hover
+                  state: true
+                type: 'custom:mini-graph-card'
+              - aggregate_func: avg
+                entities:
+                  - entity: sensor.average_temperature
+                    show_state: true
+                group_by: date
+                hour24: true
+                hours_to_show: 120
+                name: Média Diária - Últimos 5 Dias
+                points_per_hour: 6
+                show:
+                  average: false
+                  extrema: false
+                  graph: bar
+                  labels_secondary: false
+                  points: false
+                  state: true
+                type: 'custom:mini-graph-card'
+              - entities:
+                  - entity: sensor.living_room_temperature
+                    name: Sala de Estar
+                  - entity: sensor.master_bedroom_temperature
+                    name: Quarto Principal
+                  - entity: sensor.bedroom_ricardo_temperature
+                    name: Quarto do Ricardo
+                  - entity: sensor.office_temperature
+                    name: Escritório
+                show_header_toggle: false
+                type: entities
+          - break
+          - type: 'custom:vertical-stack-in-card'
+            title: Humidade
+            cards:
+              - agregate_func: avg
+                entities:
+                  - entity: sensor.living_room_humidity
+                    name: Sala de Estar
+                    show_state: false
+                  - entity: sensor.master_bedroom_humidity
+                    name: Quarto
+                    show_state: false
+                  - entity: sensor.bedroom_ricardo_humidity
+                    name: Quarto do Ricardo
+                    show_state: false
+                  - entity: sensor.office_humidity
+                    name: Escritório
+                    show_state: false
+                group_by: 900s
+                height: 120
+                hour24: true
+                hours_to_show: 24
+                line_width: 2
+                name: Últimas 24 Horas
+                points_per_hour: 4
+                show:
+                  average: false
+                  extrema: false
+                  labels_secondary: false
+                  points: hover
+                  state: true
+                type: 'custom:mini-graph-card'
+              - aggregate_func: avg
+                entities:
+                  - entity: sensor.average_humidity
+                    show_state: true
+                group_by: date
+                hour24: true
+                hours_to_show: 120
+                name: Média Diária - Últimos 5 Dias
+                points_per_hour: 6
+                show:
+                  average: false
+                  extrema: false
+                  graph: bar
+                  labels_secondary: false
+                  points: false
+                  state: true
+                type: 'custom:mini-graph-card'
+              - entities:
+                  - entity: sensor.living_room_humidity
+                    name: Sala de Estar
+                  - entity: sensor.master_bedroom_humidity
+                    name: Quarto Principal
+                  - entity: sensor.bedroom_ricardo_humidity
+                    name: Quarto do Ricardo
+                  - entity: sensor.office_humidity
+                    name: Escritório
+                show_header_toggle: false
+                type: entities
+ 
