@@ -256,7 +256,7 @@
   alias: heating_calendar_toggle
   description: ''
   use_blueprint:
-    path: rules/calendar_based_on_off.yaml
+    path: carreira/calendar_based_on_off.yaml
     input:
       check_calendar: calendar.home_automation_heating
       action_entity: climate.heating
