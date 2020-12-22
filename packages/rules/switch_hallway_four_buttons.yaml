@@ -1,5 +1,40 @@
 automation old:
-  - alias: Switch Hallway Bottom Left
+  - alias: Switch Hallway Bottom Right Long
+    mode: single
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: esphome.hallway_button_pressed
+        event_data:
+          action: short_press_bottom_left
+    action:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: script.lights_disable_motion_light_hallway
+                state: "on"
+            sequence:
+              - service: script.turn_off
+                data:
+                  entity_id: script.lights_disable_motion_light_hallway
+              - event: event_trigger_presence_light_hallway
+        default:
+          - choose:
+              # IF nobody home, sound the alarm!
+              - conditions:
+                  - condition: state
+                    entity_id: light.hallway_presence_group
+                    state: "on"
+                sequence:
+                  - service: light.turn_off
+                    data:
+                      entity_id: light.hallway_presence_group
+            default:
+              - service: light.turn_on
+                data:
+                  entity_id: light.hallway_presence_group
+
+  - alias: Switch Hallway Bottom Right Long
     mode: single
     initial_state: true
     trigger:
@@ -8,18 +43,15 @@ automation old:
         event_data:
           action: long_press_bottom_left
     action:
-      - service: script.routine_night_time
-
-  - alias: Switch Hallway Bottom Right
-    mode: single
-    initial_state: true
-    trigger:
-      - platform: event
-        event_type: esphome.hallway_button_pressed
-        event_data:
-          action: long_press_bottom_right
-    action:
       - service: script.lights_disable_motion_light_hallway
-      
-      
-      
+
+  # - alias: Switch Hallway Bottom Left Long
+  #   mode: single
+  #   initial_state: true
+  #   trigger:
+  #     - platform: event
+  #       event_type: esphome.hallway_button_pressed
+  #       event_data:
+  #         action: long_press_bottom_right
+  #   action:
+  #     - service: script.routine_night_time
