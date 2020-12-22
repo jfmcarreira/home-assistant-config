@@ -1,59 +1,436 @@
+preload_cards:
+  - picture-glance
+preload_rows:
+  - divider
 title: Tablet
 views:
-  - icon: 'mdi:tablet-dashboard'
+  - badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: 'custom:bignumber-card'
+            entity: sensor.date_time_frontend
+            scale: 34px
+          - details: true
+            entity: weather.ipma
+            forecast: true
+            name: ''
+            type: weather-forecast
+          - type: horizontal-stack
+            cards:
+              - type: picture-entity
+                aspect_ratio: 1.3/1
+                entity: person.joao
+                image: /local/img_joao.jpg
+                show_name: false
+                state_filter:
+                  away: grayscale(100%)
+                  home: grayscale(0%)
+              - type: picture-entity
+                aspect_ratio: 1.3/1
+                entity: person.bianca
+                image: /local/img_bianca.jpg
+                show_name: false
+                state_filter:
+                  away: grayscale(100%)
+                  home: grayscale(0%)
+              - type: picture-entity
+                aspect_ratio: 1.3/1
+                entity: input_boolean.ricardo_sleeping
+                image: /local/img_ricardo.jpg
+                show_name: false
+                state_filter:
+                  away: grayscale(100%)
+                  home: grayscale(0%)
+                hold_action:
+                  action: call-service
+                  service: input_boolean.toggle
+                  service_data:
+                    entity_id: input_boolean.ricardo_sleeping
+              - type: picture-entity
+                aspect_ratio: 1.3/1
+                entity: binary_sensor.cat_litter_box_need_clean
+                hold_action:
+                  action: call-service
+                  service: python_script.catlitter_reset
+                image: /local/img_cats.jpg
+                show_name: false
+                state_filter:
+                  'off': grayscale(0%)
+                  'on': grayscale(72%)
+          - type: horizontal-stack
+            cards:
+              - aspect_ratio: 4/2
+                custom_fields:
+                  dry_clothes: |
+                    [[[
+                      if (states['binary_sensor.wash_machine_dry_clothes'].state == "on")
+                        return `<ha-icon icon="mdi:tshirt-crew"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                  wet_clothes: |
+                    [[[
+                      if (states['binary_sensor.wash_machine_wet_clothes'].state == "on")
+                        return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                entity: binary_sensor.washing_machine_state
+                name: Máq. Roupa
+                hold_action:
+                  action: call-service
+                  service: python_script.whashing_machine_process_actions
+                size: 100%
+                state:
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.wash_machine_wet_clothes'].state ===
+                      'off' ]]] 
+                    icon: 'mdi:washing-machine'
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.wash_machine_wet_clothes'].state ===
+                      'on' ]]] 
+                    icon: 'mdi:washing-machine-alert'
+                styles:
+                  custom_fields:
+                    dry_clothes:
+                      - position: absolute
+                      - right: 10%
+                      - top: 10%
+                    wet_clothes:
+                      - position: absolute
+                      - left: 10%
+                      - top: 10%
+                  grid:
+                    - position: relative
+                type: 'custom:button-card'
+              - aspect_ratio: 4/2
+                entity: binary_sensor.dish_wash_machine_state
+                name: Máq. da Loiça
+                hold_action:
+                  action: call-service
+                  service: script.task_dish_wash_machine_empty
+                size: 100%
+                state:
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.dish_wash_machine_need_emtpy'].state
+                      === 'off' ]]] 
+                    icon: 'mdi:dishwasher'
+                  - operator: template
+                    value: >
+                      [[[ return
+                      states['binary_sensor.dish_wash_machine_need_emtpy'].state
+                      === 'on' ]]] 
+                    icon: 'mdi:dishwasher-alert'
+                custom_fields:
+                  clean_dishes: |
+                    [[[
+                      if (states['binary_sensor.dish_wash_machine_need_emtpy'].state == "on")
+                        return `<ha-icon icon="mdi:silverware-clean"      style="width: 18px; height: 18px;"> </ha-icon>`
+                    ]]]
+                styles:
+                  custom_fields:
+                    clean_dishes:
+                      - position: absolute
+                      - left: 10%
+                      - top: 10%
+                  grid:
+                    - position: relative
+                type: 'custom:button-card'
+              - aspect_ratio: 4/2
+                entity: binary_sensor.ricardo_vitamin_d
+                hold_action:
+                  action: call-service
+                  service: script.task_ricardo_vitamin_d
+                name: Vitamina D
+                type: 'custom:button-card'
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            title: Utilização dos Discos
+            entities:
+              - entity: sensor.omv_disk_raid_data
+                name: Dados (RAID1)
+              - entity: sensor.omv_disk_media
+                name: Multimédia
+              - entity: sensor.nextcloud_disk_usage
+                icon: 'mdi:file-tree'
+                name: Nextcloud
+      - type: vertical-stack
+        cards:
+          - type: 'custom:simple-thermostat'
+            control: false
+            entity: climate.heating
+            label:
+              temperature: Temp
+            name: Aquecimento
+            step_layout: row
+          - cards:
+              - agregate_func: avg
+                entities:
+                  - sensor.average_temperature
+                group_by: 1h
+                height: 90
+                hour24: true
+                hours_to_show: 24
+                line_width: 3
+                name: Temperatura
+                points_per_hour: 1
+                show:
+                  average: false
+                  extrema: false
+                  points: hover
+                type: 'custom:mini-graph-card'
+              - agregate_func: avg
+                entities:
+                  - sensor.average_humidity
+                group_by: 1h
+                height: 90
+                hour24: true
+                hours_to_show: 24
+                line_width: 3
+                name: Humidade
+                points_per_hour: 1
+                show:
+                  average: false
+                  extrema: false
+                  points: hover
+                type: 'custom:mini-graph-card'
+            type: horizontal-stack
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                entity: sensor.glances_hydrogen_cpu_used
+                min: 0
+                max: 100
+                unit: '%'
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 80
+                name: CPU
+              - type: gauge
+                entity: sensor.glances_hydrogen_ram_used_percent
+                min: 0
+                max: 100
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 80
+                name: RAM
+              - type: gauge
+                entity: sensor.glances_hydrogen_used_percent
+                min: 0
+                max: 100
+                name: Disco
+                severity:
+                  green: 0
+                  yellow: 75
+                  red: 90
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                entity: sensor.omv_cpu_load
+                min: 0
+                max: 100
+                unit: '%'
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 80
+                name: CPU
+              - type: gauge
+                entity: sensor.omv_memory
+                min: 0
+                max: 100
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 80
+                name: RAM
+              - type: gauge
+                entity: sensor.omv_disk_root_disk
+                min: 0
+                max: 100
+                name: Disco
+                severity:
+                  green: 0
+                  yellow: 75
+                  red: 90
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                entity: sensor.potassium_cpu_used
+                min: 0
+                max: 100
+                unit: '%'
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 80
+                name: CPU
+              - type: gauge
+                entity: sensor.potassium_ram_used_percent
+                min: 0
+                max: 100
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 80
+                name: RAM
+              - type: gauge
+                entity: sensor.potassium_used_percent
+                min: 0
+                max: 100
+                name: Disco
+                severity:
+                  green: 0
+                  yellow: 75
+                  red: 90
+          - type: glance
+            entities:
+              - entity: binary_sensor.hydrogen_francium_running
+                name: Francium
+              - entity: binary_sensor.hydrogen_unifi_controller_running
+                name: Unifi
+              - entity: binary_sensor.hydrogen_mineos_running
+                name: Minecraft
+            show_icon: false
+            show_state: true
+      - type: vertical-stack
+        cards:
+          - entities:
+              - entity: sensor.bhpzem_power
+            height: 60
+            hours_to_show: 24
+            line_width: 1
+            name: Potência - Últimas 24 Horas
+            points_per_hour: 10
+            icon: 'mdi:flash'
+            show:
+              average: false
+              extrema: true
+              graph: line
+              labels_secondary: false
+              points: hover
+              state: true
+            type: 'custom:mini-graph-card'
+          - type: entities
+            entities:
+              - type: 'custom:chartjs-card'
+                chart: bar
+                custom_options:
+                  showLegend: false
+                data:
+                  datasets:
+                    - backgroundColor: >-
+                        ${states["sensor.query_daily_energy_current_month"].attributes.colors}
+                      borderWidth: 1
+                      data: >-
+                        ${states["sensor.query_daily_energy_current_month"].attributes.data}
+                      label: Eletricidade
+                  labels: >-
+                    ${states["sensor.query_daily_energy_current_month"].attributes.labels}
+                entity_row: true
+                options:
+                  aspectRatio: 3
+                  scales:
+                    yAxes:
+                      - ticks:
+                          beginAtZero: true
+                  title:
+                    display: false
+                    text: Consumo Energético Mês Corrente
+              - type: 'custom:chartjs-card'
+                chart: doughnut
+                entity_row: true
+                data:
+                  datasets:
+                    - data:
+                        - >-
+                          ${states["sensor.query_month_energy_living_room"].state}
+                        - >-
+                          ${states["sensor.query_month_energy_office_desk"].state}
+                        - >-
+                          ${states["sensor.query_month_energy_kitchen_oven"].state}
+                        - '${states["sensor.query_month_energy_microwave"].state}'
+                        - >-
+                          ${states["sensor.query_month_energy_washing_machine"].state}
+                        - >-
+                          ${states["sensor.query_month_energy_dish_wash_machine"].state}
+                        - '${states["sensor.query_month_energy_fridge"].state}'
+                        - '${states["sensor.query_month_energy_iron"].state}'
+                        - >-
+                          ${states["sensor.query_month_energy_portable_heater"].state}
+                        - '${states["sensor.query_month_energy_lights"].state}'
+                        - '${states["sensor.query_month_energy_remaining"].state}'
+                      backgroundColor:
+                        - '#D3321D'
+                        - '#D74224'
+                        - '#DC512C'
+                        - '#E06133'
+                        - '#E5713B'
+                        - '#E98142'
+                        - '#ED9049'
+                        - '#F2A051'
+                        - '#F6B058'
+                        - '#FBBF60'
+                        - '#FFCF67'
+                      borderColor:
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                        - var(--secondary-background-color)
+                  labels:
+                    - Centro Multimédia
+                    - Secretária do Escritório
+                    - Fogão/Forno
+                    - Micro-ondas/Torradeira
+                    - Máq. Lavar Roup
+                    - Máq. Lavar Loiça
+                    - Frigorifico
+                    - Ferro de Engomar
+                    - Termoventilador
+                    - Iluminação
+                    - Outros
+                options:
+                  aspectRatio: 1.5
+                  legend:
+                    position: left
+          - type: glance
+            entities:
+              - entity: light.hallway_group
+                name: Corredor
+                icon: 'mdi:door'
+              - entity: light.living_room
+                name: Sala
+                icon: 'mdi:sofa'
+              - entity: light.kitchen
+                name: Cozinha
+                icon: 'mdi:stove'
+              - entity: light.office_group
+                name: Escritório
+                icon: 'mdi:desk'
+              - entity: light.master_bedroom_group
+                name: Quarto Principal
+                icon: 'mdi:bed-king'
+              - entity: light.bedroom_ricardo_group
+                name: Quarto do Ricardo
+                icon: 'mdi:baby'
+            columns: 6
+            show_name: false
+            show_state: false
+    icon: 'mdi:tablet-dashboard'
     id: main
     panel: false
     path: main
     title: Main
-    badges: []
-    cards:
-     
-      
-      - type: custom:bignumber-card
-        entity: sensor.date_time_frontend
-        scale: 34px
-
-      - details: false
-        entity: weather.ipma
-        forecast: true
-        name: ''
-        type: weather-forecast
-  
-
-      - type: horizontal-stack
-        cards:
-          - agregate_func: avg
-            entities:
-              - sensor.average_temperature
-            group_by: 1h
-            height: 90
-            hour24: true
-            hours_to_show: 24
-            line_width: 3
-            name: Temperatura
-            points_per_hour: 1
-            show:
-              average: false
-              extrema: false
-              points: hover
-            type: 'custom:mini-graph-card'
-          - agregate_func: avg
-            entities:
-              - sensor.average_humidity
-            group_by: 1h
-            height: 90
-            hour24: true
-            hours_to_show: 24
-            line_width: 3
-            name: Humidade
-            points_per_hour: 1
-            show:
-              average: false
-              extrema: false
-              points: hover
-            type: 'custom:mini-graph-card'
-        
-            
-            
-       
-    
