@@ -575,13 +575,13 @@ views:
                               icon: 'mdi:exit-run'
                               tap_action:
                                 action: call-service
-                                service: script.routine_all_off_away
+                                service: script.routine_away
                             - type: button
                               name: Desligar Tudo e Sair
                               icon: 'mdi:power'
                               tap_action:
                                 action: call-service
-                                service: script.routine_away
+                                service: script.routine_all_off_away
     icon: 'mdi:tablet-dashboard'
     id: main
     panel: false
