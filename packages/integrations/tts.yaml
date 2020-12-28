@@ -115,13 +115,20 @@ script:
       
       - delay: 00:00:01
       
-      - service: tts.polly_say
+      - service: tts.cloud_say
         data:
           entity_id: "{{ media_player_for_tts }}"
-          message: >
-            <speak><amazon:auto-breaths frequency='medium'>
-              {{ message_to_play }}"
-            </amazon:auto-breaths></speak>
+          message: "{{ message_to_play }}"
+          options:
+            gender: female
+          language: pt-PT
+      #- service: tts.polly_say
+        #data:
+          #entity_id: "{{ media_player_for_tts }}"
+          #message: >
+            #<speak><amazon:auto-breaths frequency='medium'>
+              #{{ message_to_play }}"
+            #</amazon:auto-breaths></speak>
       
       - delay: "{{ message_duration }}"
       
