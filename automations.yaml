@@ -565,3 +565,31 @@
     data:
       entity_id: climate.heating
       preset_mode: none
+- id: '1609196474834'
+  alias: System Alert Disk Full
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.disk_use_percent
+    above: '90'
+    for: 0:05:00
+  action:
+  - service: persistent_notification.create
+    data:
+      title: Monitorização do Sistema
+      message: Disco do Home Assistant Cheio
+      notification_id: disk_full_notification
+  - service: notify.living_room_tv
+    data:
+      title: Monitorização do Sistema
+      message: Disco do Home Assistant Cheio
+  - service: notify.mobile_app_magnesium
+    data:
+      title: Monitorização do Sistema
+      message: Disco do Home Assistant Cheio
+      data:
+        sticky: true
+        tag: disk_full_notification
+        priority: high
+  mode: restart
+  initial_state: true
