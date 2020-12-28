@@ -20,23 +20,24 @@ motion_light_living_room:
     - light.living_room_table
     - light.living_room_window
     - light.living_room_abajur
-  timeout: 180
+  timeout: 60
   curr_sw: input_boolean.automation_appdaemon_motion_lights_living_room
   turn_on_when_room_off: off
-  
+
 motion_light_hallway:
   module: motion_lights
   class: MotionLight
   motion_sensor: binary_sensor.motion_sensor_hallway
-  light:  light.hallway_presence_group
+  light: light.hallway_presence_group
   other_lights:
     - light.hallway
     - name: light.office
       master_light: false
       turn_on_when_off: true
-  timeout: 180
+  timeout: 100
   curr_sw: input_boolean.automation_appdaemon_motion_lights_hallway
   turn_on_when_room_off: on
+ # manual_trigger_event: event_trigger_presence_light_hallway
 
 motion_light_office:
   module: motion_lights
@@ -47,6 +48,6 @@ motion_light_office:
     - name: light.office
       master_light: true
       turn_on_when_off: false
-  timeout: 180
+  timeout: 60
   curr_sw: input_boolean.automation_appdaemon_motion_lights_office
   turn_on_when_room_off: off
