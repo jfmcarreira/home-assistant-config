@@ -1,0 +1,26 @@
+automation old:
+  - alias: Lights ESPHome Dimmer
+    trigger:
+      - platform: event
+        event_type: esphome.button_pressed
+        event_data:
+          action: brightness_change
+    action:
+      - service: light.turn_on
+        data_template:
+          entity_id: >
+            {{ trigger.event.data.entity_id }}  
+          brightness: >
+            {%if trigger.event.data.direction == "up" %}
+              {% set brightness = ( state_attr( trigger.event.data.entity_id , 'brightness') | int + 25 ) %}
+              {%if brightness > 255 %}
+                {% set brightness = 255 %}
+              {% endif %}
+            {% else %}
+              {% set brightness = ( state_attr( trigger.event.data.entity_id , 'brightness') | int - 25 ) %}
+              {%if brightness < 5 %}
+                {% set brightness = 5 %}
+              {% endif %}
+            {% endif %}
+            {{ brightness }}
+
