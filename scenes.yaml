@@ -33,12 +33,12 @@
   entities:
     media_player.living_room_tv:
       source_list:
+      - Browser
       - MEO
       - Netflix
       - Plex
       - Spotify - Músicas e podcasts
       - YouTube
-      sound_output: tv_speaker
       friendly_name: Living Room TV
       supported_features: 20413
       device_class: tv
@@ -66,7 +66,7 @@
     light.living_room_table:
       friendly_name: Luz da Mesa da Sala
       icon: mdi:globe-light
-      supported_features: 0
+      supported_features: 8
       state: 'off'
     light.living_room_tv_leds:
       friendly_name: Retro-iluminação da Televisão
@@ -76,7 +76,7 @@
     light.living_room_window:
       friendly_name: Luz da Janela da Sala
       icon: mdi:globe-light
-      supported_features: 0
+      supported_features: 8
       state: 'off'
     light.office:
       friendly_name: Luz do Escritório
@@ -123,7 +123,7 @@
       supported_features: 8
       state: 'off'
     light.bedroom_ricardo:
-      friendly_name: Luz do Quarto do Ricardo
+      friendly_name: Luz do Teto do Quarto do Ricardo
       icon: mdi:track-light
       supported_features: 8
       state: 'off'
@@ -148,6 +148,11 @@
       friendly_name: Luz do Espelho da Casa de Banho do Quarto
       icon: mdi:vanity-light
       supported_features: 8
+      state: 'off'
+    light.master_bedroom:
+      friendly_name: Luz do Teto do Quarto Principal
+      icon: mdi:globe-light
+      supported_features: 1
       state: 'off'
 - id: sleeping_time
   name: sleeping_time
