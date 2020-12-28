@@ -2,8 +2,8 @@
 # HA install dependencies
 #
 shell_command:
-  ha_install_dependencies: pip install pymysql python-miio
-  
+  ha_install_dependencies: pip install pymysql
+
 automation old:
   # Init dependences
   - alias: "Install Dependencies at Startup"
