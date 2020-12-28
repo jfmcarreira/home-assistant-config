@@ -17,8 +17,6 @@ mode: single
 variables:
   calendar_var: !input check_calendar
   keyword_var: !input keyword
-  keyword_on: "{{ (keyword_var | string ) + ' On' }}"
-  keyword_off: "{{ (keyword_var | string ) + ' Off' }}"
   
 trigger:
   - platform: state
@@ -29,30 +27,23 @@ trigger:
     entity_id: !input check_calendar
     from: 'off'
     to: 'on'
-condition:
-  condition: or
-  conditions:
-    - condition: and
-      conditions:
-        - condition: state
-          entity_id: !input check_calendar
-          state: 'off'
-        - condition: template
-          value_template: "{{ state_attr( calendar_var, 'message') == keyword_var }}"  
-        # - condition: template
-        #   value_template: "{{ ((as_timestamp(now()) - as_timestamp(state_attr( 'calendar.home_automation_heating', 'end_time'))) / 60 ) | int < 1 }}"
-    - condition: template
-      value_template: "{{ is_state( calendar_var , 'on') and is_state_attr( calendar_var , 'message', keyword_var ) }}"
-    - condition: template
-      value_template: "{{ is_state( calendar_var , 'on') and is_state_attr( calendar_var , 'message', keyword_on ) }}"
-      
-      
-    - condition: template
-      value_template: "{{ is_state( calendar_var , 'on') and is_state_attr( calendar_var , 'message', keyword_off ) }}"
+#condition:
+  #condition: or
+  #conditions:
+    #- condition: and
+      #conditions:
+        #- condition: state
+          #entity_id: !input check_calendar
+          #state: 'off'
+        #- condition: template
+          #value_template: "{{ state_attr( calendar_var, 'message') == keyword_var }}"  
+        ## - condition: template
+        ##   value_template: "{{ ((as_timestamp(now()) - as_timestamp(state_attr( 'calendar.home_automation_heating', 'end_time'))) / 60 ) | int < 1 }}"
+    #- condition: template
+      #value_template: "{{ is_state( calendar_var , 'on') and is_state_attr( calendar_var , 'message', keyword_var ) }}"
 action:
   - service: >
-      {% if (is_state( calendar_var , 'on') and is_state_attr( calendar_var , 'message', keyword_var )) or 
-            (is_state( calendar_var , 'on') and is_state_attr( calendar_var , 'message', keyword_on )) %}
+      {% if is_state( calendar_var , 'on') %}
           homeassistant.turn_on
       {% else %}
           homeassistant.turn_off
