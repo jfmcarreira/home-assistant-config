@@ -75,6 +75,10 @@ binary_sensor:
       inverted: true
     on_multi_click:
       - timing:
+          - ON for at most 1s
+        then:
+          - light.toggle: light_1
+      - timing:
           - ON for at least 2s
         then:
           - homeassistant.event:
