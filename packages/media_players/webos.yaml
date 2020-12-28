@@ -8,7 +8,7 @@ webostv:
     service: wake_on_lan.send_magic_packet
     data:
       mac: !secret living_room_tv_mac
-      #broadcast_address: !secret living_room_ip
+      broadcast_address: !secret living_room_ip_wol
       broadcast_port: 9
   customize:
     sources:
@@ -32,11 +32,11 @@ sensor:
     sensors:
       living_room_tv_source:
         value_template: '{{ states.media_player.living_room_tv.attributes["source"] }}'
-        friendly_name: 'Living Room TV Source'
+        friendly_name: "Living Room TV Source"
 
 binary_sensor:
-- platform: template
-  sensors:
-    living_room_tv_state:
-      icon_template: mdi:television
-      value_template: "{{ states.media_player.living_room_tv.state != 'off' }}"  
+  - platform: template
+    sensors:
+      living_room_tv_state:
+        icon_template: mdi:television
+        value_template: "{{ states.media_player.living_room_tv.state != 'off' }}"
