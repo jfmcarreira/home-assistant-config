@@ -30,6 +30,7 @@ esphome/barium/partitions.csv
 # Folders
 __pycache__
 .storage
+.cloud
 www
 lib
 deps
