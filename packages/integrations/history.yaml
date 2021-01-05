@@ -35,6 +35,7 @@ history:
       - binary_sensor.wash_machine_dry_clothes
       - binary_sensor.wash_machine_wet_clothes
       - binary_sensor.dish_wash_machine_need_emtpy
+      # Group lights
   exclude:
     domains:
       - updater
@@ -42,8 +43,11 @@ history:
       - zone
       - sun
       - weather
+    entity_globs:
+      - light.*_group
     entities:
       - light.configuration_tool_1
       - media_player.living_room_tv
       - media_player.living_room_tv
+      - light.living_room
  
