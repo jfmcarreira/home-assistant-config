@@ -1,36 +1,19 @@
 ################################################################################
 ## Auto Backup
 ################################################################################
-auto_backup:
-  auto_purge: true
-
-automation old:
-  - alias: System backup Notify Snapshot Failure
-    trigger:
-      platform: event
-      event_type: auto_backup.snapshot_failed
-    action:
-      service: persistent_notification.create
-      data_template:
-        title: "Snapshot Failed."
-        message: "Name: {{ trigger.event.data.name }}\nError: {{ trigger.event.data.error }}"
-        
+shell_command:
+  delete_snapshots: bash /config/shell_scripts/clean_snapshots.bash
+  
+automation old:             
   - alias: System backup Run Daily
     trigger:
       - platform: time
-        at: "05:00:00"
+        at: "02:00:00"
     action:
-      - service: auto_backup.snapshot_full
+      - service: shell_command.delete_snapshots
+      - service: hassio.snapshot_full
         data:
-          name: "DailyBackup: {{ now().strftime('%A, %B %-d, %Y') }}"
-          keep_days: 2
-          #exclude:
-            #addons:
-              #- Almond
-              #- Visual Studio Code
-              #- File Editor
-              #- Glances
-              #- Portainer
-              #- SSH & Web Terminal
-              #- phpMyAdmin
+          name: >
+            Backup_{{ now().strftime('%d-%m-%Y') }}
+     
 
