@@ -176,7 +176,16 @@ script:
         data:
           entity_id: vacuum.roborock
           fan_speed: "medium"
-          
+  
+  cat_litter_change_no_vaccum:
+    alias: Task Litter Box Mark Change No Vacuum
+    sequence:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.cat_litter_box_last_change
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      - service: script.cat_litter_clean_no_vaccum
+      
   cat_litter_change:
     alias: Task Litter Box Mark Change
     sequence:
