@@ -12,16 +12,14 @@ proxmoxve:
       - node: hydrogen
         vms:
           - 200
-          - 201
           - 202
-          - 203
+          - 207
           - 205
           - 300
         containers:
           - 100
-          - 111
+          - 112
           - 113
-          - 114
           
 
 sensor:
