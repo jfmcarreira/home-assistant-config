@@ -1,3 +1,7 @@
+track_house_mode:
+  module: house_mode
+  class: HouseMode
+
 input_bolean_vaccum_max_rooms:
   module: input_bolean_vaccum
   class: VacuumBooleans
@@ -15,6 +19,8 @@ motion_light_living_room:
   module: motion_lights
   class: MotionLight
   motion_sensor: binary_sensor.motion_sensor_living_room
+  lux: sensor.hallway_light_level
+  main_light: light.living_room_table
   light: light.living_room_tv_leds
   other_lights:
     - light.living_room_table
@@ -23,26 +29,32 @@ motion_light_living_room:
   timeout: 60
   curr_sw: input_boolean.automation_appdaemon_motion_lights_living_room
   turn_on_when_room_off: off
-
+  run_while_in_sleep: off
+  
 motion_light_hallway:
   module: motion_lights
   class: MotionLight
   motion_sensor: binary_sensor.motion_sensor_hallway
+  lux: sensor.hallway_light_level
+  main_light: light.hallway
   light: light.hallway_presence_group
   other_lights:
     - light.hallway
     - name: light.office
       master_light: false
       turn_on_when_off: true
-  timeout: 100
+  timeout: 90
   curr_sw: input_boolean.automation_appdaemon_motion_lights_hallway
   turn_on_when_room_off: on
+  run_while_in_sleep: on
  # manual_trigger_event: event_trigger_presence_light_hallway
 
 motion_light_office:
   module: motion_lights
   class: MotionLight
   motion_sensor: binary_sensor.motion_sensor_office
+  lux: Disabled
+  main_light: light.office
   light: light.office_desk
   other_lights:
     - name: light.office
@@ -51,3 +63,5 @@ motion_light_office:
   timeout: 60
   curr_sw: input_boolean.automation_appdaemon_motion_lights_office
   turn_on_when_room_off: off
+  run_while_in_sleep: off
+  

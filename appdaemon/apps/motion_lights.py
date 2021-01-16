@@ -14,13 +14,22 @@ class ControllingLight:
 class MotionLight(hass.Hass):
 
     def initialize(self):
+              
+        self.just_turn_off = False
         
+        self.main_light = self.args['main_light']
         self.light = self.args['light']
         self.timeout = self.args['timeout']
         self.short_timeout = 10
         self.motion_sensor = self.args['motion_sensor']
         self.curr_sw = self.args['curr_sw']
         self.turn_on_when_room_off = self.args['turn_on_when_room_off']
+        self.lux_sensor = self.args['lux']
+
+        
+        
+        #if self.manual_trigger is not None:
+        #    self.listen_state(self.motion_callback, self.motion_sensor, old = "off", new = "on")
          
         self.other_lights = []
         for light in self.args['other_lights']:
@@ -45,6 +54,18 @@ class MotionLight(hass.Hass):
       
         turnOn = True
         
+        if self.just_turn_off == True:
+            self.just_turn_off = False
+            return False
+        
+        # Do not turn on when house is off
+        if self.get_state( "input_select.house_mode" ) == "Off":
+            return False
+        
+        # Check if it should turn on while in sleep
+        if self.get_state( "input_select.house_mode" ) == "Sleep" and self.args['run_while_in_sleep'] == "off":
+            return False        
+        
         if not self.get_state( "binary_sensor.notify_home" )  == "on":
           return False
         
@@ -54,8 +75,13 @@ class MotionLight(hass.Hass):
         if self.get_state( self.curr_sw ) == "off":
           return False
 
-        # Sun condition - Below horizon
-        turnOn = turnOn and ( self.get_state( "sun.sun", "elevation" ) < 0 )
+        
+        if not ( self.lux_sensor == "Disabled" ):
+            # Check Lux
+            turnOn = turnOn and ( float( self.get_state( self.lux_sensor ) ) < 8.0 )              
+        else:
+            # Sun condition - Below horizon
+            turnOn = turnOn and ( int (self.get_state( "sun.sun", "elevation" ) ) < 0 )
 
         # Only turn on this light if others are off
         for l in self.other_lights:
@@ -77,12 +103,16 @@ class MotionLight(hass.Hass):
 
     def motion_callback(self, entity, attribute, old, new, kwargs):
         if self.should_light_turn_on():
-            self.turn_on(self.light)
+            if self.get_state( "input_select.house_mode" ) == "On":
+                self.turn_on(self.main_light)
+            elif self.get_state( "input_select.house_mode" ) == "Night":
+                self.turn_on(self.light)
             self.set_timer(self.timeout)
 
     def timeout_callback(self, kwargs):
         self.timer = None
         self.turn_off(self.light)
+        self.just_turn_off = True
 
     def light_callback(self, entity, attribute, old, new, kwargs):
         if self.timer is not None:
