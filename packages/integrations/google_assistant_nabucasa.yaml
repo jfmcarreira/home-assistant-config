@@ -31,7 +31,6 @@ cloud:
         room: Misc
         name: Temperatura da Casa
         
-      
       # Routines
       script.routine_night_time:
         room: Misc
@@ -96,9 +95,16 @@ cloud:
         name: Candeeiro da Sala 
         aliases:
           - Luz do Candeeiro da Sala
-          - Luz de Apoio da Sala
-          - Living Room Side Light
-      
+          - Luz de Apoio
+      light.master_bedroom:
+        aliases:
+          - Luz do Teto do Quarto
+      light.office:
+        aliases:
+          - Luz do Teto do Escritório
+      light.bedroom_ricardo:
+        aliases:
+          - Luz do Teto do Ricardo
       light.bedroom_ricardo_lamp:
         room: Quarto do Ricardo
         name: Candeeiro do Quarto do Ricardo
