@@ -28,16 +28,26 @@ binary_sensor:
       number: GPIO5
     on_state:
       then:
-        - light.toggle: light_1
+        #- light.toggle: light_1
+        - homeassistant.service:
+            service: light.toggle
+            data:
+              entity_id: light.office
       
-output:
+switch:
   - platform: gpio
-    id: relay_1
     pin: GPIO04
+    id: relay_1
+    name: ${upper_devicename} SW
     
-light:
-  - name: ${upper_devicename}
-    platform: binary
-    id: light_1
-    output: relay_1
+#output:
+  #- platform: gpio
+  #  id: relay_1
+  #  pin: GPIO04
+    
+#light:
+#  - name: ${upper_devicename}
+#    platform: binary
+#    id: light_1
+#    output: relay_1
     
