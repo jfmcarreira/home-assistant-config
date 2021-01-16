@@ -41,7 +41,7 @@ views:
                       - type: picture-entity
                         aspect_ratio: 1.05/1
                         entity: person.joao
-                        image: /local/img_joao.jpg
+                        image: /local/img_joao_1_1.jpg
                         show_name: false
                         state_filter:
                           away: grayscale(100%)
@@ -79,7 +79,7 @@ views:
                       - type: picture-entity
                         aspect_ratio: 1.05/1
                         entity: person.bianca
-                        image: /local/img_bianca.jpg
+                        image: /local/img_bianca_1_1.jpg
                         show_name: false
                         state_filter:
                           away: grayscale(100%)
@@ -117,7 +117,7 @@ views:
                       - type: picture-entity
                         aspect_ratio: 1.05/1
                         entity: binary_sensor.ricardo_vitamin_d
-                        image: /local/img_ricardo.jpg
+                        image: /local/img_ricardo_1_1.jpg
                         show_name: false
                         state_filter:
                           away: grayscale(100%)
@@ -152,7 +152,7 @@ views:
                         hold_action:
                           action: call-service
                           service: python_script.catlitter_reset
-                        image: /local/img_cats.jpg
+                        image: /local/img_cats_1_1.jpg
                         show_name: false
                         state_filter:
                           'off': grayscale(0%)
@@ -365,7 +365,7 @@ views:
                         return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
                     ]]]
                 entity: binary_sensor.washing_machine_state
-                name: Máq. Roupa
+                name: Roupa
                 hold_action:
                   action: call-service
                   service: python_script.whashing_machine_process_actions
@@ -424,7 +424,7 @@ views:
                             icon: 'mdi:tshirt-crew'
               - aspect_ratio: 5/3.8
                 entity: binary_sensor.dish_wash_machine_state
-                name: Máq. da Loiça
+                name: Loiça
                 hold_action:
                   action: call-service
                   service: script.task_dish_wash_machine_empty
