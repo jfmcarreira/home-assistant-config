@@ -1,11 +1,16 @@
 routine_away:
   alias: Routina Sair de Casa
+  variables:
+    motion_light_state: '{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state
+      }}'
   sequence:
   - service: browser_mod.close_popup
   - service: scene.turn_on
     entity_id: scene.away_time
   - service: light.turn_on
     entity_id: light.hallway
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
   - wait_template: '{{ is_state(''binary_sensor.front_door'', ''on'') }}'
   - service: python_script.vacuum_room
     data:
@@ -15,6 +20,19 @@ routine_away:
   - wait_template: '{{ is_state(''binary_sensor.front_door'', ''off'') }}'
   - service: light.turn_off
     entity_id: light.hallway
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ motion_light_state == "on" }}'
+      sequence:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+    default: []
+  - service: input_select.select_option
+    data:
+      option: 'Off'
+    entity_id: input_select.house_mode
+  mode: single
 routine_all_off_away:
   alias: Routina Sair de Casa (Desligar Tudo)
   sequence:
@@ -24,16 +42,34 @@ routine_all_off_away:
     entity_id: climate.heating
   - service: script.routine_away
 routine_night_time:
-  alias: Routine de Boa Noite
+  alias: Routina de Boa Noite
   sequence:
   - service: browser_mod.close_popup
   - service: scene.turn_on
     entity_id: scene.sleeping_time
   - service: light.turn_on
     entity_id: light.hallway
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
   - delay: 00:00:40
   - service: light.turn_off
     entity_id: light.hallway
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ motion_light_state == "on" }}'
+      sequence:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+    default: []
+  - service: input_select.select_option
+    data:
+      option: Sleep
+    entity_id: input_select.house_mode
+  variables:
+    motion_light_state: '{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state
+      }}'
+  mode: restart
 routine_dinner_time:
   alias: Routina Modo de Refeição
   sequence:

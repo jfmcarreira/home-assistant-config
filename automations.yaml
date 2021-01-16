@@ -253,6 +253,7 @@
   condition:
   - condition: time
     before: '23:00'
+    after: '16:00'
   action:
   - service: light.turn_on
     entity_id: light.xmas_outside
@@ -281,19 +282,6 @@
   action:
   - service: switch.toggle
     entity_id: switch.office_desk
-- id: '1607546629623'
-  alias: lights disable wled sonoff
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: light.xmas_outside
-  condition: []
-  action:
-  - service: "{% if states.light.xmas_outside.state == 'on' %}\n  light.turn_on\n\
-      {% else %}\n  light.turn_off\n{% endif %}\n"
-    data:
-      entity_id: light.xmas_outside_sonoff_switch
-  mode: single
 - id: '1607644322432'
   alias: meters reset edit button
   description: ''
@@ -308,20 +296,6 @@
   - service: input_boolean.turn_off
     data: {}
     entity_id: input_boolean.meter_tracking_edit
-  mode: single
-- id: '1607997278089'
-  alias: Lights Turno Bathroom Mirror Off When Main Is On
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: light.bathroom
-    from: 'off'
-    to: 'on'
-  condition: []
-  action:
-  - service: light.turn_off
-    data: {}
-    entity_id: light.master_bedroom_bathroom_mirror
   mode: single
 - id: '1608077590801'
   alias: Lights Toogle Living Room Abajur
@@ -351,22 +325,6 @@
     service: light.toggle
   initial_state: true
   mode: single
-- id: '1608077634916'
-  alias: Lights Living Room Side Turn Off
-  trigger:
-  - entity_id: light.living_room_table
-    platform: state
-    to: 'on'
-  - entity_id: light.living_room_window
-    platform: state
-    to: 'on'
-  action:
-  - service: light.turn_off
-    entity_id: light.living_room_abajur
-  - service: light.turn_off
-    entity_id: light.living_room_tv_leds
-  initial_state: true
-  mode: restart
 - id: '1608077774037'
   alias: Lights Kitchen Pantry Off on Timeout
   trigger:
@@ -383,19 +341,6 @@
     entity_id: light.kitchen_pantry
   mode: restart
   initial_state: true
-- id: '1608077888561'
-  alias: Lights Master Bedroom Side Turn Off
-  trigger:
-  - entity_id: light.master_bedroom
-    platform: state
-    to: 'on'
-  action:
-  - service: light.turn_off
-    entity_id: light.master_bedroom_left_bed
-  - service: light.turn_off
-    entity_id: light.master_bedroom_right_bed
-  mode: restart
-  initial_state: true
 - id: '1608085163574'
   alias: media_living_room_tv_off_when_no_motion
   trigger:
@@ -403,8 +348,7 @@
     entity_id: binary_sensor.motion_sensor_living_room
     from: 'on'
     to: 'off'
-    for:
-      minutes: 90
+    for: 0:60:00
   action:
   - service: media_player.turn_off
     entity_id: media_player.living_room_tv
@@ -457,7 +401,7 @@
   description: ''
   trigger:
   - platform: time
-    at: '18:15'
+    at: '16:30'
   condition: []
   action:
   - service: climate.turn_on
@@ -539,6 +483,8 @@
   mode: single
 - id: '1609117511797'
   alias: heating_away_house_empty
+  variables:
+    temperature_setting: '{{ states.climate.heating.attributes.temperature - 1 }}'
   trigger:
   - platform: state
     entity_id: binary_sensor.notify_home
@@ -552,7 +498,7 @@
   - service: climate.set_temperature
     data:
       entity_id: climate.heating
-      temperature: '{{ states.climate.heating.attributes.temperature - 1 }}'
+      temperature: '{{ temperature_setting }}'
 - id: '1609117538504'
   alias: heating_normal_house_occupied
   trigger:
@@ -593,3 +539,49 @@
         priority: high
   mode: restart
   initial_state: true
+- id: '1610670372839'
+  alias: Office Desk Turn On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.pegasus_lid
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: switch.turn_on
+    data: {}
+    entity_id: switch.office_desk
+  mode: single
+- id: '1610670439471'
+  alias: Office Desk Turn Off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.pegasus_lid
+    from: 'on'
+    to: 'off'
+    for: 00:00:30
+  - platform: state
+    entity_id: light.office_group
+    from: 'on'
+    to: 'off'
+    for: 00:05:00
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_office
+    from: 'on'
+    to: 'off'
+    for: 00:05:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.pegasus
+      state: 'off'
+    - condition: template
+      value_template: '{{ not states.binary_sensor.pegasus_lid.state == ''on'' }}'
+  action:
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.office_desk
+  mode: single
