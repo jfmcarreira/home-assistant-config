@@ -40,6 +40,7 @@ logbook:
       - automation.discovery_*
       - automation.image_processing_*
       - automation.switch_*
+      - automation.media_google_home_
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.query_*
