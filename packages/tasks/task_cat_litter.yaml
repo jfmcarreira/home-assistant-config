@@ -133,6 +133,15 @@ script:
       - service: counter.reset
         data:
           entity_id: counter.cat_litter_box_visits
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: "Cat_Litter_Clean"
+          column: task_name
+          date_stamp: >
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"
       - service: input_datetime.set_datetime
         data_template:
           entity_id: input_datetime.cat_litter_box_last_clean
@@ -143,15 +152,6 @@ script:
     alias: Task Litter Box Mark Clean and Vaccum
     sequence:
       - service: script.cat_litter_clean_no_vaccum      
-      #- service: script.vacuum_command
-        #data:
-          #vacuum_command_args: zoned_cleanup
-          #vacuum_params_args: 
-            #zone_ids:
-              #- id: CatLitterClean-1-Box
-                #repeats: 2
-              #- id: CatLitterClean-2-Bath
-                #repeats: 2
       - service: vacuum.set_fan_speed
         data:
           entity_id: vacuum.roborock
@@ -184,11 +184,24 @@ script:
         data_template:
           entity_id: input_datetime.cat_litter_box_last_change
           date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: "Cat_Litter_Change"
+          column: task_name
+          date_stamp: >
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"
       - service: script.cat_litter_clean_no_vaccum
       
   cat_litter_change:
     alias: Task Litter Box Mark Change
     sequence:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.cat_litter_box_last_change
+          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
       - service: input_datetime.set_datetime
         data_template:
           entity_id: input_datetime.cat_litter_box_last_change
