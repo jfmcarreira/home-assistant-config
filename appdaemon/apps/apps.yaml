@@ -1,5 +1,5 @@
 track_house_mode:
-  module: house_mode
+  module: HouseMode
   class: HouseMode
 
 input_bolean_vaccum_max_rooms:
@@ -42,7 +42,7 @@ motion_light_living_room:
       use_to_turn_off: true
       use_to_turn_on: false
   timeout: 90
-  run_while_in_sleep: off
+  run_while_in_sleep: false
 
 motion_light_hallway:
   module: AutomaticLighting
@@ -72,7 +72,7 @@ motion_light_hallway:
       use_to_turn_off: false
       use_to_turn_on: true
   timeout: 90
-  run_while_in_sleep: on
+  run_while_in_sleep: true
 
 motion_light_office:
   module: AutomaticLighting
@@ -92,4 +92,4 @@ motion_light_office:
       use_to_turn_off: false
       use_to_turn_on: false
   timeout: 90
-  run_while_in_sleep: off
+  run_while_in_sleep: false
