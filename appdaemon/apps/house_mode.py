@@ -23,9 +23,11 @@ class HouseMode(hass.Hass):
         
         self.listen_state(self.notify_home_callback, "binary_sensor.notify_home")
         
-        
-        self.listen_state(self.light_callback_awake_up, "light.living_room")
-        self.listen_state(self.light_callback_awake_up, "light.office")
+        self.listen_state(self.light_callback_awake_up, "light.master_bedroom_group", new = "on", duration = 2*60 )
+        self.listen_state(self.light_callback_awake_up, "light.kitchen", new = "on", duration = 10*60 )
+        self.listen_state(self.light_callback_awake_up, "light.living_room_main", new = "on", duration = 2*60 )
+        self.listen_state(self.light_callback_awake_up, "light.bedroom_ricardo", new = "on", duration = 2*60 )
+        self.listen_state(self.light_callback_awake_up, "light.office", new = "on", duration = 2*60 )
         
         for entity in self.trackLights:
             self.listen_state(self.light_callback, entity )

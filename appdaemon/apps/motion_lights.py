@@ -9,8 +9,7 @@ class ControllingLight:
     def init_based_on_dict(self, light_dict ):
         self.master_light = light_dict["master_light"]
         self.turn_on_when_off = light_dict["turn_on_when_off"]
-      
-
+    
 class MotionLight(hass.Hass):
 
     def initialize(self):
@@ -26,8 +25,6 @@ class MotionLight(hass.Hass):
         self.turn_on_when_room_off = self.args['turn_on_when_room_off']
         self.lux_sensor = self.args['lux']
 
-        
-        
         #if self.manual_trigger is not None:
         #    self.listen_state(self.motion_callback, self.motion_sensor, old = "off", new = "on")
          
@@ -134,3 +131,4 @@ class MotionLight(hass.Hass):
                 self.turn_on(self.light)
                 self.set_timer(self.timeout)
 
+# kate: space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;
