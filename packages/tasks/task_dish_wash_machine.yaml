@@ -65,21 +65,21 @@ sensor dishes:
     sensors:
       dish_wash_machine_state:
         value_template: >-
-          {% if is_state( 'binary_sensor.dish_wash_machine_door', 'on' )  %} 
+          {% if is_state( 'binary_sensor.dish_wash_machine_door', 'on' )  %}
             Aberta
           {% else %}
-              {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %} 
+              {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
                 A Lavar
-              {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %} 
+              {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
                 Loiça Lavada
               {% else %}
                 Desligada
               {% endif %}
           {% endif %}
         icon_template: >-
-          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %} 
+          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
             mdi:dishwasher
-          {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %} 
+          {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
             mdi:dishwasher-alert
           {% else %}
             mdi:dishwasher-off
@@ -130,7 +130,7 @@ script:
     sequence:
       - service: persistent_notification.dismiss
         data:
-          notification_id: persistent_dish_washing
+          notification_id: persistent_dish_wash_remove_dishes
 
       - service: notify.mobile_app_all
         data:
@@ -142,7 +142,7 @@ script:
       - condition: state
         entity_id: binary_sensor.dish_wash_machine_need_emtpy
         state: "on"
-      
+
       - service: shell_command.external_my_sql_insert
         data:
           table: tasks
@@ -152,7 +152,6 @@ script:
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
           save_date_time: "true"
-      
 
 automation dishes:
   - alias: task_dish_wash_machine_finished
