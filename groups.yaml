@@ -12,12 +12,17 @@ kitchen:
     - light.laundry_inside
     - light.laundry_outside
     
-living_room_hallway:
-  name: Sala de Estar / Corredor
+hallway:
+  name: Corredor
   entities:
     - light.hallway
     - light.hallway_mirror
     - light.hallway_presence
+    
+    
+living_room:
+  name: Sala de Estar 
+  entities:
     - light.living_room_table
     - light.living_room_window
     - light.living_room_abajur

@@ -1,7 +1,7 @@
 substitutions:
   devicename: shelly25_bedroom
   DeviceName: Shelly 25 Bedroom
-  LightA_Name: Master Bedroom Bathroom Ceilling
+  LightA_Name: Master Bedroom Bathroom Ceiling
   LightB_Name: Master Bedroom Bathroom Mirror
 
 esphome:
@@ -33,37 +33,56 @@ binary_sensor:
   - platform: gpio
     id: sw_1
     pin:
-      number: GPIO5
+      number: GPIO13
     on_state:
       then:
+      # - if:
+      #       condition:
+      #         api.connected:
+      #       then:
+      #         - homeassistant.event:
+      #             event: esphome.event_light_toogle_kitchen_ceiling
+      #       else:
+      #       - light.turn_on: light_1
+      # - if:
+      #     condition:
+      #       - binary_sensor.is_off: sw_1
+      #     then:
+      #       - light.turn_off: light_1
       - if:
           condition:
-            - binary_sensor.is_on: sw_1
+            api.connected:
           then:
-            - light.turn_on: light_1
-      - if:
-          condition:
-            - binary_sensor.is_off: sw_1
-          then:
-            - light.turn_off: light_1
+            - homeassistant.event:
+                event: esphome.event_light_toogle_master_bedroom_bathroom_ceiling
+          else:
+            - light.toggle: light_1
 
 
   - platform: gpio
     id: sw_2
     pin:
-      number: GPIO13
+      number: GPIO5
     on_state:
       then:
+      # - if:
+      #     condition:
+      #       - binary_sensor.is_on: sw_2
+      #     then:
+      #       - light.turn_on: light_2
+      # - if:
+      #     condition:
+      #       - binary_sensor.is_off: sw_2
+      #     then:
+      #       - light.turn_off: light_2
       - if:
           condition:
-            - binary_sensor.is_on: sw_2
+            api.connected:
           then:
-            - light.turn_on: light_2
-      - if:
-          condition:
-            - binary_sensor.is_off: sw_2
-          then:
-            - light.turn_off: light_2
+            - homeassistant.event:
+                event: esphome.event_light_toogle_master_bedroom_bathroom_mirror
+          else:
+            - light.toggle: light_2
     #on_multi_click:
       #- timing:
           #- ON for at most 1s
@@ -157,7 +176,7 @@ sensor:
       id: shelly_active_power_A
       name: Power Usage Light ${LightA_Name}
       filters:
-        - multiply: -1
+        - multiply: 1
     active_power_b:
       id: shelly_active_power_B
       name: Power Usage Light ${LightB_Name}

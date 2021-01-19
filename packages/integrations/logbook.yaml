@@ -10,6 +10,8 @@ logbook:
       - script
       - vacuum
       - climate
+      - input_select
+      - input_text
     entities:
       ## Device states
       - binary_sensor.washing_machine_state
@@ -54,7 +56,7 @@ logbook:
       - automation.power_daily_force_update_after_change_selector
       - automation.media_google_home_mini_day_volume
       - automation.media_google_home_mini_evening_volume
-      - automation.media_google_home_mini_nigth_volume 
+      - automation.media_google_home_mini_nigth_volume
       - automation.rf_brigde_demultiplexer
       ## Time vary sensors
       - sun.sun
@@ -71,4 +73,4 @@ logbook:
       - media_player.browser_tf201_kyosk
       - media_player.google_home_mini
       - light.configuration_tool_1
-      - media_player.living_room_tv 
+      - media_player.living_room_tv

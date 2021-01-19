@@ -9,6 +9,7 @@ class ControllingLight:
         self.use_to_turn_on = False
         self.trigger_event = None
         self.is_auxiliary = False
+        self.sync_off_with_other = False
 
     def init_based_on_dict(self, light_dict ):
         try:
@@ -31,6 +32,11 @@ class ControllingLight:
             self.is_auxiliary = light_dict["is_auxiliary"]
         except KeyError:
             pass
+        try:
+            self.sync_off_with_other = light_dict["sync_off"]
+        except KeyError:
+            pass
+
 
 class RoomLightControl():
 
@@ -77,6 +83,11 @@ class RoomLightControl():
     def turn_off_light(self, light, trigger = None, manual = False):
         self.turn_off( light.entity )
 
+        if manual:
+            for l in self.room_lights:
+                if ( not l == light ) and l.sync_off_with_other:
+                    self.turn_off_light( l, manual = False, trigger = "sincronização" )
+
         if trigger is not None:
             log_name = self.get_state( light.entity, "friendly_name" )
             if manual:
@@ -93,7 +104,7 @@ class RoomLightControl():
     def light_event_callback(self, event_name, data, kwargs):
         light = kwargs["light"]
         if self.get_state( light.entity ) == "on":
-            self.turn_off_light( light )
+            self.turn_off_light( light, manual = True )
         else:
             self.turn_on_light( light, manual = True)
 

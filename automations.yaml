@@ -60,7 +60,7 @@
       type: remote_button_short_release
   action:
     - service: light.turn_on
-      entity_id: light.master_bedroom_bathroom_ceilling
+      entity_id: light.master_bedroom_bathroom_ceiling
   mode: single
 - id: Remote  Phillips Hue Bedroom Short Press OFF
   alias: Remote  Phillips Hue Bedroom Short Press OFF
@@ -72,7 +72,7 @@
       type: remote_button_short_release
   action:
     - service: light.turn_off
-      entity_id: light.master_bedroom_bathroom_ceilling
+      entity_id: light.master_bedroom_bathroom_ceiling
     - service: light.turn_off
       entity_id: light.master_bedroom
     - service: light.turn_off
@@ -154,6 +154,13 @@
   condition:
     - condition: template
       value_template: '{{ state_attr("sun.sun", "elevation") < 35 }}'
+    - condition: template
+      value_template:
+        "{{ ((as_timestamp(now()) - as_timestamp(states.binary_sensor.motion_sensor_hallway.last_changed))/60)
+        > 2 }}"
+    - condition: state
+      entity_id: binary_sensor.motion_sensor_hallway
+      state: "off"
   action:
     - service: light.turn_on
       entity_id: light.front_door
@@ -193,26 +200,6 @@
   action:
     - service: light.turn_on
       entity_id: light.hallway
-- id: Lights Hallway Turn Off No Motion
-  alias: Lights Hallway Turn Off No Motion
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_sensor_hallway
-      from: "on"
-      to: "off"
-      for: 00:10:00
-  action:
-    - service: input_boolean.turn_off
-      data:
-        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-    - delay: 00:00:02
-    - service: light.turn_off
-      entity_id: light.hallway
-    - delay: 00:00:02
-    - service: input_boolean.turn_on
-      data:
-        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-  mode: restart
 - id: Lights Xmas Auto On
   alias: Ligar Luzes da Arvore de Natal
   trigger:
@@ -297,34 +284,6 @@
       data: {}
       entity_id: input_boolean.meter_tracking_edit
   mode: single
-- id: "1608077590801"
-  alias: Lights Toogle Living Room Abajur
-  trigger:
-    - platform: device
-      domain: tasmota
-      device_id: d3c3d43a7eaacb8c077f3c3a1a8934d7
-      type: button_long_press
-      subtype: button_1
-      discovery_id: 2462AB00C71D_button_1_HOLD
-  action:
-    - entity_id: light.living_room_abajur
-      service: light.toggle
-  initial_state: true
-  mode: restart
-- id: "1608077612193"
-  alias: Lights Toogle Living Room TV Leds
-  trigger:
-    - platform: device
-      domain: tasmota
-      device_id: d3c3d43a7eaacb8c077f3c3a1a8934d7
-      type: button_long_press
-      subtype: button_2
-      discovery_id: 2462AB00C71D_button_2_HOLD
-  action:
-    - entity_id: light.living_room_tv_leds
-      service: light.toggle
-  initial_state: true
-  mode: single
 - id: "1608077774037"
   alias: Lights Kitchen Pantry Off on Timeout
   trigger:
@@ -332,10 +291,7 @@
       entity_id: light.kitchen_pantry
       from: "off"
       to: "on"
-      for:
-        hours: 0
-        minutes: 10
-        seconds: 0
+      for: 0:05:00
   action:
     - service: light.turn_off
       entity_id: light.kitchen_pantry

@@ -42,6 +42,7 @@ switch:
     pin: GPIO04
     id: relay_1
     name: ${upper_devicename} SW
+    restore_mode: ALWAYS_ON
 
 #output:
   #- platform: gpio
