@@ -15,45 +15,69 @@ input_bolean_vaccum_max_rooms:
     - input_boolean.vacuum_bedroombath
     - input_boolean.vacuum_bedroomricardo
 
+room_lights_kitchen:
+  module: LightManagement
+  class: RoomLightApp
+  room_lights:
+    - name: light.kitchen
+      trigger_event: esphome.event_light_toogle_kitchen_ceiling
+    - name: light.kitchen_pantry
+      trigger_event: esphome.event_light_toogle_kitchen_pantry
+
+room_lights_bathroom:
+  module: LightManagement
+  class: RoomLightApp
+  room_lights:
+    - name: light.bathroom
+      trigger_event: esphome.event_light_toogle_bathroom_ceiling
+    - name: light.bathroom_mirror
+      trigger_event: esphome.event_light_toogle_bathroom_mirror
+      is_auxiliary: true
+
 motion_light_living_room:
-  module: AutomaticLighting
-  class: AutomaticLighting
+  module: LightManagement
+  class: AutomaticLightsApp
   switch: input_boolean.automation_appdaemon_motion_lights_living_room
-  main_light: light.living_room_table
+  main_light: light.living_room_window
   presence_light: light.living_room_tv_leds
-  lux_sensor: sensor.hallway_light_level
   event_triggers:
     - binary_sensor.motion_sensor_living_room
   room_lights:
     - name: light.living_room_table
+      trigger_event: esphome.event_light_toogle_living_room_table
       is_in_room: true
       use_to_turn_off: true
       use_to_turn_on: false
     - name: light.living_room_window
+      trigger_event: esphome.event_light_toogle_living_room_window
       is_in_room: true
       use_to_turn_off: true
       use_to_turn_on: false
     - name: light.living_room_tv_leds
+      trigger_event: esphome.event_light_toogle_living_room_tv_leds
+      is_auxiliary: true
       is_in_room: true
       use_to_turn_off: false
       use_to_turn_on: false
     - name: light.living_room_abajur
+      trigger_event: esphome.event_light_toogle_living_room_abajur
+      is_auxiliary: true
       is_in_room: true
       use_to_turn_off: true
       use_to_turn_on: false
-  timeout: 90
+  auto_timeout: 90
+  no_motion_timeout: 0
   run_while_in_sleep: false
 
 motion_light_hallway:
-  module: AutomaticLighting
-  class: AutomaticLighting
+  module: LightManagement
+  class: AutomaticLightsApp
   switch: input_boolean.automation_appdaemon_motion_lights_hallway
   main_light: light.hallway
   presence_light: light.hallway_presence_group
   lux_sensor: sensor.hallway_light_level
   event_triggers:
     - binary_sensor.motion_sensor_hallway
-    - binary_sensor.front_door
   room_lights:
     - name: light.hallway
       is_in_room: true
@@ -63,7 +87,7 @@ motion_light_hallway:
       is_in_room: true
       use_to_turn_off: false
       use_to_turn_on: false
-    - name: light.hallway_presence
+    - name: light.hallway_presence_group
       is_in_room: true
       use_to_turn_off: false
       use_to_turn_on: false
@@ -71,12 +95,14 @@ motion_light_hallway:
       is_in_room: false
       use_to_turn_off: false
       use_to_turn_on: true
-  timeout: 90
+  auto_timeout: 65
+  no_motion_timeout: 600
   run_while_in_sleep: true
+  use_always_presence: true
 
 motion_light_office:
-  module: AutomaticLighting
-  class: AutomaticLighting
+  module: LightManagement
+  class: AutomaticLightsApp
   switch: input_boolean.automation_appdaemon_motion_lights_office
   main_light: light.office
   presence_light: light.office_desk
@@ -84,6 +110,7 @@ motion_light_office:
     - binary_sensor.motion_sensor_office
   room_lights:
     - name: light.office
+      trigger_event: esphome.event_light_toogle_office
       is_in_room: true
       use_to_turn_off: true
       use_to_turn_on: false
@@ -91,5 +118,6 @@ motion_light_office:
       is_in_room: true
       use_to_turn_off: false
       use_to_turn_on: false
-  timeout: 90
+  auto_timeout: 65
+  no_motion_timeout: 0
   run_while_in_sleep: false

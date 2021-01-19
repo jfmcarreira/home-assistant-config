@@ -1,5 +1,4 @@
 import hassapi as hass
-import constant
 
 from datetime import datetime
 
@@ -8,21 +7,22 @@ HOUSE_MODE_EVENT_LIGHT          = 1
 HOUSE_MODE_EVENT_LIGHT_AWAKE    = 2
 HOUSE_MODE_EVENT_MOTION         = 3
 HOUSE_MODE_EVENT_NO_MOTION      = 4
-HOUSE_MODE_EVENT_NO_LIGHT       = 6
+HOUSE_MODE_EVENT_NO_LIGHT       = 5
 
-class ClimateControl:
 
-    def __init__(self):
-        self.entity = "climate.heating"
+class ClimateControl():
+
+    def initializeClimateControl(self):
+        self.climate_entity = "climate.heating"
 
     def saveState(self):
-        self.heating_state = self.get_state( self.entity )
-        self.heating_temperature = self.get_state( "climate.heating", "temperature" )
+        self.heating_state = self.get_state( self.climate_entity )
+        self.heating_temperature = self.get_state( self.climate_entity, "temperature" )
 
-        if self.get_state( self.entity, "preset_mode" ) == "none":
+        if self.get_state( self.climate_entity, "preset_mode" ) == "none":
             self.normal_temperature = self.heating_temperature
 
-    def updateMode(self, newMode ):
+    def updateClimateMode(self, newMode ):
         if newMode == "Off":
             self.modeAway()
         else:
@@ -30,19 +30,19 @@ class ClimateControl:
 
     def modeAway(self):
         self.saveState()
-        self.call_service("climate/set_preset_mode", entity_id = self.entity, preset_mode = "away")
+        self.call_service("climate/set_preset_mode", entity_id = self.climate_entity, preset_mode = "away")
         away_temperature = str( int(self.normal_temperature) - 1 )
-        self.call_service("climate/set_temperature", entity_id = self.entity, temperature = away_temperature)
+        self.call_service("climate/set_temperature", entity_id = self.climate_entity, temperature = away_temperature)
 
     def modeHome(self):
-        self.call_service("climate/set_preset_mode", entity_id = self.entity, preset_mode = "none")
+        self.call_service("climate/set_preset_mode", entity_id = self.climate_entity, preset_mode = "none")
 
 
-class HouseMode(hass.Hass):
+class HouseMode(hass.Hass,ClimateControl):
 
     def initialize(self):
 
-        self.climate = ClimateControl()
+        self.initializeClimateControl()
 
         self.trackLights = [
             "light.hallway_group",
@@ -78,10 +78,12 @@ class HouseMode(hass.Hass):
             self.listen_state(self.motion_callback, entity )
 
         self.house_mode = self.get_state( "input_select.house_mode" )
+        self.listen_state(self.house_mode_callback, "input_select.house_mode")
+
         self.timer = None
 
     def house_mode_callback(self, entity, attribute, old, new, kwargs):
-        self.climate.updateMode(new)
+        self.updateClimateMode(new)
         self.house_mode = new
 
 
@@ -89,7 +91,7 @@ class HouseMode(hass.Hass):
         newMode = "Off"
         current_hour = datetime.now().hour
         if self.anyone_home(person=True):
-            if current_hour > 22 and current_hour < 8:
+            if current_hour >= 21 and current_hour < 8:
                 newMode = "Night"
             else:
                 newMode = "On"
@@ -98,7 +100,7 @@ class HouseMode(hass.Hass):
     def new_house_mode_on(self, trigger ):
         newMode = "On"
         current_hour = datetime.now().hour
-        if current_hour > 22 and current_hour < 8:
+        if current_hour >= 22 and current_hour < 8:
             newMode = "Night"
         return newMode
 
@@ -106,12 +108,10 @@ class HouseMode(hass.Hass):
         newMode = "Night"
         current_hour = datetime.now().hour
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if current_hour > 22 and current_hour < 8:
-                newMode = "Night"
-            else:
+            if current_hour >= 8 and current_hour < 21:
                 newMode = "On"
         if trigger == HOUSE_MODE_EVENT_NO_MOTION:
-            if current_hour > 23 and current_hour < 8:
+            if current_hour >= 23 and current_hour < 8:
                 newMode = "Sleep"
         return newMode
 
@@ -119,7 +119,7 @@ class HouseMode(hass.Hass):
         newMode = "Sleep"
         current_hour = datetime.now().hour
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if current_hour > 22 and current_hour < 8:
+            if current_hour >= 19 and current_hour < 8:
                 newMode = "Night"
             else:
                 newMode = "On"
@@ -128,22 +128,21 @@ class HouseMode(hass.Hass):
 
     def set_new_house_mode_from_trigger(self, trigger ):
 
-        switcher = {
-            "Off": self.new_house_mode_off,
-            "On": self.new_house_mode_on,
-            "Night": self.new_house_mode_night,
-            "Sleep": self.new_house_mode_sleep
-        }
-
+        newMode = self.house_mode
         if self.noone_home(person=True):
-            return "Off"
-
-        new_mode_func = switcher.get(self.house_mode, lambda: "Invalid mode")
-        newMode = new_mode_func( trigger )
+            newMode = "Off"
+        else:
+            if self.house_mode == "Off":
+                newMode = self.new_house_mode_off( trigger )
+            elif self.house_mode == "On":
+                newMode = self.new_house_mode_on( trigger )
+            elif self.house_mode == "Night":
+                newMode = self.new_house_mode_night( trigger )
+            elif self.house_mode == "Sleep":
+                newMode = self.new_house_mode_sleep( trigger )
 
         self.select_option("input_select.house_mode", newMode )
-
-        return newMode
+        return
 
     def tracking_callback(self, entity, attribute, old, new, kwargs):
         self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_PRESENCE )
