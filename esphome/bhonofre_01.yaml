@@ -1,6 +1,6 @@
 substitutions:
   devicename: bhonfre_01
-  
+
 esphome:
   name: ${devicename}
   platform: ESP8266
@@ -10,7 +10,7 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  
+
 # Enable logging
 logger:
 
@@ -31,8 +31,15 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     on_press:
-      - light.toggle: light_2
-    
+      - if:
+          condition:
+            api.connected:
+          then:
+            - homeassistant.event:
+                event: esphome.event_light_toogle_bathroom_mirror
+          else:
+            - light.toggle: light_2
+
   - platform: gpio
     id: sw_2
     pin:
@@ -57,7 +64,7 @@ binary_sensor:
               event: esphome.hallway_button_pressed
               data:
                 action: long_press_bottom_left
-    
+
   - platform: gpio
     id: sw_3
     pin:
@@ -65,8 +72,15 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     on_press:
-      - light.toggle: light_1
-    
+      - if:
+          condition:
+            api.connected:
+          then:
+            - homeassistant.event:
+                event: esphome.event_light_toogle_bathroom_ceiling
+          else:
+            - light.toggle: light_1
+
   - platform: gpio
     id: sw_4
     pin:
@@ -77,7 +91,14 @@ binary_sensor:
       - timing:
           - ON for at most 1s
         then:
-          - light.toggle: light_1
+          - if:
+              condition:
+                api.connected:
+              then:
+                - homeassistant.event:
+                    event: esphome.event_light_toogle_bathroom_ceiling
+              else:
+                - light.toggle: light_1
       - timing:
           - ON for at least 2s
         then:
@@ -85,27 +106,27 @@ binary_sensor:
               event: esphome.hallway_button_pressed
               data:
                 action: long_press_bottom_right
-    
-    
+
+
 
 output:
   - platform: gpio
     id: relay_1
-    pin: 
+    pin:
       number: GPIO05
-      
+
   - platform: gpio
     id: relay_2
-    pin: 
+    pin:
       number: GPIO04
-      
+
 light:
   - platform: binary
     id: light_1
     output: relay_1
     restore_mode: RESTORE_DEFAULT_OFF
-    name: Bathroom 
-    
+    name: Bathroom
+
   - platform: binary
     id: light_2
     output: relay_2

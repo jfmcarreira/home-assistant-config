@@ -11,7 +11,7 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  
+
 # Enable logging
 logger:
 
@@ -28,26 +28,29 @@ binary_sensor:
       number: GPIO5
     on_state:
       then:
-        #- light.toggle: light_1
-        - homeassistant.service:
-            service: light.toggle
-            data:
-              entity_id: light.office
-      
+        - if:
+            condition:
+              api.connected:
+            then:
+              - homeassistant.event:
+                  event: esphome.event_light_toogle_office
+            else:
+              - switch.toggle: relay_1
+
 switch:
   - platform: gpio
     pin: GPIO04
     id: relay_1
     name: ${upper_devicename} SW
-    
+
 #output:
   #- platform: gpio
   #  id: relay_1
   #  pin: GPIO04
-    
+
 #light:
 #  - name: ${upper_devicename}
 #    platform: binary
 #    id: light_1
 #    output: relay_1
-    
+

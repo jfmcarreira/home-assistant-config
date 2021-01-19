@@ -3,7 +3,7 @@ substitutions:
   DeviceName: Shelly 25 Living Room
   OutputA_Name: Living Room Window
   OutputB_Name: Living Room Table
-  
+
 esphome:
   name: ${devicename}
   platform: ESP8266
@@ -13,7 +13,7 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  
+
 # Enable logging
 logger:
 
@@ -44,7 +44,7 @@ sensor:
       name: Power Usage Light ${OutputB_Name}
       filters:
         - multiply: -1
-    update_interval: 30s
+    update_interval: 2s
 
   # NTC Temperature
   - platform: ntc
@@ -54,13 +54,13 @@ sensor:
       b_constant: 3350
       reference_resistance: 10kOhm
       reference_temperature: 298.15K
-  
+
   - platform: resistance
     id: temp_resistance_reading
     sensor: temp_analog_reading
     configuration: DOWNSTREAM
     resistor: 32kOhm
-  
+
   - platform: adc
     id: temp_analog_reading
     pin: A0
@@ -78,7 +78,7 @@ output:
   - platform: gpio
     id: relay_2
     pin: GPIO04
-  
+
 light:
   - name: ${OutputA_Name}
     platform: binary
@@ -88,7 +88,7 @@ light:
     platform: binary
     id: light_table
     output: relay_2
-    
+
 binary_sensor:
   - id: sw_window
     platform: gpio
@@ -99,17 +99,22 @@ binary_sensor:
           - ON for at most 0.5s
           - OFF for at least 0.1s
         then:
-          - light.toggle: light_window
+          - if:
+              condition:
+                api.connected:
+              then:
+                - homeassistant.event:
+                    event: esphome.event_light_toogle_living_room_window
+              else:
+                - light.toggle: light_window
       - timing:
           #- ON for at least 1s
           - ON for 0.5s to 1.5s
           - OFF for at least 0.1s
         then:
-          - homeassistant.service:
-              service: light.toggle
-              data:
-                entity_id:  light.living_room_abajur 
-      
+          - homeassistant.event:
+              event: esphome.event_light_toogle_living_room_abajur
+
       - timing:
           - ON for at least 1.5s
         then:
@@ -143,9 +148,9 @@ binary_sensor:
                             entity_id: "light.living_room_abajur"
                             direction: "up"
                 - delay: 1s
-          
 
-  
+
+
   - id: sw_table
     platform: gpio
     pin:
@@ -155,14 +160,19 @@ binary_sensor:
           - ON for at most 1s
           - OFF for at least 0.1s
         then:
-          - light.toggle: light_table
+          - if:
+              condition:
+                api.connected:
+              then:
+                - homeassistant.event:
+                    event: esphome.event_light_toogle_living_room_table
+              else:
+                - light.toggle: light_table
       - timing:
           - ON for at least 1s
         then:
-          - homeassistant.service:
-              service: light.toggle
-              data:
-                entity_id: light.living_room_tv_leds
-      
+          - homeassistant.event:
+              event: esphome.event_light_toogle_living_room_tv_leds
 
-    
+
+

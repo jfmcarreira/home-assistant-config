@@ -13,7 +13,7 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  
+
 # Enable logging
 logger:
 
@@ -51,7 +51,7 @@ binary_sensor:
   - platform: gpio
     id: sw_2
     pin:
-      number: GPIO13       
+      number: GPIO13
     on_state:
       then:
       - if:
@@ -69,7 +69,7 @@ binary_sensor:
           #- ON for at most 1s
           #- OFF for at least 0.2s
         #then:
-          #- light.toggle: light_bedroom 
+          #- light.toggle: light_bedroom
           ##- homeassistant.service:
               ##service: light.toggle
               ##data:
@@ -79,8 +79,8 @@ binary_sensor:
               ##event: esphome.button_pressed
               ##data:
                 ##action: master_bedroom_toggle
-                            
-      
+
+
       #- timing:
           #- ON for at least 1s
         #then:
@@ -121,7 +121,7 @@ binary_sensor:
     #pin: GPIO04
     ##name: ${LightA_Name} Output
     #restore_mode: ALWAYS_ON
-    
+
 output:
   - platform: gpio
     id: relay_1
@@ -129,7 +129,7 @@ output:
   - platform: gpio
     id: relay_2
     pin: GPIO15
-    
+
 light:
   - id: light_1
     name: ${LightA_Name}
@@ -139,7 +139,7 @@ light:
     name: ${LightB_Name}
     platform: binary
     output: relay_2
-    
+
 i2c:
   sda: GPIO12
   scl: GPIO14
@@ -163,7 +163,7 @@ sensor:
       name: Power Usage Light ${LightB_Name}
       filters:
         - multiply: -1
-    update_interval: 30s
+    update_interval: 2s
 
   # NTC Temperature
   - platform: ntc
@@ -174,14 +174,14 @@ sensor:
       b_constant: 3350
       reference_resistance: 10kOhm
       reference_temperature: 298.15K
-  
+
   - platform: resistance
     id: temp_resistance_reading
     sensor: temp_analog_reading
     configuration: DOWNSTREAM
     resistor: 32kOhm
-  
+
   - platform: adc
     id: temp_analog_reading
     pin: A0
-    
+
