@@ -33,7 +33,7 @@ binary_sensor:
               api.connected:
             then:
               - homeassistant.event:
-                  event: esphome.event_light_toogle_office
+                  event: esphome.ev_lt_office
             else:
               - switch.toggle: relay_1
 

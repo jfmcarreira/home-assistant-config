@@ -59,7 +59,7 @@ binary_sensor:
                 #     else:
                 #       - light.toggle: light_bedroom_ricardo
                 - homeassistant.event:
-                    event: esphome.event_light_toogle_bedroom_ricardo_ceiling
+                    event: esphome.ev_lt_bed_ricardo_ceil
               else:
                 - light.toggle: light_bedroom_ricardo
 
@@ -67,7 +67,7 @@ binary_sensor:
           - ON for at least 1s
         then:
           - homeassistant.event:
-              event: esphome.event_light_toogle_bedroom_ricardo_lamp
+              event: esphome.ev_lt_bed_ricardo_lamp
           # - if:
           #     condition:
           #       - light.is_on: light_bedroom_ricardo

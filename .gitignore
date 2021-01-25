@@ -31,6 +31,7 @@ esphome/barium/partitions.csv
 __pycache__
 .storage
 .cloud
+image
 www
 lib
 deps
@@ -41,3 +42,4 @@ node-red
 disabled_configs
 data
 
+blueprints/automation/homeassistant/notify_leaving_zone.yaml

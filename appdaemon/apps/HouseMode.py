@@ -8,6 +8,7 @@ HOUSE_MODE_EVENT_LIGHT_AWAKE    = 2
 HOUSE_MODE_EVENT_MOTION         = 3
 HOUSE_MODE_EVENT_NO_MOTION      = 4
 HOUSE_MODE_EVENT_NO_LIGHT       = 5
+HOUSE_MODE_EVENT_TIME           = 6
 
 
 class ClimateControl():
@@ -82,6 +83,8 @@ class HouseMode(hass.Hass,ClimateControl):
 
         self.timer = None
 
+        self.run_at(self.update_house_mode_at_given_time, "21:30:00")
+
     def house_mode_callback(self, entity, attribute, old, new, kwargs):
         self.updateClimateMode(new)
         self.house_mode = new
@@ -89,9 +92,8 @@ class HouseMode(hass.Hass,ClimateControl):
 
     def new_house_mode_off(self, trigger ):
         newMode = "Off"
-        current_hour = datetime.now().hour
         if self.anyone_home(person=True):
-            if current_hour >= 21 and current_hour < 8:
+            if self.now_is_between("21:00:00", "09:00:00"):
                 newMode = "Night"
             else:
                 newMode = "On"
@@ -99,27 +101,25 @@ class HouseMode(hass.Hass,ClimateControl):
 
     def new_house_mode_on(self, trigger ):
         newMode = "On"
-        current_hour = datetime.now().hour
-        if current_hour >= 22 and current_hour < 8:
-            newMode = "Night"
+        if trigger == HOUSE_MODE_EVENT_TIME:
+            if self.now_is_between("21:00:00", "09:00:00"):
+                newMode = "Night"
         return newMode
 
     def new_house_mode_night(self, trigger ):
         newMode = "Night"
-        current_hour = datetime.now().hour
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if current_hour >= 8 and current_hour < 21:
+            if self.now_is_between("09:00:00", "21:00:00"):
                 newMode = "On"
         if trigger == HOUSE_MODE_EVENT_NO_MOTION:
-            if current_hour >= 23 and current_hour < 8:
+            if self.now_is_between("23:00:00", "09:00:00"):
                 newMode = "Sleep"
         return newMode
 
     def new_house_mode_sleep(self, trigger ):
         newMode = "Sleep"
-        current_hour = datetime.now().hour
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if current_hour >= 19 and current_hour < 8:
+            if self.now_is_between("19:00:00", "09:00:00"):
                 newMode = "Night"
             else:
                 newMode = "On"
@@ -174,6 +174,9 @@ class HouseMode(hass.Hass,ClimateControl):
 
     def timeout_callback(self, kwargs):
         self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_NO_MOTION )
+
+    def update_house_mode_at_given_time(self, kwargs):
+        self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_TIME )
 
 
 

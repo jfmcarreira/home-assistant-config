@@ -1,5 +1,5 @@
 automation old:
-  - alias: Switch Hallway Bottom Right Long
+  - alias: Switch Hallway Bottom Left
     mode: single
     initial_state: true
     trigger:
@@ -20,7 +20,6 @@ automation old:
               - event: event_trigger_presence_light_hallway
         default:
           - choose:
-              # IF nobody home, sound the alarm!
               - conditions:
                   - condition: state
                     entity_id: light.hallway_presence_group
@@ -34,7 +33,7 @@ automation old:
                 data:
                   entity_id: light.hallway_presence_group
 
-  - alias: Switch Hallway Bottom Right Long
+  - alias: Switch Hallway Bottom Left Long
     mode: single
     initial_state: true
     trigger:
@@ -43,7 +42,7 @@ automation old:
         event_data:
           action: long_press_bottom_left
     action:
-      - service: script.lights_disable_motion_light_hallway
+      - service: script.lights_disable_motion_lights
 
   # - alias: Switch Hallway Bottom Left Long
   #   mode: single

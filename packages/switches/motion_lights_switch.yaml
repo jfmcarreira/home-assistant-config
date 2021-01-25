@@ -1,43 +1,49 @@
 input_boolean:
-  automation_appdaemon_motion_lights_living_room:
-    name: Ativar Luz de Presença da Sala
-    icon: mdi:light
-  automation_appdaemon_motion_lights_office:
-    name: Ativar Luz de Presença do Escritório
-    icon: mdi:light
-  automation_appdaemon_motion_lights_hallway:
-    name: Ativar Luz de Presença do Corredor
-    icon: mdi:light
   automation_sw_all_motion_lights:
     name: Controlador das Luzes Automáticas
     icon: mdi:light
+  automation_appdaemon_lights_living_room:
+    name: Controlador das Luzes da Sala
+    icon: mdi:light
+  automation_appdaemon_lights_office:
+    name: Controlador das Luzes do Escritório
+    icon: mdi:light
+  automation_appdaemon_lights_hallway:
+    name: Controlador das Luzes do Corredor
+    icon: mdi:light
+  automation_appdaemon_lights_kitchen:
+    name: Controlador das Luzes da Cozinha
+    icon: mdi:light
+  automation_appdaemon_lights_bedroom_ricardo:
+    name: Controlador das Luzes do Quarto do Ricardo
+    icon: mdi:light
+  automation_appdaemon_lights_master_bedroom:
+    name: Controlador das Luzes do Quarto Principal
+    icon: mdi:light
+  automation_appdaemon_lights_bathroom:
+    name: Controlador das Luzes da Casa de Banho Principal
+    icon: mdi:light
 
-    
 switch:
   - platform: template
     switches:
-      hallway_office_motion_lights:
-        friendly_name: Luzes Automáticas 
+      motion_based_lights:
+        friendly_name: Luzes Automáticas
         value_template: "{{ is_state('input_boolean.automation_appdaemon_motion_lights_office', 'on') or is_state('input_boolean.automation_appdaemon_motion_lights_hallway', 'on') }}"
         turn_on:
           - service: input_boolean.turn_on
-            entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.automation_appdaemon_motion_lights_office
+            entity_id: input_boolean.automation_sw_all_motion_lights
         turn_off:
-          service: script.lights_disable_motion_light_hallway
-            
+          service: script.lights_disable_motion_lights
+
 script:
-  lights_disable_motion_light_hallway:
-    alias: Desligar Luzes Automáticas do Corredor
+  lights_disable_motion_lights:
+    alias: Desligar Luzes Automáticas Temporáriamente
     variables:
-      automation_appdaemon_motion_lights_hallway_state: "{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state }}"
-      automation_appdaemon_motion_lights_office_state: "{{ states.input_boolean.automation_appdaemon_motion_lights_office.state }}"
+      automation_appdaemon_motion_lights_state: "{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state }}"
     sequence:
       - service: input_boolean.turn_off
-        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.automation_appdaemon_motion_lights_office
+        entity_id: input_boolean.automation_sw_all_motion_lights
       - service: light.turn_off
         entity_id: light.hallway
       - service: light.turn_off
@@ -46,20 +52,15 @@ script:
         entity_id: light.hallway_presence
       - service: light.turn_off
         entity_id: light.office_desk
-        
+      - service: light.turn_off
+        entity_id: light.living_room_tv_leds
+
       - delay: 00:30:00
-      
+
       - service: >
-          {% if automation_appdaemon_motion_lights_hallway_state == 'on' %}
+          {% if automation_appdaemon_motion_lights_state == 'on' %}
               input_boolean.turn_on
           {% else %}
               input_boolean.turn_off
           {% endif %}
-        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-      - service: >
-          {% if automation_appdaemon_motion_lights_hallway_state == 'on' %}
-              input_boolean.turn_on
-          {% else %}
-              input_boolean.turn_off
-          {% endif %}
-        entity_id: input_boolean.automation_appdaemon_motion_lights_office
+        entity_id: input_boolean.automation_sw_all_motion_lights

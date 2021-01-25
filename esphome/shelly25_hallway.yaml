@@ -35,9 +35,9 @@ binary_sensor:
               api.connected:
             then:
               - homeassistant.event:
-                  event: esphome.event_light_toogle_hallway
+                  event: esphome.ev_lt_hallway
             else:
-              - light.turn_off: light_1
+              - light.toggle: light_1
 
 
   - platform: gpio
@@ -51,9 +51,9 @@ binary_sensor:
               api.connected:
             then:
               - homeassistant.event:
-                  event: esphome.event_light_toogle_front_door
+                  event: esphome.ev_lt_front_door
             else:
-              - light.turn_off: light_2
+              - light.toggle: light_2
 
 output:
   - platform: gpio

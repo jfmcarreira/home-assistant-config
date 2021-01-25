@@ -32,14 +32,32 @@ binary_sensor:
       then:
         - if:
             condition:
-              api.connected:
+                - binary_sensor.is_on: sw_1
             then:
-              - homeassistant.event:
-                  event: esphome.event_light_toogle_kitchen_ceiling
-            else:
-              - light.turn_off: light_1
-
-
+                - if:
+                    condition:
+                        api.connected:
+                    then:
+                        - homeassistant.event:
+                            event: esphome.ev_lt_kitchen_ceil
+                            data:
+                                action: turn_on
+                    else:
+                        - light.turn_on: light_1
+        - if:
+            condition:
+                - binary_sensor.is_off: sw_1
+            then:
+                - if:
+                    condition:
+                        api.connected:
+                    then:
+                        - homeassistant.event:
+                            event: esphome.ev_lt_kitchen_ceil
+                            data:
+                                action: turn_off
+                    else:
+                        - light.turn_off: light_1
   - platform: gpio
     id: sw_2
     pin:
@@ -48,12 +66,64 @@ binary_sensor:
       then:
         - if:
             condition:
-              api.connected:
+                - binary_sensor.is_on: sw_2
             then:
-              - homeassistant.event:
-                  event: esphome.event_light_toogle_kitchen_pantry
-            else:
-              - light.turn_off: light_2
+                - if:
+                    condition:
+                        api.connected:
+                    then:
+                        - homeassistant.event:
+                            event: esphome.ev_lt_kitchen_pantry
+                            data:
+                                action: turn_on
+                    else:
+                        - light.turn_on: light_2
+        - if:
+            condition:
+                - binary_sensor.is_off: sw_2
+            then:
+                - if:
+                    condition:
+                        api.connected:
+                    then:
+                        - homeassistant.event:
+                            event: esphome.ev_lt_kitchen_pantry
+                            data:
+                                action: turn_off
+                    else:
+                        - light.turn_off: light_2
+                        
+#binary_sensor:
+  #- platform: gpio
+    #id: sw_1
+    #pin:
+      #number: GPIO13
+    #on_state:
+      #then:
+        #- if:
+            #condition:
+              #api.connected:
+            #then:
+              #- homeassistant.event:
+                  #event: esphome.ev_lt_kitchen_ceil
+            #else:
+              #- light.toggle: light_1
+
+
+  #- platform: gpio
+    #id: sw_2
+    #pin:
+      #number: GPIO5
+    #on_state:
+      #then:
+        #- if:
+            #condition:
+              #api.connected:
+            #then:
+              #- homeassistant.event:
+                  #event: esphome.ev_lt_kitchen_pantry
+            #else:
+              #- light.toggle: light_2
 
 output:
   - platform: gpio
