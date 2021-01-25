@@ -230,12 +230,12 @@ views:
               - type: 'custom:button-card'
                 name: Entrada
                 icon: 'mdi:door-open'
-                entity: group.living_room_hallway
+                entity: group.hallway
                 hold_action:
                   action: call-service
                   service: homeassistant.turn_off
                   service_data:
-                    entity_id: group.living_room_hallway
+                    entity_id: group.hallway
                 tap_action:
                   action: call-service
                   service: browser_mod.popup
@@ -250,7 +250,6 @@ views:
                         - light.hallway
                         - light.hallway_mirror
                         - light.hallway_presence
-                        - light.xmas_light
               - type: 'custom:button-card'
                 name: Cozinha
                 icon: 'mdi:stove'
@@ -278,12 +277,12 @@ views:
               - type: 'custom:button-card'
                 name: Sala
                 icon: 'mdi:sofa'
-                entity: group.living_room_hallway
+                entity: group.living_room
                 hold_action:
                   action: call-service
                   service: homeassistant.turn_off
                   service_data:
-                    entity_id: group.living_room_hallway
+                    entity_id: group.living_room
                 tap_action:
                   action: call-service
                   service: browser_mod.popup
@@ -607,6 +606,111 @@ views:
               action: navigate
               navigation_path: /fire-tablet/main
             hold_action: none
+            
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Corredor
+                icon: 'mdi:door-open'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Hallway
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Sala
+                icon: 'mdi:sofa'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Living Room
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Cozinha
+                icon: 'mdi:stove'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Kitchen
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Casa de Banho Principal
+                icon: 'mdi:toilet'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Bathroom
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Quarto Principal
+                icon: 'mdi:bed-double'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Bedroom
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Casa de Banho Privada
+                icon: 'mdi:shower-head'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Bedroom Bath
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Quarto do Ricardo
+                icon: 'mdi:baby-face-outline'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Ricardo Bedroom
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                name: Escritório
+                icon: 'mdi:desk'
+                tap_action:
+                  action: call-service
+                  service: python_script.vacuum_room
+                  service_data:
+                    room: Office
+                    runs: 1
+              - type: 'custom:button-card'
+                aspect_ratio: 2.5/1
+                layout: icon_name_state
+                entity: script.task_roborock_clean
+                icon: 'mdi:broom'
+                name: Limpar Aspirador
+                tap_action:
+                  action: none
+                hold_action:
+                  action: call-service
+                  service: script.task_roborock_clean
+          - break
           - type: conditional
             conditions:
               - entity: sensor.roborock_state
@@ -734,17 +838,6 @@ views:
               - input_boolean.vacuum_bedroomricardo
               - input_boolean.vacuum_office
               - input_boolean.vacuum_livingroomwithcarpet
-          - type: 'custom:button-card'
-            aspect_ratio: 12/2
-            entity: script.task_roborock_clean
-            icon: 'mdi:broom'
-            layout: icon_name_state
-            name: Limpar Aspirador
-            tap_action:
-              action: none
-            hold_action:
-              action: call-service
-              service: script.task_roborock_clean
   - title: Multimedia
     path: media
     icon: 'mdi:cast-audio'
