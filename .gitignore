@@ -41,5 +41,9 @@ themes
 node-red
 disabled_configs
 data
+opencv
+.vscode
 
 blueprints/automation/homeassistant/notify_leaving_zone.yaml
+
+.rsync_folder_conf
