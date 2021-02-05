@@ -11,6 +11,9 @@ def main(args):
   with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     
+    if args.value == "unavailable":
+      return
+    
     if args.write_str:
       db_value = str(args.value)
     else:
