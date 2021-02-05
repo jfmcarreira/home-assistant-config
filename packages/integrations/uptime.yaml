@@ -1,3 +1,2 @@
 sensor:
 - platform: uptime
-  unit_of_measurement: minutes 

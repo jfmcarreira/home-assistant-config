@@ -10,8 +10,8 @@ logbook:
       - script
       - vacuum
       - climate
-      - input_select
-      - input_text
+      #- input_select
+      #- input_text
     entities:
       ## Device states
       - binary_sensor.washing_machine_state
@@ -28,6 +28,7 @@ logbook:
       ## Miscellaneous
       - binary_sensor.wash_machine_dry_clothes
       - binary_sensor.wash_machine_wet_clothes
+      - input_select.heating_temperature_selection
   exclude:
     domains:
       - updater
@@ -42,7 +43,7 @@ logbook:
       - automation.discovery_*
       - automation.image_processing_*
       - automation.switch_*
-      - automation.media_google_home_
+      - automation.media_google_home_*
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.query_*
