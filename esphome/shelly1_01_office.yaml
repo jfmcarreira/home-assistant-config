@@ -35,23 +35,24 @@ binary_sensor:
               - homeassistant.event:
                   event: esphome.ev_lt_office
             else:
-              - switch.toggle: relay_1
+              #- switch.toggle: relay_1
+              - light.toggle: light_1
 
-switch:
+#switch:
+#  - platform: gpio
+#    pin: GPIO04
+#    id: relay_1
+#    name: ${upper_devicename} SW
+#    restore_mode: ALWAYS_ON
+
+output:
   - platform: gpio
-    pin: GPIO04
     id: relay_1
-    name: ${upper_devicename} SW
-    restore_mode: ALWAYS_ON
+    pin: GPIO04
 
-#output:
-  #- platform: gpio
-  #  id: relay_1
-  #  pin: GPIO04
-
-#light:
-#  - name: ${upper_devicename}
-#    platform: binary
-#    id: light_1
-#    output: relay_1
+light:
+  - name: ${upper_devicename}
+    platform: binary
+    id: light_1
+    output: relay_1
 
