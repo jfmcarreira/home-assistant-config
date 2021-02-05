@@ -1,0 +1,127 @@
+title: Temperatura
+path: temp
+panel: true
+icon: 'mdi:thermometer'
+badges: []
+cards:
+  - type: 'custom:layout-card'
+    cards:
+      - type: 'custom:vertical-stack-in-card'
+        title: Temperatura
+        cards:
+          - agregate_func: avg
+            entities:
+              - entity: sensor.living_room_temperature
+                name: Sala de Estar
+                show_state: false
+              - entity: sensor.master_bedroom_temperature
+                name: Quarto
+                show_state: false
+              - entity: sensor.bedroom_ricardo_temperature
+                name: Quarto do Ricardo
+                show_state: false
+              - entity: sensor.office_temperature
+                name: Escritório
+                show_state: false
+            group_by: 900s
+            height: 120
+            hour24: true
+            hours_to_show: 24
+            line_width: 2
+            name: Últimas 24 Horas
+            points_per_hour: 4
+            show:
+              average: false
+              extrema: false
+              labels_secondary: false
+              points: hover
+              state: true
+            type: 'custom:mini-graph-card'
+          - aggregate_func: avg
+            entities:
+              - entity: sensor.average_temperature
+                show_state: true
+            group_by: date
+            hour24: true
+            hours_to_show: 120
+            name: Média Diária - Últimos 5 Dias
+            points_per_hour: 6
+            show:
+              average: false
+              extrema: false
+              graph: bar
+              labels_secondary: false
+              points: false
+              state: true
+            type: 'custom:mini-graph-card'
+          - entities:
+              - entity: sensor.living_room_temperature
+                name: Sala de Estar
+              - entity: sensor.master_bedroom_temperature
+                name: Quarto Principal
+              - entity: sensor.bedroom_ricardo_temperature
+                name: Quarto do Ricardo
+              - entity: sensor.office_temperature
+                name: Escritório
+            show_header_toggle: false
+            type: entities
+      - break
+      - type: 'custom:vertical-stack-in-card'
+        title: Humidade
+        cards:
+          - agregate_func: avg
+            entities:
+              - entity: sensor.living_room_humidity
+                name: Sala de Estar
+                show_state: false
+              - entity: sensor.master_bedroom_humidity
+                name: Quarto
+                show_state: false
+              - entity: sensor.bedroom_ricardo_humidity
+                name: Quarto do Ricardo
+                show_state: false
+              - entity: sensor.office_humidity
+                name: Escritório
+                show_state: false
+            group_by: 900s
+            height: 120
+            hour24: true
+            hours_to_show: 24
+            line_width: 2
+            name: Últimas 24 Horas
+            points_per_hour: 4
+            show:
+              average: false
+              extrema: false
+              labels_secondary: false
+              points: hover
+              state: true
+            type: 'custom:mini-graph-card'
+          - aggregate_func: avg
+            entities:
+              - entity: sensor.average_humidity
+                show_state: true
+            group_by: date
+            hour24: true
+            hours_to_show: 120
+            name: Média Diária - Últimos 5 Dias
+            points_per_hour: 6
+            show:
+              average: false
+              extrema: false
+              graph: bar
+              labels_secondary: false
+              points: false
+              state: true
+            type: 'custom:mini-graph-card'
+          - entities:
+              - entity: sensor.living_room_humidity
+                name: Sala de Estar
+              - entity: sensor.master_bedroom_humidity
+                name: Quarto Principal
+              - entity: sensor.bedroom_ricardo_humidity
+                name: Quarto do Ricardo
+              - entity: sensor.office_humidity
+                name: Escritório
+            show_header_toggle: false
+            type: entities
