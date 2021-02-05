@@ -9,14 +9,6 @@ homeassistant:
       unit_of_measurement: "°C"
   
 sensor:
-  - platform: template
-    sensors:
-      weather_temperature:
-        friendly_name: "Weather Temperature"
-        value_template: "{{ states.weather.ipma.attributes.temperature }}"
-        #entity_id:
-          #- weather.ipma
-
   - platform: min_max
     name: Average Temperature
     type: mean
@@ -26,6 +18,7 @@ sensor:
       - sensor.living_room_temperature
       - sensor.master_bedroom_temperature
       - sensor.bedroom_ricardo_temperature
+      - sensor.bathroom_temperature
 
   - platform: statistics
     name: daily_average_temperature
@@ -33,3 +26,10 @@ sensor:
     max_age:
       hours: 24
 
+  - platform: template
+    sensors:
+      weather_temperature:
+        friendly_name: "Weather Temperature"
+        value_template: "{{ states.weather.ipma.attributes.temperature }}"
+        #entity_id:
+          #- weather.ipma
