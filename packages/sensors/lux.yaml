@@ -1,0 +1,17 @@
+################################################################
+## Light Level
+################################################################
+homeassistant:
+  customize:
+    sensor.average_light_level:
+      friendly_name: Luminusidade Média
+
+sensor:
+  - platform: min_max
+    name: Average Light Level
+    type: mean
+    round_digits: 1
+    entity_ids:
+      - sensor.living_room_light_level
+      - sensor.hallway_light_level
+      
