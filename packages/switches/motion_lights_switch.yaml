@@ -29,7 +29,7 @@ switch:
     switches:
       motion_based_lights:
         friendly_name: Luzes Automáticas
-        value_template: "{{ is_state('input_boolean.automation_appdaemon_motion_lights_office', 'on') or is_state('input_boolean.automation_appdaemon_motion_lights_hallway', 'on') }}"
+        value_template: "{{ is_state('input_boolean.automation_sw_all_motion_lights', 'on') }}"
         turn_on:
           - service: input_boolean.turn_on
             entity_id: input_boolean.automation_sw_all_motion_lights
@@ -40,7 +40,7 @@ script:
   lights_disable_motion_lights:
     alias: Desligar Luzes Automáticas Temporáriamente
     variables:
-      automation_appdaemon_motion_lights_state: "{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state }}"
+      automation_appdaemon_motion_lights_state: "{{ states.input_boolean.automation_sw_all_motion_lights.state }}"
     sequence:
       - service: input_boolean.turn_off
         entity_id: input_boolean.automation_sw_all_motion_lights
@@ -58,7 +58,7 @@ script:
       - delay: 00:30:00
 
       - service: >
-          {% if automation_appdaemon_motion_lights_state == 'on' %}
+          {% if w == 'on' %}
               input_boolean.turn_on
           {% else %}
               input_boolean.turn_off
