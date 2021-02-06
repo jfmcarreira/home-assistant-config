@@ -89,7 +89,12 @@ class HouseMode(hass.Hass,ClimateControl):
         self.updateClimateMode(new)
         self.house_mode = new
 
-
+    def is_lights_on(self):
+        for entity in self.trackLights:
+            if self.get_state( entity ) == "on":
+                return True
+        return False
+    
     def new_house_mode_off(self, trigger ):
         newMode = "Off"
         if self.anyone_home(person=True):
@@ -126,6 +131,7 @@ class HouseMode(hass.Hass,ClimateControl):
         return newMode
 
 
+
     def set_new_house_mode_from_trigger(self, trigger ):
 
         newMode = self.house_mode
@@ -140,6 +146,9 @@ class HouseMode(hass.Hass,ClimateControl):
                 newMode = self.new_house_mode_night( trigger )
             elif self.house_mode == "Sleep":
                 newMode = self.new_house_mode_sleep( trigger )
+                
+        if newMode == "Sleep" and self.is_lights_on():
+            newMode = "Night"
 
         self.select_option("input_select.house_mode", newMode )
         return
@@ -156,7 +165,6 @@ class HouseMode(hass.Hass,ClimateControl):
         else:
             self.cancel_timer(self.timer)
             self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_MOTION )
-
 
 
     def light_callback(self, entity, attribute, old, new, kwargs):
