@@ -1,10 +1,10 @@
 blueprint:
-  name: Turn on light based on motion, illuminance and condtions
+  name: Turn on light based on motion, illuminance and condtions (v2)
   description: >
     Turn on a light based on motion detection and low light level.
 
     Required entities:
-      - Input Boolean (register auto/manual mode)
+      - Input Number (register auto/manual mode)
       - Motion sensor (single sensor or group)
       - Target entity (light, switch, scene or script)
 
@@ -32,12 +32,12 @@ blueprint:
       description: This sensor will trigger the turning on of the target entity.
       selector:
         entity:
-    light_mode:
-      name: Light mode selector
-      description: Boolean input to register if the light was turned on manually or automatically
+    light_mode_counter:
+      name: Automatic light mode counter
+      description: Number of times automatic light was turned on (0 means manual mode)
       selector:
         entity:
-          domain: input_boolean
+          domain: input_number
     target_entity:
       name: Target entity to turn ON
       description: The light, switch, scene to turn on (or script to run) when the automation is triggered when in normal mode.
@@ -91,9 +91,9 @@ variables:
   illuminance_cutoff: !input illuminance_cutoff
   blocker_entity: !input blocker_entity
   no_motion_wait: !input no_motion_wait
-  entity_domain: "{{ states[target_entity].domain }}"
   required_house_mode: !input house_mode
   run_while_sleep: !input run_while_sleep
+  light_mode_counter: !input light_mode_counter
 
 trigger:
   - platform: state
@@ -101,59 +101,69 @@ trigger:
     to: "on"
 
 condition:
-  condition: or
-  conditions:
-    # If already in the automatic mode, restart the count-down
-    - condition: state
-      entity_id: !input light_mode
-      state: "on"
+  # Do not run if the blocker is ON
+  - condition: template
+    value_template: "{{ (blocker_entity == none) or (states[blocker_entity].state == 'off') }}"
 
-    - condition: and
-      conditions:
-        # This conditions matter if the light is not in automatic mode
+  # Only run if in the specified house mode
+  - condition: template
+    value_template: >
+      {{
+        (required_house_mode == none)
+        or
+        states[house_mode].state == required_house_mode
+      }}
 
-        # Check illuminance level
-        - condition: template
-          value_template: >
-            {{
-              (illuminance_currently == none) 
-              or
-              (illuminance_cutoff == none) 
-              or
-              (states[illuminance_currently].state | int < illuminance_cutoff | int )
-            }}
+  # Never run in Off or Sleep mode
+  # (this is implementation specific)
+  - condition: template
+    value_template: >
+      {{
+        ( not states[house_mode].state == 'Off' )
+        and
+        ( not states[house_mode].state == 'Sleep' or run_while_sleep == True )
+      }}
 
-        # Do not run if the blocker is ON
-        - condition: template
-          value_template: "{{ (blocker_entity == none) or (states[blocker_entity].state == 'off') }}"
+  # Now either run if the light is Off or if it is already running
+  - condition: or
+    conditions:
+      # If already in the automatic mode, restart the count-down
+      #- condition: state
+      #  entity_id: !input light_mode_counter
+      #  above: 0
 
-        # Do not run if light is on (manually turn on)
-        - condition: state
-          entity_id: !input target_entity
-          state: "off"
+      - condition: template
+        value_template: "{{ states[light_mode_counter].state | int > 0 }}"
 
-        # Only run if in the specified house mode
-        - condition: template
-          value_template: >
-            {{
-              (required_house_mode == none)
-              or
-              states[house_mode].state == required_house_mode
-            }}
+      - condition: and
+        conditions:
+          # This conditions matter if the light is not in automatic mode
 
-        # Never run in Off or Sleep mode
-        # (this is implementation specific)
-        - condition: template
-          value_template: >
-            {{ 
-              ( not states[house_mode].state == 'Off' ) 
-              and 
-              ( not states[house_mode].state == 'Sleep' or run_while_sleep == True )
-            }}
+          # Check illuminance level
+          - condition: template
+            value_template: >
+              {{
+                (illuminance_currently == none)
+                or
+                (illuminance_cutoff == none)
+                or
+                (states[illuminance_currently].state | int < illuminance_cutoff | int )
+              }}
+
+          # Do not run if light is on (manually turn on)
+          - condition: state
+            entity_id: !input target_entity
+            state: "off"
+
+
 
 action:
-  - service: input_boolean.turn_on
-    entity_id: !input light_mode
+  #- service: input_boolean.turn_on
+    #entity_id: !input light_mode
+
+  - service: input_number.increment
+    data:
+      entity_id: !input light_mode_counter
 
   - service: light.turn_on
     entity_id: !input target_entity
@@ -168,8 +178,8 @@ action:
   # Cancel if target is already off
   # Otherwise wait for timeout
   - wait_template: "{{ not states[target_entity].state == 'on' }}"
-    timeout: 
-      seconds: "{{ no_motion_wait | int }}"
+    timeout:
+      seconds: "{{ ( (no_motion_wait|int) * 2 ** (states[light_mode_counter].state|int) ) | int }}"
 
   - choose:
       - conditions: "{{ not wait.completed }}"
@@ -177,5 +187,11 @@ action:
           - service: light.turn_off
             entity_id: !input target_entity
 
-  - service: input_boolean.turn_off
-    entity_id: !input light_mode
+  - service: input_number.set_value
+    data:
+      entity_id: !input light_mode_counter
+      value: 0
+
+
+  #- service: input_boolean.turn_off
+    #entity_id: !input light_mode

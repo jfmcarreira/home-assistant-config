@@ -512,7 +512,7 @@
       blocker_entity: light.office_group
       house_mode: Night
       run_while_sleep: false
-      light_mode: input_boolean.atm_lights_automatic_mode_office
+      light_mode_counter: input_number.atm_lights_automatic_mode_office
 - id: '1612570836529'
   alias: lights_motion_office_normal
   description: ''
@@ -520,14 +520,14 @@
     path: lights/motion_based_lights.yaml
     input:
       illuminance_cutoff: '0'
-      house_mode: Night
+      house_mode: 'On'
       automation_name: lights_motion_office_normal
       motion_sensor: binary_sensor.motion_sensor_office
       target_entity: light.office
       no_motion_wait: '60'
       blocker_entity: light.office_group
       run_while_sleep: false
-      light_mode: input_boolean.atm_lights_automatic_mode_office
+      light_mode_counter: input_number.atm_lights_automatic_mode_office
 - id: '1612574913656'
   alias: lights_motion_living_room_night
   description: ''
@@ -543,7 +543,7 @@
       house_mode: Night
       run_while_sleep: false
       illuminance_sensor: sensor.living_room_light_level
-      light_mode: input_boolean.atm_lights_automatic_mode_living_room
+      light_mode_counter: input_number.atm_lights_automatic_mode_living_room
 - id: '1612574949221'
   alias: lights_motion_living_room_normal
   description: ''
@@ -558,7 +558,7 @@
       no_motion_wait: '60'
       run_while_sleep: false
       illuminance_sensor: sensor.living_room_light_level
-      light_mode: input_boolean.atm_lights_automatic_mode_living_room
+      light_mode_counter: input_number.atm_lights_automatic_mode_living_room
 - id: '1612576412343'
   alias: lights_motion_hallway_night
   description: ''
@@ -574,7 +574,7 @@
       house_mode: Night
       run_while_sleep: true
       illuminance_sensor: sensor.hallway_light_level
-      light_mode: input_boolean.atm_lights_automatic_mode_hallway
+      light_mode_counter: input_number.atm_lights_automatic_mode_hallway
 - id: '1612577959648'
   alias: lights_sync_bathroom_mirror
   description: ''
