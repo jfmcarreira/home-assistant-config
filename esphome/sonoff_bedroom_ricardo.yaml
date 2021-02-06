@@ -45,43 +45,43 @@ binary_sensor:
               condition:
                 api.connected:
               then:
-                # - if:
-                #     condition:
-                #       or:
-                #         - binary_sensor.is_on: bedroom_ricardo_lamp_state
-                #         - light.is_on: light_bedroom_ricardo
-                #     then:
-                #       - light.turn_off: light_bedroom_ricardo
-                #       - homeassistant.service:
-                #           service: light.turn_off
-                #           data:
-                #             entity_id: light.bedroom_ricardo_lamp
-                #     else:
-                #       - light.toggle: light_bedroom_ricardo
-                - homeassistant.event:
-                    event: esphome.ev_lt_bed_ricardo_ceil
+                - if:
+                   condition:
+                     or:
+                       - binary_sensor.is_on: bedroom_ricardo_lamp_state
+                       - light.is_on: light_bedroom_ricardo
+                   then:
+                     - light.turn_off: light_bedroom_ricardo
+                     - homeassistant.service:
+                         service: light.turn_off
+                         data:
+                           entity_id: light.bedroom_ricardo_lamp
+                   else:
+                     - light.toggle: light_bedroom_ricardo
+                #- homeassistant.event:
+                #    event: esphome.ev_lt_bed_ricardo_ceil
               else:
                 - light.toggle: light_bedroom_ricardo
 
       - timing:
           - ON for at least 1s
         then:
-          - homeassistant.event:
-              event: esphome.ev_lt_bed_ricardo_lamp
-          # - if:
-          #     condition:
-          #       - light.is_on: light_bedroom_ricardo
-          #     then:
-          #       - light.turn_off: light_bedroom_ricardo
-          #       - homeassistant.service:
-          #           service: light.turn_on
-          #           data:
-          #             entity_id: light.bedroom_ricardo_lamp
-          #     else:
-          #       - homeassistant.service:
-          #           service: light.toggle
-          #           data:
-          #             entity_id: light.bedroom_ricardo_lamp
+          #- homeassistant.event:
+          #    event: esphome.ev_lt_bed_ricardo_lamp
+          - if:
+             condition:
+               - light.is_on: light_bedroom_ricardo
+             then:
+               - light.turn_off: light_bedroom_ricardo
+               - homeassistant.service:
+                   service: light.turn_on
+                   data:
+                     entity_id: light.bedroom_ricardo_lamp
+             else:
+               - homeassistant.service:
+                   service: light.toggle
+                   data:
+                     entity_id: light.bedroom_ricardo_lamp
 
 output:
   - platform: gpio

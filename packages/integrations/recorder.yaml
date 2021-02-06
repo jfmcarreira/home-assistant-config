@@ -17,6 +17,7 @@ recorder:
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.query_*
+      - input_boolean.atm_*
     entities:
       ##
       - person.bianca

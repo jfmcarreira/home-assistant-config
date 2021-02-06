@@ -49,6 +49,7 @@ logbook:
       - sensor.query_*
       - light.*_group
       - light.group_*
+      - input_boolean.atm_*
     entities:
       # Constant automations
       - automation.discovery_shellies_announce

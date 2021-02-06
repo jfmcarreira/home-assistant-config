@@ -38,10 +38,11 @@ binary_sensor:
                     condition:
                         api.connected:
                     then:
-                        - homeassistant.event:
-                            event: esphome.ev_lt_kitchen_ceil
-                            data:
-                                action: turn_on
+                        - light.turn_on: light_1
+                        #- homeassistant.event:
+                            #event: esphome.ev_lt_kitchen_ceil
+                            #data:
+                                #action: turn_on
                     else:
                         - light.turn_on: light_1
         - if:
@@ -52,10 +53,11 @@ binary_sensor:
                     condition:
                         api.connected:
                     then:
-                        - homeassistant.event:
-                            event: esphome.ev_lt_kitchen_ceil
-                            data:
-                                action: turn_off
+                        - light.turn_off: light_1
+                        #- homeassistant.event:
+                            #event: esphome.ev_lt_kitchen_ceil
+                            #data:
+                                #action: turn_off
                     else:
                         - light.turn_off: light_1
   - platform: gpio
@@ -72,10 +74,11 @@ binary_sensor:
                     condition:
                         api.connected:
                     then:
-                        - homeassistant.event:
-                            event: esphome.ev_lt_kitchen_pantry
-                            data:
-                                action: turn_on
+                        - light.turn_on: light_2
+                        #- homeassistant.event:
+                            #event: esphome.ev_lt_kitchen_pantry
+                            #data:
+                                #action: turn_on
                     else:
                         - light.turn_on: light_2
         - if:
@@ -86,13 +89,14 @@ binary_sensor:
                     condition:
                         api.connected:
                     then:
-                        - homeassistant.event:
-                            event: esphome.ev_lt_kitchen_pantry
-                            data:
-                                action: turn_off
+                        - light.turn_off: light_2
+                        #- homeassistant.event:
+                            #event: esphome.ev_lt_kitchen_pantry
+                            #data:
+                                #action: turn_off
                     else:
                         - light.turn_off: light_2
-                        
+
 #binary_sensor:
   #- platform: gpio
     #id: sw_1

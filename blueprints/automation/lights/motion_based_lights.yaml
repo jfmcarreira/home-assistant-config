@@ -4,10 +4,12 @@ blueprint:
     Turn on a light based on motion detection and low light level.
 
     Required entities:
+      - Input Boolean (register auto/manual mode)
       - Motion sensor (single sensor or group)
       - Target entity (light, switch, scene or script)
 
     Optional entities:
+    - House mode (only run in a specific house mode from a input_select
     - Illuminance sensor (sensor in illuminance class)
     - Illuminance cutoff value  (number)
     - Blocking entity (any entity with state on/off)
@@ -25,16 +27,17 @@ blueprint:
       default: 'off'
       selector:
         boolean:
-    automation_name:
-      name: Name of the automation
-      description: This is used to check the automation itself
-      selector:
-        text:
     motion_sensor:
       name: Motion Sensor
       description: This sensor will trigger the turning on of the target entity.
       selector:
         entity:
+    light_mode:
+      name: Light mode selector
+      description: Boolean input to register if the light was turned on manually or automatically
+      selector:
+        entity:
+          domain: input_boolean
     target_entity:
       name: Target entity to turn ON
       description: The light, switch, scene to turn on (or script to run) when the automation is triggered when in normal mode.
@@ -78,19 +81,19 @@ mode: restart
 max_exceeded: silent
 
 variables:
+  # Entity with the house mode
+  # (this is typically the same for all automations, so no input option)
+  house_mode: "input_select.house_mode"
+
+  # Input based variabled
   target_entity: !input target_entity
   illuminance_currently: !input illuminance_sensor
   illuminance_cutoff: !input illuminance_cutoff
   blocker_entity: !input blocker_entity
   no_motion_wait: !input no_motion_wait
   entity_domain: "{{ states[target_entity].domain }}"
-
-  house_mode: "input_select.house_mode"
   required_house_mode: !input house_mode
   run_while_sleep: !input run_while_sleep
-
-  automation_name: !input automation_name
-  automation_full_name: automation.{{ automation_name }}
 
 trigger:
   - platform: state
@@ -100,20 +103,19 @@ trigger:
 condition:
   condition: or
   conditions:
-    # Run if light is on or if it already running
-    - condition: template
-      value_template: "{{ ( now().timestamp() - as_timestamp(state_attr( automation_full_name, 'last_triggered' )) | int ) < ( no_motion_wait | int ) }}"
+    # If already in the automatic mode, restart the count-down
+    - condition: state
+      entity_id: !input light_mode
+      state: "on"
 
     - condition: and
       conditions:
-        # First condition: When entity was already on because the automation ran recently,
-        # do not check illuminance because it could have increased above threshold because
-        # of a light that was just turned on.
+        # This conditions matter if the light is not in automatic mode
+
+        # Check illuminance level
         - condition: template
           value_template: >
             {{
-              (states[target_entity].state == 'on') 
-              or
               (illuminance_currently == none) 
               or
               (illuminance_cutoff == none) 
@@ -125,9 +127,22 @@ condition:
         - condition: template
           value_template: "{{ (blocker_entity == none) or (states[blocker_entity].state == 'off') }}"
 
-        - condition: template
-          value_template: "{{ states[target_entity].state == 'off' }}"
+        # Do not run if light is on (manually turn on)
+        - condition: state
+          entity_id: !input target_entity
+          state: "off"
 
+        # Only run if in the specified house mode
+        - condition: template
+          value_template: >
+            {{
+              (required_house_mode == none)
+              or
+              states[house_mode].state == required_house_mode
+            }}
+
+        # Never run in Off or Sleep mode
+        # (this is implementation specific)
         - condition: template
           value_template: >
             {{ 
@@ -136,18 +151,14 @@ condition:
               ( not states[house_mode].state == 'Sleep' or run_while_sleep == True )
             }}
 
-        - condition: template
-          value_template: >
-            {{
-              (required_house_mode == none) 
-              or
-              states[house_mode].state == required_house_mode
-            }}
-
 action:
+  - service: input_boolean.turn_on
+    entity_id: !input light_mode
+
   - service: light.turn_on
     entity_id: !input target_entity
 
+  # Wait for motion sensor to turn off
   - wait_for_trigger:
       - platform: state
         entity_id: !input motion_sensor
@@ -165,3 +176,6 @@ action:
         sequence:
           - service: light.turn_off
             entity_id: !input target_entity
+
+  - service: input_boolean.turn_off
+    entity_id: !input light_mode

@@ -34,8 +34,9 @@ binary_sensor:
             condition:
               api.connected:
             then:
-              - homeassistant.event:
-                  event: esphome.ev_lt_hallway
+              - light.toggle: light_1
+              #- homeassistant.event:
+              #    event: esphome.ev_lt_hallway
             else:
               - light.toggle: light_1
 
@@ -50,8 +51,9 @@ binary_sensor:
             condition:
               api.connected:
             then:
-              - homeassistant.event:
-                  event: esphome.ev_lt_front_door
+              - light.toggle: light_2
+              #- homeassistant.event:
+              #    event: esphome.ev_lt_front_door
             else:
               - light.toggle: light_2
 

@@ -45,6 +45,7 @@ history:
       - weather
     entity_globs:
       - light.*_group
+      - input_boolean.atm_*
     entities:
       - light.configuration_tool_1
       - media_player.living_room_tv
