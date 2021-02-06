@@ -32,8 +32,9 @@ binary_sensor:
             condition:
               api.connected:
             then:
-              - homeassistant.event:
-                  event: esphome.ev_lt_office
+              #- homeassistant.event:
+              #    event: esphome.ev_lt_office
+              - light.toggle: light_1
             else:
               #- switch.toggle: relay_1
               - light.toggle: light_1

@@ -1,0 +1,90 @@
+blueprint:
+  name: Sync Light State
+  description: >
+    Sync On/Off state of the lights
+
+    Required entities:
+      - Master light
+      - Slave light
+
+  domain: automation
+  input:
+    master_light:
+      name: Master light
+      description: The light, switch, scene to turn on (or script to run) when the automation is triggered when in normal mode.
+      selector:
+        entity:
+          domain: light
+    slave_light:
+      name: Slave light
+      description: Light to follow state
+      default:
+      selector:
+        entity:
+          domain: light
+    sync_exclusive:
+      name: Turn light off when master ON
+      default: 'off'
+      selector:
+        boolean:
+    sync_on:
+      name: Sync ON state
+      default: 'off'
+      selector:
+        boolean:
+    sync_off:
+      name: Sync OFF state
+      default: 'off'
+      selector:
+        boolean:
+
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  master_light: !input master_light
+  sync_on: !input sync_on
+  sync_off: !input sync_off
+  sync_exclusive: !input sync_exclusive
+
+
+trigger:
+  - platform: state
+    entity_id: !input master_light
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: !input master_light
+    from: 'on'
+    to: 'off'
+
+
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ states[master_light].state == 'on' }}"
+          - condition: template
+            value_template: "{{ sync_exclusive == True }}"
+        sequence:
+          - service: homeassistant.turn_off
+            entity_id: !input slave_light
+    default:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ states[master_light].state == 'on' }}"
+              - condition: template
+                value_template: "{{ sync_on == True }}"
+            sequence:
+              - service: homeassistant.turn_on
+                entity_id: !input slave_light
+          - conditions:
+              - condition: template
+                value_template: "{{ states[master_light].state == 'off' }}"
+              - condition: template
+                value_template: "{{ sync_off == True }}"
+            sequence:
+              - service: homeassistant.turn_off
+                entity_id: !input slave_light

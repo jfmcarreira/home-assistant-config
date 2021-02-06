@@ -12,37 +12,17 @@ class ControllingLight:
         self.is_auxiliary = False
         self.sync_off_with_other = False
         self.timeout_off = 0
-        self.timer = None
+        self.main_motion_timer = None
 
     def init_based_on_dict(self, light_dict ):
-        try:
-            self.is_in_room = light_dict["is_in_room"]
-        except KeyError:
-            pass
-        try:
-            self.use_to_turn_off = light_dict["use_to_turn_off"]
-        except KeyError:
-            pass
-        try:
-            self.use_to_turn_on = light_dict["use_to_turn_on"]
-        except KeyError:
-            pass
-        try:
-            self.trigger_event = light_dict["trigger_event"]
-        except KeyError:
-            pass
-        try:
-            self.is_auxiliary = light_dict["is_auxiliary"]
-        except KeyError:
-            pass
-        try:
-            self.sync_off_with_other = light_dict["sync_off"]
-        except KeyError:
-            pass
-        try:
-            self.timeout_off = int( light_dict["timeout_off"] )
-        except KeyError:
-            pass
+        if "is_in_room" in light_dict: self.is_in_room = light_dict["is_in_room"]
+        if "use_to_turn_off" in light_dict: self.use_to_turn_off = light_dict["use_to_turn_off"]
+        if "use_to_turn_on" in light_dict: self.use_to_turn_on = light_dict["use_to_turn_on"]
+        if "trigger_event" in light_dict: self.trigger_event = light_dict["trigger_event"]
+        if "is_auxiliary" in light_dict: self.is_auxiliary = light_dict["is_auxiliary"]
+        if "sync_off" in light_dict: self.sync_off_with_other = light_dict["sync_off"]
+        if "timeout_off" in light_dict: self.timeout_off = int( light_dict["timeout_off"] )
+        
 
 
 class RoomLightControl():
@@ -99,7 +79,7 @@ class RoomLightControl():
         except:
             log_name = light.entity
 
-        self.call_service("logbook/log", domain = "light", entity_id = light.entity, name = log_name, message = log_message)
+        #self.call_service("logbook/log", domain = "light", entity_id = light.entity, name = log_name, message = log_message)
 
     def lights_controller_callback(self, entity, attribute, old, new, kwargs):
         self.lights_controller = ( new == "on" )
@@ -108,7 +88,7 @@ class RoomLightControl():
         if not self.get_state( light.entity ) == "on":
             if not manual:
                 light.just_turn_on = True
-            self.run_in(self.just_turn_on_reset_callback, 3, light = light)
+            self.run_in(self.just_turn_on_reset_callback, 2, light = light)
             self.turn_on( light.entity )
             self.add_logbook_entry( light, "ligada", manual, trigger )
             light.manual_on = manual
@@ -218,8 +198,11 @@ class AutomaticLighting():
             else:
                 trigger_name = trigger
                 trigger_state = "on"
-
-            self.listen_state(self.trigger_callback, trigger_name, new = trigger_state )
+            
+            if trigger_state == "both":
+                self.listen_state(self.trigger_callback, trigger_name )
+            else:
+                self.listen_state(self.trigger_callback, trigger_name, new = trigger_state )
 
 
         # Light sensor
@@ -228,14 +211,14 @@ class AutomaticLighting():
         except KeyError:
             self.lux_sensor = None
 
-        self.timer = None
+        self.main_motion_timer = None
         self.no_motion_timeout_timer = None
 
 
     def turn_off_automatic_lights(self):
-        if self.timer is not None and self.current_light is not None:
+        if self.main_motion_timer is not None and self.current_light is not None:
             self.turn_off_light(self.current_light, trigger = self.last_trigger)
-        self.timer = None
+        self.main_motion_timer = None
         self.current_light = None
 
 
@@ -277,15 +260,15 @@ class AutomaticLighting():
                 light = self.main_light
 
             # Increment counter if timer not running
-            if self.timer is None:
+            if self.main_motion_timer is None:
                 self.number_of_auto_on_events += 1
 
             self.current_light = light
 
             self.turn_on_light(light, manual = False, trigger = self.last_trigger )
-            self.listen_state(self.light_callback, light.entity, new = "off", oneshot = True )
+            self.turn_off_manually_handle = self.listen_state(self.light_callback, light.entity, new = "off", oneshot = True )
 
-            self.set_timer( self.number_of_auto_on_events * self.timeout )
+            self.reset_timer()
 
 
     def house_mode_callback(self, entity, attribute, old, new, kwargs):
@@ -295,15 +278,17 @@ class AutomaticLighting():
             self.number_of_auto_on_events = 0
         self.house_mode = new
 
-    def set_timer(self, timeout):
-        if self.timer is not None:
-            self.cancel_timer(self.timer)
-        self.timer = self.run_in(self.timer_callback, str(timeout))
+    def reset_timer(self):
+        timeout = self.number_of_auto_on_events * self.timeout
+        if self.main_motion_timer is not None:
+            self.cancel_timer(self.main_motion_timer)
+        self.main_motion_timer = self.run_in(self.main_motion_timer_callback, str(timeout))
 
     def timer_callback(self, kwargs):
         self.last_trigger = "Temporizador"
+        self.cancel_listen_state( self.turn_off_manually_handle )
         self.turn_off_automatic_lights()
-        self.timer = None
+        self.main_motion_timer = None
 
     def no_motion_timeout_timer_callback(self, kwargs):
         if self.lights_controller:
@@ -313,21 +298,24 @@ class AutomaticLighting():
 
     def trigger_callback(self, entity, attribute, old, new, kwargs):
         if self.lights_controller:
-            if new == "on":
-                self.last_trigger = entity
+            self.last_trigger = entity
+            if self.main_motion_timer:
+                self.reset_timer()
+            else:
                 self.automatic_control_lights()
 
-                if self.no_motion_timeout > 0:
-                    if self.no_motion_timeout_timer is not None:
-                        self.cancel_timer(self.timer)
-                    self.no_motion_timeout_timer = self.run_in(self.no_motion_timeout_timer_callback, self.no_motion_timeout)
+            if self.no_motion_timeout > 0:
+                if self.no_motion_timeout_timer is not None:
+                    self.cancel_timer(self.no_motion_timeout_timer)
+                self.no_motion_timeout_timer = self.run_in(self.no_motion_timeout_timer_callback, self.no_motion_timeout)
 
     def light_callback(self, entity, attribute, old, new, kwargs):
         self.last_trigger = entity
-        if self.timer is not None:
+        if new == "off":
             self.number_of_auto_on_events = 0
-            self.cancel_timer(self.timer)
-        self.timer = None
+            if self.main_motion_timer is not None:
+                self.cancel_timer(self.main_motion_timer)
+        self.main_motion_timer = None
 
     def room_lights_auto_callback(self, entity, attribute, old, new, kwargs):
         light = kwargs["light"]

@@ -498,3 +498,108 @@
     data: {}
     entity_id: switch.office_desk
   mode: single
+- id: '1612567748105'
+  alias: lights_motion_office_night
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights.yaml
+    input:
+      illuminance_cutoff: '0'
+      automation_name: lights_motion_office_night
+      motion_sensor: binary_sensor.motion_sensor_office
+      target_entity: light.office_desk
+      no_motion_wait: '60'
+      blocker_entity: light.office_group
+      house_mode: Night
+      run_while_sleep: false
+- id: '1612570836529'
+  alias: lights_motion_office_normal
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights.yaml
+    input:
+      illuminance_cutoff: '0'
+      house_mode: 'On'
+      automation_name: lights_motion_office_normal
+      motion_sensor: binary_sensor.motion_sensor_office
+      target_entity: light.office
+      no_motion_wait: '60'
+      blocker_entity: light.office_group
+      run_while_sleep: false
+- id: '1612574913656'
+  alias: lights_motion_living_room_night
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights.yaml
+    input:
+      illuminance_cutoff: '3'
+      automation_name: lights_motion_living_room_night
+      motion_sensor: binary_sensor.motion_sensor_living_room
+      target_entity: light.living_room_tv_leds
+      no_motion_wait: '60'
+      blocker_entity: light.living_room_group
+      house_mode: Night
+      run_while_sleep: false
+      illuminance_sensor: sensor.living_room_light_level
+- id: '1612574949221'
+  alias: lights_motion_living_room_normal
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights.yaml
+    input:
+      illuminance_cutoff: '15'
+      house_mode: 'On'
+      automation_name: lights_motion_living_room_normal
+      motion_sensor: binary_sensor.motion_sensor_living_room
+      target_entity: light.living_room_group
+      no_motion_wait: '60'
+      run_while_sleep: false
+      illuminance_sensor: sensor.living_room_light_level
+- id: '1612576412343'
+  alias: lights_motion_hallway_night
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights.yaml
+    input:
+      illuminance_cutoff: '10'
+      automation_name: lights_motion_hallway_night
+      motion_sensor: binary_sensor.motion_sensor_hallway
+      target_entity: light.hallway_presence_group
+      no_motion_wait: '120'
+      blocker_entity: light.hallway
+      house_mode: Night
+      run_while_sleep: true
+      illuminance_sensor: sensor.hallway_light_level
+- id: '1612577959648'
+  alias: lights_sync_bathroom_mirror
+  description: ''
+  use_blueprint:
+    path: lights/sync_lights.yaml
+    input:
+      master_light: light.bathroom
+      slave_light: light.bathroom_mirror
+      sync_on: false
+      sync_exclusive: true
+      sync_off: true
+- id: '1612578028726'
+  alias: lights_sync_living_room_abajur
+  description: ''
+  use_blueprint:
+    path: lights/sync_lights.yaml
+    input:
+      master_light: light.living_room_main
+      slave_light: light.living_room_abajur
+      sync_on: false
+      sync_exclusive: true
+      sync_off: true
+- id: '1612579273509'
+  alias: lights_sync_living_room_tv_leds
+  description: ''
+  use_blueprint:
+    path: lights/sync_lights.yaml
+    input:
+      master_light: light.living_room_main
+      slave_light: light.living_room_tv_leds
+      sync_on: false
+      sync_exclusive: true
+      sync_off: true

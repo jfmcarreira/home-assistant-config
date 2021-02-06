@@ -103,8 +103,9 @@ binary_sensor:
               condition:
                 api.connected:
               then:
-                - homeassistant.event:
-                    event: esphome.ev_lt_livingroomwindow
+                - light.toggle: light_window
+                #- homeassistant.event:
+                #    event: esphome.ev_lt_livingroomwindow
               else:
                 - light.toggle: light_window
       - timing:
@@ -112,8 +113,12 @@ binary_sensor:
           - ON for 0.5s to 1.5s
           - OFF for at least 0.1s
         then:
-          - homeassistant.event:
-              event: esphome.ev_lt_livingroomabajur
+          - homeassistant.service:
+              service: light.toggle
+              data:
+                entity_id: light.living_room_abajur
+          #- homeassistant.event:
+          #    event: esphome.ev_lt_livingroomabajur
 
       - timing:
           - ON for at least 1.5s
@@ -164,15 +169,20 @@ binary_sensor:
               condition:
                 api.connected:
               then:
-                - homeassistant.event:
-                    event: esphome.ev_lt_livingroomtable
+                - light.toggle: light_table
+                #- homeassistant.event:
+                #    event: esphome.ev_lt_livingroomtable
               else:
                 - light.toggle: light_table
       - timing:
           - ON for at least 1s
         then:
-          - homeassistant.event:
-              event: esphome.ev_lt_livingroomtvleds
+          - homeassistant.service:
+              service: light.toggle
+              data:
+                entity_id: light.living_room_tv_leds
+          #- homeassistant.event:
+          #    event: esphome.ev_lt_livingroomtvleds
 
 
 
