@@ -23,7 +23,7 @@ blueprint:
       selector:
         text:
     run_while_sleep:
-      name: Run while in house is on Sleep mode
+      name: Run while the house is on Sleep mode
       default: 'off'
       selector:
         boolean:
@@ -127,11 +127,6 @@ condition:
   # Now either run if the light is Off or if it is already running
   - condition: or
     conditions:
-      # If already in the automatic mode, restart the count-down
-      #- condition: state
-      #  entity_id: !input light_mode_counter
-      #  above: 0
-
       - condition: template
         value_template: "{{ states[light_mode_counter].state | int > 0 }}"
 
@@ -158,12 +153,12 @@ condition:
 
 
 action:
-  #- service: input_boolean.turn_on
-    #entity_id: !input light_mode
-
-  - service: input_number.increment
-    data:
-      entity_id: !input light_mode_counter
+  - choose:
+      - conditions: "{{ states[target_entity].state == 'off' }}"
+        sequence:
+          - service: input_number.increment
+            data:
+              entity_id: !input light_mode_counter
 
   - service: light.turn_on
     entity_id: !input target_entity
@@ -179,19 +174,31 @@ action:
   # Otherwise wait for timeout
   - wait_template: "{{ not states[target_entity].state == 'on' }}"
     timeout:
-      seconds: "{{ ( (no_motion_wait|int) * 2 ** (states[light_mode_counter].state|int) ) | int }}"
+      seconds: "{{ ( (no_motion_wait|int) * (states[light_mode_counter].state|int) ) | int }}"
 
+  # Wait completed means that light was turned off manually
+  # If so reset counter
   - choose:
-      - conditions: "{{ not wait.completed }}"
+      - conditions: "{{ wait.completed }}"
         sequence:
-          - service: light.turn_off
-            entity_id: !input target_entity
+          - service: input_number.set_value
+            data:
+              entity_id: !input light_mode_counter
+              value: 0
+
+  # Only continue if target light is still on
+  - condition: state
+    entity_id: !input target_entity
+    state: "on"
+
+  - service: light.turn_off
+    entity_id: !input target_entity
+
+  - wait_template: "{{ states[target_entity].state == 'on' }}"
+    timeout:
+      seconds: "{{ no_motion_wait }}"
 
   - service: input_number.set_value
     data:
       entity_id: !input light_mode_counter
       value: 0
-
-
-  #- service: input_boolean.turn_off
-    #entity_id: !input light_mode
