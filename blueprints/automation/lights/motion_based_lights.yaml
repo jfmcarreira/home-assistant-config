@@ -101,10 +101,6 @@ trigger:
     to: "on"
 
 condition:
-  # Do not run if the blocker is ON
-  - condition: template
-    value_template: "{{ (blocker_entity == none) or (states[blocker_entity].state == 'off') }}"
-
   # Only run if in the specified house mode
   - condition: template
     value_template: >
@@ -133,6 +129,10 @@ condition:
       - condition: and
         conditions:
           # This conditions matter if the light is not in automatic mode
+
+          # Do not run if the blocker is ON
+          - condition: template
+            value_template: "{{ (blocker_entity == none) or (states[blocker_entity].state == 'off') }}"
 
           # Check illuminance level
           - condition: template
