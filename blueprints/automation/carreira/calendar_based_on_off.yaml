@@ -1,22 +1,39 @@
 blueprint:
   name: Calendar Based Entity Toggle
+  description: >
+    Turn On/Off entity based on calendar events.
+
+    This is an example using google calendar:
+
+    1. Check `google_calendar.yaml` for the calendars fetched.
+
+      ```
+      - cal_id: xxxxxxxxxxx@group.calendar.google.com  < ID of the calendar (created by HA)
+        entities:
+          # The following config is created by the user to filter for events in the calendar
+          - device_id: home_automation_heating
+            ignore_availability: true
+            name: Home Automation Heating
+            track: true
+            search: Aquecimento < Keyword to search in the google calendar
+      ```
+
   domain: automation
   input:
     check_calendar:
-      name: Calendário a Verificar
+      name: Calendar to Check
       selector:
         entity:
           domain: calendar
-    keyword:
-      name: Palavra-chave
+    #keyword:
+      #name: (OPTIONAL) Keywork
     action_entity:
-      name: Entidade a Controlar
-            
-            
+      name: Target entity
+
 mode: single
 variables:
   calendar_var: !input check_calendar
-  keyword_var: !input keyword
+  #keyword_var: !input keyword
   
 trigger:
   - platform: state
@@ -27,6 +44,7 @@ trigger:
     entity_id: !input check_calendar
     from: 'off'
     to: 'on'
+
 #condition:
   #condition: or
   #conditions:
@@ -36,11 +54,12 @@ trigger:
           #entity_id: !input check_calendar
           #state: 'off'
         #- condition: template
-          #value_template: "{{ state_attr( calendar_var, 'message') == keyword_var }}"  
+          #value_template: "{{ calendar_var == none or state_attr( calendar_var, 'message') == keyword_var }}"
         ## - condition: template
         ##   value_template: "{{ ((as_timestamp(now()) - as_timestamp(state_attr( 'calendar.home_automation_heating', 'end_time'))) / 60 ) | int < 1 }}"
     #- condition: template
       #value_template: "{{ is_state( calendar_var , 'on') and is_state_attr( calendar_var , 'message', keyword_var ) }}"
+
 action:
   - service: >
       {% if is_state( calendar_var , 'on') %}
