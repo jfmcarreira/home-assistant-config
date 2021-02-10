@@ -34,4 +34,42 @@ influxdb:
       # Misc
       - climate.heating
       - binary_sensor.heating_boiler_state
+
+
+influxdb:
+  username: !secret influxdb_external_user
+  password: !secret influxdb_external_pass
+  host: !secret influxdb_external_host
+  port: !secret influxdb_external_port
+  max_retries: 3
+  default_measurement: state
+  tags:
+    source: hass
+  include:
+    entity_globs:
+      # Power
+      - sensor.bhpzem*
+      - sensor.power_sensor_*
+      - sensor.power_usage_*
+      - sensor.*coronavirus*
+      - sensor.daily_energy_*
+      # Temperature / Humidity
+      - sensor.*_temperature
+      - sensor.*_humidity
+    entities:
+      # Devices
+      - binary_sensor.dish_wash_machine_state
+      - binary_sensor.washing_machine_state
+      - binary_sensor.device_iron_state
+      # Utilities
+      - input_number.water_meter
+      - input_number.gas_meter
+      - input_number.electricity_meter_peak
+      - input_number.electricity_meter_offpeak
+      - input_number.electricity_meter_full
+      - sensor.electricity_meter
+      # Misc
+      - climate.heating
+      - binary_sensor.heating_boiler_state
+
  
