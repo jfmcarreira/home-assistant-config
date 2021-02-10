@@ -411,8 +411,13 @@ cards:
                   header:
                     type: buttons
                     entities:
-                      - entity: script.task_laundry_remove_wet_clothes
+                      - entity: binary_sensor.wash_machine_wet_clothes
                         icon: 'mdi:hanger'
+                        tap_action:
+                          action: call-service
+                          service: automation.trigger
+                          service_data:
+                            entity_id: automation.task_laundry_remove_clothes_done
                       - entity: script.task_laundry_remove_dry_clothes
                         icon: 'mdi:tshirt-crew'
           - aspect_ratio: 5/3.8
@@ -420,7 +425,9 @@ cards:
             name: Loiça
             hold_action:
               action: call-service
-              service: script.task_dish_wash_machine_empty
+              service: automation.trigger
+              service_data:
+                entity_id: automation.task_dish_wash_remove_dish_done
             size: 100%
             state:
               - operator: template
@@ -471,8 +478,13 @@ cards:
                   header:
                     type: buttons
                     entities:
-                      - entity: script.task_dish_wash_machine_empty
+                      - entity: binary_sensor.dish_wash_machine_need_emtpy
                         icon: 'mdi:silverware'
+                        tap_action:
+                          action: call-service
+                          service: automation.trigger
+                          service_data:
+                            entity_id: automation.task_dish_wash_remove_dish_done
           - type: 'custom:button-card'
             layout: vertical
             aspect_ratio: 5/3.8
@@ -546,9 +558,7 @@ cards:
                   action: more-info
                 tap_action:
                   action: call-service
-                  service: input_select.select_next
-                  service_data:
-                    entity_id: input_select.house_mode
+                  service: script.select_next_house_mode
               - type: 'custom:button-card'
                 layout: icon_name
                 aspect_ratio: 10/4
