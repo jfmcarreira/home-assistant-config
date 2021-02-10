@@ -5,6 +5,8 @@ homeassistant:
   customize:
     sensor.average_light_level:
       friendly_name: Luminusidade Média
+      device_class: illuminance
+      icon: hass:brightness-5
 
 sensor:
   - platform: min_max
@@ -14,4 +16,3 @@ sensor:
     entity_ids:
       - sensor.living_room_light_level
       - sensor.hallway_light_level
-      
