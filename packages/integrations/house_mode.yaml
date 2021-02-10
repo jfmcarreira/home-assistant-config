@@ -1,0 +1,63 @@
+sensor clothes:
+  - platform: template
+    sensors:
+      house_mode:
+        friendly_name: Modo de funcionamento
+        value_template: >-
+          {% if is_state( 'input_select.house_mode', 'On' )  %}
+            Ligada
+          {% elif is_state( 'input_select.house_mode', 'Night' )  %}
+            Modo Noite
+          {% elif is_state( 'input_select.house_mode', 'Sleep' )  %}
+            Modo Dormir
+          {% else %}
+            Desligada
+          {% endif %}
+        icon_template: >-
+          {% if is_state( 'input_select.house_mode', 'On' )  %}
+            mdi:home-automation
+          {% elif is_state( 'input_select.house_mode', 'Night' )  %}
+            mdi:weather-night
+          {% elif is_state( 'input_select.house_mode', 'Sleep' )  %}
+            mdi:sleep
+          {% else %}
+            mdi:account-off
+          {% endif %}
+
+script:
+  select_next_house_mode:
+    sequence:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: input_select.house_mode
+                state: "On"
+            sequence:
+              - service: input_select.select_option
+                data:
+                  entity_id: input_select.house_mode
+                  option: "Night"
+          - conditions:
+              - condition: state
+                entity_id: input_select.house_mode
+                state: "Night"
+            sequence:
+              - service: input_select.select_option
+                data:
+                  entity_id: input_select.house_mode
+                  option: "On"
+          - conditions:
+              - condition: state
+                entity_id: input_select.house_mode
+                state: "Sleep"
+            sequence:
+              - service: input_select.select_option
+                data:
+                  entity_id: input_select.house_mode
+                  option: "Night"
+        default:
+          - service: input_select.select_option
+            data:
+              entity_id: input_select.house_mode
+              option: "On"
+
