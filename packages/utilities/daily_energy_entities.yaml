@@ -55,7 +55,7 @@ sensor power:
               ( states.sensor.power_usage_light_living_room_table.state | float ) + 
               ( states.sensor.power_usage_light_living_room_window.state | float ) + 
               ( states.sensor.power_usage_light_master_bedroom.state | float ) + 
-              ( states.sensor.power_usage_light_master_bedroom_bathroom_ceilling.state | float ) + 
+              ( states.sensor.power_usage_light_master_bedroom_bathroom_ceiling.state | float ) + 
               ( states.sensor.power_usage_light_master_bedroom_bathroom_mirror.state | float ) + 
               ( states.sensor.power_usage_light_hallway.state | float ) + 
               ( states.sensor.power_usage_light_front_door.state | float ) 
@@ -102,6 +102,7 @@ sensor energy:
           {{ 
             ( states.sensor.daily_energy.state | float ) - 
             ( states.sensor.daily_energy_living_room.state | float ) - 
+            ( states.sensor.daily_energy_office_desk.state | float ) - 
             ( states.sensor.daily_energy_kitchen_oven.state | float ) - 
             ( states.sensor.daily_energy_microwave.state | float ) -
             ( states.sensor.daily_energy_washing_machine.state | float ) - 
