@@ -18,7 +18,7 @@ if tv_source == "MEO":
     meo_box_state = hass.states.get('media_player.living_room_tv_meo_box').state
 
     broadlink_device = "meo"
-    
+    send_via_broadlink = True
     numeric_commands_list_meo = [ "NUMBER_1", "NUMBER_2", "NUMBER_3", "NUMBER_4", "NUMBER_5", "NUMBER_6", "NUMBER_7", "NUMBER_8", "NUMBER_9", "NUMBER_0"]
     if button in numeric_commands_list_meo or meo_box_state == 'unavailable':
         send_via_broadlink = True

@@ -36,12 +36,3 @@ if channel in meo_channels:
     switch_channel_number(hass, entity_id, dic_channel)
 else:
     switch_channel_number(hass, entity_id, channel)
-
-    # def send_packet(packet):
-    #     service_data = { 'packet': packet }
-    #     hass.services.call('switch','broadlink_send_packet_192_168_0_16', service_data, False)
-
-    # for n in channel:
-    #     if n in vodafone_packets:
-    #         send_packet(vodafone_packets[n])
-    #         time.sleep(1)
