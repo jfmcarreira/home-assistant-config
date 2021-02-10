@@ -143,13 +143,13 @@ sensor per_month:
             ROUND(SUM(`daily_energy_living_room`), 2) AS value
           FROM `daily_energy_partial`
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
-      - name: query_month_energy_laundry
-        column: "value"
-        query: >-
-          SELECT
-            ROUND(SUM(`daily_energy_laundry`), 2) AS value
-          FROM `daily_energy_partial`
-          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+      #- name: query_month_energy_laundry
+        #column: "value"
+        #query: >-
+          #SELECT
+            #ROUND(SUM(`daily_energy_laundry`), 2) AS value
+          #FROM `daily_energy_partial`
+          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
       - name: query_month_energy_kitchen_oven
         column: "value"
         query: >-
@@ -222,8 +222,8 @@ sensor per_month:
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
             
       
-  #- platform: template
-    #sensors:
-      #query_month_energy_remaining:
-        #unit_of_measurement: "khW"
-        #value_template: "{{ ( states.sensor.query_month_energy_total.state | float ) - ( states.sensor.query_month_energy_living_room.state | float ) - ( states.sensor.query_month_energy_laundry.state | float ) - ( states.sensor.query_month_energy_dish_wash_machine.state | float ) - ( states.sensor.query_month_energy_fridge.state | float ) - ( states.sensor.query_month_energy_office_desk.state | float ) - ( states.sensor.query_month_energy_iron.state | float ) - ( states.sensor.query_month_energy_portable_heater.state | float ) - ( states.sensor.query_month_energy_lights.state | float ) }}"
+  - platform: template
+    sensors:
+      query_month_energy_remaining_diff:
+        unit_of_measurement: "khW"
+        value_template: "{{ ( states.sensor.query_month_energy_total.state | float ) - ( states.sensor.query_month_energy_living_room.state | float ) - ( states.sensor.query_month_energy_kitchen_oven.state | float ) - ( states.sensor.query_month_energy_microwave.state | float ) - ( states.sensor.query_month_energy_washing_machine.state | float )  - ( states.sensor.query_month_energy_dish_wash_machine.state | float ) - ( states.sensor.query_month_energy_fridge.state | float ) - ( states.sensor.query_month_energy_office_desk.state | float ) - ( states.sensor.query_month_energy_iron.state | float ) - ( states.sensor.query_month_energy_portable_heater.state | float ) - ( states.sensor.query_month_energy_lights.state | float ) }}"

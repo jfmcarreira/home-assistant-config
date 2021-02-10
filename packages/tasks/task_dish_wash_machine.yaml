@@ -53,7 +53,6 @@ binary_sensor state:
 
       dish_wash_machine_need_emtpy:
         friendly_name: Existe Loiça Lavada na Máquina
-        #device_class: problem
         value_template: >
           {{ as_timestamp( states('sensor.task_dish_washing_last_done') ) - as_timestamp( states('sensor.task_dish_wash_empty_last_done') ) > 0 }}
         attribute_templates:
@@ -105,53 +104,6 @@ sensor dishes:
           ORDER BY date  DESC LIMIT 1;
         column: date
 
-script:
-  task_dish_wash_machine_notification:
-    fields:
-      notification_method:
-        description: Notification method
-        example: mobile_app_magnesium
-    sequence:
-      - service: "notify.{{ notification_method }}"
-        data:
-          title: Tarefa Doméstica
-          message: Retirar loiça da máquina de lavar
-          data:
-            sticky: true
-            tag: 30
-            priority: high
-            persistent: true
-            actions:
-              - action: dish_wash_remove_done
-                title: Registar loiça retirada da máquina
-
-  task_dish_wash_machine_empty:
-    alias: Tarefa Retirar Loiça da Máquina
-    sequence:
-      - service: persistent_notification.dismiss
-        data:
-          notification_id: persistent_dish_wash_remove_dishes
-
-      - service: notify.mobile_app_all
-        data:
-          message: clear_notification
-          data:
-            tag: 30
-            dismiss: true
-
-      - condition: state
-        entity_id: binary_sensor.dish_wash_machine_need_emtpy
-        state: "on"
-
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: "Dish_Wash_Machine_Empty"
-          column: task_name
-          date_stamp: >
-            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
 
 automation dishes:
   - alias: task_dish_wash_machine_finished
@@ -195,7 +147,7 @@ automation dishes:
         state: "on"
       - condition: template
         value_template: >
-          {{ ( ( as_timestamp( now() ) - as_timestamp( state_attr( "automation.task_dish_wash_empty_machine_reminder", "last_triggered" ) ) ) / 60 ) > 60 }}
+          {{ now().timestamp() - state_attr( "automation.task_dish_wash_empty_machine_reminder", "last_triggered" ) | as_timestamp > 60 * 50 }}
     action:
       - service: persistent_notification.create
         data:
@@ -231,4 +183,27 @@ automation dishes:
         entity_id: binary_sensor.dish_wash_machine_need_emtpy
         state: "on"
     action:
-      - service: script.task_dish_wash_machine_empty
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: persistent_dish_wash_remove_dishes
+
+      - service: notify.mobile_app_all
+        data:
+          message: clear_notification
+          data:
+            tag: 30
+            dismiss: true
+
+      - condition: state
+        entity_id: binary_sensor.dish_wash_machine_need_emtpy
+        state: "on"
+
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: "Dish_Wash_Machine_Empty"
+          column: task_name
+          date_stamp: >
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"

@@ -43,7 +43,6 @@ disabled_configs
 data
 opencv
 .vscode
-
-blueprints/automation/homeassistant/notify_leaving_zone.yaml
+blueprints/
 
 .rsync_folder_conf
