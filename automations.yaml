@@ -509,25 +509,36 @@
       motion_sensor: binary_sensor.motion_sensor_office
       target_entity: light.office_desk
       no_motion_wait: '60'
-      blocker_entity: light.office_group
-      house_mode: Night
+      blocker_on_entity: light.office_group
+      required_house_mode: Night
       run_while_sleep: false
       light_mode_counter: input_number.atm_lights_automatic_mode_office
+      house_mode: input_select.house_mode
+      number_of_repetitions: '0'
+      blocker_off_entity: input_boolean.notify_home
+      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
+      only_after_sunset: false
 - id: '1612570836529'
   alias: lights_motion_office_normal
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '0'
-      house_mode: 'On'
+      illuminance_cutoff: '15'
+      required_house_mode: 'On'
       automation_name: lights_motion_office_normal
       motion_sensor: binary_sensor.motion_sensor_office
       target_entity: light.office
       no_motion_wait: '60'
-      blocker_entity: light.office_group
+      blocker_on_entity: light.office_group
       run_while_sleep: false
       light_mode_counter: input_number.atm_lights_automatic_mode_office
+      house_mode: input_select.house_mode
+      number_of_repetitions: '0'
+      blocker_off_entity: binary_sensor.notify_home
+      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
+      illuminance_sensor: sensor.office_light_level
+      only_after_sunset: false
 - id: '1612574913656'
   alias: lights_motion_living_room_night
   description: ''
@@ -538,43 +549,53 @@
       automation_name: lights_motion_living_room_night
       motion_sensor: binary_sensor.motion_sensor_living_room
       target_entity: light.living_room_tv_leds
-      no_motion_wait: '60'
-      blocker_entity: light.living_room_group
-      house_mode: Night
+      no_motion_wait: '120'
+      blocker_on_entity: light.living_room_group
+      required_house_mode: Night
       run_while_sleep: false
       illuminance_sensor: sensor.living_room_light_level
       light_mode_counter: input_number.atm_lights_automatic_mode_living_room
+      house_mode: input_select.house_mode
+      number_of_repetitions: '0'
+      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
+      only_after_sunset: false
 - id: '1612574949221'
   alias: lights_motion_living_room_normal
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '70'
-      house_mode: 'On'
+      illuminance_cutoff: '10'
+      house_mode: input_select.house_mode
       automation_name: lights_motion_living_room_normal
       motion_sensor: binary_sensor.motion_sensor_living_room
       target_entity: light.living_room_group
-      no_motion_wait: '60'
       run_while_sleep: false
       illuminance_sensor: sensor.living_room_light_level
       light_mode_counter: input_number.atm_lights_automatic_mode_living_room
+      number_of_repetitions: '5'
+      blocker_off_entity: binary_sensor.notify_home
+      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
+      required_house_mode: 'On'
+      no_motion_wait: '120'
+      only_after_sunset: false
 - id: '1612576412343'
   alias: lights_motion_hallway_night
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '10'
+      illuminance_cutoff: '0'
       automation_name: lights_motion_hallway_night
       motion_sensor: binary_sensor.motion_sensor_hallway
       target_entity: light.hallway_presence_group
       no_motion_wait: '120'
-      blocker_entity: light.hallway
-      house_mode: Night
+      blocker_on_entity: light.hallway
       run_while_sleep: true
-      illuminance_sensor: sensor.hallway_light_level
       light_mode_counter: input_number.atm_lights_automatic_mode_hallway
+      number_of_repetitions: '0'
+      blocker_off_entity: binary_sensor.notify_home
+      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
 - id: '1612577959648'
   alias: lights_sync_bathroom_mirror
   description: ''
@@ -619,3 +640,28 @@
       sync_on: false
       sync_exclusive: true
       sync_off: true
+- id: '1613309017536'
+  alias: lights_sync_hallway_presence_light
+  description: ''
+  use_blueprint:
+    path: lights/sync_lights.yaml
+    input:
+      master_light: light.hallway
+      slave_light: light.hallway_presence
+      sync_on: false
+      sync_off: false
+- id: '1613955720143'
+  alias: Notify Baby Monitor Noise
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.baby_monitor_noise
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: notify.mobile_app_magnesium
+    data:
+      title: Baby Monitor
+      message: Som detectado
+  mode: single
