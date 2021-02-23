@@ -14,7 +14,7 @@ else:
     tv_source = hass.states.get('sensor.living_room_tv_source').state
 
 if tv_source == "MEO":
-    
+
     meo_box_state = hass.states.get('media_player.living_room_tv_meo_box').state
 
     broadlink_device = "meo"
@@ -76,7 +76,6 @@ elif tv_source == 'Kodi':
     hass.services.call("kodi","call_method", service_data, False)
 
 else:
-  
     broadlink_device = "lgtv_sala"
 
     if button == 'VOLUME UP':
@@ -87,7 +86,7 @@ else:
     entity_id = "media_player.living_room_tv"
     service_data = { "entity_id": entity_id, "button": button }
     hass.services.call("webostv","button", service_data, False)
-    
+
 if send_via_broadlink:
     entity_id = "remote.universal_remote_living_room_remote"
     service_data = { "entity_id": entity_id, "device": broadlink_device, "command": button, "num_repeats": 1 }

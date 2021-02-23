@@ -1,14 +1,15 @@
 script:
-  action_meo_play_main_channel:
-    alias: Routine Meo Play SIC Channel
+  routine_turn_on_living_room_tv_meo:
+    alias: Routina Ligar Televisão no MEO
     sequence:
       - service: media_player.turn_on
         entity_id: media_player.living_room_tv
-
+      - service: media_player.turn_on
+        entity_id: media_player.living_room_tv_meo_box
       - choose:
           - conditions:
-              - condition: template
-                value_template: "{{ is_state( 'media_player.living_room_tv_meo_box', 'unavailable' )  }}"
+            - condition: template
+              value_template: "{{ is_state( 'media_player.living_room_tv_meo_box', 'unavailable' )  }}"
             sequence:
               - service: remote.send_command
                 data:
@@ -24,101 +25,68 @@ script:
         timeout: "00:00:04"
 
       - service: media_player.select_source
-        entity_id: media_player.media_center
+        entity_id: media_player.living_room_tv
         data:
           source: MEO
 
       - wait_template: "{{ is_state( 'sensor.living_room_tv_source', 'MEO' )  }}"
         timeout: "00:00:04"
 
+
+  routine_dinner_time:
+    alias: Routina Modo de Refeição
+    sequence:
+      - service: script.routine_turn_on_living_room_tv_meo
+
+      - service: media_player.volume_set
+        entity_id: media_player.living_room_tv
+        data:
+          volume_level: 0.09
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 6
+          milliseconds: 0
+
+      - service: python_script.change_meo_box_channel
+        data:
+          channel: SIC
+          entity_id: media_player.living_room_tv_meo_box
+
+      - delay: 00:00:03
+      - service: script.action_meo_reset_current_show
+
+    mode: single
+
+  action_meo_play_main_channel:
+    alias: Routina SIC na Televisão
+    sequence:
+      - service: script.routine_turn_on_living_room_tv_meo
       - service: python_script.change_meo_box_channel
         data:
           channel: SIC
           entity_id: media_player.living_room_tv_meo_box
 
   action_meo_play_kids_channel:
-    alias: Routine Meo Play Kids Channel
+    alias: Routine Bonecos na Televisão
     sequence:
-      - service: media_player.turn_on
-        entity_id: media_player.living_room_tv
-
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ is_state( 'media_player.living_room_tv_meo_box', 'unavailable' )  }}"
-            sequence:
-              - service: remote.send_command
-                data:
-                  entity_id: remote.universal_remote_living_room_remote
-                  device: meo
-                  command: ENTER
-                  num_repeats: 1
-        default:
-          - service: media_player.turn_on
-            entity_id: media_player.living_room_tv_meo_box
-
-      - wait_template: "{{ is_state( 'binary_sensor.living_room_tv_state', 'on' )  }}"
-        timeout: "00:00:04"
-
-      - service: media_player.select_source
-        entity_id: media_player.living_room_tv
-        data:
-          source: MEO
-
+      - service: script.routine_turn_on_living_room_tv_meo
       - service: python_script.change_meo_box_channel
         data:
           channel: Baby TV
           entity_id: media_player.living_room_tv_meo_box
 
   action_meo_reset_current_show:
-    alias: Routine Meo Reset Current Show
+    alias: Routina Reiniciar Programa Atual
     sequence:
-      - service: media_player.play_media
+      - service: python_script.meo_box_reset_show
         data:
           entity_id: media_player.living_room_tv_meo_box
-          media_content_id: Info
-          media_content_type: mediaroom
-      - delay: 00:00:02
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room_tv_meo_box
-          media_content_id: Right
-          media_content_type: mediaroom
-      - delay: 00:00:02
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room_tv_meo_box
-          media_content_id: OK
-          media_content_type: mediaroom
+          show: Current
   action_meo_reset_previous_show:
-    alias: Routine Meo Reset Previous Show
+    alias: Routina Reiniciar Programa Anterior
     sequence:
-      - service: media_player.play_media
+      - service: python_script.meo_box_reset_show
         data:
           entity_id: media_player.living_room_tv_meo_box
-          media_content_id: Exit
-          media_content_type: mediaroom
-      - delay: 00:00:02
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room_tv_meo_box
-          media_content_id: Up
-          media_content_type: mediaroom
-      - delay: 00:00:02
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room_tv_meo_box
-          media_content_id: Left
-          media_content_type: mediaroom
-      - delay: 00:00:01
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room_tv_meo_box
-          media_content_id: OK
-          media_content_type: mediaroom
-      - delay: 00:00:01
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room_tv_meo_box
-          media_content_id: OK
-          media_content_type: mediaroom
+          show: Previous

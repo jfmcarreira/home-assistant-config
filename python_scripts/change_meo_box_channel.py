@@ -3,7 +3,6 @@ entity_id = data.get("entity_id", 'media_player.living_room_tv_meo_box')
 
 channel = data.get("channel").lower()
 
-
 meo_channels = {
     'rtp1': '1',
     'rtp2': '2',
