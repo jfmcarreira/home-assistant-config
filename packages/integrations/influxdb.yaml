@@ -2,41 +2,6 @@
 ## Influx DB
 ################################################################
 influxdb:
-  username: !secret influxdb_user
-  password: !secret influxdb_pass
-  max_retries: 3
-  default_measurement: state
-  tags:
-    source: hass
-  include:
-    entity_globs:
-      # Power
-      - sensor.bhpzem*
-      - sensor.power_sensor_*
-      - sensor.power_usage_*
-      - sensor.*coronavirus*
-      - sensor.daily_energy_*
-      # Temperature / Humidity
-      - sensor.*_temperature
-      - sensor.*_humidity
-    entities:
-      # Devices
-      - binary_sensor.dish_wash_machine_state
-      - binary_sensor.washing_machine_state
-      - binary_sensor.device_iron_state
-      # Utilities
-      - input_number.water_meter
-      - input_number.gas_meter
-      - input_number.electricity_meter_peak
-      - input_number.electricity_meter_offpeak
-      - input_number.electricity_meter_full
-      - sensor.electricity_meter
-      # Misc
-      - climate.heating
-      - binary_sensor.heating_boiler_state
-
-
-influxdb:
   username: !secret influxdb_external_user
   password: !secret influxdb_external_pass
   host: !secret influxdb_external_host
@@ -46,6 +11,10 @@ influxdb:
   tags:
     source: hass
   include:
+    domains: 
+      - switch
+      - climate
+      - sun
     entity_globs:
       # Power
       - sensor.bhpzem*
@@ -56,20 +25,24 @@ influxdb:
       # Temperature / Humidity
       - sensor.*_temperature
       - sensor.*_humidity
+      - sensor.*_light_level
+      # Sensors Battery
+      - sensor.*_sensor_battery_level
+      # CPU / RAM
+      - sensor.*_cpu_used
+      - sensor.*_ram_used_percent
     entities:
       # Devices
       - binary_sensor.dish_wash_machine_state
       - binary_sensor.washing_machine_state
       - binary_sensor.device_iron_state
-      # Utilities
-      - input_number.water_meter
-      - input_number.gas_meter
-      - input_number.electricity_meter_peak
-      - input_number.electricity_meter_offpeak
-      - input_number.electricity_meter_full
-      - sensor.electricity_meter
+      - binary_sensor.living_room_tv_state
+      - binary_sensor.roborock_state
       # Misc
-      - climate.heating
       - binary_sensor.heating_boiler_state
+      - binary_sensor.notify_home
+  exclude:
+    entity_globs:
+      - sensor.anniversary_*
 
  
