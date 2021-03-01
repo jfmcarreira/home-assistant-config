@@ -1,4 +1,22 @@
 script:
+  action_living_room_tv_change_source:
+    alias: Routina Ligar Televisão no MEO
+    fields:
+      source:
+        description: Source to activate
+        example: MEO
+    sequence:
+      - service: media_player.turn_on
+        entity_id: media_player.living_room_tv
+
+      - wait_template: "{{ is_state( 'binary_sensor.living_room_tv_state', 'on' )  }}"
+        timeout: "00:00:04"
+
+      - service: media_player.select_source
+        entity_id: media_player.living_room_tv
+        data:
+          source: "{{ source }}"
+
   routine_turn_on_living_room_tv_meo:
     alias: Routina Ligar Televisão no MEO
     sequence:

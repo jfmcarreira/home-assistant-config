@@ -54,6 +54,11 @@ if tv_source == "MEO":
         service_data = { "entity_id": entity_id, "media_content_id": button, "media_content_type": "mediaroom" }
         hass.services.call('media_player','play_media', service_data, False)
 
+        if button == "BACK":
+            entity_id = "media_player.living_room_tv"
+            service_data = { "entity_id": entity_id, "button": button }
+            hass.services.call("webostv","button", service_data, False)
+
 elif tv_source == 'Kodi':
 
     if button == "UP":
