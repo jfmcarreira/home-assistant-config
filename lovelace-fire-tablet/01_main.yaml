@@ -41,9 +41,9 @@ cards:
                       away: grayscale(100%)
                       home: grayscale(0%)
                     tap_action:
-                      action: call-service
-                      service: browser_mod.popup
-                      service_data:
+                      action: fire-dom-event
+                      browser_mod:
+                        command: popup
                         title: João
                         card:
                           type: entities
@@ -68,8 +68,6 @@ cards:
                               name: Estado do Smartphone
                             - entity: sensor.magnesium_detected_activity
                               name: Actividade
-                        deviceID:
-                          - this
                   - type: picture-entity
                     aspect_ratio: 1.05/1
                     entity: person.bianca
@@ -79,9 +77,9 @@ cards:
                       away: grayscale(100%)
                       home: grayscale(0%)
                     tap_action:
-                      action: call-service
-                      service: browser_mod.popup
-                      service_data:
+                      action: fire-dom-event
+                      browser_mod:
+                        command: popup
                         title: Bianca
                         card:
                           type: entities
@@ -104,8 +102,6 @@ cards:
                               name: Bateria Smartphone
                             - entity: sensor.calcium_battery_state
                               name: Estado do Smartphone
-                        deviceID:
-                          - this
               - type: horizontal-stack
                 cards:
                   - type: picture-entity
@@ -120,9 +116,9 @@ cards:
                       action: call-service
                       service: script.task_ricardo_vitamin_d
                     tap_action:
-                      action: call-service
-                      service: browser_mod.popup
-                      service_data:
+                      action: fire-dom-event
+                      browser_mod:
+                        command: popup
                         title: Ricardo
                         card:
                           type: entities
@@ -138,8 +134,7 @@ cards:
                               name: Vitamina D
                             - entity: input_boolean.ricardo_sleeping
                               name: Marcar Ricardo a Dormir
-                        deviceID:
-                          - this
+
                   - type: picture-entity
                     aspect_ratio: 1.05/1
                     entity: binary_sensor.cat_litter_box_need_clean
@@ -152,9 +147,9 @@ cards:
                       'off': grayscale(0%)
                       'on': grayscale(72%)
                     tap_action:
-                      action: call-service
-                      service: browser_mod.popup
-                      service_data:
+                      action: fire-dom-event
+                      browser_mod:
+                        command: popup
                         title: Gatas
                         card:
                           type: entities
@@ -221,7 +216,8 @@ cards:
                   action: more-info
       - type: horizontal-stack
         cards:
-          - type: 'custom:button-card'
+          #- type: 'custom:button-card'
+          - type: button
             name: Entrada
             icon: 'mdi:door-open'
             entity: group.hallway
@@ -231,11 +227,9 @@ cards:
               service_data:
                 entity_id: group.hallway
             tap_action:
-              action: call-service
-              service: browser_mod.popup
-              service_data:
-                deviceID:
-                  - this
+              action: fire-dom-event
+              browser_mod:
+                command: popup
                 title: Controlo da Entrada/Especiais
                 card:
                   type: entities
@@ -244,7 +238,7 @@ cards:
                     - light.hallway
                     - light.hallway_mirror
                     - light.hallway_presence
-          - type: 'custom:button-card'
+          - type: button
             name: Cozinha
             icon: 'mdi:stove'
             entity: group.kitchen
@@ -254,11 +248,9 @@ cards:
               service_data:
                 entity_id: group.kitchen
             tap_action:
-              action: call-service
-              service: browser_mod.popup
-              service_data:
-                deviceID:
-                  - this
+              action: fire-dom-event
+              browser_mod:
+                command: popup
                 title: Controlo da Cozinha/Lavandaria
                 card:
                   type: entities
@@ -268,7 +260,7 @@ cards:
                     - light.kitchen_pantry
                     - light.laundry_inside
                     - light.laundry_outside
-          - type: 'custom:button-card'
+          - type: button
             name: Sala
             icon: 'mdi:sofa'
             entity: group.living_room
@@ -278,11 +270,9 @@ cards:
               service_data:
                 entity_id: group.living_room
             tap_action:
-              action: call-service
-              service: browser_mod.popup
-              service_data:
-                deviceID:
-                  - this
+              action: fire-dom-event
+              browser_mod:
+                command: popup
                 title: Controlo da Sala
                 card:
                   type: entities
@@ -293,7 +283,7 @@ cards:
                     - light.living_room_abajur
                     - light.living_room_tv_leds
                     - media_player.living_room_tv
-          - type: 'custom:button-card'
+          - type: button
             name: Quartos
             icon: 'mdi:bed-king'
             entity: group.all_bedrooms
@@ -303,11 +293,9 @@ cards:
               service_data:
                 entity_id: group.all_bedrooms
             tap_action:
-              action: call-service
-              service: browser_mod.popup
-              service_data:
-                deviceID:
-                  - this
+              action: fire-dom-event
+              browser_mod:
+                command: popup
                 title: Controlo dos Quartos
                 card:
                   type: entities
@@ -320,7 +308,7 @@ cards:
                     - light.master_bedroom_bathroom_mirror
                     - light.bedroom_ricardo
                     - light.bedroom_ricardo_lamp
-          - type: 'custom:button-card'
+          - type: button
             name: Escritório
             icon: 'mdi:desk'
             hold_action:
@@ -330,11 +318,9 @@ cards:
                 entity_id: group.office
             entity: group.office
             tap_action:
-              action: call-service
-              service: browser_mod.popup
-              service_data:
-                deviceID:
-                  - this
+              action: fire-dom-event
+              browser_mod:
+                command: popup
                 title: Controlo do Escritório
                 card:
                   type: entities
@@ -345,7 +331,8 @@ cards:
                     - switch.office_desk
       - type: horizontal-stack
         cards:
-          - aspect_ratio: 5/3.8
+          - type: button
+            aspect_ratio: 5/3.8
             custom_fields:
               dry_clothes: |
                 [[[
@@ -388,13 +375,10 @@ cards:
                   - top: 10%
               grid:
                 - position: relative
-            type: 'custom:button-card'
             tap_action:
-              action: call-service
-              service: browser_mod.popup
-              service_data:
-                deviceID:
-                  - this
+              action: fire-dom-event
+              browser_mod:
+                command: popup
                 title: Máquina de Lavar Roupa
                 card:
                   type: entities
@@ -420,7 +404,8 @@ cards:
                             entity_id: automation.task_laundry_remove_clothes_done
                       - entity: script.task_laundry_remove_dry_clothes
                         icon: 'mdi:tshirt-crew'
-          - aspect_ratio: 5/3.8
+          - type: button
+            aspect_ratio: 5/3.8
             entity: binary_sensor.dish_wash_machine_state
             name: Loiça
             hold_action:
@@ -456,13 +441,10 @@ cards:
                   - top: 10%
               grid:
                 - position: relative
-            type: 'custom:button-card'
             tap_action:
-              action: call-service
-              service: browser_mod.popup
-              service_data:
-                deviceID:
-                  - this
+              action: fire-dom-event
+              browser_mod:
+                command: popup
                 title: Máquina de Lavar da Loiça
                 card:
                   type: entities
@@ -524,7 +506,8 @@ cards:
         cards:
           - type: horizontal-stack
             cards:
-              - type: 'custom:button-card'
+              - type: button
+                icon_height: 50px
                 aspect_ratio: 10/4
                 layout: icon_name
                 hold_action:
@@ -533,7 +516,8 @@ cards:
                   action: navigate
                   navigation_path: /fire-tablet/vacuum
                 entity: vacuum.roborock
-              - type: 'custom:button-card'
+              - type: button
+                icon_height: 50px
                 aspect_ratio: 10/4
                 layout: icon_name
                 name: Multimédia
@@ -548,18 +532,21 @@ cards:
                 #color_type: blank-card
                 
                 
-              - type: 'custom:button-card'
+              - type: button
+                icon_height: 40px
                 entity: sensor.house_mode
                 layout: vertical
                 aspect_ratio: 10/4
                 show_name: false
                 show_state: true
                 hold_action:
-                  action: more-info
+                  action: navigate
+                  navigation_path: /lovelace/main
                 tap_action:
                   action: call-service
                   service: script.select_next_house_mode
-              - type: 'custom:button-card'
+              - type: button
+                icon_height: 50px
                 layout: icon_name
                 aspect_ratio: 10/4
                 name: Desligar/Sair
@@ -571,13 +558,11 @@ cards:
                   service_data:
                     entity_id: switch.script_routines_off_sleep_running
                 tap_action:
-                  action: call-service
-                  service: browser_mod.popup
-                  service_data:
+                  action: fire-dom-event
+                  browser_mod:
                     auto_close: true
                     large: true
-                    deviceID:
-                      - this
+                    command: popup
                     title: Routinas para Desligar Casa
                     card:
                       type: grid

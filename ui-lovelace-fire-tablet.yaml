@@ -1,5 +1,8 @@
+kiosk_mode:
+  hide_header: true
 preload_cards:
   - picture-glance
+  - "custom:button-card"
 preload_rows:
   - divider
 title: Ambiente Principal
