@@ -104,9 +104,6 @@ sensor per_day:
           #FROM daily_energy_partial
           #WHERE MONTH(date) = MONTH(CURRENT_DATE);
 
-          
-     
-
 sensor per_month:
   - platform: sql
     db_url: !secret db_custom_url
@@ -143,13 +140,15 @@ sensor per_month:
             ROUND(SUM(`daily_energy_living_room`), 2) AS value
           FROM `daily_energy_partial`
           WHERE MONTH(date) = MONTH(CURRENT_DATE);
-      #- name: query_month_energy_laundry
-        #column: "value"
-        #query: >-
-          #SELECT
-            #ROUND(SUM(`daily_energy_laundry`), 2) AS value
-          #FROM `daily_energy_partial`
-          #WHERE MONTH(date) = MONTH(CURRENT_DATE);
+
+      - name: query_month_energy_laundry
+        column: "value"
+        query: >-
+          SELECT
+            ROUND(SUM(`daily_energy_laundry`), 2) AS value
+          FROM `daily_energy_partial`
+          WHERE MONTH(date) = MONTH(CURRENT_DATE);
+
       - name: query_month_energy_kitchen_oven
         column: "value"
         query: >-

@@ -5,39 +5,54 @@ homeassistant:
   customize:
     sensor.power_usage_lights:
       friendly_name: Potência Total das Luzes
+    sensor.daily_energy_laundry:
+      friendly_name: Sótão
+    sensor.daily_energy_kitchen_oven:
+      friendly_name: Forno/Fogão
+    sensor.daily_energy_media_center:
+      friendly_name: Centro Multimédia
+    sensor.daily_energy_lights:
+      friendly_name: Luzes
   customize_glob:
+    "sensor.reative_power_usage_device_*":
+      device_class: power
+      unit_of_measurement: "VAR"
+      icon: mdi:flash-outline
     "sensor.power_usage_reactive_*":
       device_class: power
+      unit_of_measurement: "VAR"
       icon: mdi:flash-outline
-      #unit_of_measurement: "VAR"
     "sensor.power_usage_*":
       device_class: power
+      unit_of_measurement: "W"
       icon: mdi:flash
-      #unit_of_measurement: "W"
     "sensor.daily_energy_*":
       icon: mdi:flash-circle
     "sensor.energy_*":
       icon: mdi:flash-circle
-      
+
 
 utility_meter: 
   daily_energy:
     source: sensor.bhpzem_energy
     cycle: daily
-  daily_energy_living_room:
-    source: sensor.living_room_energy
-    cycle: daily
-  #daily_energy_laundry:
-    #source: sensor.energy_laundry
+  #daily_energy_living_room:
+    #source: sensor.living_room_energy
     #cycle: daily
+  daily_energy_laundry:
+    source: sensor.energy_laundry
+    cycle: daily
   daily_energy_kitchen_oven:
     source: sensor.kitchen_oven_energy
     cycle: daily
   #daily_energy_microwave:
     #source: sensor.energy_microwave
     #cycle: daily
-  daily_energy_office_desk:
-    source: sensor.energy_office_desk
+  #daily_energy_office_desk:
+    #source: sensor.energy_media_center
+    #cycle: daily
+  daily_energy_media_center:
+    source: sensor.energy_media_center
     cycle: daily
   daily_energy_lights:
     source: sensor.energy_lights
@@ -97,20 +112,23 @@ sensor energy:
   - platform: template
     sensors:
       daily_energy_remaining:
+        friendly_name: Restantes
         unit_of_measurement: "kWh"
         value_template: >
-          {{ 
-            ( states.sensor.daily_energy.state | float ) - 
-            ( states.sensor.daily_energy_living_room.state | float ) - 
-            ( states.sensor.daily_energy_office_desk.state | float ) - 
-            ( states.sensor.daily_energy_kitchen_oven.state | float ) - 
-            ( states.sensor.daily_energy_microwave.state | float ) -
-            ( states.sensor.daily_energy_washing_machine.state | float ) - 
-            ( states.sensor.daily_energy_dish_wash_machine.state | float ) - 
-            ( states.sensor.daily_energy_fridge.state | float ) -   
-            ( states.sensor.daily_energy_iron.state | float ) - 
-            ( states.sensor.daily_energy_portable_heater.state | float ) -
-            ( states.sensor.daily_energy_lights.state | float )
+          {{
+            (
+              ( states.sensor.daily_energy.state | float ) -
+              ( states.sensor.daily_energy_media_center.state | float ) -
+              ( states.sensor.daily_energy_office_desk.state | float ) -
+              ( states.sensor.daily_energy_kitchen_oven.state | float ) -
+              ( states.sensor.daily_energy_microwave.state | float ) -
+              ( states.sensor.daily_energy_laundry.state | float ) -
+              ( states.sensor.daily_energy_dish_wash_machine.state | float ) -
+              ( states.sensor.daily_energy_fridge.state | float ) -
+              ( states.sensor.daily_energy_iron.state | float ) -
+              ( states.sensor.daily_energy_portable_heater.state | float ) -
+              ( states.sensor.daily_energy_lights.state | float )
+            ) | round(3)
           }}
           
 automation insert:
@@ -123,16 +141,18 @@ automation insert:
         entity_id: sensor.daily_energy
       - platform: state
         entity_id: sensor.daily_energy_living_room
-      #- platform: state
-        #entity_id: sensor.daily_energy_laundry
+      - platform: state
+        entity_id: sensor.daily_energy_media_center
+      - platform: state
+        entity_id: sensor.daily_energy_laundry
       - platform: state
         entity_id: sensor.daily_energy_kitchen_oven
       - platform: state
         entity_id: sensor.daily_energy_microwave
       - platform: state
         entity_id: sensor.daily_energy_dish_wash_machine
-      - platform: state
-        entity_id: sensor.daily_energy_washing_machine
+      #- platform: state
+        #entity_id: sensor.daily_energy_washing_machine
       - platform: state
         entity_id: sensor.daily_energy_fridge
       - platform: state
@@ -155,6 +175,8 @@ automation insert:
             {% if trigger.entity_id == "sensor.daily_energy" %}
               daily_energy_total
             {% elif trigger.entity_id == "sensor.daily_energy_living_room" %}
+              daily_energy_living_room
+            {% elif trigger.entity_id == "sensor.daily_energy_media_center" %}
               daily_energy_living_room
             {% elif trigger.entity_id == "sensor.daily_energy_laundry" %}
               daily_energy_laundry

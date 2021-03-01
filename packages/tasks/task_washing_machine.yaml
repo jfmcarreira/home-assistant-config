@@ -34,6 +34,22 @@ binary_sensor state:
     state_topic: "binary_rf_sensors/wash_machine_door"
     qos: 1
 
+  #- platform: template
+    #sensors:
+      #washing_machine_state:
+        #friendly_name: "Máquina de Lavar"
+        #device_class: plug
+        #delay_off:
+          #minutes: 5
+        #value_template: >-
+          #{%- if ( states("sensor.power_usage_device_washing_machine") | int > 10 ) and ( states("sensor.power_usage_reactive_device_washing_machine") | float | abs > 30 ) %}
+              #True
+          #{%- else %}
+              #False
+          #{%- endif %}
+        #attribute_templates:
+          #Última Lavagem: >
+            #{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
   - platform: template
     sensors:
       washing_machine_state:
@@ -42,7 +58,7 @@ binary_sensor state:
         delay_off:
           minutes: 5
         value_template: >-
-          {%- if ( states("sensor.power_usage_device_washing_machine") | int > 10 ) and ( states("sensor.power_usage_reactive_device_washing_machine") | float | abs > 30 ) %}
+          {%- if ( states("sensor.power_usage_device_laundry") | int > 10 ) and ( states("sensor.reative_power_usage_device_laundry") | float | abs > 30 ) %}
               True
           {%- else %}
               False
