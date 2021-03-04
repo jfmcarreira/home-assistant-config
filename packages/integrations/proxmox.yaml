@@ -19,6 +19,7 @@ proxmoxve:
           - 100
           - 112
           - 113
+          - 115
           
 
 sensor:
