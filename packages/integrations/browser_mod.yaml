@@ -4,13 +4,9 @@
 browser_mod:
   prefix: "browser_"
   devices:
-    7f1ca3ca a49e2e63:
-      name: Kyosk Front Door
+    8bd4c1d7-dbc4a954:
+      name: Fire Tablet Kyosk
       camera: true
       force_stay_awake: true
-    #b0de1b03-4aadaefb:
-      #name: Browser TF201 Kyosk
-      #camera: true
-      #force_stay_awake: true
   disable:
     - all
