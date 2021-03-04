@@ -4,34 +4,55 @@
 input_boolean:
   baby_monitor_high_quality:
     name: Qualidade Baby Monitor
+  babyphone_sensor_state:
+    name: Estado do Monitor
+    initial: "off"
 
 camera:
   - platform: ffmpeg
     name: Baby Monitor
     input: !secret reolinke1pro
-    extra_arguments: -probesize 32 -sync ext -rtsp_transport udp
     
   - platform: ffmpeg
-    name: Baby Monitor FFMPEG Detector
+    name: Baby Monitor Low
     input: !secret reolinke1pro_low
-    extra_arguments: -probesize 32 -sync ext -rtsp_transport udp -vf "crop=367:190:163:162"
 
-#binary_sensor:
-  #- platform: ffmpeg_noise
-    #name: Baby Monitor Noise
-    #input: !secret reolinke1pro_low
-    #extra_arguments: -probesize 32 -sync ext -rtsp_transport udp
-    #initial_state: true
-    #duration: 1
-    #reset: 30
-    #peak: -35
-    
-  #- platform: ffmpeg_motion
-    #name: Baby Monitor Motion
-    #input: !secret reolinke1pro_low
-    #extra_arguments: -probesize 32 -sync ext -rtsp_transport udp -vf "crop=367:190:163:162"
-    #changes: 30
-    #initial_state: true
+binary_sensor:
+  - platform: ffmpeg_noise
+    name: Baby Monitor Noise
+    input: !secret reolinke1pro_low
+#    extra_arguments:
+    initial_state: false
+    duration: 1
+    reset: 30
+    peak: -50
+
+  - platform: ffmpeg_motion
+    name: Baby Monitor Motion
+    input: !secret reolinke1pro_low
+    #extra_arguments: -vf "crop=367:190:163:162"
+    changes: 30
+    initial_state: false
+
+automation:
+  - alias: "Change Baby Monitor State"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.babyphone_sensor_state
+    action:
+      - choose:
+          - conditions: "{{ states.input_boolean.babyphone_sensor_state.state == 'on' }}"
+            sequence:
+              - service: ffmpeg.start
+                entity_id: binary_sensor.baby_monitor_motion
+              - service: ffmpeg.start
+                entity_id: binary_sensor.baby_monitor_noise
+        default:
+          - service: ffmpeg.stop
+            entity_id: binary_sensor.baby_monitor_motion
+          - service: ffmpeg.stop
+            entity_id: binary_sensor.baby_monitor_noise
+
 
 #image_processing:
   #- platform: opencv
