@@ -15,4 +15,5 @@ sensor:
     round_digits: 1
     entity_ids:
       - sensor.living_room_light_level
-      - sensor.hallway_light_level
+      - sensor.office_light_level
+      - sensor.kitchen_light_level
