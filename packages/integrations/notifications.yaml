@@ -30,9 +30,8 @@ binary_sensor:
                   False
               {% endif %}
           {% endif %}
-          
 
-script:   
+script:
   task_notification:
     fields:
       task_message:
@@ -88,8 +87,7 @@ script:
                     actions:
                       - action: "{{ task_action }}"
                         title: "{{ task_action_message }}" 
-                  
-                
+
   notify_households:
     alias: Notifcar Quem Está em Casa
     fields:
