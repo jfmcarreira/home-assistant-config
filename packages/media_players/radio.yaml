@@ -7,14 +7,13 @@ input_select:
     name: "Source"
     icon: mdi:radio-fm
     options:
-      #- Mopidy
       - YouTube URL
       - RFM
       - Comercial
       - Cidade FM
       - M80
       - TSF
-      - Mega Hits
+      #- Mega Hits
       - Antena 1
       - Antena 2
       - Antena 3
@@ -30,14 +29,39 @@ input_select:
       - Escritório
       - Quarto Principal
       - Quarto do Ricardo
-      #- Kiosk
-      #- Host
-      #- TV
-      #- Pegasus
-      #- Lithium
-      #- Todos
+      - Fire Tablet
+      #- Todos0
 
 script:
+  radio_control:
+    fields:
+      service_call:
+        description: Service to call
+        example: media_extractor.play_media
+    sequence:
+      - service:  "{{ service_call }}"
+        data:
+          entity_id: >
+              {% if is_state("input_select.speakers_selector", "TV") %}
+                  media_player.living_room_tv
+              {% elif is_state("input_select.speakers_selector", "Host") %}
+                  media_player.host_speakers
+              {% elif is_state("input_select.speakers_selector", "Kiosk") %}
+                  media_player.browser_tf201_kyosk
+              {% elif is_state("input_select.speakers_selector", "Fire Tablet") %}
+                  media_player.fire_tablet_media_player
+              {% elif is_state("input_select.speakers_selector", "Sala") %}
+                  media_player.ghm_living_room
+              {% elif is_state("input_select.speakers_selector", "Cozinha") %}
+                  media_player.gh_clock_kitchen
+              {% elif is_state("input_select.speakers_selector", "Escritório") %}
+                  media_player.ghm_office
+              {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
+                  media_player.ghm_master_bedroom
+              {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
+                  media_player.ghm_bedroom_ricardo
+              {% endif %}
+
   play_radio:
     alias: "Media Play Radio"
     sequence:
@@ -47,93 +71,61 @@ script:
           media_content_type: "music"
           entity_id: >
             {% if is_state("input_select.speakers_selector", "TV") %}
-              media_player.living_room_tv
+                media_player.living_room_tv
             {% elif is_state("input_select.speakers_selector", "Host") %}
-              media_player.host_speakers
+                media_player.host_speakers
             {% elif is_state("input_select.speakers_selector", "Kiosk") %}
-              media_player.browser_tf201_kyosk
+                media_player.browser_tf201_kyosk
+            {% elif is_state("input_select.speakers_selector", "Fire Tablet") %}
+                media_player.fire_tablet_media_player
             {% elif is_state("input_select.speakers_selector", "Sala") %}
-              media_player.ghm_living_room
+                media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-              media_player.gh_clock_kitchen
+                media_player.gh_clock_kitchen
             {% elif is_state("input_select.speakers_selector", "Escritório") %}
-              media_player.ghm_office
+                media_player.ghm_office
             {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
-              media_player.ghm_master_bedroom
+                media_player.ghm_master_bedroom
             {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
-              media_player.ghm_bedroom_ricardo
+                media_player.ghm_bedroom_ricardo
             {% endif %}
           media_content_id: >
             {% if is_state("input_select.radio_station", "Mopidy") %} http://potassium.home:8000/mopidy.mp3
-            {% elif is_state("input_select.radio_station", "RFM") %} http://19613.live.streamtheworld.com:3690/RFM_SC
+            {% elif is_state("input_select.radio_station", "RFM") %} https://20863.live.streamtheworld.com/RFM_SC
             {% elif is_state("input_select.radio_station", "Cidade FM") %} http://mcrscast.mcr.iol.pt/cidadefm
             {% elif is_state("input_select.radio_station", "TSF") %} http://tsfdirecto.tsf.pt/tsfdirecto.mp3
             {% elif is_state("input_select.radio_station", "M80") %} http://mcrscast.mcr.iol.pt/m80
             {% elif is_state("input_select.radio_station", "Comercial") %} http://mcrscast1.mcr.iol.pt/comercial.mp3
-            {% elif is_state("input_select.radio_station", "Meg aHits") %} http://19553.live.streamtheworld.com/MEGA_HITS_SC
+            {% elif is_state("input_select.radio_station", "Mega Hits") %} http://19553.live.streamtheworld.com/MEGA_HITS_SC
             {% elif is_state("input_select.radio_station", "Antena 1") %} http://radiocast.rtp.pt/antena180a.mp3
             {% elif is_state("input_select.radio_station", "Antena 2") %} http://radiocast.rtp.pt/antena280a.mp3
             {% elif is_state("input_select.radio_station", "Antena 3") %} http://radiocast.rtp.pt/antena380a.mp3
             {% elif is_state("input_select.radio_station", "YouTube URL") %}
-              {% set youtube_url = states('input_text.youtube_url') %}
-              {% if 'www.youtube.com' in  youtube_url %}
-                {% set youtube_code = youtube_url.split('=')[-1] %}
-              {% else %}
-                {% set youtube_code = youtube_url.split('/')[-1] %}
-              {% endif %}
-              https://www.youtube.com/watch?v={{ youtube_code }}
+                {% set youtube_url = states('input_text.youtube_url') %}
+                {% if 'www.youtube.com' in  youtube_url %}
+                    {% set youtube_code = youtube_url.split('=')[-1] %}
+                {% else %}
+                    {% set youtube_code = youtube_url.split('/')[-1] %}
+                {% endif %}
+                https://www.youtube.com/watch?v={{ youtube_code }}
             {% endif %}
 
   pause_radio:
     alias: "Media Pause Radio"
     sequence:
-      - service: media_player.media_play_pause
-        data_template:
-          entity_id: >
-            {% if is_state("input_select.speakers_selector", "TV") %}
-              media_player.living_room_tv
-            {% elif is_state("input_select.speakers_selector", "Host") %}
-              media_player.host_speakers
-            {% elif is_state("input_select.speakers_selector", "Kiosk") %}
-              media_player.browser_tf201_kyosk
-            {% elif is_state("input_select.speakers_selector", "Sala") %}
-              media_player.ghm_living_room
-            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-              media_player.gh_clock_kitchen
-            {% elif is_state("input_select.speakers_selector", "Escritório") %}
-              media_player.ghm_office
-            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
-              media_player.ghm_master_bedroom
-            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
-              media_player.ghm_bedroom_ricardo
-            {% endif %}
+      - service: script.radio_control
+        data:
+          service_call: "media_player.media_play_pause"
 
   stop_radio:
     alias: "Media Stop Radio"
     sequence:
-      #- service: media_player.media_stop
-      - service_template: >
-          {% if is_state("input_select.speakers_selector", "Kiosk") %}
-            media_player.media_stop
-          {% else %}
-            media_player.turn_off
-          {% endif %}
-        data_template:
-          entity_id: >
-            {% if is_state("input_select.speakers_selector", "TV") %}
-              media_player.living_room_tv
-            {% elif is_state("input_select.speakers_selector", "Host") %}
-              media_player.host_speakers
-            {% elif is_state("input_select.speakers_selector", "Kiosk") %}
-              media_player.browser_tf201_kyosk
-            {% elif is_state("input_select.speakers_selector", "Sala") %}
-              media_player.ghm_living_room
-            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-              media_player.gh_clock_kitchen
-            {% elif is_state("input_select.speakers_selector", "Escritório") %}
-              media_player.ghm_office
-            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
-              media_player.ghm_master_bedroom
-            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
-              media_player.ghm_bedroom_ricardo
-            {% endif %}
+      - service: script.radio_control
+        data:
+          service_call: >
+              {% if is_state("input_select.speakers_selector", "Kiosk") or is_state("input_select.speakers_selector", "Fire Tablet") %}
+                  media_player.media_stop
+              {% else %}
+                  media_player.turn_off
+              {% endif %}
+
