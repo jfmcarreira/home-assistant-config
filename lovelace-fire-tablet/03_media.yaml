@@ -2,92 +2,104 @@ title: Multimedia
 path: media
 icon: 'mdi:cast-audio'
 badges: []
+panel: true
 cards:
-  - type: 'custom:button-card'
-    aspect_ratio: 10/2
-    entity: script.task_roborock_clean
-    icon: 'mdi:arrow-left'
-    layout: icon_name_state
-    name: Voltar
-    tap_action:
-      action: navigate
-      navigation_path: /fire-tablet/main
-    hold_action: none
-  - type: entities
-    title: Smart Speakers
-    entities:
-      - type: 'custom:mini-media-player'
-        group: true
-        entity: media_player.ghm_living_room
-        hide:
-          volume: false
-      - type: 'custom:mini-media-player'
-        group: true
-        entity: media_player.gh_clock_kitchen
-      - type: 'custom:mini-media-player'
-        group: true
-        entity: media_player.ghm_office
-      - type: 'custom:mini-media-player'
-        group: true
-        entity: media_player.ghm_master_bedroom
-      - type: 'custom:mini-media-player'
-        group: true
-        entity: media_player.ghm_bedroom_ricardo
-  - type: vertical-stack
+  - type: 'custom:layout-card'
+    max_columns: 2
+    layout: vertical
     cards:
+      - type: 'custom:button-card'
+        aspect_ratio: 11/2
+        icon: 'mdi:arrow-left'
+        layout: icon_name_state
+        name: Voltar
+        tap_action:
+          action: navigate
+          navigation_path: /fire-tablet/main
+        hold_action: none
+
+
+      - type: entities
+        title: Smart Speakers
+        entities:
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.fire_tablet_media_player
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_living_room
+            hide:
+              volume: false
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.gh_clock_kitchen
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_office
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_master_bedroom
+          - type: 'custom:mini-media-player'
+            group: true
+            entity: media_player.ghm_bedroom_ricardo
+      - break
       - type: 'custom:vertical-stack-in-card'
         cards:
-          - type: media-control
-            entity: media_player.spotify_joao_carreira
-      - type: 'custom:spotify-card'
-        limit: 10
-        spotify_entity: media_player.spotify_joao_carreira
-        playlist_type: default
-        account: default
-  - type: 'custom:vertical-stack-in-card'
-    cards:
-      - entities:
-          - entity: input_select.speakers_selector
-            name: Player
-        show_header_toggle: false
-        type: entities
-      - entities:
-          - entity: input_select.radio_station
-            name: Estação de Rádio
-        show_header_toggle: false
-        type: entities
-      - card:
-          entities:
-            - entity: input_text.youtube_url
-          show_header_toggle: false
-          type: entities
-        conditions:
-          - entity: input_select.radio_station
-            state: YouTube URL
-        type: conditional
-      - cards:
-          - icon: 'mdi:play'
-            layout: icon_name
-            name: Play
-            size: 70%
-            tap_action:
-              action: call-service
-              service: script.play_radio
-            type: 'custom:button-card'
-          - icon: 'mdi:pause'
-            layout: icon_name
-            name: Pause
-            size: 70%
-            tap_action:
-              action: call-service
-              service: script.stop_radio
-            type: 'custom:button-card'
-          - icon: 'mdi:stop'
-            layout: icon_name
-            name: Stop
-            size: 70%
-            tap_action:
-              action: call-service
-              service: script.stop_radio
-            type: 'custom:button-card'
-        type: horizontal-stack
+          - entities:
+              - entity: input_select.speakers_selector
+                name: Player
+            show_header_toggle: false
+            type: entities
+          - entities:
+              - entity: input_select.radio_station
+                name: Estação de Rádio
+            show_header_toggle: false
+            type: entities
+          - card:
+              entities:
+                - entity: input_text.youtube_url
+              show_header_toggle: false
+              type: entities
+            conditions:
+              - entity: input_select.radio_station
+                state: YouTube URL
+            type: conditional
+          - cards:
+              - icon: 'mdi:play'
+                layout: icon_name
+                name: Play
+                size: 70%
+                tap_action:
+                  action: call-service
+                  service: script.play_radio
+                type: 'custom:button-card'
+              - icon: 'mdi:pause'
+                layout: icon_name
+                name: Pause
+                size: 70%
+                tap_action:
+                  action: call-service
+                  service: script.stop_radio
+                type: 'custom:button-card'
+              - icon: 'mdi:stop'
+                layout: icon_name
+                name: Stop
+                size: 70%
+                tap_action:
+                  action: call-service
+                  service: script.stop_radio
+                type: 'custom:button-card'
+            type: horizontal-stack
+
+      - type: vertical-stack
+        cards:
+          - type: 'custom:vertical-stack-in-card'
+            cards:
+              - type: media-control
+                entity: media_player.spotify_joao_carreira
+          - type: 'custom:spotify-card'
+            limit: 10
+            spotify_entity: media_player.spotify_joao_carreira
+            playlist_type: default
+            account: default
+

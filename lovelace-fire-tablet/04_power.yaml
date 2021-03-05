@@ -9,7 +9,7 @@ cards:
     layout: vertical
     cards:
       - type: 'custom:button-card'
-        aspect_ratio: 10/2
+        aspect_ratio: 11/2
         entity: script.task_roborock_clean
         icon: 'mdi:arrow-left'
         layout: icon_name_state

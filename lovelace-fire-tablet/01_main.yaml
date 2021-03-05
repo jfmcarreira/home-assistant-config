@@ -1,16 +1,24 @@
-badges: []
+path: main
+title: Main
+icon: 'mdi:tablet-dashboard'
+id: main
+panel: true
 cards:
-  - type: vertical-stack
+  - type: custom:layout-card
+    layout: vertical
     cards:
+
       - type: 'custom:bignumber-card'
         entity: sensor.date_time_frontend
-        scale: 27px
+        scale: 43px
       - entity: weather.ipma
-        name: ''
         type: weather-forecast
-      - type: horizontal-stack
+      - type: grid
+        square: false
+        columns: 2
         cards:
-          - agregate_func: avg
+          - type: 'custom:mini-graph-card'
+            agregate_func: avg
             entities:
               - sensor.average_temperature
             group_by: 1h
@@ -24,16 +32,16 @@ cards:
               average: false
               extrema: true
               points: hover
-            type: 'custom:mini-graph-card'
+
             tap_action:
               action: navigate
               navigation_path: /fire-tablet/temp
-          - type: vertical-stack
+          - type: grid
+            square: true
+            columns: 2
             cards:
-              - type: horizontal-stack
-                cards:
                   - type: picture-entity
-                    aspect_ratio: 1.05/1
+                    aspect_ratio: 1/1
                     entity: person.joao
                     image: /local/img_joao_1_1.jpg
                     show_name: false
@@ -69,7 +77,7 @@ cards:
                             - entity: sensor.magnesium_detected_activity
                               name: Actividade
                   - type: picture-entity
-                    aspect_ratio: 1.05/1
+                    aspect_ratio: 1/1
                     entity: person.bianca
                     image: /local/img_bianca_1_1.jpg
                     show_name: false
@@ -102,10 +110,9 @@ cards:
                               name: Bateria Smartphone
                             - entity: sensor.calcium_battery_state
                               name: Estado do Smartphone
-              - type: horizontal-stack
-                cards:
+
                   - type: picture-entity
-                    aspect_ratio: 1.05/1
+                    aspect_ratio: 1/1
                     entity: binary_sensor.ricardo_vitamin_d
                     image: /local/img_ricardo_1_1.jpg
                     show_name: false
@@ -136,7 +143,7 @@ cards:
                               name: Marcar Ricardo a Dormir
 
                   - type: picture-entity
-                    aspect_ratio: 1.05/1
+                    aspect_ratio: 1/1
                     entity: binary_sensor.cat_litter_box_need_clean
                     hold_action:
                       action: call-service
@@ -171,8 +178,8 @@ cards:
                               name: Última Limpeza
                             - entity: sensor.cat_litter_box_last_change
                               name: Última Substituição
-  - type: vertical-stack
-    cards:
+
+      - break
       - type: horizontal-stack
         cards:
           - entity: sensor.bhpzem_power
@@ -182,8 +189,8 @@ cards:
             max: 3450
             severity:
               green: 0
-              yellow: 2000
-              red: 3000
+              yellow: 2500
+              red: 3100
             tap_action:
               action: navigate
               navigation_path: /fire-tablet/power
@@ -193,14 +200,14 @@ cards:
             show_header_toggle: false
             entities:
               - entity: sensor.daily_energy
-                name: Consu. Diário
+                name: Diário
                 tap_action:
                   action: navigate
                   navigation_path: /fire-tablet/power
                 hold_action:
                   action: more-info
               - entity: sensor.monthly_energy_fronted
-                name: Consu. Mensal
+                name: Mensal
                 tap_action:
                   action: navigate
                   navigation_path: /fire-tablet/power
@@ -214,10 +221,15 @@ cards:
                   navigation_path: /fire-tablet/power
                 hold_action:
                   action: more-info
-      - type: horizontal-stack
+
+
+      - type: grid
+        columns: 4
+        square: false
         cards:
-          #- type: 'custom:button-card'
+
           - type: button
+            icon_height: 40px
             name: Entrada
             icon: 'mdi:door-open'
             entity: group.hallway
@@ -230,15 +242,42 @@ cards:
               action: fire-dom-event
               browser_mod:
                 command: popup
-                title: Controlo da Entrada/Especiais
+                title: Controlo da Entrada
                 card:
-                  type: entities
-                  show_header_toggle: false
-                  entities:
-                    - light.hallway
-                    - light.hallway_mirror
-                    - light.hallway_presence
+                  type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_header_toggle: false
+                  filter:
+                    include:
+                      - group: group.hallway
+
           - type: button
+            icon_height: 40px
+            name: Sotão
+            icon: 'mdi:home-roof'
+            entity: group.laundry
+            hold_action:
+              action: call-service
+              service: homeassistant.turn_off
+              service_data:
+                entity_id: group.laundry
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: popup
+                title: Controlo do Sotão/Lavandaria
+                card:
+                  type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_header_toggle: false
+                  filter:
+                    include:
+                      - group: group.laundry
+
+          - type: button
+            icon_height: 40px
             name: Cozinha
             icon: 'mdi:stove'
             entity: group.kitchen
@@ -251,16 +290,18 @@ cards:
               action: fire-dom-event
               browser_mod:
                 command: popup
-                title: Controlo da Cozinha/Lavandaria
+                title: Controlo da Cozinha
                 card:
-                  type: entities
-                  show_header_toggle: false
-                  entities:
-                    - light.kitchen
-                    - light.kitchen_pantry
-                    - light.laundry_inside
-                    - light.laundry_outside
+                  type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_header_toggle: false
+                  filter:
+                    include:
+                      - group: group.kitchen
+
           - type: button
+            icon_height: 40px
             name: Sala
             icon: 'mdi:sofa'
             entity: group.living_room
@@ -275,40 +316,16 @@ cards:
                 command: popup
                 title: Controlo da Sala
                 card:
-                  type: entities
-                  show_header_toggle: false
-                  entities:
-                    - light.living_room_table
-                    - light.living_room_window
-                    - light.living_room_abajur
-                    - light.living_room_tv_leds
-                    - media_player.living_room_tv
+                  type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_header_toggle: false
+                  filter:
+                    include:
+                      - group: group.living_room
+
           - type: button
-            name: Quartos
-            icon: 'mdi:bed-king'
-            entity: group.all_bedrooms
-            hold_action:
-              action: call-service
-              service: homeassistant.turn_off
-              service_data:
-                entity_id: group.all_bedrooms
-            tap_action:
-              action: fire-dom-event
-              browser_mod:
-                command: popup
-                title: Controlo dos Quartos
-                card:
-                  type: entities
-                  show_header_toggle: false
-                  entities:
-                    - light.bathroom
-                    - light.bathroom_mirror
-                    - light.master_bedroom
-                    - light.master_bedroom_bathroom_ceilling
-                    - light.master_bedroom_bathroom_mirror
-                    - light.bedroom_ricardo
-                    - light.bedroom_ricardo_lamp
-          - type: button
+            icon_height: 40px
             name: Escritório
             icon: 'mdi:desk'
             hold_action:
@@ -323,16 +340,89 @@ cards:
                 command: popup
                 title: Controlo do Escritório
                 card:
-                  type: entities
-                  show_header_toggle: false
-                  entities:
-                    - light.office
-                    - light.office_desk
-                    - switch.office_desk
-      - type: horizontal-stack
-        cards:
+                  type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_header_toggle: false
+                  filter:
+                    include:
+                      - group: group.office
+
           - type: button
-            aspect_ratio: 5/3.8
+            icon_height: 40px
+            name: Quartos
+            icon: 'mdi:bed-king'
+            entity: group.all_bedrooms
+            hold_action:
+              action: call-service
+              service: homeassistant.turn_off
+              service_data:
+                entity_id: group.all_bedrooms
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: popup
+                title: Controlo dos Quartos
+                card:
+                  type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_header_toggle: false
+                  filter:
+                    include:
+                      - group: group.all_bedrooms
+
+          - type: button
+            icon_height: 40px
+            name: WC
+            icon: 'mdi:bed-king'
+            entity: group.all_bathrooms
+            hold_action:
+              action: call-service
+              service: homeassistant.turn_off
+              service_data:
+                entity_id: group.all_bathrooms
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: popup
+                title: Controlo das Casas de Banho
+                card:
+                  type: custom:auto-entities
+                  card:
+                    type: entities
+                    show_header_toggle: false
+                  filter:
+                    include:
+                      - group: group.all_bathrooms
+
+          - type: button
+            icon_height: 40px
+            name: Extras
+            icon: 'mdi:one-up'
+            #hold_action:
+              #action: call-service
+              #service: homeassistant.turn_off
+              #service_data:
+                #entity_id: group.office
+            #entity: group.office
+            #tap_action:
+              #action: fire-dom-event
+              #browser_mod:
+                #command: popup
+                #title: Controlo do Escritório
+                #card:
+                  #type: custom:auto-entities
+                  #card:
+                    #type: entities
+                    #show_header_toggle: false
+                  #filter:
+                    #include:
+                      #- group: group.office
+
+
+          - type: button
+            icon_height: 60px
             custom_fields:
               dry_clothes: |
                 [[[
@@ -355,13 +445,13 @@ cards:
                 value: >
                   [[[ return
                   states['binary_sensor.wash_machine_wet_clothes'].state ===
-                  'off' ]]] 
+                  'off' ]]]
                 icon: 'mdi:washing-machine'
               - operator: template
                 value: >
                   [[[ return
                   states['binary_sensor.wash_machine_wet_clothes'].state ===
-                  'on' ]]] 
+                  'on' ]]]
                 icon: 'mdi:washing-machine-alert'
             styles:
               custom_fields:
@@ -379,33 +469,40 @@ cards:
               action: fire-dom-event
               browser_mod:
                 command: popup
+                auto_close: true
                 title: Máquina de Lavar Roupa
                 card:
-                  type: entities
-                  show_header_toggle: false
-                  state_color: true
-                  entities:
-                    - entity: sensor.washing_machine_state
-                      name: Estado
-                    - entity: binary_sensor.washing_machine_door
-                      name: Porta
-                    - entity: sensor.task_washing_clothes_last_done
-                    - entity: sensor.task_washing_clothes_dry_last_done
-                    - entity: sensor.task_washing_clothes_remove_last_done
-                  header:
-                    type: buttons
-                    entities:
-                      - entity: binary_sensor.wash_machine_wet_clothes
-                        icon: 'mdi:hanger'
-                        tap_action:
+                  type: vertical-stack
+                  cards:
+                    - type: entities
+                      show_header_toggle: false
+                      state_color: true
+                      entities:
+                        - entity: sensor.washing_machine_state
+                          name: Estado
+                        - entity: binary_sensor.washing_machine_door
+                          name: Porta
+                        - entity: sensor.task_washing_clothes_last_done
+                        - entity: sensor.task_washing_clothes_dry_last_done
+                        - entity: sensor.task_washing_clothes_remove_last_done
+
+
+                    - type: button
+                      entity: binary_sensor.wash_machine_wet_clothes
+                      show_state: false
+                      show_name: false
+                      icon: 'mdi:hanger'
+                      tap_action:
                           action: call-service
                           service: automation.trigger
                           service_data:
                             entity_id: automation.task_laundry_remove_clothes_done
-                      - entity: script.task_laundry_remove_dry_clothes
-                        icon: 'mdi:tshirt-crew'
+
+
+
+
           - type: button
-            aspect_ratio: 5/3.8
+            icon_height: 60px
             entity: binary_sensor.dish_wash_machine_state
             name: Loiça
             hold_action:
@@ -419,13 +516,13 @@ cards:
                 value: >
                   [[[ return
                   states['binary_sensor.dish_wash_machine_need_emtpy'].state
-                  === 'off' ]]] 
+                  === 'off' ]]]
                 icon: 'mdi:dishwasher'
               - operator: template
                 value: >
                   [[[ return
                   states['binary_sensor.dish_wash_machine_need_emtpy'].state
-                  === 'on' ]]] 
+                  === 'on' ]]]
                 icon: 'mdi:dishwasher-alert'
             custom_fields:
               clean_dishes: |
@@ -445,34 +542,40 @@ cards:
               action: fire-dom-event
               browser_mod:
                 command: popup
+                auto_close: true
                 title: Máquina de Lavar da Loiça
                 card:
-                  type: entities
-                  show_header_toggle: false
-                  state_color: true
-                  entities:
-                    - entity: sensor.dish_wash_machine_state
-                      name: Estado
-                    - entity: binary_sensor.dish_wash_machine_door
-                      name: Porta
-                    - entity: sensor.task_dish_washing_last_done
-                    - entity: sensor.task_dish_wash_empty_last_done
-                  header:
-                    type: buttons
-                    entities:
-                      - entity: binary_sensor.dish_wash_machine_need_emtpy
-                        icon: 'mdi:silverware'
-                        tap_action:
-                          action: call-service
-                          service: automation.trigger
-                          service_data:
-                            entity_id: automation.task_dish_wash_remove_dish_done
-          - type: 'custom:button-card'
+                  type: vertical-stack
+                  cards:
+                    - type: entities
+                      show_header_toggle: false
+                      state_color: true
+                      entities:
+                        - entity: sensor.dish_wash_machine_state
+                          name: Estado
+                        - entity: binary_sensor.dish_wash_machine_door
+                          name: Porta
+                        - entity: sensor.task_dish_washing_last_done
+                        - entity: sensor.task_dish_wash_empty_last_done
+                    - type: button
+                      entity: binary_sensor.dish_wash_machine_need_emtpy
+                      show_state: false
+                      show_name: false
+                      icon: 'mdi:silverware'
+                      tap_action:
+                        action: call-service
+                        service: automation.trigger
+                        service_data:
+                          entity_id: automation.task_dish_wash_remove_dish_done
+
+
+
+          - type: custom:button-card
             layout: vertical
-            aspect_ratio: 5/3.8
             entity: binary_sensor.heating_state
             name: Aquecimento
             icon_height: 60px
+            aspect_ratio: 1/0.95
             show_state: false
             show_name: true
             color_type: icon
@@ -490,103 +593,99 @@ cards:
               action: more-info
               entity: climate.heating
             hold_action:
-              action: more-info
+              action: call-service
+              service: homeassistant.toggle
+              service_data:
+                entity_id: climate.heating
+
+
               entity: climate.heating
-          - type: 'custom:button-card'
-            aspect_ratio: 5/3.8
+
+          - type: button
+            icon_height: 60px
             tap_action:
               action: more-info
-            entity: switch.portable_heater
-            icon_height: 60px
-            show_state: false
             hold_action:
               action: toggle
-      - type: vertical-stack
-        columns: 2
+            entity: switch.portable_heater
+            name: Aquecedor
+
+            show_state: false
+
+
+      - type: grid
+        square: false
+        columns: 3
         cards:
-          - type: horizontal-stack
-            cards:
-              - type: button
-                icon_height: 50px
-                aspect_ratio: 10/4
-                layout: icon_name
-                hold_action:
-                  action: more-info
-                tap_action:
-                  action: navigate
-                  navigation_path: /fire-tablet/vacuum
-                entity: vacuum.roborock
-              - type: button
-                icon_height: 50px
-                aspect_ratio: 10/4
-                layout: icon_name
-                name: Multimédia
-                icon: 'mdi:cast-audio'
-                tap_action:
-                  action: navigate
-                  navigation_path: /fire-tablet/media
-          - type: horizontal-stack
-            cards:
-              #- type: 'custom:button-card'
-                #layout: icon_name
-                #color_type: blank-card
-                
-                
-              - type: button
-                icon_height: 40px
-                entity: sensor.house_mode
-                layout: vertical
-                aspect_ratio: 10/4
-                show_name: false
-                show_state: true
-                hold_action:
-                  action: navigate
-                  navigation_path: /lovelace/main
-                tap_action:
-                  action: call-service
-                  service: script.select_next_house_mode
-              - type: button
-                icon_height: 50px
-                layout: icon_name
-                aspect_ratio: 10/4
-                name: Desligar/Sair
-                icon: 'mdi:exit-to-app'
-                entity: switch.script_routines_off_sleep_running
-                hold_action:
-                  action: call-service
-                  service: switch.turn_off
-                  service_data:
-                    entity_id: switch.script_routines_off_sleep_running
-                tap_action:
-                  action: fire-dom-event
-                  browser_mod:
-                    auto_close: true
-                    large: true
-                    command: popup
-                    title: Routinas para Desligar Casa
-                    card:
-                      type: grid
-                      cards:
-                        - type: button
-                          name: Modo de Dormir      (desligar tudo)
-                          icon: 'mdi:sleep'
-                          tap_action:
-                            action: call-service
-                            service: script.routine_night_time
-                        - type: button
-                          name: Sair
-                          icon: 'mdi:exit-run'
-                          tap_action:
-                            action: call-service
-                            service: script.routine_away
-                        - type: button
-                          name: Desligar Tudo e Sair
-                          icon: 'mdi:power'
-                          tap_action:
-                            action: call-service
-                            service: script.routine_all_off_away
-icon: 'mdi:tablet-dashboard'
-id: main
-panel: false
-path: main
-title: Main
+          - type: button
+            icon_height: 90px
+            layout: icon_name
+            hold_action:
+              action: more-info
+            tap_action:
+              action: navigate
+              navigation_path: /fire-tablet/vacuum
+            entity: vacuum.roborock
+
+          - type: button
+            icon_height: 90px
+            layout: icon_name
+            name: Multimédia
+            icon: 'mdi:cast-audio'
+            tap_action:
+              action: navigate
+              navigation_path: /fire-tablet/media
+
+          #- type: button
+            #icon_height: 40px
+            #entity: sensor.house_mode
+            #layout: vertical
+            #aspect_ratio: 10/4
+            #show_name: false
+            #show_state: true
+            #hold_action:
+              #action: navigate
+              #navigation_path: /lovelace/main
+            #tap_action:
+              #action: call-service
+              #service: script.select_next_house_mode
+
+          - type: button
+            icon_height: 90px
+            name: Desligar/Sair
+            icon: 'mdi:exit-to-app'
+            entity: switch.script_routines_off_sleep_running
+            hold_action:
+              action: call-service
+              service: switch.turn_off
+              service_data:
+                entity_id: switch.script_routines_off_sleep_running
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                auto_close: true
+                large: true
+                command: popup
+                title: Routinas para Desligar Casa
+                card:
+                  type: grid
+                  cards:
+                    - type: button
+                      name: Modo de Dormir      (desligar tudo)
+                      icon: 'mdi:sleep'
+                      tap_action:
+                        action: call-service
+                        service: script.routine_night_time
+                    - type: button
+                      name: Sair
+                      icon: 'mdi:exit-run'
+                      tap_action:
+                        action: call-service
+                        service: script.routine_away
+                    - type: button
+                      name: Desligar Tudo e Sair
+                      icon: 'mdi:power'
+                      tap_action:
+                        action: call-service
+                        service: script.routine_all_off_away
+

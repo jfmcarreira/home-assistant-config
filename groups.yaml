@@ -9,17 +9,21 @@ kitchen:
   entities:
     - light.kitchen
     - light.kitchen_pantry
+    - media_player.gh_clock_kitchen
+
+laundry:
+  name: Sotão/Lavandaria
+  entities:
     - light.laundry_inside
     - light.laundry_outside
-    
+
 hallway:
   name: Corredor
   entities:
     - light.hallway
     - light.hallway_mirror
     - light.hallway_presence
-    
-    
+
 living_room:
   name: Sala de Estar 
   entities:
@@ -28,23 +32,38 @@ living_room:
     - light.living_room_abajur
     - light.living_room_tv_leds
     - media_player.living_room_tv
-    
+    - media_player.ghm_living_room
+
 all_bedrooms:
-  name: Quartos/Casas de Banho
+  name: Quartos
   entities:
-        - light.bathroom
-        - light.bathroom_mirror
         - light.master_bedroom
-        - light.master_bedroom_bathroom_ceilling
-        - light.master_bedroom_bathroom_mirror
         - light.master_bedroom_left_bed
         - light.master_bedroom_right_bed
         - light.bedroom_ricardo
         - light.bedroom_ricardo_lamp
+        - media_player.ghm_bedroom_ricardo
+        - media_player.ghm_master_bedroom
+
+all_bathrooms:
+  name: Casas de Banho
+  entities:
+    - light.bathroom
+    - light.bathroom_mirror
+    - light.master_bedroom_bathroom_ceiling
+    - light.master_bedroom_bathroom_mirror
+
 office:
   name: Escritório
   entities:
     - light.office
     - light.office_desk
     - switch.office_desk
+    - media_player.ghm_office
 
+extras:
+  name: Extras
+  entities:
+    - light.office
+    - light.office_desk
+    - switch.office_desk

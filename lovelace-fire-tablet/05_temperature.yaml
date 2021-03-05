@@ -5,8 +5,7 @@ icon: 'mdi:thermometer'
 badges: []
 cards:
       - type: 'custom:button-card'
-        aspect_ratio: 10/2
-        entity: script.task_roborock_clean
+        aspect_ratio: 11/2
         icon: 'mdi:arrow-left'
         layout: icon_name_state
         name: Voltar
@@ -14,6 +13,32 @@ cards:
           action: navigate
           navigation_path: /fire-tablet/main
         hold_action: none
+
+
+      - type: 'custom:vertical-stack-in-card'
+        cards:
+          - type: 'custom:simple-thermostat'
+            control:
+              _names: 'off'
+            entity: climate.heating
+            modes:
+              heat:
+                icon: false
+                include: true
+                name: Quente
+            #name: Aquecimento
+            sensors:
+              - entity: sensor.heating_ongoing_water_temperature
+                name: Water
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: binary_sensor.heating_boiler_state
+              - entity: input_select.heating_temperature_selection
+                name: Selecção Temperatura Controlo
+              - entity: sensor.heating_temperature
+                name: Temperatura Controlo
+
       - type: 'custom:vertical-stack-in-card'
         cards:
           - entities:
@@ -44,30 +69,6 @@ cards:
             show_header_toggle: false
             type: entities
             title: Humidade
-
-      - type: 'custom:vertical-stack-in-card'
-        cards:
-          - type: 'custom:simple-thermostat'
-            control:
-              _names: 'off'
-            entity: climate.heating
-            modes:
-              heat:
-                icon: false
-                include: true
-                name: Quente
-            #name: Aquecimento
-            sensors:
-              - entity: sensor.heating_ongoing_water_temperature
-                name: Water
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - entity: binary_sensor.heating_boiler_state
-              - entity: input_select.heating_temperature_selection
-                name: Selecção Temperatura Controlo
-              - entity: sensor.heating_temperature
-                name: Temperatura Controlo
 
       - type: 'custom:vertical-stack-in-card'
         cards:
