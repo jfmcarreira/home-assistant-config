@@ -29,6 +29,7 @@ logbook:
       - binary_sensor.wash_machine_dry_clothes
       - binary_sensor.wash_machine_wet_clothes
       - input_select.heating_temperature_selection
+      - sensor.house_mode
   exclude:
     domains:
       - updater

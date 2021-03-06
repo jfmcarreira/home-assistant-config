@@ -41,6 +41,12 @@ influxdb:
       # Misc
       - binary_sensor.heating_boiler_state
       - binary_sensor.notify_home
+      # Downloads
+      - sensor.transmission_up_speed
+      - sensor.transmission_down_speed
+      - sensor.nzbget_speed
+      - sensor.transmission_total_torrents
+      - sensor.transmission_active_torrents
   exclude:
     entity_globs:
       - sensor.anniversary_*
