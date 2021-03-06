@@ -21,4 +21,3 @@ switch:
             entity_id: script.routine_away
           - service: script.turn_off
             entity_id: script.routine_night_time
-        

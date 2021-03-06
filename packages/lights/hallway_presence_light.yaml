@@ -1,3 +1,8 @@
+homeassistant:
+  customize:
+    light.hallway_presence_group:
+      friendly_name: Luzes de Presença do Corredor
+
 light:
   - platform: template
     lights:
@@ -15,7 +20,7 @@ light:
           data:
             entity_id: switch.plug_tradfri_hallway
 
-            
+
   - platform: group
     name: hallway_presence_group
     entities:
