@@ -31,15 +31,8 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     on_press:
-      - if:
-          condition:
-            api.connected:
-          then:
-            - light.toggle: light_2
-            #- homeassistant.event:
-            #    event: esphome.ev_lt_bathroom_mirror
-          else:
-            - light.toggle: light_2
+     - light.toggle: light_2
+
 
   - platform: gpio
     id: sw_2
@@ -73,15 +66,7 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     on_press:
-      - if:
-          condition:
-            api.connected:
-          then:
-            - light.toggle: light_1
-            #- homeassistant.event:
-            #    event: esphome.ev_lt_bathroom_ceiling
-          else:
-            - light.toggle: light_1
+      - light.toggle: light_1
 
   - platform: gpio
     id: sw_4
@@ -93,15 +78,7 @@ binary_sensor:
       - timing:
           - ON for at most 1s
         then:
-          - if:
-              condition:
-                api.connected:
-              then:
-                - light.toggle: light_1
-                #- homeassistant.event:
-                #    event: esphome.ev_lt_bathroom_ceiling
-              else:
-                - light.toggle: light_1
+         - light.toggle: light_1
       - timing:
           - ON for at least 2s
         then:
