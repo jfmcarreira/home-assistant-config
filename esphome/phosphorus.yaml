@@ -1,0 +1,31 @@
+esphome:
+  name: phosphorus
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Enable updates over-the-air
+ota:
+
+
+# For bluetooth devices
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 320ms
+    duration: 10s
+    
+text_sensor:
+  - platform: ble_scanner
+    id: ble_master_bedroom
+    name: BLE Scanner Master Bedroom
+

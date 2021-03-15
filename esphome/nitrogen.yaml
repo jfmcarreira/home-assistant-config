@@ -1,5 +1,5 @@
 esphome:
-  name: barium
+  name: nitrogen
   platform: ESP32
   board: nodemcu-32s
 
@@ -20,6 +20,14 @@ ota:
 
 # For bluetooth devices
 esp32_ble_tracker:
+  scan_parameters:
+    interval: 320ms
+    duration: 10s
+    
+text_sensor:
+  - platform: ble_scanner
+    id: ble_office
+    name: BLE Scanner Office
 
 sensor:
   - platform: xiaomi_lywsdcgq
@@ -30,4 +38,12 @@ sensor:
       name: Bedroom Ricardo Mijia Humidity
     battery_level:
       name: Bedroom Ricardo Mijia Batery
+      
 
+light:
+  - platform: fastled_clockless
+    chipset: WS2811
+    pin: GPIO23
+    num_leds: 50
+    rgb_order: BRG
+    name: "FastLED WS2811 Light"

@@ -10,6 +10,7 @@ logbook:
       - script
       - vacuum
       - climate
+      - person
       #- input_select
       #- input_text
     entities:

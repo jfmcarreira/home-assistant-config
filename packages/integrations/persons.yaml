@@ -18,20 +18,21 @@ homeassistant:
     proximity.dist_home_joao:
       friendly_name: Distância a Casa João
 
+sensor presence:
+  - platform: mqtt_room
+    name: Amazfit Joao
+    device_id: amazfit_joao
+    state_topic: room_presence
+    away_timeout: 60
+
+  - platform: mqtt_room
+    name: Amazfit Bianca
+    device_id: amazfit_bianca
+    state_topic: room_presence
+    away_timeout: 60
+
 ## Device tracker
 device_tracker:
-  - platform: bluetooth_tracker
-    interval_seconds: 30
-    consider_home: 60
-    new_device_defaults:
-      track_new_devices: false
-
-  - platform: bluetooth_le_tracker
-    interval_seconds: 30
-    consider_home: 60
-    new_device_defaults:
-      track_new_devices: false
-
   - platform: ping
     interval_seconds: 30
     consider_home: 60
@@ -42,11 +43,13 @@ device_tracker:
       calcium_wifi: !secret calcium_ip
       #barium_wifi: !secret barium_ip
 
-  #- platform: mqtt
-  #  devices:
-  #    joao_beacon: 'home-assistant/location/joao_beacon'
-  #    bianca_beacon: 'home-assistant/location/bianca_beacon'
-  # Note: This is used in combination with NodeRed and ESPHome
+  - platform: mqtt
+    #Note: This is used in combination with NodeRed and ESPHome
+    source_type: bluetooth_le
+    devices:
+      joao_amazfit: 'home-assistant/location/joao_amazfit'
+      bianca_amazfit: 'home-assistant/location/bianca_amazfit'
+
 
 ## Persons - Managed by UI
 person:
@@ -78,6 +81,6 @@ binary_sensor:
         icon_template: "mdi:home"
         value_template: "{{ is_state('input_boolean.notify_home', 'on') }}"
       bianca_home:
-        value_template: "{{ states.person.bianca.state == 'home' }}"
+        value_template: "{{ not ( states.person.bianca.state == 'not_home' ) }}"
       joao_home:
-        value_template: "{{ states.person.joao.state == 'home' }}"
+        value_template: "{{ not ( states.person.joao.state == 'not_home' ) }}"

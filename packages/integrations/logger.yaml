@@ -1,8 +1,8 @@
 logger:
   default: error
   logs:
-    ##homeassistant.components.onvif: debug
-    homeassistant.components.shell_command: debug
-    homeassistant.components.ffmpeg: debug
-    haffmpeg.core:  debug
+    homeassistant.components.onvif: debug
+    #homeassistant.components.shell_command: debug
+    #homeassistant.components.ffmpeg: debug
+    #haffmpeg.core:  debug
     #homeassistant.components.device_tracker: debug
