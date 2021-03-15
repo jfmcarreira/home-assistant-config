@@ -42,6 +42,9 @@ influxdb:
       - binary_sensor.heating_boiler_state
       - binary_sensor.notify_home
       # Downloads
+      - sensor.speedtest_ping
+      - sensor.speedtest_upload
+      - sensor.speedtest_download
       - sensor.transmission_up_speed
       - sensor.transmission_down_speed
       - sensor.nzbget_speed
