@@ -27,9 +27,12 @@ binary_sensor:
   - platform: homeassistant
     id: bedroom_ricardo_lamp_state
     entity_id: light.bedroom_ricardo_lamp
+  
+  - platform: homeassistant
+    id: bedroom_ricardo_wled_state
+    entity_id: light.wled_quarto_do_ricardo
 
   - id: sw_1
-    #name: ${upper_devicename} SW
     platform: gpio
     pin:
       number: GPIO3
@@ -49,25 +52,26 @@ binary_sensor:
                    condition:
                      or:
                        - binary_sensor.is_on: bedroom_ricardo_lamp_state
+                       - binary_sensor.is_on: bedroom_ricardo_wled_state
                        - light.is_on: light_bedroom_ricardo
                    then:
-                     - light.turn_off: light_bedroom_ricardo
-                     - homeassistant.service:
+                      - light.turn_off: light_bedroom_ricardo
+                      - homeassistant.service:
                          service: light.turn_off
                          data:
                            entity_id: light.bedroom_ricardo_lamp
+                      - homeassistant.service:
+                         service: light.turn_off
+                         data:
+                           entity_id: light.wled_quarto_do_ricardo
                    else:
                      - light.toggle: light_bedroom_ricardo
-                #- homeassistant.event:
-                #    event: esphome.ev_lt_bed_ricardo_ceil
               else:
                 - light.toggle: light_bedroom_ricardo
 
       - timing:
           - ON for at least 1s
         then:
-          #- homeassistant.event:
-          #    event: esphome.ev_lt_bed_ricardo_lamp
           - if:
              condition:
                - light.is_on: light_bedroom_ricardo

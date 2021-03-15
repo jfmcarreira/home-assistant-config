@@ -1,4 +1,16 @@
+homeassistant:
+  customize:
+    light.office:
+      friendly_name: Luz do Escritório
+      icon: mdi:globe-light
+
 light:
+  - platform: group
+    name: Office
+    entities:
+      - light.office_ceiling_lamp
+      - light.office_sw
+
   - platform: template
     lights:
       office_group:
@@ -12,7 +24,7 @@ light:
             {% endif %}
         turn_on:
           - service: light.turn_on
-            entity_id: light.office       
+            entity_id: light.office
         turn_off:
           - service: light.turn_off
             entity_id: light.office

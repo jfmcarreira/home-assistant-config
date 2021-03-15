@@ -388,3 +388,33 @@
       friendly_name: Termoventilador
       icon: mdi:hvac
       state: 'off'
+- id: '1615255103323'
+  name: Light Office Night
+  entities:
+    light.office_ceiling_lamp:
+      min_mireds: 140
+      max_mireds: 650
+      effect_list:
+      - colorloop
+      brightness: 71
+      color_temp: 455
+      is_deconz_group: false
+      friendly_name: Lampada da Luz do Escritório
+      icon: mdi:lamp
+      supported_features: 63
+      state: 'on'
+- id: '1615255132304'
+  name: Light Office Day
+  entities:
+    light.office_ceiling_lamp:
+      min_mireds: 140
+      max_mireds: 650
+      effect_list:
+      - colorloop
+      brightness: 254
+      color_temp: 140
+      is_deconz_group: false
+      friendly_name: Lampada da Luz do Escritório
+      icon: mdi:lamp
+      supported_features: 63
+      state: 'on'
