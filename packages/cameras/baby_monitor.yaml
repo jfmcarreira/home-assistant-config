@@ -4,9 +4,17 @@
 input_boolean:
   baby_monitor_high_quality:
     name: Qualidade Baby Monitor
-  babyphone_sensor_state:
-    name: Estado do Monitor
-    initial: "off"
+  baby_monitor_broadcast_office:
+    name: Reproduzir Baby Monitor no Escritório
+  baby_monitor_broadcast_living_room:
+    name: Reproduzir Baby Monitor na Sala
+  baby_monitor_broadcast_master_bedroom:
+    name: Reproduzir Baby Monitor no Quarto
+  baby_monitor_notify_joao:
+    name: Notificar Joao
+  baby_monitor_notify_bianca:
+    name: Reproduzir Bianca
+
 
 camera:
   - platform: ffmpeg
@@ -25,7 +33,7 @@ binary_sensor:
     initial_state: false
     duration: 1
     reset: 30
-    peak: -50
+    peak: -43
 
   - platform: ffmpeg_motion
     name: Baby Monitor Motion
@@ -35,23 +43,129 @@ binary_sensor:
     initial_state: false
 
 automation:
-  - alias: "Change Baby Monitor State"
+  - alias: "Baby Monitor Change State"
     trigger:
       - platform: state
-        entity_id: input_boolean.babyphone_sensor_state
+        entity_id: input_boolean.ricardo_sleeping
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_noise
+        to: 'unavailable'
     action:
       - choose:
-          - conditions: "{{ states.input_boolean.babyphone_sensor_state.state == 'on' }}"
+          - conditions: "{{ states.input_boolean.ricardo_sleeping.state == 'on' }}"
             sequence:
-              - service: ffmpeg.start
-                entity_id: binary_sensor.baby_monitor_motion
               - service: ffmpeg.start
                 entity_id: binary_sensor.baby_monitor_noise
         default:
           - service: ffmpeg.stop
-            entity_id: binary_sensor.baby_monitor_motion
-          - service: ffmpeg.stop
             entity_id: binary_sensor.baby_monitor_noise
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.baby_monitor_broadcast_office
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.baby_monitor_broadcast_living_room
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.baby_monitor_broadcast_master_bedroom
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.baby_monitor_notify_joao
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.baby_monitor_notify_bianca
+
+
+  - alias: "Baby Monitor Start Broadcast"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_noise
+        from: 'off'
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.ricardo_sleeping
+          state: 'on'
+        - condition: template
+          value_template: "{{ (as_timestamp(now()) - as_timestamp((states.input_boolean.ricardo_sleeping.last_updated)) > 60 ) }}"
+    action:
+      - choose:
+        - conditions: "{{ states.input_boolean.baby_monitor_notify_joao.state == 'on' }}"
+          sequence:
+            - service: notify.mobile_app_magnesium
+              data:
+                title: Baby Monitor
+                message: Som detectado
+                data:
+                  tag: 91
+                  priority: high
+                  channel: Events
+                  clickAction: /lovelace/households
+      - choose:
+        - conditions: "{{ states.input_boolean.baby_monitor_notify_bianca.state == 'on' }}"
+          sequence:
+            - service: notify.mobile_app_calcium
+              data:
+                title: Baby Monitor
+                message: Som detectado
+                data:
+                  tag: 91
+                  priority: high
+                  channel: Events
+                  clickAction: /lovelace/households
+      - choose:
+        - conditions: "{{ states.input_boolean.baby_monitor_broadcast_master_bedroom.state == 'on' }}"
+          sequence:
+            - service: camera.play_stream
+              data:
+                entity_id: camera.baby_monitor_low
+                media_player: media_player.ghm_master_bedroom
+
+      - choose:
+        - conditions: "{{ states.input_boolean.baby_monitor_broadcast_living_room.state == 'on' }}"
+          sequence:
+            - service: camera.play_stream
+              data:
+                entity_id: camera.baby_monitor_low
+                media_player: media_player.ghm_living_room
+      - choose:
+        - conditions: "{{ states.input_boolean.baby_monitor_broadcast_office.state == 'on' }}"
+          sequence:
+            - service: camera.play_stream
+              data:
+                entity_id: camera.baby_monitor_low
+                media_player: media_player.ghm_office
+
+  - alias: "Baby Monitor Stop Broadcast"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_noise
+        from: 'on'
+        to: 'off'
+        for:
+          minutes: 10
+      - platform: state
+        entity_id: input_boolean.ricardo_sleeping
+        from: 'on'
+        to: 'off'
+    action:
+      - choose:
+        - conditions: "{{ not ( states.media_player.ghm_master_bedroom.state == 'off' ) }}"
+          sequence:
+            - service: media_player.turn_off
+              entity_id: media_player.ghm_master_bedroom
+
+      - choose:
+        - conditions: "{{ not ( states.media_player.ghm_living_room.state == 'off' ) }}"
+          sequence:
+            - service: media_player.turn_off
+              entity_id: media_player.ghm_living_room
+
+      - choose:
+        - conditions: "{{ not ( states.media_player.ghm_office.state == 'off' ) }}"
+          sequence:
+            - service: media_player.turn_off
+              entity_id: media_player.ghm_office
+
 
 
 #image_processing:
@@ -85,19 +199,7 @@ automation:
         #name: Baby Monitor Detector DLib
 
 
-#automation:
-  #- alias: image_processing_broadcast_audio
-    #mode: single
-    #trigger:
-      #- platform: state
-        #entity_id: binary_sensor.baby_monitor_noise
-        #from: 'off'
-        #to: 'on'
-    #action:     
-      #- service: camera.play_stream
-        #data:
-          #entity_id: camera.baby_monitor_ffmpeg
-          #media_player: media_player.ghm_office
+
 
 
 
