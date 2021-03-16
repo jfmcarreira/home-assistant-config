@@ -2,12 +2,14 @@ send_via_broadlink = False
 
 numeric_commands_list = [ "NUMBER_1", "NUMBER_2", "NUMBER_3", "NUMBER_4", "NUMBER_5", "NUMBER_6", "NUMBER_7", "NUMBER_8", "NUMBER_9", "NUMBER_0"]
 
+# Always conver to upper case to avoid problems
 button = data.get("button").upper()
 
 if button == "OK" or button == "OKAY":
     button = "ENTER" 
 
 tv_source = "TV"
+# Always send volume to TV
 if button == "VOLUME UP" or button == "VOLUME DOWN":
     tv_source = "TV"
 else:
@@ -49,6 +51,10 @@ if tv_source == "MEO":
             button = "Rewind"
         elif button == "SKIP-FOWARD":
             button = "Forward"
+        elif button == "PREV":
+            button = "Prev"
+        elif button == "NEXT":
+            button = "Next"
 
         entity_id = "media_player.living_room_tv_meo_box" 
         service_data = { "entity_id": entity_id, "media_content_id": button, "media_content_type": "mediaroom" }
