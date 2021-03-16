@@ -1,7 +1,0 @@
-preload_cards:
-  - markdown
-  - gauge
-preload_rows:
-  - divider
-title: Administração
-views: !include_dir_list lovelace/dashboard-admin
