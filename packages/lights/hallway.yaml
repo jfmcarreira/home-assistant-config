@@ -16,8 +16,6 @@ light:
       - light.hallway_presence
       - light.hallway_mirror
 
-
-light:
   - platform: template
     lights:
       hallway_group:
