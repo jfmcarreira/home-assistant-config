@@ -30,7 +30,7 @@ binary_sensor:
   
   - platform: homeassistant
     id: bedroom_ricardo_wled_state
-    entity_id: light.wled_quarto_do_ricardo
+    entity_id: light.bedroom_ricardo_wleds
 
   - id: sw_1
     platform: gpio
@@ -63,7 +63,7 @@ binary_sensor:
                       - homeassistant.service:
                          service: light.turn_off
                          data:
-                           entity_id: light.wled_quarto_do_ricardo
+                           entity_id: light.bedroom_ricardo_wleds
                    else:
                      - light.toggle: light_bedroom_ricardo
               else:
