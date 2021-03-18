@@ -1,11 +1,7 @@
 ################################################################
 ## Ricardo Stats
 ################################################################
-# homeassistant:
-#   customize:
-#     input_number.ricardo_weight:
-#       friendly_name: Peso do Ricardo
-      
+
 input_number:
   ricardo_weight:
     name: Peso do Ricardo
@@ -31,28 +27,9 @@ sensor:
         attribute_templates:
           last_measured: >
             {{ states('input_datetime.ricardo_weight_last_measured') | timestamp_custom("%Y-%m-%d", true) }}
-        #entity_id:
-          #- input_number.ricardo_weight
-         
-
-
-
-
 
 
 automation insert:
-  # - id: Ricardo Weight Input
-  #   alias: Ricardo Weight Input
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id: input_number.ricardo_weight
-  #   action:
-  #     - service: input_datetime.set_datetime
-  #       data_template:
-  #         entity_id: input_datetime.ricardo_weight_last_measured
-  #         date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-
 
   - alias: "Daily Stats Ricardo"
     initial_state: true

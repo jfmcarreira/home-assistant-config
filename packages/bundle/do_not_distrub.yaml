@@ -1,0 +1,22 @@
+input_boolean:
+  notification_active_non_disturb:
+    name: Não Incomodar
+    icon: mdi:bell-sleep
+
+binary_sensor:
+  - platform: template
+    sensors:
+      notification_non_disturb:
+        friendly_name: "Notificações - Não incomodar"
+        value_template: >-
+          {% if is_state("input_boolean.notification_active_non_disturb", "on") or
+                is_state("sensor.calcium_do_not_disturb", "on") or
+                is_state("sensor.magnesium_do_not_disturb", "on") %}
+              True
+          {% else %}
+              {% if is_state('calendar.home_automation_do_not_disturb', "on") %}
+                  True
+              {% else %}
+                  False
+              {% endif %}
+          {% endif %}

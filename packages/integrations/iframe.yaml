@@ -1,0 +1,25 @@
+# This handles the loading of IFrame Panels
+#
+# https://www.home-assistant.io/integrations/panel_iframe/
+#
+panel_iframe:
+  #barcodebuddy:
+    #title: 'Barcode Buddy'
+    #url: !secret barcodebuddy_url
+    #icon: mdi:barcode-scan
+    #require_admin: true
+  photoprism:
+    title: "PhotoPrism"
+    url: "http://sodium.home:2342"
+    require_admin: true
+    icon: mdi:image-multiple
+  sonarr:
+    title: "Sonarr"
+    url: "http://media-companion.home:8989"
+    require_admin: true
+    icon: mdi:image-multiple
+  radarr:
+    title: "Radarr"
+    url: "http://media-companion.home:7878"
+    require_admin: true
+    icon: mdi:image-multiple
