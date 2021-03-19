@@ -1,0 +1,81 @@
+################################################################
+## Gas Meter
+################################################################
+#homeassistant:
+  #customize:
+
+
+counter:
+  pulse_counter_gas:
+    step: 1
+
+sensor:
+  - platform: template
+    sensors:
+      pulse_counter_gas:
+        friendly_name: Consumo de Gás
+        unit_of_measurement: m3
+        icon_template: mdi:counter
+        value_template: >-
+          {% set impulse_unit = 0.01 %}
+          {% set impulse_count = states('counter.pulse_counter_gas') %}
+          {{ 'unknown' if impulse_count == 'unknown' else (impulse_count|int * impulse_unit|float) | round(2) }}
+
+utility_meter:
+  daily_gas:
+    source: sensor.pulse_counter_gas
+    cycle: daily
+  monthly_gas:
+    source: sensor.pulse_counter_gas
+    cycle: monthly
+  monthly_gas_invoice:
+    source: sensor.pulse_counter_gas
+    cycle: monthly
+    offset:
+      days: 18
+
+automation:
+  - alias: Contador de impulsos do gás
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.pulse_gas_meter
+        to: 'off'
+        from: 'on'
+    action:
+      - service: counter.increment
+        entity_id: counter.pulse_counter_gas
+
+
+sensor bill:
+  - platform: template
+    sensors:
+      monthly_gas_invoice_cicle_days:
+        unit_of_measurement: "days"
+        value_template: >-
+          {{ ( as_timestamp( now() ) - as_timestamp( states.sensor.monthly_gas_invoice.attributes.last_reset ) ) | timestamp_custom("%d") }}
+      monthly_gas_cost:
+        friendly_name: "Fatura Gás"
+        icon_template: "mdi:currency-eur"
+        unit_of_measurement: "€"
+        value_template: >-
+          {% set price_per_cubic_meter = (0.0461+0.00592920)*11.5 %}
+
+          {% set days = (states.sensor.monthly_gas_invoice_cicle_days.state|float) %}
+          {% set cubic_meter  = (states.sensor.monthly_gas_invoice.state|float) %}
+
+          {% set price_energy = cubic_meter * price_per_cubic_meter * 1.23 %}
+          {% set price_days = ( 0.0669 + 0.0701 ) * days * 1.23 %}
+
+          {{ ( price_energy + price_days ) | round(2) }}
+        attribute_templates:
+          Factura Anterior: >-
+            {% set price_per_cubic_meter = (0.0461+0.00592920)*11.5 %}
+
+            {% set days = 365 / 12 %}
+            {% set cubic_meter  = (states.sensor.monthly_gas_invoice.state|float) %}
+
+            {% set price_energy = cubic_meter * price_per_cubic_meter * 1.23 %}
+            {% set price_days = ( 0.0669 + 0.0701 ) * days * 1.23 %}
+
+            {{ ( price_energy + price_days ) | round(2) }}
