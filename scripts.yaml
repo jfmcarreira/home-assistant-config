@@ -5,19 +5,32 @@ routine_away:
       }}'
   sequence:
   - service: browser_mod.close_popup
-  - service: scene.turn_on
-    entity_id: scene.away_time
+  - service: light.turn_off
+    entity_id: all
+  - service: media_player.turn_off
+    entity_id: all
+  - service: switch.turn_off
+    entity_id: switch.portable_heater
+  - service: switch.turn_off
+    target:
+      entity_id: switch.office_desk
   - service: light.turn_on
-    entity_id: light.hallway
+    data: {}
+    target:
+      entity_id: light.hallway
   - service: input_boolean.turn_off
     entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
   - wait_template: '{{ is_state(''binary_sensor.front_door'', ''on'') }}'
+    timeout: 00:01:00
+    continue_on_timeout: true
   - service: python_script.vacuum_room
     data:
       room: switch_based
       is_zone: 0
       runs: 1
   - wait_template: '{{ is_state(''binary_sensor.front_door'', ''off'') }}'
+    timeout: 00:05:00
+    continue_on_timeout: true
   - service: light.turn_off
     entity_id: light.hallway
   - choose:

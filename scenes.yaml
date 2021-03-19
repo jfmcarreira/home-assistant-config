@@ -418,3 +418,11 @@
       icon: mdi:lamp
       supported_features: 63
       state: 'on'
+- id: '1615819357729'
+  name: Lights Master Bedroom Day
+  entities:
+    light.master_bedroom:
+      friendly_name: Luz do Teto do Quarto
+      icon: mdi:globe-light
+      supported_features: 1
+      state: 'off'

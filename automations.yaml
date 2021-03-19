@@ -3,8 +3,15 @@
   description: ''
   trigger:
   - platform: time
-    at: 07:00:00
-  condition: []
+    at: 08:00:00
+  - platform: state
+    entity_id: light.bedroom_ricardo
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: time
+    after: 07:00:00
+    before: '21:00:00'
   action:
   - service: input_boolean.turn_off
     data:
@@ -145,7 +152,7 @@
     entity_id: light.laundry_inside
   mode: restart
 - id: lights_front_door_turn_on_door_open
-  alias: Porta da Entrada Ligar Luz
+  alias: Desligar Luz da Porta da Entrada
   trigger:
   - entity_id: binary_sensor.front_door
     from: 'off'
@@ -153,16 +160,15 @@
     to: 'on'
   condition:
   - condition: template
-    value_template: '{{ state_attr("sun.sun", "elevation") < 50 }}'
-  - condition: template
-    value_template: '{{ ((as_timestamp(now()) - as_timestamp(states.binary_sensor.motion_sensor_hallway.last_changed))/60)
-      < 2 }}'
+    value_template: '{{ state_attr("sun.sun", "elevation") < 60 }}'
   action:
   - service: light.turn_on
-    entity_id: light.front_door
+    data: {}
+    target:
+      entity_id: light.front_door
   mode: restart
 - id: lights_front_door_turn_off_door_close
-  alias: Porta da Entrada  Desligar a Luz
+  alias: Desligar Luz da Porta da Entrada
   trigger:
   - platform: state
     entity_id: binary_sensor.front_door
@@ -186,24 +192,24 @@
     to: 'on'
   condition:
   - condition: template
-    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
-  - condition: template
-    value_template: '{{ ((as_timestamp(now()) - as_timestamp(states.binary_sensor.motion_sensor_hallway.last_changed))/60)
-      > 1 }}'
-  - condition: state
-    entity_id: binary_sensor.motion_sensor_hallway
-    state: 'off'
+    value_template: '{{ state_attr("sun.sun", "elevation") < 30 }}'
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.motion_sensor_hallway
+      state: 'off'
+    - condition: state
+      entity_id: input_select.house_mode
+      state: 'Off'
   - condition: state
     entity_id: light.hallway
-    for:
-      minutes: 10
+    for: 00:10:00
     state: 'off'
-  - condition: numeric_state
-    entity_id: sensor.hallway_light_level
-    below: '15'
   action:
   - service: light.turn_on
-    entity_id: light.hallway
+    data: {}
+    target:
+      entity_id: light.hallway
   mode: restart
 - id: Lights Xmas Auto On
   alias: Ligar Luzes da Arvore de Natal
@@ -300,6 +306,17 @@
   action:
   - service: media_player.turn_off
     entity_id: media_player.living_room_tv
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_living_room_esp
+    state: 'off'
+  - service: notify.living_room_tv
+    data:
+      message: A televisão irá desligar-se em breve se não ocorrer movimento
   mode: restart
 - id: '1608085379268'
   alias: media_meo_box_control_based_on_tv
@@ -504,20 +521,21 @@
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '0'
+      illuminance_cutoff: 10
       automation_name: lights_motion_office_night
       motion_sensor: binary_sensor.motion_sensor_office
       target_entity: light.office_desk
       no_motion_wait: '60'
-      blocker_on_entity: light.office_group
+      blocker_on_entity: light.office
       required_house_mode: Night
       run_while_sleep: false
       light_mode_counter: input_number.atm_lights_automatic_mode_office
       house_mode: input_select.house_mode
-      number_of_repetitions: '0'
+      number_of_repetitions: 0
       blocker_off_entity: input_boolean.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       only_after_sunset: false
+      illuminance_sensor: sensor.office_light_level
 - id: '1612570836529'
   alias: lights_motion_office_normal
   description: ''
@@ -573,11 +591,11 @@
       run_while_sleep: false
       illuminance_sensor: sensor.living_room_light_level
       light_mode_counter: input_number.atm_lights_automatic_mode_living_room
-      number_of_repetitions: '5'
+      number_of_repetitions: 5
       blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       required_house_mode: 'On'
-      no_motion_wait: '120'
+      no_motion_wait: 100
       only_after_sunset: false
 - id: '1612576412343'
   alias: lights_motion_hallway_night
@@ -585,17 +603,20 @@
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '0'
+      illuminance_cutoff: 0
       automation_name: lights_motion_hallway_night
       motion_sensor: binary_sensor.motion_sensor_hallway
       target_entity: light.hallway_presence_group
-      no_motion_wait: '120'
+      no_motion_wait: 100
       blocker_on_entity: light.hallway
       run_while_sleep: true
       light_mode_counter: input_number.atm_lights_automatic_mode_hallway
-      number_of_repetitions: '0'
+      number_of_repetitions: 0
       blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
+      house_mode: input_select.house_mode
+      required_house_mode: Night
+      only_after_sunset: false
 - id: '1612577959648'
   alias: lights_sync_bathroom_mirror
   description: ''
@@ -617,7 +638,7 @@
       slave_light: light.living_room_abajur
       sync_on: false
       sync_exclusive: true
-      sync_off: true
+      sync_off: false
 - id: '1612579273509'
   alias: lights_sync_living_room_tv_leds
   description: ''
@@ -650,18 +671,175 @@
       slave_light: light.hallway_presence
       sync_on: false
       sync_off: false
-- id: '1613955720143'
-  alias: Notify Baby Monitor Noise
+- id: '1614174741068'
+  alias: Lights Turn Off Pantry on Timeout
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.baby_monitor_noise
+    entity_id: light.kitchen_pantry
+    from: 'off'
+    to: 'on'
+    for: 00:05:00
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.kitchen_pantry
+  mode: single
+- id: '1614484912106'
+  alias: fire_tablet_turn_on_display
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.front_door
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_hallway
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.house_mode
+      state: 'Off'
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state: Sleep
+  action:
+  - type: turn_on
+    device_id: a769b4bc5587bd5eea47d70398f69c8e
+    entity_id: light.fire_tablet_screen
+    domain: light
+    brightness_pct: 100
+  mode: single
+- id: '1614552306703'
+  alias: lights_motion_kitchen_normal
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights.yaml
+    input:
+      illuminance_cutoff: 10
+      house_mode: input_select.house_mode
+      automation_name: lights_motion_living_room_normal
+      motion_sensor: binary_sensor.motion_sensor_kitchen
+      target_entity: light.kitchen
+      run_while_sleep: false
+      illuminance_sensor: sensor.kitchen_light_level
+      light_mode_counter: input_number.atm_lights_automatic_mode_living_room
+      number_of_repetitions: 5
+      blocker_off_entity: binary_sensor.notify_home
+      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
+      no_motion_wait: '120'
+      only_after_sunset: false
+      required_house_mode: 'On'
+- id: '1614905797504'
+  alias: lights_motion_hallway_sleep
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights.yaml
+    input:
+      illuminance_cutoff: 0
+      automation_name: lights_motion_hallway_night
+      motion_sensor: binary_sensor.motion_sensor_hallway
+      target_entity: light.hallway_presence_group
+      no_motion_wait: 30
+      blocker_on_entity: light.hallway
+      run_while_sleep: true
+      light_mode_counter: input_number.atm_lights_automatic_mode_hallway
+      number_of_repetitions: 0
+      blocker_off_entity: binary_sensor.notify_home
+      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
+      house_mode: input_select.house_mode
+      required_house_mode: Sleep
+      only_after_sunset: true
+- id: '1615154244751'
+  alias: light_auto_off_hallway
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_hallway
+    from: 'on'
+    to: 'off'
+    for: 00:05:00
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: light.hallway_group
+  mode: single
+- id: '1615173290799'
+  alias: Alarme Google Home Mini João
+  description: ''
+  trigger:
+  - platform: time
+    at: 09:15:00
+  - platform: time
+    at: '10:00:00'
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - fri
+  action:
+  - service: media_player.turn_on
+    target:
+      entity_id: media_player.ghm_master_bedroom
+  - service: media_player.volume_set
+    target:
+      entity_id: media_player.ghm_master_bedroom
+    data:
+      volume_level: 0.5
+  - service: media_extractor.play_media
+    data:
+      entity_id: media_player.ghm_master_bedroom
+      media_content_type: music
+      media_content_id: http://mcrscast1.mcr.iol.pt/comercial.mp3
+  mode: single
+- id: '1615255305713'
+  alias: Lights Office Set Brightness Temperature
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.office_ceiling_lamp
     from: 'off'
     to: 'on'
   condition: []
   action:
-  - service: notify.mobile_app_magnesium
-    data:
-      title: Baby Monitor
-      message: Som detectado
+  - choose:
+    - conditions:
+      - condition: time
+        after: 08:00:00
+        before: '21:00:00'
+      sequence:
+      - scene: scene.light_office_day
+    default:
+    - scene: scene.light_office_night
+  mode: single
+- id: '1615493328878'
+  alias: Lights Sync WLED Quarto do Ricardo
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.bedroom_ricardo_wleds
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.bedroom_ricardo_wleds
+        state: 'on'
+      sequence:
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.wled_sonoff_relay
+    default:
+    - service: light.turn_off
+      target:
+        entity_id: light.wled_sonoff_relay
   mode: single

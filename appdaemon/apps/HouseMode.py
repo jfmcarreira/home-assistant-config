@@ -57,6 +57,7 @@ class HouseMode(hass.Hass,ClimateControl):
 
         self.trackMotion = [
             "binary_sensor.motion_sensor_hallway",
+            "binary_sensor.motion_sensor_kitchen",
             "binary_sensor.motion_sensor_living_room",
             "binary_sensor.motion_sensor_office"
             ]
