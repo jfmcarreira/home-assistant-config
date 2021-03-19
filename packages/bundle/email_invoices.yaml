@@ -1,0 +1,95 @@
+homeassistant:
+  customize:
+    sensor.edp_invoice:
+      unit_of_measurement: "€"
+    sensor.water_invoice:
+      unit_of_measurement: "€"
+
+sensor email:
+  - platform: imap_email_content
+    name: Email Invoice
+    server: imap.gmail.com
+    port: 993
+    username: !secret shared_email
+    password: !secret shared_email_password
+    folder: Inbox
+    senders:
+      - faturaedp@edp.pt
+      - servico.cliente@aguasdolena.pt
+      - jfmcarreira@gmail.com
+
+  #- platform: template
+    #sensors:
+      #invoice_edp:
+        #friendly_name: "Factura da EDP"
+        #unit_of_measurement: "€"
+        #value_template: >
+          #{{ state_attr("sensor.email_invoice_edp", "body") | regex_findall_index("\s*\d+,?\d+\s+=E2=82=AC") | replace(",",".") | replace(" =E2=82=AC","") | round(2) }}
+        #attribute_templates:
+          #Data: >
+            #{% set date = state_attr("sensor.email_invoice_edp", "body") | regex_findall_index("\d{1,2}\s+[a-z]{3}\s+\d{4}")  %}
+            #{{ strptime(date, "%d %b %Y") | timestamp_custom("%Y-%m-%d") }}
+
+      #invoice_agua:
+        #friendly_name: "Factura da Água"
+        #unit_of_measurement: "€"
+        #value_template: >
+          #{{ state_attr("sensor.email_invoice_adl", "body") | regex_findall_index(",\sno\svalor\sde\s\d+,\d+\sEUR.") | replace(", no valor de ","") | replace("EUR","") | replace(",",".")  | round(2) }}
+        #attribute_templates:
+          #Data: >
+            #{% set date = state_attr("sensor.email_invoice_adl", "body") | regex_findall_index(",\s+emitida\s+em\s+\d{4}\/\d{2}\/\d{2}") | replace(", emitida em ","")  %}
+            #{{ strptime(date, "%Y %m %d  ") | timestamp_custom("%Y-%m-%d") }}
+
+sensor invoice:
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: edp_invoice
+        query: >-
+          SELECT * FROM invoice
+          WHERE electricity IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: electricity
+
+      - name: water_invoice
+        query: >-
+          SELECT * FROM invoice
+          WHERE water IS NOT null
+          ORDER BY date  DESC LIMIT 1;
+        column: water
+
+
+automation:
+  - alias: "Parse Invoice Email"
+    trigger:
+      - platform: state
+        entity_id: sensor.email_invoice
+    action:
+      - choose:
+          conditions: "{{ 'Aguas do Lena' in state_attr('sensor.email_invoice', 'body') }}"
+          sequence:
+            #- alias: "Guardar factura da Água"
+            - service: shell_command.external_my_sql_insert
+              data:
+                table: invoice
+                value: >
+                  "{{ state_attr('sensor.email_invoice', 'body') | regex_findall_index('valor\s*de\s*\d+,\d+\s*EUR') | replace('valor de','') | replace('EUR','') | replace(',','.') | round(2) }}"
+                date_stamp: >
+                  {% set date = state_attr("sensor.email_invoice", "body") | regex_findall_index(",\s+emitida\s+em\s+\d{4}\/\d{2}\/\d{2}") | replace(", emitida em ","")  %}
+                  "{{ strptime(date, '%Y/%m/%d') | timestamp_custom('%Y-%m-%d 00:00:00') }}"
+                save_date_time: "true"
+                column: "water"
+      - choose:
+          conditions: "{{ 'A sua fatura EDP (contrato 160804298653)' in state_attr('sensor.email_invoice', 'subject') }}"
+          sequence:
+            #- alias: "Guardar factura da EDP"
+            - service: shell_command.external_my_sql_insert
+              data_template:
+                table: invoice
+                value: >
+                  {{ state_attr("sensor.email_invoice", "body") | regex_findall_index("\s*\d+,?\d+\s+=E2=82=AC") | replace(",",".") | replace(" =E2=82=AC","") | round(2) }}
+                date_stamp: >
+                  {% set date = state_attr("sensor.email_invoice", "body") | regex_findall_index("\d{1,2}\s+[a-z]{3}\s+\d{4}")  %}
+                  "{{ strptime(date, '%d %b %Y') | timestamp_custom('%Y-%m-%d') }}"
+                save_date_time: "true"
+                column: "electricity"
