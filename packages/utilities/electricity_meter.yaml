@@ -92,7 +92,7 @@ sensor bill:
 
 
 automation insert:
-  - alias: "Record Monthly Consumption to Database"
+  - alias: "Monthly Stats Electricity Consumption to Database"
     initial_state: true
     mode: queued
     max: 10
@@ -106,10 +106,10 @@ automation insert:
           table: monthly_energy_bill
           value: >
             {{ states.sensor.monthly_energy.attributes.last_period }}
+          column: "value"
 
 
-
-  - alias: "Daily Stats Insert Value of Energy to Database"
+  - alias: "Daily Stats Insert Value of Electricity to Table Energy of Database"
     initial_state: true
     mode: queued
     max: 10
@@ -122,4 +122,5 @@ automation insert:
           table: daily_energy
           value: >
             {{ states.sensor.daily_energy.state }}
+          column: "value"
 

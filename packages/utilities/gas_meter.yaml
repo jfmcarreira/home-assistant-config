@@ -47,6 +47,9 @@ automation:
         entity_id: counter.pulse_counter_gas
 
 
+
+
+
 sensor bill:
   - platform: template
     sensors:
@@ -79,3 +82,36 @@ sensor bill:
             {% set price_days = ( 0.0669 + 0.0701 ) * days * 1.23 %}
 
             {{ ( price_energy + price_days ) | round(2) }}
+
+automation insert:
+  - alias: "Monthly Stats Gas Consumption to Database"
+    initial_state: true
+    mode: queued
+    max: 10
+    trigger:
+      - platform: state
+        entity_id: sensor.monthly_gas_invoice
+        attribute: last_period
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: monthly_gas_bill
+          value: >
+            {{ states.sensor.monthly_gas_invoice.attributes.last_period }}
+
+
+
+  - alias: "Daily Stats Insert Value of Gas to Table Energy of Database"
+    initial_state: true
+    mode: queued
+    max: 10
+    trigger:
+      - platform: state
+        entity_id: sensor.daily_energy
+    action:
+      - service: shell_command.external_my_sql_insert
+        data_template:
+          table: daily_energy
+          column: "gas"
+          value: >
+            {{ states.sensor.daily_gas.state }}
