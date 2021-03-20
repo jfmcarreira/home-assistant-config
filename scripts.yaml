@@ -83,13 +83,3 @@ routine_night_time:
     motion_light_state: '{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state
       }}'
   mode: restart
-test_tv_home_assistant:
-  alias: test_tv_home_assistant
-  sequence:
-  - service: webostv.command
-    data:
-      entity_id: media_player.living_room_tv
-      command: system.launcher/open
-      payload:
-        target: http://homeassistant.home/lovelace/main
-  mode: single

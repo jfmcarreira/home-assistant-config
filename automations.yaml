@@ -1,34 +1,3 @@
-- id: '1606263615723'
-  alias: Routine Ricardo Awake Up
-  description: ''
-  trigger:
-  - platform: time
-    at: 08:00:00
-  - platform: state
-    entity_id: light.bedroom_ricardo
-    from: 'off'
-    to: 'on'
-  condition:
-  - condition: time
-    after: 07:00:00
-    before: '21:00:00'
-  action:
-  - service: input_boolean.turn_off
-    data:
-      entity_id: input_boolean.ricardo_sleeping
-  mode: single
-- id: '1606263648109'
-  alias: Routine Ricardo Go To Sleep
-  description: ''
-  trigger:
-  - platform: time
-    at: '21:00:00'
-  condition: []
-  action:
-  - service: input_boolean.turn_on
-    data:
-      entity_id: input_boolean.ricardo_sleeping
-  mode: single
 - alias: Remote Phillips Hue Bedroom Dim UP
   id: Remote Phillips Hue Bedroom Dim UP
   mode: single
@@ -366,7 +335,7 @@
   description: ''
   trigger:
   - platform: time
-    at: '18:00'
+    at: '18:30'
   condition: []
   action:
   - service: climate.turn_on
@@ -686,36 +655,6 @@
     data: {}
     entity_id: light.kitchen_pantry
   mode: single
-- id: '1614484912106'
-  alias: fire_tablet_turn_on_display
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.front_door
-    from: 'off'
-    to: 'on'
-  - platform: state
-    entity_id: binary_sensor.motion_sensor_hallway
-    from: 'off'
-    to: 'on'
-  condition:
-  - condition: not
-    conditions:
-    - condition: state
-      entity_id: input_select.house_mode
-      state: 'Off'
-    - condition: not
-      conditions:
-      - condition: state
-        entity_id: input_select.house_mode
-        state: Sleep
-  action:
-  - type: turn_on
-    device_id: a769b4bc5587bd5eea47d70398f69c8e
-    entity_id: light.fire_tablet_screen
-    domain: light
-    brightness_pct: 100
-  mode: single
 - id: '1614552306703'
   alias: lights_motion_kitchen_normal
   description: ''
@@ -819,27 +758,4 @@
       - scene: scene.light_office_day
     default:
     - scene: scene.light_office_night
-  mode: single
-- id: '1615493328878'
-  alias: Lights Sync WLED Quarto do Ricardo
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: light.bedroom_ricardo_wleds
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: light.bedroom_ricardo_wleds
-        state: 'on'
-      sequence:
-      - service: light.turn_on
-        data: {}
-        target:
-          entity_id: light.wled_sonoff_relay
-    default:
-    - service: light.turn_off
-      target:
-        entity_id: light.wled_sonoff_relay
   mode: single
