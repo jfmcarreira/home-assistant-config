@@ -15,12 +15,11 @@ input_boolean:
   baby_monitor_notify_bianca:
     name: Reproduzir Bianca
 
-
 camera:
   - platform: ffmpeg
     name: Baby Monitor
     input: !secret reolinke1pro
-    
+
   - platform: ffmpeg
     name: Baby Monitor Low
     input: !secret reolinke1pro_low
@@ -29,11 +28,11 @@ binary_sensor:
   - platform: ffmpeg_noise
     name: Baby Monitor Noise
     input: !secret reolinke1pro_low
-#    extra_arguments:
+    #    extra_arguments:
     initial_state: false
     duration: 1
     reset: 30
-    peak: -43
+    peak: -50
 
   - platform: ffmpeg_motion
     name: Baby Monitor Motion
@@ -47,9 +46,6 @@ automation:
     trigger:
       - platform: state
         entity_id: input_boolean.ricardo_sleeping
-      - platform: state
-        entity_id: binary_sensor.baby_monitor_noise
-        to: 'unavailable'
     action:
       - choose:
           - conditions: "{{ states.input_boolean.ricardo_sleeping.state == 'on' }}"
@@ -70,157 +66,167 @@ automation:
           - service: input_boolean.turn_off
             entity_id: input_boolean.baby_monitor_notify_bianca
 
+  - alias: "Baby Monitor Restart"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_noise
+        to: "unavailable"
+    condition:
+      - condition: state
+        entity_id: input_boolean.ricardo_sleeping
+        state: "on"
+    action:
+      - service: ffmpeg.stop
+        entity_id: binary_sensor.baby_monitor_noise
+      - service: automation.turn_off
+        entity_id: automation.baby_monitor_start_broadcast
+      - service: ffmpeg.start
+        entity_id: binary_sensor.baby_monitor_noise
+      - service: automation.turn_on
+        entity_id: automation.baby_monitor_start_broadcast
 
   - alias: "Baby Monitor Start Broadcast"
     mode: single
     trigger:
       - platform: state
         entity_id: binary_sensor.baby_monitor_noise
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     condition:
       condition: and
       conditions:
         - condition: state
           entity_id: input_boolean.ricardo_sleeping
-          state: 'on'
+          state: "on"
         - condition: template
           value_template: "{{ (as_timestamp(now()) - as_timestamp((states.input_boolean.ricardo_sleeping.last_updated)) > 60 ) }}"
     action:
       - choose:
-        - conditions: "{{ states.input_boolean.baby_monitor_notify_joao.state == 'on' }}"
-          sequence:
-            - service: notify.mobile_app_magnesium
-              data:
-                title: Baby Monitor
-                message: Som detectado
+          - conditions: "{{ states.input_boolean.baby_monitor_notify_joao.state == 'on' }}"
+            sequence:
+              - service: notify.mobile_app_magnesium
                 data:
-                  tag: 91
-                  priority: high
-                  channel: Events
-                  clickAction: /lovelace/households
+                  title: Baby Monitor
+                  message: Som detectado
+                  data:
+                    image: /api/camera_proxy/camera.baby_monitor_onvif
+                    tag: 91
+                    priority: high
+                    channel: Events
+                    clickAction: /lovelace/households
+                    hide-thumbnail: false
       - choose:
-        - conditions: "{{ states.input_boolean.baby_monitor_notify_bianca.state == 'on' }}"
-          sequence:
-            - service: notify.mobile_app_calcium
-              data:
-                title: Baby Monitor
-                message: Som detectado
+          - conditions: "{{ states.input_boolean.baby_monitor_notify_bianca.state == 'on' }}"
+            sequence:
+              - service: notify.mobile_app_calcium
                 data:
-                  tag: 91
-                  priority: high
-                  channel: Events
-                  clickAction: /lovelace/households
+                  title: Baby Monitor
+                  message: Som detectado
+                  data:
+                    tag: 91
+                    priority: high
+                    channel: Events
+                    clickAction: /lovelace/households
       - choose:
-        - conditions: "{{ states.input_boolean.baby_monitor_broadcast_master_bedroom.state == 'on' }}"
-          sequence:
-            - service: camera.play_stream
-              data:
-                entity_id: camera.baby_monitor_low
-                media_player: media_player.ghm_master_bedroom
+          - conditions: "{{ states.input_boolean.baby_monitor_broadcast_master_bedroom.state == 'on' }}"
+            sequence:
+              - service: camera.play_stream
+                data:
+                  entity_id: camera.baby_monitor_low
+                  media_player: media_player.ghm_master_bedroom
 
       - choose:
-        - conditions: "{{ states.input_boolean.baby_monitor_broadcast_living_room.state == 'on' }}"
-          sequence:
-            - service: camera.play_stream
-              data:
-                entity_id: camera.baby_monitor_low
-                media_player: media_player.ghm_living_room
+          - conditions: "{{ states.input_boolean.baby_monitor_broadcast_living_room.state == 'on' }}"
+            sequence:
+              - service: camera.play_stream
+                data:
+                  entity_id: camera.baby_monitor_low
+                  media_player: media_player.ghm_living_room
       - choose:
-        - conditions: "{{ states.input_boolean.baby_monitor_broadcast_office.state == 'on' }}"
-          sequence:
-            - service: camera.play_stream
-              data:
-                entity_id: camera.baby_monitor_low
-                media_player: media_player.ghm_office
+          - conditions: "{{ states.input_boolean.baby_monitor_broadcast_office.state == 'on' }}"
+            sequence:
+              - service: camera.play_stream
+                data:
+                  entity_id: camera.baby_monitor_low
+                  media_player: media_player.ghm_office
 
   - alias: "Baby Monitor Stop Broadcast"
     mode: single
     trigger:
       - platform: state
         entity_id: binary_sensor.baby_monitor_noise
-        from: 'on'
-        to: 'off'
+        from: "on"
+        to: "off"
         for:
           minutes: 10
       - platform: state
         entity_id: input_boolean.ricardo_sleeping
-        from: 'on'
-        to: 'off'
+        from: "on"
+        to: "off"
     action:
       - choose:
-        - conditions: "{{ not ( states.media_player.ghm_master_bedroom.state == 'off' ) }}"
-          sequence:
-            - service: media_player.turn_off
-              entity_id: media_player.ghm_master_bedroom
+          - conditions: "{{ not ( states.media_player.ghm_master_bedroom.state == 'off' ) }}"
+            sequence:
+              - service: media_player.turn_off
+                entity_id: media_player.ghm_master_bedroom
 
       - choose:
-        - conditions: "{{ not ( states.media_player.ghm_living_room.state == 'off' ) }}"
-          sequence:
-            - service: media_player.turn_off
-              entity_id: media_player.ghm_living_room
+          - conditions: "{{ not ( states.media_player.ghm_living_room.state == 'off' ) }}"
+            sequence:
+              - service: media_player.turn_off
+                entity_id: media_player.ghm_living_room
 
       - choose:
-        - conditions: "{{ not ( states.media_player.ghm_office.state == 'off' ) }}"
-          sequence:
-            - service: media_player.turn_off
-              entity_id: media_player.ghm_office
-
-
-
+          - conditions: "{{ not ( states.media_player.ghm_office.state == 'off' ) }}"
+            sequence:
+              - service: media_player.turn_off
+                entity_id: media_player.ghm_office
 #image_processing:
-  #- platform: opencv
-    #source:
-      #- entity_id: camera.baby_monitor_ffmpeg_detector
-        #name: Baby Monitor Detector Opencv
-    #classifier:
-      #face_frontal:
-        #file: /config/opencv/haarcascade_frontalface_default.xml
-        #neighbors: 2
-        #min_size: 
-          #- 5
-          #- 5
-      #face_profile: 
-        #file: /config/opencv/haarcascade_profileface.xml
-        #neighbors: 2
-        #min_size: 
-          #- 5
-          #- 5
-      #upper_body: 
-        #file: /config/opencv/haarcascade_upperbody.xml
-        #neighbors: 2
-        #min_size: 
-          #- 5
-          #- 5
-  
-  #- platform: dlib_face_detect
-    #source:
-      #- entity_id: camera.baby_monitor
-        #name: Baby Monitor Detector DLib
+#- platform: opencv
+#source:
+#- entity_id: camera.baby_monitor_ffmpeg_detector
+#name: Baby Monitor Detector Opencv
+#classifier:
+#face_frontal:
+#file: /config/opencv/haarcascade_frontalface_default.xml
+#neighbors: 2
+#min_size:
+#- 5
+#- 5
+#face_profile:
+#file: /config/opencv/haarcascade_profileface.xml
+#neighbors: 2
+#min_size:
+#- 5
+#- 5
+#upper_body:
+#file: /config/opencv/haarcascade_upperbody.xml
+#neighbors: 2
+#min_size:
+#- 5
+#- 5
 
+#- platform: dlib_face_detect
+#source:
+#- entity_id: camera.baby_monitor
+#name: Baby Monitor Detector DLib
 
-
-
-
-
-
-    
 #camera:
-  #- platform: reolink_dev
-    #host: !secret reolinke1pro_ip
-    #username: !secret reolinke1pro_user
-    #password: !secret reolinke1pro_pass
-    #name: Baby Monitor Reolink
-    #stream: main
-    #protocol: rtmp
-    #scan_interval: 5 
+#- platform: reolink_dev
+#host: !secret reolinke1pro_ip
+#username: !secret reolinke1pro_user
+#password: !secret reolinke1pro_pass
+#name: Baby Monitor Reolink
+#stream: main
+#protocol: rtmp
+#scan_interval: 5
 
 #binary_sensor:
-  #- platform: template
-    #sensors:
-      #motion_baby_monitor:
-        #friendly_name:  Baby Monitor
-        #device_class: motion
-        #value_template: "{{ is_state('camera.baby_monitor_reolink', 'motion') }}"
-        #delay_off: 
-            #seconds: 15
+#- platform: template
+#sensors:
+#motion_baby_monitor:
+#friendly_name:  Baby Monitor
+#device_class: motion
+#value_template: "{{ is_state('camera.baby_monitor_reolink', 'motion') }}"
+#delay_off:
+#seconds: 15
