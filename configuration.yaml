@@ -10,6 +10,8 @@ homeassistant:
         - !secret beryllium_ip
   packages: !include_dir_named packages
   customize: !include customize.yaml
+  allowlist_external_dirs:
+    - /config/snapshots/
 
 ################################################################################
 # Configure a default setup of Home Assistant (frontend, api, etc)
@@ -30,8 +32,6 @@ updater:
 zone:
 
 tag:
-
-media_source:
 
 cloud:
 
