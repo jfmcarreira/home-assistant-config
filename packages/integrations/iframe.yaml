@@ -10,16 +10,21 @@ panel_iframe:
     #require_admin: true
   photoprism:
     title: "PhotoPrism"
-    url: "http://sodium.home:2342"
+    url: !secret photoprism_url
     require_admin: true
     icon: mdi:image-multiple
   sonarr:
     title: "Sonarr"
-    url: "http://media-companion.home:8989"
+    url: !secret sonarr_url
     require_admin: true
-    icon: mdi:image-multiple
+    icon: mdi:play-network
   radarr:
     title: "Radarr"
-    url: "http://media-companion.home:7878"
+    url: !secret radarr_url
     require_admin: true
-    icon: mdi:image-multiple
+    icon: mdi:play-network
+  valetudo:
+    title: Valetudo
+    url: !secret valetudo_url
+    require_admin: true
+    icon: mdi:robot-vacuum
