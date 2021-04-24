@@ -11,7 +11,7 @@ influxdb:
   tags:
     source: hass
   include:
-    domains: 
+    domains:
       - switch
       - climate
       - sun
@@ -32,6 +32,8 @@ influxdb:
       - sensor.*_cpu_used
       - sensor.*_ram_used_percent
     entities:
+      # Gas
+      - sensor.pulse_counter_gas
       # Devices
       - binary_sensor.dish_wash_machine_state
       - binary_sensor.washing_machine_state
@@ -54,4 +56,4 @@ influxdb:
     entity_globs:
       - sensor.anniversary_*
 
- 
+
