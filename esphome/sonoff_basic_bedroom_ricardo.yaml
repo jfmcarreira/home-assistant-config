@@ -3,7 +3,7 @@ substitutions:
   upper_devicename: Ricardo Bedroom
 
 esphome:
-  name: ${devicename}
+  name: sonoff_ricardo_bedroom
   platform: ESP8266
   board: esp01_1m
 
