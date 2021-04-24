@@ -28,32 +28,21 @@ binary_sensor:
       number: GPIO5
     on_state:
       then:
-        #- if:
-        #    condition:
-        #      api.connected:
-        #    then:
-              #- homeassistant.event:
-              #    event: esphome.ev_lt_office
-        #      - light.toggle: light_1
-        #    else:
-              #- switch.toggle: relay_1
-              - light.toggle: light_1
+        - if:
+            condition:
+              api.connected:
+            then:
+              - switch.turn_on: relay_1
+              - homeassistant.service:
+                  service: light.toggle
+                  data:
+                    entity_id: light.office
+            else:
+              - switch.toggle: relay_1
 
-#switch:
-#  - platform: gpio
-#    pin: GPIO04
-#    id: relay_1
-#    name: ${upper_devicename} SW
-#    restore_mode: ALWAYS_ON
-
-output:
+switch:
   - platform: gpio
-    id: relay_1
     pin: GPIO04
-
-light:
-  - name: ${upper_devicename}
-    platform: binary
-    id: light_1
-    output: relay_1
-
+    id: relay_1
+    name: ${upper_devicename} SW
+    restore_mode: ALWAYS_ON
