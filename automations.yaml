@@ -1,89 +1,3 @@
-- alias: Remote Phillips Hue Bedroom Dim UP
-  id: Remote Phillips Hue Bedroom Dim UP
-  mode: single
-  trigger:
-  - device_id: af5a0f838ba115521f343e38da7b566c
-    domain: deconz
-    platform: device
-    subtype: dim_up
-    type: remote_button_short_press
-  action:
-  - domain: light
-    type: brightness_increase
-    device_id: c041ba87a274b3acbd69f3f290c65e17
-    entity_id: light.master_bedroom
-- alias: Remote  Phillips Hue Bedroom Dim DOWN
-  id: Remote  Phillips Hue Bedroom Dim DOWN
-  mode: single
-  trigger:
-  - device_id: af5a0f838ba115521f343e38da7b566c
-    domain: deconz
-    platform: device
-    subtype: dim_down
-    type: remote_button_short_press
-  action:
-  - domain: light
-    type: brightness_decrease
-    device_id: c041ba87a274b3acbd69f3f290c65e17
-    entity_id: light.master_bedroom
-- id: Remote  Phillips Hue Bedroom Short Press ON
-  alias: Remote  Phillips Hue Bedroom Short Press ON
-  trigger:
-  - device_id: af5a0f838ba115521f343e38da7b566c
-    domain: deconz
-    platform: device
-    subtype: turn_on
-    type: remote_button_short_release
-  action:
-  - service: light.turn_on
-    entity_id: light.master_bedroom_bathroom_ceiling
-  mode: single
-- id: Remote  Phillips Hue Bedroom Short Press OFF
-  alias: Remote  Phillips Hue Bedroom Short Press OFF
-  trigger:
-  - device_id: af5a0f838ba115521f343e38da7b566c
-    domain: deconz
-    platform: device
-    subtype: turn_off
-    type: remote_button_short_release
-  action:
-  - service: light.turn_off
-    entity_id: light.master_bedroom_bathroom_ceiling
-  - service: light.turn_off
-    entity_id: light.master_bedroom
-  - service: light.turn_off
-    entity_id: light.master_bedroom_bathroom_mirror
-  mode: single
-- alias: Remote  Phillips Hue Bedroom Long Press ON
-  id: Remote  Phillips Hue Bedroom Long Press ON
-  mode: single
-  trigger:
-  - device_id: af5a0f838ba115521f343e38da7b566c
-    domain: deconz
-    platform: device
-    subtype: turn_on
-    type: remote_button_long_press
-  action:
-  - service: light.turn_on
-    entity_id: light.master_bedroom
-- alias: 'Remote Phillips Hue Bedroom Long Press OFF '
-  id: 'Remote Phillips Hue Bedroom Long Press OFF '
-  mode: single
-  trigger:
-  - device_id: af5a0f838ba115521f343e38da7b566c
-    domain: deconz
-    platform: device
-    subtype: turn_off
-    type: remote_button_long_press
-  action:
-  - service: light.turn_off
-    entity_id: light.master_bedroom
-  - service: light.turn_off
-    entity_id: light.master_bedroom_bathroom
-  - service: light.turn_off
-    entity_id: light.hallway
-  - service: light.turn_off
-    entity_id: light.office
 - id: frontend_set_day_theme
   alias: frontend_set_day_theme
   trigger:
@@ -439,7 +353,7 @@
   mode: restart
   initial_state: true
 - id: '1610670372839'
-  alias: Office Desk Turn On
+  alias: Ligar Secretária do Escritório
   description: ''
   trigger:
   - platform: state
@@ -453,7 +367,7 @@
     entity_id: switch.office_desk
   mode: single
 - id: '1610670439471'
-  alias: Office Desk Turn Off
+  alias: Desligar Secretária do Escritório
   description: ''
   trigger:
   - platform: state
@@ -485,20 +399,20 @@
     entity_id: switch.office_desk
   mode: single
 - id: '1612567748105'
-  alias: lights_motion_office_night
+  alias: Controlo Luz de Presença do Escritório
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
+      room_name: Escritório
       illuminance_cutoff: 10
-      automation_name: lights_motion_office_night
       motion_sensor: binary_sensor.motion_sensor_office
       target_entity: light.office_desk
-      no_motion_wait: '60'
+      no_motion_wait: 60
       blocker_on_entity: light.office
       required_house_mode: Night
       run_while_sleep: false
-      light_mode_counter: input_number.atm_lights_automatic_mode_office
+      light_mode_counter: input_number.atm_lights_automatic_mode_office_night
       house_mode: input_select.house_mode
       number_of_repetitions: 0
       blocker_off_entity: input_boolean.notify_home
@@ -506,14 +420,14 @@
       only_after_sunset: false
       illuminance_sensor: sensor.office_light_level
 - id: '1612570836529'
-  alias: lights_motion_office_normal
+  alias: Luz Automática do Escritório
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '15'
+      room_name: Escritório
+      illuminance_cutoff: 15
       required_house_mode: 'On'
-      automation_name: lights_motion_office_normal
       motion_sensor: binary_sensor.motion_sensor_office
       target_entity: light.office
       no_motion_wait: '60'
@@ -521,40 +435,40 @@
       run_while_sleep: false
       light_mode_counter: input_number.atm_lights_automatic_mode_office
       house_mode: input_select.house_mode
-      number_of_repetitions: '0'
+      number_of_repetitions: 0
       blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       illuminance_sensor: sensor.office_light_level
       only_after_sunset: false
 - id: '1612574913656'
-  alias: lights_motion_living_room_night
+  alias: Controlo Luz de Presença da Sala
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '3'
-      automation_name: lights_motion_living_room_night
+      room_name: Sala de Estar
+      illuminance_cutoff: 3
       motion_sensor: binary_sensor.motion_sensor_living_room
       target_entity: light.living_room_tv_leds
-      no_motion_wait: '120'
+      no_motion_wait: 120
       blocker_on_entity: light.living_room_group
       required_house_mode: Night
       run_while_sleep: false
       illuminance_sensor: sensor.living_room_light_level
-      light_mode_counter: input_number.atm_lights_automatic_mode_living_room
+      light_mode_counter: input_number.atm_lights_automatic_mode_living_room_night
       house_mode: input_select.house_mode
-      number_of_repetitions: '0'
+      number_of_repetitions: 0
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       only_after_sunset: false
 - id: '1612574949221'
-  alias: lights_motion_living_room_normal
+  alias: Luz Automática da Sala
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: '10'
+      room_name: Sala de Estar
+      illuminance_cutoff: 10
       house_mode: input_select.house_mode
-      automation_name: lights_motion_living_room_normal
       motion_sensor: binary_sensor.motion_sensor_living_room
       target_entity: light.living_room_group
       run_while_sleep: false
@@ -567,27 +481,28 @@
       no_motion_wait: 100
       only_after_sunset: false
 - id: '1612576412343'
-  alias: lights_motion_hallway_night
+  alias: Controlo Luz de Presença do Corredor
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
-      illuminance_cutoff: 0
-      automation_name: lights_motion_hallway_night
+      room_name: Corredor
+      illuminance_cutoff: 10
       motion_sensor: binary_sensor.motion_sensor_hallway
       target_entity: light.hallway_presence_group
       no_motion_wait: 100
       blocker_on_entity: light.hallway
       run_while_sleep: true
-      light_mode_counter: input_number.atm_lights_automatic_mode_hallway
+      light_mode_counter: input_number.atm_lights_automatic_mode_hallway_night
       number_of_repetitions: 0
       blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       house_mode: input_select.house_mode
       required_house_mode: Night
       only_after_sunset: false
+      illuminance_sensor: sensor.living_room_light_level
 - id: '1612577959648'
-  alias: lights_sync_bathroom_mirror
+  alias: Sincronizar Luz do Espelho da Casa de Banho
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -598,7 +513,7 @@
       sync_exclusive: true
       sync_off: true
 - id: '1612578028726'
-  alias: lights_sync_living_room_abajur
+  alias: Sincronizar Luz do Abajur da Sala
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -609,7 +524,7 @@
       sync_exclusive: true
       sync_off: false
 - id: '1612579273509'
-  alias: lights_sync_living_room_tv_leds
+  alias: Sincronizar Retro-iluminação da Televisão
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -620,7 +535,7 @@
       sync_exclusive: true
       sync_off: true
 - id: '1612581823364'
-  alias: lights_sync_office_desk
+  alias: Sincronizar Luz da Secretária
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -631,17 +546,17 @@
       sync_exclusive: true
       sync_off: true
 - id: '1613309017536'
-  alias: lights_sync_hallway_presence_light
+  alias: Sincronizar Luz de Presença do Corredor
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
       master_light: light.hallway
-      slave_light: light.hallway_presence
+      slave_light: light.hallway_presence_group
       sync_on: false
       sync_off: false
 - id: '1614174741068'
-  alias: Lights Turn Off Pantry on Timeout
+  alias: Desligar Luz da Despensa com Temporizador
   description: ''
   trigger:
   - platform: state
@@ -656,14 +571,14 @@
     entity_id: light.kitchen_pantry
   mode: single
 - id: '1614552306703'
-  alias: lights_motion_kitchen_normal
+  alias: Luz Automática da Cozinha
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
+      room_name: Sala
       illuminance_cutoff: 10
       house_mode: input_select.house_mode
-      automation_name: lights_motion_living_room_normal
       motion_sensor: binary_sensor.motion_sensor_kitchen
       target_entity: light.kitchen
       run_while_sleep: false
@@ -672,23 +587,23 @@
       number_of_repetitions: 5
       blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
-      no_motion_wait: '120'
+      no_motion_wait: 120
       only_after_sunset: false
       required_house_mode: 'On'
 - id: '1614905797504'
-  alias: lights_motion_hallway_sleep
+  alias: Controlo Luz de Presença do Corredor Modo Dormir
   description: ''
   use_blueprint:
     path: lights/motion_based_lights.yaml
     input:
+      room_name: Corredor
       illuminance_cutoff: 0
-      automation_name: lights_motion_hallway_night
       motion_sensor: binary_sensor.motion_sensor_hallway
       target_entity: light.hallway_presence_group
       no_motion_wait: 30
       blocker_on_entity: light.hallway
       run_while_sleep: true
-      light_mode_counter: input_number.atm_lights_automatic_mode_hallway
+      light_mode_counter: input_number.atm_lights_automatic_mode_hallway_night
       number_of_repetitions: 0
       blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
@@ -696,55 +611,26 @@
       required_house_mode: Sleep
       only_after_sunset: true
 - id: '1615154244751'
-  alias: light_auto_off_hallway
+  alias: Desligar Luz do Corredor com Temporizador
   description: ''
   trigger:
   - platform: state
     entity_id: binary_sensor.motion_sensor_hallway
     from: 'on'
     to: 'off'
-    for: 00:05:00
+    for: 00:01:00
   condition: []
   action:
   - service: light.turn_off
     target:
       entity_id: light.hallway_group
   mode: single
-- id: '1615173290799'
-  alias: Alarme Google Home Mini João
-  description: ''
-  trigger:
-  - platform: time
-    at: 09:15:00
-  - platform: time
-    at: '10:00:00'
-  condition:
-  - condition: time
-    weekday:
-    - mon
-    - tue
-    - fri
-  action:
-  - service: media_player.turn_on
-    target:
-      entity_id: media_player.ghm_master_bedroom
-  - service: media_player.volume_set
-    target:
-      entity_id: media_player.ghm_master_bedroom
-    data:
-      volume_level: 0.5
-  - service: media_extractor.play_media
-    data:
-      entity_id: media_player.ghm_master_bedroom
-      media_content_type: music
-      media_content_id: http://mcrscast1.mcr.iol.pt/comercial.mp3
-  mode: single
 - id: '1615255305713'
   alias: Lights Office Set Brightness Temperature
   description: ''
   trigger:
   - platform: state
-    entity_id: light.office_ceiling_lamp
+    entity_id: light.office
     from: 'off'
     to: 'on'
   condition: []
@@ -759,3 +645,177 @@
     default:
     - scene: scene.light_office_night
   mode: single
+- id: '1614484912106'
+  alias: fire_tablet_turn_on_display
+  description: ''
+  mode: single
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.front_door
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_hallway
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.house_mode
+      state: 'Off'
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state: Sleep
+  action:
+  - type: turn_on
+    device_id: a769b4bc5587bd5eea47d70398f69c8e
+    entity_id: light.fire_tablet_screen
+    domain: light
+    brightness_pct: 100
+- id: '1616379327864'
+  alias: Alarme Joao
+  description: Alarme Joao
+  use_blueprint:
+    path: media/music_alarm.yaml
+    input:
+      time: 09:30:00
+      speaker: media_player.ghm_master_bedroom
+      volume: 35
+- id: '1618356780696'
+  alias: Comando Philips do Quarto Principal
+  description: ''
+  use_blueprint:
+    path: mannerisms/zha-philips-hue-dimmer-switch-individual-buttons-with-long-presses.yaml
+    input:
+      remote: af5a0f838ba115521f343e38da7b566c
+      button_1_single_press:
+      - service: light.turn_on
+        target:
+          entity_id: light.master_bedroom_bathroom_ceiling
+      button_1_long_press:
+      - service: light.turn_on
+        target:
+          entity_id: light.master_bedroom
+      button_4_single_press:
+      - service: light.turn_off
+        entity_id: light.master_bedroom_bathroom_ceiling
+      - service: light.turn_off
+        entity_id: light.master_bedroom
+      - service: light.turn_off
+        entity_id: light.master_bedroom_bathroom_mirror
+      button_2_single_press:
+      - type: brightness_increase
+        device_id: c041ba87a274b3acbd69f3f290c65e17
+        entity_id: light.master_bedroom
+        domain: light
+      button_3_single_press:
+      - type: brightness_decrease
+        device_id: c041ba87a274b3acbd69f3f290c65e17
+        entity_id: light.master_bedroom
+        domain: light
+      button_4_long_press:
+      - service: script.routine_night_time
+- id: '1618408454545'
+  alias: 'Media House Mode Toggle Devices '
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.house_mode
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: input_select.house_mode
+          state: 'Off'
+        - condition: state
+          entity_id: input_select.house_mode
+          state: Sleep
+      sequence:
+      - service: switch.turn_off
+        target:
+          entity_id:
+          - switch.living_room_tv_meo_box
+          - switch.office_desk
+    default:
+    - service: switch.turn_on
+      target:
+        entity_id:
+        - switch.living_room_tv_meo_box
+  mode: restart
+- id: '1618873259672'
+  alias: Device Turn Off Coffee Machine
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.power_usage_device_coffe_machine
+    to: '0'
+    for: 00:10:00
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.coffee_machine
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - service: switch.turn_on
+    target:
+      entity_id: switch.coffee_machine
+  mode: single
+- id: '1618875449494'
+  alias: Device Turn Off Coffee Machine
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.power_usage_device_coffe_machine
+    to: '0'
+    for: 00:10:00
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.coffee_machine
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - service: switch.turn_on
+    target:
+      entity_id: switch.coffee_machine
+  mode: single
+- id: '1619130813287'
+  alias: Lights Master Bedroom Set Brightness Temperature
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.master_bedroom
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: input_select.house_mode
+  condition: []
+  action:
+  - wait_template: '{{ is_state( ''light.master_bedroom'', ''on'' ) }}'
+    timeout: 00:00:10
+  - condition: state
+    entity_id: light.master_bedroom
+    state: 'on'
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state: 'On'
+      sequence:
+      - scene: scene.light_master_bedroom_day
+    default:
+    - scene: scene.light_master_bedroom_night
+  mode: restart
