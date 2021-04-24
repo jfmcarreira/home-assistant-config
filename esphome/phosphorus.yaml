@@ -26,6 +26,6 @@ esp32_ble_tracker:
     
 text_sensor:
   - platform: ble_scanner
-    id: ble_master_bedroom
-    name: BLE Scanner Master Bedroom
+    id: ble_living_room
+    name: BLE Scanner Living Room
 

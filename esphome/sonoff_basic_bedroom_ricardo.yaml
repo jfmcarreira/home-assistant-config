@@ -1,5 +1,5 @@
 substitutions:
-  devicename: sonoff_ricardo_bedroom
+  devicename: sonoff_basic_bedroom_ricardo
   upper_devicename: Ricardo Bedroom
 
 esphome:
@@ -27,7 +27,7 @@ binary_sensor:
   - platform: homeassistant
     id: bedroom_ricardo_lamp_state
     entity_id: light.bedroom_ricardo_lamp
-  
+
   - platform: homeassistant
     id: bedroom_ricardo_wled_state
     entity_id: light.bedroom_ricardo_wleds

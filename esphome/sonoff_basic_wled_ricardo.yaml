@@ -1,0 +1,52 @@
+substitutions:
+  devicename: sonoff_basic_wled_ricardo
+  upper_devicename: Bedroom Ricardo WLEDs
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+
+wifi:
+  domain: .home
+  ssid: !secret esp_wifi_ssid
+  password: !secret esp_wifi_pass
+  use_address: 10.20.107.251
+
+
+# Enable logging
+#logger:
+
+# Enable Home Assistant API
+api:
+  reboot_timeout: 0s
+
+ota:
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+
+light:
+  - id: bedroom_ricardo_wled_relay
+    name: ${upper_devicename} Relay
+    platform: binary
+    output: relay_1
+    
+  #- name: ${upper_devicename}
+  #  platform: fastled_clockless
+  #  chipset: WS2811
+  #  pin: GPIO1
+  #  num_leds: 50
+  #  rgb_order: RGB
+    
+  - name: ${upper_devicename}
+    platform: neopixelbus
+    type: RGB
+    pin: GPIO01
+    num_leds: 50
+    method: ESP8266_UART0
+    
+
