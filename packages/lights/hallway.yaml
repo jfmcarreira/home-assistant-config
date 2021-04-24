@@ -1,19 +1,20 @@
 homeassistant:
   customize:
-    light.hallway_presence:
-      friendly_name: Luz de Presença do Corredor
+    light.hallway_wall:
+      friendly_name: Luz de Parede do Corredor
+      icon: mdi:wall-sconce-flat
     light.hallway_presence_group:
       friendly_name: Luzes de Presença do Corredor
 
 light:
   - platform: switch
-    name: Hallway Presence
+    name: Hallway Wall
     entity_id: switch.plug_tradfri_hallway
 
   - platform: group
     name: hallway_presence_group
     entities:
-      - light.hallway_presence
+      - light.hallway_wall
       - light.hallway_mirror
 
   - platform: template
@@ -21,7 +22,7 @@ light:
       hallway_group:
         friendly_name: Luzes do Corredor
         icon_template: mdi:lightbulb-group
-        value_template: > 
+        value_template: >
           {{ 
             is_state('light.hallway', 'on') or
             is_state('light.hallway_presence', 'on') or
@@ -29,7 +30,7 @@ light:
           }}
         turn_on:
           - service: light.turn_on
-            entity_id: light.hallway       
+            entity_id: light.hallway
         turn_off:
           - service: light.turn_off
             entity_id: light.hallway

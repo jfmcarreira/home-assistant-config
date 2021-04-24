@@ -1,3 +1,9 @@
+devices:
+  name: Devices
+  entities:
+    - switch.office_desk
+    - switch.portable_heater
+
 living_room_main_lights:
   name: Living Room Main Lights
   entities:
@@ -22,10 +28,10 @@ hallway:
   entities:
     - light.hallway
     - light.hallway_mirror
-    - light.hallway_presence
+    - light.hallway_wall
 
 living_room:
-  name: Sala de Estar 
+  name: Sala de Estar
   entities:
     - light.living_room_table
     - light.living_room_window
@@ -37,14 +43,14 @@ living_room:
 all_bedrooms:
   name: Quartos
   entities:
-        - light.master_bedroom
-        - light.master_bedroom_left_bed
-        - light.master_bedroom_right_bed
-        - light.bedroom_ricardo
-        - light.bedroom_ricardo_lamp
-        - light.bedroom_ricardo_wleds
-        - media_player.ghm_bedroom_ricardo
-        - media_player.ghm_master_bedroom
+    - light.master_bedroom
+    - light.master_bedroom_left_bed
+    - light.master_bedroom_right_bed
+    - light.bedroom_ricardo
+    - light.bedroom_ricardo_lamp
+    - light.bedroom_ricardo_wleds
+    - media_player.ghm_bedroom_ricardo
+    - media_player.ghm_master_bedroom
 
 all_bathrooms:
   name: Casas de Banho

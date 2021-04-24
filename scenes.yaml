@@ -391,31 +391,31 @@
 - id: '1615255103323'
   name: Light Office Night
   entities:
-    light.office_ceiling_lamp:
+    light.office:
       min_mireds: 140
       max_mireds: 650
       effect_list:
       - colorloop
-      brightness: 71
-      color_temp: 455
+      brightness: 107
+      color_temp: 484
       is_deconz_group: false
-      friendly_name: Lampada da Luz do Escritório
-      icon: mdi:lamp
+      friendly_name: Luz do Escritório
+      icon: mdi:globe-light
       supported_features: 63
       state: 'on'
 - id: '1615255132304'
   name: Light Office Day
   entities:
-    light.office_ceiling_lamp:
+    light.office:
       min_mireds: 140
       max_mireds: 650
       effect_list:
       - colorloop
       brightness: 254
-      color_temp: 140
+      color_temp: 170
       is_deconz_group: false
-      friendly_name: Lampada da Luz do Escritório
-      icon: mdi:lamp
+      friendly_name: Luz do Escritório
+      icon: mdi:globe-light
       supported_features: 63
       state: 'on'
 - id: '1615819357729'
@@ -426,3 +426,111 @@
       icon: mdi:globe-light
       supported_features: 1
       state: 'off'
+- id: '1616365655361'
+  name: Work Mode
+  entities:
+    switch.office_desk:
+      friendly_name: Secretária
+      icon: mdi:desk
+      state: 'on'
+    media_player.ghm_living_room:
+      friendly_name: Coluna da Sala
+      supported_features: 152461
+      state: 'off'
+    light.living_room_window:
+      friendly_name: Luz da Janela da Sala
+      icon: mdi:globe-light
+      supported_features: 8
+      state: 'off'
+    light.living_room_table:
+      friendly_name: Luz da Mesa da Sala
+      icon: mdi:globe-light
+      supported_features: 8
+      state: 'off'
+    light.kitchen:
+      friendly_name: Cozinha
+      icon: mdi:square-outline
+      supported_features: 8
+      state: 'off'
+    light.kitchen_pantry:
+      friendly_name: Despensa
+      icon: mdi:dome-light
+      supported_features: 8
+      state: 'off'
+    light.master_bedroom:
+      friendly_name: Luz do Teto do Quarto
+      icon: mdi:globe-light
+      supported_features: 1
+      state: 'off'
+    media_player.living_room_tv:
+      friendly_name: Living Room TV
+      supported_features: 20413
+      device_class: tv
+      state: 'off'
+    light.living_room_tv_leds:
+      friendly_name: Retro-iluminação da Televisão
+      icon: mdi:television-ambient-light
+      supported_features: 185
+      state: 'off'
+    light.living_room_abajur:
+      is_deconz_group: false
+      friendly_name: Candeeiro da Sala
+      icon: mdi:globe-light
+      supported_features: 41
+      state: 'off'
+    light.hallway:
+      friendly_name: Luz Corredor
+      icon: mdi:wall-sconce-flat
+      supported_features: 8
+      state: 'off'
+    light.front_door:
+      friendly_name: Luz da Porta
+      icon: mdi:outdoor-lamp
+      supported_features: 8
+      state: 'off'
+    light.hallway_presence_group:
+      entity_id:
+      - light.hallway_presence
+      - light.hallway_mirror
+      friendly_name: Luzes de Presença do Corredor
+      icon: mdi:lightbulb-group
+      supported_features: 0
+      state: 'off'
+    light.office:
+      min_mireds: 140
+      max_mireds: 650
+      effect_list:
+      - colorloop
+      brightness: 254
+      color_temp: 201
+      entity_id:
+      - light.office_ceiling_lamp
+      - light.office_sw
+      friendly_name: Luz do Escritório
+      icon: mdi:globe-light
+      supported_features: 63
+      state: 'on'
+- id: '1619130868249'
+  name: Light Master Bedroom Day
+  entities:
+    light.master_bedroom:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Luz do Teto do Quarto
+      icon: mdi:globe-light
+      supported_features: 1
+      state: 'on'
+- id: '1619130914121'
+  name: Light Master Bedroom Night
+  entities:
+    light.master_bedroom:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 74
+      friendly_name: Luz do Teto do Quarto
+      icon: mdi:globe-light
+      supported_features: 1
+      state: 'on'
