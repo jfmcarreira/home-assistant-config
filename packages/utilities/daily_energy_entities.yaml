@@ -5,6 +5,12 @@ homeassistant:
   customize:
     sensor.power_usage_lights:
       friendly_name: Potência Total das Luzes
+    sensor.daily_energy_coffe_machine:
+      friendly_name: Máquina do Café
+    sensor.daily_energy_office_desk:
+      friendly_name: Secretária do Escritório
+    sensor.daily_energy_server:
+      friendly_name: Servidor
     sensor.daily_energy_laundry:
       friendly_name: Sótão
     sensor.daily_energy_kitchen_oven:
@@ -28,29 +34,32 @@ homeassistant:
       icon: mdi:flash
     "sensor.daily_energy_*":
       icon: mdi:flash-circle
+      unit_of_measurement: "kWh"
     "sensor.energy_*":
       icon: mdi:flash-circle
 
-
-utility_meter: 
+utility_meter:
   daily_energy:
     source: sensor.bhpzem_energy
     cycle: daily
   #daily_energy_living_room:
-    #source: sensor.living_room_energy
-    #cycle: daily
+  #source: sensor.living_room_energy
+  #cycle: daily
   daily_energy_laundry:
     source: sensor.energy_laundry
     cycle: daily
   daily_energy_kitchen_oven:
     source: sensor.kitchen_oven_energy
     cycle: daily
-  #daily_energy_microwave:
-    #source: sensor.energy_microwave
-    #cycle: daily
-  #daily_energy_office_desk:
-    #source: sensor.energy_media_center
-    #cycle: daily
+  daily_energy_coffe_machine:
+    source: sensor.energy_coffe_machine
+    cycle: daily
+  daily_energy_office_desk:
+    source: sensor.energy_office_desk
+    cycle: daily
+  daily_energy_server:
+    source: sensor.energy_server
+    cycle: daily
   daily_energy_media_center:
     source: sensor.energy_media_center
     cycle: daily
@@ -65,50 +74,49 @@ sensor power:
         unit_of_measurement: "W"
         value_template: >
           {{ ((
-              ( states.sensor.power_usage_light_kitchen.state | float ) + 
-              ( states.sensor.power_usage_light_kitchen_pantry.state | float ) + 
-              ( states.sensor.power_usage_light_living_room_table.state | float ) + 
-              ( states.sensor.power_usage_light_living_room_window.state | float ) + 
-              ( states.sensor.power_usage_light_master_bedroom.state | float ) + 
-              ( states.sensor.power_usage_light_master_bedroom_bathroom_ceiling.state | float ) + 
-              ( states.sensor.power_usage_light_master_bedroom_bathroom_mirror.state | float ) + 
-              ( states.sensor.power_usage_light_hallway.state | float ) + 
-              ( states.sensor.power_usage_light_front_door.state | float ) 
-              ) | int )
-            }}
-         
+            ( states('sensor.power_usage_light_kitchen') | float ) + 
+            ( states('sensor.power_usage_light_kitchen_pantry') | float ) + 
+            ( states('sensor.power_usage_light_living_room_table') | float ) + 
+            ( states('sensor.power_usage_light_living_room_window') | float ) + 
+            ( states('sensor.power_usage_light_master_bedroom') | float ) + 
+            ( states('sensor.power_usage_light_master_bedroom_bathroom_ceiling') | float ) + 
+            ( states('sensor.power_usage_light_master_bedroom_bathroom_mirror') | float ) + 
+            ( states('sensor.power_usage_light_hallway') | float ) + 
+            ( states('sensor.power_usage_light_front_door') | float ) 
+            ) | int )
+          }}
+
         #( states.sensor.power_usage_light_living_room_tv_leds.state | float )+ ( states.sensor.power_usage_light_office_desk.state | float )
-        
-sensor energy: 
-  #- platform: integration
-    #source: sensor.power_sensor_living_room
-    #name: energy_living_room
-    #unit_prefix: k
-    #unit_time: h
-    #round: 2
-    
-  #- platform: integration
-    #source: sensor.power_usage_device_kitchen_oven
-    #name: energy_kitchen_oven
-    #unit_prefix: k
-    #unit_time: h
-    #round: 2 
-  
-  #- platform: integration
-    #source: sensor.power_sensor_laundry
-    #name: energy_laundry
-    #unit_prefix: k
-    #unit_time: h
-    #round: 2 
-  
+
+sensor energy:
+  - platform: integration
+    source: sensor.power_usage_device_coffe_machine
+    name: energy_coffe_machine
+    unit_prefix: k
+    unit_time: h
+    round: 2
+
+  - platform: integration
+    source: sensor.power_usage_device_server
+    name: energy_server
+    unit_prefix: k
+    unit_time: h
+    round: 2
+
+  - platform: integration
+    source: sensor.power_usage_device_office_desk
+    name: energy_office_desk
+    unit_prefix: k
+    unit_time: h
+    round: 2
+
   - platform: integration
     source: sensor.power_usage_lights
     name: energy_lights
     unit_prefix: k
     unit_time: h
-    round: 2 
+    round: 2
 
-    
   - platform: template
     sensors:
       daily_energy_remaining:
@@ -117,20 +125,22 @@ sensor energy:
         value_template: >
           {{
             (
-              ( states.sensor.daily_energy.state | float ) -
-              ( states.sensor.daily_energy_media_center.state | float ) -
-              ( states.sensor.daily_energy_office_desk.state | float ) -
-              ( states.sensor.daily_energy_kitchen_oven.state | float ) -
-              ( states.sensor.daily_energy_microwave.state | float ) -
-              ( states.sensor.daily_energy_laundry.state | float ) -
-              ( states.sensor.daily_energy_dish_wash_machine.state | float ) -
-              ( states.sensor.daily_energy_fridge.state | float ) -
-              ( states.sensor.daily_energy_iron.state | float ) -
-              ( states.sensor.daily_energy_portable_heater.state | float ) -
-              ( states.sensor.daily_energy_lights.state | float )
+              ( states('sensor.daily_energy') | float ) -
+              ( states('sensor.daily_energy_media_center') | float ) -
+              ( states('sensor.daily_energy_server') | float ) -
+              ( states('sensor.daily_energy_office_desk') | float ) -
+              ( states('sensor.daily_energy_kitchen_oven') | float ) -
+              ( states('sensor.daily_energy_microwave') | float ) -
+              ( states('sensor.daily_energy_coffe_machine') | float ) -
+              ( states('sensor.daily_energy_dish_wash_machine') | float ) -
+              ( states('sensor.daily_energy_fridge') | float ) -
+              ( states('sensor.daily_energy_laundry') | float ) -
+              ( states('sensor.daily_energy_iron') | float ) -
+              ( states('sensor.daily_energy_portable_heater') | float ) -
+              ( states('sensor.daily_energy_lights') | float )
             ) | round(3)
           }}
-          
+
 automation insert:
   - alias: "Daily Stats Insert Value of Partial Energy of to Database"
     initial_state: true
@@ -148,11 +158,13 @@ automation insert:
       - platform: state
         entity_id: sensor.daily_energy_kitchen_oven
       - platform: state
+        entity_id: sensor.daily_energy_coffe_machine
+      - platform: state
         entity_id: sensor.daily_energy_microwave
       - platform: state
         entity_id: sensor.daily_energy_dish_wash_machine
       #- platform: state
-        #entity_id: sensor.daily_energy_washing_machine
+      #entity_id: sensor.daily_energy_washing_machine
       - platform: state
         entity_id: sensor.daily_energy_fridge
       - platform: state
@@ -163,6 +175,8 @@ automation insert:
         entity_id: sensor.daily_energy_portable_heater
       - platform: state
         entity_id: sensor.daily_energy_lights
+      - platform: state
+        entity_id: sensor.daily_energy_server
       - platform: state
         entity_id: sensor.daily_energy_remaining
     action:
@@ -177,7 +191,7 @@ automation insert:
             {% elif trigger.entity_id == "sensor.daily_energy_living_room" %}
               daily_energy_living_room
             {% elif trigger.entity_id == "sensor.daily_energy_media_center" %}
-              daily_energy_living_room
+              daily_energy_media_center
             {% elif trigger.entity_id == "sensor.daily_energy_laundry" %}
               daily_energy_laundry
             {% elif trigger.entity_id == "sensor.daily_energy_kitchen_oven" %}
@@ -198,6 +212,8 @@ automation insert:
               daily_energy_portable_heater
             {% elif trigger.entity_id == "sensor.daily_energy_lights" %}
               daily_energy_lights
+            {% elif trigger.entity_id == "sensor.daily_energy_server" %}
+              daily_energy_server
             {% elif trigger.entity_id == "sensor.daily_energy_remaining" %}
               daily_energy_remaining
             {% endif %}
