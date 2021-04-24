@@ -2,11 +2,13 @@
 # HA install dependencies
 #
 shell_command:
-  ha_install_dependencies: pip install pymysql
+  #ha_install_dependencies: /usr/local/bin/python -m pip install --upgrade pip; /usr/local/bin/python -m pip install pymysql
+  ha_install_dependencies: pip --disable-pip-version-check install pymysql
 
 automation old:
   # Init dependences
-  - alias: "Install Dependencies at Startup"
+  - id: c4303d39-638f-4575-b0e6-066180763932
+    alias: "Install Dependencies at Startup"
     initial_state: true
     trigger:
       - platform: homeassistant
