@@ -4,9 +4,13 @@
 homeassistant:
   customize:
     sensor.cat_litter_box_last_clean:
+      friendly_name: "Última Limpeza da Areia das"
       icon: mdi:clock-outline
+      device_class: timestamp
     sensor.cat_litter_box_last_change:
+      friendly_name: "Última Subtituição da Areia das Gatas"
       icon: mdi:clock-outline
+      device_class: timestamp
     counter.cat_litter_box_visits:
       friendly_name: Litter Box Visits
 
@@ -21,24 +25,24 @@ counter:
   cat_litter_box_visits:
     step: 1
     icon: "mdi:cat"
-   
+
 input_datetime:
   cat_litter_box_last_visit:
     name: Litter Box Last Visit
     icon: mdi:clock-outline
     has_date: true
     has_time: true
-  cat_litter_box_last_clean:
-    name: Limpeza da Areia das Gatas
-    icon: mdi:clock-outline
-    has_date: true
-    has_time: true
-  cat_litter_box_last_change:
-    name: Mudança da Areia das Gatas
-    icon: mdi:clock-outline
-    has_date: true
-    has_time: false
-    
+  # cat_litter_box_last_clean:
+  #   name: Limpeza da Areia das Gatas
+  #   icon: mdi:clock-outline
+  #   has_date: true
+  #   has_time: true
+  # cat_litter_box_last_change:
+  #   name: Mudança da Areia das Gatas
+  #   icon: mdi:clock-outline
+  #   has_date: true
+  #   has_time: false
+
 sensor:
   - platform: template
     sensors:
@@ -47,17 +51,34 @@ sensor:
         device_class: timestamp
         value_template: >
           {{ state_attr('input_datetime.cat_litter_box_last_visit', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-          
-      cat_litter_box_last_clean:
-        friendly_name: "Litter Box Last Clean"
-        device_class: timestamp
-        value_template: >
-          {{ state_attr('input_datetime.cat_litter_box_last_clean', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
-      cat_litter_box_last_change:
-        friendly_name: "Litter Box Last Change"
-        device_class: timestamp
-        value_template: >
-          {{ state_attr('input_datetime.cat_litter_box_last_change', 'timestamp') | timestamp_custom("%Y-%m-%d", true) }}
+
+      # cat_litter_box_last_clean:
+      #   friendly_name: "Litter Box Last Clean"
+      #   device_class: timestamp
+      #   value_template: >
+      #     {{ state_attr('input_datetime.cat_litter_box_last_clean', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
+      # cat_litter_box_last_change:
+      #   friendly_name: "Litter Box Last Change"
+      #   device_class: timestamp
+      #   value_template: >
+      #     {{ state_attr('input_datetime.cat_litter_box_last_change', 'timestamp') | timestamp_custom("%Y-%m-%d", true) }}
+
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: cat_litter_box_last_clean
+        query: >-
+          SELECT * FROM tasks
+          WHERE task_name LIKE 'Cat_Litter_Clean'
+          ORDER BY date  DESC LIMIT 1;
+        column: date
+
+      - name: cat_litter_box_last_change
+        query: >-
+          SELECT * FROM tasks
+          WHERE task_name LIKE 'Cat_Litter_Change'
+          ORDER BY date  DESC LIMIT 1;
+        column: date
 
 binary_sensor cleaning:
   - platform: template
@@ -65,27 +86,21 @@ binary_sensor cleaning:
       cat_litter_box_need_clean:
         friendly_name: Limpeza da Areia das Gatas
         device_class: problem
-        #entity_id:
-          #- input_datetime.cat_litter_box_last_clean
-          #- sensor.date
         value_template: >
-          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d %H", true) ) - as_timestamp( as_timestamp( states('input_datetime.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H", true) ) ) / 60.0 / 60.0 ) > 20 }}
+          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d %H", true) ) - as_timestamp( as_timestamp( states('sensor.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H", true) ) ) / 60.0 / 60.0 ) > 20 }}
         attribute_templates:
           last_done: >
-            {{ as_timestamp( states('input_datetime.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-            
+            {{ as_timestamp( states('sensor.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
       cat_litter_box_need_change:
         friendly_name: Mudança da Areia das Gatas
         device_class: problem
-        #entity_id:
-          #- input_datetime.cat_litter_box_last_change
-          #- sensor.date
         value_template: >
-          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('input_datetime.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M", true) ) ) / 24.0 / 60.0 / 60.0 ) > 8 }} 
+          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('sensor.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M", true) ) ) / 24.0 / 60.0 / 60.0 ) > 8 }}
         attribute_templates:
           last_done: >
-            {{ as_timestamp( states('input_datetime.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-            
+            {{ as_timestamp( states('sensor.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
 script:
   cat_clean_notification:
     alias: Task Litter Box Clean Notification
@@ -126,7 +141,7 @@ script:
         data:
           operation: restore
           store_name: cat_litter_flash_store
-          
+
   cat_litter_clean_no_vaccum:
     alias: Task Litter Box Mark Clean
     sequence:
@@ -142,22 +157,22 @@ script:
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
           save_date_time: "true"
-      - service: input_datetime.set_datetime
-        data_template:
-          entity_id: input_datetime.cat_litter_box_last_clean
-          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-          time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
-          
+      # - service: input_datetime.set_datetime
+      #   data_template:
+      #     entity_id: input_datetime.cat_litter_box_last_clean
+      #     date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      #     time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
+
   cat_litter_clean:
     alias: Task Litter Box Mark Clean and Vaccum
     sequence:
-      - service: script.cat_litter_clean_no_vaccum      
+      - service: script.cat_litter_clean_no_vaccum
       - service: vacuum.set_fan_speed
         data:
           entity_id: vacuum.roborock
           fan_speed: "101"
       - service: vacuum.send_command
-        data:  
+        data:
           entity_id: vacuum.roborock
           command: zoned_cleanup
           params:
@@ -176,14 +191,14 @@ script:
         data:
           entity_id: vacuum.roborock
           fan_speed: "medium"
-  
+
   cat_litter_change_no_vaccum:
     alias: Task Litter Box Mark Change No Vacuum
     sequence:
-      - service: input_datetime.set_datetime
-        data_template:
-          entity_id: input_datetime.cat_litter_box_last_change
-          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      # - service: input_datetime.set_datetime
+      #   data_template:
+      #     entity_id: input_datetime.cat_litter_box_last_change
+      #     date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
       - service: shell_command.external_my_sql_insert
         data:
           table: tasks
@@ -194,54 +209,54 @@ script:
           save_string: "true"
           save_date_time: "true"
       - service: script.cat_litter_clean_no_vaccum
-      
+
   cat_litter_change:
     alias: Task Litter Box Mark Change
     sequence:
-      - service: input_datetime.set_datetime
-        data_template:
-          entity_id: input_datetime.cat_litter_box_last_change
-          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-      - service: input_datetime.set_datetime
-        data_template:
-          entity_id: input_datetime.cat_litter_box_last_change
-          date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: "Cat_Litter_Change"
+          column: task_name
+          date_stamp: >
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"
       - service: script.cat_litter_clean
-       
 #automation old:
-            
+
 #automation old:
 #- alias: Reset PIR State Cat Litter
-  #initial_state: true
-  #trigger:
-    #- platform: homeassistant
-      #event: start
-    #- platform: state
-      #entity_id: binary_sensor.litter_box_motion
-      #from: "off"
-      #to: "on"
-      #for:
-        #seconds: 120
-  #action:
-    #- service: mqtt.publish
-      #data:
-        #topic: binary_rf_sensors/litter_box_motion
-        #payload: "OFF"
+#initial_state: true
+#trigger:
+#- platform: homeassistant
+#event: start
+#- platform: state
+#entity_id: binary_sensor.litter_box_motion
+#from: "off"
+#to: "on"
+#for:
+#seconds: 120
+#action:
+#- service: mqtt.publish
+#data:
+#topic: binary_rf_sensors/litter_box_motion
+#payload: "OFF"
 
 #- id: Cat Litter Mark Visit
-  #alias: Cat Litter Mark Visit
-  #initial_state: true
-  #trigger:
-  #- entity_id: binary_sensor.litter_box_motion
-    #from: 'off'
-    #platform: state
-    #to: 'on'
-  #action:
-  #- service: counter.increment
-    #data:
-      #entity_id: counter.cat_litter_box_visits
-  #- service: input_datetime.set_datetime
-    #data_template:
-      #entity_id: input_datetime.cat_litter_box_last_visit
-      #date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-      #time: '{{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}'
+#alias: Cat Litter Mark Visit
+#initial_state: true
+#trigger:
+#- entity_id: binary_sensor.litter_box_motion
+#from: 'off'
+#platform: state
+#to: 'on'
+#action:
+#- service: counter.increment
+#data:
+#entity_id: counter.cat_litter_box_visits
+#- service: input_datetime.set_datetime
+#data_template:
+#entity_id: input_datetime.cat_litter_box_last_visit
+#date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+#time: '{{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}'
