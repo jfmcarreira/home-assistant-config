@@ -1,0 +1,5 @@
+media_source:
+
+homeassistant:
+  media_dirs:
+    local: /media
