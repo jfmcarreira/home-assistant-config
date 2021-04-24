@@ -9,7 +9,6 @@ homeassistant:
     sensor.roborock_empty_bin_last_done:
       friendly_name: Última Limpeza do Depósito
       device_class: timestamp
-      
 
 sensor:
   - platform: sql
@@ -21,18 +20,17 @@ sensor:
           WHERE task_name LIKE 'Roborock_Cleaning'
           ORDER BY date  DESC LIMIT 1;
         column: date
-    
+
   - platform: sql
     db_url: !secret db_custom_url
     queries:
       - name: roborock_empty_bin_last_done
         query: >-
           SELECT * FROM tasks
-          WHERE task_name LIKE 'Roborock_Empty_Bin'
+          WHERE task_name LIKE 'Roborock_EmptyBin'
           ORDER BY date  DESC LIMIT 1;
         column: date
 
-        
 script:
   task_roborock_maintenance:
     alias: Tarefa Roborock Manutenção
@@ -45,18 +43,18 @@ script:
           date_stamp: >
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
-          save_date_time: "true"  
-          
+          save_date_time: "true"
+
       - service: shell_command.external_my_sql_insert
         data:
           table: tasks
           value: "Roborock_EmptyBin"
           column: task_name
           date_stamp: >
-            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M") }}"
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
-          save_date_time: "true"   
-        
+          save_date_time: "true"
+
   task_roborock_clean:
     alias: Tarefa Roborock Limpeza
     sequence:
@@ -66,34 +64,29 @@ script:
           value: "Roborock_EmptyBin"
           column: task_name
           date_stamp: >
-            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M") }}"
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
-          save_date_time: "true"   
-          
+          save_date_time: "true"
+
       ## For original firmware and xiaomi app
       ## Trial and error for the position
       #- service: vacuum.set_fan_speed
-        #data:
-          #entity_id: vacuum.roborock
-          #fan_speed: "105"
-      #- service: vacuum.send_command 
-        #data:
-          #command: app_goto_target
-          #params:
-          #- 26925
-          #- 24435
-        #entity_id: vacuum.roborock
-      
+      #data:
+      #entity_id: vacuum.roborock
+      #fan_speed: "105"
+      #- service: vacuum.send_command
+      #data:
+      #command: app_goto_target
+      #params:
+      #- 26925
+      #- 24435
+      #entity_id: vacuum.roborock
+
       ## For valetudo app
       ## Position is configured within the webapp
       - service: vacuum.send_command
         entity_id: vacuum.roborock
         data:
-          command: 'go_to'
+          command: "go_to"
           params:
-            'spot_id': 'KitchenBin'
-            
-      
-        
-          
-      
+            "spot_id": "KitchenBin"
