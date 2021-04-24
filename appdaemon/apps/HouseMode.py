@@ -84,7 +84,7 @@ class HouseMode(hass.Hass,ClimateControl):
 
         self.timer = None
 
-        self.run_at(self.update_house_mode_at_given_time, "21:30:00")
+        self.run_daily(self.update_house_mode_at_given_time, "21:30:00")
 
     def house_mode_callback(self, entity, attribute, old, new, kwargs):
         self.updateClimateMode(new)
