@@ -11,12 +11,18 @@ homeassistant:
       entity_picture: /local/img_bianca_1_1.jpg
     proximity.dist_home_bianca:
       friendly_name: Distância a Casa Bianca
+    device_tracker.bianca_amazfit:
+      entity_picture: /local/img_bianca_1_1.jpg
+      friendly_name: AmazFit Bianca
     person.joao:
       icon: mdi:human-male
     device_tracker.magnesium:
       entity_picture: /local/img_joao_1_1.jpg
     proximity.dist_home_joao:
       friendly_name: Distância a Casa João
+    device_tracker.joao_amazfit:
+      entity_picture: /local/img_joao_1_1.jpg
+      friendly_name: AmazFit João
 
 sensor presence:
   - platform: mqtt_room
@@ -47,9 +53,8 @@ device_tracker:
     #Note: This is used in combination with NodeRed and ESPHome
     source_type: bluetooth_le
     devices:
-      joao_amazfit: 'home-assistant/location/joao_amazfit'
-      bianca_amazfit: 'home-assistant/location/bianca_amazfit'
-
+      joao_amazfit: "home-assistant/location/joao_amazfit"
+      bianca_amazfit: "home-assistant/location/bianca_amazfit"
 
 ## Persons - Managed by UI
 person:
