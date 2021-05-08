@@ -157,11 +157,6 @@ script:
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
           save_date_time: "true"
-      # - service: input_datetime.set_datetime
-      #   data_template:
-      #     entity_id: input_datetime.cat_litter_box_last_clean
-      #     date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
-      #     time: '{{ now().timestamp() | timestamp_custom("%H:%M", true) }}'
 
   cat_litter_clean:
     alias: Task Litter Box Mark Clean and Vaccum
@@ -195,10 +190,9 @@ script:
   cat_litter_change_no_vaccum:
     alias: Task Litter Box Mark Change No Vacuum
     sequence:
-      # - service: input_datetime.set_datetime
-      #   data_template:
-      #     entity_id: input_datetime.cat_litter_box_last_change
-      #     date: '{{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}'
+      - service: script.cat_litter_clean_no_vaccum
+      - delay: # Delay in order to use two line in the db
+          seconds: 1
       - service: shell_command.external_my_sql_insert
         data:
           table: tasks
@@ -208,11 +202,13 @@ script:
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
           save_date_time: "true"
-      - service: script.cat_litter_clean_no_vaccum
 
   cat_litter_change:
     alias: Task Litter Box Mark Change
     sequence:
+      - service: script.cat_litter_clean
+      - delay: # Delay in order to use two line in the db
+          seconds: 1
       - service: shell_command.external_my_sql_insert
         data:
           table: tasks
@@ -222,7 +218,6 @@ script:
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
           save_date_time: "true"
-      - service: script.cat_litter_clean
 #automation old:
 
 #automation old:
