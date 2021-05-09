@@ -61,7 +61,10 @@ class HouseMode(hass.Hass,ClimateControl):
             "binary_sensor.motion_sensor_living_room",
             "binary_sensor.motion_sensor_office"
             ]
-
+        
+        self.trackState = [
+            "media_player.living_room_tv"
+        ]
 
         self.listen_state(self.tracking_callback, "person.joao")
         self.listen_state(self.tracking_callback, "person.bianca")
@@ -90,6 +93,12 @@ class HouseMode(hass.Hass,ClimateControl):
         self.updateClimateMode(new)
         self.house_mode = new
 
+    def is_device_on(self):
+        for entity in self.trackState:
+            if self.get_state( entity ) = "on":
+                return True
+        return False
+
     def is_lights_on(self):
         for entity in self.trackLights:
             if self.get_state( entity ) == "on":
@@ -116,10 +125,12 @@ class HouseMode(hass.Hass,ClimateControl):
         newMode = "Night"
         if trigger == HOUSE_MODE_EVENT_LIGHT:
             if self.now_is_between("09:00:00", "21:00:00"):
-                newMode = "On"
+                return "On"
         if trigger == HOUSE_MODE_EVENT_NO_MOTION:
+            if self.is_device_on():
+                return "Night"
             if self.now_is_between("23:00:00", "09:00:00"):
-                newMode = "Sleep"
+                return "Sleep"
         return newMode
 
     def new_house_mode_sleep(self, trigger ):
