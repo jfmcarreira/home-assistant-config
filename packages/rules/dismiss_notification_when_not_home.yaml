@@ -1,0 +1,9 @@
+automation:
+  - alias: dismiss_notification_when_not_home
+    trigger:
+      - platform: state
+        entity_id: person.bianca
+      - platform: state
+        entity_id: person.joao
+    action:
+      - service: script.task_notification_dismiss

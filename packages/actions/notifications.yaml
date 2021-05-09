@@ -1,7 +1,7 @@
 ################################################################
 ## Notifications
 ################################################################
-notify:   
+notify:
   - platform: group
     name: mobile_app_all
     services:
@@ -9,6 +9,44 @@ notify:
       - service: mobile_app_calcium
 
 script:
+  task_notification_dismiss:
+    fields:
+      notify_device:
+        description: Device to dismiss notification
+        example: notify.mobile_app_magnesium
+    sequence:
+      - choose:
+          - conditions: "{{ not is_state('person.joao','home') }}"
+            sequence:
+              - service: notify.mobile_app_magnesium
+                data:
+                  message: clear_notification
+                  data:
+                    tag: 30
+                    dismiss: true
+              - service: notify.mobile_app_magnesium
+                data:
+                  message: clear_notification
+                  data:
+                    tag: 20
+                    dismiss: true
+
+      - choose:
+          - conditions: "{{ not is_state('person.bianca','home') }}"
+            sequence:
+              - service: notify.mobile_app_calcium
+                data:
+                  message: clear_notification
+                  data:
+                    tag: 30
+                    dismiss: true
+              - service: notify.mobile_app_magnesium
+                data:
+                  message: clear_notification
+                  data:
+                    tag: 20
+                    dismiss: true
+
   task_notification:
     fields:
       task_message:
@@ -20,7 +58,7 @@ script:
       task_action_message:
         description: Message to show on the action to be trigger
         example: Registar loiça retirada da máquina
-      task_id: 
+      task_id:
         description: Task id
         example: 20
     sequence:
@@ -43,7 +81,7 @@ script:
                     clickAction: "/lovelace/task"
                     actions:
                       - action: "{{ task_action }}"
-                        title: "{{ task_action_message }}" 
+                        title: "{{ task_action_message }}"
       - choose:
           - conditions:
               - condition: state
@@ -63,7 +101,7 @@ script:
                     clickAction: "/lovelace/task"
                     actions:
                       - action: "{{ task_action }}"
-                        title: "{{ task_action_message }}" 
+                        title: "{{ task_action_message }}"
 
   notify_households:
     alias: Notifcar Quem Está em Casa
