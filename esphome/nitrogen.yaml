@@ -40,10 +40,3 @@ sensor:
       name: Bedroom Ricardo Mijia Batery
       
 
-light:
-  - platform: fastled_clockless
-    chipset: WS2811
-    pin: GPIO23
-    num_leds: 50
-    rgb_order: BRG
-    name: "FastLED WS2811 Light"
