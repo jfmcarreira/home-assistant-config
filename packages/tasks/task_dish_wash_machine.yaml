@@ -16,6 +16,8 @@ homeassistant:
       icon: mdi:silverware
       friendly_name: Retir a Loiça da Máquina
       device_class: timestamp
+    binary_sensor.dish_wash_machine_need_emtpy:
+      friendly_name: Existe Loiça Lavada na Máquina
 
     automation.task_dish_wash_empty_machine_reminder:
       friendly_name: Máq. da Loiça - Relembrar de Retirar a Loiça
@@ -24,66 +26,7 @@ homeassistant:
     automation.task_dish_wash_remove_dish_done:
       friendly_name: Máq. da Loiça - Loiça Retirada
 
-binary_sensor state:
-  - platform: template
-    sensors:
-      dish_wash_machine_state:
-        device_class: plug
-        delay_on:
-          minutes: 1
-        delay_off:
-          minutes: 5
-        value_template: >-
-          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
-              {%- if states("sensor.power_usage_device_dish_wash_machine") | int < 3 %}
-                  False
-              {%- else %}
-                  True
-              {%- endif %}
-          {%- else %}
-              {%- if states("sensor.power_usage_device_dish_wash_machine") | int > 10 %}
-                  True
-              {%- else %}
-                  False
-              {%- endif %}
-          {%- endif %}
-        attribute_templates:
-          Última Lavagem: >
-            {{ as_timestamp( states('sensor.task_dish_washing_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-
-      dish_wash_machine_need_emtpy:
-        friendly_name: Existe Loiça Lavada na Máquina
-        value_template: >
-          {{ as_timestamp( states('sensor.task_dish_washing_last_done') ) - as_timestamp( states('sensor.task_dish_wash_empty_last_done') ) > 0 }}
-        attribute_templates:
-          last_done: >
-            {{ as_timestamp( states('sensor.task_dish_wash_empty_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-
-sensor dishes:
-  - platform: template
-    sensors:
-      dish_wash_machine_state:
-        value_template: >-
-          {% if is_state( 'binary_sensor.dish_wash_machine_door', 'on' )  %}
-            Aberta
-          {% else %}
-              {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
-                A Lavar
-              {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
-                Loiça Lavada
-              {% else %}
-                Desligada
-              {% endif %}
-          {% endif %}
-        icon_template: >-
-          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
-            mdi:dishwasher
-          {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
-            mdi:dishwasher-alert
-          {% else %}
-            mdi:dishwasher-off
-          {% endif %}
-
+sensor timestamps:
   - platform: sql
     db_url: !secret db_custom_url
     queries:
@@ -104,6 +47,64 @@ sensor dishes:
           ORDER BY date  DESC LIMIT 1;
         column: date
 
+template:
+  binary_sensor:
+    - name: dish_wash_machine_state
+      unique_id: dish_wash_machine_state
+      device_class: plug
+      delay_on:
+        minutes: 1
+      delay_off:
+        minutes: 5
+      state: >-
+        {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+            {%- if states("sensor.power_usage_device_dish_wash_machine") | int < 3 %}
+                False
+            {%- else %}
+                True
+            {%- endif %}
+        {%- else %}
+            {%- if states("sensor.power_usage_device_dish_wash_machine") | int > 10 %}
+                True
+            {%- else %}
+                False
+            {%- endif %}
+        {%- endif %}
+      attributes:
+        Última Lavagem: >
+          {{ as_timestamp( states('sensor.task_dish_washing_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+    - name: dish_wash_machine_need_emtpy
+      unique_id: dish_wash_machine_need_emtpy
+      state: >
+        {{ as_timestamp( states('sensor.task_dish_washing_last_done') ) - as_timestamp( states('sensor.task_dish_wash_empty_last_done') ) > 0 }}
+      attributes:
+        last_done: >
+          {{ as_timestamp( states('sensor.task_dish_wash_empty_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+  sensor:
+    - name: dish_wash_machine_state
+      unique_id: dish_wash_machine_state
+      state: >-
+        {% if is_state( 'binary_sensor.dish_wash_machine_door', 'on' )  %}
+          Aberta
+        {% else %}
+            {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+              A Lavar
+            {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
+              Loiça Lavada
+            {% else %}
+              Desligada
+            {% endif %}
+        {% endif %}
+      icon: >-
+        {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+          mdi:dishwasher
+        {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
+          mdi:dishwasher-alert
+        {% else %}
+          mdi:dishwasher-off
+        {% endif %}
 
 automation dishes:
   - alias: task_dish_wash_machine_finished
