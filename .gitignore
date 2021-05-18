@@ -46,3 +46,4 @@ opencv
 blueprints/
 
 .rsync_folder_conf
+**/partitions.csv
