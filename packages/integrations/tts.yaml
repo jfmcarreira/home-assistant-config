@@ -107,7 +107,7 @@ script:
         data:
           entity_id: "{{ media_player_for_tts }}"
           volume_level: >
-            {% if now().strftime("%H")|int < 23 %}
+            {% if now().strftime("%H")|int < 23 and now().strftime("%H")|int > 7 %}
               {{ ( states( 'input_number.google_home_volume_tts_day' ) | int ) / 100 }}
             {% else %}
               {{ ( states( 'input_number.google_home_volume_tts_night' ) | int ) / 100 }}
