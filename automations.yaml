@@ -28,22 +28,24 @@
     entity_id: binary_sensor.laundry_door
     from: 'off'
     to: 'on'
-  condition: []
+  condition:
+  - condition: state
+    entity_id: light.laundry_group
+    state: 'off'
+    for: 00:00:30
   action:
   - service: light.turn_on
     data: {}
     entity_id: light.laundry_inside
   mode: restart
 - id: lights_front_door_turn_on_door_open
-  alias: Desligar Luz da Porta da Entrada
+  alias: Ligar Luz da Porta da Entrada
   trigger:
   - entity_id: binary_sensor.front_door
     from: 'off'
     platform: state
     to: 'on'
-  condition:
-  - condition: template
-    value_template: '{{ state_attr("sun.sun", "elevation") < 60 }}'
+  condition: []
   action:
   - service: light.turn_on
     data: {}
@@ -84,6 +86,9 @@
     - condition: state
       entity_id: input_select.house_mode
       state: 'Off'
+    - condition: state
+      entity_id: binary_sensor.motion_sensor_hallway
+      state: 'on'
   - condition: state
     entity_id: light.hallway
     for: 00:10:00
@@ -555,6 +560,7 @@
       slave_light: light.hallway_presence_group
       sync_on: false
       sync_off: false
+      sync_exclusive: true
 - id: '1614174741068'
   alias: Desligar Luz da Despensa com Temporizador
   description: ''
