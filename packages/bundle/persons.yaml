@@ -78,14 +78,3 @@ proximity:
     unit_of_measurement: m
     tolerance: 50
 
-binary_sensor:
-  - platform: template
-    sensors:
-      notify_home:
-        friendly_name: Notify House Occupied
-        icon_template: "mdi:home"
-        value_template: "{{ is_state('input_boolean.notify_home', 'on') }}"
-      bianca_home:
-        value_template: "{{ not ( states.person.bianca.state == 'not_home' ) }}"
-      joao_home:
-        value_template: "{{ not ( states.person.joao.state == 'not_home' ) }}"

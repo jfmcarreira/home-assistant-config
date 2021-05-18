@@ -1,0 +1,5 @@
+- sensor:
+    - name: nextcloud_disk_usage
+      unique_id: nextcloud_disk_usage
+      unit_of_measurement: "GB"
+      state: "{{ ( ( states.sensor.nextcloud_system_freespace.state | float ) / 1024 / 1024 / 1024 ) | round(0) }}"

@@ -45,3 +45,4 @@ script: !include scripts.yaml
 group: !include groups.yaml
 scene: !include scenes.yaml
 python_script:
+template: !include_dir_merge_list templates

@@ -1,0 +1,15 @@
+- sensor:
+    - name: transmission_server_down_speed_kbps
+      unique_id: transmission_server_down_speed_kbps
+      state: "{{ states.sensor.transmission_down_speed.state | multiply(1024) }}"
+      unit_of_measurement: "kB/s"
+
+    - name: transmission_server_up_speed_kbps
+      unique_id: transmission_server_up_speed_kbps
+      state: "{{ states.sensor.transmission_up_speed.state | multiply(1024) }}"
+      unit_of_measurement: "kB/s"
+
+    - name: nzbget_down_speed_kbps
+      unique_id: nzbget_down_speed_kbps
+      state: "{{ states.sensor.nzbget_speed.state | multiply(1024) }}"
+      unit_of_measurement: "kB/s"

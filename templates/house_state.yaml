@@ -1,0 +1,13 @@
+- binary_sensor:
+    - name: Notify Home
+      unique_id: notify_home
+      icon: "mdi:home"
+      state: "{{ is_state('input_boolean.notify_home', 'on') }}"
+    - name: Bianca Home
+      unique_id: bianca_home
+      state: "{{ not ( states.person.bianca.state == 'not_home' ) }}"
+    - name: Joao Home
+      unique_id: joao_home
+      state: "{{ not is_state('person.joao', 'not_home' ) }}"
+      #attributes:
+      #  last_changed: "{{ now() }}"

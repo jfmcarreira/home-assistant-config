@@ -1,0 +1,25 @@
+################################################################
+## State of the Iron
+################################################################
+- binary_sensor:
+    - name: device_iron_state
+      unique_id: device_iron_state
+      device_class: plug
+      delay_on:
+        minutes: 1
+      delay_off:
+        minutes: 1
+      state: >-
+        {% if is_state( 'binary_sensor.device_iron_state', 'on' )  %}
+            {%- if states("sensor.power_usage_device_iron") | int < 3 %}
+                False
+            {%- else %}
+                True
+            {%- endif %}
+        {%- else %}
+            {%- if states("sensor.power_usage_device_iron") | int > 10 %}
+                True
+            {%- else %}
+                False
+            {%- endif %}
+        {%- endif %}
