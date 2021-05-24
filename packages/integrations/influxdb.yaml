@@ -52,8 +52,11 @@ influxdb:
       - sensor.nzbget_speed
       - sensor.transmission_total_torrents
       - sensor.transmission_active_torrents
+      # Magnesium
+      - sensor.magnesium_sleep_confidence
+      - sensor.magnesium_detected_activity
+      - sensor.magnesium_phone_state
+      - sensor.magnesium_battery_temperature
   exclude:
     entity_globs:
       - sensor.anniversary_*
-
-
