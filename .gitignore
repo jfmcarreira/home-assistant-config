@@ -47,3 +47,6 @@ blueprints/
 
 .rsync_folder_conf
 **/partitions.csv
+room_assistant/local.yaml
+home-assistant_v2.db-wal
+home-assistant_v2.db-shm
