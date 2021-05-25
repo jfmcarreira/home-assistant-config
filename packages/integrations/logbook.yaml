@@ -63,6 +63,8 @@ logbook:
       - automation.media_google_home_mini_nigth_volume
       - automation.rf_brigde_demultiplexer
       - automation.contador_de_impulsos_do_gas
+      # Auxiliary scripts
+      - script.task_notification_dismiss
       ## Time vary sensors
       - sun.sun
       - sensor.uptime
