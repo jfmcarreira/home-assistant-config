@@ -97,7 +97,7 @@ script:
           entity_id: media_player.living_room_tv_meo_box
 
   action_meo_play_kids_channel:
-    alias: Routine Bonecos na Televisão
+    alias: Routina Bonecos na Televisão
     sequence:
       - service: script.routine_turn_on_living_room_tv_meo
       - service: python_script.change_meo_box_channel
