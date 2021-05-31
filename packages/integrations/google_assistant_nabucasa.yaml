@@ -3,8 +3,7 @@
 ################################################################
 cloud:
   google_actions:
-    entity_config:        
-      
+    entity_config:
       vacuum.roborock:
         room: Sala
         name: Roborock
@@ -15,7 +14,7 @@ cloud:
           - Aquecimento central
           - Heating
           - Central heating
-          
+
       media_player.living_room_tv:
         room: Sala
         name: Televisão
@@ -23,26 +22,26 @@ cloud:
           - Televisão da Sala
           - Media center
           - TV
-          
+
       switch.hallway_office_motion_lights:
         room: Misc
-        
+
       sensor.average_temperature:
         room: Misc
         name: Temperatura da Casa
-        
+
       # Routines
       script.routine_night_time:
-        room: Misc
+        room: Corredor
         name: Modo Dormir
         aliases:
           - Sleep mode
       script.routine_away:
-        room: Misc
+        room: Corredor
         name: Modo Ausente
         aliases:
           - Away mode
-          
+
       script.routine_dinner_time:
         room: Sala
         name: Modo Refeição
@@ -55,11 +54,11 @@ cloud:
           - Almoço
           - Dinner time
           - Lunch time
-          
+
       script.action_meo_play_main_channel:
         room: Sala
         name: Canal SIC
-      
+
       script.action_meo_play_kids_channel:
         room: Sala
         name: Bonecos na Televisão
@@ -83,7 +82,7 @@ cloud:
           - Cat litter change
       script.task_ricardo_vitamin_d:
         room: Misc
-        name: Administração da Vitamina D 
+        name: Administração da Vitamina D
         aliases:
           - Vitamina D
 
@@ -91,7 +90,7 @@ cloud:
         room: Corredor
 
       light.living_room_abajur:
-        name: Candeeiro da Sala 
+        name: Candeeiro da Sala
         aliases:
           - Luz do Candeeiro da Sala
           - Luz de Apoio
@@ -111,4 +110,3 @@ cloud:
           - Luz de Apoio
           - Luz do Candeeiro do Quarto do Ricardo
           - Luz de Apoio do Quarto do Ricardo
-

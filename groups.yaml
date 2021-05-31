@@ -48,6 +48,7 @@ all_bedrooms:
     - light.master_bedroom_right_bed
     - light.bedroom_ricardo
     - light.bedroom_ricardo_lamp
+    - light.bedroom_ricardo_wall
     - light.bedroom_ricardo_wleds
     - media_player.ghm_bedroom_ricardo
     - media_player.ghm_master_bedroom
@@ -65,7 +66,6 @@ office:
   entities:
     - light.office
     - light.office_desk
-    - switch.office_desk
     - media_player.ghm_office
 
 extras:

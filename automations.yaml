@@ -472,7 +472,6 @@
     path: lights/motion_based_lights.yaml
     input:
       room_name: Sala de Estar
-      illuminance_cutoff: 10
       house_mode: input_select.house_mode
       motion_sensor: binary_sensor.motion_sensor_living_room
       target_entity: light.living_room_group
@@ -485,6 +484,7 @@
       required_house_mode: 'On'
       no_motion_wait: 100
       only_after_sunset: false
+      illuminance_cutoff: 5
 - id: '1612576412343'
   alias: Controlo Luz de Presença do Corredor
   description: ''
@@ -825,3 +825,38 @@
     default:
     - scene: scene.light_master_bedroom_night
   mode: restart
+- id: '1621616055489'
+  alias: Lights Turn Off Ricardo Lamp When SW turns On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.bedroom_ricardo_lamp
+    from: 'off'
+    to: 'on'
+    for: 00:00:05
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: light.bedroom_ricardo_lamp
+  mode: single
+- id: '1622499171025'
+  alias: Desligar a Casa Toda em Modo de Férias
+  description: ''
+  trigger:
+  - platform: time_pattern
+    hours: /1
+  condition:
+  - condition: state
+    entity_id: input_select.house_mode
+    state: 'Off'
+    for: 00:15:00
+  action:
+  - scene: scene.away_time
+  - service: light.turn_off
+    data:
+      entity_id: all
+  - service: media_player.turn_off
+    data:
+      entity_id: all
+  mode: single

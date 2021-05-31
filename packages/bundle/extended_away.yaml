@@ -1,0 +1,43 @@
+automation:
+  - alias: "Extended away notify door open"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        from: "off"
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.laundry_door
+        from: "off"
+        to: "on"
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.extended_away_mode
+          state: "on"
+        # - condition: state
+        #   entity_id: binary_sensor.notify_home
+        #   state: "on"
+    action:
+      - service: notify.mobile_app_magnesium
+        data:
+          title: Alerta de atividade
+          message: A {{ state_attr('trigger.entity_id', 'friendly_name') }} foi aberta
+          data:
+            tag: 81
+            priority: high
+            channel: Intrusion
+            clickAction: /lovelace/main
+            hide-thumbnail: false
+
+      - service: notify.mobile_app_calcium
+        data:
+          title: Alerta de atividade
+          message: A {{ state_attr('trigger.entity_id', 'friendly_name') }} foi aberta
+          data:
+            tag: 81
+            priority: high
+            channel: Intrusion
+            clickAction: /lovelace/main
+            hide-thumbnail: false
