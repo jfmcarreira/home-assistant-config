@@ -23,7 +23,7 @@ automation:
       - service: notify.mobile_app_magnesium
         data:
           title: Alerta de atividade
-          message: A {{ state_attr('trigger.entity_id', 'friendly_name') }} foi aberta
+          message: A {{ state_attr(trigger.entity_id, 'friendly_name') }} foi aberta
           data:
             tag: 81
             priority: high
@@ -34,7 +34,7 @@ automation:
       - service: notify.mobile_app_calcium
         data:
           title: Alerta de atividade
-          message: A {{ state_attr('trigger.entity_id', 'friendly_name') }} foi aberta
+          message: A {{ state_attr(trigger.entity_id, 'friendly_name') }} foi aberta
           data:
             tag: 81
             priority: high
