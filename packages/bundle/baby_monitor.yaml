@@ -15,46 +15,53 @@ input_boolean:
   baby_monitor_notify_bianca:
     name: Reproduzir Bianca
 
-camera:
-  - platform: ffmpeg
-    name: Baby Monitor
-    input: !secret reolinke1pro
+# camera:
+#   - platform: ffmpeg
+#     name: Baby Monitor
+#     input: !secret reolinke1pro
 
-  - platform: ffmpeg
-    name: Baby Monitor Low
-    input: !secret reolinke1pro_low
+#   - platform: ffmpeg
+#     name: Baby Monitor Low
+#     input: !secret reolinke1pro_low
 
 binary_sensor:
   - platform: ffmpeg_noise
     name: Baby Monitor Noise
-    input: !secret reolinke1pro_low
+    input: !secret reolinke1pro_sensors
     #    extra_arguments:
     initial_state: false
-    duration: 1
-    reset: 30
-    peak: -50
+    duration: 2
+    reset: 10
+    peak: -42
 
   - platform: ffmpeg_motion
     name: Baby Monitor Motion
-    input: !secret reolinke1pro_low
-    #extra_arguments: -vf "crop=367:190:163:162"
-    changes: 30
+    input: !secret reolinke1pro_sensors
+    #extra_arguments: -filter:v "crop=367:190:163:162"
     initial_state: false
+    changes: 5
+    reset: 10
 
 automation:
   - alias: "Baby Monitor Change State"
     trigger:
       - platform: state
         entity_id: input_boolean.ricardo_sleeping
+      - platform: homeassistant
+        event: start
     action:
       - choose:
           - conditions: "{{ states.input_boolean.ricardo_sleeping.state == 'on' }}"
             sequence:
               - service: ffmpeg.start
                 entity_id: binary_sensor.baby_monitor_noise
+              - service: ffmpeg.start
+                entity_id: binary_sensor.baby_monitor_motion
         default:
           - service: ffmpeg.stop
             entity_id: binary_sensor.baby_monitor_noise
+          - service: ffmpeg.stop
+            entity_id: binary_sensor.baby_monitor_motion
           - service: input_boolean.turn_off
             entity_id: input_boolean.baby_monitor_broadcast_office
           - service: input_boolean.turn_off
@@ -92,6 +99,14 @@ automation:
         entity_id: binary_sensor.baby_monitor_noise
         from: "off"
         to: "on"
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion
+        from: "off"
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_sensor
+        from: "off"
+        to: "on"
     condition:
       condition: and
       conditions:
@@ -107,7 +122,7 @@ automation:
               - service: notify.mobile_app_magnesium
                 data:
                   title: Baby Monitor
-                  message: Som detectado
+                  message: Atividade Detectada (Som/Movimento)
                   data:
                     image: /api/camera_proxy/camera.baby_monitor_onvif
                     tag: 91
@@ -121,7 +136,7 @@ automation:
               - service: notify.mobile_app_calcium
                 data:
                   title: Baby Monitor
-                  message: Som detectado
+                  message: Atividade Detectada (Som/Movimento)
                   data:
                     tag: 91
                     priority: high
@@ -134,6 +149,15 @@ automation:
                 data:
                   entity_id: camera.baby_monitor_low
                   media_player: media_player.ghm_master_bedroom
+              - service: media_player.volume_set
+                data:
+                  entity_id: media_player.ghm_master_bedroom
+                  volume_level: >
+                    {% if now().strftime("%H")|int < 23 and now().strftime("%H")|int > 7 %}
+                      {{ ( states( 'input_number.google_home_volume_tts_day' ) | int ) / 100 }}
+                    {% else %}
+                      {{ ( states( 'input_number.google_home_volume_tts_night' ) | int ) / 100 }}
+                    {% endif %}
 
       - choose:
           - conditions: "{{ states.input_boolean.baby_monitor_broadcast_living_room.state == 'on' }}"
@@ -142,6 +166,15 @@ automation:
                 data:
                   entity_id: camera.baby_monitor_low
                   media_player: media_player.ghm_living_room
+              - service: media_player.volume_set
+                data:
+                  entity_id: media_player.ghm_living_room
+                  volume_level: >
+                    {% if now().strftime("%H")|int < 23 and now().strftime("%H")|int > 7 %}
+                      {{ ( states( 'input_number.google_home_volume_tts_day' ) | int ) / 100 }}
+                    {% else %}
+                      {{ ( states( 'input_number.google_home_volume_tts_night' ) | int ) / 100 }}
+                    {% endif %}
       - choose:
           - conditions: "{{ states.input_boolean.baby_monitor_broadcast_office.state == 'on' }}"
             sequence:
@@ -149,6 +182,15 @@ automation:
                 data:
                   entity_id: camera.baby_monitor_low
                   media_player: media_player.ghm_office
+              - service: media_player.volume_set
+                data:
+                  entity_id: media_player.ghm_office
+                  volume_level: >
+                    {% if now().strftime("%H")|int < 23 and now().strftime("%H")|int > 7 %}
+                      {{ ( states( 'input_number.google_home_volume_tts_day' ) | int ) / 100 }}
+                    {% else %}
+                      {{ ( states( 'input_number.google_home_volume_tts_night' ) | int ) / 100 }}
+                    {% endif %}
 
   - alias: "Baby Monitor Stop Broadcast"
     mode: single
