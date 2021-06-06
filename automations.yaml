@@ -851,6 +851,9 @@
     entity_id: input_select.house_mode
     state: 'Off'
     for: 00:15:00
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'on'
   action:
   - scene: scene.away_time
   - service: light.turn_off
