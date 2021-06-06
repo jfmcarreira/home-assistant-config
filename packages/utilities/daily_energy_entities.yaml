@@ -87,7 +87,8 @@ sensor:
             ( states('sensor.power_usage_light_master_bedroom_bathroom_ceiling') | float ) +
             ( states('sensor.power_usage_light_master_bedroom_bathroom_mirror') | float ) +
             ( states('sensor.power_usage_light_hallway') | float ) +
-            ( states('sensor.power_usage_light_front_door') | float )
+            ( states('sensor.power_usage_light_front_door') | float ) +
+            ( states('sensor.power_usage_light_ricardo_lamp') | float )
             ) | int )
           }}
 
