@@ -30,16 +30,7 @@ binary_sensor:
       number: GPIO13
     on_state:
       then:
-        - if:
-            condition:
-              api.connected:
-            then:
-              - light.toggle: light_1
-              #- homeassistant.event:
-              #    event: esphome.ev_lt_hallway
-            else:
-              - light.toggle: light_1
-
+        - light.toggle: light_1
 
   - platform: gpio
     id: sw_2
@@ -47,15 +38,7 @@ binary_sensor:
       number: GPIO5
     on_state:
       then:
-        - if:
-            condition:
-              api.connected:
-            then:
-              - light.toggle: light_2
-              #- homeassistant.event:
-              #    event: esphome.ev_lt_front_door
-            else:
-              - light.toggle: light_2
+        - light.toggle: light_2
 
 output:
   - platform: gpio
@@ -119,4 +102,3 @@ sensor:
   - platform: adc
     id: temp_analog_reading
     pin: A0
-

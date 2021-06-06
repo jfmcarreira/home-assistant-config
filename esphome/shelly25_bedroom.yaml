@@ -24,10 +24,10 @@ api:
 ota:
 
 #globals:
- #- id: var_window_dimmer_direction
-   #type: int
-   #restore_value: false
-   #initial_value: "0"
+#- id: var_window_dimmer_direction
+#type: int
+#restore_value: false
+#initial_value: "0"
 
 binary_sensor:
   - platform: gpio
@@ -38,34 +38,14 @@ binary_sensor:
       then:
         - if:
             condition:
-                - binary_sensor.is_on: sw_1
+              - binary_sensor.is_on: sw_1
             then:
-                - if:
-                    condition:
-                        api.connected:
-                    then:
-                        - light.turn_on: light_1
-                        #- homeassistant.event:
-                        #    event: esphome.ev_lt_mbedroombr_ceil
-                        #    data:
-                        #        action: turn_on
-                    else:
-                        - light.turn_on: light_1
+              - light.turn_on: light_1
         - if:
             condition:
-                - binary_sensor.is_off: sw_1
+              - binary_sensor.is_off: sw_1
             then:
-                - if:
-                    condition:
-                        api.connected:
-                    then:
-                        - light.turn_off: light_1
-                        #- homeassistant.event:
-                        #    event: esphome.ev_lt_mbedroombr_ceil
-                        #    data:
-                        #        action: turn_off
-                    else:
-                        - light.turn_off: light_1
+              - light.turn_off: light_1
   - platform: gpio
     id: sw_2
     pin:
@@ -74,91 +54,90 @@ binary_sensor:
       then:
         - if:
             condition:
-                - binary_sensor.is_on: sw_2
+              - binary_sensor.is_on: sw_2
             then:
-                - if:
-                    condition:
-                        api.connected:
-                    then:
-                        - light.turn_on: light_2
-                        #- homeassistant.event:
-                        #    event: esphome.ev_lt_mbedroombr_mirror
-                        #    data:
-                        #        action: turn_on
-                    else:
-                        - light.turn_on: light_2
+              - if:
+                  condition:
+                    api.connected:
+                  then:
+                    - light.turn_on: light_2
+                    #- homeassistant.event:
+                    #    event: esphome.ev_lt_mbedroombr_mirror
+                    #    data:
+                    #        action: turn_on
+                  else:
+                    - light.turn_on: light_2
         - if:
             condition:
-                - binary_sensor.is_off: sw_2
+              - binary_sensor.is_off: sw_2
             then:
-                - if:
-                    condition:
-                        api.connected:
-                    then:
-                        - light.turn_off: light_2
-                        #- homeassistant.event:
-                        #    event: esphome.ev_lt_mbedroombr_mirror
-                        #    data:
-                        #        action: turn_off
-                    else:
-                        - light.turn_off: light_2
+              - if:
+                  condition:
+                    api.connected:
+                  then:
+                    - light.turn_off: light_2
+                    #- homeassistant.event:
+                    #    event: esphome.ev_lt_mbedroombr_mirror
+                    #    data:
+                    #        action: turn_off
+                  else:
+                    - light.turn_off: light_2
     #on_multi_click:
-      #- timing:
-          #- ON for at most 1s
-          #- OFF for at least 0.2s
-        #then:
-          #- light.toggle: light_bedroom
-          ##- homeassistant.service:
-              ##service: light.toggle
-              ##data:
-                ##entity_id: light.master_bedroom
-          ##- logger.log: "Dimmer Down"
-          ##- homeassistant.event:
-              ##event: esphome.button_pressed
-              ##data:
-                ##action: master_bedroom_toggle
+    #- timing:
+    #- ON for at most 1s
+    #- OFF for at least 0.2s
+    #then:
+    #- light.toggle: light_bedroom
+    ##- homeassistant.service:
+    ##service: light.toggle
+    ##data:
+    ##entity_id: light.master_bedroom
+    ##- logger.log: "Dimmer Down"
+    ##- homeassistant.event:
+    ##event: esphome.button_pressed
+    ##data:
+    ##action: master_bedroom_toggle
 
-
-      #- timing:
-          #- ON for at least 1s
-        #then:
-          #- lambda: |-
-              #if( id(var_window_dimmer_direction) ) {
-                #id(var_window_dimmer_direction) = 0;
-              #} else {
-                #id(var_window_dimmer_direction) = 1;
-              #}
-          #- while:
-              #condition:
-                #binary_sensor.is_on: sw_bedroom
-              #then:
-                #- if:
-                    #condition:
-                      #lambda: 'return id(var_window_dimmer_direction) == 0;'
-                    #then:
-                      #- logger.log: "Dimmer Down"
-                      #- homeassistant.event:
-                          #event: esphome.button_pressed
-                          #data:
-                            #action: brightness_change
-                            #entity_id: "light.master_bedroom"
-                            #direction: "down"
-                    #else:
-                      #- logger.log: "Dimmer Up"
-                      #- homeassistant.event:
-                          #event: esphome.button_pressed
-                          #data:
-                            #action: brightness_change
-                            #entity_id: "light.master_bedroom"
-                            #direction: "up"
-                #- delay: 0.3s
+    #- timing:
+    #- ON for at least 1s
+    #then:
+    #- lambda: |-
+    #if( id(var_window_dimmer_direction) ) {
+    #id(var_window_dimmer_direction) = 0;
+    #} else {
+    #id(var_window_dimmer_direction) = 1;
+    #}
+    #- while:
+    #condition:
+    #binary_sensor.is_on: sw_bedroom
+    #then:
+    #- if:
+    #condition:
+    #lambda: 'return id(var_window_dimmer_direction) == 0;'
+    #then:
+    #- logger.log: "Dimmer Down"
+    #- homeassistant.event:
+    #event: esphome.button_pressed
+    #data:
+    #action: brightness_change
+    #entity_id: "light.master_bedroom"
+    #direction: "down"
+    #else:
+    #- logger.log: "Dimmer Up"
+    #- homeassistant.event:
+    #event: esphome.button_pressed
+    #data:
+    #action: brightness_change
+    #entity_id: "light.master_bedroom"
+    #direction: "up"
+    #- delay: 0.3s
 
 #switch:
-  #- platform: gpio
-    #id: light_bedroom
-    #pin: GPIO04
-    ##name: ${LightA_Name} Output
-    #restore_mode: ALWAYS_ON
+#- platform: gpio
+#id: light_bedroom
+#pin: GPIO04
+##name: ${LightA_Name} Output
+#restore_mode: ALWAYS_ON
 
 output:
   - platform: gpio
@@ -222,4 +201,3 @@ sensor:
   - platform: adc
     id: temp_analog_reading
     pin: A0
-

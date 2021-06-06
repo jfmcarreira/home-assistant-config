@@ -66,10 +66,10 @@ sensor:
     pin: A0
 
 globals:
- - id: var_window_dimmer_direction
-   type: int
-   restore_value: false
-   initial_value: "0"
+  - id: var_window_dimmer_direction
+    type: int
+    restore_value: false
+    initial_value: "0"
 
 output:
   - platform: gpio
@@ -124,7 +124,7 @@ binary_sensor:
               then:
                 - if:
                     condition:
-                      lambda: 'return id(var_window_dimmer_direction) == 0;'
+                      lambda: "return id(var_window_dimmer_direction) == 0;"
                     then:
                       - logger.log: "Dimmer Down"
                       - homeassistant.event:
@@ -143,8 +143,6 @@ binary_sensor:
                             direction: "up"
                 - delay: 1s
 
-
-
   - id: sw_table
     platform: gpio
     pin:
@@ -154,15 +152,7 @@ binary_sensor:
           - ON for at most 1s
           - OFF for at least 0.1s
         then:
-          - if:
-              condition:
-                api.connected:
-              then:
-                - light.toggle: light_table
-                #- homeassistant.event:
-                #    event: esphome.ev_lt_livingroomtable
-              else:
-                - light.toggle: light_table
+          - light.toggle: light_table
       - timing:
           - ON for at least 1s
         then:
@@ -170,8 +160,3 @@ binary_sensor:
               service: light.toggle
               data:
                 entity_id: light.living_room_tv_leds
-          #- homeassistant.event:
-          #    event: esphome.ev_lt_livingroomtvleds
-
-
-

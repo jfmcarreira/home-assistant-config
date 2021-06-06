@@ -60,7 +60,6 @@ light:
     
 binary_sensor:
   - id: button_1
-    #name: ${OutputA_Name} SW
     platform: gpio
     pin:
       number: GPIO0
@@ -88,7 +87,6 @@ binary_sensor:
     
   
   - id: button_3
-    #name: ${OutputB_Name} SW
     platform: gpio
     pin:
       number: GPIO10

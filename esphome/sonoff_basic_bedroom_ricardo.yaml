@@ -7,12 +7,10 @@ esphome:
   platform: ESP8266
   board: esp01_1m
 
-
 wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-
 
 # Enable logging
 logger:
@@ -48,44 +46,52 @@ binary_sensor:
               condition:
                 api.connected:
               then:
+                - homeassistant.service:
+                    service: light.turn_on
+                    data:
+                      entity_id: light.bedroom_ricardo_lamp_sw
                 - if:
-                   condition:
-                     or:
-                       - binary_sensor.is_on: bedroom_ricardo_lamp_state
-                       - binary_sensor.is_on: bedroom_ricardo_wled_state
-                       - light.is_on: light_bedroom_ricardo
-                   then:
+                    condition:
+                      or:
+                        - binary_sensor.is_on: bedroom_ricardo_lamp_state
+                        - binary_sensor.is_on: bedroom_ricardo_wled_state
+                        - light.is_on: light_bedroom_ricardo
+                    then:
                       - light.turn_off: light_bedroom_ricardo
                       - homeassistant.service:
-                         service: light.turn_off
-                         data:
-                           entity_id: light.bedroom_ricardo_lamp
+                          service: light.turn_off
+                          data:
+                            entity_id: light.bedroom_ricardo_lamp
                       - homeassistant.service:
-                         service: light.turn_off
-                         data:
-                           entity_id: light.bedroom_ricardo_wleds
-                   else:
-                     - light.toggle: light_bedroom_ricardo
+                          service: light.turn_off
+                          data:
+                            entity_id: light.bedroom_ricardo_wleds
+                    else:
+                      - light.toggle: light_bedroom_ricardo
               else:
                 - light.toggle: light_bedroom_ricardo
 
       - timing:
           - ON for at least 1s
         then:
+          - homeassistant.service:
+              service: light.turn_on
+              data:
+                entity_id: light.bedroom_ricardo_lamp_sw
           - if:
-             condition:
-               - light.is_on: light_bedroom_ricardo
-             then:
-               - light.turn_off: light_bedroom_ricardo
-               - homeassistant.service:
-                   service: light.turn_on
-                   data:
-                     entity_id: light.bedroom_ricardo_lamp
-             else:
-               - homeassistant.service:
-                   service: light.toggle
-                   data:
-                     entity_id: light.bedroom_ricardo_lamp
+              condition:
+                - light.is_on: light_bedroom_ricardo
+              then:
+                - light.turn_off: light_bedroom_ricardo
+                - homeassistant.service:
+                    service: light.turn_on
+                    data:
+                      entity_id: light.bedroom_ricardo_lamp
+              else:
+                - homeassistant.service:
+                    service: light.toggle
+                    data:
+                      entity_id: light.bedroom_ricardo_lamp
 
 output:
   - platform: gpio
@@ -97,4 +103,3 @@ light:
     platform: binary
     id: light_bedroom_ricardo
     output: relay_1
-

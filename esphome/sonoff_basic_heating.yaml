@@ -28,7 +28,6 @@ binary_sensor:
     on_release:
       then:
         - logger.log: "Standalone mode"
-        #- switch.turn_off: relay
         
   - platform: gpio
     pin:
