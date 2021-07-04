@@ -31,6 +31,31 @@ sensor:
           ORDER BY date  DESC LIMIT 1;
         column: date
 
+automation:
+  - alias: task_roborock_send_cleaning
+    id: task_roborock_send_cleaning
+    variables:
+      tts_message: "O aspirador terminou. Deve proceder à sua limpeza"
+      tts_message_timming: "00:00:7"
+    trigger:
+      - platform: state
+        entity_id: vacuum.roborock
+        to: "returning"
+    condition:
+      - condition: template
+        value_template: "{{ ( ( now().timestamp() - as_timestamp( states('sensor.roborock_empty_bin_last_done') ) ) / 60 / 60 / 24 ) > 5 }}"
+    action:
+      - service: script.broadcast_tts_announcement
+        data:
+          message_duration: "{{ tts_message_timming }}"
+          message_to_play: "{{ tts_message }}"
+      - service: vacuum.stop
+        target:
+          entity_id: vacuum.roborock
+      - delay:
+          seconds: 10
+      - service: script.task_roborock_clean
+
 script:
   task_roborock_maintenance:
     alias: Tarefa Roborock Manutenção
@@ -84,6 +109,10 @@ script:
 
       ## For valetudo app
       ## Position is configured within the webapp
+      - service: vacuum.stop
+        target:
+          entity_id: vacuum.roborock
+
       - service: vacuum.send_command
         entity_id: vacuum.roborock
         data:
