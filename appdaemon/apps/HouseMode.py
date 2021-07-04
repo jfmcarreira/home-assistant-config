@@ -108,7 +108,7 @@ class HouseMode(hass.Hass,ClimateControl):
     def new_house_mode_off(self, trigger ):
         newMode = "Off"
         if self.anyone_home(person=True):
-            if self.now_is_between("21:00:00", "09:00:00"):
+            if self.now_is_between("21:00:00", "08:00:00"):
                 newMode = "Night"
             else:
                 newMode = "On"
@@ -117,26 +117,26 @@ class HouseMode(hass.Hass,ClimateControl):
     def new_house_mode_on(self, trigger ):
         newMode = "On"
         if trigger == HOUSE_MODE_EVENT_TIME:
-            if self.now_is_between("21:00:00", "09:00:00"):
+            if self.now_is_between("21:00:00", "08:00:00"):
                 newMode = "Night"
         return newMode
 
     def new_house_mode_night(self, trigger ):
         newMode = "Night"
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if self.now_is_between("09:00:00", "21:00:00"):
+            if self.now_is_between("08:00:00", "21:00:00"):
                 return "On"
         if trigger == HOUSE_MODE_EVENT_NO_MOTION:
             if self.is_device_on():
                 return "Night"
-            if self.now_is_between("23:00:00", "09:00:00"):
+            if self.now_is_between("23:00:00", "08:00:00"):
                 return "Sleep"
         return newMode
 
     def new_house_mode_sleep(self, trigger ):
         newMode = "Sleep"
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if self.now_is_between("19:00:00", "09:00:00"):
+            if self.now_is_between("19:00:00", "08:00:00"):
                 newMode = "Night"
             else:
                 newMode = "On"
