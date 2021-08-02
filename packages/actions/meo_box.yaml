@@ -9,15 +9,6 @@ script:
       - service: media_player.turn_on
         entity_id: media_player.living_room_tv
 
-      # If MEO box is off give it a bit of time to boot up before continuing
-      - choose:
-          - conditions: "{{ not is_state('switch.living_room_tv_meo_box', 'on') }}"
-            sequence:
-              - service: switch.turn_on
-                target:
-                  entity_id: switch.living_room_tv_meo_box
-              - delay: 00:00:10
-
       - wait_template: "{{ is_state( 'binary_sensor.living_room_tv_state', 'on' )  }}"
         timeout: "00:00:04"
 
@@ -31,11 +22,19 @@ script:
     sequence:
       - service: media_player.turn_on
         entity_id: media_player.living_room_tv
-      - service: switch.turn_on
-        target:
-          entity_id: switch.living_room_tv_meo_box
+
+      # If MEO box is off give it a bit of time to boot up before continuing
+      - choose:
+          - conditions: "{{ not is_state('switch.living_room_tv_meo_box', 'on') }}"
+            sequence:
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.living_room_tv_meo_box
+              - delay: 00:00:10
+
       - service: media_player.turn_on
         entity_id: media_player.living_room_tv_meo_box
+
       - choose:
           - conditions:
               - condition: template
@@ -70,7 +69,7 @@ script:
       - service: media_player.volume_set
         entity_id: media_player.living_room_tv
         data:
-          volume_level: 0.08
+          volume_level: 0.16
       - delay:
           hours: 0
           minutes: 0
@@ -91,6 +90,7 @@ script:
     alias: Routina SIC na Televisão
     sequence:
       - service: script.routine_turn_on_living_room_tv_meo
+
       - service: python_script.change_meo_box_channel
         data:
           channel: SIC
@@ -112,6 +112,7 @@ script:
         data:
           entity_id: media_player.living_room_tv_meo_box
           show: Current
+
   action_meo_reset_previous_show:
     alias: Routina Reiniciar Programa Anterior
     sequence:
