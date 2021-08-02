@@ -2,7 +2,7 @@
 ## Recorder
 ################################################################################
 recorder:
-#  db_url: !secret db_url
+  db_url: !secret db_url
   purge_keep_days: 5
   exclude:
     domains:
@@ -42,6 +42,3 @@ recorder:
       - sensor.roborock_map
       # MobileAPP
       - sensor.magnesium_last_notification
-
-
-
