@@ -18,13 +18,12 @@ input_select:
       - Antena 2
       - Antena 3
 
-
   ## Speaker selection
   speakers_selector:
     name: "Media Player"
     icon: mdi:speaker
     options:
-      - Sala 
+      - Sala
       - Cozinha
       - Escritório
       - Quarto Principal
@@ -39,28 +38,28 @@ script:
         description: Service to call
         example: media_extractor.play_media
     sequence:
-      - service:  "{{ service_call }}"
+      - service: "{{ service_call }}"
         data:
           entity_id: >
-              {% if is_state("input_select.speakers_selector", "TV") %}
-                  media_player.living_room_tv
-              {% elif is_state("input_select.speakers_selector", "Host") %}
-                  media_player.host_speakers
-              {% elif is_state("input_select.speakers_selector", "Kiosk") %}
-                  media_player.browser_tf201_kyosk
-              {% elif is_state("input_select.speakers_selector", "Fire Tablet") %}
-                  media_player.fire_tablet_media_player
-              {% elif is_state("input_select.speakers_selector", "Sala") %}
-                  media_player.ghm_living_room
-              {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-                  media_player.gh_clock_kitchen
-              {% elif is_state("input_select.speakers_selector", "Escritório") %}
-                  media_player.ghm_office
-              {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
-                  media_player.ghm_master_bedroom
-              {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
-                  media_player.ghm_bedroom_ricardo
-              {% endif %}
+            {% if is_state("input_select.speakers_selector", "TV") %}
+                media_player.living_room_tv
+            {% elif is_state("input_select.speakers_selector", "Host") %}
+                media_player.host_speakers
+            {% elif is_state("input_select.speakers_selector", "Kiosk") %}
+                media_player.browser_tf201_kyosk
+            {% elif is_state("input_select.speakers_selector", "Fire Tablet") %}
+                media_player.fire_tablet_media_player
+            {% elif is_state("input_select.speakers_selector", "Sala") %}
+                media_player.ghm_living_room
+            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
+                media_player.gh_clock_kitchen
+            {% elif is_state("input_select.speakers_selector", "Escritório") %}
+                media_player.ghm_office
+            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
+                media_player.ghm_master_bedroom
+            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
+                media_player.ghm_bedroom_ricardo
+            {% endif %}
 
   play_radio:
     alias: "Media Play Radio"
@@ -123,9 +122,22 @@ script:
       - service: script.radio_control
         data:
           service_call: >
-              {% if is_state("input_select.speakers_selector", "Kiosk") or is_state("input_select.speakers_selector", "Fire Tablet") %}
-                  media_player.media_stop
-              {% else %}
-                  media_player.turn_off
-              {% endif %}
+            {% if is_state("input_select.speakers_selector", "Kiosk") or is_state("input_select.speakers_selector", "Fire Tablet") %}
+                media_player.media_stop
+            {% else %}
+                media_player.turn_off
+            {% endif %}
 
+automation radio:
+  - alias: "Media Play Radio from Android"
+    trigger:
+      - platform: event
+        event_type: "mobile_app.share"
+        event_data:
+          caller: android-app://com.vanced.android.youtube
+    action:
+      - service: input_text.set_value
+        data:
+          entity_id: input_text.youtube_url
+          value: "{{ trigger.event.data.url }}"
+      - service: script.play_radio
