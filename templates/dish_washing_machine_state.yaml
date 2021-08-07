@@ -1,13 +1,13 @@
 - binary_sensor:
-    - name: dish_wash_machine_state
-      unique_id: dish_wash_machine_state
+    - name: dish_wash_machine_working
+      unique_id: dish_wash_machine_working
       device_class: plug
       delay_on:
         minutes: 5
       delay_off:
         minutes: 5
       state: >-
-        {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+        {% if is_state( 'binary_sensor.dish_wash_machine_working', 'on' )  %}
             {%- if states("sensor.power_usage_device_dish_wash_machine") | int < 3 %}
                 False
             {%- else %}
@@ -32,6 +32,25 @@
         last_done: >
           {{ as_timestamp( states('sensor.task_dish_wash_empty_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
 
+- trigger:
+    - platform: state
+      entity_id: binary_sensor.dish_wash_machine_working
+      for:
+        minutes: 45
+  binary_sensor:
+    - name: dish_wash_machine_state
+      unique_id: dish_wash_machine_state
+      device_class: plug
+      state: >-
+        {% if is_state( 'binary_sensor.dish_wash_machine_working', 'on' )  %}
+          True
+        {% else %}
+          False
+        {% endif %}
+      attributes:
+        Última Lavagem: >
+          {{ as_timestamp( states('sensor.task_dish_washing_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
 - sensor:
     - name: dish_wash_machine_state
       unique_id: dish_wash_machine_state
@@ -39,8 +58,12 @@
         {% if is_state( 'binary_sensor.dish_wash_machine_door', 'on' )  %}
           Aberta
         {% else %}
-            {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
-              A Lavar
+            {% if is_state( 'binary_sensor.dish_wash_machine_working', 'on' )  %}
+                {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+                  A Lavar
+                {% else %}
+                  Em Pré-Lavagem
+                {% endif %}
             {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
               Loiça Lavada
             {% else %}
