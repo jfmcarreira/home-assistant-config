@@ -1,127 +1,130 @@
 vacuum_kitchen:
   alias: Aspiração da Cozinha
   sequence:
-    - service: python_script.vacuum_room
-      data:
-        room: Kitchen
-        runs: 1
+  - service: python_script.vacuum_room
+    data:
+      room: Kitchen
+      runs: 1
   mode: single
 vacuum_living_room:
   alias: Aspiração da Sala
   sequence:
-    - service: python_script.vacuum_room
-      data:
-        room: Living Room
-        runs: 1
+  - service: python_script.vacuum_room
+    data:
+      room: Living Room
+      runs: 1
   mode: single
 vacuum_master_bedroom:
   alias: Aspiração do Quarto Principal
   sequence:
-    - service: python_script.vacuum_room
-      data:
-        room: Bedroom
-        runs: 1
+  - service: python_script.vacuum_room
+    data:
+      room: Bedroom
+      runs: 1
   mode: single
 vacuum_office:
   alias: Aspiração do Escritório
   sequence:
-    - service: python_script.vacuum_room
-      data:
-        room: Office
-        runs: 1
+  - service: python_script.vacuum_room
+    data:
+      room: Office
+      runs: 1
   mode: single
 vacuum_bedroom_ricardo:
   alias: Aspiração do Quarto do Ricardo
   sequence:
-    - service: python_script.vacuum_room
-      data:
-        room: Ricardo Bedroom
-        runs: 1
+  - service: python_script.vacuum_room
+    data:
+      room: Ricardo Bedroom
+      runs: 1
   mode: single
 routine_away:
   alias: Routina Sair de Casa
   variables:
-    motion_light_state:
-      "{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state
-      }}"
+    motion_light_state: '{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state
+      }}'
   sequence:
-    - service: browser_mod.close_popup
-    - service: light.turn_off
-      entity_id: all
-    - service: light.turn_on
-      data: {}
-      target:
-        entity_id: light.hallway
-    - service: media_player.turn_off
-      entity_id: all
-    - service: switch.turn_off
-      target:
-        entity_id: switch.office_desk
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-    - wait_template: "{{ is_state('binary_sensor.front_door', 'on') }}"
-      timeout: 00:01:00
-      continue_on_timeout: true
-    - service: python_script.vacuum_room
-      data:
-        room: switch_based
-        is_zone: 0
-        runs: 1
-    - wait_template: "{{ is_state('binary_sensor.front_door', 'off') }}"
-      timeout: 00:05:00
-      continue_on_timeout: true
-    - service: light.turn_off
+  - service: browser_mod.close_popup
+  - service: light.turn_off
+    entity_id: all
+  - service: light.turn_on
+    data: {}
+    target:
       entity_id: light.hallway
-    - choose:
-        - conditions:
-            - condition: template
-              value_template: '{{ motion_light_state == "on" }}'
-          sequence:
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-      default: []
-    - service: input_select.select_option
-      data:
-        option: "Off"
-      entity_id: input_select.house_mode
+  - service: media_player.turn_off
+    entity_id: all
+  - service: switch.turn_off
+    target:
+      entity_id: switch.office_desk
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+  - wait_template: '{{ is_state(''binary_sensor.front_door'', ''on'') }}'
+    timeout: 00:01:00
+    continue_on_timeout: true
+  - service: script.routine_vacuum_home
+  - wait_template: '{{ is_state(''binary_sensor.front_door'', ''off'') }}'
+    timeout: 00:05:00
+    continue_on_timeout: true
+  - service: light.turn_off
+    entity_id: light.hallway
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ motion_light_state == "on" }}'
+      sequence:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+    default: []
+  - service: input_select.select_option
+    data:
+      option: 'Off'
+    entity_id: input_select.house_mode
   mode: single
-
 routine_all_off_away:
   alias: Routina Sair de Casa (Desligar Tudo)
   sequence:
-    - service: light.turn_off
-      entity_id: all
-    - service: climate.turn_off
-      entity_id: climate.heating
-    - service: script.routine_away
+  - service: light.turn_off
+    entity_id: all
+  - service: climate.turn_off
+    entity_id: climate.heating
+  - service: script.routine_away
   mode: single
 routine_night_time:
   alias: Routina de Boa Noite
   mode: restart
   sequence:
-    - service: browser_mod.close_popup
-    - service: scene.turn_on
-      entity_id: scene.sleeping_time
-    - service: light.turn_on
-      entity_id: light.hallway
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-    - delay: 00:00:40
-    - service: light.turn_off
-      entity_id: light.hallway
-    - choose:
-        - conditions:
-            - condition: template
-              value_template: '{{ motion_light_state == "on" }}'
-          sequence:
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
-      default: []
-    - service: input_select.select_option
-      data:
-        option: Sleep
-      entity_id: input_select.house_mode
+  - service: browser_mod.close_popup
+  - service: scene.turn_on
+    entity_id: scene.sleeping_time
+  - service: light.turn_on
+    entity_id: light.hallway
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+  - delay: 00:00:40
+  - service: light.turn_off
+    entity_id: light.hallway
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ motion_light_state == "on" }}'
+      sequence:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.automation_appdaemon_motion_lights_hallway
+    default: []
+  - service: input_select.select_option
+    data:
+      option: Sleep
+    entity_id: input_select.house_mode
   variables:
-    motion_light_state:
-      "{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state
-      }}"
+    motion_light_state: '{{ states.input_boolean.automation_appdaemon_motion_lights_hallway.state
+      }}'
+routine_vacuum_home:
+  sequence:
+  - service: python_script.vacuum_room
+    data:
+      room: switch_based
+      is_zone: 0
+      runs: 1
+  mode: queued
+  alias: Aspiração da Casa
+  max: 10

@@ -15,7 +15,9 @@ kitchen:
   entities:
     - light.kitchen
     - light.kitchen_pantry
-    - media_player.gh_clock_kitchen
+    - media_player.ghm_kitchen
+    - binary_sensor.motion_sensor_kitchen
+    - sensor.kitchen_light_level
 
 laundry:
   name: Sotão/Lavandaria
@@ -29,6 +31,7 @@ hallway:
     - light.hallway
     - light.hallway_mirror
     - light.hallway_wall
+    - binary_sensor.motion_sensor_hallway
 
 living_room:
   name: Sala de Estar
@@ -39,6 +42,8 @@ living_room:
     - light.living_room_tv_leds
     - media_player.living_room_tv
     - media_player.ghm_living_room
+    - binary_sensor.motion_sensor_living_room
+    - sensor.living_room_light_level
 
 all_bedrooms:
   name: Quartos
@@ -48,8 +53,6 @@ all_bedrooms:
     - light.master_bedroom_right_bed
     - light.bedroom_ricardo
     - light.bedroom_ricardo_lamp
-    - light.bedroom_ricardo_wall
-    - light.bedroom_ricardo_wleds
     - media_player.ghm_bedroom_ricardo
     - media_player.ghm_master_bedroom
 
@@ -67,6 +70,9 @@ office:
     - light.office
     - light.office_desk
     - media_player.ghm_office
+    - binary_sensor.imac_soundparticles_active
+    - binary_sensor.motion_sensor_office
+    - sensor.office_light_level
 
 extras:
   name: Extras
