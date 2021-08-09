@@ -30,7 +30,18 @@ uart:
   baud_rate: 9600
   stop_bits: 1
 
+# Enable time component to reset energy at midnight
+time:
+  - platform: sntp
+    id: my_time
+    
 sensor:
+  - platform: total_daily_energy
+    name: "Daily Energy Total"
+    power_id: pzem_power
+    filters:
+      - multiply: 0.001
+
   - platform: pzemac
     energy:
       name: ${upper_devicename} Energy
@@ -45,6 +56,7 @@ sensor:
       name: ${upper_devicename} Voltage
       accuracy_decimals: 0
     power:
+      id: pzem_power
       name: ${upper_devicename} Power
       accuracy_decimals: 2
     frequency:
