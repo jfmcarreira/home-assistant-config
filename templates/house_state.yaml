@@ -2,7 +2,7 @@
     - name: Notify Home
       unique_id: notify_home
       icon: "mdi:home"
-      state: "{{ is_state('input_boolean.notify_home', 'on') }}"
+      state: "{{ is_state('input_boolean.house_guest', 'on') or is_state('binary_sensor.joaao_home', 'on') or is_state('binary_sensor.bianca_home', 'on') }}"
     - name: Bianca Home
       unique_id: bianca_home
       state: "{{ not ( states.person.bianca.state == 'not_home' ) }}"
@@ -11,3 +11,19 @@
       state: "{{ not is_state('person.joao', 'not_home' ) }}"
       #attributes:
       #  last_changed: "{{ now() }}"
+
+- sensor:
+    - name: Joao State
+      unique_id: joao_state
+      state: >
+        {% if is_state('binary_sensor.imac_soundparticles_camera', 'on') %}
+            {{ "On Call" }}
+        {% elif is_state('person.joao', 'home') %}
+          {% if now().strftime("%H")|int < 19 and now().strftime("%H")|int > 9 and is_state('binary_sensor.imac_soundparticles_active', 'on') %}
+            {{ "Trabalhar" }}
+          {% else %}
+            {{ "Casa" }}
+          {% endif %}
+        {% else %}
+          {{ states('person.joao') }}
+        {% endif %}

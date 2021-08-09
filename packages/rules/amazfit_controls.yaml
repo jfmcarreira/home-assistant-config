@@ -1,0 +1,95 @@
+automation old:
+  - alias: webhook_amazfit_gts
+    id: webhook_amazfit_gts
+    mode: restart
+    trigger:
+      - platform: webhook
+        webhook_id: Amazfit_Button_Trigger
+
+    condition:
+      - condition: template
+        value_template: '{{ trigger.json.user == "joao" }}'
+      - condition: template
+        value_template: |
+          {{ 
+              trigger.json.event == '1x' or 
+              trigger.json.event == '2x' or 
+              trigger.json.event == '3x' or 
+              trigger.json.event == 'vol_up' or
+              trigger.json.event == 'vol_down'
+          }}
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: '{{ trigger.json.event == "1x" }}'
+            sequence:
+              - service: notify.mobile_app_magnesium
+                data:
+                  title: >
+                    Temp. {{ states('sensor.average_temperature' ) }}ºC, Consumo {{
+                    states( 'sensor.bhpzem_power' ) | int }}W
+                  message: >
+                    Modo: {{ states( 'input_select.house_mode' ) }}; Aquecimento {{
+                    states( 'climate.heating' ) }}; {% if
+                    is_state('binary_sensor.dish_wash_machine_need_emtpy', 'on' ) %}
+                    Retirar Loiça da Máquina;{% endif %}{% if
+                    is_state('binary_sensor.wash_machine_wet_clothes', 'on' ) %}
+                    Retirar Roupa Lavada;{% endif %}
+                  data:
+                    tag: 100
+                    priority: high
+                    channel: Report
+              - delay: "00:00:30"
+              - service: notify.mobile_app_magnesium
+                data:
+                  message: clear_notification
+                  data:
+                    tag: 100
+                    dismiss: true
+          - conditions:
+              - condition: template
+                value_template: '{{ trigger.json.event == "2x" }}'
+              - condition: state
+                entity_id: binary_sensor.joao_home
+                state: "on"
+            sequence:
+              - choose:
+                  - conditions: >
+                      {{ 
+                          is_state('sensor.amazfit_joao', 'living_room') or 
+                          is_state('sensor.amazfit_joao', 'office') or 
+                          is_state('sensor.amazfit_joao', 'master_bedroom')
+                      }}
+                    sequence:
+                      service: script.action_turn_off_all_other_rooms
+                      data:
+                        current_room: office
+          - conditions:
+              - condition: template
+                value_template: '{{ trigger.json.event == "3x" }}'
+              - condition: state
+                entity_id: binary_sensor.joao_home
+                state: "on"
+            sequence:
+              - choose:
+                  - conditions:
+                      - condition: time
+                        after: "08:00:00"
+                        before: "22:00:00"
+                    sequence:
+                      - service: script.routine_away
+                default:
+                  - service: script.routine_night_time
+          - conditions:
+              - condition: template
+                value_template: '{{ trigger.json.event == "vol_up" }}'
+            sequence:
+              - service: media_player.volume_up
+                entity_id: media_player.living_room_tv
+          - conditions:
+              - condition: template
+                value_template: '{{ trigger.json.event == "vol_down" }}'
+            sequence:
+              - service: media_player.volume_down
+                entity_id: media_player.living_room_tv

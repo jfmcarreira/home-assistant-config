@@ -1,0 +1,18 @@
+script:
+  action_turn_off_all_other_rooms:
+    alias: Desligar Divisões Restantes
+    fields:
+      current_room:
+        description: Room to keep unchanged
+        example: office
+    sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id: >
+            {% set all_groups = ["hallway", "kitchen", "laundry", "living_room", "office", "master_bedroom", "bedroom_ricardo", "all_bathrooms"] %}
+            {% for grp in all_groups %}
+              {%- if not current_room in grp %} 
+            group.{{ grp }}
+                  {%- if not loop.last %},{% endif -%}
+              {% endif -%}
+            {% endfor %}
