@@ -190,7 +190,7 @@ automation clothes:
         state: "off"
       - condition: template
         value_template: >
-          {{ now().timestamp() - state_attr( "automation.task_laundry_remove_clothes_from_wash_machine_reminder", "last_triggered" ) | as_timestamp > 60 * 50 }}
+          {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
     action:
       - service: persistent_notification.create
         data:

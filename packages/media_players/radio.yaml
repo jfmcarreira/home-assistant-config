@@ -52,7 +52,7 @@ script:
             {% elif is_state("input_select.speakers_selector", "Sala") %}
                 media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-                media_player.gh_clock_kitchen
+                media_player.ghm_kitchen
             {% elif is_state("input_select.speakers_selector", "Escritório") %}
                 media_player.ghm_office
             {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
@@ -80,7 +80,7 @@ script:
             {% elif is_state("input_select.speakers_selector", "Sala") %}
                 media_player.ghm_living_room
             {% elif is_state("input_select.speakers_selector", "Cozinha") %}
-                media_player.gh_clock_kitchen
+                media_player.ghm_kitchen
             {% elif is_state("input_select.speakers_selector", "Escritório") %}
                 media_player.ghm_office
             {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}

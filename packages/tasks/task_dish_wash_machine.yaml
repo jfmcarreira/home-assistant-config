@@ -89,7 +89,7 @@ automation dishes:
         state: "on"
       - condition: template
         value_template: >
-          {{ now().timestamp() - state_attr( "automation.task_dish_wash_empty_machine_reminder", "last_triggered" ) | as_timestamp > 60 * 50 }}
+          {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
     action:
       - service: persistent_notification.create
         data:
