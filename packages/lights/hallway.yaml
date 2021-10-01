@@ -37,4 +37,4 @@ light:
           - service: light.turn_off
             entity_id: light.hallway_mirror
           - service: light.turn_off
-            entity_id: light.hallway_presence
+            entity_id: light.hallway_wall
