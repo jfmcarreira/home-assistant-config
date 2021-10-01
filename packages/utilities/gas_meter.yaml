@@ -1,9 +1,16 @@
 ################################################################
 ## Gas Meter
 ################################################################
-#homeassistant:
-  #customize:
-
+homeassistant:
+  customize:
+    sensor.gas_meter_volume:
+      last_reset: "1970-01-01T00:00:00+00:00"
+      device_class: gas
+      state_class: total_increasing
+    sensor.gas_meter_energy:
+      last_reset: "1970-01-01T00:00:00+00:00"
+      device_class: energy
+      state_class: total_increasing
 
 counter:
   pulse_counter_gas:
@@ -20,6 +27,23 @@ sensor:
           {% set impulse_unit = 0.01 %}
           {% set impulse_count = states('counter.pulse_counter_gas') %}
           {{ 'unknown' if impulse_count == 'unknown' else (impulse_count|int * impulse_unit|float) | round(2) }}
+
+      gas_meter_volume:
+        friendly_name: Consumo de Gás (Volume)
+        unit_of_measurement: m³
+        icon_template: mdi:counter
+        value_template: >-
+          {% set impulse_unit = 0.01 %}
+          {% set impulse_count = states('counter.pulse_counter_gas') %}
+          {{ 'unknown' if impulse_count == 'unknown' else (impulse_count|int * impulse_unit|float) | round(2) }}
+
+      gas_meter_energy:
+        friendly_name: Consumo de Gás (Energia)
+        unit_of_measurement: kWh
+        icon_template: mdi:counter
+        value_template: >-
+          {% set conversion_factor = 11.913488 %}
+          {{ ( states.sensor.gas_meter_volume.state | float ) * conversion_factor  | float | round(2) }}
 
 utility_meter:
   daily_gas:
@@ -40,15 +64,11 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.pulse_gas_meter
-        to: 'off'
-        from: 'on'
+        to: "off"
+        from: "on"
     action:
       - service: counter.increment
         entity_id: counter.pulse_counter_gas
-
-
-
-
 
 sensor bill:
   - platform: template
@@ -98,8 +118,6 @@ automation insert:
           table: monthly_gas_bill
           value: >
             {{ states.sensor.monthly_gas_invoice.attributes.last_period }}
-
-
 
   - alias: "Daily Stats Insert Value of Gas to Table Energy of Database"
     initial_state: true

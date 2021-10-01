@@ -5,39 +5,43 @@ homeassistant:
   customize:
     sensor.daily_energy:
       device_class: energy
-      state_class: measurement
+      state_class: total_increasing
     sensor.power_usage_lights:
       friendly_name: Potência Total das Luzes
     sensor.daily_energy_coffe_machine:
       friendly_name: Energia Diária da Máquina do Café
     sensor.energy_coffe_machine:
       friendly_name: Energia Máquina do Café
-    sensor.daily_energy_office_desk:
-      friendly_name: Energia Diária da Secretária do Escritório
-    sensor.energy_office_desk:
-      friendly_name: Energia Secretária do Escritório
-    sensor.daily_energy_server:
-      friendly_name: Energia Diária do Servidor
-    sensor.energy_server:
-      friendly_name: Energia Servidor
     sensor.daily_energy_laundry:
       friendly_name: Energia Diária do Sótão
     sensor.energy_laundry:
       friendly_name: Energia do Sótão
       device_class: energy
-      state_class: measurement
+      state_class: total_increasing
+    # sensor.daily_energy_office_desk:
+    #   friendly_name: Energia Diária da Secretária do Escritório
+    # sensor.energy_office_desk:
+    #   friendly_name: Energia Secretária do Escritório
+    sensor.daily_energy_media_center:
+      friendly_name: Energia Diária do Servidor
+    sensor.energy_media_center:
+      friendly_name: Energia Servidor
     sensor.daily_energy_kitchen_oven:
       friendly_name: Energia Diária do Forno/Fogão
     sensor.kitchen_oven_energy:
       friendly_name: Energia Forno/Fogão
       device_class: energy
-      state_class: measurement
+      state_class: total_increasing
     sensor.daily_energy_lights:
       friendly_name: Energia Diária das Luzes
     sensor.energy_lights:
       friendly_name: Energia Luzes
+      device_class: energy
+      state_class: total_increasing
     sensor.daily_energy_remaining:
       friendly_name: Energia Diária Restante
+      device_class: energy
+      state_class: total_increasing
   customize_glob:
     "sensor.reative_power_usage_device_*":
       device_class: power
@@ -51,18 +55,21 @@ homeassistant:
       device_class: power
       unit_of_measurement: "W"
       icon: mdi:flash
+      state_class: measurement
     "sensor.daily_energy_*":
       icon: mdi:flash-circle
       unit_of_measurement: "kWh"
       device_class: energy
+      state_class: total_increasing
     "sensor.energy_*":
       icon: mdi:flash-circle
       device_class: energy
-      state_class: measurement
+      unit_of_measurement: "kWh"
+      state_class: total_increasing
 
 utility_meter:
-  # daily_energy:
-  #   source: sensor.bhpzem_energy
+  # daily_energy_remaining:
+  #   source: sensor.energy_remaining
   #   cycle: daily
   #daily_energy_living_room:
   #source: sensor.living_room_energy
@@ -76,11 +83,11 @@ utility_meter:
   daily_energy_coffe_machine:
     source: sensor.energy_coffe_machine
     cycle: daily
-  daily_energy_office_desk:
-    source: sensor.energy_office_desk
-    cycle: daily
-  daily_energy_server:
-    source: sensor.energy_server
+  # daily_energy_office_desk:
+  #   source: sensor.energy_office_desk
+  #   cycle: daily
+  daily_energy_media_center:
+    source: sensor.energy_media_center
     cycle: daily
   daily_energy_lights:
     source: sensor.energy_lights
@@ -93,6 +100,11 @@ sensor:
         unit_of_measurement: "W"
         value_template: >
           {{ ( states('sensor.power_usage_laundry_main') | float ) - ( states('sensor.power_usage_device_washing_machine') | float ) }}
+
+      # energy_laundry:
+      #   unit_of_measurement: "kWh"
+      #   value_template: >
+      #     {{ ( states('sensor.energy_laundry_main') | float ) - ( states('sensor.energy_washing_machine') | float ) }}
 
       power_usage_lights:
         unit_of_measurement: "W"
@@ -130,9 +142,12 @@ sensor:
               ( states('sensor.daily_energy_laundry') | float ) -
               ( states('sensor.daily_energy_iron') | float ) -
               ( states('sensor.daily_energy_portable_heater') | float ) -
+              ( states('sensor.daily_energy_vacuum_chargers') | float ) -
               ( states('sensor.daily_energy_lights') | float )
             ) | round(3)
           }}
+        attribute_templates:
+          last_reset: "{{ state_attr('sensor.daily_energy','last_reset') }}"
 
   - platform: integration
     source: sensor.power_usage_laundry
@@ -149,18 +164,18 @@ sensor:
     round: 2
 
   - platform: integration
-    source: sensor.power_usage_device_server
-    name: energy_server
+    source: sensor.power_usage_device_media_center
+    name: energy_media_center
     unit_prefix: k
     unit_time: h
     round: 2
 
-  - platform: integration
-    source: sensor.power_usage_device_office_desk
-    name: energy_office_desk
-    unit_prefix: k
-    unit_time: h
-    round: 2
+  # - platform: integration
+  #   source: sensor.power_usage_device_office_desk
+  #   name: energy_office_desk
+  #   unit_prefix: k
+  #   unit_time: h
+  #   round: 2
 
   - platform: integration
     source: sensor.power_usage_lights
