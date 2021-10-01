@@ -30,12 +30,14 @@ sensor presence:
     device_id: amazfit_joao
     state_topic: room_presence
     away_timeout: 60
+    timeout: 10
 
   - platform: mqtt_room
     name: Amazfit Bianca
     device_id: amazfit_bianca
     state_topic: room_presence
     away_timeout: 60
+    timeout: 10
 
 ## Device tracker
 device_tracker:
@@ -77,4 +79,3 @@ proximity:
       - device_tracker.calcium
     unit_of_measurement: m
     tolerance: 50
-
