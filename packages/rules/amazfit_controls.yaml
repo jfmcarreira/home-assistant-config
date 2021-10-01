@@ -64,7 +64,7 @@ automation old:
                     sequence:
                       service: script.action_turn_off_all_other_rooms
                       data:
-                        current_room: office
+                        current_room: "{{ states.sensor.amazfit_joao.state  }}"
           - conditions:
               - condition: template
                 value_template: '{{ trigger.json.event == "3x" }}'
