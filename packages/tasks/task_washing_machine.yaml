@@ -8,6 +8,7 @@ homeassistant:
       friendly_name: Porta da Máquina de Lavar
     binary_sensor.washing_machine_state:
       icon: mdi:washing-machine
+      friendly_name: Máquina de Lavar a Roupa
     binary_sensor.wash_machine_wet_clothes:
       friendly_name: Existe Roupa Lavada na Máquina
     binary_sensor.wash_machine_dry_clothes:
