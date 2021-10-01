@@ -6,7 +6,11 @@ browser_mod:
   devices:
     8bd4c1d7-dbc4a954:
       name: Fire Tablet Kyosk
-      camera: true
-      force_stay_awake: true
+      camera: false
+      disable:
+        - sensor
+        - light
+        - media_player
+        - binary_sensor
   disable:
     - all
