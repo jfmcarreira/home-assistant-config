@@ -34,11 +34,13 @@ recorder:
       - binary_sensor.workday
       - binary_sensor.workday_tomorrow
       - sensor.bhpzem_energy
-      #- sensor.daily_energy
-      - sensor.monthly_energy
       - sensor.monthly_energy_cost
       - sensor.monthly_energy_cicle_days
       # Roborock Map
       - sensor.roborock_map
       # MobileAPP
       - sensor.magnesium_last_notification
+  include:
+    entities:
+      - sensor.daily_energy_remaining
+      - sensor.monthly_energy

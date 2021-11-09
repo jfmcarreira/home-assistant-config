@@ -8,6 +8,12 @@ homeassistant:
       trusted_networks:
         - !secret home_network
         - !secret beryllium_ip
+        - 10.20.107.11
+        - 10.20.100.105
+      trusted_users:
+        10.20.107.11: 2ba6266b35b4407ba65ca65db8b8dfbd
+        10.20.100.105: 2ba6266b35b4407ba65ca65db8b8dfbd
+      allow_bypass_login: true
   packages: !include_dir_named packages
   customize: !include customize.yaml
   allowlist_external_dirs:
@@ -34,6 +40,8 @@ tag:
 cloud:
 
 my:
+
+energy:
 
 ################################################################################
 ## Includes

@@ -13,14 +13,17 @@ proxmoxve:
         vms:
           - 200
           - 207
-          - 205
           - 300
+          - 406
+          - 700
         containers:
           - 100
-          - 112
-          - 113
-          - 115
-          
+          - 101
+          - 120
+          - 121
+          - 131
+          - 140
+          - 190
 
 sensor:
   - platform: template
@@ -31,29 +34,28 @@ sensor:
         value_template: !secret proxmox_user
       proxmox_pass:
         value_template: !secret proxmox_pass
-        
-        
+
 shell_command:
-  proxmox_control_vm: bash /config/shell_scripts/proxmox_control_vm.bash {{ states("sensor.proxmox_ip") }} hydrogen {{ states("sensor.proxmox_user") }} {{ states("sensor.proxmox_pass") }} {{ command }} {{ type }} {{ vm }} 
-  
+  proxmox_control_vm: bash /config/shell_scripts/proxmox_control_vm.bash {{ states("sensor.proxmox_ip") }} hydrogen {{ states("sensor.proxmox_user") }} {{ states("sensor.proxmox_pass") }} {{ command }} {{ type }} {{ vm }}
+
 switch:
   #- platform: template
-    #switches:
-      #proxmox_zoneminder_vm:
-        #value_template: "{{ is_state('binary_sensor.hydrogen_zoneminder_running', 'on') }}"
-        #turn_on:
-          #service: shell_command.proxmox_control_vm
-          #data:
-            #type: lxc
-            #vm: 114
-            #command: start
-        #turn_off:
-          #service: shell_command.proxmox_control_vm
-          #data:
-            #type: lxc
-            #vm: 114
-            #command: stop
-            
+  #switches:
+  #proxmox_zoneminder_vm:
+  #value_template: "{{ is_state('binary_sensor.hydrogen_zoneminder_running', 'on') }}"
+  #turn_on:
+  #service: shell_command.proxmox_control_vm
+  #data:
+  #type: lxc
+  #vm: 114
+  #command: start
+  #turn_off:
+  #service: shell_command.proxmox_control_vm
+  #data:
+  #type: lxc
+  #vm: 114
+  #command: stop
+
   - platform: template
     switches:
       proxmox_unifi_controller_vm:
@@ -62,34 +64,45 @@ switch:
           service: shell_command.proxmox_control_vm
           data:
             type: lxc
-            vm: 113
+            vm: 101
             command: start
         turn_off:
           service: shell_command.proxmox_control_vm
           data:
             type: lxc
-            vm: 113
+            vm: 101
             command: stop
-  
-  - platform: template
-    switches:
-      proxmox_mineos_vm:
-        value_template: "{{ is_state('binary_sensor.hydrogen_mineos_running', 'on') }}"
+
+      proxmox_gentoo_binhost_vm:
+        value_template: "{{ is_state('binary_sensor.hydrogen_gentoo_binhost_running', 'on') }}"
         turn_on:
           service: shell_command.proxmox_control_vm
           data:
-            type: qemu
-            vm: 205
+            type: lxc
+            vm: 190
             command: start
         turn_off:
           service: shell_command.proxmox_control_vm
           data:
-            type: qemu
-            vm: 205
+            type: lxc
+            vm: 190
             command: stop
-            
-  - platform: template
-    switches:
+
+      #     proxmox_mineos_vm:
+      #       value_template: "{{ is_state('binary_sensor.hydrogen_mineos_running', 'on') }}"
+      #       turn_on:
+      #         service: shell_command.proxmox_control_vm
+      #         data:
+      #           type: qemu
+      #           vm: 205
+      #           command: start
+      #       turn_off:
+      #         service: shell_command.proxmox_control_vm
+      #         data:
+      #           type: qemu
+      #           vm: 205
+      #           command: stop
+
       proxmox_francium_vm:
         value_template: "{{ is_state('binary_sensor.hydrogen_francium_running', 'on') }}"
         turn_on:

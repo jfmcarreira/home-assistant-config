@@ -45,6 +45,8 @@ class HouseMode(hass.Hass,ClimateControl):
 
         self.initializeClimateControl()
 
+        self.house_mode = self.get_state( "input_select.house_mode" )
+
         self.trackLights = [
             "light.hallway_group",
             "light.living_room_main",
@@ -59,7 +61,8 @@ class HouseMode(hass.Hass,ClimateControl):
             "binary_sensor.motion_sensor_hallway",
             "binary_sensor.motion_sensor_kitchen",
             "binary_sensor.motion_sensor_living_room",
-            "binary_sensor.motion_sensor_office"
+            "binary_sensor.motion_sensor_office",
+            "binary_sensor.master_bedroom_motion_sensor",
             ]
 
         self.trackState = [
@@ -82,18 +85,27 @@ class HouseMode(hass.Hass,ClimateControl):
         for entity in self.trackMotion:
             self.listen_state(self.motion_callback, entity )
 
-        self.house_mode = self.get_state( "input_select.house_mode" )
+        
         self.listen_state(self.house_mode_callback, "input_select.house_mode")
 
         self.timer = None
+        self.run_daily(self.update_house_mode_at_given_time, "08:05:00")
+        self.run_daily(self.update_house_mode_at_given_time, "21:05:00")
+        self.run_daily(self.update_house_mode_at_given_time, "23:05:00")
+        self.run_daily(self.update_house_mode_at_given_time, "23:35:00")
+        self.run_daily(self.update_house_mode_at_given_time, "00:05:00")
+        self.run_daily(self.update_house_mode_at_given_time, "01:05:00")
 
-        self.run_daily(self.update_house_mode_at_given_time, "21:30:00")
+        self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_TIME )
 
     def house_mode_callback(self, entity, attribute, old, new, kwargs):
         self.updateClimateMode(new)
         self.house_mode = new
 
     def is_device_on(self):
+        for l in self.trackLights:
+            if self.get_state( l ) == "on":
+                return True
         for entity in self.trackState:
             if self.get_state( entity ) == "on":
                 return True
@@ -105,44 +117,58 @@ class HouseMode(hass.Hass,ClimateControl):
                 return True
         return False
 
-    def new_house_mode_off(self, trigger ):
+    def preffered_house_mode(self):
+        newMode = "On"
+        if self.now_is_between("07:30:00", "08:30:00"):
+          newMode = "Evening"
+        elif self.now_is_between("21:00:00", "23:00:00"):
+          newMode = "Evening"
+        elif self.now_is_between("23:00:00", "08:00:00"):
+          newMode = "Night"
+        return newMode
+    
+    def is_sleep_time(self):
+      return self.now_is_between("00:00:00", "07:00:00")
+
+    def new_house_mode_from_off(self, trigger ):
         newMode = "Off"
         if self.anyone_home(person=True):
-            if self.now_is_between("21:00:00", "08:00:00"):
-                newMode = "Night"
-            else:
-                newMode = "On"
+          newMode = self.preffered_house_mode()
         return newMode
 
-    def new_house_mode_on(self, trigger ):
+    def new_house_mode_from_on(self, trigger ):
         newMode = "On"
         if trigger == HOUSE_MODE_EVENT_TIME:
-            if self.now_is_between("21:00:00", "08:00:00"):
-                newMode = "Night"
+            newMode = self.preffered_house_mode()
         return newMode
 
-    def new_house_mode_night(self, trigger ):
+    def new_house_mode_from_evening(self, trigger ):
+        newMode = "Evening"
+        if trigger == HOUSE_MODE_EVENT_LIGHT:
+            newMode = self.preffered_house_mode()
+        elif trigger == HOUSE_MODE_EVENT_TIME:
+            newMode = self.preffered_house_mode()
+        elif trigger == HOUSE_MODE_EVENT_NO_MOTION:
+            if not self.is_device_on() and self.is_sleep_time():
+                newMode = "Sleep"
+        return newMode
+
+    def new_house_mode_from_night(self, trigger ):
         newMode = "Night"
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if self.now_is_between("08:00:00", "21:00:00"):
-                return "On"
-        if trigger == HOUSE_MODE_EVENT_NO_MOTION:
-            if self.is_device_on():
-                return "Night"
-            if self.now_is_between("23:00:00", "08:00:00"):
-                return "Sleep"
+            newMode = self.preffered_house_mode()
+        elif trigger == HOUSE_MODE_EVENT_NO_MOTION:
+            if not self.is_device_on() and self.is_sleep_time():
+                newMode = "Sleep"
+        elif trigger == HOUSE_MODE_EVENT_TIME:
+            newMode = self.preffered_house_mode()
         return newMode
 
-    def new_house_mode_sleep(self, trigger ):
+    def new_house_mode_from_sleep(self, trigger ):
         newMode = "Sleep"
         if trigger == HOUSE_MODE_EVENT_LIGHT:
-            if self.now_is_between("19:00:00", "08:00:00"):
-                newMode = "Night"
-            else:
-                newMode = "On"
+            newMode = self.preffered_house_mode()
         return newMode
-
-
 
     def set_new_house_mode_from_trigger(self, trigger ):
 
@@ -151,19 +177,19 @@ class HouseMode(hass.Hass,ClimateControl):
             newMode = "Off"
         else:
             if self.house_mode == "Off":
-                newMode = self.new_house_mode_off( trigger )
+                newMode = self.new_house_mode_from_off( trigger )
             elif self.house_mode == "On":
-                newMode = self.new_house_mode_on( trigger )
+                newMode = self.new_house_mode_from_on( trigger )
+            elif self.house_mode == "Evening":
+                newMode = self.new_house_mode_from_evening( trigger )
             elif self.house_mode == "Night":
-                newMode = self.new_house_mode_night( trigger )
+                newMode = self.new_house_mode_from_night( trigger )
             elif self.house_mode == "Sleep":
-                newMode = self.new_house_mode_sleep( trigger )
-
-        if newMode == "Sleep" and self.is_lights_on():
-            newMode = "Night"
+                newMode = self.new_house_mode_from_sleep( trigger )
 
         self.select_option("input_select.house_mode", newMode )
         return
+
 
     def tracking_callback(self, entity, attribute, old, new, kwargs):
         self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_PRESENCE )
@@ -175,7 +201,9 @@ class HouseMode(hass.Hass,ClimateControl):
         if not haveMotion:
             self.timer = self.run_in(self.timeout_callback, 30 * 60 )
         else:
-            self.cancel_timer(self.timer)
+            if self.timer is not None and self.timer_running(self.timer):
+                self.cancel_timer(self.timer)
+            self.timer = None
             self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_MOTION )
 
 
@@ -184,6 +212,8 @@ class HouseMode(hass.Hass,ClimateControl):
         for l in self.trackLights:
             isLightsOn = isLightsOn or self.get_state( l ) == "on"
         if not isLightsOn:
+            if self.timer is not None and self.timer_running(self.timer):
+                self.cancel_timer(self.timer)
             self.timer = self.run_in(self.timeout_callback, 30 * 60 )
         else:
             self.cancel_timer(self.timer)

@@ -13,17 +13,53 @@
       #  last_changed: "{{ now() }}"
 
 - sensor:
+    # - name: Joao State
+    #   unique_id: joao_state
+    #   state: >-
+    #     {% if is_state('binary_sensor.imac_soundparticles_camera', 'on') %}
+    #         {{ "On Call" }}
+    #     {% elif is_state('person.joao', 'home') %}
+    #         {% if now().strftime("%H")|int < 19 and now().strftime("%H")|int > 9 and is_state('binary_sensor.imac_soundparticles_active', 'on') %}
+    #             {{ "Trabalhar" }}
+    #         {% else %}
+    #             {% if is_state('sensor.amazfit_joao', 'not_home') %}
+    #                 {{ "Em Casa" }}
+    #             {% else %}
+    #                 {{ states.device_tracker.joao_amazfit.state }}
+    #             {% endif %}
+    #         {% endif %}
+    #     {% elif is_state('person.joao', 'not_home') %}
+    #         {{ "Fora" }}
+    #     {% else %}
+    #         {{ states('person.joao') }}
+    #     {% endif %}
+
     - name: Joao State
       unique_id: joao_state
-      state: >
-        {% if is_state('binary_sensor.imac_soundparticles_camera', 'on') %}
-            {{ "On Call" }}
-        {% elif is_state('person.joao', 'home') %}
-          {% if now().strftime("%H")|int < 19 and now().strftime("%H")|int > 9 and is_state('binary_sensor.imac_soundparticles_active', 'on') %}
-            {{ "Trabalhar" }}
-          {% else %}
-            {{ "Casa" }}
-          {% endif %}
+      state: >-
+        {% if is_state('person.joao', 'home') %}
+            {% if is_state('sensor.amazfit_joao', 'not_home') %}
+                {{ "Em Casa" }}
+            {% else %}
+                {{ states.device_tracker.joao_amazfit.state }}
+            {% endif %}
+        {% elif is_state('person.joao', 'not_home') %}
+            {{ "Fora" }}
         {% else %}
-          {{ states('person.joao') }}
+            {{ states('person.joao') }}
+        {% endif %}
+
+    - name: Bianca State
+      unique_id: bianca_state
+      state: >-
+        {% if is_state('person.bianca', 'home') %}
+            {% if is_state('sensor.amazfit_bianca', 'not_home') %}
+                {{ "Em Casa" }}
+            {% else %}
+                {{ states.device_tracker.bianca_amazfit.state }}
+            {% endif %}
+        {% elif is_state('person.bianca', 'not_home') %}
+            {{ "Fora" }}
+        {% else %}
+            {{ states('person.bianca') }}
         {% endif %}

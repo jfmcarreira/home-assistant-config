@@ -2,31 +2,61 @@
   name: Modo Televisão
   entities:
     light.living_room_abajur:
-      min_mireds: 140
-      max_mireds: 650
-      effect_list:
-      - colorloop
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
       brightness: 28
-      color_temp: 601
-      is_deconz_group: false
+      off_brightness:
       friendly_name: Candeeiro da Sala
       icon: mdi:lamp
-      supported_features: 63
+      supported_features: 41
       state: 'on'
     light.living_room_table:
+      supported_color_modes:
+      - onoff
       friendly_name: Luz da Mesa da Sala
       icon: mdi:globe-light
-      supported_features: 0
+      supported_features: 8
       state: 'off'
     light.living_room_tv_leds:
+      supported_color_modes:
+      - rgb
+      - white
       friendly_name: Retro-iluminação da Televisão
       icon: mdi:television-ambient-light
-      supported_features: 185
+      supported_features: 40
       state: 'off'
     light.living_room_window:
+      supported_color_modes:
+      - onoff
       friendly_name: Luz da Janela da Sala
       icon: mdi:globe-light
-      supported_features: 0
+      supported_features: 8
+      state: 'off'
+    light.kitchen:
+      supported_color_modes:
+      - onoff
+      friendly_name: Cozinha
+      icon: mdi:square-outline
+      supported_features: 8
+      state: 'off'
+    light.kitchen_pantry:
+      supported_color_modes:
+      - onoff
+      friendly_name: Despensa
+      icon: mdi:dome-light
+      supported_features: 8
+      state: 'off'
+    light.office:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - hs
+      off_brightness:
+      friendly_name: Luz do Escritório
+      icon: mdi:globe-light
+      supported_features: 59
       state: 'off'
 - id: away_time
   name: away_time

@@ -6,6 +6,8 @@ sensor clothes:
         value_template: >-
           {% if is_state( 'input_select.house_mode', 'On' )  %}
             Ligada
+          {% elif is_state( 'input_select.house_mode', 'Evening' )  %}
+            Modo Amanhecer/Anoitecer
           {% elif is_state( 'input_select.house_mode', 'Night' )  %}
             Modo Noite
           {% elif is_state( 'input_select.house_mode', 'Sleep' )  %}
@@ -16,6 +18,8 @@ sensor clothes:
         icon_template: >-
           {% if is_state( 'input_select.house_mode', 'On' )  %}
             mdi:home-automation
+          {% elif is_state( 'input_select.house_mode', 'Evening' )  %}
+            mdi:weather-sunset
           {% elif is_state( 'input_select.house_mode', 'Night' )  %}
             mdi:weather-night
           {% elif is_state( 'input_select.house_mode', 'Sleep' )  %}
@@ -32,6 +36,15 @@ script:
               - condition: state
                 entity_id: input_select.house_mode
                 state: "On"
+            sequence:
+              - service: input_select.select_option
+                data:
+                  entity_id: input_select.house_mode
+                  option: "Evening"
+          - conditions:
+              - condition: state
+                entity_id: input_select.house_mode
+                state: "Evening"
             sequence:
               - service: input_select.select_option
                 data:
@@ -60,4 +73,3 @@ script:
             data:
               entity_id: input_select.house_mode
               option: "On"
-
