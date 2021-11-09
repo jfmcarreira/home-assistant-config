@@ -17,7 +17,7 @@ logger:
 
 # Enable Home Assistant API
 api:
-  #reboot_timeout: 30s
+  reboot_timeout: 30s
 
 ota:
 
@@ -45,4 +45,4 @@ switch:
     pin: GPIO04
     id: relay_1
     name: ${upper_devicename} SW
-    restore_mode: ALWAYS_ON
+    restore_mode: ALWAYS_OFF

@@ -1,5 +1,5 @@
 substitutions:
-  devicename: bh_pzem_01
+  devicename: bhpzem01
   upper_devicename: BHPZEM
   
 esphome:
@@ -37,7 +37,7 @@ time:
     
 sensor:
   - platform: total_daily_energy
-    name: "Daily Energy Total"
+    name: "Daily Energy"
     power_id: pzem_power
     filters:
       - multiply: 0.001
@@ -63,6 +63,6 @@ sensor:
       name: ${upper_devicename} Frequency
       accuracy_decimals: 1
     power_factor:
-      name: ${upper_devicename} Power Factor
+      name: ${upper_devicename} PF
       accuracy_decimals: 2
     update_interval: 5s

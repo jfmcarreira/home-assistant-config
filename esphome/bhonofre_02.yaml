@@ -11,7 +11,7 @@ wifi:
   domain: .home
   ssid: !secret esp_wifi_ssid
   password: !secret esp_wifi_pass
-  #use_address: 10.20.207.41
+  use_address: 10.20.107.62
   
 # Enable logging
 logger:
@@ -20,6 +20,10 @@ logger:
 api:
 
 ota:
+
+captive_portal:
+
+web_server:
 
 # dallas:
 #   - pin: GPIO14
