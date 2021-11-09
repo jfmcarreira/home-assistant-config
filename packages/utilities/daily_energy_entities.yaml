@@ -34,6 +34,8 @@ homeassistant:
       state_class: total_increasing
     sensor.daily_energy_lights:
       friendly_name: Energia Diária das Luzes
+    sensor.energy_portable_heater:
+
     sensor.energy_lights:
       friendly_name: Energia Luzes
       device_class: energy
@@ -42,30 +44,30 @@ homeassistant:
       friendly_name: Energia Diária Restante
       device_class: energy
       state_class: total_increasing
-  customize_glob:
-    "sensor.reative_power_usage_device_*":
-      device_class: power
-      unit_of_measurement: "VAR"
-      icon: mdi:flash-outline
-    "sensor.power_usage_reactive_*":
-      device_class: power
-      unit_of_measurement: "VAR"
-      icon: mdi:flash-outline
-    "sensor.power_usage_*":
-      device_class: power
-      unit_of_measurement: "W"
-      icon: mdi:flash
-      state_class: measurement
-    "sensor.daily_energy_*":
-      icon: mdi:flash-circle
-      unit_of_measurement: "kWh"
-      device_class: energy
-      state_class: total_increasing
-    "sensor.energy_*":
-      icon: mdi:flash-circle
-      device_class: energy
-      unit_of_measurement: "kWh"
-      state_class: total_increasing
+  #customize_glob:
+    #"sensor.reative_power_usage_device_*":
+      #device_class: power
+      #unit_of_measurement: "VAR"
+      #icon: mdi:flash-outline
+    #"sensor.power_usage_reactive_*":
+      #device_class: power
+      #unit_of_measurement: "VAR"
+      #icon: mdi:flash-outline
+    #"sensor.power_usage_*":
+      #device_class: power
+      #unit_of_measurement: "W"
+      #icon: mdi:flash
+      #state_class: measurement
+    #"sensor.daily_energy_*":
+      #icon: mdi:flash-circle
+      #unit_of_measurement: "kWh"
+      #device_class: energy
+      #state_class: total_increasing
+    #"sensor.energy_*":
+      #icon: mdi:flash-circle
+      #device_class: energy
+      #unit_of_measurement: "kWh"
+      #state_class: total_increasing
 
 utility_meter:
   # daily_energy_remaining:
@@ -80,14 +82,17 @@ utility_meter:
   daily_energy_kitchen_oven:
     source: sensor.kitchen_oven_energy
     cycle: daily
-  daily_energy_coffe_machine:
-    source: sensor.energy_coffe_machine
+  daily_energy_iron:
+    source: sensor.energy_iron
     cycle: daily
   # daily_energy_office_desk:
   #   source: sensor.energy_office_desk
   #   cycle: daily
   daily_energy_media_center:
     source: sensor.energy_media_center
+    cycle: daily
+  daily_energy_portable_heater:
+    source: sensor.energy_portable_heater
     cycle: daily
   daily_energy_lights:
     source: sensor.energy_lights
@@ -101,12 +106,34 @@ sensor:
         value_template: >
           {{ ( states('sensor.power_usage_laundry_main') | float ) - ( states('sensor.power_usage_device_washing_machine') | float ) }}
 
+
+      energy_portable_heater:
+        unit_of_measurement: "kWh"
+        value_template: >
+          {{ states('sensor.energy_portable_heater_raw') | float * 0.01 }}
+
+      energy_media_center:
+        unit_of_measurement: "kWh"
+        value_template: >
+          {{ states('sensor.energy_media_center_raw') | float * 0.01 }}
+
+      energy_iron:
+        unit_of_measurement: "kWh"
+        value_template: >
+          {{ states('sensor.energy_iron_raw') | float * 0.01 }}
+
+      energy_office_desk_non_critical:
+        unit_of_measurement: "kWh"
+        value_template: >
+          {{ states('sensor.energy_office_desk_non_critical_raw') | float * 0.01 }}
+
       # energy_laundry:
       #   unit_of_measurement: "kWh"
       #   value_template: >
       #     {{ ( states('sensor.energy_laundry_main') | float ) - ( states('sensor.energy_washing_machine') | float ) }}
 
       power_usage_lights:
+        friendly_name: "Potência das Luzes"
         unit_of_measurement: "W"
         value_template: >
           {{ ((
@@ -156,19 +183,12 @@ sensor:
     unit_time: h
     round: 2
 
-  - platform: integration
-    source: sensor.power_usage_device_coffe_machine
-    name: energy_coffe_machine
-    unit_prefix: k
-    unit_time: h
-    round: 2
-
-  - platform: integration
-    source: sensor.power_usage_device_media_center
-    name: energy_media_center
-    unit_prefix: k
-    unit_time: h
-    round: 2
+  #- platform: integration
+    #source: sensor.power_usage_device_media_center
+    #name: energy_media_center
+    #unit_prefix: k
+    #unit_time: h
+    #round: 2
 
   # - platform: integration
   #   source: sensor.power_usage_device_office_desk

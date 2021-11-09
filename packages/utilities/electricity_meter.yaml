@@ -20,8 +20,6 @@ utility_meter:
   monthly_energy:
     source: sensor.bhpzem_energy
     cycle: monthly
-    offset:
-      days: 19
 
   # monthly_energy_bi_tariff:
   #   source: sensor.bhpzem_energy
