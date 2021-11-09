@@ -2,12 +2,11 @@
 ## Customize
 ################################################################
 homeassistant:
-  customize:       
+  customize:
     binary_sensor.beryllium:
       friendly_name: Beryllium (Kiosk)
     binary_sensor.strontium:
       friendly_name: Strontium (Samsung Tab)
-
 
 ################################################################
 ## Detect state sensors
@@ -17,10 +16,15 @@ binary_sensor:
     name: Router Asus Laundy
     host: !secret router_asus_ip
     count: 2
-    scan_interval: 300
+    scan_interval: 2
+  - platform: ping
+    name: Sonoff RF Bridge
+    host: !secret sonoff_rf_bridge
+    count: 2
+    scan_interval: 2
   - platform: ping
     name: Boron
-    host: !secret boron_ip  
+    host: !secret boron_ip
     count: 2
     scan_interval: 300
   - platform: ping
@@ -51,8 +55,3 @@ binary_sensor:
     name: Strontium
     host: !secret strontium_ip
     count: 2
-
-
-
-
-
