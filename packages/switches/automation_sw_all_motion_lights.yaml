@@ -1,28 +1,28 @@
-input_boolean:
-  automation_sw_all_motion_lights:
-    name: Controlador das Luzes Automáticas
-    icon: mdi:light
-  automation_appdaemon_lights_living_room:
-    name: Controlador das Luzes da Sala
-    icon: mdi:light
-  automation_appdaemon_lights_office:
-    name: Controlador das Luzes do Escritório
-    icon: mdi:light
-  automation_appdaemon_lights_hallway:
-    name: Controlador das Luzes do Corredor
-    icon: mdi:light
-  automation_appdaemon_lights_kitchen:
-    name: Controlador das Luzes da Cozinha
-    icon: mdi:light
-  automation_appdaemon_lights_bedroom_ricardo:
-    name: Controlador das Luzes do Quarto do Ricardo
-    icon: mdi:light
-  automation_appdaemon_lights_master_bedroom:
-    name: Controlador das Luzes do Quarto Principal
-    icon: mdi:light
-  automation_appdaemon_lights_bathroom:
-    name: Controlador das Luzes da Casa de Banho Principal
-    icon: mdi:light
+#input_boolean:
+  #automation_sw_all_motion_lights:
+    #name: Controlador das Luzes Automáticas
+    #icon: mdi:light
+ #automation_appdaemon_lights_living_room:
+    #name: Controlador das Luzes da Sala
+    #icon: mdi:light
+  #automation_appdaemon_lights_office:
+    #name: Controlador das Luzes do Escritório
+    #icon: mdi:light
+  #automation_appdaemon_lights_hallway:
+    #name: Controlador das Luzes do Corredor
+    #icon: mdi:light
+  #automation_appdaemon_lights_kitchen:
+    #name: Controlador das Luzes da Cozinha
+    #icon: mdi:light
+  #automation_appdaemon_lights_bedroom_ricardo:
+    #name: Controlador das Luzes do Quarto do Ricardo
+    #icon: mdi:light
+  #automation_appdaemon_lights_master_bedroom:
+    #name: Controlador das Luzes do Quarto Principal
+    #icon: mdi:light
+  #automation_appdaemon_lights_bathroom:
+    #name: Controlador das Luzes da Casa de Banho Principal
+    #icon: mdi:light
 
 
 

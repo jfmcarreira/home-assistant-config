@@ -7,11 +7,11 @@ sensor clothes:
           {% if is_state( 'input_select.house_mode', 'On' )  %}
             Ligada
           {% elif is_state( 'input_select.house_mode', 'Evening' )  %}
-            Modo Amanhecer/Anoitecer
+            Amanhecer/Anoitecer
           {% elif is_state( 'input_select.house_mode', 'Night' )  %}
-            Modo Noite
+            Noite
           {% elif is_state( 'input_select.house_mode', 'Sleep' )  %}
-            Modo Dormir
+            Dormir
           {% else %}
             Desligada
           {% endif %}

@@ -339,7 +339,7 @@
   alias: Controlo Luz do  Escritório (Fim de Dia)
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Escritório
       illuminance_cutoff: 10
@@ -347,9 +347,7 @@
       target_entity: light.office
       no_motion_wait: 60
       blocker_on_entity: light.office
-      required_house_mode: Evening
-      house_mode: input_select.house_mode
-      blocker_off_entity: input_boolean.notify_home
+      required_house_mode: Amanhecer/Anoitecer
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       only_after_sunset: false
       illuminance_sensor: sensor.office_light_level
@@ -358,7 +356,7 @@
   alias: Luz Automática do Escritório
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Escritório
       illuminance_cutoff: 15
@@ -366,17 +364,15 @@
       target_entity: light.office
       no_motion_wait: 60
       blocker_on_entity: light.office_group
-      house_mode: input_select.house_mode
-      blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       illuminance_sensor: sensor.office_light_level
       only_after_sunset: false
-      required_house_mode: 'On'
+      required_house_mode: Ligada
 - id: '1612574913656'
   alias: Controlo Luz da Sala (Modo Noite)
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Sala
       illuminance_cutoff: 15
@@ -385,16 +381,14 @@
       no_motion_wait: 120
       min_repetition_interval_sec: 0
       blocker_on_entity: light.living_room_group
-      house_mode: input_select.house_mode
-      blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       illuminance_sensor: sensor.living_room_light_level
-      required_house_mode: Night
+      required_house_mode: Noite
 - id: '1612574949221'
   alias: Luz Automática da Sala
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Sala
       illuminance_cutoff: 15
@@ -403,30 +397,9 @@
       no_motion_wait: 120
       min_repetition_interval_sec: 10
       blocker_on_entity: light.living_room_group
-      house_mode: input_select.house_mode
-      blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       illuminance_sensor: sensor.living_room_light_level
-      required_house_mode: 'On'
-- id: '1612576412343'
-  alias: Controlo Luz de Presença do Corredor
-  description: ''
-  use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
-    input:
-      room_name: Corredor
-      target_entity: light.hallway_presence_group
-      motion_sensor: binary_sensor.motion_sensor_hallway
-      no_motion_wait: 100
-      illuminance_cutoff: 10
-      illuminance_sensor: sensor.living_room_light_level
-      blocker_on_entity: light.hallway
-      blocker_off_entity: binary_sensor.notify_home
-      house_mode: input_select.house_mode
-      required_house_mode: Night
-      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
-      only_after_sunset: false
-      min_repetition_interval_sec: 0
+      required_house_mode: Ligada
 - id: '1612577959648'
   alias: Sincronizar Luz do Espelho da Casa de Banho
   description: ''
@@ -506,7 +479,7 @@
   alias: Luz Automática da Cozinha
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Cozinha
       illuminance_cutoff: 15
@@ -515,16 +488,14 @@
       no_motion_wait: 120
       min_repetition_interval_sec: 10
       blocker_on_entity: light.kitchen
-      house_mode: input_select.house_mode
-      blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       illuminance_sensor: sensor.kitchen_light_level
-      required_house_mode: 'On'
+      required_house_mode: Ligada
 - id: '1614905797504'
   alias: Controlo Luz de Presença do Corredor Modo Dormir
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Corredor
       target_entity: light.hallway_presence_group
@@ -532,9 +503,7 @@
       no_motion_wait: 100
       illuminance_cutoff: 0
       blocker_on_entity: light.hallway
-      blocker_off_entity: binary_sensor.notify_home
-      house_mode: input_select.house_mode
-      required_house_mode: Sleep
+      required_house_mode: Dormir
       only_after_sunset: true
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       min_repetition_interval_sec: 0
@@ -568,14 +537,14 @@
   condition:
   - condition: not
     conditions:
-    - condition: state
-      entity_id: input_select.house_mode
-      state: 'Off'
-    - condition: not
+    - condition: or
       conditions:
       - condition: state
         entity_id: input_select.house_mode
         state: Sleep
+      - condition: state
+        entity_id: input_select.house_mode
+        state: 'Off'
   action:
   - type: turn_on
     device_id: a769b4bc5587bd5eea47d70398f69c8e
@@ -767,17 +736,15 @@
   alias: lights_motion_master_bedroom_normal
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       illuminance_cutoff: 0
       motion_sensor: binary_sensor.master_bedroom_motion_sensor
       target_entity: light.master_bedroom
       only_after_sunset: false
-      house_mode: input_select.house_mode
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
-      blocker_off_entity: binary_sensor.notify_home
       blocker_on_entity: light.master_bedroom_group
-      required_house_mode: 'On'
+      required_house_mode: Ligada
       room_name: Quarto Principal
 - id: '1631223016015'
   alias: fire_tablet_close_all_popups
@@ -803,7 +770,7 @@
   alias: Controlo Luz de Presença do Escritório (Mode Noite)
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Escritório
       illuminance_cutoff: 10
@@ -811,9 +778,7 @@
       target_entity: light.office_desk
       no_motion_wait: 60
       blocker_on_entity: light.office
-      required_house_mode: Night
-      house_mode: input_select.house_mode
-      blocker_off_entity: input_boolean.notify_home
+      required_house_mode: Noite
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       only_after_sunset: false
       illuminance_sensor: sensor.office_light_level
@@ -821,23 +786,21 @@
   alias: lights_motion_master_bedroom_evening
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       illuminance_cutoff: 0
       motion_sensor: binary_sensor.master_bedroom_motion_sensor
       only_after_sunset: false
-      house_mode: input_select.house_mode
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
-      blocker_off_entity: binary_sensor.notify_home
       blocker_on_entity: light.master_bedroom_group
-      required_house_mode: Evening
+      required_house_mode: Amanhecer/Anoitecer
       room_name: Quarto Principal
       target_entity: light.master_bedroom
 - id: '1631653971844'
   alias: lights_motion_living_room_evening
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Sala
       illuminance_cutoff: 15
@@ -846,16 +809,14 @@
       no_motion_wait: 120
       min_repetition_interval_sec: 10
       blocker_on_entity: light.living_room_group
-      house_mode: input_select.house_mode
-      blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       illuminance_sensor: sensor.living_room_light_level
-      required_house_mode: Evening
+      required_house_mode: Amanhecer/Anoitecer
 - id: '1631654143874'
   alias: lights_motion_kitchen_evening
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Cozinha
       illuminance_cutoff: 15
@@ -864,16 +825,14 @@
       no_motion_wait: 120
       min_repetition_interval_sec: 10
       blocker_on_entity: light.kitchen
-      house_mode: input_select.house_mode
-      blocker_off_entity: binary_sensor.notify_home
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       illuminance_sensor: sensor.kitchen_light_level
-      required_house_mode: Evening
+      required_house_mode: Amanhecer/Anoitecer
 - id: '1631654959208'
-  alias: lights_motion_hallway_evening
+  alias: Controlo Luz do Corredor (Fim de Dia e Noite)
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       room_name: Corredor
       target_entity: light.hallway_presence_group
@@ -882,9 +841,7 @@
       illuminance_cutoff: 10
       illuminance_sensor: sensor.living_room_light_level
       blocker_on_entity: light.hallway
-      blocker_off_entity: binary_sensor.notify_home
-      house_mode: input_select.house_mode
-      required_house_mode: Night
+      required_house_mode: Anoitecer+Noite
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       only_after_sunset: false
       min_repetition_interval_sec: 0
@@ -934,45 +891,28 @@
   alias: lights_motion_bathroom_day
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       illuminance_cutoff: 0
       motion_sensor: binary_sensor.motion_sensor_bathroom
       target_entity: light.bathroom
       only_after_sunset: false
       blocker_on_entity: light.bathroom_group
-      house_mode: input_select.house_mode
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       room_name: Casa de Banho
-      required_house_mode: 'On'
-- id: '1635695381718'
-  alias: lights_motion_bathroom_evening
-  description: ''
-  use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
-    input:
-      illuminance_cutoff: 0
-      motion_sensor: binary_sensor.motion_sensor_bathroom
-      target_entity: light.bathroom
-      only_after_sunset: false
-      blocker_on_entity: light.bathroom_group
-      required_house_mode: Evening
-      house_mode: input_select.house_mode
-      motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
-      room_name: Casa de Banho
+      required_house_mode: Ligada
 - id: '12312312312312'
   alias: lights_motion_bathroom_night
   description: ''
   use_blueprint:
-    path: lights/motion_based_lights_v2.yaml
+    path: lights/motion_based_lights_v3.yaml
     input:
       illuminance_cutoff: 0
       motion_sensor: binary_sensor.motion_sensor_bathroom
       target_entity: light.bathroom_mirror
       only_after_sunset: false
       blocker_on_entity: light.bathroom_group
-      required_house_mode: Night
-      house_mode: input_select.house_mode
+      required_house_mode: Anoitecer+Noite
       motion_light_main_sw: input_boolean.automation_sw_all_motion_lights
       room_name: Casa de Banho
 - id: '1635698335573'
@@ -1029,9 +969,6 @@
       minutes: 0
       seconds: 0
       milliseconds: 0
-  - condition: state
-    entity_id: input_boolean.extended_away_mode
-    state: 'on'
   action:
   - scene: scene.away_time
   - service: light.turn_off
