@@ -14,7 +14,7 @@ homeassistant:
     sensor.monthly_energy:
       device_class: energy
       state_class: total_increasing
-      friendly_name: Consumo de Electricidade
+      friendly_name: Consumo de Electricidade Mensal
 
 utility_meter:
   monthly_energy:
@@ -44,7 +44,7 @@ sensor meter:
   - platform: template
     sensors:
       pzem_electricity_meter:
-        friendly_name: Consumo de Electricidade
+        friendly_name: Consumo Total de Electricidade
         unit_of_measurement: kWh
         value_template: >
           {{ ( states('sensor.bhpzem_energy') | float + 3586 ) }}
