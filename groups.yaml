@@ -3,6 +3,16 @@ devices:
   entities:
     - switch.office_desk
     - switch.portable_heater
+    - light.xmas_tree
+
+extras:
+  name: Extras
+  entities:
+    - light.xmas_tree
+    - light.front_door
+    - switch.office_desk
+    - switch.portable_heater
+
 
 living_room_main_lights:
   name: Living Room Main Lights
@@ -82,11 +92,4 @@ office:
     - light.office_desk
     - media_player.ghm_office
     - sensor.office_light_level
-
-extras:
-  name: Extras
-  entities:
-    - light.front_door
-    - switch.office_desk
-    - switch.portable_heater
 
