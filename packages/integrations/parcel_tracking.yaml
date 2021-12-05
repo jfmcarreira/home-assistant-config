@@ -7,16 +7,17 @@ sensor:
     password: !secret seventeentrack_pass
     show_delivered: true
 
-binary_sensor:    
+binary_sensor:
   - platform: template
     sensors:
       seventeentrack_has_info:
         value_template: >
           {{ 
+            not is_state( "sensor.seventeentrack_packages_in_transit", "unavailable") and (
             not is_state( "sensor.seventeentrack_packages_in_transit", "0" ) or 
             not is_state( "sensor.seventeentrack_packages_not_found", "0" ) or
             not is_state( "sensor.seventeentrack_packages_ready_to_be_picked_up", "0" ) or
             not is_state( "sensor.seventeentrack_packages_returned", "0" ) or
             not is_state( "sensor.seventeentrack_packages_undelivered", "0" ) or
-            not is_state( "sensor.seventeentrack_packages_delivered", "0" )
+            not is_state( "sensor.seventeentrack_packages_delivered", "0" ) )
           }}
