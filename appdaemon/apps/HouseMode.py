@@ -73,7 +73,7 @@ class HouseMode(hass.Hass,ClimateControl):
         self.listen_state(self.tracking_callback, "person.bianca")
 
         self.listen_state(self.light_callback_awake_up, "light.master_bedroom_group", new = "on", duration = 0 )
-        self.listen_state(self.light_callback_awake_up, "light.bedroom_ricardo", new = "on", duration = 0 )
+        self.listen_state(self.light_callback_awake_up, "light.bedroom_ricardo", new = "on", duration = 2*60 )
 
         self.listen_state(self.light_callback_awake_up, "light.kitchen", new = "on", duration = 2*60 )
         self.listen_state(self.light_callback_awake_up, "light.living_room_main", new = "on", duration = 2*60 )
@@ -91,8 +91,7 @@ class HouseMode(hass.Hass,ClimateControl):
         self.timer = None
         self.run_daily(self.update_house_mode_at_given_time, "08:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "21:05:00")
-        self.run_daily(self.update_house_mode_at_given_time, "23:05:00")
-        self.run_daily(self.update_house_mode_at_given_time, "23:35:00")
+        self.run_daily(self.update_house_mode_at_given_time, "22:35:00")
         self.run_daily(self.update_house_mode_at_given_time, "00:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "01:05:00")
 
@@ -101,6 +100,17 @@ class HouseMode(hass.Hass,ClimateControl):
     def house_mode_callback(self, entity, attribute, old, new, kwargs):
         self.updateClimateMode(new)
         self.house_mode = new
+
+    def cancel_tracking_timer(self):
+        if self.timer is not None and self.timer_running(self.timer):
+            self.cancel_timer(self.timer)
+        self.timer = None
+
+    def timer_delay(self):
+        if self.now_is_between("02:00:00", "07:00:00"):
+            return 5 * 60
+        else:
+            return 36 * 60
 
     def is_device_on(self):
         for l in self.trackLights:
@@ -121,9 +131,9 @@ class HouseMode(hass.Hass,ClimateControl):
         newMode = "On"
         if self.now_is_between("07:30:00", "08:30:00"):
           newMode = "Evening"
-        elif self.now_is_between("21:00:00", "23:00:00"):
+        elif self.now_is_between("21:00:00", "22:00:00"):
           newMode = "Evening"
-        elif self.now_is_between("23:00:00", "08:00:00"):
+        elif self.now_is_between("22:00:00", "08:00:00"):
           newMode = "Night"
         return newMode
     
@@ -199,11 +209,9 @@ class HouseMode(hass.Hass,ClimateControl):
         for entity in self.trackMotion:
             haveMotion = haveMotion or self.get_state( entity ) == "on"
         if not haveMotion:
-            self.timer = self.run_in(self.timeout_callback, 30 * 60 )
+            self.timer = self.run_in(self.timeout_callback, self.timer_delay() )
         else:
-            if self.timer is not None and self.timer_running(self.timer):
-                self.cancel_timer(self.timer)
-            self.timer = None
+            self.cancel_tracking_timer()
             self.set_new_house_mode_from_trigger( HOUSE_MODE_EVENT_MOTION )
 
 
@@ -211,12 +219,9 @@ class HouseMode(hass.Hass,ClimateControl):
         isLightsOn = False
         for l in self.trackLights:
             isLightsOn = isLightsOn or self.get_state( l ) == "on"
+        self.cancel_tracking_timer()
         if not isLightsOn:
-            if self.timer is not None and self.timer_running(self.timer):
-                self.cancel_timer(self.timer)
-            self.timer = self.run_in(self.timeout_callback, 30 * 60 )
-        else:
-            self.cancel_timer(self.timer)
+            self.timer = self.run_in(self.timeout_callback, self.timer_delay() )
 
     def light_callback_awake_up(self, entity, attribute, old, new, kwargs):
         if new == "on":
