@@ -1,19 +1,18 @@
 light:
+  - platform: demo
   - platform: template
     lights:
       laundry_group:
         friendly_name: Luzes da Lavandaria/Sotão
         icon_template: mdi:lightbulb-group
-        value_template: > 
+        value_template: >
           {{ 
             is_state('light.laundry_inside', 'on') or
             is_state('light.laundry_outside', 'on')
           }}
         turn_on:
           - service: light.turn_on
-            entity_id: light.laundry_inside       
+            entity_id: light.demo_light
         turn_off:
           - service: light.turn_off
-            entity_id: light.laundry_inside
-          - service: light.turn_off
-            entity_id: light.laundry_outside
+            entity_id: light.demo_light
