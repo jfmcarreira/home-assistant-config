@@ -1,0 +1,25 @@
+################################################################
+## State of the Oven
+################################################################
+- binary_sensor:
+    - name: device_oven
+      unique_id: device_oven
+      device_class: plug
+      delay_on:
+        minutes: 1
+      delay_off:
+        minutes: 1
+      state: >-
+        {% if is_state( 'binary_sensor.device_oven', 'on' )  %}
+            {%- if states("sensor.power_usage_device_oven") | int < 3 %}
+                False
+            {%- else %}
+                True
+            {%- endif %}
+        {%- else %}
+            {%- if states("sensor.power_usage_device_oven") | int > 20 %}
+                True
+            {%- else %}
+                False
+            {%- endif %}
+        {%- endif %}

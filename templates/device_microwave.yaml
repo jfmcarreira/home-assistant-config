@@ -1,0 +1,25 @@
+################################################################
+## State of the Microware/Toster
+################################################################
+- binary_sensor:
+    - name: device_microwave
+      unique_id: device_microwave
+      device_class: plug
+      delay_on:
+        minutes: 1
+      delay_off:
+        minutes: 1
+      state: >-
+        {% if is_state( 'binary_sensor.device_microwave', 'on' )  %}
+            {%- if states("sensor.power_usage_device_microwave") | int < 3 %}
+                False
+            {%- else %}
+                True
+            {%- endif %}
+        {%- else %}
+            {%- if states("sensor.power_usage_device_microwave") | int > 20 %}
+                True
+            {%- else %}
+                False
+            {%- endif %}
+        {%- endif %}
