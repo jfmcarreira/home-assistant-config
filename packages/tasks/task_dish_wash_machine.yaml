@@ -119,7 +119,7 @@ automation dishes:
       - platform: event
         event_type: mobile_app_notification_action
         event_data:
-          action: dish_wash_remove_done
+          action: dish_wash_remove_dishes
     condition:
       - condition: state
         entity_id: binary_sensor.dish_wash_machine_need_emtpy
