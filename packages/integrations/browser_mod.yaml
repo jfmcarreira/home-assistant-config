@@ -4,9 +4,9 @@
 browser_mod:
   prefix: "browser_"
   devices:
-    8bd4c1d7-dbc4a954:
+    6ed070de-066872d1:
       name: Fire Tablet Kyosk
-      camera: false
+      camera: true
       disable:
         - sensor
         - light
