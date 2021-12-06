@@ -50,3 +50,5 @@ blueprints/
 room_assistant/local.yaml
 home-assistant_v2.db-wal
 home-assistant_v2.db-shm
+templates/room_presence_kitchen.yaml
+templates/room_presence_kitchen.yaml
