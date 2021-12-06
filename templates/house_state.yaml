@@ -1,16 +1,38 @@
+# - trigger:
+#     - platform: homeassistant
+#       event: start
+#     - platform: state
+#       entity_id: input_boolean.house_guest
+#     - platform: state
+#       entity_id: person.joao
+- binary_sensor:
+    - name: Joao Home
+      unique_id: joao_home
+      state: "{{ not is_state('person.joao', 'not_home' ) }}"
+      attributes:
+        Mudou de Localização: "{{ now() }}"
+# - trigger:
+#     - platform: homeassistant
+#       event: start
+#     - platform: state
+#       entity_id: input_boolean.house_guest
+#     - platform: state
+#        entity_id: person.bianca
+- binary_sensor:
+    - name: Bianca Home
+      unique_id: bianca_home
+      state: "{{ not ( states.person.bianca.state == 'not_home' ) }}"
+      attributes:
+        Mudou de Localização: "{{ now() }}"
 - binary_sensor:
     - name: Notify Home
       unique_id: notify_home
       icon: "mdi:home"
-      state: "{{ is_state('input_boolean.house_guest', 'on') or is_state('binary_sensor.joao_home', 'on') or is_state('binary_sensor.bianca_home', 'on') }}"
-    - name: Bianca Home
-      unique_id: bianca_home
-      state: "{{ not ( states.person.bianca.state == 'not_home' ) }}"
-    - name: Joao Home
-      unique_id: joao_home
-      state: "{{ not is_state('person.joao', 'not_home' ) }}"
-      #attributes:
-      #  last_changed: "{{ now() }}"
+      state: >
+        {{ is_state('input_boolean.house_guest', 'on') or
+            is_state('binary_sensor.joao_home', 'on') or 
+            is_state('binary_sensor.bianca_home', 'on') 
+        }}
 
 - sensor:
     # - name: Joao State

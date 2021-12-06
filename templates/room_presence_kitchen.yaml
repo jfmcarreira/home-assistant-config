@@ -1,0 +1,75 @@
+- binary_sensor:
+    - name: room_presence_kitchen
+      unique_id: room_presence_kitchen
+      device_class: occupancy
+      delay_off:
+        seconds: 30
+      state: >-
+        {% set has_presence = namespace(value=0) %}
+        {% for device in states.device_tracker %}
+          {% if device.state == "Sala de Estar" %}
+            {% set has_presence.value = has_presence.value + 1 %}
+          {% endif %}
+        {% endfor %}
+        {% if is_state('media_player.ghm_kitchen', 'playing') %}
+          {% set has_presence.value = has_presence.value + 1 %}
+        {% endif %}
+        {% if is_state('binary_sensor.device_microwave', 'on') %}
+          {% set has_presence.value = has_presence.value + 1 %}
+        {% endif %}
+        {% if is_state('binary_sensor.device_oven', 'on') %}
+          {% set has_presence.value = has_presence.value + 1 %}
+        {% endif %}
+        {% if is_state('binary_sensor.dish_wash_machine_door', 'on') %}
+          {% set has_presence.value = has_presence.value + 1 %}
+        {% endif %}
+        {% if is_state('binary_sensor.notify_home', 'on') and has_presence.value > 0 %}
+          {{ True }}
+        {% else %}
+          {{ False }}
+        {% endif %}
+
+    - name: room_presence_living_room
+      unique_id: room_presence_living_room
+      device_class: occupancy
+      delay_off:
+        seconds: 30
+      state: >-
+        {% set has_presence = namespace(value=0) %}
+        {% for device in states.device_tracker %}
+          {% if device.state == "Sala de Estar" %}
+            {% set has_presence.value = has_presence.value + 1 %}
+          {% endif %}
+        {% endfor %}
+        {% if is_state('media_player.living_room_tv', 'on') %}
+          {% set has_presence.value = has_presence.value + 1 %}
+        {% endif %}
+        {% if is_state('binary_sensor.notify_home', 'on') and has_presence.value > 0 %}
+          {{ True }}
+        {% else %}
+          {{ False }}
+        {% endif %}
+
+    - name: room_presence_office
+      unique_id: room_presence_office
+      device_class: occupancy
+      delay_off:
+        seconds: 30
+      state: >-
+        {% set has_presence = namespace(value=0) %}
+        {% for device in states.device_tracker %}
+          {% if device.state == "Escritório" %}
+            {% set has_presence.value = has_presence.value + 1 %}
+          {% endif %}
+        {% endfor %}
+        {% if is_state('media_player.ghm_office', 'playing') %}
+          {% set has_presence.value = has_presence.value + 1 %}
+        {% endif %}
+        {% if is_state('binary_sensor.device_iron_state', 'on') %}
+          {% set has_presence.value = has_presence.value + 1 %}
+        {% endif %}
+        {% if is_state('binary_sensor.notify_home', 'on') and has_presence.value > 0 %}
+          {{ True }}
+        {% else %}
+          {{ False }}
+        {% endif %}
