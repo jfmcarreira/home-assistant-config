@@ -21,14 +21,14 @@ homeassistant:
     sensor.energy_iron:
       device_class: energy
       state_class: total_increasing
-    sensor.energy_media_center:
-      device_class: energy
-      state_class: total_increasing
+    # sensor.energy_media_center:
+    #   device_class: energy
+    #   state_class: total_increasing
     sensor.energy_portable_heater:
       device_class: energy
       state_class: total_increasing
     sensor.daily_energy_media_center:
-      friendly_name: Energia Diária do Servidor
+      friendly_name: Energia Diária do Centro Multimédia
     sensor.daily_energy_kitchen_oven:
       friendly_name: Energia Diária do Forno/Fogão
     sensor.kitchen_oven_energy:
@@ -89,9 +89,9 @@ utility_meter:
   # daily_energy_office_desk:
   #   source: sensor.energy_office_desk
   #   cycle: daily
-  daily_energy_media_center:
-    source: sensor.energy_media_center
-    cycle: daily
+  # daily_energy_media_center:
+  #   source: sensor.energy_media_center
+  #   cycle: daily
   daily_energy_portable_heater:
     source: sensor.energy_portable_heater
     cycle: daily
@@ -105,7 +105,9 @@ sensor:
       power_usage_laundry:
         unit_of_measurement: "W"
         value_template: >
-          {{ ( states('sensor.power_usage_laundry_main') | float ) - ( states('sensor.power_usage_device_washing_machine') | float ) }}
+          {{  ( states('sensor.power_usage_laundry_main') | float ) - 
+              ( states('sensor.power_usage_device_washing_machine') | float ) - 
+              ( states('sensor.power_usage_device_dryer_machine') | float )}}
 
       energy_portable_heater:
         unit_of_measurement: "kWh"
@@ -114,12 +116,12 @@ sensor:
         value_template: >
           {{ states('sensor.energy_portable_heater_raw') | float * 0.01 }}
 
-      energy_media_center:
-        unit_of_measurement: "kWh"
-        device_class: energy
-        #state_class: total_increasing
-        value_template: >
-          {{ states('sensor.energy_media_center_raw') | float * 0.01 }}
+      # energy_media_center:
+      #   unit_of_measurement: "kWh"
+      #   device_class: energy
+      #   #state_class: total_increasing
+      #   value_template: >
+      #     {{ states('sensor.energy_media_center_raw') | float * 0.01 }}
 
       energy_iron:
         unit_of_measurement: "kWh"
@@ -162,7 +164,6 @@ sensor:
           {{
             (
               ( states('sensor.daily_energy') | float ) -
-              ( states('sensor.daily_energy_media_center') | float ) -
               ( states('sensor.daily_energy_server') | float ) -
               ( states('sensor.daily_energy_office_desk') | float ) -
               ( states('sensor.daily_energy_kitchen_oven') | float ) -
@@ -170,6 +171,7 @@ sensor:
               ( states('sensor.daily_energy_coffe_machine') | float ) -
               ( states('sensor.daily_energy_washing_machine') | float ) -
               ( states('sensor.daily_energy_dish_wash_machine') | float ) -
+              ( states('sensor.daily_energy_dryer_machine') | float ) -
               ( states('sensor.daily_energy_fridge') | float ) -
               ( states('sensor.daily_energy_laundry') | float ) -
               ( states('sensor.daily_energy_iron') | float ) -
@@ -242,6 +244,8 @@ automation insert:
       - platform: state
         entity_id: sensor.daily_energy_portable_heater
       - platform: state
+        entity_id: sensor.daily_energy_xmas_tree
+      - platform: state
         entity_id: sensor.daily_energy_lights
       - platform: state
         entity_id: sensor.daily_energy_server
@@ -280,6 +284,8 @@ automation insert:
               daily_energy_iron
             {% elif trigger.entity_id == "sensor.daily_energy_portable_heater" %}
               daily_energy_portable_heater
+            {% elif trigger.entity_id == "sensor.daily_energy_xmas_tree" %}
+              daily_energy_xmas_tree
             {% elif trigger.entity_id == "sensor.daily_energy_lights" %}
               daily_energy_lights
             {% elif trigger.entity_id == "sensor.daily_energy_server" %}
