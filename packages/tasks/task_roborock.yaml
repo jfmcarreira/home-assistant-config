@@ -44,6 +44,8 @@ automation:
     condition:
       - condition: template
         value_template: "{{ ( ( now().timestamp() - as_timestamp( states('sensor.roborock_empty_bin_last_done') ) ) / 60 / 60 / 24 ) > 5 }}"
+      - condition: template
+        value_template: "{{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 10 }}"
     action:
       - service: script.broadcast_tts_announcement
         data:
@@ -53,7 +55,7 @@ automation:
         target:
           entity_id: vacuum.roborock
       - delay:
-          seconds: 10
+          seconds: 3
       - service: script.task_roborock_clean
 
 script:
