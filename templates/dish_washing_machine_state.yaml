@@ -3,7 +3,7 @@
       unique_id: dish_wash_machine_working
       device_class: plug
       delay_on:
-        minutes: 5
+        minutes: 1
       delay_off:
         minutes: 5
       state: >-

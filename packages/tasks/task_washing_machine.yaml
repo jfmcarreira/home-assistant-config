@@ -3,9 +3,6 @@
 ################################################################
 homeassistant:
   customize:
-    binary_sensor.washing_machine_door:
-      #icon: mdi:washing-machine
-      friendly_name: Porta da Máquina de Lavar
     binary_sensor.washing_machine_state:
       icon: mdi:washing-machine
       friendly_name: Máquina de Lavar a Roupa
@@ -33,12 +30,6 @@ homeassistant:
       friendly_name: Máq. de Roupa - Roupa Retirada da Máquina
 
 binary_sensor:
-  - platform: mqtt
-    name: "Washing Machine Door"
-    device_class: door
-    state_topic: "binary_rf_sensors/wash_machine_door"
-    qos: 1
-
   - platform: template
     sensors:
       washing_machine_state:

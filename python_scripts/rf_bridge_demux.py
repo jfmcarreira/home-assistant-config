@@ -1,7 +1,9 @@
 d = { '57E10A':['wash_machine_door','ON','true'],
       '57E10E':['wash_machine_door','OFF','true'],
-      '58940A':['laundry_door','ON','true'],
-      '58940E':['laundry_door','OFF','true'],
+      '58940A':['dryer_machine_door','ON','true'],
+      '58940E':['dryer_machine_door','OFF','true'],
+      #'58940A':['laundry_door','ON','true'],
+      #'58940E':['laundry_door','OFF','true'],
       #'BDA5B9':['sonoff_door_sensor','ON','false'],
     }
 

@@ -1,0 +1,11 @@
+homeassistant:
+  customize:
+    binary_sensor.dryer_machine_door:
+      friendly_name: Porta da Máquina de Secar
+
+binary_sensor:
+  - platform: mqtt
+    name: "Dryer Machine Door"
+    device_class: door
+    state_topic: "binary_rf_sensors/dryer_door"
+    qos: 1

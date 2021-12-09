@@ -1,0 +1,12 @@
+homeassistant:
+  customize:
+    binary_sensor.washing_machine_door:
+      #icon: mdi:washing-machine
+      friendly_name: Porta da Máquina de Lavar
+
+binary_sensor:
+  - platform: mqtt
+    name: "Washing Machine Door"
+    device_class: door
+    state_topic: "binary_rf_sensors/wash_machine_door"
+    qos: 1

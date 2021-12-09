@@ -1,0 +1,147 @@
+################################################################
+## Dryer Task
+################################################################
+homeassistant:
+  customize:
+    binary_sensor.dryer_machine_door:
+      device_class: door
+    sensor.task_dryer_last_done:
+      friendly_name: Secagem da Roupa
+      device_class: timestamp
+    sensor.task_dryer_empty_last_done:
+      #icon: mdi:silverware
+      friendly_name: Retirar Roupa Seca da Máquina
+      device_class: timestamp
+    binary_sensor.dryer_machine_need_emtpy:
+      friendly_name: Existe Roupa Seca na Máquina
+
+    automation.task_dryer_empty_machine_reminder:
+      friendly_name: Máq. de Secar a Roupa - Relembrar de Retirar a Roupa
+    automation.task_dryer_machine_finished:
+      friendly_name: Máq. de Secar a Roupa - Secagem Terminou
+    automation.task_dryer_remove_clothes_done:
+      friendly_name: Máq. de Secar a Roupa - Loiça Retirada
+
+sensor timestamps:
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: task_dryer_last_done
+        query: >-
+          SELECT * FROM tasks
+          WHERE task_name LIKE 'Dryer_Machine_Clean'
+          ORDER BY date  DESC LIMIT 1;
+        column: date
+
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: task_dryer_empty_last_done
+        query: >-
+          SELECT * FROM tasks
+          WHERE task_name LIKE 'Dryer_Machine_Empty'
+          ORDER BY date  DESC LIMIT 1;
+        column: date
+
+automation dryer:
+  - alias: task_dryer_machine_finished
+    variables:
+      tts_message: "A máquina de secar a roupa terminou! Pode retirar a roupa."
+      tts_message_timming: "00:00:10"
+    trigger:
+      - entity_id: binary_sensor.dryer_machine_state
+        from: "on"
+        platform: state
+        to: "off"
+    action:
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: "Dryer_Machine_Clean"
+          column: task_name
+          date_stamp: >
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"
+      - service: notify.living_room_tv
+        data:
+          title: Tarefa Doméstica
+          message: Máquina de Secar a Roupa Terminou
+      - service: automation.trigger
+        data:
+          entity_id: automation.task_dryer_empty_machine_reminder
+          skip_condition: true
+
+  - alias: task_dryer_empty_machine_reminder
+    trigger:
+      - platform: event
+        event_type: event_remaind_task_todo
+    condition:
+      - condition: state
+        entity_id: binary_sensor.notification_non_disturb
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.dryer_machine_need_emtpy
+        state: "on"
+      - condition: template
+        value_template: >
+          {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
+    action:
+      - service: persistent_notification.create
+        data:
+          title: Tarefa Doméstica
+          message: Retirar roupa da máquina de secar
+          notification_id: persistent_dryer_remove_clothes
+
+      - service: script.task_notification
+        data:
+          task_message: Retirar roupa da máquina de secar
+          task_action: dryer_remove_clothes
+          task_action_message: Registar roupa retirada da máquina
+          task_id: 60
+
+  - alias: task_dryer_remove_clothes_done
+    trigger:
+      - entity_id: binary_sensor.dryer_machine_state
+        from: "off"
+        platform: state
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.dryer_machine_door
+        from: "off"
+        to: "on"
+        for:
+          minutes: 2
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: dryer_remove_clothes
+    condition:
+      - condition: state
+        entity_id: binary_sensor.dryer_machine_need_emtpy
+        state: "on"
+    action:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: persistent_dryer_remove_clothes
+
+      - service: notify.mobile_app_all
+        data:
+          message: clear_notification
+          data:
+            tag: 60
+            dismiss: true
+
+      - condition: state
+        entity_id: binary_sensor.dryer_machine_need_emtpy
+        state: "on"
+
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: "Dryer_Machine_Empty"
+          column: task_name
+          date_stamp: >
+            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+          save_string: "true"
+          save_date_time: "true"

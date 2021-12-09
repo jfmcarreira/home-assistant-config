@@ -32,16 +32,6 @@ input_datetime:
     icon: mdi:clock-outline
     has_date: true
     has_time: true
-  # cat_litter_box_last_clean:
-  #   name: Limpeza da Areia das Gatas
-  #   icon: mdi:clock-outline
-  #   has_date: true
-  #   has_time: true
-  # cat_litter_box_last_change:
-  #   name: Mudança da Areia das Gatas
-  #   icon: mdi:clock-outline
-  #   has_date: true
-  #   has_time: false
 
 sensor:
   - platform: template
@@ -51,17 +41,6 @@ sensor:
         device_class: timestamp
         value_template: >
           {{ state_attr('input_datetime.cat_litter_box_last_visit', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-
-      # cat_litter_box_last_clean:
-      #   friendly_name: "Litter Box Last Clean"
-      #   device_class: timestamp
-      #   value_template: >
-      #     {{ state_attr('input_datetime.cat_litter_box_last_clean', 'timestamp') | timestamp_custom("%Y-%m-%d %H:%M", true) }}
-      # cat_litter_box_last_change:
-      #   friendly_name: "Litter Box Last Change"
-      #   device_class: timestamp
-      #   value_template: >
-      #     {{ state_attr('input_datetime.cat_litter_box_last_change', 'timestamp') | timestamp_custom("%Y-%m-%d", true) }}
 
   - platform: sql
     db_url: !secret db_custom_url
@@ -191,7 +170,7 @@ script:
     alias: Task Litter Box Mark Change No Vacuum
     sequence:
       - service: script.cat_litter_clean_no_vaccum
-      - delay: # Delay in order to use two line in the db
+      - delay: # Delay in order to add two entires in the db
           seconds: 1
       - service: shell_command.external_my_sql_insert
         data:
@@ -207,7 +186,7 @@ script:
     alias: Task Litter Box Mark Change
     sequence:
       - service: script.cat_litter_clean
-      - delay: # Delay in order to use two line in the db
+      - delay: # Delay in order to add two entries in the db
           seconds: 1
       - service: shell_command.external_my_sql_insert
         data:
@@ -218,9 +197,114 @@ script:
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
           save_date_time: "true"
-#automation old:
 
-#automation old:
+automation:
+  - alias: task_cat_litter_clean_reminder
+    id: task_cat_litter_clean_reminder
+    trigger:
+      - platform: event
+        event_type: event_remaind_task_todo
+    condition:
+      - condition: state
+        entity_id: binary_sensor.notification_non_disturb
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.cat_litter_box_need_clean
+        state: "on"
+      - condition: template
+        value_template: >
+          {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
+      #- condition: time
+      #  before: "21:00:00"
+    action:
+      - service: persistent_notification.create
+        data:
+          title: Tarefa Doméstica
+          message: Limpar Areia das Gatas
+          notification_id: persistent_task_cat_litter_clean
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: person.joao
+                state: home
+            sequence:
+              - service: notify.mobile_app_magnesium
+                data:
+                  title: Tarefa Doméstica
+                  message: Limpar Areia das Gatas
+                  data:
+                    tag: 50
+                    priority: high
+                    persistent: true
+                    channel: Tasks
+                    sticky: true
+                    clickAction: "/lovelace/task"
+                    actions:
+                      - action: task_cat_litter_clean
+                        title: "Activar Limpeza"
+                      - action: task_cat_litter_clean_no_vaccum
+                        title: "Registar Limpeza"
+
+  - alias: task_cat_litter_clean_done
+    id: task_cat_litter_clean_done
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: task_cat_litter_clean
+    condition:
+      - condition: state
+        entity_id: binary_sensor.cat_litter_box_need_clean
+        state: "on"
+    action:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: persistent_dish_wash_remove_dishes
+
+      - service: notify.mobile_app_all
+        data:
+          message: clear_notification
+          data:
+            tag: 50
+            dismiss: true
+
+      - condition: state
+        entity_id: binary_sensor.cat_litter_box_need_clean
+        state: "on"
+
+      - service: script.cat_litter_clean
+
+  - alias: task_cat_litter_clean_done_no_vaccum
+    id: task_cat_litter_clean_done_no_vaccum
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: task_cat_litter_clean_no_vaccum
+    condition:
+      - condition: state
+        entity_id: binary_sensor.cat_litter_box_need_clean
+        state: "on"
+    action:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: persistent_dish_wash_remove_dishes
+
+      - service: notify.mobile_app_all
+        data:
+          message: clear_notification
+          data:
+            tag: 50
+            dismiss: true
+
+      - condition: state
+        entity_id: binary_sensor.cat_litter_box_need_clean
+        state: "on"
+
+      - service: script.cat_litter_change_no_vaccum
+#automation :
+
+#automation :
 #- alias: Reset PIR State Cat Litter
 #initial_state: true
 #trigger:
