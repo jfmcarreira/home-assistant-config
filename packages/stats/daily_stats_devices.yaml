@@ -3,20 +3,29 @@
 #
 sensor:
   - platform: history_stats
+    name: Daily Dryer Machine Usage
+    entity_id: binary_sensor.dryer_machine_state
+    state: "on"
+    type: time
+    end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
+    duration:
+      hours: 24
+
+  - platform: history_stats
     name: Daily Dish Wash Machine Usage
     entity_id: binary_sensor.dish_wash_machine_state
     state: "on"
-    type: count
-    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    type: time
+    end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
     duration:
       hours: 24
-      
+
   - platform: history_stats
     name: Daily Washing Machine Usage
     entity_id: binary_sensor.washing_machine_state
     state: "on"
-    type: count
-    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    type: time
+    end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
     duration:
       hours: 24
 
@@ -24,11 +33,10 @@ sensor:
     name: Daily Roborock Usage
     entity_id: binary_sensor.roborock_state
     state: "on"
-    type: count
-    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    type: time
+    end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
     duration:
       hours: 24
-
 
 automation insert:
   - alias: "Daily Stats Insert Value of Device Usage to Database"
@@ -37,9 +45,11 @@ automation insert:
     max: 10
     trigger:
       - platform: state
+        entity_id: sensor.daily_washing_machine_usage
+      - platform: state
         entity_id: sensor.daily_dish_wash_machine_usage
       - platform: state
-        entity_id: sensor.daily_washing_machine_usage
+        entity_id: sensor.daily_dryer_machine_usage
       - platform: state
         entity_id: sensor.daily_roborock_usage
     action:
@@ -53,6 +63,8 @@ automation insert:
               washing_machine
             {% elif trigger.entity_id == "sensor.daily_dish_wash_machine_usage" %}
               dish_wash_machine
+            {% elif trigger.entity_id == "sensor.daily_dryer_machine_usage" %}
+              dryer_machine
             {% elif trigger.entity_id == "sensor.daily_roborock_usage" %}
               roborock
             {% endif %}
