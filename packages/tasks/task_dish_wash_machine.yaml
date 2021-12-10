@@ -47,105 +47,105 @@ sensor timestamps:
           ORDER BY date  DESC LIMIT 1;
         column: date
 
-automation dishes:
-  - alias: task_dish_wash_machine_finished
-    variables:
-      tts_message: "A máquina de lavar loiça terminou! Pode retirar a loiça."
-      tts_message_timming: "00:00:10"
-    trigger:
-      - entity_id: binary_sensor.dish_wash_machine_state
-        from: "on"
-        platform: state
-        to: "off"
-    action:
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: "Dish_Wash_Machine_Clean"
-          column: task_name
-          date_stamp: >
-            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
-      - service: notify.living_room_tv
-        data:
-          title: Tarefa Doméstica
-          message: Máquina de Lavar Loiça Terminou
-      - service: automation.trigger
-        data:
-          entity_id: automation.task_dish_wash_empty_machine_reminder
-          skip_condition: true
+# automation dishes:
+#   - alias: task_dish_wash_machine_finished
+#     variables:
+#       tts_message: "A máquina de lavar loiça terminou! Pode retirar a loiça."
+#       tts_message_timming: "00:00:10"
+#     trigger:
+#       - entity_id: binary_sensor.dish_wash_machine_state
+#         from: "on"
+#         platform: state
+#         to: "off"
+#     action:
+#       - service: shell_command.external_my_sql_insert
+#         data:
+#           table: tasks
+#           value: "Dish_Wash_Machine_Clean"
+#           column: task_name
+#           date_stamp: >
+#             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+#           save_string: "true"
+#           save_date_time: "true"
+#       - service: notify.living_room_tv
+#         data:
+#           title: Tarefa Doméstica
+#           message: Máquina de Lavar Loiça Terminou
+#       - service: automation.trigger
+#         data:
+#           entity_id: automation.task_dish_wash_empty_machine_reminder
+#           skip_condition: true
 
-  - alias: task_dish_wash_empty_machine_reminder
-    trigger:
-      - platform: event
-        event_type: event_remaind_task_todo
-    condition:
-      - condition: state
-        entity_id: binary_sensor.notification_non_disturb
-        state: "off"
-      - condition: state
-        entity_id: binary_sensor.dish_wash_machine_need_emtpy
-        state: "on"
-      - condition: template
-        value_template: >
-          {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
-    action:
-      - service: persistent_notification.create
-        data:
-          title: Tarefa Doméstica
-          message: Retirar loiça da máquina de lavar
-          notification_id: persistent_dish_wash_remove_dishes
+#   - alias: task_dish_wash_empty_machine_reminder
+#     trigger:
+#       - platform: event
+#         event_type: event_remaind_task_todo
+#     condition:
+#       - condition: state
+#         entity_id: binary_sensor.notification_non_disturb
+#         state: "off"
+#       - condition: state
+#         entity_id: binary_sensor.dish_wash_machine_need_emtpy
+#         state: "on"
+#       - condition: template
+#         value_template: >
+#           {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
+#     action:
+#       - service: persistent_notification.create
+#         data:
+#           title: Tarefa Doméstica
+#           message: Retirar loiça da máquina de lavar
+#           notification_id: persistent_dish_wash_remove_dishes
 
-      - service: script.task_notification
-        data:
-          task_message: Retirar loiça da máquina de lavar
-          task_action: dish_wash_remove_dishes
-          task_action_message: Registar loiça retirada da máquina
-          task_id: 30
+#       - service: script.task_notification
+#         data:
+#           task_message: Retirar loiça da máquina de lavar
+#           task_action: dish_wash_remove_dishes
+#           task_action_message: Registar loiça retirada da máquina
+#           task_id: 30
 
-  - alias: task_dish_wash_remove_dish_done
-    trigger:
-      - entity_id: binary_sensor.dish_wash_machine_state
-        from: "off"
-        platform: state
-        to: "on"
-      - platform: state
-        entity_id: binary_sensor.dish_wash_machine_door
-        from: "off"
-        to: "on"
-        for:
-          minutes: 3
-      - platform: event
-        event_type: mobile_app_notification_action
-        event_data:
-          action: dish_wash_remove_dishes
-    condition:
-      - condition: state
-        entity_id: binary_sensor.dish_wash_machine_need_emtpy
-        state: "on"
-    action:
-      - service: persistent_notification.dismiss
-        data:
-          notification_id: persistent_dish_wash_remove_dishes
+#   - alias: task_dish_wash_remove_dish_done
+#     trigger:
+#       - entity_id: binary_sensor.dish_wash_machine_state
+#         from: "off"
+#         platform: state
+#         to: "on"
+#       - platform: state
+#         entity_id: binary_sensor.dish_wash_machine_door
+#         from: "off"
+#         to: "on"
+#         for:
+#           minutes: 3
+#       - platform: event
+#         event_type: mobile_app_notification_action
+#         event_data:
+#           action: dish_wash_remove_dishes
+#     condition:
+#       - condition: state
+#         entity_id: binary_sensor.dish_wash_machine_need_emtpy
+#         state: "on"
+#     action:
+#       - service: persistent_notification.dismiss
+#         data:
+#           notification_id: persistent_dish_wash_remove_dishes
 
-      - service: notify.mobile_app_all
-        data:
-          message: clear_notification
-          data:
-            tag: 30
-            dismiss: true
+#       - service: notify.mobile_app_all
+#         data:
+#           message: clear_notification
+#           data:
+#             tag: 30
+#             dismiss: true
 
-      - condition: state
-        entity_id: binary_sensor.dish_wash_machine_need_emtpy
-        state: "on"
+#       - condition: state
+#         entity_id: binary_sensor.dish_wash_machine_need_emtpy
+#         state: "on"
 
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: "Dish_Wash_Machine_Empty"
-          column: task_name
-          date_stamp: >
-            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
+#       - service: shell_command.external_my_sql_insert
+#         data:
+#           table: tasks
+#           value: "Dish_Wash_Machine_Empty"
+#           column: task_name
+#           date_stamp: >
+#             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+#           save_string: "true"
+#           save_date_time: "true"

@@ -4,7 +4,6 @@
 homeassistant:
   customize:
     binary_sensor.washing_machine_state:
-      icon: mdi:washing-machine
       friendly_name: Máquina de Lavar a Roupa
     binary_sensor.wash_machine_wet_clothes:
       friendly_name: Existe Roupa Lavada na Máquina
@@ -22,38 +21,12 @@ homeassistant:
       icon: mdi:tshirt-crew
       friendly_name: Apanhar Roupa
       device_class: timestamp
-    automation.task_laundry_wash_machine_finished:
-      friendly_name: Máq. de Roupa - Lavagem Terminou
-    automation.task_laundry_remove_clothes_from_wash_machine_reminder:
-      friendly_name: Máq. de Roupa - Relembrar de Retirar a Roupa
-    automation.task_laundry_remove_clothes_done:
-      friendly_name: Máq. de Roupa - Roupa Retirada da Máquina
-
-binary_sensor:
-  - platform: template
-    sensors:
-      washing_machine_state:
-        device_class: plug
-        delay_off:
-          minutes: 5
-        value_template: >-
-          {%- if ( states("sensor.power_usage_laundry_main") | int > 20 ) and ( states("sensor.reative_power_usage_laundry_main") | float | abs > 30 ) %}
-              True
-          {%- else %}
-              False
-          {%- endif %}
-        attribute_templates:
-          Última Lavagem: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
-
-      wash_machine_wet_clothes:
-        value_template: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) - as_timestamp( states('sensor.task_washing_clothes_dry_last_done') ) > 0 }}"
-        attribute_templates:
-          last_done: "{{ as_timestamp( states('sensor.task_washing_clothes_dry_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
-
-      wash_machine_dry_clothes:
-        value_template: "{{ as_timestamp( states('sensor.task_washing_clothes_dry_last_done') ) - as_timestamp( states('sensor.task_washing_clothes_remove_last_done') ) > 0 }}"
-        attribute_templates:
-          last_done: "{{ as_timestamp( states('sensor.task_washing_clothes_remove_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+    # automation.task_laundry_wash_machine_finished:
+    #   friendly_name: Máq. de Roupa - Lavagem Terminou
+    # automation.task_laundry_remove_clothes_from_wash_machine_reminder:
+    #   friendly_name: Máq. de Roupa - Relembrar de Retirar a Roupa
+    # automation.task_laundry_remove_clothes_done:
+    #   friendly_name: Máq. de Roupa - Roupa Retirada da Máquina
 
 sensor:
   - platform: sql
@@ -80,42 +53,20 @@ sensor:
           ORDER BY date  DESC LIMIT 1;
         column: date
 
-  - platform: template
-    sensors:
-      washing_machine_state:
-        value_template: >-
-          {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
-            A Lavar
-          {% elif is_state( 'binary_sensor.wash_machine_wet_clothes', 'on' )  %}
-            Roupa Lavada
-          {% else %}
-            Desligada
-          {% endif %}
-        icon_template: >-
-          {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
-            mdi:washing-machine
-          {% elif is_state( 'binary_sensor.wash_machine_wet_clothes', 'on' )  %}
-            mdi:washing-machine-alert
-          {% else %}
-            mdi:washing-machine-off
-          {% endif %}
-
 script:
-  task_laundry_process_action:
-    sequence:
-      - choose:
-          - conditions: "{{ states.binary_sensor.wash_machine_dry_clothes.state == 'on' }}"
-            sequence:
-              - service: automation.trigger
-                data:
-                  entity_id: script.task_laundry_remove_dry_clothes
+  # task_laundry_process_action:
+  #   sequence:
+  #     - choose:
+  #         - conditions: "{{ states.binary_sensor.wash_machine_dry_clothes.state == 'on' }}"
+  #           sequence:
+  #             - service: script.task_laundry_remove_dry_clothes
 
-      - choose:
-          - conditions: "{{ states.binary_sensor.wash_machine_wet_clothes.state == 'on' }}"
-            sequence:
-              - service: automation.trigger
-                data:
-                  entity_id: automation.task_laundry_remove_clothes_done
+  #     - choose:
+  #         - conditions: "{{ states.binary_sensor.wash_machine_wet_clothes.state == 'on' }}"
+  #           sequence:
+  #             - service: automation.trigger
+  #               data:
+  #                 entity_id: automation.task_laundry_remove_clothes_done
 
   task_laundry_remove_dry_clothes:
     alias: Tarefa Apanhar Roupa do Estendal
@@ -133,112 +84,111 @@ script:
             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
           save_string: "true"
           save_date_time: "true"
+# automation clothes:
+#   - alias: task_laundry_wash_machine_finished
+#     variables:
+#       tts_message: "A máquina de lavar roupa terminou! Pode retirar a roupa da máquina."
+#       tts_message_timming: "00:00:10"
+#     trigger:
+#       - entity_id: binary_sensor.washing_machine_state
+#         from: "on"
+#         platform: state
+#         to: "off"
+#     action:
+#       - service: shell_command.external_my_sql_insert
+#         data:
+#           table: tasks
+#           value: "Washing_Machine_Wash_Clothes"
+#           column: task_name
+#           date_stamp: >
+#             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+#           save_string: "true"
+#           save_date_time: "true"
 
-automation clothes:
-  - alias: task_laundry_wash_machine_finished
-    variables:
-      tts_message: "A máquina de lavar roupa terminou! Pode retirar a roupa da máquina."
-      tts_message_timming: "00:00:10"
-    trigger:
-      - entity_id: binary_sensor.washing_machine_state
-        from: "on"
-        platform: state
-        to: "off"
-    action:
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: "Washing_Machine_Wash_Clothes"
-          column: task_name
-          date_stamp: >
-            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
+#       - service: notify.living_room_tv
+#         data:
+#           title: Tarefa Doméstica
+#           message: Máquina de Lavar Roupa Terminou
 
-      - service: notify.living_room_tv
-        data:
-          title: Tarefa Doméstica
-          message: Máquina de Lavar Roupa Terminou
+#       - service: automation.trigger
+#         data:
+#           entity_id: automation.task_laundry_remove_clothes_from_wash_machine_reminder
+#           skip_condition: true
+#       #- service: script.broadcast_tts_announcement
+#       #data:
+#       #message_duration: "{{ tts_message_timming }}"
+#       #message_to_play: "{{ tts_message }}"
 
-      - service: automation.trigger
-        data:
-          entity_id: automation.task_laundry_remove_clothes_from_wash_machine_reminder
-          skip_condition: true
-      #- service: script.broadcast_tts_announcement
-      #data:
-      #message_duration: "{{ tts_message_timming }}"
-      #message_to_play: "{{ tts_message }}"
+#   - alias: task_laundry_remove_clothes_from_wash_machine_reminder
+#     trigger:
+#       - platform: event
+#         event_type: event_remaind_task_todo
+#     condition:
+#       - condition: state
+#         entity_id: binary_sensor.wash_machine_wet_clothes
+#         state: "on"
+#       - condition: state
+#         entity_id: binary_sensor.notification_non_disturb
+#         state: "off"
+#       - condition: template
+#         value_template: >
+#           {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
+#     action:
+#       - service: persistent_notification.create
+#         data:
+#           title: Tarefa Doméstica
+#           message: Retirar roupa da máquina de lavar
+#           notification_id: persistent_washing_maching
 
-  - alias: task_laundry_remove_clothes_from_wash_machine_reminder
-    trigger:
-      - platform: event
-        event_type: event_remaind_task_todo
-    condition:
-      - condition: state
-        entity_id: binary_sensor.wash_machine_wet_clothes
-        state: "on"
-      - condition: state
-        entity_id: binary_sensor.notification_non_disturb
-        state: "off"
-      - condition: template
-        value_template: >
-          {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
-    action:
-      - service: persistent_notification.create
-        data:
-          title: Tarefa Doméstica
-          message: Retirar roupa da máquina de lavar
-          notification_id: persistent_washing_maching
+#       - service: script.task_notification
+#         data:
+#           task_message: Retirar roupa da máquina de lavar
+#           task_action: laundry_wet_clothes_done
+#           task_action_message: Registar roupa estendida
+#           task_id: 20
 
-      - service: script.task_notification
-        data:
-          task_message: Retirar roupa da máquina de lavar
-          task_action: laundry_wet_clothes_done
-          task_action_message: Registar roupa estendida
-          task_id: 20
+#   - alias: task_laundry_remove_clothes_done
+#     trigger:
+#       - platform: state
+#         entity_id: binary_sensor.washing_machine_state
+#         from: "off"
+#         to: "on"
+#       - platform: state
+#         entity_id: binary_sensor.washing_machine_door
+#         from: "off"
+#         to: "on"
+#         for:
+#           minutes: 1
+#       - platform: event
+#         event_type: mobile_app_notification_action
+#         event_data:
+#           action: laundry_wet_clothes_done
+#     condition:
+#       - condition: state
+#         entity_id: binary_sensor.wash_machine_wet_clothes
+#         state: "on"
+#     action:
+#       - service: persistent_notification.dismiss
+#         data:
+#           notification_id: persistent_washing_maching
 
-  - alias: task_laundry_remove_clothes_done
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.washing_machine_state
-        from: "off"
-        to: "on"
-      - platform: state
-        entity_id: binary_sensor.washing_machine_door
-        from: "off"
-        to: "on"
-        for:
-          minutes: 1
-      - platform: event
-        event_type: mobile_app_notification_action
-        event_data:
-          action: laundry_wet_clothes_done
-    condition:
-      - condition: state
-        entity_id: binary_sensor.wash_machine_wet_clothes
-        state: "on"
-    action:
-      - service: persistent_notification.dismiss
-        data:
-          notification_id: persistent_washing_maching
+#       - service: notify.mobile_app_all
+#         data:
+#           message: clear_notification
+#           data:
+#             tag: 20
+#             dismiss: true
 
-      - service: notify.mobile_app_all
-        data:
-          message: clear_notification
-          data:
-            tag: 20
-            dismiss: true
+#       - condition: state
+#         entity_id: binary_sensor.wash_machine_wet_clothes
+#         state: "on"
 
-      - condition: state
-        entity_id: binary_sensor.wash_machine_wet_clothes
-        state: "on"
-
-      - service: shell_command.external_my_sql_insert
-        data:
-          table: tasks
-          value: "Washing_Machine_Clothes_Off"
-          column: task_name
-          date_stamp: >
-            "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
-          save_string: "true"
-          save_date_time: "true"
+#       - service: shell_command.external_my_sql_insert
+#         data:
+#           table: tasks
+#           value: "Washing_Machine_Clothes_Off"
+#           column: task_name
+#           date_stamp: >
+#             "{{ now().timestamp() | timestamp_custom("%Y-%m-%d %H:%M:%S") }}"
+#           save_string: "true"
+#           save_date_time: "true"
