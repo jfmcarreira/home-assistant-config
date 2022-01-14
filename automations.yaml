@@ -1,154 +1,154 @@
 - id: frontend_set_day_theme
   alias: frontend_set_day_theme
   trigger:
-    - event: sunrise
-      offset: 00:30:00
-      platform: sun
+  - event: sunrise
+    offset: 00:30:00
+    platform: sun
   action:
-    - service: frontend.set_theme
-      data:
-        name: Google Light Theme
+  - service: frontend.set_theme
+    data:
+      name: Google Light Theme
 - id: frontend_set_night_theme
   alias: frontend_set_night_theme
   trigger:
-    - event: sunset
-      offset: 01:00:00
-      platform: sun
-    - event: start
-      platform: homeassistant
+  - event: sunset
+    offset: 01:00:00
+    platform: sun
+  - event: start
+    platform: homeassistant
   condition: []
   action:
-    - service: frontend.set_theme
-      data:
-        name: Google Dark Theme
+  - service: frontend.set_theme
+    data:
+      name: Google Dark Theme
 - id: lights_turn_on_laundry_when_door_open
   alias: Sotão Ligar Luz Quando a Porta Abre
   trigger:
-    - platform: state
-      entity_id: binary_sensor.laundry_door
-      from: "off"
-      to: "on"
+  - platform: state
+    entity_id: binary_sensor.laundry_door
+    from: 'off'
+    to: 'on'
   condition:
-    - condition: state
-      entity_id: light.laundry_group
-      state: "off"
-      for: 00:00:30
+  - condition: state
+    entity_id: light.laundry_group
+    state: 'off'
+    for: 00:00:30
   action:
-    - service: light.turn_on
-      data: {}
-      entity_id: light.laundry_inside
+  - service: light.turn_on
+    data: {}
+    entity_id: light.laundry_inside
   mode: restart
 - id: lights_front_door_turn_on_door_open
   alias: Ligar Luz da Porta da Entrada
   trigger:
-    - entity_id: binary_sensor.front_door
-      from: "off"
-      platform: state
-      to: "on"
+  - entity_id: binary_sensor.front_door
+    from: 'off'
+    platform: state
+    to: 'on'
   condition: []
   action:
-    - service: light.turn_on
-      data: {}
-      target:
-        entity_id: light.front_door
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.front_door
   mode: restart
 - id: lights_front_door_turn_off_door_close
   alias: Desligar Luz da Porta da Entrada
   trigger:
-    - platform: state
-      entity_id: binary_sensor.front_door
-      from: "on"
-      to: "off"
-      for: 00:00:10
-    - platform: state
-      entity_id: light.front_door
-      to: "on"
-      for: 00:02:00
+  - platform: state
+    entity_id: binary_sensor.front_door
+    from: 'on'
+    to: 'off'
+    for: 00:00:10
+  - platform: state
+    entity_id: light.front_door
+    to: 'on'
+    for: 00:02:00
   action:
-    - service: light.turn_off
-      entity_id: light.front_door
+  - service: light.turn_off
+    entity_id: light.front_door
   mode: single
 - id: Lights Hallway Turn On Door Open
   alias: Lights Hallway Turn On Door Open
   trigger:
-    - entity_id: binary_sensor.front_door
-      from: "off"
-      platform: state
-      to: "on"
+  - entity_id: binary_sensor.front_door
+    from: 'off'
+    platform: state
+    to: 'on'
   condition:
-    - condition: template
-      value_template: '{{ state_attr("sun.sun", "elevation") < 30 }}'
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.motion_sensor_hallway
-          state: "off"
-        - condition: state
-          entity_id: input_select.house_mode
-          state: "Off"
-        - condition: state
-          entity_id: binary_sensor.motion_sensor_hallway
-          state: "on"
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 30 }}'
+  - condition: or
+    conditions:
     - condition: state
-      entity_id: light.hallway
-      for: 00:10:00
-      state: "off"
+      entity_id: binary_sensor.motion_sensor_hallway
+      state: 'off'
+    - condition: state
+      entity_id: input_select.house_mode
+      state: 'Off'
+    - condition: state
+      entity_id: binary_sensor.motion_sensor_hallway
+      state: 'on'
+  - condition: state
+    entity_id: light.hallway
+    for: 00:10:00
+    state: 'off'
   action:
-    - service: light.turn_on
-      data: {}
-      target:
-        entity_id: light.hallway
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.hallway
   mode: restart
 - id: Lights Xmas Auto On
   alias: Ligar Luzes da Arvore de Natal
   trigger:
-    - platform: template
-      value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
-    - platform: state
-      entity_id: binary_sensor.notify_home
-      to: "on"
+  - platform: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+  - platform: state
+    entity_id: binary_sensor.notify_home
+    to: 'on'
   condition:
-    - condition: template
-      value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
-    - condition: state
-      entity_id: binary_sensor.notify_home
-      state: "on"
-    - condition: time
-      after: "16:00:00"
-      before: "23:30"
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'on'
+  - condition: time
+    after: '16:00:00'
+    before: '23:30'
   action:
-    - service: light.turn_on
-      entity_id: light.xmas_tree
+  - service: light.turn_on
+    entity_id: light.xmas_tree
   mode: restart
 - id: Lights Xmas Auto Off
   alias: Desligar Luzes de Natal
   trigger:
-    - platform: time
-      at: 01:30:00
+  - platform: time
+    at: 01:30:00
   action:
-    - service: light.turn_off
-      entity_id: light.xmas_outside
-    - service: light.turn_off
-      data: {}
-      entity_id: light.xmas_tree
+  - service: light.turn_off
+    entity_id: light.xmas_outside
+  - service: light.turn_off
+    data: {}
+    entity_id: light.xmas_tree
   mode: restart
-- id: "1606961825991"
+- id: '1606961825991'
   alias: Ligar Luzes de Natal da Varanda
-  description: ""
+  description: ''
   trigger:
-    - platform: template
-      value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
+  - platform: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
   condition:
-    - condition: time
-      before: "23:00"
-      after: "16:00"
+  - condition: time
+    before: '23:00'
+    after: '16:00'
   action:
-    - service: light.turn_on
-      entity_id: light.xmas_outside
+  - service: light.turn_on
+    entity_id: light.xmas_outside
   mode: restart
-- id: "1607310492779"
+- id: '1607310492779'
   alias: heating_calendar_toggle
-  description: ""
+  description: ''
   use_blueprint:
     path: carreira/calendar_based_on_off.yaml
     input:
@@ -158,190 +158,193 @@
 - id: NFC Tag Front Door
   alias: NFC Tag Front Door
   trigger:
-    - platform: tag
-      tag_id: bc6345fb-4f1c-4fcf-a6b0-74b3894635ac
+  - platform: tag
+    tag_id: bc6345fb-4f1c-4fcf-a6b0-74b3894635ac
   action:
-    - service: script.routine_away
+  - service: script.routine_away
 - id: NFC Tag Office Desk
   alias: NFC Tag Office Desk
   trigger:
-    - platform: tag
-      tag_id: 94a59e6e-62d6-469c-a133-d59f37545f55
+  - platform: tag
+    tag_id: 94a59e6e-62d6-469c-a133-d59f37545f55
   action:
-    - service: switch.toggle
-      entity_id: switch.office_desk
-- id: "1607644322432"
+  - service: switch.toggle
+    entity_id: switch.office_desk
+- id: '1607644322432'
   alias: meters reset edit button
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: input_boolean.meter_tracking_edit
-      from: "off"
-      to: "on"
-      for: 00:10:00
+  - platform: state
+    entity_id: input_boolean.meter_tracking_edit
+    from: 'off'
+    to: 'on'
+    for: 00:10:00
   condition: []
   action:
-    - service: input_boolean.turn_off
-      data: {}
-      entity_id: input_boolean.meter_tracking_edit
+  - service: input_boolean.turn_off
+    data: {}
+    entity_id: input_boolean.meter_tracking_edit
   mode: single
-- id: "1608085163574"
+- id: '1608085163574'
   alias: media_living_room_tv_off_when_no_motion
   trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_sensor_living_room
-      from: "on"
-      to: "off"
-      for: 0:60:00
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_living_room
+    from: 'on'
+    to: 'off'
+    for: 0:60:00
+  condition:
+  - condition: time
+    after: 00:15
+    before: 08:00
   action:
-    - service: media_player.turn_off
-      entity_id: media_player.living_room_tv
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 30
-        milliseconds: 0
-    - condition: state
-      entity_id: binary_sensor.motion_sensor_living_room_esp
-      state: "off"
-    - service: notify.living_room_tv
-      data:
-        message: A televisão irá desligar-se em breve se não ocorrer movimento
+  - service: notify.living_room_tv
+    data:
+      title: Home Assistant
+      message: A televisão vai desligar-se em 30s se não existir movimento!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - condition: state
+    state: 'off'
+    entity_id: binary_sensor.motion_sensor_living_room
+  - service: media_player.turn_off
+    entity_id: media_player.living_room_tv
   mode: restart
-- id: "1608085379268"
+- id: '1608085379268'
   alias: media_meo_box_control_based_on_tv
   trigger:
-    - platform: state
-      entity_id: binary_sensor.living_room_tv_state
-    - platform: state
-      entity_id: sensor.living_room_tv_source
+  - platform: state
+    entity_id: binary_sensor.living_room_tv_state
+  - platform: state
+    entity_id: sensor.living_room_tv_source
   action:
-    - entity_id: media_player.living_room_tv_meo_box
-      service:
-        "{% if is_state('binary_sensor.living_room_tv_state', 'off') %}\n   \
-        \ media_player.turn_off\n{% else %}\n    {% if is_state('sensor.living_room_tv_source',\
-        \ 'MEO') %}\n        media_player.turn_on \n    {% else %}    \n        media_player.turn_off\n\
-        \    {% endif %}\n{% endif %}\n"
+  - entity_id: media_player.living_room_tv_meo_box
+    service: "{% if is_state('binary_sensor.living_room_tv_state', 'off') %}\n   \
+      \ media_player.turn_off\n{% else %}\n    {% if is_state('sensor.living_room_tv_source',\
+      \ 'MEO') %}\n        media_player.turn_on \n    {% else %}    \n        media_player.turn_off\n\
+      \    {% endif %}\n{% endif %}\n"
   mode: restart
-- id: "1608085667348"
+- id: '1608085667348'
   alias: tts_alert_tablet_low_battery
   trigger:
-    - platform: numeric_state
-      entity_id: sensor.stromium_device_battery_level
-      below: "15"
+  - platform: numeric_state
+    entity_id: sensor.stromium_device_battery_level
+    below: '15'
   condition:
-    - condition: and
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.stromium_is_charging
-          state: "off"
-        - condition: template
-          value_template:
-            '{{ (as_timestamp( now() | timestamp_custom("%Y-%m-%d %H", true)
-            ) - as_timestamp( state_attr( "automation.tts_alert_tablet_low_battery", "last_triggered"
-            ) | timestamp_custom("%Y-%m-%d %H", true ) ) ) / 60 > 10 }}
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.stromium_is_charging
+      state: 'off'
+    - condition: template
+      value_template: '{{ (as_timestamp( now() | timestamp_custom("%Y-%m-%d %H", true)
+        ) - as_timestamp( state_attr( "automation.tts_alert_tablet_low_battery", "last_triggered"
+        ) | timestamp_custom("%Y-%m-%d %H", true ) ) ) / 60 > 10 }}
 
-            '
+        '
   action:
-    - service: script.play_tts_announcement
-      data:
-        media_player_for_tts: media_player.ghm_living_room
-        message_duration: 00:00:06
-        message_to_play: "Atenção! Bateria do táblete fraca \n"
+  - service: script.play_tts_announcement
+    data:
+      media_player_for_tts: media_player.ghm_living_room
+      message_duration: 00:00:06
+      message_to_play: "Atenção! Bateria do táblete fraca \n"
   initial_state: true
   mode: single
   variables:
     current_volume: 0.1
     current_media_player: media_player.ghm_living_room
-- id: "1609096146161"
+- id: '1609096146161'
   alias: heating_turn_on_every_day
-  description: ""
+  description: ''
   trigger:
-    - platform: time
-      at: "18:00"
+  - platform: time
+    at: '18:00'
   condition: []
   action:
-    - service: climate.turn_on
-      data: {}
-      entity_id: climate.heating
+  - service: climate.turn_on
+    data: {}
+    entity_id: climate.heating
   mode: single
-- id: "1609196474834"
+- id: '1609196474834'
   alias: System Alert Disk Full
   trigger:
-    - platform: numeric_state
-      entity_id:
-        - sensor.disk_use_percent
-      above: "90"
-      for: 0:05:00
+  - platform: numeric_state
+    entity_id:
+    - sensor.disk_use_percent
+    above: '90'
+    for: 0:05:00
   action:
-    - service: persistent_notification.create
+  - service: persistent_notification.create
+    data:
+      title: Monitorização do Sistema
+      message: Disco do Home Assistant Cheio
+      notification_id: disk_full_notification
+  - service: notify.living_room_tv
+    data:
+      title: Monitorização do Sistema
+      message: Disco do Home Assistant Cheio
+  - service: notify.mobile_app_magnesium
+    data:
+      title: Monitorização do Sistema
+      message: Disco do Home Assistant Cheio
       data:
-        title: Monitorização do Sistema
-        message: Disco do Home Assistant Cheio
-        notification_id: disk_full_notification
-    - service: notify.living_room_tv
-      data:
-        title: Monitorização do Sistema
-        message: Disco do Home Assistant Cheio
-    - service: notify.mobile_app_magnesium
-      data:
-        title: Monitorização do Sistema
-        message: Disco do Home Assistant Cheio
-        data:
-          sticky: true
-          tag: disk_full_notification
-          priority: high
+        sticky: true
+        tag: disk_full_notification
+        priority: high
   mode: restart
   initial_state: true
-- id: "1610670372839"
+- id: '1610670372839'
   alias: Ligar Secretária do Escritório
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: binary_sensor.pegasus_lid
-      from: "off"
-      to: "on"
+  - platform: state
+    entity_id: binary_sensor.pegasus_lid
+    from: 'off'
+    to: 'on'
   condition: []
   action:
-    - service: switch.turn_on
-      data: {}
-      entity_id: switch.office_desk
+  - service: switch.turn_on
+    data: {}
+    entity_id: switch.office_desk
   mode: single
-- id: "1610670439471"
+- id: '1610670439471'
   alias: Desligar Secretária do Escritório
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: binary_sensor.pegasus_lid
-      from: "on"
-      to: "off"
-      for: 00:00:30
-    - platform: state
-      entity_id: light.office_group
-      from: "on"
-      to: "off"
-      for: 00:05:00
-    - platform: state
-      entity_id: binary_sensor.motion_sensor_office
-      from: "on"
-      to: "off"
-      for: 00:05:00
+  - platform: state
+    entity_id: binary_sensor.pegasus_lid
+    from: 'on'
+    to: 'off'
+    for: 00:00:30
+  - platform: state
+    entity_id: light.office_group
+    from: 'on'
+    to: 'off'
+    for: 00:05:00
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_office
+    from: 'on'
+    to: 'off'
+    for: 00:05:00
   condition:
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.pegasus
-          state: "off"
-        - condition: template
-          value_template: "{{ not states.binary_sensor.pegasus_lid.state == 'on' }}"
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.pegasus
+      state: 'off'
+    - condition: template
+      value_template: '{{ not states.binary_sensor.pegasus_lid.state == ''on'' }}'
   action:
-    - service: switch.turn_off
-      data: {}
-      entity_id: switch.office_desk
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.office_desk
   mode: single
-- id: "1612570836529"
+- id: '1612570836529'
   alias: Luz Automática do Escritório
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -356,9 +359,9 @@
       illuminance_sensor: sensor.office_light_level
       required_house_mode: Dia+Anoitecer
       presence_sensor: binary_sensor.room_presence_office
-- id: "1612574913656"
+- id: '1612574913656'
   alias: Controlo Luz da Sala (Modo Noite)
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -373,16 +376,16 @@
       blocker_on_entity: light.living_room_group
       illuminance_sensor: sensor.living_room_light_level
       required_house_mode: Noite
-- id: "1612574949221"
+- id: '1612574949221'
   alias: Luz Automática da Sala
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
       disable_in_guest: true
       only_after_sunset: false
       room_name: Sala
-      illuminance_cutoff: 15
+      illuminance_cutoff: 5
       motion_sensor: binary_sensor.motion_sensor_living_room
       target_entity: light.living_room_main
       no_motion_wait: 300
@@ -391,9 +394,9 @@
       illuminance_sensor: sensor.living_room_light_level
       required_house_mode: Ligada
       presence_sensor: binary_sensor.room_presence_living_room
-- id: "1612577959648"
+- id: '1612577959648'
   alias: Sincronizar Luz do Espelho da Casa de Banho
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
@@ -403,33 +406,33 @@
       sync_on: false
       sync_exclusive: true
       sync_off: true
-- id: "1612578028726"
-  alias: Sincronizar Luz do Abajur da Sala
-  description: ""
+- id: '1612578028726'
+  alias: Sincronizar Luzes Auxiliares da Sala (com a Luz da Janela)
+  description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
-      master_light: light.living_room_main
-      slave_light:
-        entity_id: light.living_room_abajur
+      master_light: light.living_room_window
       sync_on: false
       sync_exclusive: true
       sync_off: false
-- id: "1612579273509"
-  alias: Sincronizar Retro-iluminação da Televisão
-  description: ""
+      slave_light:
+        entity_id: light.living_room_auxiliar
+- id: '1612579273509'
+  alias: Sincronizar Luzes Auxiliares da Sala (com a Luz da Mesa)
+  description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
-      master_light: light.living_room_main
-      slave_light:
-        entity_id: light.living_room_tv_leds
+      master_light: light.living_room_table
       sync_on: false
       sync_exclusive: true
-      sync_off: true
-- id: "1612581823364"
+      sync_off: false
+      slave_light:
+        entity_id: light.living_room_auxiliar
+- id: '1612581823364'
   alias: Sincronizar Luz da Secretária
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
@@ -439,9 +442,9 @@
       sync_on: false
       sync_exclusive: true
       sync_off: true
-- id: "1613309017536"
+- id: '1613309017536'
   alias: Sincronizar Luz de Presença do Corredor
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
@@ -451,24 +454,24 @@
       sync_on: false
       sync_off: false
       sync_exclusive: true
-- id: "1614174741068"
+- id: '1614174741068'
   alias: Desligar Luz da Despensa com Temporizador
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: light.kitchen_pantry
-      from: "off"
-      to: "on"
-      for: 00:05:00
+  - platform: state
+    entity_id: light.kitchen_pantry
+    from: 'off'
+    to: 'on'
+    for: 00:05:00
   condition: []
   action:
-    - service: light.turn_off
-      data: {}
-      entity_id: light.kitchen_pantry
+  - service: light.turn_off
+    data: {}
+    entity_id: light.kitchen_pantry
   mode: single
-- id: "1614552306703"
+- id: '1614552306703'
   alias: Luz Automática da Cozinha
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -484,9 +487,9 @@
       illuminance_sensor: sensor.kitchen_light_level
       required_house_mode: Dia+Anoitecer
       presence_sensor: binary_sensor.room_presence_kitchen
-- id: "1614905797504"
+- id: '1614905797504'
   alias: Controlo Luz de Presença do Corredor Modo Dormir
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -500,52 +503,52 @@
       blocker_on_entity: light.hallway
       required_house_mode: Dormir
       min_repetition_interval_sec: 0
-- id: "1615154244751"
+- id: '1615154244751'
   alias: Desligar Luz do Corredor com Temporizador
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_sensor_hallway
-      from: "on"
-      to: "off"
-      for: 00:01:00
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_hallway
+    from: 'on'
+    to: 'off'
+    for: 00:01:00
   condition: []
   action:
-    - service: light.turn_off
-      target:
-        entity_id: light.hallway_group
+  - service: light.turn_off
+    target:
+      entity_id: light.hallway_group
   mode: single
-- id: "1614484912106"
+- id: '1614484912106'
   alias: fire_tablet_turn_on_display
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: binary_sensor.front_door
-      from: "off"
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.motion_sensor_hallway
-      from: "off"
-      to: "on"
+  - platform: state
+    entity_id: binary_sensor.front_door
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_hallway
+    from: 'off'
+    to: 'on'
   condition:
-    - condition: not
+  - condition: not
+    conditions:
+    - condition: or
       conditions:
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: input_select.house_mode
-              state: Sleep
-            - condition: state
-              entity_id: input_select.house_mode
-              state: "Off"
+      - condition: state
+        entity_id: input_select.house_mode
+        state: Sleep
+      - condition: state
+        entity_id: input_select.house_mode
+        state: 'Off'
   action:
-    - type: turn_on
-      device_id: a769b4bc5587bd5eea47d70398f69c8e
-      entity_id: light.fire_tablet_screen
-      domain: light
-      brightness_pct: 100
+  - type: turn_on
+    device_id: a769b4bc5587bd5eea47d70398f69c8e
+    entity_id: light.fire_tablet_screen
+    domain: light
+    brightness_pct: 100
   mode: single
-- id: "1616379327864"
+- id: '1616379327864'
   alias: Alarme Joao
   description: Alarme Joao
   use_blueprint:
@@ -554,134 +557,134 @@
       time: 09:30:00
       speaker: media_player.ghm_master_bedroom
       volume: 35
-- id: "1618356780696"
+- id: '1618356780696'
   alias: Comando Philips do Quarto Principal
-  description: ""
+  description: ''
   use_blueprint:
     path: mannerisms/zha-philips-hue-dimmer-switch-individual-buttons-with-long-presses.yaml
     input:
       remote: af5a0f838ba115521f343e38da7b566c
       button_1_single_press:
-        - service: light.toggle
-          target:
-            entity_id: light.bedroom_ricardo
+      - service: light.toggle
+        target:
+          entity_id: light.bedroom_ricardo
       button_1_long_press: []
       button_4_single_press: []
       button_2_single_press: []
       button_3_single_press: []
       button_4_long_press: []
-- id: "1618408454545"
-  alias: "Media House Mode Toggle Devices "
-  description: ""
+- id: '1618408454545'
+  alias: 'Media House Mode Toggle Devices '
+  description: ''
   trigger:
-    - platform: state
-      entity_id: input_select.house_mode
+  - platform: state
+    entity_id: input_select.house_mode
   condition: []
   action:
-    - choose:
-        - conditions:
-            - condition: or
-              conditions:
-                - condition: state
-                  entity_id: input_select.house_mode
-                  state: "Off"
-                - condition: state
-                  entity_id: input_select.house_mode
-                  state: Sleep
-          sequence:
-            - service: switch.turn_off
-              target:
-                entity_id:
-                  - switch.living_room_tv_meo_box
-                  - switch.office_desk
-      default:
-        - service: switch.turn_on
-          target:
-            entity_id:
-              - switch.living_room_tv_meo_box
-  mode: restart
-- id: "1618873259672"
-  alias: Device Turn Off Coffee Machine
-  description: ""
-  trigger:
-    - platform: state
-      entity_id: sensor.power_usage_device_coffe_machine
-      to: "0"
-      for: 00:10:00
-  condition: []
-  action:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: input_select.house_mode
+          state: 'Off'
+        - condition: state
+          entity_id: input_select.house_mode
+          state: Sleep
+      sequence:
+      - service: switch.turn_off
+        target:
+          entity_id:
+          - switch.living_room_tv_meo_box
+          - switch.office_desk
+    default:
     - service: switch.turn_on
-      target:
-        entity_id: switch.coffee_machine
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 10
-        milliseconds: 0
-    - service: switch.turn_on
-      target:
-        entity_id: switch.coffee_machine
-  mode: single
-- id: "1621616055489"
-  alias: Lights Turn Off Ricardo Lamp When SW turns On
-  description: ""
-  trigger:
-    - platform: state
-      entity_id: switch.bedroom_ricardo_lamp
-      from: "off"
-      to: "on"
-      for: 00:00:05
-  condition: []
-  action:
-    - service: light.turn_off
-      target:
-        entity_id: light.bedroom_ricardo_lamp
-  mode: single
-- id: "1622499171025"
-  alias: Desligar a Casa Toda em Modo de Férias
-  description: ""
-  trigger:
-    - platform: time_pattern
-      hours: /1
-  condition:
-    - condition: state
-      entity_id: input_select.house_mode
-      state: "Off"
-      for: 00:15:00
-    - condition: state
-      entity_id: input_boolean.extended_away_mode
-      state: "on"
-  action:
-    - scene: scene.away_time
-    - service: light.turn_off
-      data:
-        entity_id: all
-    - service: media_player.turn_off
-      data:
-        entity_id: all
-    - service: climate.turn_off
       target:
         entity_id:
-          - climate.heating
-          - climate.heating_ongoing_water
-  mode: single
-- id: "1625430750395"
-  alias: media_turn_off_google_home_ricardo_bedroom
-  description: ""
+        - switch.living_room_tv_meo_box
+  mode: restart
+- id: '1618873259672'
+  alias: Device Turn Off Coffee Machine
+  description: ''
   trigger:
-    - platform: state
-      entity_id: light.bedroom_ricardo_group
-      from: "on"
-      to: "off"
+  - platform: state
+    entity_id: sensor.power_usage_device_coffe_machine
+    to: '0'
+    for: 00:10:00
   condition: []
   action:
-    - service: media_player.turn_off
-      target:
-        entity_id: media_player.ghm_bedroom_ricardo
+  - service: switch.turn_on
+    target:
+      entity_id: switch.coffee_machine
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - service: switch.turn_on
+    target:
+      entity_id: switch.coffee_machine
   mode: single
-- id: "1628456819151"
+- id: '1621616055489'
+  alias: Lights Turn Off Ricardo Lamp When SW turns On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.bedroom_ricardo_lamp
+    from: 'off'
+    to: 'on'
+    for: 00:00:05
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: light.bedroom_ricardo_lamp
+  mode: single
+- id: '1622499171025'
+  alias: Desligar a Casa Toda em Modo de Férias
+  description: ''
+  trigger:
+  - platform: time_pattern
+    hours: /1
+  condition:
+  - condition: state
+    entity_id: input_select.house_mode
+    state: 'Off'
+    for: 00:15:00
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'on'
+  action:
+  - scene: scene.away_time
+  - service: light.turn_off
+    data:
+      entity_id: all
+  - service: media_player.turn_off
+    data:
+      entity_id: all
+  - service: climate.turn_off
+    target:
+      entity_id:
+      - climate.heating
+      - climate.heating_ongoing_water
+  mode: single
+- id: '1625430750395'
+  alias: media_turn_off_google_home_ricardo_bedroom
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.bedroom_ricardo_group
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: media_player.turn_off
+    target:
+      entity_id: media_player.ghm_bedroom_ricardo
+  mode: single
+- id: '1628456819151'
   alias: Lights Office Set Brightness Temperature
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/light_mode.yaml
     input:
@@ -689,45 +692,45 @@
       scene_day: scene.light_office_day
       scene_night: scene.light_office_night
       scene_fallback: scene.light_office_day
-- id: "1628457928528"
+- id: '1628457928528'
   alias: lights_master_bedroom_set_brightness_temperature
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/light_mode.yaml
     input:
       master_light: light.master_bedroom
       scene_day: scene.light_master_bedroom_day
       scene_night: scene.light_master_bedroom_night
-- id: "1628463798896"
+- id: '1628463798896'
   alias: TEST_TRIGGER
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_sensor_office
-      from: "off"
-      to: "on"
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_office
+    from: 'off'
+    to: 'on'
   condition:
-    - condition: state
-      entity_id: light.office
-      state: "off"
+  - condition: state
+    entity_id: light.office
+    state: 'off'
   action:
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 10
-        milliseconds: 0
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
   mode: restart
-- id: "1628467078306"
+- id: '1628467078306'
   alias: Ativar Aspiração com Base no Calendário
-  description: ""
+  description: ''
   use_blueprint:
     path: carreira/calendar_based_on_off.yaml
     input:
       check_calendar: calendar.home_automation_vacuum
       action_entity: script.routine_vacuum_home
-- id: "1629806032987"
+- id: '1629806032987'
   alias: lights_motion_master_bedroom_normal
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -739,30 +742,30 @@
       blocker_on_entity: light.master_bedroom_group
       required_house_mode: Dia+Anoitecer
       room_name: Quarto Principal
-- id: "1631223016015"
+- id: '1631223016015'
   alias: fire_tablet_close_all_popups
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: light.fire_tablet_screen
-      from: "on"
-      to: "off"
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 30
-        milliseconds: 0
+  - platform: state
+    entity_id: light.fire_tablet_screen
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
   condition: []
   action:
-    - service: browser_mod.close_popup
-      data:
-        deviceID:
-          - 6ed070de-066872d1
-    - service: rest_command.fire_tablet_load_start_url
+  - service: browser_mod.close_popup
+    data:
+      deviceID:
+      - 6ed070de-066872d1
+  - service: rest_command.fire_tablet_load_start_url
   mode: restart
-- id: "1631653605158"
+- id: '1631653605158'
   alias: Controlo Luz de Presença do Escritório (Mode Noite)
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -776,9 +779,9 @@
       blocker_on_entity: light.office
       required_house_mode: Noite
       illuminance_sensor: sensor.office_light_level
-- id: "1631653971844"
+- id: '1631653971844'
   alias: lights_motion_living_room_evening
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -793,68 +796,68 @@
       blocker_on_entity: light.living_room_group
       illuminance_sensor: sensor.living_room_light_level
       required_house_mode: Amanhecer/Anoitecer
-- id: "1631654959208"
-  alias: Controlo Luz do Corredor (Fim de Dia e Noite)
-  description: ""
+- id: '1631654959208'
+  alias: lights_motion_hallway_day
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
       disable_in_guest: true
       only_after_sunset: false
       room_name: Corredor
-      target_entity: light.hallway_presence_group
+      target_entity: light.hallway
       motion_sensor: binary_sensor.motion_sensor_hallway
       no_motion_wait: 300
-      illuminance_cutoff: 10
-      illuminance_sensor: sensor.living_room_light_level
-      blocker_on_entity: light.hallway
-      required_house_mode: Anoitecer+Noite
+      illuminance_cutoff: 20
+      illuminance_sensor: sensor.average_light_level
+      required_house_mode: Ligada
       min_repetition_interval_sec: 0
-- id: "1632069594470"
+      presence_sensor: none
+- id: '1632069594470'
   alias: fire_tablet_turn_off_display
-  description: ""
+  description: ''
   trigger:
-    - platform: device
-      type: turned_on
-      device_id: a769b4bc5587bd5eea47d70398f69c8e
-      entity_id: light.fire_tablet_screen
-      domain: light
-      for:
-        hours: 0
-        minutes: 1
-        seconds: 0
-        milliseconds: 0
+  - platform: device
+    type: turned_on
+    device_id: a769b4bc5587bd5eea47d70398f69c8e
+    entity_id: light.fire_tablet_screen
+    domain: light
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
   condition:
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: input_select.house_mode
-          state: Sleep
-        - condition: state
-          entity_id: input_select.house_mode
-          state: "Off"
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_select.house_mode
+      state: Sleep
+    - condition: state
+      entity_id: input_select.house_mode
+      state: 'Off'
   action:
-    - type: turn_off
-      device_id: a769b4bc5587bd5eea47d70398f69c8e
-      entity_id: light.fire_tablet_screen
-      domain: light
+  - type: turn_off
+    device_id: a769b4bc5587bd5eea47d70398f69c8e
+    entity_id: light.fire_tablet_screen
+    domain: light
   mode: single
-- id: "1635677202802"
+- id: '1635677202802'
   alias: Tag Office Desk is scanned
-  description: ""
+  description: ''
   trigger:
-    - platform: tag
-      tag_id: 94a59e6e-62d6-469c-a133-d59f37545f55
+  - platform: tag
+    tag_id: 94a59e6e-62d6-469c-a133-d59f37545f55
   condition: []
   action:
-    - type: toggle
-      device_id: 21bae48e0e6fe6f5745213ef2ac0cedd
-      entity_id: switch.office_desk
-      domain: switch
+  - type: toggle
+    device_id: 21bae48e0e6fe6f5745213ef2ac0cedd
+    entity_id: switch.office_desk
+    domain: switch
   mode: single
-- id: "1231231245345324234"
+- id: '1231231245345324234'
   alias: lights_motion_bathroom_day
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -867,9 +870,9 @@
       room_name: Casa de Banho
       required_house_mode: Ligada
       no_motion_wait: 30
-- id: "12312312312312"
+- id: '12312312312312'
   alias: lights_motion_bathroom_night
-  description: ""
+  description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -882,124 +885,125 @@
       required_house_mode: Anoitecer+Noite
       room_name: Casa de Banho
       no_motion_wait: 30
-- id: "1635698335573"
+- id: '1635698335573'
   alias: Sonoff RF Bridge Demultiplexer
   trigger:
-    - platform: mqtt
-      topic: tele/tasmota_sonoff_rf_bridge/RESULT
+  - platform: mqtt
+    topic: tele/tasmota_sonoff_rf_bridge/RESULT
   action:
-    - service: python_script.rf_bridge_demux
-      data_template:
-        payload: "{{trigger.payload_json.RfReceived.Data}}"
+  - service: python_script.rf_bridge_demux
+    data_template:
+      payload: '{{trigger.payload_json.RfReceived.Data}}'
   mode: queued
   max: 10
-- id: "1635715271502"
+- id: '1635715271502'
   alias: automation.lights_auto_off_bathroom_on_timeout
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_sensor_bathroom
-      from: "on"
-      to: "off"
-      for:
-        hours: 0
-        minutes: 10
-        seconds: 0
-        milliseconds: 0
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_bathroom
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
   condition: []
   action:
-    - service: light.turn_off
-      data: {}
-      target:
-        entity_id: light.bathroom_group
-  mode: single
-- id: "1636493280649"
-  alias: Desligar a Casa Toda em Modo Off
-  description: ""
-  trigger:
-    - platform: time_pattern
-      hours: /2
-    - platform: state
-      entity_id: input_select.house_mode
-      to: "Off"
-      for:
-        hours: 1
-        minutes: 0
-        seconds: 0
-        milliseconds: 0
-  condition:
-    - condition: state
-      entity_id: input_select.house_mode
-      state: "Off"
-      for:
-        hours: 1
-        minutes: 0
-        seconds: 0
-        milliseconds: 0
-  action:
-    - scene: scene.away_time
-    - service: light.turn_off
-      data:
-        entity_id: all
-    - service: media_player.turn_off
-      data:
-        entity_id: all
-  mode: single
-- id: "1637002916392"
-  alias: lights_turn_on_office_light_switch
-  description: ""
-  trigger:
-    - platform: state
-      entity_id: switch.office_sw
-      to: "off"
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 30
-        milliseconds: 0
-    - platform: homeassistant
-      event: start
-  condition:
-    - condition: state
-      entity_id: light.office
-      state: "off"
-    - condition: device
-      type: is_off
-      device_id: 62d8cf10a14e48a6a288435cc3406fff
-      entity_id: switch.office_sw
-      domain: switch
-  action:
-    - type: turn_on
-      device_id: 62d8cf10a14e48a6a288435cc3406fff
-      entity_id: switch.office_sw
-      domain: switch
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 5
-        milliseconds: 0
-    - type: turn_off
-      device_id: 69e76e17624013ab1f744cf95a041904
-      entity_id: light.office
-      domain: light
-  mode: single
-- id: "1637007794683"
-  alias: media_turn_off_google_home_bathroom
-  description: ""
-  trigger:
-    - platform: state
+  - service: light.turn_off
+    data: {}
+    target:
       entity_id: light.bathroom_group
-      from: "on"
-      to: "off"
+  mode: single
+- id: '1636493280649'
+  alias: Desligar a Casa Toda em Modo Off
+  description: ''
+  trigger:
+  - platform: time_pattern
+    hours: /2
+  - platform: state
+    entity_id: input_select.house_mode
+    to: 'Off'
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: state
+    entity_id: input_select.house_mode
+    state: 'Off'
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  action:
+  - scene: scene.away_time
+  - service: light.turn_off
+    data:
+      entity_id: all
+  - service: media_player.turn_off
+    data:
+      entity_id: all
+  mode: single
+- id: '1637002916392'
+  alias: lights_turn_on_office_light_switch
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.office_sw
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+  - platform: homeassistant
+    event: start
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 62d8cf10a14e48a6a288435cc3406fff
+    entity_id: switch.office_sw
+    domain: switch
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: light.office
+      state: 'on'
+  action:
+  - type: turn_on
+    device_id: 62d8cf10a14e48a6a288435cc3406fff
+    entity_id: switch.office_sw
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - type: turn_off
+    device_id: 69e76e17624013ab1f744cf95a041904
+    entity_id: light.office
+    domain: light
+  mode: single
+- id: '1637007794683'
+  alias: media_turn_off_google_home_bathroom
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.bathroom_group
+    from: 'on'
+    to: 'off'
   condition: []
   action:
-    - service: media_player.turn_off
-      target:
-        device_id: 198b183395553c35321d699ce1f51aa8
+  - service: media_player.turn_off
+    target:
+      device_id: 198b183395553c35321d699ce1f51aa8
   mode: single
-- id: "1639015052613"
+- id: '1639015052613'
   alias: task_dryer_machine
-  description: ""
+  description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
     input:
@@ -1014,9 +1018,9 @@
       notification_action: Registar roupa retirada da máquina
       android_task_id: 60
       notification_action_id: dryer_remove_clothes
-- id: "1639015052612"
+- id: '1639015052612'
   alias: task_dish_wash_machine
-  description: ""
+  description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
     input:
@@ -1027,15 +1031,14 @@
       task_done_door_time: 5
       task_machine_code_name: Dish_Wash_Machine_Clean
       task_done_code_name: Dish_Wash_Machine_Empty
-      machine_finish_message:
-        A máquina de lavar a loiça terminou. Pode retirar a
+      machine_finish_message: A máquina de lavar a loiça terminou. Pode retirar a
         loiça!
       notification_action: Registar loiça retirada da máquina
       android_task_id: 61
       notification_action_id: dish_wash_empty
-- id: "1639015052667"
+- id: '1639015052667'
   alias: task_washing_machine
-  description: ""
+  description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
     input:
@@ -1044,11 +1047,71 @@
       machine_energy_sensor: sensor.energy_washing_machine
       task_needs_attention: binary_sensor.wash_machine_wet_clothes
       task_done_door_time: 1
-      task_machine_code_name: wash_machine_wet_clothes
+      task_machine_code_name: Washing_Machine_Wash_Clothes
       task_done_code_name: Washing_Machine_Clothes_Off
-      machine_finish_message:
-        A máquina de lavar a rouoa terminou. Pode retirar a
+      machine_finish_message: A máquina de lavar a roupa terminou. Pode retirar a
         roupa!
       notification_action: Registar roupa retirada da máquina
       android_task_id: 62
       notification_action_id: washing_empty
+- id: '1639178450885'
+  alias: task_water_filter
+  description: ''
+  use_blueprint:
+    path: tasks/tracked_tasks.yaml
+    input:
+      task_needs_attention: binary_sensor.water_filter_needs_replacement
+      task_done_code_name: Water_Filter_Replacement
+      notification_message: Trocar o Filtro do Jarro da Água
+      notification_action: Registar a substituição
+      android_task_id: 70
+      notification_action_id: water_filter_replacement_mark_done
+- id: '1641058250307'
+  alias: lights_motion_hallway_evening
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights_v3.yaml
+    input:
+      disable_in_guest: true
+      only_after_sunset: false
+      room_name: Corredor
+      target_entity: light.hallway_presence_group
+      motion_sensor: binary_sensor.motion_sensor_hallway
+      no_motion_wait: 300
+      illuminance_cutoff: 20
+      illuminance_sensor: sensor.average_light_level
+      required_house_mode: Anoitecer+Noite
+      min_repetition_interval_sec: 0
+      presence_sensor: none
+      blocker_on_entity: light.hallway
+- id: '1641149171430'
+  alias: lights_switch_living_room_table
+  description: ''
+  use_blueprint:
+    path: lights/event_based_light_switch.yaml
+    input:
+      controlled_light: light.living_room_table
+      light_name: living_room_table
+- id: '1641159452786'
+  alias: lights_switch_living_room_window
+  description: ''
+  use_blueprint:
+    path: lights/event_based_light_switch.yaml
+    input:
+      controlled_light: light.living_room_window
+      light_name: living_room_window
+- id: '1641761635599'
+  alias: Turn Office Desk with iMac
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: bb0d00cb6069c7d10d2f1090b37f1910
+    entity_id: binary_sensor.imac_soundparticles_active
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.office_desk
+  mode: single

@@ -1,0 +1,29 @@
+################################################################
+## Water Filter Replacement
+################################################################
+homeassistant:
+  customize:
+    sensor.water_filter_replacement_last_done:
+      friendly_name: "Última Subtituição do Filtro da Água"
+      device_class: timestamp
+
+input_number:
+  water_filter_replacement_days:
+    name: Duração do Filtro da Água
+    min: 0
+    max: 120
+    step: 1
+    mode: box
+    unit_of_measurement: days
+    icon: mdi:timer-sand
+
+sensor:
+  - platform: sql
+    db_url: !secret db_custom_url
+    queries:
+      - name: water_filter_replacement_last_done
+        query: >-
+          SELECT * FROM tasks
+          WHERE task_name LIKE 'Water_Filter_Replacement'
+          ORDER BY date  DESC LIMIT 1;
+        column: date
