@@ -1,0 +1,35 @@
+- sensor:
+    - name: water_filter_remaing_days
+      unique_id: water_filter_remaing_days
+      unit_of_measurement: days
+      state: >-
+        {% set remaining_days = (((as_timestamp(states('sensor.water_filter_replacement_last_done')) - now().timestamp() ) / 3600 / 24 ) + states('input_number.water_filter_replacement_days') | float) | int %}
+        {% if remaining_days < 0 %}
+          0.0
+        {% else %}
+          {{ remaining_days }}
+        {% endif %}
+      icon: >-
+        {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+          mdi:dishwasher
+        {% elif is_state( 'binary_sensor.dish_wash_machine_need_emtpy', 'on' )  %}
+          mdi:dishwasher-alert
+        {% else %}
+          mdi:dishwasher-off
+        {% endif %}
+
+- binary_sensor:
+    - name: water_filter_needs_replacement
+      unique_id: water_filter_needs_replacement
+      device_class: problem
+      icon: >-
+        {% if is_state( 'binary_sensor.water_filter_needs_replacement', 'on' )  %}
+          mdi:filter-off
+        {% else %}
+          mdi:filter
+        {% endif %}
+      state: >
+        {{ (now().timestamp() - as_timestamp(states('sensor.water_filter_replacement_last_done'))) / 3600 / 24 >= states('input_number.water_filter_replacement_days') | float }}
+      attributes:
+        Última Substituição: >
+          {{ as_timestamp( states('sensor.water_filter_replacement_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
