@@ -1,26 +1,6 @@
 ##################################################################################
 ## WebOS TV
 ##################################################################################
-webostv:
-  name: Living Room TV
-  host: !secret living_room_ip
-  turn_on_action:
-    service: wake_on_lan.send_magic_packet
-    data:
-      mac: !secret living_room_tv_mac
-      broadcast_address: !secret living_room_ip_wol
-      broadcast_port: 9
-  customize:
-    sources:
-      - MEO
-      #- Kodi
-      #- Jellyfin
-      - Plex
-      - YouTube
-      - Netflix
-      - Spotify
-      - Browser
-
 homeassistant:
   customize:
     binary_sensor.living_room_tv_state:
@@ -40,3 +20,16 @@ binary_sensor:
       living_room_tv_state:
         icon_template: mdi:television
         value_template: "{{ states.media_player.living_room_tv.state != 'off' }}"
+
+automation:
+  - alias: Media Turn On Living Room TV WakeOnLan
+    mode: single
+    trigger:
+      - platform: device
+        device_id: 21d768ee2371ef0226d6b180699f12fc
+        domain: webostv
+        type: webostv.turn_on
+    action:
+      - service: wake_on_lan.send_magic_packet
+        data:
+          mac: !secret living_room_tv_mac
