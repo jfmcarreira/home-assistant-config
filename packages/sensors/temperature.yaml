@@ -2,12 +2,16 @@
 ## Temperature
 ################################################################
 homeassistant:
+  customize:
+    sensor.average_temperature:
+      friendly_name: "Temperatura Média"
+
   customize_glob:
     "sensor.*temperature":
       device_class: temperature
       icon: mdi:thermometer
       unit_of_measurement: "°C"
-  
+
 sensor:
   - platform: min_max
     name: Average Temperature
@@ -32,4 +36,4 @@ sensor:
         friendly_name: "Weather Temperature"
         value_template: "{{ states.weather.ipma.attributes.temperature }}"
         #entity_id:
-          #- weather.ipma
+        #- weather.ipma
