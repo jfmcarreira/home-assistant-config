@@ -3,13 +3,20 @@ homeassistant:
     light.hallway_wall:
       friendly_name: Luz de Parede do Corredor
       icon: mdi:wall-sconce-flat
+    light.hallway_mirror:
+      friendly_name: Luz do Espelho do Corredor
+      icon: mdi:led-strip
     light.hallway_presence_group:
       friendly_name: Luzes de Presença do Corredor
 
 light:
   - platform: switch
     name: Hallway Wall
-    entity_id: switch.plug_tradfri_hallway
+    entity_id: switch.hallway_wall
+
+  - platform: switch
+    name: Hallway Mirror
+    entity_id: switch.hallway_mirror_light
 
   - platform: group
     name: hallway_presence_group

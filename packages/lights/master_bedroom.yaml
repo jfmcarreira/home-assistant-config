@@ -4,25 +4,26 @@ light:
       master_bedroom_group:
         friendly_name: Luzes do Quarto Principal
         icon_template: mdi:lightbulb-group
-        value_template: >
-          {{
-            is_state('light.master_bedroom', 'on') or
-            is_state('light.master_bedroom_bathroom_ceilling', 'on') or
-            is_state('light.master_bedroom_bathroom_mirror', 'on') or
-            is_state('light.master_bedroom_left_bed', 'on') or
-            is_state('light.master_bedroom_right_bed', 'on')
-          }}
+        value_template: "{{ is_state('light.master_bedroom', 'on') }}"
+        # value_template: >
+        #   {{
+        #     is_state('light.master_bedroom', 'on') or
+        #     is_state('light.master_bedroom_bathroom_ceilling', 'on') or
+        #     is_state('light.master_bedroom_bathroom_mirror', 'on') or
+        #     is_state('light.master_bedroom_left_bed', 'on') or
+        #     is_state('light.master_bedroom_right_bed', 'on')
+        #   }}
         turn_on:
           - service: light.turn_on
             entity_id: light.master_bedroom
         turn_off:
           - service: light.turn_off
             entity_id: light.master_bedroom
-          - service: light.turn_off
-            entity_id: light.master_bedroom_bathroom_ceiling
-          - service: light.turn_off
-            entity_id: light.master_bedroom_bathroom_mirror
-          - service: light.turn_off
-            entity_id: light.master_bedroom_left_bed
-          - service: light.turn_off
-            entity_id: light.master_bedroom_right_bed
+          # - service: light.turn_off
+          #   entity_id: light.master_bedroom_bathroom_ceiling
+          # - service: light.turn_off
+          #   entity_id: light.master_bedroom_bathroom_mirror
+          # - service: light.turn_off
+          #   entity_id: light.master_bedroom_left_bed
+          # - service: light.turn_off
+          #   entity_id: light.master_bedroom_right_bed

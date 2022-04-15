@@ -1,0 +1,15 @@
+# This handles the climate entities
+#
+# https://www.home-assistant.io/integrations/generic_thermostat/
+#
+climate:
+  - platform: generic_thermostat
+    name: Portable Heater
+    heater: switch.portable_heater
+    target_sensor: sensor.bathroom_temperature
+    min_temp: 17
+    max_temp: 22
+    min_cycle_duration:
+      minutes: 5
+    cold_tolerance: .2
+    hot_tolerance: .2

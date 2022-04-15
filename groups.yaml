@@ -8,11 +8,10 @@ devices:
 extras:
   name: Extras
   entities:
-    - light.xmas_tree
+    #- light.xmas_tree
     - light.front_door
     - switch.office_desk
     - switch.portable_heater
-
 
 living_room_main_lights:
   name: Living Room Main Lights
@@ -27,12 +26,12 @@ hallway:
     - light.hallway_mirror
     - light.hallway_wall
 
-kitchen:
-  name: Cozinha/Lavandaria
-  entities:
-    - light.kitchen
-    - light.kitchen_pantry
-    - media_player.ghm_kitchen
+# kitchen:
+#   name: Cozinha/Lavandaria
+#   entities:
+#     - light.demo_light
+#     - light.kitchen
+#     #- light.kitchen_pantry
 
 laundry:
   name: Sotão/Lavandaria
@@ -48,48 +47,41 @@ living_room:
     - light.living_room_abajur
     - light.living_room_tv_leds
     - media_player.living_room_tv
-    - media_player.ghm_living_room
-    
 
 master_bedroom:
   name: Quarto Principal
   entities:
     - light.master_bedroom
-    - light.master_bedroom_left_bed
-    - light.master_bedroom_right_bed
-    - media_player.ghm_master_bedroom
+    #- light.master_bedroom_left_bed
+    #- light.master_bedroom_right_bed
 
 bedroom_ricardo:
   name: Quarto do Ricardo
   entities:
     - light.bedroom_ricardo
     - light.bedroom_ricardo_lamp
-    - media_player.ghm_bedroom_ricardo
 
 all_bedrooms:
   name: Quartos
   entities:
     - light.master_bedroom
-    - light.master_bedroom_left_bed
-    - light.master_bedroom_right_bed
+    #- light.master_bedroom_left_bed
+    #- light.master_bedroom_right_bed
     - light.bedroom_ricardo
     - light.bedroom_ricardo_lamp
-    - media_player.ghm_bedroom_ricardo
-    - media_player.ghm_master_bedroom
 
 all_bathrooms:
   name: Casas de Banho
   entities:
     - light.bathroom
     - light.bathroom_mirror
-    - light.master_bedroom_bathroom_ceiling
-    - light.master_bedroom_bathroom_mirror
+    #- light.master_bedroom_bathroom_ceiling
+    #- light.master_bedroom_bathroom_mirror
 
 office:
   name: Escritório
   entities:
     - light.office
     - light.office_desk
-    - media_player.ghm_office
-    - sensor.office_light_level
 
+    - sensor.office_light_level

@@ -15,13 +15,13 @@ binary_sensor:
   - platform: ping
     name: Router Asus Laundy
     host: !secret router_asus_ip
-    count: 2
-    scan_interval: 2
+    count: 50
+    scan_interval: 30
   - platform: ping
     name: Sonoff RF Bridge
     host: !secret sonoff_rf_bridge
-    count: 2
-    scan_interval: 2
+    count: 50
+    scan_interval: 30
   - platform: ping
     name: Boron
     host: !secret boron_ip

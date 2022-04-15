@@ -559,8 +559,8 @@
       supported_color_modes:
       - brightness
       color_mode: brightness
-      brightness: 74
-      friendly_name: Luz do Teto do Quarto
+      brightness: 138
       icon: mdi:globe-light
-      supported_features: 1
+      friendly_name: Luz do Teto do Quarto Principal
+      supported_features: 32
       state: 'on'

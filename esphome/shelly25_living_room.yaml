@@ -99,7 +99,16 @@ binary_sensor:
           - ON for at most 0.5s
           - OFF for at least 0.1s
         then:
-          - light.toggle: light_window
+          - if:
+              condition:
+                api.connected:
+              then:
+                - homeassistant.event:
+                    event: esphome.light_switch_event
+                    data:
+                      light: living_room_window
+              else:
+                - light.toggle: light_window
       - timing:
           - ON for 0.5s to 1.5s
           - OFF for at least 0.1s
@@ -152,7 +161,16 @@ binary_sensor:
           - ON for at most 1s
           - OFF for at least 0.1s
         then:
-          - light.toggle: light_table
+          - if:
+              condition:
+                api.connected:
+              then:
+                - homeassistant.event:
+                    event: esphome.light_switch_event
+                    data: 
+                      light: living_room_table
+              else:
+                - light.toggle: light_table
       - timing:
           - ON for at least 1s
         then:

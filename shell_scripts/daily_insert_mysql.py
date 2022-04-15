@@ -5,7 +5,7 @@ import argparse
 ## on homeassistant container:
 ## pip install pymysql
 import pymysql
-import mysql.connector as mysql
+#import mysql.connector as mysql
 import warnings
 
 def main(args):

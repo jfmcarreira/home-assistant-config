@@ -71,7 +71,7 @@ script:
                   data:
                     tag: "{{ task_id }}"
                     priority: high
-                    persistent: true
+                    persistent: false
                     channel: Tasks
                     sticky: true
                     clickAction: "/lovelace/task"
@@ -91,7 +91,7 @@ script:
                   data:
                     tag: "{{ task_id }}"
                     priority: high
-                    persistent: true
+                    persistent: false
                     channel: Tasks
                     sticky: true
                     clickAction: "/lovelace/task"

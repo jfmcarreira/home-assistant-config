@@ -11,12 +11,12 @@ automation old:
       - choose:
           - conditions:
               - condition: state
-                entity_id: script.lights_disable_motion_light_hallway
+                entity_id: script.lights_disable_motion_lights
                 state: "on"
             sequence:
               - service: script.turn_off
                 data:
-                  entity_id: script.lights_disable_motion_light_hallway
+                  entity_id: script.lights_disable_motion_lights
               - event: event_trigger_presence_light_hallway
         default:
           - choose:

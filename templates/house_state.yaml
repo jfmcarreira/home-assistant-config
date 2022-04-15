@@ -8,20 +8,23 @@
 - binary_sensor:
     - name: Joao Home
       unique_id: joao_home
-      state: "{{ not is_state('person.joao', 'not_home' ) }}"
+      state: >
+        {{  is_state('person.joao', 'home') or 
+            is_state('person.joao', 'Escritório') or 
+            is_state('person.joao', 'Sala de Estar') or 
+            is_state('person.joao', 'Quarto Principal')
+        }}
       attributes:
         Mudou de Localização: "{{ now() }}"
-# - trigger:
-#     - platform: homeassistant
-#       event: start
-#     - platform: state
-#       entity_id: input_boolean.house_guest
-#     - platform: state
-#        entity_id: person.bianca
 - binary_sensor:
     - name: Bianca Home
       unique_id: bianca_home
-      state: "{{ not ( states.person.bianca.state == 'not_home' ) }}"
+      state: >
+        {{  is_state('person.bianca', 'home') or 
+            is_state('person.bianca', 'Escritório') or 
+            is_state('person.bianca', 'Sala de Estar') or 
+            is_state('person.bianca', 'Quarto Principal')
+        }}
       attributes:
         Mudou de Localização: "{{ now() }}"
 - binary_sensor:

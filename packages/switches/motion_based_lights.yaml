@@ -10,7 +10,6 @@ switch:
         turn_off:
           service: script.lights_disable_motion_lights
 
-
 script:
   lights_disable_motion_lights:
     alias: Desligar Luzes Automáticas Temporáriamente
@@ -29,7 +28,7 @@ script:
       - delay: 00:30:00
 
       - service: >
-          {% if w == 'on' %}
+          {% if automation_appdaemon_motion_lights_state == 'on' %}
               input_boolean.turn_on
           {% else %}
               input_boolean.turn_off

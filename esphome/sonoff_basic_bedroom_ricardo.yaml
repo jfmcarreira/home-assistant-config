@@ -26,10 +26,6 @@ binary_sensor:
     id: bedroom_ricardo_lamp_state
     entity_id: light.bedroom_ricardo_lamp
 
-  - platform: homeassistant
-    id: bedroom_ricardo_wled_state
-    entity_id: light.bedroom_ricardo_wleds
-
   - id: sw_1
     platform: gpio
     pin:
@@ -54,7 +50,6 @@ binary_sensor:
                     condition:
                       or:
                         - binary_sensor.is_on: bedroom_ricardo_lamp_state
-                        - binary_sensor.is_on: bedroom_ricardo_wled_state
                         - light.is_on: light_bedroom_ricardo
                     then:
                       - light.turn_off: light_bedroom_ricardo
