@@ -17,7 +17,7 @@ routine_bedtime_all_off:
   - delay:
       hours: 0
       minutes: 0
-      seconds: 45
+      seconds: 35
       milliseconds: 0
   - service: light.turn_off
     data:
@@ -27,17 +27,39 @@ routine_bedtime_all_off:
       option: Sleep
     target:
       entity_id: input_select.house_mode
+  - type: turn_off
+    device_id: d2123f9e22e377423487a7554edd985a
+    entity_id: light.fire_tablet_screen
+    domain: light
   mode: single
+  icon: mdi:sleep
 house_turn_all_off:
   alias: House Turn Everything Off
   mode: restart
   sequence:
   - service: light.turn_off
-    data:
-      entity_id: all
+    data: {}
+    target:
+      area_id:
+      - bathroom_main
+      - bathroom_rc
+      - kitchen
+      - office
+      - outside
+      - hall
+      - laundry
+      - guest_bedroom
+      - bedroom_rc
+      - bedroom_ricardo
+      - living_room
+      - master_bedroom
   - service: fan.turn_off
-    data:
-      entity_id: all
+    target:
+      area_id:
+      - bathroom_main
+      - bathroom_rc
+      - master_bedroom
+    data: {}
   - service: media_player.turn_off
     data: {}
     target:
@@ -52,6 +74,7 @@ routine_good_moorning:
       entity_id: all
       position: 30
   mode: single
+  icon: mdi:weather-sunset-up
 routine_exit_house_all_off:
   alias: Routina de Sair de Casa (Desligar Tudo)
   sequence:
@@ -93,13 +116,18 @@ routine_exit_house_all_off:
       area_id: kitchen
   - delay:
       hours: 0
-      minutes: 1
+      minutes: 3
       seconds: 0
       milliseconds: 0
   - service: light.turn_off
     data:
       entity_id: all
+  - type: turn_off
+    device_id: d2123f9e22e377423487a7554edd985a
+    entity_id: light.fire_tablet_screen
+    domain: light
   mode: single
+  icon: mdi:exit-run
 lights_arriving_home:
   alias: 'Lights Arriving Home '
   sequence:
@@ -111,6 +139,7 @@ lights_arriving_home:
       entity_id:
       - light.exterior_wall_back
       - light.exterior_wall_side
+      - light.kitchen_door
     data: {}
   - wait_for_trigger:
     - platform: state
@@ -140,6 +169,7 @@ lights_arriving_home:
       entity_id:
       - light.exterior_wall_side
       - light.exterior_wall_back
+      - light.kitchen_door
     data: {}
   mode: single
 show_word_party:
@@ -160,16 +190,27 @@ cover_close_to_when_raining:
         entity:
           multiple: false
           domain: cover
+  variables:
+    cover_entitiy: cover.{{ action_cover }}
+    cover_position: input_number.cover_rainy_position_{{ action_cover }}
   sequence:
   - condition: template
-    value_template: '{{ state_attr(action_cover, ''current_position'') | float > 20.0
-      }}'
+    value_template: '{{ state_attr(cover_entitiy, ''current_position'') | float >
+      states(cover_position) }}'
   - service: cover.close_cover
     target:
-      entity_id: '{{ action_cover }}'
-  - wait_template: '{{ is_state(action_cover, ''closed'') }}'
+      entity_id: '{{ cover_entitiy }}'
+  - wait_template: '{{ is_state(cover_entitiy, ''closed'') }}'
   - service: cover.set_cover_position
     data:
-      position: 20
+      position: '{{ states(cover_position) }}'
     target:
-      entity_id: '{{ action_cover }}'
+      entity_id: '{{ cover_entitiy }}'
+routine_cover_rain_mode:
+  alias: Routina Modo de Chuva
+  sequence:
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_close_to_when_raining
+      control_switch: close_in_rain
+  mode: single

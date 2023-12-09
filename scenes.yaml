@@ -8,7 +8,7 @@
       friendly_name: Luz Ambiente da Sala
       supported_features: 32
       color_mode: brightness
-      brightness: 115
+      brightness: 38
       state: 'on'
   metadata: {}
 - id: '1657064316017'

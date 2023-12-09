@@ -4,7 +4,7 @@
   trigger:
   - platform: sun
     event: sunset
-    offset: -00:00:00
+    offset: 00:00:00
   condition:
   - condition: state
     entity_id: binary_sensor.notify_home
@@ -35,7 +35,7 @@
   trigger:
   - platform: sun
     event: sunrise
-    offset: 00:10:00
+    offset: 00:30:00
   - platform: time
     at: 07:46:00
   condition:
@@ -93,7 +93,7 @@
         entity_id: light.kitchen_pantry
   mode: single
 - id: '1653354558079'
-  alias: Lights Turn On Kitchen Door Light
+  alias: Lights Turn On Exterior With Kitchen Door
   description: ''
   trigger:
   - platform: state
@@ -103,7 +103,7 @@
     to: 'on'
   condition:
   - condition: state
-    entity_id: light.kitchen_door
+    entity_id: light.exterior_wall_back
     state: 'off'
   - condition: numeric_state
     entity_id: sun.sun
@@ -113,7 +113,7 @@
   - service: light.turn_on
     data: {}
     target:
-      entity_id: light.kitchen_door
+      entity_id: light.exterior_wall_back
   - wait_for_trigger:
     - platform: state
       entity_id:
@@ -121,7 +121,7 @@
       to: 'off'
     - platform: state
       entity_id:
-      - light.kitchen_door
+      - light.exterior_wall_back
       to: 'off'
   - condition: state
     entity_id: light.kitchen_door
@@ -129,16 +129,17 @@
   - wait_for_trigger:
     - platform: state
       entity_id:
-      - light.kitchen_door
+      - light.exterior_wall_back
       to: 'off'
     timeout: 00:01:00
   - condition: state
-    entity_id: light.kitchen_door
+    entity_id: light.exterior_wall_back
     state: 'on'
   - service: light.turn_off
     data: {}
     target:
-      entity_id: light.kitchen_door
+      entity_id:
+      - light.exterior_wall_back
   mode: single
 - id: '1653947527310'
   alias: Lights Turn On Kitchen Light
@@ -177,20 +178,6 @@
       notification_action: Roupa Retirada
       android_task_id: 20
       notification_action_id: washing_machine_clothes_off
-- id: '1655150664363'
-  alias: Routines Trigger Turn All Off
-  description: ''
-  trigger:
-  - platform: device
-    device_id: 5f77eabf33fc6da75819d4111f18d96e
-    domain: shelly
-    type: long
-    subtype: button
-  condition: []
-  action:
-  - service: script.routine_exit_house_all_off
-    data: {}
-  mode: single
 - id: '1655314200388'
   alias: Lights Sync Office
   description: ''
@@ -203,41 +190,6 @@
       sync_on: false
       sync_off: true
       sync_off_from_slave: false
-- id: '1655387667447'
-  alias: Lights Turn Off Floor 1 When Long Press On Stairs
-  description: ''
-  trigger:
-  - platform: device
-    device_id: 35ca4364bcf05720b2a3ab48dcf93f53
-    domain: shelly
-    type: long
-    subtype: button1
-  - platform: device
-    device_id: 35ca4364bcf05720b2a3ab48dcf93f53
-    domain: shelly
-    type: long
-    subtype: button2
-  condition: []
-  action:
-  - service: light.turn_off
-    data: {}
-    target:
-      area_id:
-      - master_bedroom
-      - bedroom_ricardo
-      - hall
-      - bathroom_main
-      - guest_bedroom
-  - service: media_player.turn_off
-    data: {}
-    target:
-      area_id:
-      - master_bedroom
-      - bedroom_ricardo
-      - hall
-      - bathroom_main
-      - guest_bedroom
-  mode: restart
 - id: '1655428526899'
   alias: Lights Turn Off Floor 0 When Long Press On Hall
   description: ''
@@ -316,7 +268,7 @@
       notification_action: Roupa Retirada
       android_task_id: 21
       notification_action_id: dryer_machine_clothes_off
-      task_done_door_time: 5
+      task_done_door_time: 1
 - id: '1655769049761'
   alias: Bathroom Master Bedroom Bathroom Fan Control
   description: ''
@@ -566,10 +518,10 @@
         data: {}
         target:
           entity_id: switch.fire_tablet_motion_detection
-      - service: light.turn_off
-        data: {}
-        target:
-          entity_id: light.fire_tablet_screen
+      - type: turn_off
+        device_id: 2ae8ef1981d03f83e4144debe519a697
+        entity_id: switch.fire_tablet_screen
+        domain: switch
     default:
     - service: switch.turn_on
       data: {}
@@ -577,7 +529,7 @@
         entity_id: switch.fire_tablet_motion_detection
   mode: queued
 - id: '1658541474586'
-  alias: tablet reset home screen
+  alias: Tablet Reset Home Screen
   description: ''
   trigger:
   - platform: state
@@ -589,18 +541,44 @@
       hours: 0
       minutes: 0
       seconds: 10
+  - platform: device
+    type: turned_off
+    device_id: 2ae8ef1981d03f83e4144debe519a697
+    entity_id: switch.fire_tablet_screen
+    domain: switch
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  - platform: state
+    entity_id:
+    - input_select.house_mode
+    to: Sleep
+  - platform: state
+    entity_id:
+    - input_select.house_mode
+    to: 'Off'
+  - platform: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
   condition:
   - condition: state
-    entity_id: light.fire_tablet_screen
+    entity_id: switch.fire_tablet_screen
     state: 'off'
   action:
-  - service: fullykiosk.load_url
+  - service: fully_kiosk.load_url
     data:
-      url: http://10.20.107.2/lovelace/main?deviceID=6ed070de-066872d1
-      entity_id: media_player.fire_tablet
+      url: http://10.20.107.2/lovelace-dashboard/dashboard-main?deviceID=6ed070de-066872d1
+    target:
+      device_id: 2ae8ef1981d03f83e4144debe519a697
+  - device_id: 2ae8ef1981d03f83e4144debe519a697
+    domain: button
+    entity_id: button.fire_tablet_load_start_url
+    type: press
   mode: single
 - id: '1658672750916'
-  alias: cctv control recording state
+  alias: cctv control push notifications
   description: ''
   trigger:
   - platform: state
@@ -614,14 +592,9 @@
     - conditions:
       - condition: or
         conditions:
-        - condition: and
-          conditions:
-          - condition: state
-            entity_id: binary_sensor.notify_home
-            state: 'on'
-          - condition: time
-            after: 09:00:00
-            before: '22:00:00'
+        - condition: state
+          entity_id: binary_sensor.notify_home
+          state: 'on'
         - condition: state
           entity_id: input_boolean.house_guest
           state: 'on'
@@ -630,15 +603,15 @@
         data: {}
         target:
           entity_id:
-          - switch.front_camera_recording
-          - switch.backyard_camera_recording
+          - switch.backyard_camera_push_notifications
+          - switch.front_camera_push_notifications
     default:
     - service: switch.turn_on
       data: {}
       target:
         entity_id:
-        - switch.front_camera_recording
-        - switch.backyard_camera_recording
+        - switch.backyard_camera_push_notifications
+        - switch.front_camera_push_notifications
   mode: single
 - id: '1658675704141'
   alias: cctv notify front camera
@@ -649,6 +622,7 @@
       notify_joao: true
       camera: camera.front_camera
       motion_sensor: binary_sensor.front_camera_smart_detection
+      notify_bianca: true
 - id: '1658676096110'
   alias: cctv notify backyard camera
   description: ''
@@ -658,6 +632,7 @@
       notify_joao: true
       camera: camera.backyard_camera
       motion_sensor: binary_sensor.backyard_camera_smart_detection
+      notify_bianca: true
 - id: '1659187275200'
   alias: Lights Control Kitchen Pantry With Timer
   description: ''
@@ -700,7 +675,7 @@
   condition:
   - condition: numeric_state
     entity_id: sensor.temperature_outside
-    above: 20
+    above: 25
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'off'
@@ -747,11 +722,11 @@
       hours: 0
       minutes: 30
       seconds: 0
-    above: '20'
+    above: 23
   condition:
   - condition: numeric_state
     entity_id: sensor.temperature_outside
-    above: '20'
+    above: 25
   - condition: time
     after: '10:00:00'
     before: '16:00:00'
@@ -777,27 +752,586 @@
       min_repetition_interval_sec: 10
       illuminance_sensor: sensor.light_sensor_office
       illuminance_cutoff: 10
-      only_after_sunset: 'off'
-      disable_in_guest: true
+      only_after_sunset: false
+      disable_in_guest: false
       required_house_mode: Todos
       blocker_off_entity: binary_sensor.notify_home
       room_name: Escritório
       blocker_on_entity: light.office
       disable_in_sleep: true
       presence_sensor: none
-- id: '1662164982452'
-  alias: Lights Toggle Entry Exterior Lights
+- id: '1663526552935'
+  alias: cover close when raining
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: weather.home
+    attribute: precipitation_unit
+    above: 70
+  condition: []
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_close_to_when_raining
+      control_switch: close_in_rain
+  mode: single
+- id: '1665241197738'
+  alias: lights_master_bedroom_bed_triggers
   description: ''
   trigger:
   - platform: device
-    device_id: 5f77eabf33fc6da75819d4111f18d96e
+    device_id: 055d18283ca2d4c5701c5fcd53242090
     domain: shelly
     type: long
-    subtype: button
+    subtype: button1
+    id: first_long
+  - platform: device
+    device_id: 055d18283ca2d4c5701c5fcd53242090
+    domain: shelly
+    type: long
+    subtype: button2
+    id: second_long
+  - platform: device
+    device_id: 055d18283ca2d4c5701c5fcd53242090
+    domain: shelly
+    type: single
+    subtype: button1
+    id: first_short
+  - platform: device
+    device_id: 055d18283ca2d4c5701c5fcd53242090
+    domain: shelly
+    type: single
+    subtype: button2
+    id: second_short
   condition: []
   action:
-  - service: light.toggle
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: first_long
+        - condition: trigger
+          id: second_long
+      sequence:
+      - if:
+        - condition: state
+          entity_id: light.master_bedroom
+          state: 'off'
+        - condition: state
+          entity_id: light.master_bedroom_bathroom
+          state: 'off'
+        - condition: state
+          entity_id: light.hall_group
+          state: 'off'
+        - condition: state
+          entity_id: light.stairs_group
+          state: 'off'
+        then:
+        - service: light.turn_on
+          data: {}
+          target:
+            entity_id:
+            - light.master_bedroom
+        else:
+        - service: light.turn_off
+          data: {}
+          target:
+            entity_id:
+            - light.master_bedroom
+            - light.master_bedroom_bathroom
+            - light.hall_group
+            - light.stairs_down
+            - light.stairs_group
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: first_short
+      sequence:
+      - service: light.toggle
+        data: {}
+        target:
+          entity_id: light.master_bedroom_bed_wall
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: second_short
+      sequence:
+      - service: light.toggle
+        data: {}
+        target:
+          entity_id: light.master_bedroom_bed_window
+  mode: single
+- id: '1665435183140'
+  alias: water_heater_turn_on_morning
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:00:00
+  condition: []
+  action:
+  - service: climate.turn_on
     data: {}
     target:
-      entity_id: light.exterior_wall_side
+      entity_id: climate.water_heater
   mode: single
+- id: '1665435233424'
+  alias: water_heater_auto_turn_off
+  description: ''
+  trigger:
+  - platform: time
+    at: 09:00:00
+  - platform: time
+    at: '23:45:00'
+  condition: []
+  action:
+  - service: climate.turn_off
+    data: {}
+    target:
+      entity_id: climate.water_heater
+  mode: single
+- id: '1665435448806'
+  alias: water_heater_turn_on_evening
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -01:00:00
+  - platform: time
+    at: '17:30:00'
+  - platform: time_pattern
+    minutes: '30'
+  condition:
+  - condition: time
+    after: '17:30:00'
+    before: '21:00:00'
+  action:
+  - service: climate.turn_on
+    data: {}
+    target:
+      entity_id: climate.water_heater
+  mode: single
+- id: '1668971106955'
+  alias: Media Turn Off Google Home Hall
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.hall_group
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: media_player.turn_off
+    data: {}
+    target:
+      entity_id: media_player.googlehome7569
+  mode: single
+- id: Lights Xmas Auto On
+  alias: Ligar Luzes da Arvore de Natal
+  trigger:
+  - platform: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+  - platform: state
+    entity_id: binary_sensor.notify_home
+    to: 'on'
+  condition:
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'on'
+  - condition: time
+    after: '16:00:00'
+    before: '23:30'
+  action:
+  - service: light.turn_on
+    entity_id: light.xmas_tree
+  mode: restart
+- id: Lights Xmas Auto Off
+  alias: Desligar Luzes de Natal
+  trigger:
+  - platform: time
+    at: 01:30:00
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.xmas_tree
+  mode: restart
+- id: '1669853123196'
+  alias: lights_motion_kitchen
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights_v3.yaml
+    input:
+      motion_sensor: binary_sensor.motion_sensor_kitchen
+      target_entity: light.kitchen
+      min_repetition_interval_sec: 10
+      illuminance_sensor: sensor.light_sensor_living_room
+      illuminance_cutoff: 10
+      only_after_sunset: 'off'
+      disable_in_guest: true
+      required_house_mode: Todos
+      blocker_off_entity: binary_sensor.notify_home
+      room_name: Escritório
+      blocker_on_entity: light.kitchen
+      disable_in_sleep: true
+      presence_sensor: none
+- id: '1669853572469'
+  alias: device_turn_portable_heater_off_with_lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.main_bathroom
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: climate.turn_off
+    data: {}
+    target:
+      entity_id: climate.portable_heater
+  mode: single
+- id: '1669853950698'
+  alias: device_toggle_portable_heater_bathroom_main_light_switch
+  description: ''
+  trigger:
+  - platform: event
+    event_type: esphome.shelly25_bathroom_btn
+    event_data:
+      button: shelly25_bathroom_main_long_2
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: climate.portable_heater
+        state: 'off'
+      sequence:
+      - service: climate.turn_on
+        data: {}
+        target:
+          entity_id: climate.portable_heater
+    default:
+    - service: climate.turn_off
+      data: {}
+      target:
+        entity_id: climate.portable_heater
+  mode: single
+- id: '1670373784711'
+  alias: Xmas Lights Outside
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
+  condition:
+  - condition: template
+    value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
+  - condition: time
+    after: '16:00:00'
+    before: '23:30'
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.xmas_leds
+  mode: restart
+- id: '1670520386584'
+  alias: Kitchen Extractor Fan Control
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.kitchen_extractor_fan_slider
+    to: 'on'
+  condition: []
+  action:
+  - service: fan.turn_on
+    data: {}
+    target:
+      entity_id: fan.kitchen_extractor
+  mode: single
+- id: '1670674527026'
+  alias: lights_auto_off_stairs_with_lux
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.light_sensor_stairs
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    above: 300
+  - platform: state
+    entity_id:
+    - light.stairs_group
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.light_sensor_stairs
+    above: 300
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id:
+      - light.stairs_lamp
+      - light.stairs_wall
+      - light.stairs_down
+  mode: single
+- id: '1671734880370'
+  alias: device_turn_portable_heater_off_after_timeout
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - switch.portable_heater
+    to: 'on'
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: climate.turn_off
+    data: {}
+    target:
+      entity_id: climate.portable_heater
+  - type: turn_off
+    device_id: 8983d6e0684741d520208b62eaba8c89
+    entity_id: switch.portable_heater
+    domain: switch
+  mode: single
+- id: '1673206351942'
+  alias: cctv_notify_backyard_camera_front
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.notify_home
+    - input_boolean.house_guest
+    - sensor.house_mode
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: and
+          conditions:
+          - condition: state
+            entity_id: binary_sensor.notify_home
+            state: 'on'
+          - condition: time
+            after: 09:00:00
+            before: '22:00:00'
+        - condition: state
+          entity_id: input_boolean.house_guest
+          state: 'on'
+      sequence:
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id:
+          - switch.front_camera_recording
+    default:
+    - service: switch.turn_on
+      data: {}
+      target:
+        entity_id:
+        - switch.front_camera_recording
+  mode: single
+- id: '1673207521061'
+  alias: cctv_front_door_snapshot
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.front_camera_person_detected
+    - binary_sensor.front_camera_vehicle_detected
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'on'
+  action:
+  - service: camera.snapshot
+    entity_id: camera.front_camera
+    data:
+      filename: /config/www/camera/snapshot_front_door.jpg
+  - device_id: 9fb26e914719ad2a416b2847f915b00a
+    domain: mobile_app
+    type: notify
+    message: Movimento Porta da Frente
+    title: Cameras
+  - device_id: 086fd6ff05201d28b4bc0fbdbd707c86
+    domain: mobile_app
+    type: notify
+    title: Cameras
+    message: Movimento Porta da Frente
+    data:
+      image: /local/camera/snapshot_front_door.jpg
+      clickAction: /lovelace/cctv
+  mode: single
+- id: '1674085777289'
+  alias: water_heater_turn_off_confort_mode
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:00:00'
+  condition: []
+  action:
+  - service: climate.set_preset_mode
+    data:
+      preset_mode: none
+    target:
+      entity_id: climate.water_heater
+  mode: single
+- id: '1675112824745'
+  alias: device_turn_off_dehumidifier
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - switch.dehumidifier
+    to: 'on'
+    for:
+      hours: 2
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: switch.turn_off
+    data: {}
+    target:
+      entity_id: switch.dehumidifier
+  mode: single
+- id: '1677573303585'
+  alias: HVAC_turn_on_morning
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: 'on'
+  - condition: numeric_state
+    entity_id: sensor.temperature_living_room
+    below: 20
+  action:
+  - service: climate.turn_on
+    data: {}
+    target:
+      entity_id: climate.living_room
+  - service: climate.set_hvac_mode
+    data:
+      hvac_mode: heat
+    target:
+      entity_id: climate.living_room
+  - service: climate.set_fan_mode
+    data:
+      fan_mode: 3D
+    target:
+      entity_id: climate.living_room
+  - delay:
+      hours: 1
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - service: climate.turn_off
+    data: {}
+    target:
+      entity_id: climate.living_room
+  mode: single
+- id: '1678033269553'
+  alias: device_turn_off_dehumidifier_at_night
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  - platform: time
+    at: 00:30:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: time
+      after: 00:00:00
+      before: 08:00:00
+    - condition: state
+      entity_id: switch.dehumidifier
+      state: 'off'
+  action:
+  - service: humidifier.turn_off
+    data: {}
+    target:
+      entity_id: humidifier.portable_dehumidifier
+  mode: single
+- id: '1678915034155'
+  alias: device_turn_on_dehumidifier_morning
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:45:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.notify_home
+      state: 'on'
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: 'on'
+  action:
+  - service: humidifier.turn_on
+    data: {}
+    target:
+      entity_id: humidifier.portable_dehumidifier
+  mode: single
+- id: '1681081732356'
+  alias: cctv_alarm_motion_joao
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.motion_sensor_kitchen_door
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: ''
+  action:
+  - device_id: 9fb26e914719ad2a416b2847f915b00a
+    domain: mobile_app
+    type: notify
+    message: Cameras
+    title: Movimento Detectado na Porta da Cozinha
+  mode: single
+- id: '1683763190674'
+  alias: lights_motion_living_room
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights_v3.yaml
+    input:
+      motion_sensor: binary_sensor.motion_sensor_living_room
+      target_entity: light.hallway
+      min_repetition_interval_sec: 10
+      illuminance_sensor: sensor.light_sensor_stairs
+      illuminance_cutoff: 10
+      only_after_sunset: false
+      disable_in_guest: true
+      required_house_mode: Dia+Anoitecer
+      blocker_off_entity: binary_sensor.notify_home
+      room_name: Sala
+      disable_in_sleep: true
+      presence_sensor: none
+      blocker_on_entity: light.living_room_group
