@@ -1,0 +1,6 @@
+- binary_sensor:
+    - name: cover_controls_enabled
+      unique_id: cover_controls_enabled
+      device_class: lock
+      state: >-
+        {{ is_state( 'input_boolean.cover_controls_bypass', 'off') }}
