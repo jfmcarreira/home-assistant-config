@@ -1,5 +1,5 @@
 
-entity_id = data.get("entity_id", 'media_player.living_room_tv_meo_box')
+entity_id = data.get("entity_id", 'media_player.mediaroom_82_155_7_99')
 
 channel = data.get("channel").lower()
 
@@ -19,7 +19,7 @@ meo_channels = {
 }
 
 def switch_channel_number(hass, entity_id, channel):
-    meo_box_state = hass.states.get('media_player.living_room_tv_meo_box').state
+    meo_box_state = hass.states.get('media_player.mediaroom_82_155_7_99').state
     if meo_box_state == 'unavailable':
         for n in channel:
             button = "NUMBER_" + str(n)
