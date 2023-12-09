@@ -1335,3 +1335,31 @@
       disable_in_sleep: true
       presence_sensor: none
       blocker_on_entity: light.living_room_group
+- id: '1689293787806'
+  alias: cover_partial_close
+  description: ''
+  trigger:
+  - platform: time
+    at: '11:00:00'
+  - platform: time
+    at: '18:00:00'
+  condition: []
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_to_partial_close
+      control_switch: open_sunrise
+  mode: single
+- id: '1689293902907'
+  alias: cover_partial_open
+  description: ''
+  trigger:
+  - platform: time
+    at: '11:30:00'
+  condition: []
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_to_partial_open
+      control_switch: open_sunrise
+  mode: single
