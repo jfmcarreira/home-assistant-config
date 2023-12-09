@@ -1,0 +1,59 @@
+- binary_sensor:
+    - name: washing_machine_state
+      unique_id: washing_machine_state
+      icon: mdi:washing-machine
+      device_class: plug
+      delay_on:
+        minutes: 1
+      delay_off:
+        minutes: 2
+      state: >-
+        {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
+            {%- if states("sensor.device_power_washing_machine") | int < 3 %}
+                False
+            {%- else %}
+                True
+            {%- endif %}
+        {%- else %}
+            {%- if states("sensor.device_power_washing_machine") | int > 50 %}
+                True
+            {%- else %}
+                False
+            {%- endif %}
+        {%- endif %}
+      attributes:
+        Lavagem da Roupa: >
+          {{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+    - name: wash_machine_wet_clothes
+      unique_id: wash_machine_wet_clothes
+      icon: mdi:hanger
+      state: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) - as_timestamp( states('sensor.task_remove_washing_clothes_last_done') ) > 0 }}"
+      attributes:
+        Energia: "{{ states('sensor.device_energy_washing_machine') }}"
+        Roupa Lavada: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+        Roupa Retirada: "{{ as_timestamp( states('sensor.task_remove_washing_clothes_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+
+- sensor:
+    - name: washing_machine_state
+      unique_id: washing_machine_state
+      state: >-
+        {% if is_state( 'binary_sensor.washing_machine_door', 'on' )  %}
+          Aberta
+        {% else %}
+          {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
+            A Lavar
+          {% elif is_state( 'binary_sensor.wash_machine_wet_clothes', 'on' )  %}
+            Roupa Lavada
+          {% else %}
+            Desligada
+          {% endif %}
+        {% endif %}
+      icon: >-
+        {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
+            mdi:washing-machine
+        {% elif is_state( 'binary_sensor.wash_machine_wet_clothes', 'on' )  %}
+          mdi:washing-machine-alert
+        {% else %}
+          mdi:washing-machine-off
+        {% endif %}
