@@ -1,0 +1,16 @@
+homeassistant:
+  customize:
+    sensor.temperature_outside:
+      state_class: measurement
+    sensor.temperature_outside_average:
+      state_class: measurement
+
+sensor:
+  - platform: filter
+    name: temperature_outside_average
+    unique_id: temperature_outside_average
+    entity_id: sensor.temperature_outside
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "24:00"
+        precision: 1

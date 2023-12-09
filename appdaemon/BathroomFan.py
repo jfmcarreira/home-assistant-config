@@ -104,7 +104,7 @@ class BathroomFan(hass.Hass):
         self.light_entity = self.args["light_entity"]
 
 
-        self.humidity_light_on = 0.0
+        self.humidity_light_on = self.get_average_humidity()
         self.current_humidity = self.get_humidity()
         self.average_humidity = MovingAverage(
             360, float(self.get_state(self.args["average_humidity_entity"]))
@@ -131,7 +131,7 @@ class BathroomFan(hass.Hass):
     def get_fan_max_timeout(self):
         return float(self.get_state(MAX_TIMEOUT_ENTITY)) * 60.0
 
-    def get_humidity_threshold(self):
+    def get_humidity_threshold_ratio(self):
         return float(self.get_state(THRESHOLD_HUMIDITY))
 
     def get_humidity(self):
@@ -149,13 +149,17 @@ class BathroomFan(hass.Hass):
     def is_light_on(self):
         return self.get_state(self.light_entity) == "on"
 
+
     def is_fan_on(self):
         return self.get_state(self.fan_entity) == "on"
 
     def is_high_humidity(self):
-        min_humidity = min(self.get_humidity_threshold(), self.humidity_light_on)
-        humidity_difference = self.current_humidity - min_humidity
-        is_high_humidity = humidity_difference > self.get_humidity_threshold()
+        threshold_ratio = self.get_humidity_threshold_ratio()
+        humidity = min(self.get_average_humidity(), self.humidity_light_on)
+        humidity_threshold = max(100 - humidity, 0.0) * self.get_humidity_threshold_ratio()
+        humidity_difference = self.current_humidity - humidity
+        is_high_humidity = humidity_difference > humidity_threshold
+        self.log("Min humidity is " + str(humidity), level="INFO")
         self.log("High humidity is " + str(is_high_humidity), level="INFO")
         return is_high_humidity
 

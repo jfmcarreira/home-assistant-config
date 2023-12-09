@@ -1,0 +1,16 @@
+homeassistant:
+  customize:
+    sensor.humidity_outside:
+      state_class: measurement
+    sensor.humidity_outside_average:
+      state_class: measurement
+
+sensor:
+  - platform: filter
+    name: humidity_outside_average
+    unique_id: humidity_outside_average
+    entity_id: sensor.humidity_outside
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "24:00"
+        precision: 1
