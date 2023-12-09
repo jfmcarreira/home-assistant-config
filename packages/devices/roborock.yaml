@@ -35,7 +35,7 @@ input_boolean:
     icon: mdi:desk
   vacuum_hall:
     name: Hall
-    icon: mdi:desk
+    icon: mdi:home-roof
   vacuum_masterbedroom:
     name: Suite
     icon: mdi:bed-double
