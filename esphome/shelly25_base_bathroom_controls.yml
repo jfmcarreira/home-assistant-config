@@ -77,7 +77,7 @@ binary_sensor:
           - homeassistant.service:
               service: homeassistant.toggle
               data:
-                entity_id: fan.bathroom_rc
+                entity_id: ${Fan}
 
 
   - id: sw_2

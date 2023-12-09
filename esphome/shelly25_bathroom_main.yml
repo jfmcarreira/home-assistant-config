@@ -5,6 +5,7 @@ substitutions:
   InputBPin: GPIO5
   Light_A_Name: Main Bathroom Ceiling
   Light_B_Name: Main Bathroom Mirror
+  Fan: fan.bathroom_rc
   Address: !secret shelly25_bathroom_main_ip
 
 output:
