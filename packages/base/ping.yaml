@@ -4,7 +4,7 @@ device_tracker:
     count: 2
     consider_home: 60
     new_device_defaults:
-      track_new_devices: true
+      track_new_devices: false
     hosts:
       magnesium_wifi: !secret magnesium_ip
       calcium_wifi: !secret calcium_ip
