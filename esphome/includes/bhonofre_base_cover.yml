@@ -24,7 +24,12 @@ globals:
     restore_value: no
     initial_value: "0"
 
+
 binary_sensor:
+  - platform: homeassistant
+    id: cover_controls_enabled
+    entity_id: binary_sensor.cover_controls_enabled
+
   - platform: gpio
     id: sw_open
     pin:
@@ -37,10 +42,17 @@ binary_sensor:
       - timing:
           - ON for at least 1s
         then:
-          - logger.log: "Cover going to 50"
-          - cover.control:
-              id: cover_1
-              position: 50%
+          - if:
+              condition:
+                or:
+                  - not:
+                    - api.connected:
+                  - binary_sensor.is_on: cover_controls_enabled
+              then:
+                - logger.log: "Cover going to 50"
+                - cover.control:
+                    id: cover_1
+                    position: 50%
       - timing:
           - ON for at most 1s
           - OFF for at least 100ms
@@ -62,15 +74,22 @@ binary_sensor:
                 - logger.log: "Special control"
                 - script.execute: special_cover_controls
               else:
-                - logger.log: "Cover Open"
-                - lambda: |-
-                    auto call = id(cover_1).make_call();
-                    if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
-                      call.set_command_stop();
-                    } else {
-                      call.set_command_open();
-                    }
-                    call.perform();
+                - if:
+                    condition:
+                      or:
+                        - not:
+                          - api.connected:
+                        - binary_sensor.is_on: cover_controls_enabled
+                    then:
+                      - logger.log: "Cover Open"
+                      - lambda: |-
+                          auto call = id(cover_1).make_call();
+                          if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
+                            call.set_command_stop();
+                          } else {
+                            call.set_command_open();
+                          }
+                          call.perform();
 
   - platform: gpio
     id: sw_close
@@ -84,15 +103,22 @@ binary_sensor:
       - timing:
           - ON for at least 1s
         then:
-          - logger.log: "Cover going to just open"
-          - cover.close: cover_1
-          - wait_until:
-              lambda: |-
-                return id(cover_1).position == COVER_CLOSED;
-          - delay: 1s
-          - cover.control:
-              id: cover_1
-              position: ${SmallOpenPosition}
+         - if:
+              condition:
+                or:
+                  - not:
+                    - api.connected:
+                  - binary_sensor.is_on: cover_controls_enabled
+              then:
+                - logger.log: "Cover going to just open"
+                - cover.close: cover_1
+                - wait_until:
+                    lambda: |-
+                      return id(cover_1).position == COVER_CLOSED;
+                - delay: 1s
+                - cover.control:
+                    id: cover_1
+                    position: ${SmallOpenPosition}
       - timing:
           - ON for at most 1s
           - OFF for at least 100ms
@@ -114,15 +140,21 @@ binary_sensor:
                 - logger.log: "Special control"
                 - script.execute: special_cover_controls
               else:
-                - logger.log: "Cover closing"
-                - lambda: |-
-                    auto call = id(cover_1).make_call();
-                    if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_CLOSING){
-                      call.set_command_stop();
-                    } else {
-                      call.set_command_close();
-                    }
-                    call.perform();
+                - if:
+                    condition:
+                      or:
+                        - not:
+                          - api.connected:
+                        - binary_sensor.is_on: cover_controls_enabled
+                    then:
+                      - lambda: |-
+                          auto call = id(cover_1).make_call();
+                          if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_CLOSING){
+                            call.set_command_stop();
+                          } else {
+                            call.set_command_close();
+                          }
+                          call.perform();
 
   - platform: gpio
     id: sw_extra_top
