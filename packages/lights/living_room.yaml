@@ -8,7 +8,7 @@ light:
           {{
               is_state('light.living_room', 'on') or
               is_state('light.living_room_window', 'on') or
-              is_state('light.living_room_table', 'on') or
+              is_state('light.living_room_table', 'on')
           }}
         turn_on:
           - choose:
