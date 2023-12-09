@@ -7,8 +7,10 @@ light:
         value_template: >-
           {{
               is_state('light.master_bedroom_ceiling', 'on') or 
-              is_state('light.master_bedroom_entry', 'on')
-              is_state('light.master_bedroom_closet', 'on')
+              is_state('light.master_bedroom_entry', 'on') or
+              is_state('light.master_bedroom_closet', 'on') or
+              is_state('light.master_bedroom_bed_wall', 'on') or
+              is_state('light.master_bedroom_bed_window', 'on')
           }}
         turn_on:
           - choose:
@@ -28,3 +30,7 @@ light:
             entity_id: light.master_bedroom_entry
           - service: light.turn_off
             entity_id: light.master_bedroom_closet
+          - service: light.turn_off
+            entity_id: light.master_bedroom_bed_wall
+          - service: light.turn_off
+            entity_id: light.master_bedroom_bed_window
