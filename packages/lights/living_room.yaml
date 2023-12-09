@@ -9,8 +9,6 @@ light:
               is_state('light.living_room', 'on') or
               is_state('light.living_room_window', 'on') or
               is_state('light.living_room_table', 'on') or
-              is_state('light.doorway', 'on') or
-              is_state('light.hallway', 'on')
           }}
         turn_on:
           - choose:
@@ -23,5 +21,8 @@ light:
                 entity_id: light.living_room
         turn_off:
           - service: light.turn_off
-            target:
-              area_id: living_room
+            entity_id: light.living_room
+          - service: light.turn_off
+            entity_id: light.living_room_window
+          - service: light.turn_off
+            entity_id: light.living_room_table
