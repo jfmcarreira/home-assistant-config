@@ -1,0 +1,55 @@
+blueprint:
+  domain: script
+  name: Notification Script
+  description: >-
+    A script to send notification to be used with notify_households
+
+  input:
+    title:
+      name: "Title"
+      description: "The title of the button shown in the notification."
+      default: ""
+      selector:
+        text:
+    message:
+      name: "Message"
+      description: "The message body"
+      selector:
+        text:
+    persistent:
+      name: Notificação Persistente
+      default: "false"
+      selector:
+        boolean:
+    priority:
+      name: Prioridade
+      default: "default"
+      selector:
+        select:
+          mode: list
+          options:
+            - label: Normal
+              value: default
+            - label: Alta
+              value: high
+            - label: Baixa
+              value: low
+            - label: Máxima
+              value: max
+            - label: Mínima
+              value: min
+
+mode: restart
+
+fields:
+  notification_method:
+    description: Who to notify
+
+sequence:
+  - service: "{{ notification_method }}"
+    data:
+      title: !input title
+      message: !input message
+      data:
+        priority: !input priority
+        persistent: !input persistent
