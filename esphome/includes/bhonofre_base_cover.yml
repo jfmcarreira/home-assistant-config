@@ -254,6 +254,14 @@ switch:
       return {};
     optimistic: yes
 
+  - platform: template
+    name: "cover_control_close_in_rain_${CoverName}"
+    device_class: switch
+    restore_state: yes
+    lambda: |-
+      return {};
+    optimistic: yes
+
 script:
   - id: cover_cycle_open_close
     then:
