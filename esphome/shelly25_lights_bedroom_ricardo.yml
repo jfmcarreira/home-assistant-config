@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: shelly25_lights_bedroom_ricardo
-  FriendlyName: Shelly 25 Bedroom Ricardo
+  FriendlyName: Shelly25 Bedroom Ricardo
   InputPin: GPIO5
   Light_A_Name: Bedroom Ricardo Ceiling
   Light_B_Name: Bedroom Ricardo Closet

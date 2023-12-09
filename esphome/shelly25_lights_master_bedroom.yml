@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: shelly25_lights_master_bedroom
-  FriendlyName: Shelly 25 Master Bedroom
+  FriendlyName: Shelly25 Master Bedroom
   InputPin: GPIO13
   Light_A_Name: Master Bedroom Ceiling
   Light_B_Name: Master Bedroom Entry
@@ -14,3 +14,4 @@ binary_sensor:
     pin: ${InputPin}
     on_press:
       - light.toggle: light_1
+      - light.toggle: light_2
