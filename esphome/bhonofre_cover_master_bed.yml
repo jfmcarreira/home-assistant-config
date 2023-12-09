@@ -10,5 +10,7 @@ substitutions:
   RelayPower: GPIO4
   RelayDirection: GPIO5
   InvertRelayDirection: "false"
+  SunOrientation: "3"
+  Floor: "1"
 
 <<: !include includes/bhonofre_base_cover.yml

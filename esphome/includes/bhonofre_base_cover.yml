@@ -18,6 +18,14 @@ api:
             id: cover_1
             position: ${SmallOpenPosition}
 
+
+globals:
+  - id: cover_action
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+
 binary_sensor:
   - platform: gpio
     id: sw_open
@@ -29,33 +37,37 @@ binary_sensor:
         pullup: true
     on_multi_click:
       - timing:
-          - ON for at least 2s
+          - ON for at least 1s
         then:
-           - if:
-              condition:
-                - binary_sensor.is_on: sw_extra_top
-              then:
-                - mqtt.publish:
-                    topic: esphome/cover/trigger/open_all
-                    payload: ""
-              else:
-                - logger.log: "Cover going to 50"
-                - cover.control:
-                    id: cover_1
-                    position: 50%
+          - logger.log: "Cover going to 50"
+          - cover.control:
+              id: cover_1
+              position: 50%
       - timing:
-          - ON for at most 2s
+          - ON for at most 1s
           - OFF for at least 100ms
         then:
-          - logger.log: "Cover Open"
-          - lambda: |-
-              auto call = id(cover_1).make_call();
-              if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
-                call.set_command_stop();
-              } else {
-                call.set_command_open();
-              }
-              call.perform();
+          - globals.set:
+              id: cover_action
+              value: "1"
+          - if:
+              condition:
+                or:
+                  - binary_sensor.is_on: sw_extra_top
+                  - binary_sensor.is_on: sw_extra_bottom
+              then:
+                - logger.log: "Special control"
+                - script.execute: special_cover_controls
+              else:
+                - logger.log: "Cover Open"
+                - lambda: |-
+                    auto call = id(cover_1).make_call();
+                    if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
+                      call.set_command_stop();
+                    } else {
+                      call.set_command_open();
+                    }
+                    call.perform();
 
   - platform: gpio
     id: sw_close
@@ -67,38 +79,42 @@ binary_sensor:
         pullup: true
     on_multi_click:
       - timing:
-          - ON for at least 2s
+          - ON for at least 1s
         then:
-          - if:
-              condition:
-                - binary_sensor.is_on: sw_extra_bottom
-              then:
-                - mqtt.publish:
-                    topic: esphome/cover/trigger/close_all
-                    payload: ""
-              else:
-                - logger.log: "Cover going to just open"
-                - cover.close: cover_1
-                - wait_until:
-                    lambda: |-
-                      return id(cover_1).position == COVER_CLOSED;
-                - delay: 1s
-                - cover.control:
-                    id: cover_1
-                    position: ${SmallOpenPosition}
+          - logger.log: "Cover going to just open"
+          - cover.close: cover_1
+          - wait_until:
+              lambda: |-
+                return id(cover_1).position == COVER_CLOSED;
+          - delay: 1s
+          - cover.control:
+              id: cover_1
+              position: ${SmallOpenPosition}
       - timing:
-          - ON for at most 2s
+          - ON for at most 1s
           - OFF for at least 100ms
         then:
-          - logger.log: "Cover closing"
-          - lambda: |-
-              auto call = id(cover_1).make_call();
-              if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_CLOSING){
-                call.set_command_stop();
-              } else {
-                call.set_command_close();
-              }
-              call.perform();
+          - globals.set:
+              id: cover_action
+              value: "-1"
+          - if:
+              condition:
+                or:
+                  - binary_sensor.is_on: sw_extra_top
+                  - binary_sensor.is_on: sw_extra_bottom
+              then:
+                - logger.log: "Special control"
+                - script.execute: special_cover_controls
+              else:
+                - logger.log: "Cover closing"
+                - lambda: |-
+                    auto call = id(cover_1).make_call();
+                    if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_CLOSING){
+                      call.set_command_stop();
+                    } else {
+                      call.set_command_close();
+                    }
+                    call.perform();
 
 
   - platform: gpio
@@ -158,6 +174,36 @@ switch:
       return {};
     optimistic: yes
 
+script:
+  - id: special_cover_controls
+    then:
+      - mqtt.publish_json:
+          topic: esphome/cover/control_control
+          payload: |-
+            root["floor"] = -1;
+            root["sun_orientation"] = -1;
+
+            if (id(cover_action) == 1) {
+                root["cover_action"] = "open";
+            } else if (id(cover_action) == -1) {
+                root["cover_action"] = "close";
+            } else {
+                root["cover_action"] = "stop";
+            }
+
+            if (id(sw_extra_top).state && id(sw_extra_bottom).state ) {
+              return;
+            }
+            if (id(sw_extra_top).state) {
+              root["floor"] = ${Floor};
+              return;
+            }
+            if (id(sw_extra_bottom).state) {
+              root["sun_orientation"] = ${SunOrientation};
+              return;
+            }
+      - logger.log: "Special control finished"
+
 mqtt:
   reboot_timeout: 0s
   broker: !secret mqtt_broker
@@ -165,19 +211,41 @@ mqtt:
   password: !secret mqtt_password
   discovery: false
   discovery_retain: false
-  on_message:
-    - topic: esphome/cover/trigger/close_all
-      qos: 0
-      then:
-        - cover.close: cover_1
-    - topic: esphome/cover/trigger/open_all
-      qos: 0
-      then:
-        - cover.open: cover_1
-    - topic: esphome/cover/trigger/stop_all
-      qos: 0
-      then:
-        - cover.stop: cover_1
+  on_json_message:
+    topic: esphome/cover/control_control
+    then:
+      - lambda: |-
+          if(x["floor"] != -1 && x["floor"] != ${Floor}) {
+            return;
+          }
+          if(x["sun_orientation"] != -1 && x["sun_orientation"] != ${SunOrientation}) {
+            return;
+          }
+          auto call = id(cover_1).make_call();
+          if( x["cover_action"] == "open" && id(cover_1).current_operation != CoverOperation::COVER_OPERATION_OPENING ) {
+            call.set_command_open();
+          } else if( x["cover_action"] == "close" && id(cover_1).current_operation != CoverOperation::COVER_OPERATION_CLOSING ) {
+            call.set_command_close();
+          } else {
+            call.set_command_stop();
+          }
+          call.perform();
+
+
+
+  # on_message:
+  #   - topic: esphome/cover/trigger/close_all
+  #     qos: 0
+  #     then:
+  #       - cover.close: cover_1
+  #   - topic: esphome/cover/trigger/open_all
+  #     qos: 0
+  #     then:
+  #       - cover.open: cover_1
+  #   - topic: esphome/cover/trigger/stop_all
+  #     qos: 0
+  #     then:
+  #       - cover.stop: cover_1
 
 
 cover:
@@ -188,19 +256,20 @@ cover:
     assumed_state: false
     open_action:
       - switch.turn_off: relay_power
-      - delay: 400ms
+      - delay: 500ms
       - switch.turn_on: relay_direction
-      - delay: 400ms
+      - delay: 500ms
       - switch.turn_on: relay_power
-      - delay: 400ms
+      - delay: 500ms
     close_action:
       - switch.turn_off: relay_power
-      - delay: 400ms
+      - delay: 500ms
       - switch.turn_off: relay_direction
-      - delay: 400ms
+      - delay: 500ms
       - switch.turn_on: relay_power
-      - delay: 400ms
+      - delay: 500ms
     stop_action:
       - switch.turn_off: relay_power
+      - delay: 500ms
     close_duration: ${CoverTime}
     open_duration: ${CoverTime}

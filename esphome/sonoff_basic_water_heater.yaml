@@ -1,0 +1,58 @@
+substitutions:
+  devicename: sonoff_basic_water_heater
+  upper_devicename: Sonoff Water Heater
+  #Address: "10.20.107.181"
+
+<<: !include includes/common.yml
+
+api:
+
+esphome:
+  name: sonoff_basic_water_heater
+  platform: ESP8266
+  board: esp01_1m
+
+binary_sensor:
+  - platform: status
+    id: connected_status
+    on_press:
+      then:
+        - logger.log: "Connected mode"
+    on_release:
+      then:
+        - logger.log: "Standalone mode"
+
+  - platform: gpio
+    id: sonoff_basic_heating_switch
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    on_press:
+      - switch.toggle: relay
+
+switch:
+  - platform: gpio
+    id: relay
+    pin:
+      number: GPIO12
+      inverted: True
+    restore_mode: ALWAYS_OFF
+
+  - platform: gpio
+    pin:
+      number: GPIO13
+      inverted: True
+    id: green_led
+    restore_mode: ALWAYS_OFF
+
+
+dallas:
+  - pin: GPIO3
+
+sensor:
+  - platform: dallas
+    address: 0xC403209779413328
+    name: "Temperature Water Heater Top"
+    state_class: measurement
+    device_class: temperature
