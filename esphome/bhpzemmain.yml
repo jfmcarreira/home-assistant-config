@@ -1,6 +1,6 @@
 substitutions:
   devicename: bhpzemmain
-  PowerSaveMode: "LIGHT"
+  PowerSaveMode: NONE
   upper_devicename: BHPZEM Main
 
 <<: !include includes/common.yml

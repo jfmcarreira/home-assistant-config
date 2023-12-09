@@ -53,7 +53,7 @@ binary_sensor:
                 - logger.log: "Disconnected! Toggling the SW"
                 - switch.toggle: light_1
       - timing:
-          - ON for at least 1000ms
+          - ON for at least 1.5s
         invalid_cooldown: 10ms
         then:
           - if:
@@ -61,6 +61,25 @@ binary_sensor:
                 and:
                   - api.connected:
               then:
+                - homeassistant.service:
+                    service: light.toggle
+                    data:
+                      entity_id: light.exterior_wall_back
+              else:
+                - light.toggle: light_2
+      - timing:
+          - ON for at most 1.2s
+          - OFF for at most 1.2s
+          - ON for at most 1.2s
+          - OFF for at least 100ms
+        invalid_cooldown: 10ms
+        then:
+          - if:
+              condition:
+                and:
+                  - api.connected:
+              then:
+                - light.turn_on: light_2
                 - switch.turn_on: light_1
                 - homeassistant.service:
                     service: scene.turn_on
@@ -86,7 +105,7 @@ binary_sensor:
                 - light.toggle: light_2
 
       - timing:
-          - ON for at least 1000ms
+          - ON for at least 1.5s
         invalid_cooldown: 10ms
         then:
           - if:
@@ -97,7 +116,7 @@ binary_sensor:
                 - homeassistant.service:
                     service: light.toggle
                     data:
-                      entity_id: light.exterior_wall_back
+                      entity_id: light.exterior_wall_side
               else:
                 - light.toggle: light_2
 

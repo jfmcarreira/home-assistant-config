@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: shelly25_bathroom_suite
-  PowerSaveMode: LIGHT
+  PowerSaveMode: NONE
   FriendlyName: Shelly 25 Master Bedroom Bathroom
   InputAPin: GPIO13
   InputBPin: GPIO5

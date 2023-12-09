@@ -6,6 +6,7 @@ esphome:
   board: nodemcu
 
 api:
+  reboot_timeout: 30min
   services:
     - service: minimal_open_cover
       then:
@@ -17,9 +18,9 @@ api:
         - cover.control:
             id: cover_1
             position: ${SmallOpenPosition}
-    # - service: cover_cycle_open_close
-    #   then:
-    #     - script.execute: cover_cycle_open_close
+    - service: cover_cycle_open_close
+      then:
+        - script.execute: cover_cycle_open_close
 
 
 globals:
@@ -32,27 +33,27 @@ globals:
     restore_value: no
     initial_value: "0"
 
-time:
-  - platform: homeassistant
-    id: homeassistant_time
-    on_time:
-      - seconds: 0
-        minutes: 0
-        hours: 9
-        then:
-          - switch.turn_off: cover_cicle_sw
-      - seconds: 0
-        minutes: 0
-        hours: 11,12,13,14,15,16,17,18
-        then:
-          - if:
-              condition:
-                and:
-                  - api.connected:
-                  - binary_sensor.is_off: notify_home
-                  - switch.is_off: cover_cicle_sw
-              then:
-                - script.execute: cover_cycle_open_close
+# time:
+#   - platform: homeassistant
+#     id: homeassistant_time
+#     on_time:
+#       - seconds: 0
+#         minutes: 0
+#         hours: 9
+#         then:
+#           - switch.turn_off: cover_cicle_sw
+#       - seconds: 0
+#         minutes: 0
+#         hours: 11,12,13,14,15,16,17,18
+#         then:
+#           - if:
+#               condition:
+#                 and:
+#                   - api.connected:
+#                   - binary_sensor.is_off: notify_home
+#                   - switch.is_off: cover_cicle_sw
+#               then:
+#                 - script.execute: cover_cycle_open_close
 
 binary_sensor:
   - platform: homeassistant

@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: shelly25_lights_bedroom_ricardo
-  PowerSaveMode: LIGHT
+  PowerSaveMode: NONE
   FriendlyName: Shelly25 Bedroom Ricardo
   InputPin: GPIO5
   Light_A_Name: Bedroom Ricardo Ceiling

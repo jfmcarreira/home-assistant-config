@@ -2,13 +2,14 @@ wifi:
   domain: .home
   ssid: !secret esp_ssid
   password: !secret esp_password
-  #use_address: "10.20.107.236"
-  power_save_mode: "${PowerSaveMode}"
+  #use_address: "10.20.107.216"
+  #power_save_mode: "${PowerSaveMode}"
+  reboot_timeout: 30min
 
 logger:
 
 ota:
-  reboot_timeout: 0s
+  reboot_timeout: 5min
 
 web_server:
 

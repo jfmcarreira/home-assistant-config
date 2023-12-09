@@ -5,9 +5,9 @@ light:
     name: ${Light_A_Name}
     platform: binary
     output: relay_1
-    restore_mode: RESTORE_AND_OFF
+    restore_mode: RESTORE_DEFAULT_OFF
   - id: light_2
     name: ${Light_B_Name}
     platform: binary
     output: relay_2
-    restore_mode: RESTORE_AND_OFF
+    restore_mode: RESTORE_DEFAULT_OFF
