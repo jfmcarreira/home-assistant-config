@@ -11,23 +11,24 @@ light:
     restore_mode: RESTORE_DEFAULT_OFF
 
 globals:
-  - id: time_lights_on_mins
-    type: int
+  - id: should_toggle_lights
+    type: bool
     restore_value: no
-    initial_value: "0"
+    initial_value: "false"
 
-# time:
-#   - platform: homeassistant
-#     id: homeassistant_time
-#     # count time in enabled state every minute
-#     on_time:
-#       - seconds: 0
-#         minutes: /1
-#         then:
-#           - lambda: |-
-#               if (id(light_1).state || id(light_2).state) {
-#                 id(time_lights_on_mins) += 1;
-#               }
+script:
+  - id: bathroom_toggle_lights_countdown
+    mode: restart
+    then:
+      - globals.set:
+          id: should_toggle_lights
+          value: "false"
+      - delay: 30s
+      - globals.set:
+          id: should_toggle_lights
+          value: "true"
+      - logger.log: "Turning both lights off count finished"
+
 
 binary_sensor:
   - id: sw_1
@@ -42,16 +43,28 @@ binary_sensor:
           - if:
               condition:
                 and:
-                  - light.is_on: light_1
-                  - light.is_on: light_2
+                  - lambda: 'return id(should_toggle_lights);'
+                  - or:
+                      - light.is_on: light_1
+                      - light.is_on: light_2
               then:
+                - globals.set:
+                    id: should_toggle_lights
+                    value: "false"
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
-                - light.toggle: light_1
-          - globals.set:
-              id: time_lights_on_mins
-              value: "0"
+                - if:
+                    condition:
+                      and:
+                        - light.is_on: light_1
+                        - light.is_on: light_2
+                    then:
+                      - light.turn_off: light_1
+                      - light.turn_off: light_2
+                    else:
+                      - light.toggle: light_1
+                - script.execute: bathroom_toggle_lights_countdown
       - timing:
           - ON for at least 1000ms
         invalid_cooldown: 100ms
@@ -73,17 +86,27 @@ binary_sensor:
         then:
           - if:
               condition:
-                and:
-                  - light.is_on: light_1
-                  - light.is_on: light_2
+                lambda: 'return id(should_toggle_lights);'
               then:
+                - globals.set:
+                    id: should_toggle_lights
+                    value: "false"
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
-                - light.toggle: light_2
-          - globals.set:
-              id: time_lights_on_mins
-              value: "0"
+                - if:
+                    condition:
+                      or:
+                        - lambda: 'return id(should_toggle_lights);'
+                        - and:
+                          - light.is_on: light_1
+                          - light.is_on: light_2
+                    then:
+                      - light.turn_off: light_1
+                      - light.turn_off: light_2
+                    else:
+                      - light.toggle: light_2
+                - script.execute: bathroom_toggle_lights_countdown
       - timing:
           - ON for at least 1000ms
         invalid_cooldown: 100ms
