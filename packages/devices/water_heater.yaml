@@ -1,6 +1,7 @@
 climate:
   - platform: generic_thermostat
     name: Water Heater
+    unique_id: water_heater
     heater: switch.water_heater
     target_sensor: sensor.temperature_water_heater_top
     min_temp: 30
@@ -10,6 +11,5 @@ climate:
     hot_tolerance: 1
     initial_hvac_mode: "off"
     precision: 0.5
-    away_temp: 35
+    away_temp: 40
     comfort_temp: 45
-    home_temp: 38

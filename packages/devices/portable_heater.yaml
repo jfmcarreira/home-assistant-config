@@ -1,11 +1,7 @@
-homeassistant:
-  customize:
-    climate.portable_heater:
-      friendly_name: "Termoventilador"
-
 climate:
   - platform: generic_thermostat
     name: Portable Heater
+    unique_id: portable_heater
     heater: switch.portable_heater
     target_sensor: sensor.portable_heater_temperature
     min_temp: 15
