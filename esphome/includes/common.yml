@@ -2,7 +2,7 @@ wifi:
   domain: .home
   ssid: !secret esp_ssid
   password: !secret esp_password
-  use_address: ${Address}
+  #use_address: ${Address}
 
 logger:
 

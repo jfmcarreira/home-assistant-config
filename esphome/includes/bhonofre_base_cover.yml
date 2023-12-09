@@ -112,6 +112,8 @@ binary_sensor:
     on_press:
       then:
           - logger.log: "Extra Top"
+          # - delay: 400ms
+          # - switch.toggle: relay_direction
 
   - platform: gpio
     id: sw_extra_bottom
@@ -126,42 +128,19 @@ binary_sensor:
       then:
         - logger.log: "Extra Bottom"
 
-cover:
-  - platform: time_based
-    id: cover_1
-    name: "${CoverName}"
-    device_class: shutter
-    assumed_state: false
-    open_action:
-      - switch.turn_off: relay_power
-      - delay: 400ms
-      - switch.turn_on: relay_direction
-      - delay: 400ms
-      - switch.turn_on: relay_power
-      - delay: 400ms
-    close_action:
-      - switch.turn_off: relay_power
-      - delay: 400ms
-      - switch.turn_off: relay_direction
-      - delay: 400ms
-      - switch.turn_on: relay_power
-      - delay: 400ms
-    stop_action:
-      - switch.turn_off: relay_power
-    close_duration: ${CoverTime}
-    open_duration: ${CoverTime}
-
-
 switch:
   - platform: gpio
     id: relay_power
-    pin: GPIO4
+    pin: ${RelayPower}
     restore_mode: ALWAYS_OFF
 
   - platform: gpio
     id: relay_direction
-    pin: GPIO5
+    pin:
+      number: ${RelayDirection}
+      inverted: ${InvertRelayDirection}
     restore_mode: ALWAYS_OFF
+
 
   - platform: template
     name: "cover_control_open_sunsire_${CoverName}"
@@ -199,3 +178,29 @@ mqtt:
       qos: 0
       then:
         - cover.stop: cover_1
+
+
+cover:
+  - platform: time_based
+    id: cover_1
+    name: "${CoverName}"
+    device_class: shutter
+    assumed_state: false
+    open_action:
+      - switch.turn_off: relay_power
+      - delay: 400ms
+      - switch.turn_on: relay_direction
+      - delay: 400ms
+      - switch.turn_on: relay_power
+      - delay: 400ms
+    close_action:
+      - switch.turn_off: relay_power
+      - delay: 400ms
+      - switch.turn_off: relay_direction
+      - delay: 400ms
+      - switch.turn_on: relay_power
+      - delay: 400ms
+    stop_action:
+      - switch.turn_off: relay_power
+    close_duration: ${CoverTime}
+    open_duration: ${CoverTime}

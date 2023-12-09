@@ -6,7 +6,7 @@ substitutions:
   Light_B_Name: Master Bedroom Entry
   Address: !secret shelly25_master_bedroom_ip
 
-<<: !include shelly25_base_one_switch_two_lights.yml
+<<: !include includes/shelly25_base_one_switch_two_lights.yml
 
 binary_sensor:
   - id: sw_1

@@ -5,11 +5,11 @@ esphome:
   platform: ESP8266
   board: esp01_1m
 
+api:
+
 i2c:
   sda: GPIO12
   scl: GPIO14
-
-api:
 
 sensor:
   # Voltage
@@ -21,12 +21,12 @@ sensor:
     current_b:
       id: shelly_current_A
     active_power_a:
-      name: Power Usage Light ${Light_A_Name}
+      name: Light Power ${Light_A_Name}
       id: power_usage_light_a
       filters:
         - multiply: -1
     active_power_b:
-      name: Power Usage Light ${Light_B_Name}
+      name: Light Power ${Light_B_Name}
       id: power_usage_light_b
       filters:
         - multiply: -1
@@ -35,7 +35,7 @@ sensor:
   # NTC Temperature
   - platform: ntc
     sensor: temp_resistance_reading
-    name: ${FriendlyName} Temperature
+    name: Device Temperature ${FriendlyName}
     calibration:
       b_constant: 3350
       reference_resistance: 10kOhm

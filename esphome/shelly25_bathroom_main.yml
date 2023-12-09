@@ -17,4 +17,4 @@ output:
     pin: GPIO15
 
 
-<<: !include shelly25_base_bathroom_controls.yml
+<<: !include includes/shelly25_base_bathroom_controls.yml

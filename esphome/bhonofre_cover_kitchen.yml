@@ -1,13 +1,15 @@
 substitutions:
   devicename: bhonofre_cover_kitchen
-  Address: !secret bhonofre_cover_kitchen_ip
   CoverName: Kitchen
   Open: "12"
   Close: "13"
   ExtraTop: "2"
   ExtraBottom: "14"
-  CoverTime: "13s"
+  CoverTime: "14s"
   SmallOpenPosition: 17%
+  RelayPower: GPIO4
+  RelayDirection: GPIO5
+  InvertRelayDirection: "false"
 
 
-<<: !include bhonofre_base_cover.yml
+<<: !include includes/bhonofre_base_cover.yml

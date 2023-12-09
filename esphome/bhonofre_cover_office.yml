@@ -1,13 +1,14 @@
 substitutions:
   devicename: bhonofre_cover_office
-  Address: !secret bhonofre_cover_office_ip
   CoverName: Office
-  Open: "12"
-  Close: "13"
+  Open: "14"
+  Close: "12"
   ExtraTop: "2"
-  ExtraBottom: "14"
+  ExtraBottom: "13"
   CoverTime: "14s"
   SmallOpenPosition: 15%
+  RelayPower: GPIO5
+  RelayDirection: GPIO4
+  InvertRelayDirection: "false"
 
-
-<<: !include bhonofre_base_cover.yml
+<<: !include includes/bhonofre_base_cover.yml

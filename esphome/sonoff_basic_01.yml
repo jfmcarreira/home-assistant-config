@@ -1,0 +1,33 @@
+substitutions:
+  DeviceName: sonoff-basic-01
+  FriendlyName: Sonoff Basic Kitchen Pantry
+
+<<: !include includes/common.yml
+
+api:
+  reboot_timeout: 10min
+
+esphome:
+    name: ${DeviceName}
+    platform: ESP8266
+    board: esp01_1m
+
+
+light:
+  - id: light_1
+    name: Kitchen Pantry
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+
+
+
+
+
+
+
