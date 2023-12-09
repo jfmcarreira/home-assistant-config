@@ -17,7 +17,7 @@ binary_sensor:
     sensors:
       roborock_state:
         icon_template: mdi:robot-vacuum
-        value_template: "{{ states.vacuum.roborock.state != 'docked' }}"
+        value_template: "{{ states('vacuum.roborock') != 'docked' }}"
         friendly_name: "Aspirador Roborock"
 
 input_boolean:
