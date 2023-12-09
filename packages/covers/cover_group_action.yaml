@@ -2,6 +2,19 @@ script:
   cover_group_action:
     alias: Controlo Grupo de Estores
     mode: single
+    fields:
+      action_to_run:
+        description: Service to run on the covers.
+        example: cover.open
+        required: true
+        selector:
+          text:
+      control_switch:
+        description: Switch name that controls which covers to control
+        example: open_sunrise
+        required: true
+        selector:
+          text:
     sequence:
       - repeat:
           for_each:
@@ -18,6 +31,13 @@ script:
             - condition:
                 "{{ is_state('switch.cover_control_' + control_switch + '_'
                 + repeat.item, 'on') }}"
-            - service: "{{ action_to_run }}"
-              target:
-                entity_id: cover.{{ repeat.item }}
+            - choose:
+                - conditions: "{{ 'script.' in action_to_run }}"
+                  sequence:
+                    - service: "{{ action_to_run }}"
+                      data:
+                        action_cover: cover.{{ repeat.item }}
+              default:
+                - service: "{{ action_to_run }}"
+                  target:
+                    entity_id: cover.{{ repeat.item }}
