@@ -1,9 +1,10 @@
 substitutions:
   devicename: bhpzemmain
   upper_devicename: BHPZEM Main
-  Address: !secret bhpzem_main_ip
 
-<<: !include common.yml
+<<: !include includes/common.yml
+
+api:
 
 esphome:
   name: ${devicename}

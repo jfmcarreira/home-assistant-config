@@ -1,13 +1,15 @@
 substitutions:
   devicename: bhonofre_cover_living_room
-  Address: !secret bhonofre_cover_living_room_ip
   CoverName: Living Room
   Open: "13"
   Close: "12"
   ExtraTop: "14"
   ExtraBottom: "2"
-  CoverTime: "23s"
+  CoverTime: "24s"
   SmallOpenPosition: 15%
+  RelayPower: GPIO4
+  RelayDirection: GPIO5
+  InvertRelayDirection: "false"
 
 
-<<: !include bhonofre_base_cover.yml
+<<: !include includes/bhonofre_base_cover.yml

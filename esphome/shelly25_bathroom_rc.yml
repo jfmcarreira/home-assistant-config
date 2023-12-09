@@ -3,18 +3,18 @@ substitutions:
   FriendlyName: Shelly 25 Bathroom RC
   InputAPin: GPIO13
   InputBPin: GPIO5
-  Light_A_Name: Bathroom RC Ceiling
-  Light_B_Name: Bathroom RC LED
+  Light_A_Name: Bathroom RC LED
+  Light_B_Name: Bathroom RC Ceiling
   Fan: fan.bathroom_rc
   Address: !secret shelly25_bathroom_rc_ip
 
 output:
   - platform: gpio
-    id: relay_1
+    id: relay_2
     pin: GPIO04
   - platform: gpio
-    id: relay_2
+    id: relay_1
     pin: GPIO15
 
 
-<<: !include shelly25_base_bathroom_controls.yml
+<<: !include includes/shelly25_base_bathroom_controls.yml
