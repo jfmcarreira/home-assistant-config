@@ -1,26 +1,18 @@
 substitutions:
   DeviceName: shelly25_lights_kitchen
-  PowerSaveMode: HIGH
+
   FriendlyName: Shelly25 Kitchen
-  Light_A_Name: Kitchen LED
-  Light_B_Name: Kitchen Window
+  Light_1_Name: Kitchen LED
+  Light_2_Name: Kitchen Window
 
 packages:
   esphome_base: !include packages/common.yml
   home_state: !include packages/home_state.yml
-  device_base: !include packages/shelly25_lights.yml
-
-output:
-  - platform: gpio
-    id: relay_1
-    pin: GPIO15
-  - platform: gpio
-    id: relay_2
-    pin: GPIO04
+  device_lights: !include packages/shelly25_lights.yml
 
 light:
   - id: light_2
-    name: ${Light_B_Name}
+    name: ${Light_2_Name}
     platform: binary
     output: relay_2
     restore_mode: RESTORE_AND_OFF
@@ -28,7 +20,7 @@ light:
 switch:
   - platform: output
     id: light_1
-    name: ${Light_A_Name} SW
+    name: ${Light_1_Name} SW
     output: relay_1
     restore_mode: ALWAYS_ON
 

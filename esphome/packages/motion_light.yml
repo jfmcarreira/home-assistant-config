@@ -1,0 +1,19 @@
+globals:
+  - id: prevent_light_toggle
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+script:
+  - id: light_turn_on_action
+    mode: restart
+    then:
+      - logger.log: "Disabling switch"
+      - globals.set:
+          id: prevent_light_toggle
+          value: "true"
+      - delay: 2s
+      - globals.set:
+          id: prevent_light_toggle
+          value: "false"
+      - logger.log: "Enabling switch"

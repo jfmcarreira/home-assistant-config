@@ -1,48 +1,8 @@
-output:
-  - platform: gpio
-    id: relay_1
-    pin: GPIO15
-  - platform: gpio
-    id: relay_2
-    pin: GPIO04
+packages:
+  device_two_lights: !include shelly25_two_lights.yml
 
 globals:
-  - id: prevent_light_toggle
-    type: bool
-    restore_value: no
-    initial_value: "false"
   - id: lights_state
     type: int
     restore_value: no
     initial_value: "0"
-
-script:
-  - id: light_turn_on_action
-    mode: restart
-    then:
-      - logger.log: "Disabling switch"
-      - globals.set:
-          id: prevent_light_toggle
-          value: "true"
-      - delay: 2s
-      - globals.set:
-          id: prevent_light_toggle
-          value: "false"
-      - logger.log: "Enabling switch"
-
-light:
-  - id: light_1
-    name: ${Light_A_Name}
-    platform: binary
-    output: relay_1
-    restore_mode: RESTORE_DEFAULT_OFF
-    on_turn_on:
-      - script.execute: light_turn_on_action
-
-  - id: light_2
-    name: ${Light_B_Name}
-    platform: binary
-    output: relay_2
-    restore_mode: RESTORE_DEFAULT_OFF
-    on_turn_on:
-      - script.execute: light_turn_on_action

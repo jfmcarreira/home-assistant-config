@@ -1,20 +1,11 @@
-esphome:
-  name: ${DeviceName}
-  friendly_name: ${FriendlyName}
-  platform: ESP8266
-  board: esp01_1m
-
-wifi:
-  power_save_mode: HIGH
-
-i2c:
-  sda: GPIO12
-  scl: GPIO14
+packages:
+  device_base: !include shelly25.yml
 
 sensor:
-  # Voltage
   - platform: ade7953
-    irq_pin: GPIO16 # Prevent overheating by setting this
+    update_interval: 5s
+    # Prevent overheating by setting this
+    irq_pin: GPIO16
     voltage:
       id: shelly_voltage
     current_a:
@@ -22,7 +13,7 @@ sensor:
     current_b:
       id: shelly_current_A
     active_power_a:
-      name: Light Power ${Light_A_Name}
+      name: Light Power ${Light_1_Name}
       id: power_usage_light_a
       # active_power_a is normal, so don't multiply by -1
       filters:
@@ -41,7 +32,7 @@ sensor:
                 data_template:
                   message: Switch turned off because max power was exceeded
     active_power_b:
-      name: Light Power ${Light_B_Name}
+      name: Light Power ${Light_2_Name}
       id: power_usage_light_b
       # active_power_b is inverted, so take the absolute value
       filters:
@@ -61,47 +52,12 @@ sensor:
                 data_template:
                   message: Switch turned off because power exceeded max power
 
-  # NTC Temperature
-  - platform: ntc
-    sensor: temp_resistance_reading
-    name: Device Temperature ${FriendlyName}
-    calibration:
-      b_constant: 3350
-      reference_resistance: 10kOhm
-      reference_temperature: 298.15K
-    on_value_range:
-      - above: 85.0
-        then:
-          - output.turn_off: relay_1
-          - output.turn_off: relay_2
-          - homeassistant.service:
-              service: persistent_notification.create
-              data:
-                title: Message from ${FriendlyName}
-              data_template:
-                message: Switch turned off because max temperature was exceeded
-
-  - platform: resistance
-    id: temp_resistance_reading
-    sensor: temp_analog_reading
-    configuration: DOWNSTREAM
-    resistor: 32kOhm
-
-  - platform: adc
-    id: temp_analog_reading
-    pin: A0
-
   - platform: total_daily_energy
-    name: Light Daily Energy ${Light_A_Name}
+    name: Light Daily Energy ${Light_1_Name}
     power_id: power_usage_light_a
     unit_of_measurement: Wh
 
   - platform: total_daily_energy
-    name: Light Daily Energy ${Light_B_Name}
+    name: Light Daily Energy ${Light_2_Name}
     power_id: power_usage_light_b
     unit_of_measurement: Wh
-
-status_led:
-  pin:
-    number: GPIO0
-    inverted: yes

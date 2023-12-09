@@ -1,14 +1,5 @@
-light:
-  - id: light_1
-    name: ${Light_A_Name}
-    platform: binary
-    output: relay_1
-    restore_mode: RESTORE_DEFAULT_OFF
-  - id: light_2
-    name: ${Light_B_Name}
-    platform: binary
-    output: relay_2
-    restore_mode: RESTORE_DEFAULT_OFF
+packages:
+  two_lights: !include shelly25_two_lights.yml
 
 globals:
   - id: should_toggle_lights
@@ -29,11 +20,10 @@ script:
           value: "true"
       - logger.log: "Turning both lights off count finished"
 
-
 binary_sensor:
   - id: sw_1
     platform: gpio
-    pin: ${InputAPin}
+    pin: GPIO13
     on_multi_click:
       - timing:
           - ON for at most 1000ms
@@ -43,7 +33,7 @@ binary_sensor:
           - if:
               condition:
                 and:
-                  - lambda: 'return id(should_toggle_lights);'
+                  - lambda: "return id(should_toggle_lights);"
                   - or:
                       - light.is_on: light_1
                       - light.is_on: light_2
@@ -63,7 +53,8 @@ binary_sensor:
                       - light.turn_off: light_1
                       - light.turn_off: light_2
                     else:
-                      - light.toggle: light_1
+                      - light.toggle: ${input_a_light}
+
                 - script.execute: bathroom_toggle_lights_countdown
       - timing:
           - ON for at least 1000ms
@@ -73,11 +64,11 @@ binary_sensor:
           - homeassistant.service:
               service: homeassistant.toggle
               data:
-                entity_id: ${Fan}
+                entity_id: ${fan}
 
   - id: sw_2
     platform: gpio
-    pin: ${InputBPin}
+    pin: GPIO5
     on_multi_click:
       - timing:
           - ON for at most 1000ms
@@ -86,7 +77,7 @@ binary_sensor:
         then:
           - if:
               condition:
-                lambda: 'return id(should_toggle_lights);'
+                lambda: "return id(should_toggle_lights);"
               then:
                 - globals.set:
                     id: should_toggle_lights
@@ -97,15 +88,15 @@ binary_sensor:
                 - if:
                     condition:
                       or:
-                        - lambda: 'return id(should_toggle_lights);'
+                        - lambda: "return id(should_toggle_lights);"
                         - and:
-                          - light.is_on: light_1
-                          - light.is_on: light_2
+                            - light.is_on: light_1
+                            - light.is_on: light_2
                     then:
                       - light.turn_off: light_1
                       - light.turn_off: light_2
                     else:
-                      - light.toggle: light_2
+                      - light.toggle: ${input_b_light}
                 - script.execute: bathroom_toggle_lights_countdown
       - timing:
           - ON for at least 1000ms
