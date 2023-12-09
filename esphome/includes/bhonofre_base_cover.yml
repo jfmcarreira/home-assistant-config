@@ -173,7 +173,7 @@ switch:
     optimistic: yes
 
   - platform: template
-    name: "cover_control_open_sunsire_${CoverName}"
+    name: "cover_control_open_sunrise_${CoverName}"
     device_class: switch
     restore_state: yes
     lambda: |-

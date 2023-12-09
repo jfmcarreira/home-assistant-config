@@ -1,8 +1,8 @@
 homeassistant:
   customize_glob:
-    "switch.cover_control_open_*":
+    "switch.cover_control_open_sunrise_*":
       friendly_name: "Abrir com o Nascer do Sol"
-    "switch.cover_control_close_*":
+    "switch.cover_control_close_sunset_*":
       friendly_name: "Fechar com o Pôr do Sol"
     "switch.cover_control_group_*":
       friendly_name: "Controlar Estores em Grupo"
