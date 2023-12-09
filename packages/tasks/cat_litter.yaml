@@ -95,9 +95,6 @@ script:
   cat_litter_clean_no_vaccum:
     alias: Task Litter Box Mark Clean
     sequence:
-      - service: counter.reset
-        data:
-          entity_id: counter.cat_litter_box_visits
       - service: shell_command.external_my_sql_insert
         data:
           table: tasks
@@ -185,8 +182,6 @@ automation:
       - condition: template
         value_template: >
           {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
-      #- condition: time
-      #  before: "21:00:00"
     action:
       - service: persistent_notification.create
         data:
