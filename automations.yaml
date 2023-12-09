@@ -19,7 +19,10 @@
   - platform: sun
     event: sunset
     offset: -00:00:00
-  condition: []
+  condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
   action:
   - service: script.cover_group_action
     data:
@@ -37,7 +40,7 @@
     entity_id: binary_sensor.notify_home
     state: 'off'
   action:
-  - service: script.lights_turn_all_off_when_empty
+  - service: script.house_turn_all_off
     data: {}
   mode: single
 - id: '1651844118576'
@@ -86,8 +89,20 @@
   trigger:
   - platform: sun
     event: sunrise
-    offset: 00:30:00
-  condition: []
+    offset: 00:10:00
+  - platform: time
+    at: 07:30:00
+  condition:
+  - condition: time
+    after: 07:30:00
+    before: '12:00:00'
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: '0'
+  - condition: template
+    value_template: '{{ ( ( (now() | as_timestamp) - (states.automation.cover_open_all_sunrise.attributes.last_triggered
+      | as_timestamp) ) / 60 / 60 ) > 18 }}'
   action:
   - service: script.cover_group_action
     data:
@@ -101,11 +116,11 @@
     path: lights/sync_lights.yaml
     input:
       master_light: light.hall
-      slave_light:
-        entity_id: light.hall_side
+      slave_light: light.hall_side
       sync_exclusive: false
-      sync_on: 'off'
+      sync_on: false
       sync_off: true
+      sync_off_from_slave: true
 - id: '1653347146334'
   alias: Lights Control Kitchen Pantry With Door
   description: ''
@@ -130,4 +145,279 @@
       data: {}
       target:
         entity_id: light.kitchen_pantry
+  mode: single
+- id: '1653354558079'
+  alias: Lights Turn On Kitchen Door Light
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.kitchen_door
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.kitchen_door
+    state: 'off'
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    below: '5'
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.kitchen_door
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.kitchen_door
+      to: 'off'
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.kitchen_door
+  mode: single
+- id: '1653947527310'
+  alias: Lights Turn On Kitchen Light
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.kitchen_door
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    below: '5'
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.kitchen_led
+  mode: single
+- id: '1655079401495'
+  alias: Tarefa Máquina de Lavar Roupa
+  description: ''
+  use_blueprint:
+    path: tasks/machine_two_steps_task.yaml
+    input:
+      machine_sensor: binary_sensor.washing_machine_state
+      machine_door_sensor: binary_sensor.washing_machine_door
+      machine_energy_sensor: sensor.device_energy_washing_machine
+      task_needs_attention: binary_sensor.wash_machine_wet_clothes
+      task_done_door_time: 1
+      task_machine_code_name: Washing_Machine_Wash_Clothes
+      task_done_code_name: Washing_Machine_Clothes_Off
+      machine_finish_message: A máquina da roupa terminou. Pode retirar a roupa
+      notification_action: Roupa Retirada
+      android_task_id: 20
+      notification_action_id: washing_machine_clothes_off
+- id: '1655150664363'
+  alias: Routines Trigger Turn All Off
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 5f77eabf33fc6da75819d4111f18d96e
+    domain: shelly
+    type: long
+    subtype: button
+  condition: []
+  action:
+  - service: script.routine_exit_house_all_off
+    data: {}
+  mode: single
+- id: '1655314200388'
+  alias: Lights Sync Office
+  description: ''
+  use_blueprint:
+    path: lights/sync_lights.yaml
+    input:
+      master_light: light.office_main
+      slave_light: light.office_lamp
+      sync_exclusive: true
+      sync_on: false
+      sync_off: true
+      sync_off_from_slave: false
+- id: '1655387667447'
+  alias: Lights Turn Off Floor 1 When Long Press On Stairs
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 35ca4364bcf05720b2a3ab48dcf93f53
+    domain: shelly
+    type: long
+    subtype: button1
+  - platform: device
+    device_id: 35ca4364bcf05720b2a3ab48dcf93f53
+    domain: shelly
+    type: long
+    subtype: button2
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      area_id:
+      - master_bedroom
+      - bedroom_ricardo
+      - hall
+      - bathroom_main
+      - guest_bedroom
+  - service: media_player.turn_off
+    data: {}
+    target:
+      area_id:
+      - master_bedroom
+      - bedroom_ricardo
+      - hall
+      - bathroom_main
+      - guest_bedroom
+  mode: restart
+- id: '1655428526899'
+  alias: Lights Turn Off Floor 0 When Long Press On Hall
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 609033a1628a2cb7eabd77e4c284bb00
+    domain: shelly
+    type: long
+    subtype: button1
+  - platform: device
+    device_id: 609033a1628a2cb7eabd77e4c284bb00
+    domain: shelly
+    type: long
+    subtype: button2
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      area_id:
+      - kitchen
+      - office
+      - outside
+      - bathroom_rc
+      - living_room
+      - laundry
+      - bedroom_rc
+  - service: media_player.turn_off
+    data: {}
+    target:
+      area_id:
+      - kitchen
+      - office
+      - outside
+      - bathroom_rc
+      - living_room
+      - laundry
+      - bedroom_rc
+  mode: restart
+- id: '1655462775855'
+  alias: Task Water Filter Replacement
+  description: ''
+  use_blueprint:
+    path: tasks/tracked_tasks.yaml
+    input:
+      task_needs_attention: binary_sensor.water_filter_needs_replacement
+      task_done_code_name: Water_Filter_Replacement
+      notification_message: O Filtro da Água Necessita de Substuição
+      notification_action: Filtro Substituido
+      android_task_id: 30
+      notification_action_id: water_filter_replaced
+- id: '1655494396722'
+  alias: Sonoff RF Bridge Demultiplexer
+  trigger:
+  - platform: mqtt
+    topic: tele/tasmota_sonoff_rf_bridge/RESULT
+  action:
+  - service: python_script.rf_bridge_demux
+    data:
+      payload: '{{trigger.payload_json.RfReceived.Data}}'
+  mode: queued
+  max: 10
+- id: '1655496730769'
+  alias: Task Dryer Machine
+  description: ''
+  use_blueprint:
+    path: tasks/machine_two_steps_task.yaml
+    input:
+      machine_sensor: binary_sensor.dryer_machine_state
+      machine_door_sensor: binary_sensor.dryer_machine_door
+      machine_energy_sensor: sensor.device_energy_dryer_machine
+      task_needs_attention: binary_sensor.dryer_machine_need_emtpy
+      task_machine_code_name: Dryer_Machine_Clean
+      task_done_code_name: Dryer_Machine_Empty
+      machine_finish_message: Máquina de Secar Terminou. Pode Retirar a Roupa!
+      notification_action: Roupa Retirada
+      android_task_id: 21
+      notification_action_id: dryer_machine_clothes_off
+      task_done_door_time: 5
+- id: '1655769049761'
+  alias: Bathroom Master Bedroom Bathroom Fan Control
+  description: ''
+  use_blueprint:
+    path: bathroom/bathroom_fan.yaml
+    input:
+      bathroom_light: light.master_bedroom_bathroom_group
+      extractor_fan: fan.bathroom_master_bedroom
+      humidity_sensor: sensor.humidity_master_bedroom_bathroom
+      max_time_fan_on: 20
+      humidity_threshold: 80
+- id: '1655769658775'
+  alias: Bathroom Main Bathroom Fan Control
+  description: ''
+  use_blueprint:
+    path: bathroom/bathroom_fan.yaml
+    input:
+      bathroom_light: light.main_bathroom_group
+      extractor_fan: fan.main_bathroom
+      humidity_sensor: sensor.humidity_main_bathroom
+      max_time_fan_on: 15
+      humidity_threshold: 70
+- id: '1656144735044'
+  alias: Bathroom RC Fan Control
+  description: ''
+  use_blueprint:
+    path: bathroom/bathroom_fan.yaml
+    input:
+      bathroom_light: light.bathroom_rc_group
+      extractor_fan: fan.bathroom_rc
+      humidity_sensor: sensor.humidity_bathroom_rc
+      max_time_fan_on: 20
+      humidity_threshold: 80
+- id: '1656374052136'
+  alias: Lights Sync Kitchen
+  description: ''
+  use_blueprint:
+    path: lights/sync_lights.yaml
+    input:
+      master_light: light.kitchen_led
+      slave_light: light.kitchen_window
+      sync_exclusive: false
+      sync_on: false
+      sync_off: true
+      sync_off_from_slave: true
+- id: '1656459694019'
+  alias: Routines Trigger Bedtime
+  description: ''
+  trigger:
+  - platform: device
+    device_id: a78dc0dfbae5c816158f0de54c4f9566
+    domain: shelly
+    type: long
+    subtype: button2
+  condition: []
+  action:
+  - service: script.turn_on
+    data: {}
+    target:
+      entity_id: script.routine_bedtime_all_off
   mode: single
