@@ -2,13 +2,25 @@
     - name: dehumidifier_humidity
       unique_id: dehumidifier_humidity
       device_class: humidity
+      state_class: measurement
+      unit_of_measurement: "%"
+      availability: >-
+        {% if is_state( 'input_select.dehumidifier_location', 'Suite' )  %}
+          {{ is_number(states('sensor.humidity_master_bedroom_bathroom')) }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Casa de Banho Principal' )  %}
+          {{ is_number(states('sensor.humidity_main_bathroom')) }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Sotão' )  %}
+          {{ is_number(states('sensor.humidity_hall')) }}
+        {% else  %}
+          False
+        {% endif %}
       state: >-
         {% if is_state( 'input_select.dehumidifier_location', 'Suite' )  %}
           {{ states('sensor.humidity_master_bedroom_bathroom') }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Casa de Banho Principal' )  %}
           {{ states('sensor.humidity_main_bathroom') }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Sotão' )  %}
-            {{ states('sensor.humidity_hall') }} 
+            {{ states('sensor.humidity_hall') }}
         {% else  %}
           0.0
         {% endif %}
