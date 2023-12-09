@@ -3,7 +3,7 @@ homeassistant:
     automation.event_remain_task_todo:
       friendly_name: Gerar Evento Para Lembrar Tarefas a Realizar
 
-automation old:
+automation:
   - alias: event_remain_task_todo
     mode: single
     trigger:

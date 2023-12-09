@@ -56,7 +56,7 @@ input_number:
     step: 1
     unit_of_measurement: "%"
 
-automation old:
+automation:
   - alias: media_google_home_day_volume
     trigger:
       - platform: homeassistant
