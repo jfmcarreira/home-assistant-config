@@ -3,16 +3,14 @@
 ################################################################################
 recorder:
   db_url: !secret db_url
-  purge_keep_days: 5
+  purge_keep_days: 15
   exclude:
+    event_types:
+      - zha_event
     domains:
       - updater
       - weblink
       - zone
-      - sun
-      - weather
-      - device_tracker
-      - automation
       - timer
       - remote
       - camera

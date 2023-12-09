@@ -14,6 +14,7 @@ logbook:
       - climate
       - person
       - device_tracker
+      - binary_sensor
   exclude:
     entities:
       # Light group
