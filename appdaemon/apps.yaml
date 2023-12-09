@@ -2,6 +2,15 @@ HouseModeApp:
   module: HouseMode
   class: HouseMode
 
+DummyBathroom:
+  module: BathroomFan
+  class: BathroomFan
+  toggle: input_boolean.auto_fan_bathroom_rc
+  fan_entity: input_boolean.dummy_fan
+  light_entity: input_boolean.dummy_light
+  humidity_entity: input_number.dummy_humidity
+  average_humidity_entity: sensor.humidity_bathroom_rc_average
+
 MasterBedroomBathroom:
   module: BathroomFan
   class: BathroomFan
