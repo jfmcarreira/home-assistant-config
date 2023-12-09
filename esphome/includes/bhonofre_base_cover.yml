@@ -49,7 +49,12 @@ binary_sensor:
         then:
           - globals.set:
               id: cover_action
-              value: "1"
+              value: !lambda |-
+                if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
+                    return 0;
+                } else {
+                    return 1;
+                }
           - if:
               condition:
                 or:
@@ -96,7 +101,12 @@ binary_sensor:
         then:
           - globals.set:
               id: cover_action
-              value: "-1"
+              value: !lambda |-
+                if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
+                    return 0;
+                } else {
+                    return -1;
+                }
           - if:
               condition:
                 or:
@@ -159,6 +169,14 @@ switch:
 
 
   - platform: template
+    name: "cover_control_group_${CoverName}"
+    device_class: switch
+    restore_state: yes
+    lambda: |-
+      return {};
+    optimistic: yes
+
+  - platform: template
     name: "cover_control_open_sunsire_${CoverName}"
     device_class: switch
     restore_state: yes
@@ -177,32 +195,53 @@ switch:
 script:
   - id: special_cover_controls
     then:
-      - mqtt.publish_json:
-          topic: esphome/cover/control_control
-          payload: |-
-            root["floor"] = -1;
-            root["sun_orientation"] = -1;
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_on: sw_extra_top
+              - binary_sensor.is_on: sw_extra_bottom
+          then:
+            - homeassistant.service:
+                service: script.cover_group_action
+                data:
+                  control_switch: "group"
+                  action_to_run: !lambda |-
+                      if (id(cover_action) == 1) {
+                        return "cover.open_cover";
+                      } else if (id(cover_action) == -1) {
+                          return "cover.close_cover";
+                      } else {
+                          return "cover.stop_cover";
+                      }
+            - logger.log: "Special control using HA finished"
 
-            if (id(cover_action) == 1) {
-                root["cover_action"] = "open";
-            } else if (id(cover_action) == -1) {
-                root["cover_action"] = "close";
-            } else {
-                root["cover_action"] = "stop";
-            }
+          else:
+            - mqtt.publish_json:
+                topic: esphome/cover/control_control
+                payload: |-
+                  root["floor"] = -1;
+                  root["sun_orientation"] = -1;
 
-            if (id(sw_extra_top).state && id(sw_extra_bottom).state ) {
-              return;
-            }
-            if (id(sw_extra_top).state) {
-              root["floor"] = ${Floor};
-              return;
-            }
-            if (id(sw_extra_bottom).state) {
-              root["sun_orientation"] = ${SunOrientation};
-              return;
-            }
-      - logger.log: "Special control finished"
+                  if (id(cover_action) == 1) {
+                      root["cover_action"] = "open";
+                  } else if (id(cover_action) == -1) {
+                      root["cover_action"] = "close";
+                  } else {
+                      root["cover_action"] = "stop";
+                  }
+
+                  if (id(sw_extra_top).state && id(sw_extra_bottom).state ) {
+                    return;
+                  }
+                  if (id(sw_extra_top).state) {
+                    root["floor"] = ${Floor};
+                    return;
+                  }
+                  if (id(sw_extra_bottom).state) {
+                    root["sun_orientation"] = ${SunOrientation};
+                    return;
+                  }
+            - logger.log: "Special control using MQTT finished"
 
 mqtt:
   reboot_timeout: 0s

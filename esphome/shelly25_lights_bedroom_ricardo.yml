@@ -6,7 +6,7 @@ substitutions:
   Light_B_Name: Bedroom Ricardo Closet
   Address: !secret shelly25_bedroom_ricardo_ip
 
-<<: !include includes/shelly25_base_one_switch_two_lights.yml
+<<: !include includes/shelly25_base_two_lights.yml
 
 
 globals:

@@ -11,6 +11,12 @@ i2c:
   sda: GPIO12
   scl: GPIO14
 
+globals:
+  - id: time_lights_on_mins
+    type: int
+    restore_value: no
+    initial_value: '0'
+
 sensor:
   # Voltage
   - platform: ade7953
@@ -63,6 +69,19 @@ light:
     output: relay_2
     restore_mode: RESTORE_DEFAULT_OFF
 
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    # count time in enabled state every minute
+    on_time:
+      - seconds: 0
+        minutes: /1
+        then:
+          - lambda: |-
+              if (id(light_1).state || id(light_2).state) {
+                id(time_lights_on_mins) += 1;
+              }
+
 binary_sensor:
   - id: sw_1
     platform: gpio
@@ -72,9 +91,19 @@ binary_sensor:
           - ON for at most 1000ms
           - OFF for at least 100ms
         invalid_cooldown: 100ms
-        then:
-          - logger.log: "Short 1 Press"
-          - light.toggle: light_1
+          - if:
+              condition:
+                or:
+                  - light.is_on: light_1
+                  - light.is_on: light_2
+              then:
+                - light.turn_off: light_1
+                - light.turn_off: light_2
+              else:
+                - light.turn_on: light_1
+          - globals.set:
+              id: time_lights_on_mins
+              value: "0"
       - timing:
           - ON for at least 1000ms
         invalid_cooldown: 100ms
@@ -85,7 +114,6 @@ binary_sensor:
               data:
                 entity_id: ${Fan}
 
-
   - id: sw_2
     platform: gpio
     pin: ${InputBPin}
@@ -95,6 +123,16 @@ binary_sensor:
           - OFF for at least 100ms
         invalid_cooldown: 100ms
         then:
-          - logger.log: "Short 2 Press"
-          - light.toggle: light_2
-
+          - if:
+              condition:
+                or:
+                  - light.is_on: light_1
+                  - light.is_on: light_2
+              then:
+                - light.turn_off: light_1
+                - light.turn_off: light_2
+              else:
+                - light.turn_on: light_2
+          - globals.set:
+              id: time_lights_on_mins
+              value: "0"

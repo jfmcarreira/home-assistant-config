@@ -1,5 +1,6 @@
 <<: !include common.yml
 
+
 esphome:
   name: ${DeviceName}
   platform: ESP8266
