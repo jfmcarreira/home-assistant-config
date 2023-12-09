@@ -27,12 +27,14 @@ output:
 binary_sensor:
   - platform: gpio
     id: gate_close_sensor
+    name: gate_close
     pin:
       inverted: true
       number: D5
       mode: INPUT_PULLUP
   - platform: gpio
     id: gate_open_sensor
+    name: gate_open
     pin:
       number: D6
       inverted: true
