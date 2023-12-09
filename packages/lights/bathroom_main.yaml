@@ -1,0 +1,16 @@
+light:
+  - platform: template
+    lights:
+      main_bathroom_group:
+        unique_id: lights_main_bathroom_group
+        friendly_name: Luzes da Casa de Banho Principal
+        value_template: >-
+          {{
+              is_state('light.main_bathroom_ceiling', 'on')
+          }}
+        turn_on:
+          - service: light.turn_on
+            entity_id: light.main_bathroom_ceiling
+        turn_off:
+          - service: light.turn_off
+            entity_id: light.main_bathroom_ceiling

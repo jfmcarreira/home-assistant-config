@@ -1,0 +1,19 @@
+light:
+  - platform: template
+    lights:
+      stairs_group:
+        unique_id: lights_stairs_group
+        friendly_name: Luzes da Escada
+        value_template: >-
+          {{
+              is_state('light.stairs', 'on') or
+              is_state('light.stairs_wall', 'on')
+          }}
+        turn_on:
+          - service: light.turn_on
+            entity_id: light.stairs
+        turn_off:
+          - service: light.turn_off
+            entity_id: light.stairs
+          - service: light.turn_off
+            entity_id: light.stairs_wall

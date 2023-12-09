@@ -1,7 +1,8 @@
 light:
   - platform: template
     lights:
-      office_group:
+      kitchen_group:
+        unique_id: lights_kitchen_group
         friendly_name: Luzes da Cozinha
         value_template: >-
           {{

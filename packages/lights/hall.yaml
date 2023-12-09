@@ -3,6 +3,7 @@ light:
     lights:
       hall_group:
         friendly_name: Luzes do Hall
+        unique_id: lights_hall_group
         value_template: "{{ is_state('light.hall', 'on') or is_state('light.hall_side', 'on') }}"
         turn_on:
           - service: light.turn_on

@@ -1,0 +1,16 @@
+light:
+  - platform: template
+    lights:
+      master_bedroom_group:
+        unique_id: lights_master_bedroom_group
+        friendly_name: Luzes da Suite
+        value_template: >-
+          {{
+              is_state('light.master_bedroom_ceiling', 'on')
+          }}
+        turn_on:
+          - service: light.turn_on
+            entity_id: light.master_bedroom_ceiling
+        turn_off:
+          - service: light.turn_off
+            entity_id: light.master_bedroom_ceiling
