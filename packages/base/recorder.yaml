@@ -15,3 +15,9 @@ recorder:
       - automation
       - timer
       - remote
+    entity_globs:
+      - sensor.birthday_*
+      - sensor.daily_*
+      - sensor.query_*
+      - sensor.ble_scanner_*
+      - sensor._*last_done

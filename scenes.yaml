@@ -1,0 +1,56 @@
+- id: '1657064296685'
+  name: Lights Living Room Night
+  entities:
+    light.living_room_window:
+      supported_color_modes:
+      - brightness
+      icon: mdi:wall-sconce-flat
+      friendly_name: Luz Ambiente da Sala
+      supported_features: 32
+      color_mode: brightness
+      brightness: 115
+      state: 'on'
+  metadata: {}
+- id: '1657064316017'
+  name: Lights Living Room Day
+  entities:
+    light.living_room_window:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 250
+      icon: mdi:wall-sconce-flat
+      friendly_name: Luz Ambiente da Sala
+      supported_features: 32
+      state: 'on'
+  metadata:
+    light.living_room_window:
+      entity_only: true
+- id: '1658004842201'
+  name: Lights Kitchen Day
+  entities:
+    light.kitchen_led:
+      supported_color_modes:
+      - brightness
+      friendly_name: Kitchen LED
+      supported_features: 40
+      color_mode: brightness
+      brightness: 255
+      state: 'on'
+  metadata:
+    light.kitchen_led:
+      entity_only: true
+- id: '1658004862259'
+  name: Lights Kitchen Night
+  entities:
+    light.kitchen_led:
+      supported_color_modes:
+      - brightness
+      friendly_name: Kitchen LED
+      supported_features: 40
+      color_mode: brightness
+      brightness: 97
+      state: 'on'
+  metadata:
+    light.kitchen_led:
+      entity_only: true

@@ -5,7 +5,7 @@ panel_iframe:
     icon: mdi:robot-vacuum
   radarr:
     title: "Radarr"
-    url: !secret sonarr_url
+    url: !secret radarr_url
     icon: mdi:movie-search
   sonarr:
     title: "Sonarr"

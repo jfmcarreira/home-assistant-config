@@ -1,0 +1,40 @@
+################################################################
+## Influx DB
+################################################################
+influxdb:
+  username: !secret influxdb_user
+  password: !secret influxdb_pass
+  host: !secret influxdb_host
+  max_retries: 3
+  default_measurement: state
+  tags:
+    source: hass
+  include:
+    domains:
+      - climate
+      - sun
+      - fan
+    entity_globs:
+      # Power
+      - sensor.bhpzem*
+      - sensor.device_power_*
+      - sensor.device_energy_*
+      # Temperature / Humidity
+      - sensor.temperature_*
+      - sensor.humidity_*
+      - sensor.light_sensor_*
+      # Sensors Battery
+      - sensor.sensor_battery_*
+    entities:
+      - binary_sensor.notify_home
+      # Gas
+      - sensor.pulse_counter_gas
+      # # Devices
+      # - binary_sensor.dish_wash_machine_state
+      # - binary_sensor.washing_machine_state
+      # - binary_sensor.living_room_tv_state
+      # - binary_sensor.roborock_state
+      # Downloads
+      - sensor.speedtest_ping
+      - sensor.speedtest_upload
+      - sensor.speedtest_download

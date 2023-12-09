@@ -13,7 +13,17 @@ logbook:
       - vacuum
       - climate
       - person
+      - device_tracker
   exclude:
+    entities:
+      # Light group
+      - light.bathroom_rc
+      - light.main_bathroom
+      - light.master_bedroom_bathroom
+      - light.kitchen
+      - light.office
+    entity_globs:
+      - light.*_group
     domains:
       - updater
       - weblink

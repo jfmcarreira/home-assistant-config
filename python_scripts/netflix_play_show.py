@@ -7,7 +7,6 @@ shortcut_list = {
     "the big bang theory": "the big",
 }
 
-
 series_requiring_pin = [
     "blacklist",
 ]
@@ -55,12 +54,19 @@ if show_name in series_requiring_pin:
     requires_pin = True
   
 # Change source if not in Netflix
+tv_state = hass.states.get(entity_id)
+if tv_state == "off":
+    hass.services.call('media_player','turn_on', { "entity_id": entity_id }, blocking=True)
+    time.sleep(5)
+
 tv_source = hass.states.get(entity_id).attributes.get('source')
 if not tv_source == "Netflix":
     service_data = { "entity_id": entity_id, "source": "Netflix" }
     hass.services.call('media_player','select_source', service_data, blocking=True)
     time.sleep(5)
     send_button( entity_id, "ENTER" )
+    time.sleep(1)
+    send_button( entity_id, "BACK" )
     #logger.info("Switching %s to Netflix", entity_id)
 
 # Send TV to search menu

@@ -9,5 +9,6 @@ www/community/**
 .DS_Store
 zigbee.db
 appdaemon/apps/__pycache__/**
-themes/mushroom/**
-themes/mushroom/**
+themes/**
+tts/**
+zigbee.db-*

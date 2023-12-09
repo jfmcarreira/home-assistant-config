@@ -1,0 +1,12 @@
+- binary_sensor:
+    - name: stairs_automation_blocker
+      unique_id: stairs_automation_blocker
+      device_class: light
+      icon: mdi:lightbulb-group
+      state: >
+        {{  is_state('light.hall', 'on') or 
+            is_state('light.hall_side', 'on') or 
+            is_state('light.hallway', 'on') or
+            is_state('light.stairs_down', 'on') or
+            is_state('light.stairs_lamp', 'on')
+        }}

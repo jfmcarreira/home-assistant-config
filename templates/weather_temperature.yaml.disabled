@@ -1,0 +1,6 @@
+- sensor:
+    - name: Weather Temperature
+      unique_id: weather_temperature
+      device_class: temperature
+      state: >
+        {{ states.weather.home.attributes.temperature | float }}
