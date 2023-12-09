@@ -1,0 +1,129 @@
+################################################################
+## Selections
+################################################################
+input_select:
+  ## Radio Stations
+  radio_station:
+    name: "Source"
+    icon: mdi:radio-fm
+    options:
+      - YouTube URL
+      - RFM
+      - Comercial
+      - Cidade FM
+      - M80
+      - TSF
+      - Antena 1
+      - Antena 2
+      - Antena 3
+
+  ## Speaker selection
+  speakers_selector:
+    name: "Media Player"
+    icon: mdi:speaker
+    options:
+      - Sala
+      - Cozinha
+      - Escritório
+      - Quarto Principal
+      - Quarto do Ricardo
+      - Fire Tablet
+
+script:
+  radio_control:
+    fields:
+      service_call:
+        description: Service to call
+        example: media_extractor.play_media
+    sequence:
+      - service: "{{ service_call }}"
+        data:
+          entity_id: >
+            {% if is_state("input_select.speakers_selector", "TV") %}
+                media_player.living_room_tv
+            {% elif is_state("input_select.speakers_selector", "Sala") %}
+                media_player.ghm_living_room
+            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
+                media_player.ghm_kitchen
+            {% elif is_state("input_select.speakers_selector", "Escritório") %}
+                media_player.gh_clock_office
+            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
+                media_player.ghm_master_bedroom
+            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
+                media_player.ghm_bedroom_ricardo
+            {% endif %}
+
+  play_radio:
+    alias: "Media Play Radio"
+    sequence:
+      #- service: media_player.play_media
+      - service: media_extractor.play_media
+        data_template:
+          media_content_type: "music"
+          entity_id: >
+            {% if is_state("input_select.speakers_selector", "TV") %}
+                media_player.living_room_tv
+            {% elif is_state("input_select.speakers_selector", "Sala") %}
+                media_player.ghm_living_room
+            {% elif is_state("input_select.speakers_selector", "Cozinha") %}
+                media_player.ghm_kitchen
+            {% elif is_state("input_select.speakers_selector", "Escritório") %}
+                media_player.gh_clock_office
+            {% elif is_state("input_select.speakers_selector", "Quarto Principal") %}
+                media_player.ghm_master_bedroom
+            {% elif is_state("input_select.speakers_selector", "Quarto do Ricardo") %}
+                media_player.ghm_bedroom_ricardo
+            {% endif %}
+          media_content_id: >
+            {% if is_state("input_select.radio_station", "Mopidy") %} http://potassium.home:8000/mopidy.mp3
+            {% elif is_state("input_select.radio_station", "RFM") %} https://20863.live.streamtheworld.com/RFM_SC
+            {% elif is_state("input_select.radio_station", "Cidade FM") %} http://mcrscast.mcr.iol.pt/cidadefm
+            {% elif is_state("input_select.radio_station", "TSF") %} http://tsfdirecto.tsf.pt/tsfdirecto.mp3
+            {% elif is_state("input_select.radio_station", "M80") %} http://mcrscast.mcr.iol.pt/m80
+            {% elif is_state("input_select.radio_station", "Comercial") %} http://mcrscast1.mcr.iol.pt/comercial.mp3
+            {% elif is_state("input_select.radio_station", "Mega Hits") %} http://19553.live.streamtheworld.com/MEGA_HITS_SC
+            {% elif is_state("input_select.radio_station", "Antena 1") %} http://radiocast.rtp.pt/antena180a.mp3
+            {% elif is_state("input_select.radio_station", "Antena 2") %} http://radiocast.rtp.pt/antena280a.mp3
+            {% elif is_state("input_select.radio_station", "Antena 3") %} http://radiocast.rtp.pt/antena380a.mp3
+            {% elif is_state("input_select.radio_station", "YouTube URL") %}
+                {% set youtube_url = states('input_text.youtube_url') %}
+                {% if 'www.youtube.com' in  youtube_url %}
+                    {% set youtube_code = youtube_url.split('=')[-1] %}
+                {% else %}
+                    {% set youtube_code = youtube_url.split('/')[-1] %}
+                {% endif %}
+                https://www.youtube.com/watch?v={{ youtube_code }}
+            {% endif %}
+
+  pause_radio:
+    alias: "Media Pause Radio"
+    sequence:
+      - service: script.radio_control
+        data:
+          service_call: "media_player.media_play_pause"
+
+  stop_radio:
+    alias: "Media Stop Radio"
+    sequence:
+      - service: script.radio_control
+        data:
+          service_call: >
+            {% if is_state("input_select.speakers_selector", "Kiosk") or is_state("input_select.speakers_selector", "Fire Tablet") %}
+                media_player.media_stop
+            {% else %}
+                media_player.turn_off
+            {% endif %}
+
+automation radio:
+  - alias: "Media Play Radio from Android"
+    trigger:
+      - platform: event
+        event_type: "mobile_app.share"
+        event_data:
+          caller: android-app://com.vanced.android.youtube
+    action:
+      - service: input_text.set_value
+        data:
+          entity_id: input_text.youtube_url
+          value: "{{ trigger.event.data.url }}"
+      - service: script.play_radio

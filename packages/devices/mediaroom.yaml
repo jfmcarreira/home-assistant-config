@@ -1,0 +1,10 @@
+homeassistant:
+  customize:
+    media_player.mediaroom_box_sala:
+      friendly_name: Televisão da Sala Box do Meo
+
+media_player:
+  - platform: mediaroom
+    name: Living Room TV MEO Box
+    host: !secret meo_box_ip
+    optimistic: true
