@@ -1,0 +1,35 @@
+substitutions:
+  devicename: shelly25_doorway
+  FriendlyName: Shelly 25 DoorWay
+  Light_1_Name: Doorway
+  Light_2_Name: Front Door
+
+packages:
+  esphome_base: !include packages/common.yml
+  home_state: !include packages/home_state.yml
+  lights_base: !include packages/shelly25_two_lights.yml
+
+binary_sensor:
+  - id: sw_1
+    platform: gpio
+    pin: GPIO13
+    on_multi_click:
+      - timing:
+          - ON for at most 2000ms
+          - OFF for at least 100ms
+        invalid_cooldown: 100ms
+        then:
+          - light.toggle: light_2
+      - timing:
+          - ON for at least 2000ms
+        invalid_cooldown: 100ms
+        then:
+          - homeassistant.service:
+              service: lock.unlock
+              data:
+                entity_id: lock.gate_door
+  - id: sw_2
+    platform: gpio
+    pin: GPIO5
+    on_click:
+      - light.toggle: light_1
