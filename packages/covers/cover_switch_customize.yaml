@@ -1,6 +1,6 @@
 homeassistant:
   customize_glob:
-    "sensor.cover_control_open_*":
+    "switch.cover_control_open_*":
       friendly_name: "Abrir com o Nascer do Sol"
-    "sensor.cover_control_close_*":
+    "switch.cover_control_close_*":
       friendly_name: "Abrir com o Nascer do Sol"
