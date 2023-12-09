@@ -1,15 +1,29 @@
 homeassistant:
   customize_glob:
-    "switch.cover_control_open_sunrise_*":
+    "input_boolean.cover_control_open_sunrise_*":
       friendly_name: "Abrir com o Nascer do Sol"
-    "switch.cover_control_close_sunset_*":
+      icon: mdi:weather-sunset-up
+    "input_boolean.cover_control_close_sunset_*":
       friendly_name: "Fechar com o Pôr do Sol"
-    "switch.cover_control_close_in_rain_*":
+      icon: mdi:weather-sunset-down
+    "input_boolean.cover_control_close_in_rain_*":
       friendly_name: "Fechar Quando Chove"
-    "switch.cover_control_group_*":
+      icon: mdi:weather-pouring
+    "input_boolean.cover_control_group_*":
       friendly_name: "Controlar Estores em Grupo"
+    "input_number.cover_lower_position_*":
+      friendly_name: "Posição Inferior"
+    "input_number.cover_higher_position_*":
+      friendly_name: "Posição Superior"
+    "input_number.cover_rainy_position_*":
+      friendly_name: "Posição Modo Chuva"
 
 input_boolean:
+  cover_master_control_close_south:
+    name: "[AD] Fechar Janelas a Sul"
+  cover_master_control_close_west:
+    name: "[AD] Fechar Janelas a Poente"
+
   cover_control_group_living_room:
     name: Controlo em Grupo do Estore da Sala de Estar
     icon: mdi:window-shutter-alert
@@ -40,60 +54,87 @@ input_boolean:
 
   cover_control_open_sunrise_living_room:
     name: Controlo Abrir com o Nascer do Sol Estore da Sala de Estar
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_kitchen:
     name: Controlo Abrir com o Nascer do Sol Estore da Cozinha
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_laundry:
     name: Controlo Abrir com o Nascer do Sol Estore da Lavandaria
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_bedroom_rc:
     name: Controlo Abrir com o Nascer do Sol Estore do Quarto do R/C
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_bathroom:
     name: Controlo Abrir com o Nascer do Sol Estore da Casa de Banho
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_office:
     name: Controlo Abrir com o Nascer do Sol Estore do Escritório
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_master_bedroom:
     name: Controlo Abrir com o Nascer do Sol Estore do Quarto Principal
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_bedroom_ricardo:
     name: Controlo Abrir com o Nascer do Sol Estore do Quarto do Ricardo
+    icon: mdi:weather-sunset-up
   cover_control_open_sunrise_bedroom_guest:
     name: Controlo Abrir com o Nascer do Sol Estore do Quarto Extra
+    icon: mdi:weather-sunset-up
 
   cover_control_close_sunset_living_room:
     name: Controlo Fechar com o Pôr do Sol Estore da Sala de Estar
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_kitchen:
     name: Controlo Fechar com o Pôr do Sol Estore da Cozinha
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_laundry:
     name: Controlo Fechar com o Pôr do Sol Estore da Lavandaria
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_bedroom_rc:
     name: Controlo Fechar com o Pôr do Sol Estore do Quarto do R/C
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_bathroom:
     name: Controlo Fechar com o Pôr do Sol Estore da Casa de Banho
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_office:
     name: Controlo Fechar com o Pôr do Sol Estore do Escritório
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_master_bedroom:
     name: Controlo Fechar com o Pôr do Sol Estore do Quarto Principal
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_bedroom_ricardo:
     name: Controlo Fechar com o Pôr do Sol Estore do Quarto do Ricardo
+    icon: mdi:weather-sunset-down
   cover_control_close_sunset_bedroom_guest:
     name: Controlo Fechar com o Pôr do Sol Estore do Quarto Extra
+    icon: mdi:weather-sunset-down
 
   cover_control_close_in_rain_living_room:
     name: Controlo Fechar Quando Chove Estore da Sala de Estar
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_kitchen:
     name: Controlo Fechar Quando Chove Estore da Cozinha
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_laundry:
     name: Controlo Fechar Quando Chove Estore da Lavandaria
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_bedroom_rc:
     name: Controlo Fechar Quando Chove Estore do Quarto do R/C
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_bathroom:
     name: Controlo Fechar Quando Chove Estore da Casa de Banho
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_office:
     name: Controlo Fechar Quando Chove Estore do Escritório
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_master_bedroom:
     name: Controlo Fechar Quando Chove Estore do Quarto Principal
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_bedroom_ricardo:
     name: Controlo Fechar Quando Chove Estore do Quarto do Ricardo
+    icon: mdi:weather-pouring
   cover_control_close_in_rain_bedroom_guest:
     name: Controlo Fechar Quando Chove Estore do Quarto Extra
+    icon: mdi:weather-pouring
 
 input_number:
   cover_lower_position_living_room:
@@ -103,6 +144,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_kitchen:
     name: Posição Inferior do Estore da Cozinha
     icon: mdi:window-shutter-alert
@@ -110,6 +152,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_laundry:
     name: Posição Inferior do Estore da Lavandaria
     icon: mdi:window-shutter-alert
@@ -117,6 +160,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_bedroom_rc:
     name: Posição Inferior do Estore do Quarto do R/C
     icon: mdi:window-shutter-alert
@@ -124,6 +168,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_bathroom:
     name: Posição Inferior do Estore da Casa de Banho
     icon: mdi:window-shutter-alert
@@ -131,6 +176,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_office:
     name: Posição Inferior do Estore do Escritório
     icon: mdi:window-shutter-alert
@@ -138,6 +184,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_master_bedroom:
     name: Posição Inferior do Estore do Quarto Principal
     icon: mdi:window-shutter-alert
@@ -145,6 +192,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_bedroom_ricardo:
     name: Posição Inferior do Estore do Quarto do Ricardo
     icon: mdi:window-shutter-alert
@@ -152,6 +200,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_lower_position_bedroom_guest:
     name: Posição Inferior do Estore do Quarto Extra
     icon: mdi:window-shutter-alert
@@ -159,6 +208,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_living_room:
     name: Posição Superior do Estore da Sala de Estar
     icon: mdi:window-shutter-alert
@@ -166,6 +216,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_kitchen:
     name: Posição Superior do Estore da Cozinha
     icon: mdi:window-shutter-alert
@@ -173,6 +224,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_laundry:
     name: Posição Superior do Estore da Lavandaria
     icon: mdi:window-shutter-alert
@@ -180,6 +232,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_bedroom_rc:
     name: Posição Superior do Estore do Quarto do R/C
     icon: mdi:window-shutter-alert
@@ -187,6 +240,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_bathroom:
     name: Posição Superior do Estore da Casa de Banho
     icon: mdi:window-shutter-alert
@@ -194,6 +248,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_office:
     name: Posição Superior do Estore do Escritório
     icon: mdi:window-shutter-alert
@@ -201,6 +256,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_master_bedroom:
     name: Posição Superior do Estore do Quarto Principal
     icon: mdi:window-shutter-alert
@@ -208,6 +264,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_bedroom_ricardo:
     name: Posição Superior do Estore do Quarto do Ricardo
     icon: mdi:window-shutter-alert
@@ -215,6 +272,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_higher_position_bedroom_guest:
     name: Posição Superior do Estore do Quarto Extra
     icon: mdi:window-shutter-alert
@@ -222,6 +280,7 @@ input_number:
     min: 20
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_living_room:
     name: Posição com Chuva do Estore da Sala de Estar
     icon: mdi:window-shutter-alert
@@ -229,6 +288,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_kitchen:
     name: Posição com Chuva do Estore da Cozinha
     icon: mdi:window-shutter-alert
@@ -236,6 +296,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_laundry:
     name: Posição com Chuva do Estore da Lavandaria
     icon: mdi:window-shutter-alert
@@ -243,6 +304,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_bedroom_rc:
     name: Posição com Chuva do Estore do Quarto do R/C
     icon: mdi:window-shutter-alert
@@ -250,6 +312,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_bathroom:
     name: Posição com Chuva do Estore da Casa de Banho
     icon: mdi:window-shutter-alert
@@ -257,6 +320,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_office:
     name: Posição com Chuva do Estore do Escritório
     icon: mdi:window-shutter-alert
@@ -264,6 +328,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_master_bedroom:
     name: Posição com Chuva do Estore do Quarto Principal
     icon: mdi:window-shutter-alert
@@ -271,6 +336,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_bedroom_ricardo:
     name: Posição com Chuva do Estore do Quarto do Ricardo
     icon: mdi:window-shutter-alert
@@ -278,6 +344,7 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
   cover_rainy_position_bedroom_guest:
     name: Posição com Chuva do Estore do Quarto Extra
     icon: mdi:window-shutter-alert
@@ -285,3 +352,4 @@ input_number:
     min: 0
     step: 1
     mode: slider
+    unit_of_measurement: "%"
