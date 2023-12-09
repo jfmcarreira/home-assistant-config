@@ -1,0 +1,23 @@
+script:
+  cover_group_action:
+    alias: Controlo Grupo de Estores
+    mode: single
+    sequence:
+      - repeat:
+          for_each:
+            - living_room
+            - kitchen
+            - office
+            - laundry
+            - bathroom
+            - bedroom_rc
+            - master_bedroom
+            - bedroom_ricardo
+            - bedroom_guest
+          sequence:
+            - condition:
+                "{{ is_state('switch.cover_control_' + control_switch + '_'
+                + repeat.item, 'on') }}"
+            - service: "{{ action_to_run }}"
+              target:
+                entity_id: cover.{{ repeat.item }}

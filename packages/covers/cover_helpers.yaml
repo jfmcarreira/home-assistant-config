@@ -29,70 +29,70 @@
 
 input_number:
   cover_lower_position_living_room:
-    name: Controlo em Grupo do Estore da Sala de Estar
+    name: Posição Inferior do Estore da Sala de Estar
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_kitchen:
-    name: Controlo em Grupo do Estore da Cozinha
+    name: Posição Inferior do Estore da Cozinha
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_laundry:
-    name: Controlo em Grupo do Estore da Lavandaria
+    name: Posição Inferior do Estore da Lavandaria
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_bedroom_rc:
-    name: Controlo em Grupo do Estore do Quarto do R/C
+    name: Posição Inferior do Estore do Quarto do R/C
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_bathroom:
-    name: Controlo em Grupo do Estore da Casa de Banho
+    name: Posição Inferior do Estore da Casa de Banho
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_office:
-    name: Controlo em Grupo do Estore do Escritório
+    name: Posição Inferior do Estore do Escritório
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_master_bedroom:
-    name: Controlo em Grupo do Estore do Quarto Principal
+    name: Posição Inferior do Estore do Quarto Principal
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_bedroom_ricardo:
-    name: Controlo em Grupo do Estore do Quarto do Ricardo
+    name: Posição Inferior do Estore do Quarto do Ricardo
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_lower_position_bedroom_guest:
-    name: Controlo em Grupo do Estore do Quarto Extra
+    name: Posição Inferior do Estore do Quarto Extra
     icon: mdi:window-shutter-alert
     max: 50
     min: 0
     step: 1
     mode: slider
   cover_higher_position_living_room:
-    name: Controlo em Grupo do Estore da Sala de Estar
+    name: Posição Superior do Estore da Sala de Estar
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -100,7 +100,7 @@ input_number:
 
     mode: slider
   cover_higher_position_kitchen:
-    name: Controlo em Grupo do Estore da Cozinha
+    name: Posição Superior do Estore da Cozinha
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -108,7 +108,7 @@ input_number:
 
     mode: slider
   cover_higher_position_laundry:
-    name: Controlo em Grupo do Estore da Lavandaria
+    name: Posição Superior do Estore da Lavandaria
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -116,7 +116,7 @@ input_number:
 
     mode: slider
   cover_higher_position_bedroom_rc:
-    name: Controlo em Grupo do Estore do Quarto do R/C
+    name: Posição Superior do Estore do Quarto do R/C
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -124,7 +124,7 @@ input_number:
 
     mode: slider
   cover_higher_position_bathroom:
-    name: Controlo em Grupo do Estore da Casa de Banho
+    name: Posição Superior do Estore da Casa de Banho
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -132,7 +132,7 @@ input_number:
 
     mode: slider
   cover_higher_position_office:
-    name: Controlo em Grupo do Estore do Escritório
+    name: Posição Superior do Estore do Escritório
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -140,7 +140,7 @@ input_number:
 
     mode: slider
   cover_higher_position_master_bedroom:
-    name: Controlo em Grupo do Estore do Quarto Principal
+    name: Posição Superior do Estore do Quarto Principal
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -148,7 +148,7 @@ input_number:
 
     mode: slider
   cover_higher_position_bedroom_ricardo:
-    name: Controlo em Grupo do Estore do Quarto do Ricardo
+    name: Posição Superior do Estore do Quarto do Ricardo
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
@@ -156,7 +156,7 @@ input_number:
 
     mode: slider
   cover_higher_position_bedroom_guest:
-    name: Controlo em Grupo do Estore do Quarto Extra
+    name: Posição Superior do Estore do Quarto Extra
     icon: mdi:window-shutter-alert
     max: 100
     min: 20
