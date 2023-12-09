@@ -42,7 +42,7 @@ script:
             sequence:
               - service: remote.send_command
                 data:
-                  entity_id: remote.universal_remote_living_room_remote
+                  entity_id: remote.living_room_tv
                   device: meo
                   command: ENTER
                   num_repeats: 1
