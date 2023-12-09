@@ -15,3 +15,7 @@ panel_iframe:
     title: "Photoprism"
     url: !secret photoprism_url
     icon: mdi:image-multiple
+  grocy:
+    title: "Grocy"
+    url: !secret grocy_url
+    icon: mdi:cart
