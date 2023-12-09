@@ -6,7 +6,8 @@ light:
         friendly_name: Luzes da Suite
         value_template: >-
           {{
-              is_state('light.master_bedroom_ceiling', 'on')
+              is_state('light.master_bedroom_ceiling', 'on') or 
+              is_state('light.master_bedroom_entry', 'on')
           }}
         turn_on:
           - choose:
