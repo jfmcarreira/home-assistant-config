@@ -13,5 +13,4 @@ substitutions:
   SunOrientation: "1"
   Floor: "1"
 
-
 <<: !include includes/bhonofre_base_cover.yml

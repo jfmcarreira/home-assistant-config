@@ -18,13 +18,11 @@ api:
             id: cover_1
             position: ${SmallOpenPosition}
 
-
 globals:
   - id: cover_action
     type: int
     restore_value: no
-    initial_value: '0'
-
+    initial_value: "0"
 
 binary_sensor:
   - platform: gpio
@@ -126,7 +124,6 @@ binary_sensor:
                     }
                     call.perform();
 
-
   - platform: gpio
     id: sw_extra_top
     pin:
@@ -137,9 +134,9 @@ binary_sensor:
         pullup: true
     on_press:
       then:
-          - logger.log: "Extra Top"
-          # - delay: 400ms
-          # - switch.toggle: relay_direction
+        - logger.log: "Extra Top"
+        # - delay: 400ms
+        # - switch.toggle: relay_direction
 
   - platform: gpio
     id: sw_extra_bottom
@@ -166,7 +163,6 @@ switch:
       number: ${RelayDirection}
       inverted: ${InvertRelayDirection}
     restore_mode: ALWAYS_OFF
-
 
   - platform: template
     name: "cover_control_group_${CoverName}"
@@ -206,13 +202,13 @@ script:
                 data:
                   control_switch: "group"
                   action_to_run: !lambda |-
-                      if (id(cover_action) == 1) {
-                        return "cover.open_cover";
-                      } else if (id(cover_action) == -1) {
-                          return "cover.close_cover";
-                      } else {
-                          return "cover.stop_cover";
-                      }
+                    if (id(cover_action) == 1) {
+                      return "cover.open_cover";
+                    } else if (id(cover_action) == -1) {
+                        return "cover.close_cover";
+                    } else {
+                        return "cover.stop_cover";
+                    }
             - logger.log: "Special control using HA finished"
 
           else:
@@ -270,8 +266,6 @@ mqtt:
           }
           call.perform();
 
-
-
   # on_message:
   #   - topic: esphome/cover/trigger/close_all
   #     qos: 0
@@ -285,7 +279,6 @@ mqtt:
   #     qos: 0
   #     then:
   #       - cover.stop: cover_1
-
 
 cover:
   - platform: time_based
