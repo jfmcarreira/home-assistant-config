@@ -55,9 +55,13 @@ sensor:
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_1_Name}
     power_id: power_usage_light_a
-    unit_of_measurement: Wh
+    unit_of_measurement: kWh
+    filters:
+      - multiply: 0.001
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_2_Name}
     power_id: power_usage_light_b
-    unit_of_measurement: Wh
+    unit_of_measurement: kWh
+    filters:
+      - multiply: 0.001

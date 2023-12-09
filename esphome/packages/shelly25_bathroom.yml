@@ -108,4 +108,4 @@ binary_sensor:
               data:
                 name: button_2
                 type: long
-                device: ${devicename}
+                device: ${name}
