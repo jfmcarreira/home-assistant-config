@@ -31,6 +31,25 @@ energy:
 
 discovery:
 
+sun:
+  name: sun_tracker
+
+wake_on_lan:
+
+stream:
+
+media_extractor:
+
+input_boolean:
+
+input_datetime:
+
+input_number:
+
+input_select:
+
+input_text:
+
 ################################################################################
 ## Includes
 ################################################################################

@@ -3,5 +3,5 @@
 ################################################################################
 http:
   server_port: !secret server_port
-  ip_ban_enabled: true
+  ip_ban_enabled: false
   login_attempts_threshold: 10
