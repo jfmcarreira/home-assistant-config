@@ -1,0 +1,83 @@
+homeassistant:
+  customize:
+    cover.first_floor:
+      assumed_state: true
+
+cover:
+  - platform: template
+    covers:
+      first_floor:
+        device_class: shutter
+        friendly_name: Grupo de Estores do R/C
+        open_cover:
+          service: cover.open_cover
+          data:
+            entity_id: >-
+              {% set list_of_covers = [] %}
+              {% if is_state('input_boolean.cover_control_group_livingroom', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.office'] %}
+              {% endif %}
+              {{ list_of_covers|join(',') }}
+        close_cover:
+          service: cover.close_cover
+          data:
+            entity_id: >-
+              {% set list_of_covers = [] %}
+              {% if is_state('input_boolean.cover_control_group_livingroom', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.office'] %}
+              {% endif %}
+              {{ list_of_covers|join(',') }}
+        stop_cover:
+          service: cover.stop_cover
+          data:
+            entity_id: >-
+              {% set list_of_covers = [] %}
+              {% if is_state('input_boolean.cover_control_group_livingroom', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.office'] %}
+              {% endif %}
+              {{ list_of_covers|join(',') }}
