@@ -1,6 +1,5 @@
 substitutions:
   devicename: bhonofre_cover_master_bed
-
   CoverName: Master Bedroom
   Open: "12"
   Close: "13"

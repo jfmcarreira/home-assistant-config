@@ -1,6 +1,5 @@
 substitutions:
   devicename: bhonofre_cover_bedroom_ricardo
-
   CoverName: Bedroom Ricardo
   Open: "13"
   Close: "12"

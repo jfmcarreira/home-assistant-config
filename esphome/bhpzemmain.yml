@@ -1,10 +1,9 @@
 substitutions:
-  devicename: bhpzemmain
-
-  upper_devicename: BHPZEM Main
+  DeviceName: bhpzemmain
+  FriendlyName: BHPZEM Main
 
 esphome:
-  name: ${devicename}
+  name: ${DeviceName}
   platform: ESP8266
   board: nodemcu
   # Reset sensor
@@ -37,25 +36,25 @@ sensor:
   - platform: pzemac
     id: pzemac_1
     energy:
-      name: ${upper_devicename} Energy
+      name: ${FriendlyName} Energy
       filters:
         - lambda: return x / 1000.0 + 24.0;
       unit_of_measurement: "kWh"
       accuracy_decimals: 2
     current:
-      name: ${upper_devicename} Current
+      name: ${FriendlyName} Current
       accuracy_decimals: 2
     voltage:
-      name: ${upper_devicename} Voltage
+      name: ${FriendlyName} Voltage
       accuracy_decimals: 0
     power:
       id: pzem_power
-      name: ${upper_devicename} Power
+      name: ${FriendlyName} Power
       accuracy_decimals: 2
     frequency:
-      name: ${upper_devicename} Frequency
+      name: ${FriendlyName} Frequency
       accuracy_decimals: 1
     power_factor:
-      name: ${upper_devicename} PF
+      name: ${FriendlyName} PF
       accuracy_decimals: 2
     update_interval: 5s

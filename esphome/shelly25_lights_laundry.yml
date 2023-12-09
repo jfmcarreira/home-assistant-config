@@ -1,6 +1,5 @@
 substitutions:
   DeviceName: shelly25_lights_laundry
-
   FriendlyName: Shelly25 Laundry
   InputPin: GPIO13
   Light_1_Name: Laundry Main

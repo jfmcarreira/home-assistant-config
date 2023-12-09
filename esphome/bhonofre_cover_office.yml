@@ -1,6 +1,5 @@
 substitutions:
   devicename: bhonofre_cover_office
-
   CoverName: Office
   Open: "14"
   Close: "12"

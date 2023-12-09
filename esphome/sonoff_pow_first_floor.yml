@@ -1,10 +1,11 @@
 # Basic Config
 substitutions:
-  friendly_name: sonoff_pow_first_floor
-  device_name: pow-elite-16a
+  DeviceName: pow-elite-16a
+  FriendlyName: Sonoff Pow First Floor
 
 esphome:
-  name: $device_name
+  name: ${DeviceName}
+  friendly_name: ${FriendlyName}
 
 esp32:
   board: nodemcu-32s

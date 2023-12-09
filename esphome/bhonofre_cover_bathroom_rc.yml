@@ -1,6 +1,5 @@
 substitutions:
   devicename: bhonofre_cover_bathroom_rc
-
   CoverName: Bathroom
   Open: "12"
   Close: "13"

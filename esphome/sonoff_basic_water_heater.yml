@@ -2,8 +2,6 @@ substitutions:
   devicename: sonoff_basic_water_heater
   upper_devicename: Sonoff Water Heater
 
-  #Address: "10.20.107.181"
-
 packages:
   esphome_base: !include packages/common.yml
 

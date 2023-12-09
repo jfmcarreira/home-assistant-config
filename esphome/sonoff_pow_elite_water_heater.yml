@@ -1,10 +1,11 @@
 # Basic Config
 substitutions:
-  friendly_name: Sonoff Water Heater
-  device_name: sonoff_pow_elite_water_heater
+  DeviceName: sonoff_pow_elite_water_heater
+  FriendlyName: Sonoff Water Heater
 
 esphome:
-  name: $device_name
+  name: ${DeviceName}
+  friendly_name: ${FriendlyName}
 
 esp32:
   board: nodemcu-32s
@@ -33,26 +34,26 @@ sensor:
     voltage:
       id: voltage_sensor
     power:
-      name: $friendly_name Power
+      name: ${FriendlyName} Power
       id: w_sensor
     energy:
-      name: $friendly_name Energy
+      name: ${FriendlyName} Energy
       id: wh_sensor
       filters:
         - multiply: 0.001
 
   - platform: total_daily_energy
-    name: $friendly_name Total Daily Energy
+    name: ${FriendlyName} Total Daily Energy
     power_id: w_sensor
     filters:
       - multiply: 0.001
 
   - platform: wifi_signal
-    name: $friendly_name Wifi RSSI
+    name: ${FriendlyName} Wifi RSSI
     update_interval: 60s
 
   - platform: template
-    name: $friendly_name Temperature
+    name: ${FriendlyName} Temperature
     device_class: temperature
     unit_of_measurement: °C
     id: esp32_temp
@@ -64,7 +65,7 @@ sensor:
     lambda: return id(w_sensor).state / id(voltage_sensor).state / id(current_sensor).state;
 
   - platform: esp32_hall
-    name: $friendly_name ESP32 Hall Sensor
+    name: ${FriendlyName} ESP32 Hall Sensor
     update_interval: 60s
 
 binary_sensor:
@@ -128,7 +129,7 @@ output:
 
 switch:
   - platform: template
-    name: $friendly_name
+    name: ${FriendlyName}
     optimistic: true
     id: relay_1
     turn_off_action:
