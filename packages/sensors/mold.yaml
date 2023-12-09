@@ -1,0 +1,33 @@
+homeassistant:
+  customize:
+    sensor.mold_bathroom_rc:
+      friendly_name: Indicador de Bolor da Casa de Banho de Serviço
+      icon: mdi:cloud-percent
+    sensor.mold_main_bathroom:
+      friendly_name: Indicador de Bolor da Casa de Banho Principal
+      icon: mdi:cloud-percent
+    sensor.mold_master_bedroom_bathroom:
+      friendly_name: Indicador de Bolor da Casa de Banho da Suite
+      icon: mdi:cloud-percent
+
+sensor:
+  - platform: mold_indicator
+    name: mold_bathroom_rc
+    indoor_temp_sensor: sensor.temperature_bathroom_rc
+    indoor_humidity_sensor: sensor.humidity_bathroom_rc
+    outdoor_temp_sensor: sensor.temperature_outside
+    calibration_factor: 1.0
+
+  - platform: mold_indicator
+    name: mold_main_bathroom
+    indoor_temp_sensor: sensor.temperature_main_bathroom
+    indoor_humidity_sensor: sensor.humidity_main_bathroom
+    outdoor_temp_sensor: sensor.temperature_outside
+    calibration_factor: 1.0
+
+  - platform: mold_indicator
+    name: mold_master_bedroom_bathroom
+    indoor_temp_sensor: sensor.temperature_master_bedroom_bathroom
+    indoor_humidity_sensor: sensor.humidity_master_bedroom_bathroom
+    outdoor_temp_sensor: sensor.temperature_outside
+    calibration_factor: 1.0

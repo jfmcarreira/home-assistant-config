@@ -4,8 +4,11 @@ sensor:
     unique_id: humidity_main_bathroom_average
     entity_id: sensor.humidity_main_bathroom
     filters:
+      - filter: outlier
+        window_size: 10
+        radius: 5.0
       - filter: time_simple_moving_average
-        window_size: "03:00"
+        window_size: "24:00"
         precision: 1
 
   - platform: filter
@@ -13,8 +16,11 @@ sensor:
     unique_id: humidity_master_bedroom_bathroom_average
     entity_id: sensor.humidity_master_bedroom_bathroom
     filters:
+      - filter: outlier
+        window_size: 10
+        radius: 5.0
       - filter: time_simple_moving_average
-        window_size: "03:00"
+        window_size: "24:00"
         precision: 1
 
   - platform: filter
@@ -22,8 +28,11 @@ sensor:
     unique_id: humidity_bathroom_rc_average
     entity_id: sensor.humidity_bathroom_rc
     filters:
+      - filter: outlier
+        window_size: 10
+        radius: 5.0
       - filter: time_simple_moving_average
-        window_size: "03:00"
+        window_size: "24:00"
         precision: 1
 
   - platform: filter

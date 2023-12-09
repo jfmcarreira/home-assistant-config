@@ -2,16 +2,20 @@ HouseModeApp:
   module: HouseMode
   class: HouseMode
 
-# input_bolean_vaccum_max_rooms:
-#   module: input_bolean_vaccum
-#   class: VacuumBooleans
-#   input_boolean_switches:
-#     - input_boolean.vacuum_livingroom
-#     - input_boolean.vacuum_hallway
-#     - input_boolean.vacuum_kitchen
-#     - input_boolean.vacuum_office
-#     - input_boolean.vacuum_bathroom
-#     - input_boolean.vacuum_bedroom
-#     - input_boolean.vacuum_bedroombath
-#     - input_boolean.vacuum_bedroomricardo
+MasterBedroomBathroom:
+  module: BathroomFan
+  class: BathroomFan
+  toggle: input_boolean.auto_fan_master_bedroom_bathroom
+  fan_entity: fan.bathroom_master_bedroom
+  light_entity: light.master_bedroom_bathroom
+  humidity_entity: sensor.humidity_master_bedroom_bathroom
+  average_humidity_entity: sensor.humidity_master_bedroom_bathroom_average
 
+BathroomRC:
+  module: BathroomFan
+  class: BathroomFan
+  toggle: input_boolean.auto_fan_bathroom_rc
+  fan_entity: fan.bathroom_rc
+  light_entity: light.bathroom_rc
+  humidity_entity: sensor.humidity_bathroom_rc
+  average_humidity_entity: sensor.humidity_bathroom_rc_average

@@ -1,0 +1,36 @@
+input_boolean:
+  auto_fan_master_bedroom_bathroom:
+    name: "Controlo Ventoinha Casa de Banho da Suite"
+  auto_fan_bathroom_rc:
+    name: "Controlo Ventoinha Casa de Banho de Serviço"
+  auto_fan_main_bathroom:
+    name: "Controlo Ventoinha Casa de Banho Principal"
+
+input_number:
+  bathroom_fan_humidity_threshold:
+    name: Threshold Humidade
+    initial: 15
+    min: 5
+    max: 50
+    step: 1
+    unit_of_measurement: "%"
+    icon: mdi:water-percent-alert
+    mode: slider
+  bathroom_fan_timeout:
+    name: Temporizador Ventoinha Casas de Banho
+    initial: 60
+    min: 5
+    max: 1200
+    step: 10
+    unit_of_measurement: "s"
+    icon: mdi:fan-clock
+    mode: slider
+  bathroom_fan_max_timeout:
+    name: Tempo Máximo Ventoinha Casas de Banho
+    initial: 30
+    min: 5
+    max: 120
+    step: 1
+    unit_of_measurement: "min"
+    icon: mdi:fan-clock
+    mode: slider
