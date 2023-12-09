@@ -36,8 +36,8 @@ script:
                   sequence:
                     - service: "{{ action_to_run }}"
                       data:
-                        action_cover: cover.{{ repeat.item }}
+                        action_cover: '{{ repeat.item }}'
               default:
                 - service: "{{ action_to_run }}"
                   target:
-                    entity_id: cover.{{ repeat.item }}
+                    entity_id: 'cover.{{ repeat.item }}'

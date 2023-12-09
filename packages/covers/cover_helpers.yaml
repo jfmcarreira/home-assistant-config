@@ -222,3 +222,66 @@ input_number:
     min: 20
     step: 1
     mode: slider
+  cover_rainy_position_living_room:
+    name: Posição com Chuva do Estore da Sala de Estar
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_kitchen:
+    name: Posição com Chuva do Estore da Cozinha
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_laundry:
+    name: Posição com Chuva do Estore da Lavandaria
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_bedroom_rc:
+    name: Posição com Chuva do Estore do Quarto do R/C
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_bathroom:
+    name: Posição com Chuva do Estore da Casa de Banho
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_office:
+    name: Posição com Chuva do Estore do Escritório
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_master_bedroom:
+    name: Posição com Chuva do Estore do Quarto Principal
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_bedroom_ricardo:
+    name: Posição com Chuva do Estore do Quarto do Ricardo
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+  cover_rainy_position_bedroom_guest:
+    name: Posição com Chuva do Estore do Quarto Extra
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
