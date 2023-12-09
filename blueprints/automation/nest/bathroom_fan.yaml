@@ -136,7 +136,7 @@ action:
         sequence:
           - condition: "{{ automatic_turn_on }}"
           - condition: time
-            after: "08:00:00"
+            after: "07:45:00"
             before: "22:30:00"
           - condition: state
             entity_id: !input bathroom_light
@@ -159,12 +159,12 @@ action:
           #     minutes: !input max_time_fan_on
           - alias: "Wait for humidity to decrease comparing to long average"
             wait_template: >
-              {{ 
-                  is_state(extractor_fan, 'off') or 
+              {{
+                  is_state(extractor_fan, 'off') or
                   (
                     (states(humidity_sensor) | float < 90.0) and
-                    (((states(humidity_sensor) | float) - (states(average_humidity) | float)) < (humidity_threshold | float)) 
-                  ) 
+                    (((states(humidity_sensor) | float) - (states(average_humidity) | float)) < (humidity_threshold | float))
+                  )
               }}
             timeout:
               minutes: !input max_time_fan_on
