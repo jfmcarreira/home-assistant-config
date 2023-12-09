@@ -1,9 +1,9 @@
 light:
   - platform: template
     lights:
-      laundry_group:
+      laundry:
         unique_id: lights_laundry_group
-        friendly_name: Luzes da Lavandaria
+        friendly_name: Luz da Lavandaria
         value_template: >-
           {{
               is_state('light.laundry_main', 'on') or
