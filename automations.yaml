@@ -273,7 +273,7 @@
   alias: Bathroom Master Bedroom Bathroom Fan Control
   description: ''
   use_blueprint:
-    path: bathroom/bathroom_fan.yaml
+    path: nest/bathroom_fan.yaml
     input:
       bathroom_light: light.master_bedroom_bathroom
       extractor_fan: fan.bathroom_master_bedroom
@@ -286,7 +286,7 @@
   alias: Bathroom Main Bathroom Fan Control
   description: ''
   use_blueprint:
-    path: bathroom/bathroom_fan.yaml
+    path: nest/bathroom_fan.yaml
     input:
       bathroom_light: light.main_bathroom
       extractor_fan: fan.main_bathroom
@@ -300,7 +300,7 @@
   alias: Bathroom RC Fan Control
   description: ''
   use_blueprint:
-    path: bathroom/bathroom_fan.yaml
+    path: nest/bathroom_fan.yaml
     input:
       bathroom_light: light.bathroom_rc
       extractor_fan: fan.bathroom_rc
@@ -870,7 +870,10 @@
   trigger:
   - platform: time
     at: 06:00:00
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
   action:
   - service: climate.turn_on
     data: {}
@@ -907,6 +910,9 @@
   - condition: time
     after: '17:30:00'
     before: '21:00:00'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
   action:
   - service: climate.turn_on
     data: {}
@@ -1227,6 +1233,9 @@
   - condition: numeric_state
     entity_id: sensor.temperature_living_room
     below: 20
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
   action:
   - service: climate.turn_on
     data: {}
@@ -1362,4 +1371,32 @@
     data:
       action_to_run: script.cover_to_partial_open
       control_switch: open_sunrise
+  mode: single
+- id: '1689453293699'
+  alias: cover first floor parcial open
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: 00:00:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  action:
+  - service: cover.close_cover
+    data: {}
+    target:
+      entity_id:
+      - cover.bedroom_ricardo
+      - cover.master_bedroom
+      - cover.bedroom_guest
+  - service: cover.set_cover_position
+    data:
+      position: 25
+    target:
+      entity_id:
+      - cover.master_bedroom
+      - cover.bedroom_ricardo
+      - cover.bedroom_guest
   mode: single
