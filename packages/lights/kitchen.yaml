@@ -6,7 +6,7 @@ light:
         friendly_name: Luzes da Cozinha
         value_template: >-
           {{
-              is_state('light.kitchen_ceiling', 'on') or
+              is_state('light.kitchen_led', 'on') or
               is_state('light.kitchen_window', 'on')
           }}
         turn_on:
