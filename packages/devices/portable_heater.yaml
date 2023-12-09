@@ -7,7 +7,7 @@ climate:
     min_temp: 15
     max_temp: 25
     target_temp: 20
-    cold_tolerance: 1
-    hot_tolerance: 0
-    initial_hvac_mode: "off"
+    cold_tolerance: 0
+    hot_tolerance: 1
+    keep_alive: false
     precision: 0.5
