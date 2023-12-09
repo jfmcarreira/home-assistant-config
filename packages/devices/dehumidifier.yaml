@@ -3,26 +3,6 @@ homeassistant:
     humidifier.portable_dehumidifier:
       friendly_name: "Desumidificador"
 
-switch:
-  - platform: template
-    switches:
-      dehumidifier:
-        unique_id: "dehumidifier"
-        value_template: "{{ states('sensor.device_power_dehumidifier') | round(1, default=0) | int > 10 }}"
-        icon_template: >-
-          {% if is_state( 'switch.dehumidifier', 'on' )  %}
-            mdi:air-humidifier
-          {% else %}
-              mdi:air-humidifier-off
-          {% endif %}
-        turn_on:
-          service: switch.turn_on
-          target:
-            entity_id: switch.dehumidifier_sw
-        turn_off:
-          service: switch.turn_off
-          target:
-            entity_id: switch.dehumidifier_sw
 
 generic_hygrostat:
   - name: Portable Dehumidifier
@@ -32,12 +12,10 @@ generic_hygrostat:
     min_humidity: 50
     max_humidity: 90
     target_humidity: 70
-    dry_tolerance: 3
-    wet_tolerance: 0
+    dry_tolerance: 2
+    wet_tolerance: 2
     min_cycle_duration:
-      seconds: 5
-    keep_alive:
-      minutes: 3
+      seconds: 30
     initial_state: false
     sensor_stale_duration:
-      minutes: 15
+      minutes: 60
