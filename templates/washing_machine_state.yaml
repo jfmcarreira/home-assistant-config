@@ -9,13 +9,13 @@
         minutes: 2
       state: >-
         {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
-            {%- if states("sensor.device_power_washing_machine") | int < 3 %}
+            {%- if (states("sensor.device_power_washing_machine") | int(0) )< 3 %}
                 False
             {%- else %}
                 True
             {%- endif %}
         {%- else %}
-            {%- if states("sensor.device_power_washing_machine") | int > 50 %}
+            {%- if (states("sensor.device_power_washing_machine") | int(0)) > 50 %}
                 True
             {%- else %}
                 False
