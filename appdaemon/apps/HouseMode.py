@@ -10,6 +10,7 @@ HOUSE_MODE_EVENT_NO_MOTION      = 4
 HOUSE_MODE_EVENT_NO_LIGHT       = 5
 HOUSE_MODE_EVENT_TIME           = 6
 
+
 class HouseMode(hass.Hass):
 
     def initialize(self):
@@ -17,13 +18,12 @@ class HouseMode(hass.Hass):
         self.house_mode = self.get_state( "input_select.house_mode" )
 
         self.trackLights = [
-            "light.hallway_group",
-            "light.living_room_main",
-            "light.living_room_abajur",
-            "light.kitchen",
-            "light.office",
-            "light.master_bedroom_group",
-            "light.bedroom_ricardo_group"
+            "light.living_room_group",
+            "light.kitchen_group",
+            "light.office_group",
+            "light.hall_group",
+            "light.all_bedrooms",
+            "light.all_bathrooms"
             ]
 
         # self.trackMotion = [
@@ -38,8 +38,8 @@ class HouseMode(hass.Hass):
             "media_player.living_room_tv"
         ]
 
-        self.listen_state(self.tracking_callback, "person.joao")
-        self.listen_state(self.tracking_callback, "person.bianca")
+        self.listen_state(self.tracking_callback, "person.joao_carreira")
+        self.listen_state(self.tracking_callback, "person.bianca_pires")
 
         self.listen_state(self.light_callback_awake_up, "light.master_bedroom_group", new = "on", duration = 30 )
         self.listen_state(self.light_callback_awake_up, "light.bedroom_ricardo_group", new = "on", duration = 2*60 )

@@ -1,0 +1,44 @@
+################################################################
+## Google Assistant
+################################################################
+cloud:
+  google_actions:
+    entity_config:
+      media_player.living_room_tv:
+        room: Sala
+        name: Televisão
+        aliases:
+          - Televisão da Sala
+          - Media center
+          - TV
+
+      # Routines
+      script.routine_night_time:
+        room: Corredor
+        name: Modo Dormir
+        aliases:
+          - Sleep mode
+
+      script.routine_dinner_time:
+        room: Sala
+        name: Modo Refeição
+        aliases:
+          - Modo de jantar
+          - Modo de almoço
+          - Modo de refeição
+          - Jantar
+          - Refeição
+          - Almoço
+          - Dinner time
+          - Lunch time
+
+      script.action_meo_play_main_channel:
+        room: Sala
+        name: Canal SIC
+
+      script.action_meo_play_kids_channel:
+        room: Sala
+        name: Bonecos na Televisão
+        aliases:
+          - Bonecos na TV
+          - Bonecos

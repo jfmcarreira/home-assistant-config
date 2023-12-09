@@ -1,0 +1,17 @@
+panel_iframe:
+  roborock:
+    title: "Roborock"
+    url: !secret roborock_url
+    icon: mdi:robot-vacuum
+  radarr:
+    title: "Radarr"
+    url: !secret sonarr_url
+    icon: mdi:movie-search
+  sonarr:
+    title: "Sonarr"
+    url: !secret sonarr_url
+    icon: mdi:television-play
+  photoprism:
+    title: "Photoprism"
+    url: !secret photoprism_url
+    icon: mdi:image-multiple

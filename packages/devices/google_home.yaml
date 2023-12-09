@@ -1,0 +1,151 @@
+homeassistant:
+  customize:
+    automation.media_google_home_day_volume:
+      friendly_name: Google Home Configurar Volume de Dia
+    automation.media_google_home_evening_volume:
+      friendly_name: Google Home Configurar Volume de Fim de Dia
+    automation.media_google_home_night_volume:
+      friendly_name: Google Home Configurar Volume de Noite
+    automation.media_google_home_night_volume_ricardo:
+      friendly_name: Google Home Configurar Volume de Noite no Quarto do Ricardo
+
+group:
+  google_assistant_speakers:
+    entities:
+      - media_player.ghm_kitchen
+      - media_player.ghm_living_room
+      - media_player.gh_clock_office
+      - media_player.ghm_master_bedroom
+      - media_player.ghm_bedroom_ricardo
+  google_assistant_speakers_main_volume:
+    entities:
+      - media_player.ghm_kitchen
+      - media_player.ghm_living_room
+      - media_player.gh_clock_office
+      - media_player.ghm_master_bedroom
+
+input_number:
+  google_home_volume_day:
+    name: Google Assistant Volume Dia
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "%"
+  google_home_volume_evening:
+    name: Google Assistant Volume Final do Dia
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "%"
+  google_home_volume_night:
+    name: Google Assistant Volume Noite
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "%"
+  google_home_volume_tts_day:
+    name: Google Assistant Volume TTS Dia
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "%"
+  google_home_volume_tts_night:
+    name: Google Assistant Volume TTS Noite
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "%"
+
+automation old:
+  - alias: media_google_home_day_volume
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.google_home_volume_day
+      - platform: time
+        at: "08:00:00"
+      - platform: time_pattern
+        minutes: 30
+    condition:
+      - condition: time
+        after: "08:00:00"
+        before: "21:00:00"
+      - condition: state
+        entity_id: group.google_assistant_speakers
+        state: "off"
+    action:
+      - entity_id: group.google_assistant_speakers
+        service: media_player.volume_set
+        data_template:
+          volume_level: >
+            {{ ( states( 'input_number.google_home_volume_day' ) | int ) / 100 }}
+
+  - alias: media_google_home_evening_volume
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.google_home_volume_evening
+      - platform: time
+        at: "21:45:00"
+      - platform: time_pattern
+        minutes: 30
+    condition:
+      - condition: time
+        after: "21:45:00"
+        before: "23:45:00"
+      - condition: state
+        entity_id: group.google_assistant_speakers_main_volume
+        state: "off"
+    action:
+      - entity_id: group.google_assistant_speakers_main_volume
+        service: media_player.volume_set
+        data_template:
+          volume_level: >
+            {{ ( states( 'input_number.google_home_volume_evening' ) | int ) / 100 }}
+
+  - alias: media_google_home_night_volume
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.google_home_volume_night
+      - platform: time
+        at: "23:45:00"
+      - platform: time_pattern
+        minutes: 30
+    condition:
+      - condition: time
+        after: "23:45:00"
+        before: "08:00:00"
+      - condition: state
+        entity_id: group.google_assistant_speakers_main_volume
+        state: "off"
+    action:
+      - entity_id: group.google_assistant_speakers_main_volume
+        service: media_player.volume_set
+        data_template:
+          volume_level: >
+            {{ ( states( 'input_number.google_home_volume_night' ) | int ) / 100 }}
+
+  - alias: media_google_home_night_volume_ricardo
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: time
+        at: "21:45:00"
+      - platform: state
+        entity_id: media_player.ghm_bedroom_ricardo
+    condition:
+      - condition: time
+        after: "21:45:00"
+        before: "08:00:00"
+      - condition: state
+        entity_id: media_player.ghm_bedroom_ricardo
+        state: "off"
+    action:
+      - entity_id: media_player.ghm_bedroom_ricardo
+        service: media_player.volume_set
+        data_template:
+          volume_level: 0.02
