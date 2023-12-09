@@ -30,10 +30,8 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     on_press:
-      - homeassistant.service:
-          service: light.toggle
-          data:
-            entity_id: light.kitchen_door
+      - light.toggle: light_2
+
   - platform: gpio
     id: sw_3
     pin:
@@ -44,7 +42,7 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.exterior_wall_back
+            entity_id: light.kitchen_door
 
   - platform: gpio
     id: sw_4
@@ -56,7 +54,8 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.exterior_wall_side
+            entity_id: light.exterior_wall_back
+            #entity_id: light.exterior_wall_side
 
 
 
@@ -66,19 +65,26 @@ output:
   - platform: gpio
     id: relay_1
     pin:
-      number: GPIO05
+      number: GPIO04
 
   - platform: gpio
     id: relay_2
     pin:
-      number: GPIO04
+      number: GPIO05
 
 light:
   - id: light_1
-    name: Storage
+    name: Storage Workbench LED
+    platform: binary
+    output: relay_1
+    restore_mode: ALWAYS_OFF
+
+  - id: light_2
+    name: Storage Ceiling
     platform: binary
     output: relay_2
-    restore_mode: RESTORE_AND_OFF
+    restore_mode: ALWAYS_OFF
+
 
 
 
