@@ -1,0 +1,26 @@
+- binary_sensor:
+    - name: Bianca Home
+      unique_id: bianca_home
+      device_class: presence
+      icon: mdi:human-female
+      state: >
+        {{  is_state('person.bianca_pires', 'home') or 
+            is_state('person.bianca_pires', 'Escritório') or 
+            is_state('person.bianca_pires', 'Sala de Estar') or 
+            is_state('person.bianca_pires', 'Quarto Principal')
+        }}
+      attributes:
+        Mudou de Localização: "{{ now() }}"
+
+    - name: bianca_home_with_hysteresis
+      unique_id: bianca_home_with_hysteresis
+      icon: mdi:human-female
+      device_class: presence
+      delay_on:
+        minutes: 1
+      delay_off:
+        minutes: 10
+      state: >
+        {{
+            is_state('binary_sensor.bianca_home', 'on') 
+        }}

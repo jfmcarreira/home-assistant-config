@@ -1,0 +1,26 @@
+- binary_sensor:
+    - name: Joao Home
+      unique_id: joao_home
+      icon: mdi:human-male
+      device_class: presence
+      state: >
+        {{  is_state('person.joao_carreira', 'home') or 
+            is_state('person.joao_carreira', 'Escritório') or 
+            is_state('person.joao_carreira', 'Sala de Estar') or 
+            is_state('person.joao_carreira', 'Quarto Principal')
+        }}
+      attributes:
+        Mudou de Localização: "{{ now() }}"
+
+    - name: joao_home_with_hysteresis
+      unique_id: joao_home_with_hysteresis
+      icon: mdi:human-male
+      device_class: presence
+      delay_on:
+        minutes: 1
+      delay_off:
+        minutes: 10
+      state: >
+        {{
+            is_state('binary_sensor.joao_home', 'on') 
+        }}

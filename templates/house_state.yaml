@@ -34,28 +34,6 @@
             is_state('input_select.house_mode', 'Sleep')
         }}
 
-    - name: Joao Home
-      unique_id: joao_home
-      state: >
-        {{  is_state('person.joao_carreira', 'home') or 
-            is_state('person.joao_carreira', 'Escritório') or 
-            is_state('person.joao_carreira', 'Sala de Estar') or 
-            is_state('person.joao_carreira', 'Quarto Principal')
-        }}
-      attributes:
-        Mudou de Localização: "{{ now() }}"
-
-    - name: Bianca Home
-      unique_id: bianca_home
-      state: >
-        {{  is_state('person.bianca_pires', 'home') or 
-            is_state('person.bianca_pires', 'Escritório') or 
-            is_state('person.bianca_pires', 'Sala de Estar') or 
-            is_state('person.bianca_pires', 'Quarto Principal')
-        }}
-      attributes:
-        Mudou de Localização: "{{ now() }}"
-
     - name: Notify Home
       unique_id: notify_home
       icon: "mdi:home"
