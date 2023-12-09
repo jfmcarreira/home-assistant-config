@@ -11,6 +11,8 @@
           {{ is_number(states('sensor.humidity_main_bathroom')) }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Sotão' )  %}
           {{ is_number(states('sensor.humidity_hall')) }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Sala' )  %}
+          {{ is_number(states('sensor.humidity_living_room')) }}
         {% else  %}
           False
         {% endif %}
@@ -21,6 +23,8 @@
           {{ states('sensor.humidity_main_bathroom') }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Sotão' )  %}
             {{ states('sensor.humidity_hall') }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Sala' )  %}
+            {{ states('sensor.humidity_living_room') }}
         {% else  %}
           0.0
         {% endif %}
