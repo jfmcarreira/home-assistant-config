@@ -9,6 +9,7 @@ api:
   reboot_timeout: 20min
 
 logger:
+  level: INFO
 
 ota:
   reboot_timeout: 5min
