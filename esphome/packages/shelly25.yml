@@ -27,6 +27,7 @@ sensor:
       # active_power_a is normal, so don't multiply by -1
       filters:
         - lambda: >
+            if (x < 0.0) return 0.0;
             return x;
       on_value_range:
         - above: 2000.0
@@ -46,6 +47,7 @@ sensor:
       filters:
         - multiply: -1
         - lambda: >
+            if (x < 0.0) return 0.0;
             return x;
       on_value_range:
         - above: 2000.0
@@ -92,19 +94,13 @@ sensor:
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_A_Name}
     power_id: power_usage_light_a
-    filters:
-      # Multiplication factor from W to kW is 0.001
-      - multiply: 0.001
-    unit_of_measurement: kW
+    unit_of_measurement: Wh
 
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_B_Name}
     power_id: power_usage_light_b
-    filters:
-      # Multiplication factor from W to kW is 0.001
-      - multiply: 0.001
-    unit_of_measurement: kW
+    unit_of_measurement: Wh
 
 status_led:
   pin:
