@@ -1,5 +1,5 @@
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   friendly_name: ${FriendlyName}
   platform: ESP8266
   board: esp01_1m
