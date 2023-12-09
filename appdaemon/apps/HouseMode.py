@@ -17,6 +17,18 @@ class HouseMode(hass.Hass):
     def initialize(self):
         self.house_mode = self.get_state("input_select.house_mode")
 
+        self.trackCovers = [
+            "cover.kitchen"
+            "cover.living_room"
+            "cover.office"
+            "cover.laundry"
+            "cover.bedroom_rc"
+            "cover.bathroom"
+            "cover.master_bedroom"
+            "cover.bedroom_ricardo"
+            "cover.bedroom_guest"
+        ]
+
         self.trackWorkingLights = [
             "light.kitchen",
             "light.office",
@@ -35,6 +47,8 @@ class HouseMode(hass.Hass):
 
         self.trackMotion = [
             "binary_sensor.motion_sensor_stairs",
+            "binary_sensor.motion_sensor_office",
+            "binary_sensor.motion_sensor_kitchen",
         ]
         #     "binary_sensor.motion_sensor_kitchen",
         #     "binary_sensor.motion_sensor_living_room",
@@ -50,18 +64,20 @@ class HouseMode(hass.Hass):
 
         for entity in self.trackLights:
             self.listen_state(self.light_callback, entity)
+            self.listen_state(self.light_callback_awake_up,
+                                entity, new="on", duration=120)
 
         for entity in self.trackWorkingLights:
             self.listen_state(self.working_light_callback, entity)
             self.listen_state(self.light_callback_awake_up,
-                              entity, new="on", duration=120)
+                                entity, new="on", duration=120)
 
         self.listen_state(self.light_callback_awake_up,
-                          "light.master_bedroom_group", new="on", duration=30)
+                            "light.master_bedroom_group", new="on", duration=30)
         self.listen_state(self.light_callback_awake_up,
-                          "light.bedroom_ricardo_group", new="on", duration=2*60)
+                            "light.bedroom_ricardo_group", new="on", duration=2*60)
         self.listen_state(self.light_callback_awake_up,
-                          "light.living_room_group", new="on", duration=2*60)
+                            "light.living_room_group", new="on", duration=2*60)
 
         for entity in self.trackMotion:
             self.listen_state(self.motion_callback, entity)
