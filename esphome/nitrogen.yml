@@ -3,14 +3,13 @@ substitutions:
   FriendlyName: Nitrogen
   PowerSaveMode: NONE
 
-<<: !include includes/common.yml
-
-api:
-
 esphome:
   name: nitrogen
   platform: ESP32
   board: nodemcu-32s
+
+packages:
+  esphome_base: !include packages/common.yml
 
 
 # For bluetooth devices

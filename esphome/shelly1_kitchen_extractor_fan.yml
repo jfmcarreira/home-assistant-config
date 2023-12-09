@@ -3,7 +3,8 @@ substitutions:
   FriendlyName: Shelly 1 Kitchen Extractor Fan
   PowerSaveMode: NONE
 
-<<: !include includes/common.yml
+packages:
+  esphome_base: !include packages/common.yml
 
 esphome:
   name: ${DeviceName}
@@ -23,7 +24,7 @@ fan:
   - platform: binary
     output: relay_1
     name: Kitchen Extractor
-    restore_mode: ALWAYS_OFF
+    restore_mode: ALWAYS_ON
 
 
 # binary_sensor:

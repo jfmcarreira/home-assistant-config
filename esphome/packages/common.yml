@@ -1,0 +1,27 @@
+wifi:
+  domain: .home
+  ssid: !secret esp_ssid
+  password: !secret esp_password
+  #use_address: "10.20.107.192"
+  #power_save_mode: "${PowerSaveMode}"
+  reboot_timeout: 20min
+
+api:
+  reboot_timeout: 20min
+
+logger:
+
+ota:
+  reboot_timeout: 5min
+
+web_server:
+
+captive_portal:
+
+sensor:
+  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
+    name: "WiFi Signal dB"
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
+

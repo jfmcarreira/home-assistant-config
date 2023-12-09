@@ -3,11 +3,9 @@ substitutions:
   FriendlyName: Sonoff Basic Kitchen Pantry
   PowerSaveMode: NONE
 
+packages:
+  esphome_base: !include packages/common.yml
 
-<<: !include includes/common.yml
-
-api:
-  reboot_timeout: 10min
 
 esphome:
     name: ${DeviceName}

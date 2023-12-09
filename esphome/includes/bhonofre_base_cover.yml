@@ -1,12 +1,9 @@
-<<: !include common.yml
-
 esphome:
   name: ${devicename}
   platform: ESP8266
   board: nodemcu
 
 api:
-  reboot_timeout: 30min
   services:
     - service: minimal_open_cover
       then:

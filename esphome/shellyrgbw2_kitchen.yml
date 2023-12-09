@@ -3,14 +3,13 @@ substitutions:
   upper_devicename: Kitchen LED
   PowerSaveMode: NONE
 
-<<: !include includes/common.yml
+packages:
+  esphome_base: !include packages/common.yml
 
 esphome:
   name: ${devicename}
   platform: ESP8266
   board: esp01_1m
-
-api:
 
 # Unused pins
 # Status LED: GPIO02

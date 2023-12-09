@@ -3,10 +3,6 @@ substitutions:
   PowerSaveMode: NONE
   upper_devicename: BHPZEM Main
 
-<<: !include includes/common.yml
-
-api:
-
 esphome:
   name: ${devicename}
   platform: ESP8266
@@ -16,6 +12,9 @@ esphome:
   #  priority: -100.0
   #  then:
   #    - pzemac.reset_energy: pzemac_1
+
+packages:
+  esphome_base: !include packages/common.yml
 
 uart:
   rx_pin: GPIO4

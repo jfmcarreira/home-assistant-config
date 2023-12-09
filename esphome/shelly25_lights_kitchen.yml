@@ -1,11 +1,22 @@
 substitutions:
   DeviceName: shelly25_lights_kitchen
-  PowerSaveMode: NONE
+  PowerSaveMode: HIGH
   FriendlyName: Shelly25 Kitchen
   Light_A_Name: Kitchen LED
   Light_B_Name: Kitchen Window
 
-<<: !include includes/shelly25_base.yml
+packages:
+  esphome_base: !include packages/common.yml
+  device_base: !include packages/shelly25.yml
+  home_state: !include packages/home_state.yml
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO15
+  - platform: gpio
+    id: relay_2
+    pin: GPIO04
 
 light:
   - id: light_2
@@ -22,10 +33,6 @@ switch:
     restore_mode: ALWAYS_ON
 
 binary_sensor:
-  - platform: homeassistant
-    id: house_mode_night
-    entity_id: binary_sensor.night_mode
-
   - platform: homeassistant
     id: kitchen_led_state
     entity_id: light.kitchen_led

@@ -4,9 +4,8 @@ substitutions:
   PowerSaveMode: NONE
   #Address: "10.20.107.181"
 
-<<: !include includes/common.yml
-
-api:
+packages:
+  esphome_base: !include packages/common.yml
 
 esphome:
   name: sonoff_basic_water_heater

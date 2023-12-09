@@ -1,11 +1,22 @@
 substitutions:
   DeviceName: shelly25_lights_stairs
-  PowerSaveMode: NONE
+  PowerSaveMode: HIGH
   FriendlyName: Shelly25 Stairs
   Light_A_Name: Stairs Lamp
   Light_B_Name: Stairs Wall
 
-<<: !include includes/shelly25_base.yml
+packages:
+  esphome_base: !include packages/common.yml
+  device_base: !include packages/shelly25.yml
+  home_state: !include packages/home_state.yml
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO15
+  - platform: gpio
+    id: relay_2
+    pin: GPIO04
 
 light:
   - id: light_1
@@ -21,10 +32,6 @@ light:
     restore_mode: RESTORE_AND_OFF
 
 binary_sensor:
-  - platform: homeassistant
-    id: house_mode_night
-    entity_id: binary_sensor.night_mode
-
   - platform: homeassistant
     id: stairs_down_state
     entity_id: light.stairs_down

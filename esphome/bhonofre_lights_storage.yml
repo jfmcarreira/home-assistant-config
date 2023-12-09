@@ -3,15 +3,14 @@ substitutions:
   FriendlyName: BHOnofre Lights Storage
   PowerSaveMode: NONE
 
-
-<<: !include includes/common.yml
-
-api:
-
 esphome:
     name: ${DeviceName}
     platform: ESP8266
     board: nodemcu
+
+packages:
+  esphome_base: !include packages/common.yml
+
 
 binary_sensor:
   - platform: gpio

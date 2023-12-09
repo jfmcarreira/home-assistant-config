@@ -1,5 +1,3 @@
-<<: !include shelly25_base.yml
-
 light:
   - id: light_1
     name: ${Light_A_Name}

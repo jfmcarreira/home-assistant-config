@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: shelly25_bathroom_rc
-  PowerSaveMode: NONE
+  PowerSaveMode: HIGH
   FriendlyName: Shelly 25 Bathroom RC
   InputAPin: GPIO13
   InputBPin: GPIO5
@@ -8,6 +8,11 @@ substitutions:
   Light_B_Name: Bathroom RC Ceiling
   Fan: fan.bathroom_rc
   Address: !secret shelly25_bathroom_rc_ip
+
+packages:
+  esphome_base: !include packages/common.yml
+  device_base: !include packages/shelly25.yml
+  home_state: !include packages/home_state.yml
 
 output:
   - platform: gpio

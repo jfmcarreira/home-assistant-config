@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: shelly25_bathroom_main
-  PowerSaveMode: NONE
+  PowerSaveMode: HIGH
   FriendlyName: Shelly 25 Main Bathroom
   InputAPin: GPIO13
   InputBPin: GPIO5
@@ -8,6 +8,11 @@ substitutions:
   Light_B_Name: Main Bathroom LED
   Fan: fan.main_bathroom
   Address: !secret shelly25_bathroom_main_ip
+
+packages:
+  esphome_base: !include packages/common.yml
+  device_base: !include packages/shelly25.yml
+  home_state: !include packages/home_state.yml
 
 output:
   - platform: gpio

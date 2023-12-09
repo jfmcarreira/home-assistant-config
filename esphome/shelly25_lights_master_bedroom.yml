@@ -1,11 +1,16 @@
 substitutions:
   DeviceName: shelly25_lights_master_bedroom
-  PowerSaveMode: NONE
+  PowerSaveMode: HIGH
   FriendlyName: Shelly25 Master Bedroom
   InputPin: GPIO13
   Light_A_Name: Master Bedroom Ceiling
   Light_B_Name: Master Bedroom Entry
   Address: !secret shelly25_master_bedroom_ip
+
+packages:
+  esphome_base: !include packages/common.yml
+  device_base: !include packages/shelly25.yml
+  home_state: !include packages/home_state.yml
 
 <<: !include includes/shelly25_base_two_lights.yml
 
@@ -43,10 +48,6 @@ script:
             - light.turn_off: light_1
 
 binary_sensor:
-  - platform: homeassistant
-    id: house_mode_night
-    entity_id: binary_sensor.night_mode
-
   - platform: homeassistant
     id: master_bedroom_closet_state
     entity_id: light.master_bedroom_closet
