@@ -7,3 +7,10 @@ substitutions:
   Address: !secret shelly25_master_bedroom_ip
 
 <<: !include shelly25_base_one_switch_two_lights.yml
+
+binary_sensor:
+  - id: sw_1
+    platform: gpio
+    pin: ${InputPin}
+    on_press:
+      - light.toggle: light_1

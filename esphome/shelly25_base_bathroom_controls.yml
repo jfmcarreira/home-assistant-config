@@ -69,11 +69,13 @@ binary_sensor:
       - timing:
           - ON for at most 1000ms
           - OFF for at least 100ms
+        invalid_cooldown: 100ms
         then:
           - logger.log: "Short 1 Press"
           - light.toggle: light_1
       - timing:
           - ON for at least 1000ms
+        invalid_cooldown: 100ms
         then:
           - logger.log: "Long 1 Press"
           - homeassistant.service:
@@ -89,6 +91,7 @@ binary_sensor:
       - timing:
           - ON for at most 1000ms
           - OFF for at least 100ms
+        invalid_cooldown: 100ms
         then:
           - logger.log: "Short 2 Press"
           - light.toggle: light_2

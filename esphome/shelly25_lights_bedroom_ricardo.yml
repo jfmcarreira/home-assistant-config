@@ -7,3 +7,45 @@ substitutions:
   Address: !secret shelly25_bedroom_ricardo_ip
 
 <<: !include shelly25_base_one_switch_two_lights.yml
+
+binary_sensor:
+  - id: sw_1
+    platform: gpio
+    pin: ${InputPin}
+    on_multi_click:
+      - timing:
+          - ON for at most 1000ms
+          - OFF for at least 100ms
+        then:
+          - if:
+              condition:
+                or:
+                  - light.is_on: light_1
+                  - light.is_on: light_2
+              then:
+                - light.turn_off: light_1
+                - light.turn_off: light_2
+              else:
+                - light.turn_on: light_1
+      - timing:
+          - ON for at least 1000ms
+        then:
+          - if:
+              condition:
+                and:
+                  - light.is_on: light_1
+                  - light.is_on: light_2
+              then:
+                - light.turn_off: light_2
+              else:
+                - if:
+                    condition:
+                      and:
+                        - light.is_off: light_1
+                        - light.is_off: light_2
+                    then:
+                      - light.turn_on: light_1
+                      - light.turn_on: light_2
+                    else:
+                      - light.toggle: light_1
+                      - light.toggle: light_2

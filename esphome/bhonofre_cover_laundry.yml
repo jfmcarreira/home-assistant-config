@@ -6,7 +6,7 @@ substitutions:
   Close: "14"
   ExtraTop: "12"
   ExtraBottom: "13"
-  CoverTime: "12s"
+  CoverTime: "13s"
   SmallOpenPosition: 17%
 
 <<: !include bhonofre_base_cover.yml
