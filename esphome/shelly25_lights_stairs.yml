@@ -1,25 +1,24 @@
 substitutions:
-  DeviceName: shelly25_lights_kitchen
-  PowerSaveMode: NONE
-  FriendlyName: Shelly25 Kitchen
-  Light_A_Name: Kitchen LED
-  Light_B_Name: Kitchen Window
+  DeviceName: shelly25_lights_stairs
+  PowerSaveMode: HIGH
+  FriendlyName: Shelly25 Stairs
+  Light_A_Name: Stairs Lamp
+  Light_B_Name: Stairs Wall
 
 <<: !include includes/shelly25_base.yml
 
 light:
+  - id: light_1
+    name: ${Light_A_Name}
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF
+
   - id: light_2
     name: ${Light_B_Name}
     platform: binary
     output: relay_2
     restore_mode: RESTORE_AND_OFF
-
-switch:
-  - platform: output
-    id: light_1
-    name: ${Light_A_Name} SW
-    output: relay_1
-    restore_mode: ALWAYS_ON
 
 binary_sensor:
   - platform: homeassistant
@@ -27,8 +26,8 @@ binary_sensor:
     entity_id: binary_sensor.night_mode
 
   - platform: homeassistant
-    id: kitchen_led_state
-    entity_id: light.kitchen_led
+    id: stairs_down_state
+    entity_id: light.stairs_down
 
   - id: sw_1
     platform: gpio
@@ -41,30 +40,37 @@ binary_sensor:
         then:
           - if:
               condition:
-                and:
                   - api.connected:
               then:
-                - switch.turn_on: light_1
-                - homeassistant.service:
-                    service: light.toggle
-                    data:
-                      entity_id: light.kitchen_led
+                - if:
+                    condition:
+                      or:
+                        - light.is_on: light_2
+                        - binary_sensor.is_on: stairs_down_state
+                    then:
+                      - light.turn_off: light_2
+                      - homeassistant.service:
+                          service: light.turn_off
+                          data:
+                              entity_id: light.stairs_down
+                    else:
+                      - homeassistant.service:
+                          service: light.turn_on
+                          data:
+                              entity_id: light.stairs_down
               else:
-                - switch.turn_off: light_1
+                - light.toggle: light_2
       - timing:
           - ON for at least 1000ms
         invalid_cooldown: 10ms
         then:
           - if:
               condition:
-                and:
                   - api.connected:
               then:
-                - switch.turn_on: light_1
-                - homeassistant.service:
-                    service: scene.turn_on
-                    data:
-                      entity_id: scene.lights_kitchen_day
+                - light.toggle: light_1
+              else:
+                - light.toggle: light_1
 
   - id: sw_2
     platform: gpio
@@ -93,10 +99,7 @@ binary_sensor:
                 and:
                   - api.connected:
               then:
-                - homeassistant.service:
-                    service: light.toggle
-                    data:
-                      entity_id: light.exterior_wall_back
+                - light.toggle: light_2
               else:
                 - light.toggle: light_2
 

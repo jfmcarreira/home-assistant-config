@@ -1,6 +1,7 @@
 substitutions:
   devicename: sonoff_basic_water_heater
   upper_devicename: Sonoff Water Heater
+  PowerSaveMode: NONE
   #Address: "10.20.107.181"
 
 <<: !include includes/common.yml

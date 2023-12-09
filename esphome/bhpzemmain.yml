@@ -1,5 +1,6 @@
 substitutions:
   devicename: bhpzemmain
+  PowerSaveMode: "LIGHT"
   upper_devicename: BHPZEM Main
 
 <<: !include includes/common.yml
@@ -11,7 +12,7 @@ esphome:
   platform: ESP8266
   board: nodemcu
   # Reset sensor
-  #on_boot:
+  # on_boot:
   #  priority: -100.0
   #  then:
   #    - pzemac.reset_energy: pzemac_1
@@ -39,7 +40,7 @@ sensor:
     energy:
       name: ${upper_devicename} Energy
       filters:
-        - multiply: 0.001
+        - lambda: return x / 1000.0 + 24.0;
       unit_of_measurement: "kWh"
       accuracy_decimals: 2
     current:

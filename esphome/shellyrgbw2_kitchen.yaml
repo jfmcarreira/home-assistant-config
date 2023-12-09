@@ -1,0 +1,69 @@
+substitutions:
+  devicename: shellyrgbw2_kitchen
+  upper_devicename: Kitchen LED
+  PowerSaveMode: "NONE"
+
+<<: !include includes/common.yml
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+api:
+
+# Unused pins
+# Status LED: GPIO02
+# Button: GPIO13
+
+light:
+  # Office Desk Light
+  # - platform: rgbw
+  #   name: ${upper_devicename}
+  #   id: rgbw_light
+  #   color_interlock: true
+  #   red: output_r
+  #   green: output_g
+  #   blue: output_b
+  #   white: output_w
+
+  - platform: monochromatic
+    name: ${upper_devicename}
+    output: output_r
+    restore_mode: RESTORE_AND_OFF
+
+  # - platform: monochromatic
+  #   name: ${upper_devicename} r
+  #   output: output_r
+  #   restore_mode: RESTORE_AND_OFF
+
+  # - platform: monochromatic
+  #   name: ${upper_devicename} g
+  #   output: output_g
+  #   restore_mode: RESTORE_AND_OFF
+
+  # - platform: monochromatic
+  #   name: ${upper_devicename} b
+  #   output: output_b
+  #   restore_mode: RESTORE_AND_OFF
+
+
+
+output:
+  - platform: esp8266_pwm
+    id: output_r
+    pin: GPIO12
+    frequency: 1000 Hz
+  - platform: esp8266_pwm
+    id: output_g
+    frequency: 1000 Hz
+    pin: GPIO15
+  - platform: esp8266_pwm
+    id: output_b
+    frequency: 1000 Hz
+    pin: GPIO14
+  - platform: esp8266_pwm
+    id: output_w
+    frequency: 1000 Hz
+    pin: GPIO4
+

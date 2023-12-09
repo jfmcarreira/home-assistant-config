@@ -1,6 +1,8 @@
 substitutions:
   DeviceName: sonoff-basic-01
   FriendlyName: Sonoff Basic Kitchen Pantry
+  PowerSaveMode: NONE
+
 
 <<: !include includes/common.yml
 
