@@ -29,7 +29,8 @@ class HouseMode(hass.Hass):
         self.trackLights = [
             "light.living_room_group",
             "light.all_bedrooms",
-            "light.all_bathrooms"
+            "light.all_bathrooms",
+            "light.stairs_group",
         ]
 
         self.trackMotion = [
@@ -113,7 +114,11 @@ class HouseMode(hass.Hass):
         elif self.now_is_between("21:00:00", "22:00:00"):
             newMode = "Evening"
         elif self.now_is_between("22:00:00", "08:00:00"):
-            newMode = "Night"
+            guest_mode = self.get_state('input_boolean.house_guest') == "on"
+            if guest_mode:
+                newMode = "Evening"
+            else:
+                newMode = "Night"
         return newMode
 
     def is_sleep_time(self):

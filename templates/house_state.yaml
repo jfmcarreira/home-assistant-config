@@ -37,6 +37,7 @@
     - name: Notify Home
       unique_id: notify_home
       icon: "mdi:home"
+      device_class: occupancy
       state: >
         {{ is_state('input_boolean.house_guest', 'on') or
             is_state('binary_sensor.joao_home', 'on') or 
