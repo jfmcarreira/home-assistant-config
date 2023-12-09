@@ -1,0 +1,35 @@
+script:
+  cover_group_action:
+    alias: "Controlar Grupo de Estores"
+    mode: single
+    fields:
+      action_to_run:
+        description: Service to run on the covers.
+        example: cover.open
+      control_switch:
+        description: Switch name that controls which covers to control
+        example: open_sunrise
+    sequence:
+      service: "{{ action_to_run }}"
+      data:
+        entity_id: >-
+          {% set list_of_covers = [] %}
+          {% if is_state('input_boolean.cover_control_group_livingroom', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
+          {% endif %}
+          {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
+          {% endif %}
+          {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
+          {% endif %}
+          {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
+          {% endif %}
+          {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
+          {% endif %}
+          {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.office'] %}
+          {% endif %}
+          {{ list_of_covers|join(',') }}
