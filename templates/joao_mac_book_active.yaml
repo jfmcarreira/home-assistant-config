@@ -1,0 +1,9 @@
+- binary_sensor:
+    - name: joao_mac_book_active_home
+      unique_id: joao_mac_book_active_home
+      state: >-
+        {% if is_state('device_tracker.joao_macbook_pro_wifi', 'home') and is_state('binary_sensor.joao_macbook_pro_active', 'on')  %}
+            True
+        {% else %}
+            False
+        {% endif %}

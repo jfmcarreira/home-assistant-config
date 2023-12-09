@@ -49,14 +49,12 @@ class HouseMode(hass.Hass):
             "binary_sensor.motion_sensor_stairs",
             "binary_sensor.motion_sensor_office",
             "binary_sensor.motion_sensor_kitchen",
+            "binary_sensor.motion_sensor_living_room",
         ]
-        #     "binary_sensor.motion_sensor_kitchen",
-        #     "binary_sensor.motion_sensor_living_room",
-        #     "binary_sensor.motion_sensor_office",
-        #     "binary_sensor.master_bedroom_motion_sensor",
 
         self.trackState = [
-            "media_player.living_room_tv"
+            "media_player.living_room_tv",
+            "binary_sensor.joao_mac_book_active_home"
         ]
 
         self.listen_state(self.tracking_callback, "person.joao_carreira")
@@ -228,7 +226,7 @@ class HouseMode(hass.Hass):
         if not isLightsOn:
             self.timer = self.run_in(self.timeout_callback, self.timer_delay())
             self.set_new_house_mode_from_trigger(Event.WORKING_LIGHT_OFF)
-        
+
     def light_callback_awake_up(self, entity, attribute, old, new, kwargs):
         if new == "on":
             self.set_new_house_mode_from_trigger(Event.LIGHT_ON)
