@@ -57,11 +57,27 @@ cover:
     device_class: gate
     has_built_in_endstop: true
     open_action:
-      - button.press: gate_open
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: gate_open_sensor
+          then:
+            - button.press: gate_open
     close_action:
-      - button.press: gate_open
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: gate_close_sensor
+          then:
+            - button.press: gate_open
     stop_action:
-      - button.press: gate_open
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: gate_open_sensor
+              - binary_sensor.is_off: gate_close_sensor
+          then:
+            - button.press: gate_open
     open_endstop: gate_open_sensor
     close_endstop: gate_close_sensor
     open_duration: 17s
