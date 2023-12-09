@@ -68,6 +68,7 @@ class HouseMode(hass.Hass):
         self.listen_state(self.house_mode_callback, "input_select.house_mode")
 
         self.timer = None
+
         self.run_daily(self.update_house_mode_at_given_time, "08:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "21:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "22:35:00")
@@ -151,6 +152,7 @@ class HouseMode(hass.Hass):
             newMode = self.preffered_house_mode()
         return newMode
 
+
     def new_house_mode_from_sleep(self, trigger):
         newMode = "Sleep"
         if trigger == Event.LIGHT_ON:
@@ -201,15 +203,11 @@ class HouseMode(hass.Hass):
         isLightsOn = False
         for l in self.trackWorkingLights:
             isLightsOn = isLightsOn or self.get_state(l) == "on"
-        for l in self.trackLights:
-            isLightsOn = isLightsOn or self.get_state(l) == "on"
         self.cancel_tracking_timer()
         if not isLightsOn:
-            self.timer = self.run_in(self.working_light_off_callback, 60)
-
-    def working_light_off_callback(self, kwargs):
-        self.set_new_house_mode_from_trigger(Event.WORKING_LIGHT_OFF)
-
+            self.timer = self.run_in(self.timeout_callback, self.timer_delay())
+            self.set_new_house_mode_from_trigger(Event.WORKING_LIGHT_OFF)
+        
     def light_callback_awake_up(self, entity, attribute, old, new, kwargs):
         if new == "on":
             self.set_new_house_mode_from_trigger(Event.LIGHT_ON)
