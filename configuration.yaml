@@ -7,10 +7,6 @@ homeassistant:
   packages: !include_dir_named packages
   customize: !include customize.yaml
 
-################################################################################
-# Configure a default setup of Home Assistant (frontend, api, etc)
-# https://www.home-assistant.io/integrations/default_config/
-################################################################################
 config:
 
 system_health:
@@ -50,6 +46,8 @@ input_select:
 
 input_text:
 
+media_source:
+
 ################################################################################
 ## Includes
 ################################################################################
@@ -59,3 +57,5 @@ group: !include groups.yaml
 scene: !include scenes.yaml
 template: !include_dir_merge_list templates
 python_script:
+frontend:
+  themes: !include_dir_merge_named themes
