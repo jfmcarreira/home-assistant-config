@@ -2,7 +2,6 @@ wifi:
   domain: .home
   ssid: !secret esp_ssid
   password: !secret esp_password
-  #use_address: "10.20.107.192"
   #power_save_mode: "${PowerSaveMode}"
   reboot_timeout: 20min
 
@@ -26,6 +25,5 @@ sensor:
     entity_category: "diagnostic"
 
 time:
-  - platform: sntp
-    id: my_time
-    timezone: "Europe/Lisbon"
+  - platform: homeassistant
+    id: homeassistant_time
