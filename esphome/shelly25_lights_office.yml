@@ -77,8 +77,12 @@ binary_sensor:
         then:
           - if:
               condition:
-                - lambda: 'return id(prevent_light_toggle) == false;'
+                - lambda: 'return id(prevent_light_toggle) == true;'
               then:
+                - globals.set:
+                    id: prevent_light_toggle
+                    value: "false"
+              else:
                 - if:
                     condition:
                       or:
@@ -112,8 +116,6 @@ binary_sensor:
                             - globals.set:
                                 id: lights_state
                                 value: "0"
-              else:
-                  - logger.log: "flag is on"
 
       - timing:
           - ON for at least 1000ms
