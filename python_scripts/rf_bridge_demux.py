@@ -2,6 +2,7 @@ d = { '57E10A':['washing_machine_door','ON','true'],
       '57E10E':['washing_machine_door','OFF','true'],
       '58940A':['dryer_machine_door','ON','true'],
       '58940E':['dryer_machine_door','OFF','true'],
+      'E11841':['kitchen_fan_slider','ON','true'],
     }
 
 p = data.get('payload')

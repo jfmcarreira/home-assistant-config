@@ -58,7 +58,7 @@ input_number:
     step: 0.01
     mode: box
 
-automation old:
+automation:
   - alias: meters_save_water_gas_meters_counter_to_db
     initial_state: true
     mode: queued

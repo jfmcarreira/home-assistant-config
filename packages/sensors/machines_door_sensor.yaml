@@ -11,3 +11,10 @@ mqtt:
       device_class: door
       state_topic: "binary_rf_sensors/washing_machine_door"
       qos: 1
+
+    - name: "Kitchen Extractor Fan Slider"
+      unique_id: kitchen_fan_slider
+      device_class: door
+      state_topic: "binary_rf_sensors/kitchen_fan_slider"
+      qos: 1
+      off_delay: 30

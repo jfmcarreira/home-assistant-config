@@ -12,3 +12,5 @@ appdaemon/apps/__pycache__/**
 themes/**
 tts/**
 zigbee.db-*
+node-red/**
+www/**

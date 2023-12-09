@@ -6,6 +6,7 @@ history:
     domains:
       - lights
       - media_player
+      - automation
   exclude:
     domains:
       - updater
