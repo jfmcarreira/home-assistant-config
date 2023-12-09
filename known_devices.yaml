@@ -12,6 +12,12 @@ calcium_wifi:
   picture: /local/photos/img_bianca_1_1.jpg
   track: true
 
+joao_macbook_pro_wifi:
+  name: Joao Mac Book (Wifi)
+  icon: mdi:laptop
+  track: true
+  mac: !secret joao_macbook_pro_wifi_mac
+
 bianca_amazfit:
   name: Amazfit Bianca
   icon: mdi:human-female

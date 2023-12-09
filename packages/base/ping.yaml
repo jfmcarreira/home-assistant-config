@@ -7,4 +7,5 @@ device_tracker:
       track_new_devices: false
     hosts:
       magnesium_wifi: !secret magnesium_ip
+      joao_macbook_pro_wifi: !secret joao_macbook_pro_wifi
       calcium_wifi: !secret calcium_ip
