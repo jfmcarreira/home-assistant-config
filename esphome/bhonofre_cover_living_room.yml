@@ -1,6 +1,6 @@
 substitutions:
   devicename: bhonofre_cover_living_room
-  PowerSaveMode: NONE
+
   CoverName: Living Room
   Open: "13"
   Close: "12"

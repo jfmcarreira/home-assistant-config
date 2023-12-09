@@ -1,7 +1,6 @@
 substitutions:
   DeviceName: nitrogen
   FriendlyName: Nitrogen (First Floor)
-  PowerSaveMode: NONE
 
 esphome:
   name: nitrogen
@@ -11,7 +10,6 @@ esphome:
 packages:
   esphome_base: !include packages/common.yml
 
-
 bluetooth_proxy:
 
 # For bluetooth devices
@@ -19,7 +17,6 @@ esp32_ble_tracker:
   scan_parameters:
     interval: 320ms
     duration: 10s
-
 
 text_sensor:
   - platform: ble_scanner

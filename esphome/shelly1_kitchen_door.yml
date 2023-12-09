@@ -1,7 +1,6 @@
 substitutions:
   DeviceName: shelly1_kitchen_door
   FriendlyName: Shelly 1 Kitchen Door
-  PowerSaveMode: NONE
 
 packages:
   esphome_base: !include packages/common.yml
@@ -87,4 +86,3 @@ binary_sensor:
                 - light.turn_on: light_1
               else:
                 - light.toggle: light_1
-

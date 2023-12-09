@@ -1,7 +1,6 @@
 substitutions:
   DeviceName: arsenic
   FriendlyName: Arsenic
-  PowerSaveMode: NONE
 
 esphome:
   name: arsenic

@@ -1,17 +1,14 @@
 substitutions:
   DeviceName: sonoff-basic-01
   FriendlyName: Sonoff Basic Kitchen Pantry
-  PowerSaveMode: NONE
 
 packages:
   esphome_base: !include packages/common.yml
 
-
 esphome:
-    name: ${DeviceName}
-    platform: ESP8266
-    board: esp01_1m
-
+  name: ${DeviceName}
+  platform: ESP8266
+  board: esp01_1m
 
 light:
   - id: light_1
@@ -24,10 +21,3 @@ output:
   - platform: gpio
     id: relay_1
     pin: GPIO12
-
-
-
-
-
-
-

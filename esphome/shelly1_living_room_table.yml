@@ -1,7 +1,6 @@
 substitutions:
   DeviceName: shelly1_living_room_table
   FriendlyName: Shelly 1 Living Room Table Light
-  PowerSaveMode: NONE
 
 packages:
   esphome_base: !include packages/common.yml
@@ -24,7 +23,6 @@ light:
     output: relay_1
     restore_mode: RESTORE_AND_OFF
 
-
 binary_sensor:
   - id: sw_1
     platform: gpio
@@ -33,4 +31,3 @@ binary_sensor:
     on_state:
       then:
         - light.toggle: light_1
-

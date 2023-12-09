@@ -1,6 +1,6 @@
 substitutions:
   devicename: bhonofre_cover_master_bed
-  PowerSaveMode: NONE
+
   CoverName: Master Bedroom
   Open: "12"
   Close: "13"

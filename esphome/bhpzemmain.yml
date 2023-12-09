@@ -1,6 +1,6 @@
 substitutions:
   devicename: bhpzemmain
-  PowerSaveMode: NONE
+
   upper_devicename: BHPZEM Main
 
 esphome:
@@ -59,4 +59,3 @@ sensor:
       name: ${upper_devicename} PF
       accuracy_decimals: 2
     update_interval: 5s
-

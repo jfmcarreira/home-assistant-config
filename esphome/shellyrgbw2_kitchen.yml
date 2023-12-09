@@ -1,7 +1,6 @@
 substitutions:
   devicename: shellyrgbw2_kitchen
   upper_devicename: Kitchen LED
-  PowerSaveMode: NONE
 
 packages:
   esphome_base: !include packages/common.yml
@@ -46,8 +45,6 @@ light:
   #   output: output_b
   #   restore_mode: RESTORE_AND_OFF
 
-
-
 output:
   - platform: esp8266_pwm
     id: output_r
@@ -65,4 +62,3 @@ output:
     id: output_w
     frequency: 1000 Hz
     pin: GPIO4
-

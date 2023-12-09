@@ -1,7 +1,7 @@
 substitutions:
   devicename: sonoff_basic_water_heater
   upper_devicename: Sonoff Water Heater
-  PowerSaveMode: NONE
+
   #Address: "10.20.107.181"
 
 packages:
@@ -45,7 +45,6 @@ switch:
       inverted: True
     id: green_led
     restore_mode: ALWAYS_OFF
-
 
 dallas:
   - pin: GPIO3

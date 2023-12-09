@@ -1,7 +1,6 @@
 substitutions:
   DeviceName: phosphorus
   FriendlyName: Phosphorus
-  PowerSaveMode: NONE
 
 esphome:
   name: phosphorus
@@ -16,7 +15,6 @@ esp32:
 
 packages:
   esphome_base: !include packages/common.yml
-
 
 esp32_ble_tracker:
   scan_parameters:
@@ -98,7 +96,6 @@ sensor:
           window_size: 5
           send_every: 5
       - heartbeat: 10s
-
 
   - platform: template
     name: "Temperature Water Heater Bottom"

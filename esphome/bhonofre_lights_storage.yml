@@ -1,16 +1,14 @@
 substitutions:
   DeviceName: bhonofre_lights_storage
   FriendlyName: BHOnofre Lights Storage
-  PowerSaveMode: NONE
 
 esphome:
-    name: ${DeviceName}
-    platform: ESP8266
-    board: nodemcu
+  name: ${DeviceName}
+  platform: ESP8266
+  board: nodemcu
 
 packages:
   esphome_base: !include packages/common.yml
-
 
 binary_sensor:
   - platform: gpio
@@ -56,10 +54,6 @@ binary_sensor:
             entity_id: light.exterior_wall_back
             #entity_id: light.exterior_wall_side
 
-
-
-
-
 output:
   - platform: gpio
     id: relay_1
@@ -83,10 +77,3 @@ light:
     platform: binary
     output: relay_2
     restore_mode: ALWAYS_OFF
-
-
-
-
-
-
-

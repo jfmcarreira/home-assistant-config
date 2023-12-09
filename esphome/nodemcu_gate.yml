@@ -1,7 +1,6 @@
 substitutions:
   DeviceName: nodemcu_gate
   FriendlyName: Gate
-  PowerSaveMode: NONE
 
 esphome:
   name: ${DeviceName}
