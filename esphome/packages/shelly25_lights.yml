@@ -7,7 +7,6 @@ esphome:
 wifi:
   power_save_mode: HIGH
 
-
 i2c:
   sda: GPIO12
   scl: GPIO14
@@ -78,7 +77,7 @@ sensor:
           - homeassistant.service:
               service: persistent_notification.create
               data:
-                  title: Message from ${FriendlyName}
+                title: Message from ${FriendlyName}
               data_template:
                 message: Switch turned off because max temperature was exceeded
 
@@ -96,7 +95,6 @@ sensor:
     name: Light Daily Energy ${Light_A_Name}
     power_id: power_usage_light_a
     unit_of_measurement: Wh
-
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_B_Name}

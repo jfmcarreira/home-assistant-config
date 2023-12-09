@@ -7,8 +7,8 @@ substitutions:
 
 packages:
   esphome_base: !include packages/common.yml
-  device_base: !include packages/shelly25.yml
   home_state: !include packages/home_state.yml
+  device_base: !include packages/shelly25_lights.yml
 
 output:
   - platform: gpio

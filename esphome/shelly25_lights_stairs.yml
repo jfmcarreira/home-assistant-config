@@ -7,8 +7,8 @@ substitutions:
 
 packages:
   esphome_base: !include packages/common.yml
-  device_base: !include packages/shelly25.yml
   home_state: !include packages/home_state.yml
+  device_base: !include packages/shelly25_lights.yml
 
 output:
   - platform: gpio
@@ -47,7 +47,7 @@ binary_sensor:
         then:
           - if:
               condition:
-                  - api.connected:
+                - api.connected:
               then:
                 - if:
                     condition:
@@ -59,12 +59,12 @@ binary_sensor:
                       - homeassistant.service:
                           service: light.turn_off
                           data:
-                              entity_id: light.stairs_down
+                            entity_id: light.stairs_down
                     else:
                       - homeassistant.service:
                           service: light.turn_on
                           data:
-                              entity_id: light.stairs_down
+                            entity_id: light.stairs_down
               else:
                 - light.toggle: light_2
       - timing:
@@ -73,7 +73,7 @@ binary_sensor:
         then:
           - if:
               condition:
-                  - api.connected:
+                - api.connected:
               then:
                 - light.toggle: light_1
               else:
@@ -109,6 +109,3 @@ binary_sensor:
                 - light.toggle: light_2
               else:
                 - light.toggle: light_2
-
-
-

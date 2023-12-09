@@ -11,8 +11,9 @@ substitutions:
 
 packages:
   esphome_base: !include packages/common.yml
-  device_base: !include packages/shelly25.yml
   home_state: !include packages/home_state.yml
+  device_base: !include packages/shelly25_lights.yml
+  bathroom: !include packages/shelly25_bathroom.yml
 
 output:
   - platform: gpio
@@ -21,6 +22,3 @@ output:
   - platform: gpio
     id: relay_1
     pin: GPIO15
-
-
-<<: !include includes/shelly25_base_bathroom_controls.yml

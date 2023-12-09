@@ -14,7 +14,7 @@ globals:
   - id: lights_state
     type: int
     restore_value: no
-    initial_value: '0'
+    initial_value: "0"
 
 script:
   - id: light_turn_on_action
@@ -30,14 +30,12 @@ script:
           value: "false"
       - logger.log: "Enabling switch"
 
-
 light:
   - id: light_1
     name: ${Light_A_Name}
     platform: binary
     output: relay_1
     restore_mode: RESTORE_DEFAULT_OFF
-    icon: mdi:lightbulb-spot
     on_turn_on:
       - script.execute: light_turn_on_action
 
@@ -46,7 +44,5 @@ light:
     platform: binary
     output: relay_2
     restore_mode: RESTORE_DEFAULT_OFF
-    icon: mdi:lightbulb-spot
     on_turn_on:
       - script.execute: light_turn_on_action
-
