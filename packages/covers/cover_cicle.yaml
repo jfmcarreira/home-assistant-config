@@ -1,0 +1,41 @@
+script:
+  cover_reset_position_cicle:
+    alias: Reset Ciclo da Posição dos Estores
+    mode: single
+    sequence:
+      - repeat:
+          for_each:
+            - living_room
+            - kitchen
+            - office
+            - laundry
+            - bathroom
+            - bedroom_rc
+            - master_bedroom
+            - bedroom_ricardo
+            - bedroom_guest
+          sequence:
+            - service: switch.turn_off
+              data:
+                entity_id: switch.cover_cicle_sw_{{ repeat.item }}
+
+  cover_trigger_position_cicle:
+    alias: Executar Ciclo Posição dos Estores
+    mode: single
+    sequence:
+      - repeat:
+          for_each:
+            - living_room
+            - kitchen
+            - office
+            - laundry
+            - bathroom
+            - bedroom_rc
+            - master_bedroom
+            - bedroom_ricardo
+            - bedroom_guest
+          sequence:
+            - condition: "{{ is_state('switch.cover_cicle_sw_' + repeat.item, 'off') }}"
+            - service: esphome.bhonofre_cover_{{ repeat.item }}_cover_cycle_open_close
+            - delay:
+                seconds: 5
