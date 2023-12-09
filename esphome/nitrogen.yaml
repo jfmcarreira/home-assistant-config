@@ -1,7 +1,7 @@
 substitutions:
-  devicename: nitrogen
-  upper_devicename: Nitrogen
-  PowerSaveMode: HIGH
+  DeviceName: nitrogen
+  FriendlyName: Nitrogen
+  PowerSaveMode: NONE
 
 <<: !include includes/common.yml
 
@@ -19,10 +19,12 @@ esp32_ble_tracker:
     interval: 320ms
     duration: 10s
 
+bluetooth_proxy:
+
 text_sensor:
   - platform: ble_scanner
-    id: ble_office
-    name: BLE Scanner Office
+    id: ble_living_room
+    name: BLE Scanner Living Room
 
 # sensor:
 #   - platform: xiaomi_lywsdcgq
