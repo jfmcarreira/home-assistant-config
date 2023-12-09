@@ -1,38 +1,133 @@
 - id: '1650403799573'
-  alias: 'Cover Open Floor 1 Morning '
+  alias: Cover Open Floor 1 Sunrise
   description: ''
   trigger:
-  - platform: time
-    at: 07:30:00
+  - platform: sun
+    event: sunrise
+    offset: 00:30:00
   condition: []
   action:
   - service: cover.open_cover
     data: {}
     target:
-      area_id:
-      - quarto_do_ricardo
-      - bedroom
-      - quarto_1o_andar
+      entity_id: cover.second_floor
   mode: single
-- id: '1650903302899'
-  alias: Fan Control Bathroom RC
-  description: ''
-  use_blueprint:
-    path: nest/fan_light_combo.yaml
-    input:
-      light_device: 883b7d67edad812fb1e7f0fea1566ee0
-      ceiling_light: light.bathroom_rc_ceiling
-      extractor_fan: fan.bathroom_rc
-      time_when_light_is_off: 10
 - id: '1651018838807'
   alias: Cover Close All Evening
   description: ''
   trigger:
-  - platform: time
-    at: '20:00:00'
+  - platform: sun
+    event: sunset
+    offset: -00:00:00
   condition: []
   action:
-  - service: cover.close_cover
+  - service: script.cover_group_action
     data:
-      entity_id: all
+      action_to_run: cover.close_cover
+      control_switch: close_sunset
+  mode: single
+- id: '1651441102640'
+  alias: Desligar Tudo se a Casa Estiver Vazia
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: /30
+  condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  action:
+  - service: script.lights_turn_all_off_when_empty
+    data: {}
+  mode: single
+- id: '1651844118576'
+  alias: 'Cover Open Ground Floor Morning '
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:08:00
+  condition: []
+  action:
+  - service: cover.open_cover
+    data: {}
+    target:
+      entity_id: cover.first_floor
+  mode: single
+- id: '1651876491470'
+  alias: Cover Open Laundry Morning
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00:00
+  condition: []
+  action:
+  - service: cover.open_cover
+    data: {}
+    target:
+      entity_id: cover.laundry
+  mode: single
+- id: '1651876841918'
+  alias: Cover Open Ground Floor Sunrise
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: 01:00:00
+  condition: []
+  action:
+  - service: cover.open_cover
+    data: {}
+    target:
+      entity_id: cover.first_floor
+  mode: single
+- id: '1652141596083'
+  alias: Cover Open All Sunrise
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: 00:30:00
+  condition: []
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: cover.open_cover
+      control_switch: open_sunrise
+  mode: single
+- id: '1652213927460'
+  alias: 'Lights Sync Hall '
+  description: ''
+  use_blueprint:
+    path: lights/sync_lights.yaml
+    input:
+      master_light: light.hall
+      slave_light:
+        entity_id: light.hall_side
+      sync_exclusive: false
+      sync_on: 'off'
+      sync_off: true
+- id: '1653347146334'
+  alias: Lights Control Kitchen Pantry With Door
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.kitchen_pantry_door
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.kitchen_pantry_door
+        state: 'on'
+      sequence:
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.kitchen_pantry
+    default:
+    - service: light.turn_off
+      data: {}
+      target:
+        entity_id: light.kitchen_pantry
   mode: single
