@@ -12,6 +12,13 @@ esp8266:
 
 packages:
   esphome_base: !include packages/common.yml
+  mqtt: !include packages/mqtt.yml
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/muxa/esphome-state-machine.git
+    components: [state_machine]
 
 output:
   - platform: gpio
@@ -23,6 +30,14 @@ output:
     id: relay_2
     pin:
       number: D1
+
+sensor:
+  - platform: mqtt_subscribe
+    id: main_power
+    topic: shellies/shellyem-34945478023D/emeter/0/power
+  - platform: mqtt_subscribe
+    id: leaf_power
+    topic: shellies/shellyem-34945478023D/emeter/1/power
 
 binary_sensor:
   - platform: gpio
@@ -39,6 +54,107 @@ binary_sensor:
       number: D6
       inverted: true
       mode: INPUT_PULLUP
+
+  - platform: template
+    id: gate_moving
+    name: Gate Moving
+    lambda: |-
+      return id(main_power).state > 100;
+    on_release:
+      then:
+        - state_machine.transition: stop
+
+  - platform: template
+    id: gate_starts_opening
+    lambda: |-
+      if (!id(gate_moving).state) return false;
+      return id(gate_open_sensor).state || id(leaf_power).state > 100;
+    on_press:
+      then:
+        - state_machine.transition: start_opening
+
+  - platform: template
+    id: gate_starts_closing
+    lambda: |-
+      if (!id(gate_moving).state) return false;
+      return id(leaf_power).state < 100;
+    on_press:
+      then:
+        - state_machine.transition: start_closing
+
+  - platform: template
+    id: gate_is_open
+    lambda: |-
+      return id(gate_state).current_state() == "Open";
+
+  - platform: template
+    id: gate_is_close
+    lambda: |-
+      return id(gate_state).current_state() == "Close";
+
+  - platform: template
+    id: gate_is_opening
+    lambda: |-
+      return id(gate_state).current_state() == "Opening";
+
+  - platform: template
+    id: gate_is_closing
+    lambda: |-
+      return id(gate_state).current_state() == "Closing";
+
+state_machine:
+  - name: Gate State
+    id: gate_state
+    states:
+      - name: "Stopped"
+        on_enter:
+          - if:
+              condition:
+                - binary_sensor.is_on: gate_open_sensor
+              then:
+                - logger.log: "From stop to open"
+                - state_machine.transition: fully_open
+          - if:
+              condition:
+                - binary_sensor.is_on: gate_close_sensor
+              then:
+                - logger.log: "From stop to close"
+                - state_machine.transition: fully_close
+        on_set:
+          - delay: 5s
+          - if:
+              condition:
+                - binary_sensor.is_on: gate_open_sensor
+              then:
+                - state_machine.set: Open
+          - if:
+              condition:
+                - binary_sensor.is_on: gate_close_sensor
+              then:
+                - state_machine.set: Close
+      - name: "Open"
+      - name: "Opening"
+      - name: "Close"
+      - name: "Closing"
+    inputs:
+      - name: stop
+        transitions:
+          - Opening -> Stopped
+          - Closing -> Stopped
+      - name: fully_open
+        transitions:
+          - Stopped -> Open
+      - name: fully_close
+        transitions:
+          - Stopped -> Close
+      - name: start_opening
+        transitions:
+          - Stopped -> Opening
+          - Close -> Opening
+      - name: start_closing
+        transitions:
+          - Stopped -> Closing
+          - Open -> Closing
 
 button:
   - platform: output
@@ -90,8 +206,11 @@ cover:
               - binary_sensor.is_off: gate_close_sensor
           then:
             - button.press: gate_open
-    open_endstop: gate_open_sensor
-    close_endstop: gate_close_sensor
+
+    open_sensor: gate_is_opening
+    open_endstop: gate_is_open
+    close_sensor: gate_is_closing
+    close_endstop: gate_is_close
     open_duration: 17s
     close_duration: 20s
     max_duration: 40s
