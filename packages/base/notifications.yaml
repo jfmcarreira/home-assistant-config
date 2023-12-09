@@ -98,7 +98,7 @@ script:
                     persistent: false
                     channel: Tasks
                     sticky: true
-                    clickAction: "/lovelace/task"
+                    clickAction: "/lovelace/shores"
                     actions:
                       - action: "{{ task_action }}"
                         title: "{{ task_action_message }}"
@@ -118,7 +118,7 @@ script:
                     persistent: false
                     channel: Tasks
                     sticky: true
-                    clickAction: "/lovelace/task"
+                    clickAction: "/lovelace/shores"
                     actions:
                       - action: "{{ task_action }}"
                         title: "{{ task_action_message }}"
