@@ -25,6 +25,9 @@ sensor:
       name: Light Power ${Light_A_Name}
       id: power_usage_light_a
       # active_power_a is normal, so don't multiply by -1
+      filters:
+        - lambda: >
+            return x;
       on_value_range:
         - above: 2000.0
           then:
@@ -42,6 +45,8 @@ sensor:
       # active_power_b is inverted, so take the absolute value
       filters:
         - multiply: -1
+        - lambda: >
+            return x;
       on_value_range:
         - above: 2000.0
           then:
@@ -83,6 +88,23 @@ sensor:
   - platform: adc
     id: temp_analog_reading
     pin: A0
+
+  - platform: total_daily_energy
+    name: Light Daily Energy ${Light_A_Name}
+    power_id: power_usage_light_a
+    filters:
+      # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kW
+
+
+  - platform: total_daily_energy
+    name: Light Daily Energy ${Light_B_Name}
+    power_id: power_usage_light_b
+    filters:
+      # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kW
 
 status_led:
   pin:

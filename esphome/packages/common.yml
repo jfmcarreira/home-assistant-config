@@ -25,3 +25,7 @@ sensor:
     update_interval: 60s
     entity_category: "diagnostic"
 
+time:
+  - platform: sntp
+    id: my_time
+    timezone: "Europe/Lisbon"
