@@ -38,7 +38,7 @@ blueprint:
       selector:
         boolean:
     sync_off_from_slave:
-      name: Turn light off when master turns off
+      name: Turn light off when slave turns off
       default: "off"
       selector:
         boolean:
