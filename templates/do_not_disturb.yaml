@@ -19,8 +19,8 @@
       unique_id: notification_non_disturb
       state: >-
         {% if is_state("input_boolean.notification_active_non_disturb", "on") or
-              is_state("sensor.calcium_do_not_disturb", "on") or
-              is_state("sensor.magnesium_do_not_disturb", "on") %}
+              not is_state("sensor.calcium_do_not_disturb", "off") or
+              not is_state("sensor.magnesium_do_not_disturb", "off") %}
             True
         {% else %}
             False
