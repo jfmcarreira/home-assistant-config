@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: shelly25_lights_hall
-  FriendlyName: Shelly 2.5 Hall
+  FriendlyName: Shelly25 Hall
   Light_1_Name: Hall Side
   Light_2_Name: Hall
 

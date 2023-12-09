@@ -34,35 +34,27 @@ sensor:
     voltage:
       id: voltage_sensor
     power:
-      name: ${FriendlyName} Power
+      name: device_power_water_heater
       id: w_sensor
     energy:
-      name: ${FriendlyName} Energy
       id: wh_sensor
       filters:
         - multiply: 0.001
 
   - platform: total_daily_energy
-    name: ${FriendlyName} Total Daily Energy
+    id: daily_wh_sensor
+    name: device_daily_energy_water_heater
     power_id: w_sensor
+    unit_of_measurement: kWh
     filters:
       - multiply: 0.001
 
-  - platform: wifi_signal
-    name: ${FriendlyName} Wifi RSSI
-    update_interval: 60s
-
   - platform: template
-    name: ${FriendlyName} Temperature
+    name: device_temperature_${DeviceName}
     device_class: temperature
     unit_of_measurement: °C
     id: esp32_temp
     lambda: return temperatureRead();
-
-  - platform: template
-    device_class: power_factor
-    id: power_factor
-    lambda: return id(w_sensor).state / id(voltage_sensor).state / id(current_sensor).state;
 
   - platform: esp32_hall
     name: ${FriendlyName} ESP32 Hall Sensor
@@ -116,7 +108,7 @@ display:
     } else {
       it.display_voltage(false);
       it.display_kwh(true);
-      it.printf(0, "%.1f", id(wh_sensor).state);
+      it.printf(0, "%.1f", id(daily_wh_sensor).state);
       it.printf(1, "%.1f", id(w_sensor).state);
     }
 
@@ -129,7 +121,7 @@ output:
 
 switch:
   - platform: template
-    name: ${FriendlyName}
+    name: Water Heater
     optimistic: true
     id: relay_1
     turn_off_action:

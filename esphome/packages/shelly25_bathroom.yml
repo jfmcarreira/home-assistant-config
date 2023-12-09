@@ -104,6 +104,8 @@ binary_sensor:
         then:
           - logger.log: "Long 2 Press"
           - homeassistant.event:
-              event: esphome.shelly25_bathroom_btn
+              event: esphome.button_pressed
               data:
-                button: ${DeviceName}_long_2
+                name: button_2
+                type: long
+                device: ${devicename}

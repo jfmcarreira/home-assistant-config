@@ -1,7 +1,9 @@
 esphome:
   name: ${devicename}
-  platform: ESP8266
+
+esp8266:
   board: nodemcu
+  restore_from_flash: true
 
 api:
   services:
@@ -18,7 +20,6 @@ api:
     - service: cover_cycle_open_close
       then:
         - script.execute: cover_cycle_open_close
-
 
 globals:
   - id: cover_action
@@ -77,7 +78,7 @@ binary_sensor:
               condition:
                 or:
                   - not:
-                    - api.connected:
+                      - api.connected:
                   - binary_sensor.is_on: cover_controls_enabled
               then:
                 - logger.log: "Cover going to 50"
@@ -105,7 +106,7 @@ binary_sensor:
                     condition:
                       or:
                         - not:
-                          - api.connected:
+                            - api.connected:
                         - binary_sensor.is_on: cover_controls_enabled
                     then:
                       - logger.log: "Cover Open"
@@ -131,11 +132,11 @@ binary_sensor:
           - ON for at least 1s
         invalid_cooldown: 100ms
         then:
-         - if:
+          - if:
               condition:
                 or:
                   - not:
-                    - api.connected:
+                      - api.connected:
                   - binary_sensor.is_on: cover_controls_enabled
               then:
                 - logger.log: "Cover going to just open"
@@ -169,7 +170,7 @@ binary_sensor:
                     condition:
                       or:
                         - not:
-                          - api.connected:
+                            - api.connected:
                         - binary_sensor.is_on: cover_controls_enabled
                     then:
                       - lambda: |-
@@ -270,7 +271,7 @@ switch:
     id: "cover_cicle_sw"
     name: "cover_cicle_sw_${CoverName}"
     device_class: switch
-    restore_state: no
+    restore_mode: ALWAYS_OFF
     lambda: |-
       return {};
     optimistic: yes
@@ -278,7 +279,7 @@ switch:
   # - platform: template
   #   name: "cover_control_group_${CoverName}"
   #   device_class: switch
-  #   restore_state: yes
+  #   restore_state: RESTORE_DEFAULT_OFF
   #   lambda: |-
   #     return {};
   #   optimistic: yes
@@ -286,7 +287,7 @@ switch:
   # - platform: template
   #   name: "cover_control_open_sunrise_${CoverName}"
   #   device_class: switch
-  #   restore_state: yes
+  #   restore_state: RESTORE_DEFAULT_OFF
   #   lambda: |-
   #     return {};
   #   optimistic: yes
@@ -294,7 +295,7 @@ switch:
   # - platform: template
   #   name: "cover_control_close_sunset_${CoverName}"
   #   device_class: switch
-  #   restore_state: yes
+  #   restore_state: RESTORE_DEFAULT_OFF
   #   lambda: |-
   #     return {};
   #   optimistic: yes
@@ -302,7 +303,7 @@ switch:
   # - platform: template
   #   name: "cover_control_close_in_rain_${CoverName}"
   #   device_class: switch
-  #   restore_state: yes
+  #   restore_state: RESTORE_DEFAULT_OFF
   #   lambda: |-
   #     return {};
   #   optimistic: yes
@@ -317,7 +318,7 @@ script:
             return id(cover_1).position;
       - logger.log:
           format: "Cached position for cycling: %.1f"
-          args: [ 'id(cover_position_cache)' ]
+          args: ["id(cover_position_cache)"]
       - cover.close: cover_1
       - wait_until:
           lambda: |-
@@ -454,4 +455,3 @@ cover:
       - switch.turn_on: cover_cicle_sw
     #on_closed:
     #  - switch.turn_on: cover_cicle_sw
-
