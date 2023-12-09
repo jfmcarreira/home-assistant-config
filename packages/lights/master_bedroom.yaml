@@ -8,6 +8,7 @@ light:
           {{
               is_state('light.master_bedroom_ceiling', 'on') or 
               is_state('light.master_bedroom_entry', 'on')
+              is_state('light.master_bedroom_closet', 'on')
           }}
         turn_on:
           - choose:
@@ -25,3 +26,5 @@ light:
             entity_id: light.master_bedroom_ceiling
           - service: light.turn_off
             entity_id: light.master_bedroom_entry
+          - service: light.turn_off
+            entity_id: light.master_bedroom_closet
