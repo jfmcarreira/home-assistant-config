@@ -1,0 +1,23 @@
+homeassistant:
+  customize:
+    automation.event_remain_task_todo:
+      friendly_name: Gerar Evento Para Lembrar Tarefas a Realizar
+
+automation old:
+  - alias: event_remain_task_todo
+    mode: single
+    trigger:
+      - platform: time_pattern
+        minutes: 30
+      - platform: state
+        entity_id: person.joao_carreira
+        to: home
+      - platform: state
+        entity_id: person.bianca_pires
+        to: home
+      - platform: state
+        entity_id: binary_sensor.kitchen_door
+        from: "off"
+        to: "on"
+    action:
+      - event: event_remaind_task_todo
