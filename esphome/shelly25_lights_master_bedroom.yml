@@ -47,6 +47,10 @@ binary_sensor:
     id: house_mode_night
     entity_id: binary_sensor.night_mode
 
+  - platform: homeassistant
+    id: master_bedroom_closet_state
+    entity_id: light.master_bedroom_closet
+
   - id: sw_1
     platform: gpio
     pin: ${InputPin}
@@ -61,9 +65,18 @@ binary_sensor:
                 or:
                   - light.is_on: light_1
                   - light.is_on: light_2
+                  - binary_sensor.is_on: master_bedroom_closet_state
               then:
                 - light.turn_off: light_1
                 - light.turn_off: light_2
+                - if:
+                    condition:
+                      - api.connected:
+                    then:
+                      - homeassistant.service:
+                          service: light.turn_off
+                          data:
+                            entity_id: light.master_bedroom_closet
                 - globals.set:
                     id: lights_state
                     value: "0"
