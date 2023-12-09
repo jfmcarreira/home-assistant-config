@@ -1,31 +1,99 @@
-# input_boolean:
-#   cover_control_group_living_room:
-#     name: Controlo em Grupo do Estore da Sala de Estar
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_kitchen:
-#     name: Controlo em Grupo do Estore da Cozinha
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_laundry:
-#     name: Controlo em Grupo do Estore da Lavandaria
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_bedroom_rc:
-#     name: Controlo em Grupo do Estore do Quarto do R/C
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_bathroom:
-#     name: Controlo em Grupo do Estore da Casa de Banho
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_office:
-#     name: Controlo em Grupo do Estore do Escritório
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_master_bedroom:
-#     name: Controlo em Grupo do Estore do Quarto Principal
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_bedroom_ricardo:
-#     name: Controlo em Grupo do Estore do Quarto do Ricardo
-#     icon: mdi:window-shutter-alert
-#   cover_control_group_bedroom_guest:
-#     name: Controlo em Grupo do Estore do Quarto Extra
-#     icon: mdi:window-shutter-alert
+homeassistant:
+  customize_glob:
+    "switch.cover_control_open_sunrise_*":
+      friendly_name: "Abrir com o Nascer do Sol"
+    "switch.cover_control_close_sunset_*":
+      friendly_name: "Fechar com o Pôr do Sol"
+    "switch.cover_control_close_in_rain_*":
+      friendly_name: "Fechar Quando Chove"
+    "switch.cover_control_group_*":
+      friendly_name: "Controlar Estores em Grupo"
+
+input_boolean:
+  cover_control_group_living_room:
+    name: Controlo em Grupo do Estore da Sala de Estar
+    icon: mdi:window-shutter-alert
+  cover_control_group_kitchen:
+    name: Controlo em Grupo do Estore da Cozinha
+    icon: mdi:window-shutter-alert
+  cover_control_group_laundry:
+    name: Controlo em Grupo do Estore da Lavandaria
+    icon: mdi:window-shutter-alert
+  cover_control_group_bedroom_rc:
+    name: Controlo em Grupo do Estore do Quarto do R/C
+    icon: mdi:window-shutter-alert
+  cover_control_group_bathroom:
+    name: Controlo em Grupo do Estore da Casa de Banho
+    icon: mdi:window-shutter-alert
+  cover_control_group_office:
+    name: Controlo em Grupo do Estore do Escritório
+    icon: mdi:window-shutter-alert
+  cover_control_group_master_bedroom:
+    name: Controlo em Grupo do Estore do Quarto Principal
+    icon: mdi:window-shutter-alert
+  cover_control_group_bedroom_ricardo:
+    name: Controlo em Grupo do Estore do Quarto do Ricardo
+    icon: mdi:window-shutter-alert
+  cover_control_group_bedroom_guest:
+    name: Controlo em Grupo do Estore do Quarto Extra
+    icon: mdi:window-shutter-alert
+
+  cover_control_open_sunrise_living_room:
+    name: Controlo Abrir com o Nascer do Sol Estore da Sala de Estar
+  cover_control_open_sunrise_kitchen:
+    name: Controlo Abrir com o Nascer do Sol Estore da Cozinha
+  cover_control_open_sunrise_laundry:
+    name: Controlo Abrir com o Nascer do Sol Estore da Lavandaria
+  cover_control_open_sunrise_bedroom_rc:
+    name: Controlo Abrir com o Nascer do Sol Estore do Quarto do R/C
+  cover_control_open_sunrise_bathroom:
+    name: Controlo Abrir com o Nascer do Sol Estore da Casa de Banho
+  cover_control_open_sunrise_office:
+    name: Controlo Abrir com o Nascer do Sol Estore do Escritório
+  cover_control_open_sunrise_master_bedroom:
+    name: Controlo Abrir com o Nascer do Sol Estore do Quarto Principal
+  cover_control_open_sunrise_bedroom_ricardo:
+    name: Controlo Abrir com o Nascer do Sol Estore do Quarto do Ricardo
+  cover_control_open_sunrise_bedroom_guest:
+    name: Controlo Abrir com o Nascer do Sol Estore do Quarto Extra
+
+  cover_control_close_sunset_living_room:
+    name: Controlo Fechar com o Pôr do Sol Estore da Sala de Estar
+  cover_control_close_sunset_kitchen:
+    name: Controlo Fechar com o Pôr do Sol Estore da Cozinha
+  cover_control_close_sunset_laundry:
+    name: Controlo Fechar com o Pôr do Sol Estore da Lavandaria
+  cover_control_close_sunset_bedroom_rc:
+    name: Controlo Fechar com o Pôr do Sol Estore do Quarto do R/C
+  cover_control_close_sunset_bathroom:
+    name: Controlo Fechar com o Pôr do Sol Estore da Casa de Banho
+  cover_control_close_sunset_office:
+    name: Controlo Fechar com o Pôr do Sol Estore do Escritório
+  cover_control_close_sunset_master_bedroom:
+    name: Controlo Fechar com o Pôr do Sol Estore do Quarto Principal
+  cover_control_close_sunset_bedroom_ricardo:
+    name: Controlo Fechar com o Pôr do Sol Estore do Quarto do Ricardo
+  cover_control_close_sunset_bedroom_guest:
+    name: Controlo Fechar com o Pôr do Sol Estore do Quarto Extra
+
+  cover_control_close_in_rain_living_room:
+    name: Controlo Fechar Quando Chove Estore da Sala de Estar
+  cover_control_close_in_rain_kitchen:
+    name: Controlo Fechar Quando Chove Estore da Cozinha
+  cover_control_close_in_rain_laundry:
+    name: Controlo Fechar Quando Chove Estore da Lavandaria
+  cover_control_close_in_rain_bedroom_rc:
+    name: Controlo Fechar Quando Chove Estore do Quarto do R/C
+  cover_control_close_in_rain_bathroom:
+    name: Controlo Fechar Quando Chove Estore da Casa de Banho
+  cover_control_close_in_rain_office:
+    name: Controlo Fechar Quando Chove Estore do Escritório
+  cover_control_close_in_rain_master_bedroom:
+    name: Controlo Fechar Quando Chove Estore do Quarto Principal
+  cover_control_close_in_rain_bedroom_ricardo:
+    name: Controlo Fechar Quando Chove Estore do Quarto do Ricardo
+  cover_control_close_in_rain_bedroom_guest:
+    name: Controlo Fechar Quando Chove Estore do Quarto Extra
 
 input_number:
   cover_lower_position_living_room:
@@ -97,7 +165,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_kitchen:
     name: Posição Superior do Estore da Cozinha
@@ -105,7 +172,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_laundry:
     name: Posição Superior do Estore da Lavandaria
@@ -113,7 +179,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_bedroom_rc:
     name: Posição Superior do Estore do Quarto do R/C
@@ -121,7 +186,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_bathroom:
     name: Posição Superior do Estore da Casa de Banho
@@ -129,7 +193,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_office:
     name: Posição Superior do Estore do Escritório
@@ -137,7 +200,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_master_bedroom:
     name: Posição Superior do Estore do Quarto Principal
@@ -145,7 +207,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_bedroom_ricardo:
     name: Posição Superior do Estore do Quarto do Ricardo
@@ -153,7 +214,6 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider
   cover_higher_position_bedroom_guest:
     name: Posição Superior do Estore do Quarto Extra
@@ -161,5 +221,4 @@ input_number:
     max: 100
     min: 20
     step: 1
-
     mode: slider

@@ -29,7 +29,7 @@ script:
             - bedroom_guest
           sequence:
             - condition:
-                "{{ is_state('switch.cover_control_' + control_switch + '_'
+                "{{ is_state('input_boolean.cover_control_' + control_switch + '_'
                 + repeat.item, 'on') }}"
             - choose:
                 - conditions: "{{ 'script.' in action_to_run }}"
