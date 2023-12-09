@@ -1,0 +1,31 @@
+- binary_sensor:
+    - name: Joao Home
+      unique_id: joao_home
+      state: >
+        {{  is_state('person.joao_carreira', 'home') or 
+            is_state('person.joao_carreira', 'Escritório') or 
+            is_state('person.joao_carreira', 'Sala de Estar') or 
+            is_state('person.joao_carreira', 'Quarto Principal')
+        }}
+      attributes:
+        Mudou de Localização: "{{ now() }}"
+- binary_sensor:
+    - name: Bianca Home
+      unique_id: bianca_home
+      state: >
+        {{  is_state('person.bianca', 'home') or 
+            is_state('person.bianca', 'Escritório') or 
+            is_state('person.bianca', 'Sala de Estar') or 
+            is_state('person.bianca', 'Quarto Principal')
+        }}
+      attributes:
+        Mudou de Localização: "{{ now() }}"
+- binary_sensor:
+    - name: Notify Home
+      unique_id: notify_home
+      icon: "mdi:home"
+      state: >
+        {{ is_state('input_boolean.house_guest', 'on') or
+            is_state('binary_sensor.joao_home', 'on') or 
+            is_state('binary_sensor.bianca_home', 'on') 
+        }}
