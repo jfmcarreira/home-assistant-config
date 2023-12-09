@@ -14,22 +14,31 @@ script:
       data:
         entity_id: >-
           {% set list_of_covers = [] %}
-          {% if is_state('input_boolean.cover_control_group_livingroom', 'on') %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_livingroom', 'on') %}
             {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
           {% endif %}
-          {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_kitchen', 'on') %}
             {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
           {% endif %}
-          {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_laundry', 'on') %}
             {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
           {% endif %}
-          {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_bathroom', 'on') %}
             {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
           {% endif %}
-          {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_bedroom_rc', 'on') %}
             {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
           {% endif %}
-          {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_office', 'on') %}
             {% set list_of_covers = list_of_covers + ['cover.office'] %}
+          {% endif %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_master_bedroom', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.master_bedroom'] %}
+          {% endif %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_bedroom_ricardo', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.bedroom_ricardo'] %}
+          {% endif %}
+          {% if is_state('switch.cover_control_' + action_to_run + '_bedroom_guest', 'on') %}
+            {% set list_of_covers = list_of_covers + ['cover.bedroom_guest'] %}
           {% endif %}
           {{ list_of_covers|join(',') }}
