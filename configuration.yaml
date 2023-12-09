@@ -11,6 +11,8 @@ config:
 
 system_health:
 
+bluetooth:
+
 map:
 
 mobile_app:
@@ -26,6 +28,12 @@ my:
 energy:
 
 discovery:
+
+zeroconf:
+
+usb:
+
+ssdp:
 
 sun:
   name: sun_tracker
@@ -47,6 +55,10 @@ input_select:
 input_text:
 
 media_source:
+
+device_tracker:
+  - platform: bluetooth_le_tracker
+    track_new_devices: true
 
 ################################################################################
 ## Includes
