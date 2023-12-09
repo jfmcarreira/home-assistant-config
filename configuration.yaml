@@ -7,6 +7,8 @@ homeassistant:
   packages: !include_dir_named packages
   customize: !include customize.yaml
 
+default_config:
+
 config:
 
 system_health:
@@ -58,7 +60,7 @@ media_source:
 
 device_tracker:
   - platform: bluetooth_le_tracker
-    track_new_devices: true
+    track_new_devices: false
 
 ################################################################################
 ## Includes
