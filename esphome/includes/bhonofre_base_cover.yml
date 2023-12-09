@@ -17,15 +17,48 @@ api:
         - cover.control:
             id: cover_1
             position: ${SmallOpenPosition}
+    - service: cover_cycle_open_close
+      then:
+        - script.execute: cover_cycle_open_close
+
 
 globals:
   - id: cover_action
     type: int
     restore_value: no
     initial_value: "0"
+  - id: cover_position_cache
+    type: float
+    restore_value: no
+    initial_value: "0"
 
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time:
+      - seconds: 0
+        minutes: 0
+        hours: 9
+        then:
+          - switch.turn_off: cover_cicle_sw
+      - seconds: 0
+        minutes: 0
+        hours: 11,12,13,14,15,16,17,18
+        then:
+          - if:
+              condition:
+                and:
+                  - api.connected:
+                  - binary_sensor.is_off: notify_home
+                  - switch.is_off: cover_cicle_sw
+              then:
+                - script.execute: cover_cycle_open_close
 
 binary_sensor:
+  - platform: homeassistant
+    id: notify_home
+    entity_id: binary_sensor.notify_home
+
   - platform: homeassistant
     id: cover_controls_enabled
     entity_id: binary_sensor.cover_controls_enabled
@@ -60,11 +93,7 @@ binary_sensor:
           - globals.set:
               id: cover_action
               value: !lambda |-
-                if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
-                    return 0;
-                } else {
-                    return 1;
-                }
+                return id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING ? 0 : 1;
           - if:
               condition:
                 or:
@@ -126,11 +155,7 @@ binary_sensor:
           - globals.set:
               id: cover_action
               value: !lambda |-
-                if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
-                    return 0;
-                } else {
-                    return -1;
-                }
+                return id(cover_1).current_operation == CoverOperation::COVER_OPERATION_CLOSING ? 0 : -1;
           - if:
               condition:
                 or:
@@ -197,6 +222,15 @@ switch:
     restore_mode: ALWAYS_OFF
 
   - platform: template
+    id: "cover_cicle_sw"
+    #name: "cover_cicle_sw_${CoverName}"
+    device_class: switch
+    restore_state: no
+    lambda: |-
+      return {};
+    optimistic: yes
+
+  - platform: template
     name: "cover_control_group_${CoverName}"
     device_class: switch
     restore_state: yes
@@ -221,6 +255,31 @@ switch:
     optimistic: yes
 
 script:
+  - id: cover_cycle_open_close
+    then:
+      - logger.log: "Cover is cycling"
+      - globals.set:
+          id: cover_position_cache
+          value: !lambda |-
+            return id(cover_1).position;
+      - logger.log:
+          format: "Cached position for cycling: %.1f"
+          args: [ 'id(cover_position_cache)' ]
+      - cover.close: cover_1
+      - wait_until:
+          lambda: |-
+            return id(cover_1).position == COVER_CLOSED;
+      - delay: 1s
+      - cover.open: cover_1
+      - wait_until:
+          lambda: |-
+            return id(cover_1).position == COVER_OPEN;
+      - delay: 1s
+      - cover.control:
+          id: cover_1
+          position: !lambda |-
+            return id(cover_position_cache);
+
   - id: special_cover_controls
     then:
       - if:
@@ -337,3 +396,8 @@ cover:
       - delay: 500ms
     close_duration: ${CoverTime}
     open_duration: ${CoverTime}
+    on_open:
+      - switch.turn_on: cover_cicle_sw
+    #on_closed:
+    #  - switch.turn_on: cover_cicle_sw
+
