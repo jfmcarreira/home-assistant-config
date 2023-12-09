@@ -13,19 +13,20 @@ AUTO_TIME_END = "22:00:00"
 class MovingAverage:
     average = 0.0
     points = []
+    size = 0
 
     def __init__(self, size, value):
         for i in range(size):
             self.points.append(value/size)
         self.average = value
+        self.size = size
 
     def add_point(self, value):
-        new_point = value / len(self.points)
-
+        new_point = value / self.size
         value_to_remove = self.points.pop(0)
         self.points.append(new_point)
-
         self.average = self.average - value_to_remove + new_point
+
 
     def get(self):
         return self.average
@@ -102,6 +103,7 @@ class BathroomFan(hass.Hass):
         self.fan_entity = self.args["fan_entity"]
         self.light_entity = self.args["light_entity"]
 
+
         self.humidity_light_on = 0.0
         self.current_humidity = self.get_humidity()
         self.average_humidity = MovingAverage(
@@ -120,9 +122,6 @@ class BathroomFan(hass.Hass):
 
         self.run_every(self.humidity_update_timer, "now", interval=30)
 
-        self.log(
-            "Average Humidity is " + str(self.average_humidity.average), level="INFO"
-        )
         self.log("State is " + str(self.machine.current_state), level="INFO")
 
     ######## Getters
@@ -138,6 +137,9 @@ class BathroomFan(hass.Hass):
     def get_humidity(self):
         return float(self.get_state(self.args["humidity_entity"]))
 
+    def get_average_humidity(self):
+        return float(self.get_state(self.args["average_humidity_entity"]))
+
     def is_auto_on_disabled(self):
         return not (self.get_state(self.args["toggle"]) == "on")
 
@@ -151,7 +153,7 @@ class BathroomFan(hass.Hass):
         return self.get_state(self.fan_entity) == "on"
 
     def is_high_humidity(self):
-        min_humidity = min(self.average_humidity.average, self.humidity_light_on)
+        min_humidity = min(self.get_humidity_threshold(), self.humidity_light_on)
         humidity_difference = self.current_humidity - min_humidity
         is_high_humidity = humidity_difference > self.get_humidity_threshold()
         self.log("High humidity is " + str(is_high_humidity), level="INFO")
@@ -164,14 +166,10 @@ class BathroomFan(hass.Hass):
     def humidity_state_changed(self, entity, attribute, old, new, kwargs):
         self.current_humidity = float(new)
         self.machine.humidity_update()
-        # self.log("Current humidity is " + str(self.current_humidity), level="INFO")
 
     def humidity_update_timer(self, kwargs):
         if self.machine.current_state.id == "off":
             self.average_humidity.add_point(self.current_humidity)
-        self.log(
-            "Average humidity is " + str(self.average_humidity.average), level="INFO"
-        )
 
     def state_update_timer(self, kwargs):
         self.machine.timer_update()
