@@ -4,7 +4,7 @@ substitutions:
   InputAPin: GPIO13
   InputBPin: GPIO5
   Light_A_Name: Master Bedroom Bathroom Ceiling
-  Light_B_Name: Master Bedroom Bathroom Mirror
+  Light_B_Name: Master Bedroom Bathroom LED
   Fan: fan.bathroom_master_bedroom
   Address: !secret shelly25_bathroom_suite_ip
 

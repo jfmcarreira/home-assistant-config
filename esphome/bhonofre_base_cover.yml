@@ -5,6 +5,19 @@ esphome:
   platform: ESP8266
   board: nodemcu
 
+api:
+  services:
+    - service: minimal_open_cover
+      then:
+        - cover.close: cover_1
+        - wait_until:
+            lambda: |-
+              return id(cover_1).position == COVER_CLOSED;
+        - delay: 1s
+        - cover.control:
+            id: cover_1
+            position: ${SmallOpenPosition}
+
 binary_sensor:
   - platform: gpio
     id: sw_open
@@ -113,17 +126,6 @@ binary_sensor:
       then:
         - logger.log: "Extra Bottom"
 
-switch:
-  - platform: gpio
-    id: relay_power
-    pin: GPIO4
-    restore_mode: RESTORE_DEFAULT_OFF
-
-  - platform: gpio
-    id: relay_direction
-    pin: GPIO5
-    restore_mode: RESTORE_DEFAULT_OFF
-
 cover:
   - platform: time_based
     id: cover_1
@@ -148,6 +150,37 @@ cover:
       - switch.turn_off: relay_power
     close_duration: ${CoverTime}
     open_duration: ${CoverTime}
+
+
+switch:
+  - platform: gpio
+    id: relay_power
+    pin: GPIO4
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: gpio
+    id: relay_direction
+    pin: GPIO5
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: template
+    name: "cover_control_open_sunsire_${CoverName}"
+    device_class: switch
+    restore_state: yes
+    lambda: |-
+      return {};
+    optimistic: yes
+
+  - platform: template
+    name: "cover_control_close_sunset_${CoverName}"
+    device_class: switch
+    restore_state: yes
+    lambda: |-
+      return {};
+    optimistic: yes
+
+
+
 
 
 mqtt:
