@@ -1,0 +1,8 @@
+device_tracker:
+  - platform: ping
+    interval_seconds: 30
+    consider_home: 60
+    new_device_defaults:
+      track_new_devices: true
+    hosts:
+      magnesium_wifi: !secret magnesium_ip
