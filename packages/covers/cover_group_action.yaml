@@ -14,7 +14,7 @@ script:
       data:
         entity_id: >-
           {% set list_of_covers = [] %}
-          {% if is_state('switch.cover_control_' + control_switch + '_livingroom', 'on') %}
+          {% if is_state('switch.cover_control_' + control_switch + '_living_room', 'on') %}
             {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
           {% endif %}
           {% if is_state('switch.cover_control_' + control_switch + '_kitchen', 'on') %}
