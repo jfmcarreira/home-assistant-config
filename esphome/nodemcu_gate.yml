@@ -4,11 +4,11 @@ substitutions:
   PowerSaveMode: NONE
 
 esphome:
-    name: ${DeviceName}
+  name: ${DeviceName}
 
 esp8266:
-    board: nodemcuv2
-    early_pin_init: false
+  board: nodemcuv2
+  early_pin_init: false
 
 packages:
   esphome_base: !include packages/common.yml
@@ -39,7 +39,6 @@ binary_sensor:
       number: D6
       inverted: true
       mode: INPUT_PULLUP
-
 
 button:
   - platform: output
@@ -95,4 +94,5 @@ cover:
     close_endstop: gate_close_sensor
     open_duration: 17s
     close_duration: 20s
+    max_duration: 40s
     direction_change_wait_time: 5s
