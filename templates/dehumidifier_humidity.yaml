@@ -1,0 +1,14 @@
+- sensor:
+    - name: dehumidifier_humidity
+      unique_id: dehumidifier_humidity
+      device_class: humidity
+      state: >-
+        {% if is_state( 'input_select.dehumidifier_location', 'Suite' )  %}
+          {{ states('sensor.humidity_master_bedroom_bathroom') }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Casa de Banho Principal' )  %}
+          {{ states('sensor.humidity_main_bathroom') }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Sotão' )  %}
+            {{ states('sensor.humidity_hall') }} 
+        {% else  %}
+          0.0
+        {% endif %}

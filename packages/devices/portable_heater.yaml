@@ -1,0 +1,17 @@
+homeassistant:
+  customize:
+    climate.portable_heater:
+      friendly_name: "Termoventilador"
+
+climate:
+  - platform: generic_thermostat
+    name: Portable Heater
+    heater: switch.portable_heater
+    target_sensor: sensor.portable_heater_temperature
+    min_temp: 15
+    max_temp: 25
+    target_temp: 20
+    cold_tolerance: 1
+    hot_tolerance: 0
+    initial_hvac_mode: "off"
+    precision: 0.5

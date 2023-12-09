@@ -1,0 +1,16 @@
+- sensor:
+    - name: portable_heater_temperature
+      unique_id: portable_heater_temperature
+      device_class: temperature
+      state: >-
+        {% if is_state( 'input_select.portable_heater_location', 'Casa de Banho da Suite' )  %}
+          {{ states('sensor.temperature_master_bedroom_bathroom') }}
+        {% elif is_state( 'input_select.portable_heater_location', 'Casa de Banho Principal' )  %}
+          {{ states('sensor.temperature_main_bathroom') }}
+        {% elif is_state( 'input_select.portable_heater_location', 'Casa de Banho de Serviço' )  %}
+          {{ states('sensor.temperature_bathroom_rc') }}
+        {% elif is_state( 'input_select.portable_heater_location', 'Sotão' )  %}
+            {{ states('sensor.temperature_hall') }} 
+        {% else  %}
+          100.0
+        {% endif %}
