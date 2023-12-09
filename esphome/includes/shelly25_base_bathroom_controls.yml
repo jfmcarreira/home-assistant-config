@@ -12,6 +12,12 @@ light:
     output: relay_2
     restore_mode: RESTORE_DEFAULT_OFF
 
+globals:
+  - id: time_lights_on_mins
+    type: int
+    restore_value: no
+    initial_value: "0"
+
 # time:
 #   - platform: homeassistant
 #     id: homeassistant_time

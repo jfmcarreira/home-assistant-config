@@ -61,6 +61,7 @@ binary_sensor:
                   - light.is_on: light_1
                   - light.is_on: light_2
               then:
+                - logger.log: "Turning lights OFF"
                 - light.turn_off: light_1
                 - light.turn_off: light_2
                 - globals.set:
@@ -73,11 +74,13 @@ binary_sensor:
                         - api.connected:
                         - binary_sensor.is_on: house_mode_night
                     then:
+                      - logger.log: "Turning lights in Night mode"
                       - light.turn_on: light_1
                       - globals.set:
                           id: lights_state
                           value: "1"
                     else:
+                      - logger.log: "Turning both lights ON"
                       - light.turn_on: light_1
                       - light.turn_on: light_2
                       - globals.set:
