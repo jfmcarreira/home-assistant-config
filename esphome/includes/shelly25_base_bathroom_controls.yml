@@ -42,7 +42,11 @@ binary_sensor:
         then:
           - if:
               condition:
-                lambda: 'return id(should_toggle_lights);'
+                and:
+                  - lambda: 'return id(should_toggle_lights);'
+                  - or:
+                      - light.is_on: light_1
+                      - light.is_on: light_2
               then:
                 - globals.set:
                     id: should_toggle_lights
