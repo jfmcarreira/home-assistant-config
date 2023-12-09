@@ -20,10 +20,12 @@ sensor:
       id: shelly_current_A
     active_power_a:
       name: Power Usage Light ${Light_A_Name}
+      id: power_usage_light_a
       filters:
         - multiply: -1
     active_power_b:
       name: Power Usage Light ${Light_B_Name}
+      id: power_usage_light_b
       filters:
         - multiply: -1
     #update_interval: 10s
