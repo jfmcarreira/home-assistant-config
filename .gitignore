@@ -8,4 +8,6 @@ custom_components/**
 www/community/**
 .DS_Store
 zigbee.db
-appdaemon/apps/__pycache__/HouseMode.cpython-310.pyc
+appdaemon/apps/__pycache__/**
+themes/mushroom/**
+themes/mushroom/**
