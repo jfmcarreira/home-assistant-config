@@ -1,0 +1,20 @@
+- binary_sensor:
+    - name: Backyard Camera Smart Detection
+      unique_id: backyard_camera_smart_detection
+      device_class: motion
+      icon: mdi:cctv
+      state: >
+        {{  is_state('binary_sensor.backyard_camera_person_detected', 'on') or 
+            is_state('binary_sensor.backyard_camera_pet_detected', 'on') or 
+            is_state('binary_sensor.backyard_camera_vehicle_detected', 'on')
+        }}
+
+    - name: Front Camera Smart Detection
+      unique_id: front_camera_smart_detection
+      device_class: motion
+      icon: mdi:cctv
+      state: >
+        {{  is_state('binary_sensor.front_camera_person_detected', 'on') or 
+            is_state('binary_sensor.front_camera_pet_detected', 'on') or 
+            is_state('binary_sensor.front_camera_vehicle_detected', 'on')
+        }}
