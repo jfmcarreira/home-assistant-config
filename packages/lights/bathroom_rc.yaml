@@ -6,7 +6,8 @@ light:
         friendly_name: Luzes da Casa de Banho de Serviço
         value_template: >-
           {{
-              is_state('light.bathroom_rc_ceiling', 'on')
+              is_state('light.bathroom_rc_ceiling', 'on') or
+              is_state('light.bathroom_rc_led', 'on')
           }}
         turn_on:
           - service: light.turn_on
@@ -14,3 +15,5 @@ light:
         turn_off:
           - service: light.turn_off
             entity_id: light.bathroom_rc_ceiling
+          - service: light.turn_off
+            entity_id: light.bathroom_rc_led

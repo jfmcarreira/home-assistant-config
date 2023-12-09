@@ -6,7 +6,8 @@ light:
         friendly_name: Luzes da Casa de Banho da Suite
         value_template: >-
           {{
-              is_state('light.master_bedroom_bathroom_ceiling', 'on')
+              is_state('light.master_bedroom_bathroom_ceiling', 'on') or
+              is_state('light.master_bedroom_bathroom_led', 'on')
           }}
         turn_on:
           - service: light.turn_on
@@ -14,3 +15,5 @@ light:
         turn_off:
           - service: light.turn_off
             entity_id: light.master_bedroom_bathroom_ceiling
+          - service: light.turn_off
+            entity_id: light.master_bedroom_bathroom_led
