@@ -1,0 +1,37 @@
+blueprint:
+  name: Event Based Light Switch Controller
+  description: >
+    Control a light switch using events. Instead of directly controlling a light 
+    the switch will send events to Home Assistant to further processing
+
+    The event will be used for toggle the light
+  domain: automation
+  input:
+    controlled_light:
+      name: Light
+      description: The light to be controlled
+      selector:
+        entity:
+          domain: light
+    light_name:
+      name: Name of the light on the event
+      description: Event used to control this light
+      selector:
+        text:
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  #- id: trigger_light
+  #  platform: state
+  #  entity_id: !input controlled_light
+  - id: trigger_event
+    platform: event
+    event_type: "esphome.light_switch_event"
+    event_data:
+      light: !input light_name
+condition: []
+action:
+  - service: light.toggle
+    entity_id: !input controlled_light

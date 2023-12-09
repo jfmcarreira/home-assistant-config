@@ -1,0 +1,118 @@
+blueprint:
+  name: "[Tasks] Track and notification of periodic task"
+  description: >
+    This automation track the end of a task and reminder for atention
+    Example:
+      - Replace filters
+
+  domain: automation
+  input:
+    task_needs_attention:
+      name: Sensor da Tarefa
+      description: Sensor que detecta se é necessário realizar a tarefa (binary_sensor.dryer_machine_need_emtpy)
+      selector:
+        entity:
+          domain: binary_sensor
+    task_done_code_name:
+      name: Código quando a tarefa é executada (Dryer_Machine_Empty)
+    notification_message:
+      name: Mensagem na Notificação
+      description: >
+        Mensagem enviada na notificação (A máquina de secar terminou! Pode retirar a roupa)
+      selector:
+        text:
+    notification_action:
+      name: Acção na Notificação
+      description: >
+        Texto da acção que aparece na notificação (Registar roupa retirada da máquina)
+      selector:
+        text:
+    android_task_id:
+      name: ID da notificação Android
+      selector:
+        number:
+          min: 0
+          max: 100
+    notification_action_id:
+      name: ID da acção
+      description: >
+        ID unico para registar acção concluida (dryer_remove_clothes)
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  task_done_code_name: !input task_done_code_name
+  record_timestamp: "{{ now().timestamp() | timestamp_custom('%Y-%m-%d %H:%M:%S') }}"
+  task_needs_attention: !input task_needs_attention
+  tts_message_timming: "00:00:10"
+
+trigger:
+  - id: trigger_task_overdue
+    entity_id: !input task_needs_attention
+    from: "on"
+    platform: state
+    to: "off"
+
+  - id: trigger_send_notification
+    platform: event
+    event_type: event_remaind_task_todo
+
+  - id: trigger_notification_action
+    platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: !input notification_action_id
+
+action:
+  - choose:
+      - conditions: "{{ trigger.id == 'trigger_task_overdue' or trigger.id == 'trigger_send_notification' }}"
+        sequence:
+          - condition: state
+            entity_id: binary_sensor.notification_non_disturb
+            state: "off"
+          - condition: state
+            entity_id: !input task_needs_attention
+            state: "on"
+          - condition: template
+            value_template: >
+              {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
+          - service: script.task_notification
+            data:
+              task_message: !input notification_message
+              task_action: !input notification_action_id
+              task_action_message: !input notification_action
+              task_id: !input android_task_id
+          # - service: persistent_notification.create
+          #   data:
+          #     title: Tarefa Doméstica
+          #     message: !input notification_message
+          #     notification_id: !input notification_action_id
+
+    default:
+      #- conditions: "{{ trigger.id == 'trigger_restart_machine' or trigger.id == 'trigger_notification_action' or trigger.id == 'trigger_notification_action' }}"
+      #sequence:
+      - service: notify.mobile_app_all
+        data:
+          message: clear_notification
+          data:
+            tag: !input android_task_id
+            dismiss: true
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: !input notification_action_id
+
+      - condition: state
+        entity_id: !input task_needs_attention
+        state: "on"
+
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: tasks
+          value: >
+            "{{ task_done_code_name }}"
+          column: task_name
+          date_stamp: >
+            "{{ record_timestamp}}"
+          save_string: "true"
+          save_date_time: "true"

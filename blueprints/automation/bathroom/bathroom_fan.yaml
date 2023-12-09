@@ -1,0 +1,207 @@
+blueprint:
+  name: "[Bathroom] Fan Control"
+  description: >
+    Control the state of a fan in a room with a light, e.g., bathroom.
+
+  domain: automation
+  input:
+    bathroom_light:
+      name: Light
+      description: The light that is present in the room
+      selector:
+        entity:
+          domain: light
+    extractor_fan:
+      name: Fan
+      description: The fan that is present in the room
+      selector:
+        entity:
+          domain: fan
+    automatic_turn_on:
+      name: Automatic Turn On
+      description: Turn on Fan automatically
+      default: "off"
+      selector:
+        boolean:
+    humidity_sensor:
+      name: Humidity
+      description: Humidity sensor of the room
+      selector:
+        entity:
+          domain: sensor
+          device_class: humidity
+    average_humidity:
+      name: Average Humidity
+      description: Average humidity of the room
+      selector:
+        entity:
+          domain: sensor
+          device_class: humidity
+    time_to_auto_fan_on:
+      name: Auto ON timer
+      description: Time before auto turning on the fan
+      default: 2
+      selector:
+        number:
+          min: 0
+          max: 10
+          unit_of_measurement: "m"
+    max_time_fan_on:
+      name: Maximum Time ON
+      description: Maximum time the fan can be On
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 30
+          unit_of_measurement: "m"
+
+    humidity_threshold:
+      name: Humidity Threshold
+      description: Humidity threshold to turn off fan
+      default: 80
+      selector:
+        number:
+          min: 0
+          max: 40
+          unit_of_measurement: "%"
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  bathroom_light: !input bathroom_light
+  extractor_fan: !input extractor_fan
+  humidity_sensor: !input humidity_sensor
+  average_humidity: !input average_humidity
+  humidity_threshold: !input humidity_threshold
+  automatic_turn_on: !input automatic_turn_on
+
+trigger:
+  - id: light_changes_to_on
+    platform: state
+    entity_id: !input bathroom_light
+    to: "on"
+    for:
+      minutes: !input time_to_auto_fan_on
+
+  - id: light_changes_to_off
+    platform: state
+    entity_id: !input bathroom_light
+    to: "off"
+
+  # - id: light_off_max_time
+  #   platform: state
+  #   entity_id: !input bathroom_light
+  #   to: "off"
+  #   for:
+  #      minutes: !input max_time_fan_on
+
+  # - id: fan_on_max_time
+  #   platform: state
+  #   entity_id: !input extractor_fan
+  #   to: "on"
+  #   for:
+  #     minutes: !input max_time_fan_on
+
+  - id: fan_on
+    platform: state
+    entity_id: !input extractor_fan
+    to: "on"
+
+  - id: fan_off
+    platform: state
+    entity_id: !input extractor_fan
+    to: "off"
+
+  # - id: humidity_change
+  #   platform: numeric_state
+  #   entity_id: !input humidity_sensor
+  #   below: !input humidity_threshold
+
+# condition:
+#   - condition: or
+#     conditions:
+#       - condition: state
+#         entity_id: !input bathroom_light
+#         state: "off"
+#       - condition: state
+#         entity_id: !input extractor_fan
+#         state: "off"
+
+action:
+  - alias: "Turn on fan if light is on"
+    choose:
+      - conditions: "{{ trigger.id == 'light_changes_to_on' }}"
+        sequence:
+          - condition: "{{ automatic_turn_on }}"
+          - condition: time
+            after: "08:00:00"
+            before: "22:30:00"
+          - condition: state
+            entity_id: !input bathroom_light
+            state: "on"
+          - service: homeassistant.turn_on
+            entity_id: !input extractor_fan
+
+  - alias: "Turn off fan if light is off and no humidity"
+    choose:
+      - conditions: "{{ trigger.id == 'light_changes_to_off' }}"
+        sequence:
+          - condition: state
+            entity_id: !input extractor_fan
+            state: "on"
+          - delay:
+              seconds: 30
+          # - alias: "Wait for humidity to decrease"
+          #   wait_template: "{{ is_state(extractor_fan, 'off') or states(humidity_sensor) | float < humidity_threshold }}"
+          #   timeout:
+          #     minutes: !input max_time_fan_on
+          - alias: "Wait for humidity to decrease comparing to long average"
+            wait_template: >
+              {{ 
+                  is_state(extractor_fan, 'off') or 
+                  (
+                    (states(humidity_sensor) | float < 90.0) and
+                    (((states(humidity_sensor) | float) - (states(average_humidity) | float)) < (humidity_threshold | float)) 
+                  ) 
+              }}
+            timeout:
+              minutes: !input max_time_fan_on
+          - service: homeassistant.turn_off
+            entity_id: !input extractor_fan
+
+  # - alias: "Turn off fan if humidity threshold is met"
+  #   choose:
+  #     - conditions: "{{ trigger.id == 'humidity_change' }}"
+  #       sequence:
+  #         - condition: state
+  #           entity_id: !input bathroom_light
+  #           state: "off"
+  #         - condition: numeric_state
+  #           entity_id: !input humidity_sensor
+  #           below: !input humidity_threshold
+  #         - service: homeassistant.turn_off
+  #           entity_id: !input extractor_fan
+
+  # - alias: "Turn off fan after a maximum time"
+  #   choose:
+  #     - conditions: "{{ trigger.id == 'fan_on_max_time' or trigger.id == 'light_off_max_time' }}"
+  #       sequence:
+  #         - condition: state
+  #           entity_id: !input bathroom_light
+  #           state: "off"
+  #         - service: homeassistant.turn_off
+  #           entity_id: !input extractor_fan
+
+  - alias: "Turn off fan after a maximum time"
+    choose:
+      - conditions: "{{ trigger.id == 'fan_on' }}"
+        sequence:
+          - condition: state
+            entity_id: !input bathroom_light
+            state: "off"
+          - delay:
+              minutes: !input max_time_fan_on
+          - service: homeassistant.turn_off
+            entity_id: !input extractor_fan

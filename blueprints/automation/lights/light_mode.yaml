@@ -1,0 +1,65 @@
+blueprint:
+  name: Configurar Luz com Base no Estado da Casa
+  description: >
+    Configurar temperatura e brilho das luzes com base na hora/modo de funcionamento da casa
+
+  domain: automation
+  input:
+    master_light:
+      name: Luz
+      description: Luz a controlar
+      selector:
+        entity:
+          domain: light
+    scene_day:
+      name: Cenário de Dia
+      description: Light to follow state
+      default:
+      selector:
+        entity:
+          domain: scene
+    scene_night:
+      name: Cenário de Noite
+      default:
+      selector:
+        entity:
+          domain: scene
+
+    scene_fallback:
+      name: (OPCIONAL) Cenário em caso de duplo trigger
+      default:
+      selector:
+        entity:
+          domain: scene
+
+mode: restart
+max_exceeded: silent
+variables:
+  scene_fallback: !input scene_fallback
+
+trigger:
+  - platform: state
+    entity_id: !input master_light
+    from: "off"
+    to: "on"
+
+action:
+  - alias: "Verificar se a luz acabou de ser acesa"
+    choose:
+      - conditions: "{{ scene_fallback != none and this.attributes.current == 1 }}"
+        sequence:
+          - scene: !input scene_day
+    default:
+      - alias: "Verificar o modo de funcionamento"
+        choose:
+          - conditions:
+              - condition: state
+                entity_id: input_select.house_mode
+                state: "On"
+            sequence:
+              - scene: !input scene_day
+        default:
+          - scene: !input scene_night
+
+  - alias: "Esperar 5s por um novo accionamento"
+    delay: 5

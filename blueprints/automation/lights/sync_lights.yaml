@@ -1,0 +1,94 @@
+blueprint:
+  name: Sync Light State
+  description: >
+    Sync On/Off state of the lights
+
+    Required entities:
+      - Main light
+      - Extra light
+
+  domain: automation
+  input:
+    master_light:
+      name: Master light
+      description: The main light of the room which others will follow state
+      selector:
+        entity:
+          domain: light
+    slave_light:
+      name: Extra light
+      description: Extra light in the room
+      default:
+      selector:
+        entity:
+          domain: light
+    sync_exclusive:
+      name: Turn light off when master turns on
+      default: "off"
+      selector:
+        boolean:
+    sync_on:
+      name: Turn light on when master turns on
+      default: "off"
+      selector:
+        boolean:
+    sync_off:
+      name: Turn light off when master turns off
+      default: "off"
+      selector:
+        boolean:
+    sync_off_from_slave:
+      name: Turn light off when master turns off
+      default: "off"
+      selector:
+        boolean:
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  master_light: !input master_light
+  sync_exclusive: !input sync_exclusive
+  sync_on: !input sync_on
+  sync_off: !input sync_off
+  sync_off_from_slave: !input sync_off_from_slave
+
+trigger:
+  - id: master_light_trigger
+    platform: state
+    entity_id: !input master_light
+  - id: extra_light_trigger
+    platform: state
+    entity_id: !input slave_light
+    from: "on"
+    to: "off"
+
+action:
+  - choose:
+      - conditions: "{{ trigger.id == 'extra_light_trigger' }}"
+        sequence:
+          - condition: state
+            entity_id: !input slave_light
+            state: "off"
+          - condition: "{{ sync_off_from_slave == True }}"
+          - service: homeassistant.turn_off
+            data:
+              entity_id: !input master_light
+
+      - conditions: "{{ trigger.id == 'master_light_trigger' and states[master_light].state == 'on' and sync_exclusive == True}}"
+        sequence:
+          - service: homeassistant.turn_off
+            data:
+              entity_id: !input slave_light
+
+      - conditions: "{{ trigger.id == 'master_light_trigger' and states[master_light].state == 'on' and sync_on == True }}"
+        sequence:
+          - service: homeassistant.turn_on
+            data:
+              entity_id: !input slave_light
+
+      - conditions: "{{ trigger.id == 'master_light_trigger' and  states[master_light].state == 'off' and sync_off == True }}"
+        sequence:
+          - service: homeassistant.turn_off
+            data:
+              entity_id: !input slave_light

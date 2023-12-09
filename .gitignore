@@ -3,8 +3,6 @@
 .HA_VERSION
 secrets.yaml
 home-assistant.log*
-blueprints/**
-custom_components/**
 www/community/**
 .DS_Store
 zigbee.db

@@ -1,0 +1,287 @@
+blueprint:
+  name: "[Lights] Contolador do estado da iluminação (v2)"
+  description: >
+    Ligar luz com base no movimento e luminusidade da divisão.
+
+    A ideia da automação é apenas ligar a luz quando ocorre movimento.
+    Caso isto aconteça a luz, após um tempo definido ela desliga-se automáticamente.
+
+    Contudo, isto só acontece se a luz estiver inicialmente desligada, caso contrário esta automação não é executada.
+
+    Pode ser definido um número máximo de execuções a partir do qual a luz se mantem acesa (evitar que a malta se esteja sempre a abanar).
+    No caso deste valor ser mantido a zero ela é executada sempre.
+
+    O tempo que a luz se mantém ligada aumenta ao longo da execuções, ou seja, a primeira vez que a luz acende demora 1x a duração definida.
+    Após isto, se ela se apagar e for ativada por movimento o tempo é multiplicado por 2 e depois por 3, sucessivamente.
+
+    Após um período igual ao tempo este contador é reiniciado (ou caso a luz seja desligada manualmente).
+
+    Atenção: esta automação não serve para desligar uma luz que tenha sido ligada manualmente após algum tempo.
+
+    Caso seja selecionado um modo de funcionamento, quando este altera a luz será desligada caso não deva ser ativada nesse modo.
+
+    Entidades necessárias:
+      - motion_sensor (sensor usado para ativar a automação)
+      - light (luz a controlar)
+
+    Entidades opcionais:
+      - Modo de funcionamento (apenas executar a automação caso o modo de funcionamento seja o definido)
+      - Sensor de luminusidade (device_class: illuminance)
+      - Nível de luminusidade
+      - Bloqueio se desligado (apenas executa a automação se entidade não estiver OFF)
+      - Bloqueio se ligado (apenas executa a automação se entidade não estiver ON)
+
+  domain: automation
+  input:
+    motion_sensor:
+      name: Sensor de Movimento
+      description: Sensor que aciona a automação
+      selector:
+        entity:
+    target_entity:
+      name: Luz a controlar
+      description: Luz a controlar pela automação
+      selector:
+        entity:
+          domain: light
+    no_motion_wait:
+      name: Duração
+      description: Duração para manter a luz ligada após não existir movimento
+      default: 60
+      selector:
+        number:
+          min: 0
+          max: 600
+          unit_of_measurement: "s"
+    min_repetition_interval_sec:
+      name: Tempo mínimo entre repetições
+      description: Duração miníma entre repetições para não desativar e deixar a luz acesa
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 120
+          unit_of_measurement: "s"
+    illuminance_sensor:
+      name: (OPCIONAL) Sensor de luminusidade
+      description: Sensor com o valor de luminusidade na divisão.
+      default:
+      selector:
+        entity:
+          domain: sensor
+          device_class: illuminance
+    illuminance_cutoff:
+      name: (OPCIONAL) Luminusidade
+      description: Executar a automação se a luminusidade for abaixo deste valor.
+      default:
+      selector:
+        number:
+          min: 0
+          max: 100
+    only_after_sunset:
+      name: (OPCIONAL) Funcionamento Exclusivo de Noite
+      description: Apenas executar a automação durante a noite (após o pôr do sol)
+      default: "off"
+      selector:
+        boolean:
+    blocker_on_entity:
+      name: (OPCIONAL) Entidade bloqueadora ON
+      description: Automção é excluída se esta entidade estiver ON (ex, outras luzes já estarem ligadas).
+      default:
+      selector:
+        entity:
+    blocker_off_entity:
+      name: (OPCIONAL) Entidade bloqueadora OFF
+      description: Automção é excluída se esta entidade estiver OFF (ex, se não estiver ninguém em casa).
+      default:
+      selector:
+        entity:
+    required_house_mode:
+      name: (OPCIONAL) Ativar no modo de funcionamento
+      description: Nome do modo de funcionamento para esta automação
+      default:
+      selector:
+        text:
+    house_mode:
+      name: (OPCIONAL) Modo de funcionamento
+      description: Entidade que define o modo de funcionamento da casa
+      default:
+      selector:
+        entity:
+    motion_light_main_sw:
+      name: (OPCIONAL) Controlador Geral das Luzes
+      description: Entidade que funciona como interruptor geral das automações das luzes
+      default:
+      selector:
+        entity:
+          domain: input_boolean
+    room_name:
+      name: (OPCIONAL) Nome da Divisão
+      description: >
+        Nome da divisão onde é aplicada esta regra de forma a cruzar os dados com device_tracker.
+        Se estiver alguém presente nesta divisão a luz não é apagada.
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - platform: state
+    entity_id: !input motion_sensor
+    to: "on"
+    id: motion_sensor_trigger
+  - platform: state
+    entity_id: !input house_mode
+    id: house_mode_trigger
+  - platform: state
+    entity_id: !input motion_light_main_sw
+    from: "on"
+    to: "off"
+    id: motion_light_sw_state_trigger
+
+variables:
+  motion_sensor: !input motion_sensor
+  target_entity: !input target_entity
+  illuminance_currently: !input illuminance_sensor
+  illuminance_cutoff: !input illuminance_cutoff
+  blocker_on_entity: !input blocker_on_entity
+  blocker_off_entity: !input blocker_off_entity
+  no_motion_wait: !input no_motion_wait
+  required_house_mode: !input required_house_mode
+  house_mode: !input house_mode
+  motion_light_main_sw: !input motion_light_main_sw
+  only_after_sunset: !input only_after_sunset
+  room_name: !input room_name
+  min_repetition_interval_sec: !input min_repetition_interval_sec
+  automation_last_triggered: "{{ this.attributes.last_triggered }}"
+  automation_previous_state: "{{ this.attributes.current }}"
+
+condition:
+  - condition: or
+    conditions:
+      # Run if the light is in automatic mode (automation is already running)
+      - "{{ this.attributes.current == 1 }}"
+
+      # These are the conditions to enter in automatic mode
+      # This conditions matter if the light is not in automatic mode
+      - condition: and
+        conditions:
+          # Do not run if light is on (manually turn on)
+          - condition: state
+            entity_id: !input target_entity
+            state: "off"
+
+          # Do not run if automation controller is off
+          - "{{ (motion_light_main_sw == none) or (states[motion_light_main_sw].state == 'on') }}"
+
+          # Do not run if sun is not down
+          - "{{ (only_after_sunset == false) or  (state_attr('sun.sun', 'elevation') < 10) }}"
+
+          # Only run in specific house mode
+          - "{{ house_mode == none or required_house_mode == none or states[house_mode].state == required_house_mode }}"
+
+          # Do not run if this blocker is ON
+          - "{{ (blocker_on_entity == none) or (not states[blocker_on_entity].state == 'on') }}"
+
+          # Do not run if the blocker is OFF
+          - "{{ (blocker_off_entity == none) or (not states[blocker_off_entity].state == 'off') }}"
+
+          # Check illuminance level
+          # This is only valid if the light is off for more than 10 sec (refresh time of the lux sensor)
+          - condition: or
+            conditions:
+              - condition: not
+                conditions:
+                  - condition: state
+                    entity_id: !input target_entity
+                    state: "off"
+                    for:
+                      seconds: 10
+              - condition: template
+                value_template: >
+                  {{
+                    (illuminance_currently == none)
+                    or
+                    (illuminance_cutoff == none)
+                    or
+                    (states[illuminance_currently].state | int < illuminance_cutoff | int )
+                  }}
+
+action:
+  # Check if house mode, automation or sunset is met
+  #- alias: "Process specific triggers that can change light state"
+  - choose:
+      - conditions: "{{ trigger.id == 'house_mode_trigger' or trigger.id == 'motion_light_sw_state_trigger' }}"
+        sequence:
+          - choose:
+              conditions:
+                - "{{ this.attributes.current == 1 }}"
+                - condition: or
+                  conditions:
+                    - "{{ not( (motion_light_main_sw == none) or (states[motion_light_main_sw].state == 'on') ) }}"
+                    - "{{ not( house_mode == none or required_house_mode == none or states[house_mode].state == required_house_mode ) }}"
+              sequence:
+                - service: light.turn_off
+                  entity_id: !input target_entity
+                # Exit automation
+                - condition: template
+                  value_template: "{{ false }}"
+
+  #- alias: "If we repeat this action was ran twice in a short period of time"
+  - choose:
+      - conditions:
+          - "{{ automation_previous_state == 0 }}"
+          - "{{ now().timestamp() - automation_last_triggered - no_motion_wait | as_timestamp < min_repetition_interval_sec }}"
+        sequence:
+          # Exit automation, therefore light will stay on
+          - condition: template
+            value_template: "{{ false }}"
+
+  # Double check if motion is on
+  - condition: state
+    entity_id: !input motion_sensor
+    state: "on"
+
+  - service: light.turn_on
+    entity_id: !input target_entity
+
+  - delay:
+      seconds: 1
+
+  # Wait untill the motion sensor is off or untill light is manually turned off
+  - wait_template: >
+      {{
+          states[motion_sensor].state == 'off'
+          or
+          states[target_entity].state == 'off'
+      }}
+
+  # Wait untill room has presence
+  - wait_template: >
+      {% if room_name %}
+        {% set is_device_in_room = namespace(value=0) %}
+        {% for device in states.device_tracker %}
+          {% if device.state == room_name %}
+            {% set is_device_in_room.value = is_device_in_room.value + 1 %}
+          {% endif %}
+        {% endfor %}
+        {% if states[target_entity].state == 'off' or is_device_in_room.value == 0 %}
+          True
+        {% else %}
+          False
+        {% endif %}
+      {% else %}
+        True
+      {% endif %}
+
+  # Wait a defined time or cancel if target is already off
+  - wait_template: "{{ states[target_entity].state == 'off' }}"
+    timeout:
+      seconds: "{{ no_motion_wait | int }}"
+
+  # Terminate if light is off at this point
+  - condition: state
+    entity_id: !input target_entity
+    state: "on"
+
+  - service: light.turn_off
+    entity_id: !input target_entity
