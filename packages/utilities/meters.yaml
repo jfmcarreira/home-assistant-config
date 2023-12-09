@@ -1,0 +1,122 @@
+################################################################
+## Utilities Meter
+################################################################
+homeassistant:
+  customize:
+    automation.meters_save_water_gas_meters_counter_to_db:
+      friendly_name: Guardar Contagens da Água/Gás na BD
+    automation.meters_save_electricity_meters_counter_to_db:
+      friendly_name: Guardar Contagens da Electrecidade na BD
+    sensor.electricity_last_meter:
+      friendly_name: Última Contagem da Electrecidade
+      device_class: timestamp
+    sensor.water_last_meter:
+      friendly_name: Última Contagem da Água
+      device_class: timestamp
+    sensor.electricity_meter_full:
+      icon: mdi:counter
+    sensor.electricity_meter_peak:
+      icon: mdi:counter
+    sensor.electricity_meter_offpeak:
+      icon: mdi:counter
+    sensor.water_meter:
+      icon: mdi:counter
+    sensor.electricity_meter:
+      icon: mdi:counter
+
+sensor:
+  - platform: template
+    sensors:
+      electricity_meter:
+        friendly_name: Electricity Meter
+        value_template: >
+          {{ ( ( states('sensor.electricity_meter_offpeak') | float ) + ( states('sensor.electricity_meter_peak') | float ) + ( states('sensor.electricity_meter_full') | float ) ) | int }}
+
+input_number:
+  electricity_meter_full:
+    name: Electricity Meter Full
+    min: 0
+    max: 99999
+    step: 1
+    mode: box
+  electricity_meter_peak:
+    name: Electricity Meter Peak
+    min: 0
+    max: 99999
+    step: 1
+    mode: box
+  electricity_meter_offpeak:
+    name: Electricity Meter Off-Peak
+    min: 0
+    max: 99999
+    step: 1
+    mode: box
+  water_meter:
+    name: Water Meter
+    min: 0
+    max: 99999
+    step: 0.01
+    mode: box
+
+automation old:
+  - alias: meters_save_water_gas_meters_counter_to_db
+    initial_state: true
+    mode: queued
+    max: 20
+    trigger:
+      - platform: state
+        entity_id: input_number.water_meter
+    action:
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: meters_tracking
+          value: >
+            {{ trigger.to_state.state }}
+          date_stamp: >
+            "{{ now().timestamp()  | timestamp_custom("%Y-%m-%d %H:00:00") }}"
+          save_date_time: "true"
+          column: >
+            {% if trigger.entity_id == "input_number.water_meter" %}
+              water_meter
+            {% elif trigger.entity_id == "input_number.gas_meter" %}
+              gas_meter
+            {% endif %}
+
+  - alias: meters_save_electricity_meters_counter_to_db
+    initial_state: true
+    mode: queued
+    max: 20
+    trigger:
+      - platform: state
+        entity_id: input_number.electricity_meter_full
+      - platform: state
+        entity_id: input_number.electricity_meter_peak
+      - platform: state
+        entity_id: input_number.electricity_meter_offpeak
+    action:
+      - service: shell_command.external_my_sql_insert
+        data:
+          table: meters_tracking
+          value: >
+            {{ trigger.to_state.state }}
+          date_stamp: >
+            "{{ now().timestamp()  | timestamp_custom("%Y-%m-%d %H:00:00") }}"
+          save_date_time: "true"
+          column: >
+            {% if trigger.entity_id   == "input_number.electricity_meter_full" %}
+              electricity_meter_full
+            {% elif trigger.entity_id == "input_number.electricity_meter_peak" %}
+              electricity_meter_peak
+            {% elif trigger.entity_id == "input_number.electricity_meter_offpeak" %}
+              electricity_meter_offpeak
+            {% endif %}
+
+      # - service: shell_command.external_my_sql_insert
+      #   data_template:
+      #     table: meters_tracking
+      #     value: >
+      #       {{ states.sensor.bhpzem_energy.state }}
+      #     date_stamp: >
+      #       "{{ now().timestamp()  | timestamp_custom("%Y-%m-%d %H:00:00") }}"
+      #     save_date_time: "true"
+      #     column: "electricity_energy_monitoring"
