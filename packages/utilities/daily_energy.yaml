@@ -1,10 +1,4 @@
 utility_meter:
-  light_daily_energy_hall:
-    source: sensor.light_energy_hall
-    cycle: daily
-  light_daily_energy_hall_side:
-    source: sensor.light_energy_hall_side
-    cycle: daily
   light_daily_energy_living_room_window:
     source: sensor.light_energy_living_room_window
     cycle: daily
