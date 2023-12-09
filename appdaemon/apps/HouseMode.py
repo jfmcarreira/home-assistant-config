@@ -19,20 +19,21 @@ class HouseMode(hass.Hass):
 
         self.trackLights = [
             "light.living_room_group",
-            "light.kitchen_group",
-            "light.office_group",
+            "light.kitchen",
+            "light.office",
+            "light.laundry",
             "light.hall_group",
             "light.all_bedrooms",
             "light.all_bathrooms"
             ]
 
-        # self.trackMotion = [
-        #     "binary_sensor.motion_sensor_hallway",
+        self.trackMotion = [
+             "binary_sensor.motion_sensor_stairs",
+            ]
         #     "binary_sensor.motion_sensor_kitchen",
         #     "binary_sensor.motion_sensor_living_room",
         #     "binary_sensor.motion_sensor_office",
         #     "binary_sensor.master_bedroom_motion_sensor",
-        #     ]
 
         self.trackState = [
             "media_player.living_room_tv"
@@ -51,8 +52,8 @@ class HouseMode(hass.Hass):
         for entity in self.trackLights:
             self.listen_state(self.light_callback, entity )
 
-        # for entity in self.trackMotion:
-        #     self.listen_state(self.motion_callback, entity )
+        for entity in self.trackMotion:
+            self.listen_state(self.motion_callback, entity )
 
 
         self.listen_state(self.house_mode_callback, "input_select.house_mode")
