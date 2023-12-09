@@ -33,18 +33,21 @@ input_boolean:
   vacuum_office:
     name: Escritório
     icon: mdi:desk
-  vacuum_bathroom:
-    name: Casa de Banho
-    icon: mdi:toilet
-  vacuum_bedroom:
-    name: Quarto
+  vacuum_hall:
+    name: Hall
+    icon: mdi:desk
+  vacuum_masterbedroom:
+    name: Suite
     icon: mdi:bed-double
-  vacuum_bedroombath:
-    name: Casa de Banho do Quarto
-    icon: mdi:shower-head
   vacuum_bedroomricardo:
     name: Quarto do Ricardo
     icon: mdi:baby-face-outline
-  vacuum_livingroomwithcarpet:
-    name: Sala Com Tapetes (Zona)
-    icon: mdi:sofa
+  vacuum_bedroomguest:
+    name: Quarto Extra
+    icon: mdi:bed-double
+  vacuum_mainbathroom:
+    name: Casa de Banho Principal
+    icon: mdi:toilet
+  vacuum_masterbedroombath:
+    name: WC da Suite
+    icon: mdi:shower-head

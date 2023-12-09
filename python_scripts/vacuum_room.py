@@ -29,16 +29,17 @@ vaccum_room_list = [
 application_name = "valetudo_re" # or "xiaomi" or "valetudo"
 
 vaccum_room_list = [
-    #  Room Name                                        Room code name             Room id (name or number)       Is Zone?
-    (['sala', 'living room'],                           'LivingRoom',              ["LivingRoom"],                False ),
-    (['cozinha', 'kitchen'],                            'Kitchen',                 ["Kitchen"],                   False ),
-    (['escritório', 'office'],                           'Office',                  ["Office"],                    False ),
-    (['casa de banho', 'bathroom'],                     'Bathroom',                ["Bathroom"],                  False ),
-    (['quarto', 'bedroom'],                             'Bedroom',                 ["Bedroom"],                   False ),
-    (['corredor', 'hallway'],                           'Hallway',                 ["Hallway"],                   False ),
-    (['casa de banho privada', 'bedroom bathroom'],     'BedroomBath',             ["PrivateBathroom"],           False ),
-    (['quarto do ricardo', 'ricardo bedroom'],          'BedroomRicardo',          ["BedroomRicardo"],            False ),
-    (['casa de banho centro', 'bathroom center'],       'BathroomCenter',          ["BathroomSemBalanca"],        True  ),
+    #  Room Name                                              Room code name             Room id (name or number)       Is Zone?
+    (['sala', 'living room'],                                 'LivingRoom',              ["LivingRoom"],                False ),
+    (['cozinha', 'kitchen'],                                  'Kitchen',                 ["Kitchen"],                   False ),
+    (['escritório', 'office'],                                 'Office',                   ["Office"],                     False ),
+    (['corredor', 'hallway'],                                 'Hallway',                 ["Hallway"],                   False ),
+    (['hall', 'hall'],                                        'Hall',                    ["Hall"],                      False ),
+    (['suite', 'master bedroom'],                             'MasterBedroom',           ["MasterBedroom"],             False ),
+    (['quarto do ricardo', 'ricardo bedroom'],                'BedroomRicardo',          ["BedroomRicardo"],            False ),
+    (['quarto exta', 'guest bedroom'],                        'BedroomExtra',            ["BedroomExtra"],              False ),
+    (['casa de banho', 'bathroom'],                           'MainBathroom',            ["MainBathroom"],              False ),
+    (['casa de banho da suite', 'master bedroom bathroom'],   'MasterBedroomBath',       ["MasterBedroomBath"],         False ),
 ]
 
 # Get vacuum entity_id (if more than one) (string)
