@@ -1,5 +1,6 @@
 substitutions:
   devicename: bhonofre_cover_bedroom_rc
+  PowerSaveMode: NONE
   CoverName: Bedroom RC
   Open: "13"
   Close: "12"

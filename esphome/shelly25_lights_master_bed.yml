@@ -1,0 +1,62 @@
+substitutions:
+  DeviceName: shelly25_lights_master_bed
+  PowerSaveMode: LIGHT
+  FriendlyName: Shelly25 Master Bedroom Bed
+  InputPin: GPIO13
+  Light_A_Name: Master Bedroom Ceiling
+  Light_B_Name: Master Bedroom Entry
+
+<<: !include includes/shelly25_base_two_lights.yml
+
+globals:
+  - id: lights_state
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+binary_sensor:
+  - platform: homeassistant
+    id: house_mode_night
+    entity_id: binary_sensor.night_mode
+
+  - id: sw_1
+    platform: gpio
+    pin: GPIO13
+    on_multi_click:
+      - timing:
+          - ON for at most 1000ms
+          - OFF for at least 100ms
+        invalid_cooldown: 100ms
+        then:
+          - if:
+              condition:
+                and:
+                  - api.connected:
+              then:
+                - homeassistant.service:
+                    service: light.toggle
+                    data:
+                      entity_id: light.master_bedroom_group
+              else:
+                - light.toggle: light_1
+
+  - id: sw_2
+    platform: gpio
+    pin: GPIO05
+    on_multi_click:
+      - timing:
+          - ON for at most 1000ms
+          - OFF for at least 100ms
+        invalid_cooldown: 100ms
+        then:
+           - if:
+              condition:
+                and:
+                  - api.connected:
+              then:
+                - homeassistant.service:
+                    service: light.toggle
+                    data:
+                      entity_id: light.master_bedroom_group
+              else:
+                - light.toggle: light_2

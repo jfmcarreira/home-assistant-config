@@ -69,18 +69,18 @@ light:
     output: relay_2
     restore_mode: RESTORE_DEFAULT_OFF
 
-time:
-  - platform: homeassistant
-    id: homeassistant_time
-    # count time in enabled state every minute
-    on_time:
-      - seconds: 0
-        minutes: /1
-        then:
-          - lambda: |-
-              if (id(light_1).state || id(light_2).state) {
-                id(time_lights_on_mins) += 1;
-              }
+# time:
+#   - platform: homeassistant
+#     id: homeassistant_time
+#     # count time in enabled state every minute
+#     on_time:
+#       - seconds: 0
+#         minutes: /1
+#         then:
+#           - lambda: |-
+#               if (id(light_1).state || id(light_2).state) {
+#                 id(time_lights_on_mins) += 1;
+#               }
 
 binary_sensor:
   - id: sw_1
@@ -91,16 +91,17 @@ binary_sensor:
           - ON for at most 1000ms
           - OFF for at least 100ms
         invalid_cooldown: 100ms
+        then:
           - if:
               condition:
-                or:
+                and:
                   - light.is_on: light_1
                   - light.is_on: light_2
               then:
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
-                - light.turn_on: light_1
+                - light.toggle: light_1
           - globals.set:
               id: time_lights_on_mins
               value: "0"
@@ -125,14 +126,14 @@ binary_sensor:
         then:
           - if:
               condition:
-                or:
+                and:
                   - light.is_on: light_1
                   - light.is_on: light_2
               then:
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
-                - light.turn_on: light_2
+                - light.toggle: light_2
           - globals.set:
               id: time_lights_on_mins
               value: "0"
