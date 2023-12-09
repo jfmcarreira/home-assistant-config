@@ -17,9 +17,9 @@ api:
         - cover.control:
             id: cover_1
             position: ${SmallOpenPosition}
-    - service: cover_cycle_open_close
-      then:
-        - script.execute: cover_cycle_open_close
+    # - service: cover_cycle_open_close
+    #   then:
+    #     - script.execute: cover_cycle_open_close
 
 
 globals:
@@ -223,44 +223,44 @@ switch:
 
   - platform: template
     id: "cover_cicle_sw"
-    #name: "cover_cicle_sw_${CoverName}"
+    name: "cover_cicle_sw_${CoverName}"
     device_class: switch
     restore_state: no
     lambda: |-
       return {};
     optimistic: yes
 
-  - platform: template
-    name: "cover_control_group_${CoverName}"
-    device_class: switch
-    restore_state: yes
-    lambda: |-
-      return {};
-    optimistic: yes
+  # - platform: template
+  #   name: "cover_control_group_${CoverName}"
+  #   device_class: switch
+  #   restore_state: yes
+  #   lambda: |-
+  #     return {};
+  #   optimistic: yes
 
-  - platform: template
-    name: "cover_control_open_sunrise_${CoverName}"
-    device_class: switch
-    restore_state: yes
-    lambda: |-
-      return {};
-    optimistic: yes
+  # - platform: template
+  #   name: "cover_control_open_sunrise_${CoverName}"
+  #   device_class: switch
+  #   restore_state: yes
+  #   lambda: |-
+  #     return {};
+  #   optimistic: yes
 
-  - platform: template
-    name: "cover_control_close_sunset_${CoverName}"
-    device_class: switch
-    restore_state: yes
-    lambda: |-
-      return {};
-    optimistic: yes
+  # - platform: template
+  #   name: "cover_control_close_sunset_${CoverName}"
+  #   device_class: switch
+  #   restore_state: yes
+  #   lambda: |-
+  #     return {};
+  #   optimistic: yes
 
-  - platform: template
-    name: "cover_control_close_in_rain_${CoverName}"
-    device_class: switch
-    restore_state: yes
-    lambda: |-
-      return {};
-    optimistic: yes
+  # - platform: template
+  #   name: "cover_control_close_in_rain_${CoverName}"
+  #   device_class: switch
+  #   restore_state: yes
+  #   lambda: |-
+  #     return {};
+  #   optimistic: yes
 
 script:
   - id: cover_cycle_open_close

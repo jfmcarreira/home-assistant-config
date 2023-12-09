@@ -2,8 +2,7 @@ wifi:
   domain: .home
   ssid: !secret esp_ssid
   password: !secret esp_password
-  #use_address: 10.20.107.114
-  use_address: 10.20.107.236
+  #use_address: "10.20.107.236"
   power_save_mode: "${PowerSaveMode}"
 
 logger:

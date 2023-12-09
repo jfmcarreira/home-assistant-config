@@ -10,6 +10,7 @@ i2c:
   scl: GPIO14
 
 api:
+  reboot_timeout: 30min
 
 sensor:
   # Voltage

@@ -86,3 +86,12 @@ binary_sensor:
           - globals.set:
               id: time_lights_on_mins
               value: "0"
+      - timing:
+          - ON for at least 1000ms
+        invalid_cooldown: 100ms
+        then:
+          - logger.log: "Long 2 Press"
+          - homeassistant.event:
+              event: esphome.shelly25_bathroom_btn
+              data:
+                button: ${DeviceName}_long_2

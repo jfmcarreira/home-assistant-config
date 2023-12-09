@@ -1,5 +1,5 @@
 substitutions:
-  devicename: bhonofre_cover_bathroom
+  devicename: bhonofre_cover_bathroom_rc
   PowerSaveMode: NONE
   CoverName: Bathroom
   Open: "12"
