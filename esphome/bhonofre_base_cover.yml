@@ -155,6 +155,8 @@ mqtt:
   broker: !secret mqtt_broker
   username: !secret mqtt_username
   password: !secret mqtt_password
+  discovery: false
+  discovery_retain: false
   on_message:
     - topic: esphome/cover/trigger/close_all
       qos: 0

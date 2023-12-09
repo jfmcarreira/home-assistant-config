@@ -1,0 +1,19 @@
+substitutions:
+  DeviceName: shelly25_bathroom_suite
+  FriendlyName: Shelly 25 Master Bedroom Bathroom
+  InputAPin: GPIO13
+  InputBPin: GPIO5
+  Light_A_Name: Master Bedroom Bathroom Ceiling
+  Light_B_Name: Master Bedroom Bathroom Mirror
+  Address: !secret shelly25_bathroom_suite_ip
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO04
+  - platform: gpio
+    id: relay_2
+    pin: GPIO15
+
+
+<<: !include shelly25_base_bathroom_controls.yml
