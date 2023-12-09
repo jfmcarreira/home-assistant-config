@@ -1,5 +1,5 @@
 substitutions:
-  DeviceName: shelly25_lights_bedroom_ricardo
+  devicename: shelly25_lights_bedroom_ricardo
   FriendlyName: Shelly25 Bedroom Ricardo
   InputPin: GPIO5
   Light_1_Name: Bedroom Ricardo Ceiling
@@ -74,7 +74,7 @@ binary_sensor:
                 or:
                   - light.is_on: light_1
                   - light.is_on: light_2
-                  - binary_sensor.is_on: bedroom_ricardo_lamp_state
+                  #- binary_sensor.is_on: bedroom_ricardo_lamp_state
               then:
                 - light.turn_off: light_1
                 - light.turn_off: light_2

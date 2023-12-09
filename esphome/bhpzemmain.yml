@@ -1,9 +1,9 @@
 substitutions:
-  DeviceName: bhpzemmain
+  devicename: bhpzemmain
   FriendlyName: BHPZEM Main
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   platform: ESP8266
   board: nodemcu
   # Reset sensor

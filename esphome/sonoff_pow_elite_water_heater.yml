@@ -1,10 +1,10 @@
 # Basic Config
 substitutions:
-  DeviceName: sonoff_pow_elite_water_heater
+  devicename: sonoff_pow_elite_water_heater
   FriendlyName: Sonoff Water Heater
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   friendly_name: ${FriendlyName}
 
 esp32:
@@ -50,7 +50,7 @@ sensor:
       - multiply: 0.001
 
   - platform: template
-    name: device_temperature_${DeviceName}
+    name: device_temperature_${devicename}
     device_class: temperature
     unit_of_measurement: °C
     id: esp32_temp

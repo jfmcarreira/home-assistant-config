@@ -1,5 +1,5 @@
 substitutions:
-  DeviceName: shelly25_lights_kitchen
+  devicename: shelly25_lights_kitchen
   FriendlyName: Shelly25 Kitchen
   Light_1_Name: Kitchen LED
   Light_2_Name: Kitchen Window

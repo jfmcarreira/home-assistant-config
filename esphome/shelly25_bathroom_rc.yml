@@ -1,5 +1,5 @@
 substitutions:
-  DeviceName: shelly25_bathroom_rc
+  devicename: shelly25_bathroom_rc
   FriendlyName: Shelly 25 Bathroom RC
   Light_1_Name: Bathroom RC LED
   Light_2_Name: Bathroom RC Ceiling
@@ -10,6 +10,7 @@ packages:
   base: !include
     file: packages/shelly25_bathroom.yml
     vars:
+      name: ${devicename}
       input_a_light: light_1
       input_b_light: light_2
       fan: fan.bathroom_rc

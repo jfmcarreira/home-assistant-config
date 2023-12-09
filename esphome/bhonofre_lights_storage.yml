@@ -1,9 +1,9 @@
 substitutions:
-  DeviceName: bhonofre_lights_storage
+  devicename: bhonofre_lights_storage
   FriendlyName: BHOnofre Lights Storage
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   platform: ESP8266
   board: nodemcu
 

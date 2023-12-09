@@ -1,12 +1,12 @@
 substitutions:
-  DeviceName: sonoff-basic-01
+  devicename: sonoff-basic-01
   FriendlyName: Sonoff Basic Kitchen Pantry
 
 packages:
   esphome_base: !include packages/common.yml
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   platform: ESP8266
   board: esp01_1m
 

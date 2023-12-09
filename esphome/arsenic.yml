@@ -1,5 +1,5 @@
 substitutions:
-  DeviceName: arsenic
+  devicename: arsenic
   FriendlyName: Arsenic
 
 esphome:

@@ -1,9 +1,9 @@
 substitutions:
-  DeviceName: nodemcu_gate
+  devicename: nodemcu_gate
   FriendlyName: Gate
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
 
 esp8266:
   board: nodemcuv2

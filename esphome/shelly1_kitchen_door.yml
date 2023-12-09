@@ -1,12 +1,12 @@
 substitutions:
-  DeviceName: shelly1_kitchen_door
+  devicename: shelly1_kitchen_door
   FriendlyName: Shelly 1 Kitchen Door
 
 packages:
   esphome_base: !include packages/common.yml
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   platform: ESP8266
   board: esp01_1m
 
@@ -53,16 +53,7 @@ binary_sensor:
                       - homeassistant.service:
                           service: light.turn_off
                           data:
-                            entity_id: light.exterior_wall_side
-                      - homeassistant.service:
-                          service: light.turn_off
-                          data:
-                            entity_id: light.exterior_wall_back
-                      - homeassistant.service:
-                          service: light.turn_off
-                          data:
-                            entity_id: light.exterior_wall_east
-                      - light.turn_off: light_1
+                            entity_id: light.outside_group
                     else:
                       - light.turn_on: light_1
               else:

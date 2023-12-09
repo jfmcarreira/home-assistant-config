@@ -1,10 +1,10 @@
 # Basic Config
 substitutions:
-  DeviceName: pow-elite-16a
+  devicename: pow-elite-16a
   FriendlyName: Sonoff Pow First Floor
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   friendly_name: ${FriendlyName}
 
 esp32:

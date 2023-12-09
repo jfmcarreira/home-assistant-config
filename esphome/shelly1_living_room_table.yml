@@ -1,5 +1,5 @@
 substitutions:
-  DeviceName: shelly1_living_room_table
+  devicename: shelly1_living_room_table
   FriendlyName: Shelly 1 Living Room Table Light
 
 packages:
@@ -7,7 +7,7 @@ packages:
   #use_address: !include packages/use_address.yml
 
 esphome:
-  name: ${DeviceName}
+  name: ${devicename}
   platform: ESP8266
   board: esp01_1m
 
