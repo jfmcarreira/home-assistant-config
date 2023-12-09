@@ -1,0 +1,30 @@
+- sensor:
+    - name: humidity_main_bathroom_light_off
+      unique_id: humidity_main_bathroom_light_off
+      device_class: humidity
+      state: >-
+        {% if is_state( 'light.main_bathroom', 'on' )  %}
+          {{ states.sensor.humidity_main_bathroom_light_off.state | float(0) }}
+        {% else %}
+          {{ states.sensor.humidity_main_bathroom.state | float(0) }}
+        {% endif %}
+
+    - name: humidity_master_bedroom_bathroom_light_off
+      unique_id: humidity_master_bedroom_bathroom_light_off
+      device_class: humidity
+      state: >-
+        {% if is_state( 'light.master_bedroom_bathroom', 'on' )  %}
+          {{ states.sensor.humidity_master_bedroom_bathroom_light_off.state | float(0) }}
+        {% else %}
+          {{ states.sensor.humidity_master_bedroom_bathroom.state | float(0) }}
+        {% endif %}
+
+    # - name: humidity_bathroom_rc_light_off
+    #   unique_id: humidity_bathroom_rc_light_off
+    #   device_class: humidity
+    #   state: >-
+    #     {% if is_state( 'light.bathroom_rc', 'on' )  %}
+    #       {{ states.sensor.humidity_bathroom_rc_light_off.state | float(0) }}
+    #     {% else %}
+    #       {{ states.sensor.humidity_bathroom_rc.state | float(0) }}
+    #     {% endif %}
