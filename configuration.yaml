@@ -37,9 +37,6 @@ usb:
 
 ssdp:
 
-sun:
-  name: sun_tracker
-
 wake_on_lan:
 
 stream:
@@ -58,9 +55,9 @@ input_text:
 
 media_source:
 
-device_tracker:
-  - platform: bluetooth_le_tracker
-    track_new_devices: false
+#device_tracker:
+#  - platform: bluetooth_le_tracker
+#    track_new_devices: false
 
 ################################################################################
 ## Includes
