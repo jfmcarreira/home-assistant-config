@@ -30,14 +30,14 @@ application_name = "valetudo_re" # or "xiaomi" or "valetudo"
 
 vaccum_room_list = [
     #  Room Name                                              Room code name             Room id (name or number)       Is Zone?
-    (['sala', 'living room'],                                 'LivingRoom',              ["LivingRoom"],                False ),
-    (['cozinha', 'kitchen'],                                  'Kitchen',                 ["Kitchen"],                   False ),
-    (['escritório', 'office'],                                 'Office',                   ["Office"],                     False ),
-    (['corredor', 'hallway'],                                 'Hallway',                 ["Hallway"],                   False ),
+    #(['sala', 'living room'],                                 'LivingRoom',              ["LivingRoom"],                False ),
+    #(['cozinha', 'kitchen'],                                  'Kitchen',                 ["Kitchen"],                   False ),
+    #(['escritório', 'office'],                                 'Office',                   ["Office"],                     False ),
+    #(['corredor', 'hallway'],                                 'Hallway',                 ["Hallway"],                   False ),
     (['hall', 'hall'],                                        'Hall',                    ["Hall"],                      False ),
     (['suite', 'master bedroom'],                             'MasterBedroom',           ["MasterBedroom"],             False ),
     (['quarto do ricardo', 'ricardo bedroom'],                'BedroomRicardo',          ["BedroomRicardo"],            False ),
-    (['quarto exta', 'guest bedroom'],                        'BedroomExtra',            ["BedroomExtra"],              False ),
+    (['quarto exta', 'guest bedroom'],                        'BedroomGuest',            ["BedroomGuest"],              False ),
     (['casa de banho', 'bathroom'],                           'MainBathroom',            ["MainBathroom"],              False ),
     (['casa de banho da suite', 'master bedroom bathroom'],   'MasterBedroomBath',       ["MasterBedroomBath"],         False ),
 ]
@@ -71,7 +71,7 @@ if room == "switch_based":
               if is_zone == -1: # overwrite is_zone information
                   is_zone = int(r[3])
               vaccum_room_ids.extend( r[2] )
-          hass.states.set( entity_name, 'off' )
+          hass.services.call("input_boolean", "turn_off", {"entity_id": entity_name}, False)
 
 else:
     # Single room
