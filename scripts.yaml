@@ -1,40 +1,14 @@
 routine_bedtime_all_off:
   alias: Routina de Boa Noite (Desligar Tudo)
   sequence:
-  - service: script.turn_on
+  - service: script.house_turn_all_off
     data: {}
-    target:
-      entity_id: script.house_turn_all_off
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 1
-      milliseconds: 0
-  - service: light.turn_on
+  - service: script.routine_good_night
     data: {}
-    target:
-      entity_id: light.stairs_wall
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 35
-      milliseconds: 0
-  - service: light.turn_off
-    data:
-      entity_id: all
-  - service: input_select.select_option
-    data:
-      option: Sleep
-    target:
-      entity_id: input_select.house_mode
-  - type: turn_off
-    device_id: d2123f9e22e377423487a7554edd985a
-    entity_id: light.fire_tablet_screen
-    domain: light
   mode: single
   icon: mdi:sleep
 house_turn_all_off:
-  alias: House Turn Everything Off
+  alias: Desligar a Casa Toda
   mode: restart
   sequence:
   - service: light.turn_off
@@ -123,17 +97,14 @@ routine_exit_house_all_off:
     data:
       entity_id: all
   - type: turn_off
-    device_id: d2123f9e22e377423487a7554edd985a
-    entity_id: light.fire_tablet_screen
-    domain: light
+    device_id: 2ae8ef1981d03f83e4144debe519a697
+    entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
+    domain: switch
   mode: single
   icon: mdi:exit-run
 lights_arriving_home:
   alias: 'Lights Arriving Home '
   sequence:
-  - condition: state
-    entity_id: light.outside_group
-    state: 'off'
   - service: light.turn_on
     target:
       entity_id:
@@ -225,10 +196,12 @@ cover_to_partial_close:
         entity:
           multiple: false
           domain: cover
+  variables:
+    cover_entitiy: cover.{{ action_cover }}
   sequence:
   - service: cover.set_cover_position
     data:
-      position: '66%'
+      position: 66
     target:
       entity_id: '{{ cover_entitiy }}'
 cover_to_partial_open:
@@ -242,9 +215,80 @@ cover_to_partial_open:
         entity:
           multiple: false
           domain: cover
+  variables:
+    cover_entitiy: cover.{{ action_cover }}
   sequence:
   - service: cover.set_cover_position
     data:
-      position: '30%'
+      position: 30
     target:
       entity_id: '{{ cover_entitiy }}'
+routine_good_night:
+  alias: Routina de Boa Noite
+  mode: single
+  icon: mdi:sleep
+  sequence:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.stairs_wall
+  - service: input_select.select_option
+    data:
+      option: Sleep
+    target:
+      entity_id: input_select.house_mode
+  - if:
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: sensor.magnesium_next_alarm
+        state: unknown
+      - condition: state
+        entity_id: sensor.magnesium_next_alarm
+        state: unavailable
+    then:
+    - device_id: 9fb26e914719ad2a416b2847f915b00a
+      domain: mobile_app
+      type: notify
+      message: Deve configurar o alarme para amanhã!
+      title: Routinas
+      data:
+        tag: 923
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 35
+      milliseconds: 0
+  - service: light.turn_off
+    data:
+      transition: 10
+    target:
+      area_id:
+      - hall
+      - master_bedroom
+  - type: turn_off
+    device_id: 2ae8ef1981d03f83e4144debe519a697
+    entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
+    domain: switch
+  - service: notify.mobile_app_all
+    data:
+      message: clear_notification
+      data:
+        tag: 923
+        dismiss: true
+gate_passagem_pedonal:
+  alias: Passagem Pedonal
+  sequence:
+  - device_id: f9e1ca6ea2ed7c2fdb83d37101b15e52
+    domain: button
+    entity_id: d4f53843675d3ea74dbce99c4e7419ee
+    type: press
+  mode: single
+notification_ricardo_out_bed:
+  alias: notification_ricardo_out_bed
+  use_blueprint:
+    path: nest/household_notification.yaml
+    input:
+      title: Baby Monitor
+      message: Movimento Quarto do Ricardo
+      persistent: false

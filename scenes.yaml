@@ -54,3 +54,39 @@
   metadata:
     light.kitchen_led:
       entity_only: true
+- id: '1692128900294'
+  name: Cover Summer Night
+  entities:
+    cover.laundry:
+      current_position: 20
+      device_class: shutter
+      friendly_name: Janela da Lavandaria
+      supported_features: 15
+      state: open
+    cover.master_bedroom:
+      current_position: 20
+      device_class: shutter
+      friendly_name: Janela da Suite
+      supported_features: 15
+      state: open
+    cover.bedroom_ricardo:
+      current_position: 20
+      device_class: shutter
+      friendly_name: Janela do Quarto do Ricardo
+      supported_features: 15
+      state: open
+    cover.bathroom:
+      current_position: 21
+      device_class: shutter
+      friendly_name: Janela da Casa de Banho
+      supported_features: 15
+      state: open
+  metadata:
+    cover.laundry:
+      entity_only: true
+    cover.master_bedroom:
+      entity_only: true
+    cover.bedroom_ricardo:
+      entity_only: true
+    cover.bathroom:
+      entity_only: true
