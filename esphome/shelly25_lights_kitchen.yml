@@ -50,7 +50,8 @@ binary_sensor:
                     data:
                       entity_id: light.kitchen_led
               else:
-                - switch.turn_off: light_1
+                - logger.log: "Disconnected! Toggling the SW"
+                - switch.toggle: light_1
       - timing:
           - ON for at least 1000ms
         invalid_cooldown: 10ms
