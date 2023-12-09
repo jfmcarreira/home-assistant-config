@@ -1,0 +1,13 @@
+mqtt:
+  binary_sensor:
+    - name: "Dryer Machine Door"
+      unique_id: mqtt_dryer_machine_door
+      device_class: door
+      state_topic: "binary_rf_sensors/dryer_machine_door"
+      qos: 1
+
+    - name: "Washing Machine Door"
+      unique_id: mqtt_washing_machine_door
+      device_class: door
+      state_topic: "binary_rf_sensors/washing_machine_door"
+      qos: 1

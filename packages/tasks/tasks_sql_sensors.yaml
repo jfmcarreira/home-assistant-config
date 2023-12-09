@@ -1,0 +1,14 @@
+homeassistant:
+  customize:
+    sensor.task_dryer_last_done:
+      device_class: timestamp
+    sensor.task_dryer_empty_last_done:
+      device_class: timestamp
+    sensor.task_washing_clothes_last_done:
+      device_class: timestamp
+    sensor.task_washing_clothes_dry_last_done:
+      device_class: timestamp
+    sensor.task_washing_clothes_remove_last_done:
+      device_class: timestamp
+    sensor.water_filter_replacement_last_done:
+      device_class: timestamp

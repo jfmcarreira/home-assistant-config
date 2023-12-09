@@ -15,9 +15,13 @@ sensor meter:
         friendly_name: Consumo Total de Electricidade
         unit_of_measurement: kWh
         value_template: >
-          {{ ( states('sensor.bhpzem_main_energy') | float ) + ( states('input_number.electricity_meter_pzem_offset') | float ) }}
+          {{ ( states('sensor.bhpzem_main_energy') | float(0) ) + ( states('input_number.electricity_meter_pzem_offset') | float(0) ) }}
+        availability_template: >
+          {{ not is_state('sensor.bhpzem_main_energy', 'unavailable')  }}
       electricity_meter_frontend:
         friendly_name: Consumo de Electricidade
         unit_of_measurement: kWh
         value_template: >
-          {{ states('sensor.electricity_meter') | int }}
+          {{ states('sensor.electricity_meter') | int(0) }}
+        availability_template: >
+          {{ not is_state('sensor.bhpzem_main_energy', 'unavailable')  }}

@@ -1,6 +1,6 @@
 script:
   action_living_room_tv_change_source:
-    alias: Routina Ligar Televisão no MEO
+    alias: Ligar Televisão da sala no Input
     fields:
       source:
         description: Source to activate
@@ -17,28 +17,28 @@ script:
         data:
           source: "{{ source }}"
 
-  routine_turn_on_living_room_tv_meo:
+  action_turn_on_living_room_tv_meo:
     alias: Routina Ligar Televisão no MEO
     sequence:
-      - service: media_player.turn_on
+      - service: script.action_living_room_tv_change_source
         entity_id: media_player.living_room_tv
 
-      # If MEO box is off give it a bit of time to boot up before continuing
-      - choose:
-          - conditions: "{{ not is_state('switch.living_room_tv_meo_box', 'on') }}"
-            sequence:
-              - service: switch.turn_on
-                target:
-                  entity_id: switch.living_room_tv_meo_box
-              - delay: 00:00:10
+      # # If MEO box is off give it a bit of time to boot up before continuing
+      # - choose:
+      #     - conditions: "{{ not is_state('switch.living_room_tv_meo_box', 'on') }}"
+      #       sequence:
+      #         - service: switch.turn_on
+      #           target:
+      #             entity_id: switch.living_room_tv_meo_box
+      #         - delay: 00:00:10
 
       - service: media_player.turn_on
-        entity_id: media_player.living_room_tv_meo_box
+        entity_id: media_player.mediaroom_82_155_7_99
 
       - choose:
           - conditions:
               - condition: template
-                value_template: "{{ is_state( 'media_player.living_room_tv_meo_box', 'unavailable' )  }}"
+                value_template: "{{ is_state( 'media_player.mediaroom_82_155_7_99', 'unavailable' )  }}"
             sequence:
               - service: remote.send_command
                 data:
@@ -48,7 +48,7 @@ script:
                   num_repeats: 1
         default:
           - service: media_player.turn_on
-            entity_id: media_player.living_room_tv_meo_box
+            entity_id: media_player.mediaroom_82_155_7_99
 
       - wait_template: "{{ is_state( 'binary_sensor.living_room_tv_state', 'on' )  }}"
         timeout: "00:00:04"
@@ -64,7 +64,7 @@ script:
   routine_dinner_time:
     alias: Routina Modo de Refeição
     sequence:
-      - service: script.routine_turn_on_living_room_tv_meo
+      - service: script.action_turn_on_living_room_tv_meo
 
       - service: media_player.volume_set
         entity_id: media_player.living_room_tv
@@ -79,7 +79,7 @@ script:
       - service: python_script.change_meo_box_channel
         data:
           channel: SIC
-          entity_id: media_player.living_room_tv_meo_box
+          entity_id: media_player.mediaroom_82_155_7_99
 
       - delay: 00:00:03
       - service: script.action_meo_reset_current_show
@@ -89,28 +89,28 @@ script:
   action_meo_play_main_channel:
     alias: Routina SIC na Televisão
     sequence:
-      - service: script.routine_turn_on_living_room_tv_meo
+      - service: script.action_turn_on_living_room_tv_meo
 
       - service: python_script.change_meo_box_channel
         data:
           channel: SIC
-          entity_id: media_player.living_room_tv_meo_box
+          entity_id: media_player.mediaroom_82_155_7_99
 
   action_meo_play_kids_channel:
     alias: Routina Bonecos na Televisão
     sequence:
-      - service: script.routine_turn_on_living_room_tv_meo
+      - service: script.action_turn_on_living_room_tv_meo
       - service: python_script.change_meo_box_channel
         data:
           channel: Baby TV
-          entity_id: media_player.living_room_tv_meo_box
+          entity_id: media_player.mediaroom_82_155_7_99
 
   action_meo_reset_current_show:
     alias: Routina Reiniciar Programa Atual
     sequence:
       - service: python_script.meo_box_reset_show
         data:
-          entity_id: media_player.living_room_tv_meo_box
+          entity_id: media_player.mediaroom_82_155_7_99
           show: Current
 
   action_meo_reset_previous_show:
@@ -118,5 +118,5 @@ script:
     sequence:
       - service: python_script.meo_box_reset_show
         data:
-          entity_id: media_player.living_room_tv_meo_box
+          entity_id: media_player.mediaroom_82_155_7_99
           show: Previous

@@ -17,7 +17,7 @@ else:
 
 if tv_source == "MEO":
 
-    meo_box_state = hass.states.get('media_player.living_room_tv_meo_box').state
+    meo_box_state = hass.states.get('media_player.mediaroom_82_155_7_99').state
 
     broadlink_device = "meo"
     send_via_broadlink = False
@@ -57,7 +57,7 @@ if tv_source == "MEO":
             elif button == "NEXT":
                 button = "Next"
 
-        entity_id = "media_player.living_room_tv_meo_box"
+        entity_id = "media_player.mediaroom_82_155_7_99"
         service_data = { "entity_id": entity_id, "media_content_id": button, "media_content_type": "mediaroom" }
         hass.services.call('media_player','play_media', service_data, False)
 

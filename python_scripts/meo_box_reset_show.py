@@ -1,4 +1,4 @@
-entity_id = data.get("entity_id", 'media_player.living_room_tv_meo_box')
+entity_id = data.get("entity_id", 'media_player.mediaroom_82_155_7_99')
 show = data.get("show").lower()
 
 if show == "current":

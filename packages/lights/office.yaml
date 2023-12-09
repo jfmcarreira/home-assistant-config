@@ -11,10 +11,16 @@ light:
               is_state('light.office_lamp', 'on')
           }}
         turn_on:
-          - service: light.turn_on
-            entity_id: light.office_main
-          - service: light.turn_on
-            entity_id: light.office_extra
+          - choose:
+              - conditions: "{{ is_state('binary_sensor.night_mode', 'on') }}"
+                sequence:
+                  - service: light.turn_on
+                    entity_id: light.office_extra
+            default:
+              - service: light.turn_on
+                entity_id: light.office_main
+              - service: light.turn_on
+                entity_id: light.office_extra
         turn_off:
           - service: light.turn_off
             target:

@@ -10,4 +10,8 @@
       unique_id: living_room_tv_source
       icon: mdi:television
       state: >
-        {{ states.media_player.living_room_tv.attributes["source"] }}
+        {% if is_state( 'binary_sensor.living_room_tv_state', 'on' )  %}
+            {{ states.media_player.living_room_tv.attributes["source"] }}
+        {%- else %}
+            Off
+        {%- endif %}

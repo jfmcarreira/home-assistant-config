@@ -1,4 +1,39 @@
+- sensor:
+    - name: house_mode
+      unique_id: sensor_house_mode
+      state: >-
+        {% if is_state( 'input_select.house_mode', 'On' )  %}
+          Ligada
+        {% elif is_state( 'input_select.house_mode', 'Evening' )  %}
+          Amanhecer/Anoitecer
+        {% elif is_state( 'input_select.house_mode', 'Night' )  %}
+          Noite
+        {% elif is_state( 'input_select.house_mode', 'Sleep' )  %}
+          Dormir
+        {% else %}
+          Desligada
+        {% endif %}
+      icon: >-
+        {% if is_state( 'input_select.house_mode', 'On' )  %}
+          mdi:home-automation
+        {% elif is_state( 'input_select.house_mode', 'Evening' )  %}
+          mdi:weather-sunset
+        {% elif is_state( 'input_select.house_mode', 'Night' )  %}
+          mdi:weather-night
+        {% elif is_state( 'input_select.house_mode', 'Sleep' )  %}
+          mdi:sleep
+        {% else %}
+          mdi:account-off
+        {% endif %}
+
 - binary_sensor:
+    - name: Night Mode
+      unique_id: night_mode
+      state: >
+        {{  is_state('input_select.house_mode', 'Night') or 
+            is_state('input_select.house_mode', 'Sleep')
+        }}
+
     - name: Joao Home
       unique_id: joao_home
       state: >
@@ -9,18 +44,18 @@
         }}
       attributes:
         Mudou de Localização: "{{ now() }}"
-- binary_sensor:
+
     - name: Bianca Home
       unique_id: bianca_home
       state: >
-        {{  is_state('person.bianca', 'home') or 
-            is_state('person.bianca', 'Escritório') or 
-            is_state('person.bianca', 'Sala de Estar') or 
-            is_state('person.bianca', 'Quarto Principal')
+        {{  is_state('person.bianca_pires', 'home') or 
+            is_state('person.bianca_pires', 'Escritório') or 
+            is_state('person.bianca_pires', 'Sala de Estar') or 
+            is_state('person.bianca_pires', 'Quarto Principal')
         }}
       attributes:
         Mudou de Localização: "{{ now() }}"
-- binary_sensor:
+
     - name: Notify Home
       unique_id: notify_home
       icon: "mdi:home"

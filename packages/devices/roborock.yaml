@@ -1,0 +1,50 @@
+################################################################
+## Roborock
+################################################################
+# sensor:
+#   - platform: mqtt
+#     name: Roborock Error
+#     state_topic: "valetudo/Roborock/state"
+#     value_template: >
+#       {% if is_state('vacuum.roborock', 'error') %}
+#         {{ value_json.error }}
+#       {% else %}
+#         Ok
+#       {% endif %}
+
+binary_sensor:
+  - platform: template
+    sensors:
+      roborock_state:
+        icon_template: mdi:robot-vacuum
+        value_template: "{{ states.vacuum.roborock.state != 'docked' }}"
+        friendly_name: "Aspirador Roborock"
+
+input_boolean:
+  vacuum_livingroom:
+    name: Sala de Estar
+    icon: mdi:sofa
+  vacuum_hallway:
+    name: Corredor
+    icon: mdi:door-open
+  vacuum_kitchen:
+    name: Cozinha
+    icon: mdi:stove
+  vacuum_office:
+    name: Escritório
+    icon: mdi:desk
+  vacuum_bathroom:
+    name: Casa de Banho
+    icon: mdi:toilet
+  vacuum_bedroom:
+    name: Quarto
+    icon: mdi:bed-double
+  vacuum_bedroombath:
+    name: Casa de Banho do Quarto
+    icon: mdi:shower-head
+  vacuum_bedroomricardo:
+    name: Quarto do Ricardo
+    icon: mdi:baby-face-outline
+  vacuum_livingroomwithcarpet:
+    name: Sala Com Tapetes (Zona)
+    icon: mdi:sofa

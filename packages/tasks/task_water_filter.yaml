@@ -1,0 +1,13 @@
+################################################################
+## Water Filter Replacement
+################################################################
+input_number:
+  water_filter_replacement_days:
+    name: Duração do Filtro da Água
+    min: 0
+    max: 120
+    step: 1
+    mode: box
+    unit_of_measurement: days
+    icon: mdi:timer-sand
+

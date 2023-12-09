@@ -1,0 +1,139 @@
+routine_bedtime_all_off:
+  alias: Routina de Boa Noite (Desligar Tudo)
+  sequence:
+    - service: script.turn_on
+      data: {}
+      target:
+        entity_id: script.house_turn_all_off
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 1
+        milliseconds: 0
+    - service: light.turn_on
+      data: {}
+      target:
+        entity_id: light.stairs_wall
+    - delay:
+        hours: 0
+        minutes: 1
+        seconds: 0
+        milliseconds: 0
+    - service: light.turn_off
+      data:
+        entity_id: all
+  mode: single
+house_turn_all_off:
+  alias: House Turn Everything Off
+  mode: restart
+  sequence:
+    - service: light.turn_off
+      data:
+        entity_id: all
+    - service: fan.turn_off
+      data:
+        entity_id: all
+    - service: media_player.turn_off
+      data: {}
+      target:
+        entity_id:
+          - media_player.google_home_speakers
+          - media_player.living_room_tv
+routine_good_moorning:
+  alias: Routina de Bom Dia
+  sequence:
+    - service: cover.set_cover_position
+      data:
+        entity_id: all
+        position: 30
+  mode: single
+routine_exit_house_all_off:
+  alias: Routina de Sair de Casa (Desligar Tudo)
+  sequence:
+    - service: script.turn_on
+      data: {}
+      target:
+        entity_id: script.house_turn_all_off
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 1
+        milliseconds: 0
+    - condition: numeric_state
+      entity_id: sun.sun
+      attribute: elevation
+      below: "0"
+    - service: light.turn_on
+      data: {}
+      target:
+        entity_id:
+          - light.kitchen_led
+          - light.kitchen_door
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.kitchen_door
+          to: "on"
+      timeout: 00:05:00
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.kitchen_door
+          to: "off"
+      timeout: 00:05:00
+    - delay:
+        hours: 0
+        minutes: 1
+        seconds: 0
+        milliseconds: 0
+    - service: light.turn_off
+      data:
+        entity_id: all
+  mode: single
+cover_group_action:
+  alias: Controlo Grupo de Estores
+  sequence:
+    - condition:
+        "{% set list_of_covers = [] %}  {% if is_state('switch.cover_control_'
+        + control_switch + '_living_room', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.living_room'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+        + control_switch + '_kitchen', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.kitchen'] %}\n{% endif %} {% if is_state('switch.cover_control_' +
+        control_switch + '_laundry', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.laundry'] %}\n{% endif %} {% if is_state('switch.cover_control_' +
+        control_switch + '_bathroom', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.bathroom'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+        + control_switch + '_bedroom_rc', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.bedroom_rc'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+        + control_switch + '_office', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.office'] %}\n{% endif %} {% if is_state('switch.cover_control_' +
+        control_switch + '_master_bedroom', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.master_bedroom'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+        + control_switch + '_bedroom_ricardo', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.bedroom_ricardo'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+        + control_switch + '_bedroom_guest', 'on') %}\n  {% set list_of_covers = list_of_covers
+        + ['cover.bedroom_guest'] %}\n{% endif %} {% if list_of_covers|join(',')|length
+        > 0 %}\n  {{ True }}\n{% else %}\n  {{ False }}\n{% endif %}"
+    - service: "{{ action_to_run }}"
+      data:
+        entity_id:
+          "{% set list_of_covers = [] %} {% if is_state('switch.cover_control_'
+          + control_switch + '_living_room', 'on') %}\n  {% set list_of_covers = list_of_covers
+          + ['cover.living_room'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_kitchen', 'on') %}\n  {% set list_of_covers = list_of_covers
+          + ['cover.kitchen'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_laundry', 'on') %}\n  {% set list_of_covers = list_of_covers
+          + ['cover.laundry'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_bathroom', 'on') %}\n  {% set list_of_covers = list_of_covers
+          + ['cover.bathroom'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_bedroom_rc', 'on') %}\n  {% set list_of_covers = list_of_covers
+          + ['cover.bedroom_rc'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_office', 'on') %}\n  {% set list_of_covers = list_of_covers
+          + ['cover.office'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_master_bedroom', 'on') %}\n  {% set list_of_covers =
+          list_of_covers + ['cover.master_bedroom'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_bedroom_ricardo', 'on') %}\n  {% set list_of_covers =
+          list_of_covers + ['cover.bedroom_ricardo'] %}\n{% endif %} {% if is_state('switch.cover_control_'
+          + control_switch + '_bedroom_guest', 'on') %}\n  {% set list_of_covers = list_of_covers
+          + ['cover.bedroom_guest'] %}\n{% endif %} {{ list_of_covers|join(',') }}"
+  mode: single
