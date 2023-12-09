@@ -6,8 +6,6 @@ wifi:
 
 logger:
 
-api:
-
 ota:
   reboot_timeout: 0s
 
