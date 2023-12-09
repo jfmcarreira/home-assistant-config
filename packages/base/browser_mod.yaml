@@ -1,0 +1,3 @@
+browser_mod:
+  disable:
+    - all
