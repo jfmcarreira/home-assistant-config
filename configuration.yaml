@@ -29,8 +29,6 @@ my:
 
 energy:
 
-discovery:
-
 zeroconf:
 
 usb:
