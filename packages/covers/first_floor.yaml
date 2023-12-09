@@ -9,27 +9,55 @@ cover:
       first_floor:
         device_class: shutter
         friendly_name: Grupo de Estores do R/C
+        position_template: >
+          {% set position_sum = 0 %}
+          {% set position_count = 0 %}
+          {% if is_state('switch.cover_control_group_living_room', 'on') %}
+            {% set position_sum = position_sum + state_attr('cover.living_room','current_position') %}
+            {% set position_count = position_count + 1 %}
+          {% endif %}
+          {% if is_state('switch.cover_control_group_kitchen', 'on') %}
+            {% set position_sum = position_sum + state_attr('cover.kitchen','current_position') %}
+            {% set position_count = position_count + 1 %}
+          {% endif %}
+          {% if is_state('switch.cover_control_group_laundry', 'on') %}
+            {% set position_sum = position_sum + state_attr('cover.laundry','current_position') %}
+            {% set position_count = position_count + 1 %}
+          {% endif %}
+          {% if is_state('switch.cover_control_group_bathroom', 'on') %}
+            {% set position_sum = position_sum + state_attr('cover.bathroom','current_position') %}
+            {% set position_count = position_count + 1 %}
+          {% endif %}
+          {% if is_state('switch.cover_control_group_bedroom_rc', 'on') %}
+            {% set position_sum = position_sum + state_attr('cover.bedroom_rc','current_position') %}
+            {% set position_count = position_count + 1 %}
+          {% endif %}
+          {% if is_state('switch.cover_control_group_office', 'on') %}
+            {% set position_sum = position_sum + state_attr('cover.office','current_position') %}
+            {% set position_count = position_count + 1 %}
+          {% endif %}
+          {{ (position_sum / position_count) | round(0) }}
         open_cover:
           service: cover.open_cover
           data:
             entity_id: >-
               {% set list_of_covers = [] %}
-              {% if is_state('input_boolean.cover_control_group_living_room', 'on') %}
+              {% if is_state('switch.cover_control_group_living_room', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+              {% if is_state('switch.cover_control_group_kitchen', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+              {% if is_state('switch.cover_control_group_laundry', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+              {% if is_state('switch.cover_control_group_bathroom', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+              {% if is_state('switch.cover_control_group_bedroom_rc', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+              {% if is_state('switch.cover_control_group_office', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.office'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}
@@ -38,22 +66,22 @@ cover:
           data:
             entity_id: >-
               {% set list_of_covers = [] %}
-              {% if is_state('input_boolean.cover_control_group_living_room', 'on') %}
+              {% if is_state('switch.cover_control_group_living_room', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+              {% if is_state('switch.cover_control_group_kitchen', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+              {% if is_state('switch.cover_control_group_laundry', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+              {% if is_state('switch.cover_control_group_bathroom', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+              {% if is_state('switch.cover_control_group_bedroom_rc', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+              {% if is_state('switch.cover_control_group_office', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.office'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}
@@ -62,22 +90,22 @@ cover:
           data:
             entity_id: >-
               {% set list_of_covers = [] %}
-              {% if is_state('input_boolean.cover_control_group_living_room', 'on') %}
+              {% if is_state('switch.cover_control_group_living_room', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.living_room'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
+              {% if is_state('switch.cover_control_group_kitchen', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.kitchen'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
+              {% if is_state('switch.cover_control_group_laundry', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.laundry'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
+              {% if is_state('switch.cover_control_group_bathroom', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bathroom'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
+              {% if is_state('switch.cover_control_group_bedroom_rc', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_rc'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_office', 'on') %}
+              {% if is_state('switch.cover_control_group_office', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.office'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}

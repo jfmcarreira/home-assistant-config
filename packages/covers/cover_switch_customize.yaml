@@ -4,3 +4,5 @@ homeassistant:
       friendly_name: "Abrir com o Nascer do Sol"
     "switch.cover_control_close_*":
       friendly_name: "Fechar com o Pôr do Sol"
+    "switch.cover_control_group_*":
+      friendly_name: "Controlar Estores em Grupo"
