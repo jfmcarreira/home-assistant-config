@@ -2,7 +2,7 @@ wifi:
   domain: .home
   ssid: !secret esp_ssid
   password: !secret esp_password
-  #power_save_mode: "${PowerSaveMode}"
+  #power_save_mode: Low
   reboot_timeout: 20min
 
 api:

@@ -59,6 +59,10 @@ binary_sensor:
                           service: light.turn_off
                           data:
                             entity_id: light.exterior_wall_back
+                      - homeassistant.service:
+                          service: light.turn_off
+                          data:
+                            entity_id: light.exterior_wall_east
                       - light.turn_off: light_1
                     else:
                       - light.turn_on: light_1

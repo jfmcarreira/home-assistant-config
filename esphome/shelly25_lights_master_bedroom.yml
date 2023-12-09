@@ -11,14 +11,7 @@ packages:
   esphome_base: !include packages/common.yml
   device_base: !include packages/shelly25.yml
   home_state: !include packages/home_state.yml
-
-<<: !include includes/shelly25_base_two_lights.yml
-
-globals:
-  - id: lights_state
-    type: int
-    restore_value: no
-    initial_value: '0'
+  lights_base: !include packages/shelly25_base_two_lights.yml
 
 script:
   - id: smart_light_state

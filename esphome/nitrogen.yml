@@ -1,6 +1,6 @@
 substitutions:
   DeviceName: nitrogen
-  FriendlyName: Nitrogen
+  FriendlyName: Nitrogen (First Floor)
   PowerSaveMode: NONE
 
 esphome:
@@ -12,27 +12,16 @@ packages:
   esphome_base: !include packages/common.yml
 
 
+bluetooth_proxy:
+
 # For bluetooth devices
 esp32_ble_tracker:
   scan_parameters:
     interval: 320ms
     duration: 10s
 
-bluetooth_proxy:
 
 text_sensor:
   - platform: ble_scanner
-    id: ble_living_room
-    name: BLE Scanner Living Room
-
-# sensor:
-#   - platform: xiaomi_lywsdcgq
-#     mac_address: 58:2D:34:32:55:01
-#     temperature:
-#       name: Bedroom Ricardo Mijia Temperature
-#     humidity:
-#       name: Bedroom Ricardo Mijia Humidity
-#     battery_level:
-#       name: Bedroom Ricardo Mijia Batery
-
-
+    id: ble_hall
+    name: BLE Scanner Hall

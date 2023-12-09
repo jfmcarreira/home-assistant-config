@@ -5,7 +5,7 @@ substitutions:
   Light_A_Name: Kitchen LED SW
   Light_B_Name: Kitchen Window
 
-<<: !include includes/shelly25_base_two_lights.yml
+lights_base: !include packages/shelly25_base_two_lights.yml
 
 
 binary_sensor:

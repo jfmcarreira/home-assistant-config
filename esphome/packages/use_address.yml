@@ -1,0 +1,4 @@
+#use_address: !include packages/use_address.yml
+
+wifi:
+  use_address: "10.20.107.216"

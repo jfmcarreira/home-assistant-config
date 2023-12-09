@@ -1,0 +1,36 @@
+substitutions:
+  DeviceName: shelly1_living_room_table
+  FriendlyName: Shelly 1 Living Room Table Light
+  PowerSaveMode: NONE
+
+packages:
+  esphome_base: !include packages/common.yml
+  #use_address: !include packages/use_address.yml
+
+esphome:
+  name: ${DeviceName}
+  platform: ESP8266
+  board: esp01_1m
+
+output:
+  - platform: gpio
+    pin: GPIO04
+    id: relay_1
+
+light:
+  - id: light_1
+    name: Living Room Table
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF
+
+
+binary_sensor:
+  - id: sw_1
+    platform: gpio
+    pin:
+      number: GPIO5
+    on_state:
+      then:
+        - light.toggle: light_1
+

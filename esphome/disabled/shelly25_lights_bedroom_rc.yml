@@ -1,17 +1,27 @@
 substitutions:
-  DeviceName: shelly25_lights_bedroom_ricardo
+  DeviceName: shelly25_lights_bedroom_rc
   PowerSaveMode: HIGH
-  FriendlyName: Shelly25 Bedroom Ricardo
+  FriendlyName: Shelly25 Bedroom RC
   InputPin: GPIO5
-  Light_A_Name: Bedroom Ricardo Ceiling
-  Light_B_Name: Bedroom Ricardo Closet
-  Address: !secret shelly25_bedroom_ricardo_ip
+  Light_A_Name: Bedroom RC Main
+  Light_B_Name: Bedroom RC Extra
+  Address: "0.0.0.0"
 
 packages:
   esphome_base: !include packages/common.yml
   device_base: !include packages/shelly25.yml
   home_state: !include packages/home_state.yml
-  lights_base: !include packages/shelly25_base_two_lights.yml
+  #use_address: !include packages/use_address.yml
+
+
+lights_base: !include packages/shelly25_base_two_lights.yml
+
+globals:
+  - id: lights_state
+    type: int
+    restore_value: no
+    initial_value: '0'
+
 
 script:
   - id: smart_light_state
@@ -33,40 +43,15 @@ script:
           then:
             - light.turn_on: light_1
             - light.turn_on: light_2
-            # - homeassistant.service:
-            #     service: light.turn_off
-            #     data:
-            #       entity_id: light.bedroom_ricardo_lamp
       - if:
           condition:
             lambda: 'return id(lights_state) == 1;'
           then:
             - light.turn_on: light_1
             - light.turn_off: light_2
-            # - homeassistant.service:
-            #     service: light.turn_off
-            #     data:
-            #       entity_id: light.bedroom_ricardo_lamp
-
-      # - if:
-      #     condition:
-      #       lambda: 'return id(lights_state) == 2;'
-      #     then:
-      #       - light.turn_off: light_1
-      #       - light.turn_off: light_2
-      #       # - homeassistant.service:
-      #       #     service: light.turn_on
-      #       #     data:
-      #       #       entity_id: light.bedroom_ricardo_lamp
-
-
 
 
 binary_sensor:
-  # - platform: homeassistant
-  #   id: bedroom_ricardo_lamp_state
-  #   entity_id: light.bedroom_ricardo_lamp
-
   - id: sw_1
     platform: gpio
     pin: ${InputPin}
@@ -80,14 +65,9 @@ binary_sensor:
                 or:
                   - light.is_on: light_1
                   - light.is_on: light_2
-                  #- binary_sensor.is_on: bedroom_ricardo_lamp_state
               then:
                 - light.turn_off: light_1
                 - light.turn_off: light_2
-                # - homeassistant.service:
-                #     service: light.turn_off
-                #     data:
-                #       entity_id: light.bedroom_ricardo_lamp
               else:
                 - if:
                     condition:
