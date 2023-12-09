@@ -142,11 +142,6 @@ action:
                 "{{ record_timestamp }}"
               save_date_time: "true"
 
-          - service: notify.living_room_tv
-            data:
-              title: Tarefa Doméstica
-              message: !input machine_finish_message
-
   - choose:
       - conditions: "{{ trigger.id == 'trigger_machine_finished' or trigger.id == 'trigger_send_notification' }}"
         sequence:
