@@ -129,6 +129,7 @@ binary_sensor:
     on_multi_click:
       - timing:
           - ON for at least 1s
+        invalid_cooldown: 100ms
         then:
          - if:
               condition:
@@ -149,6 +150,7 @@ binary_sensor:
       - timing:
           - ON for at most 1s
           - OFF for at least 100ms
+        invalid_cooldown: 100ms
         then:
           - globals.set:
               id: cover_action
@@ -187,11 +189,33 @@ binary_sensor:
       mode:
         input: true
         pullup: true
-    on_press:
-      then:
-        - logger.log: "Extra Top"
-        # - delay: 400ms
-        # - switch.toggle: relay_direction
+    on_multi_click:
+      - timing:
+          - ON for at least 1s
+        invalid_cooldown: 100ms
+        then:
+          - while:
+              condition:
+                binary_sensor.is_on: sw_extra_top
+              then:
+                - homeassistant.event:
+                    event: esphome.button_pressed
+                    data:
+                      name: extra_top
+                      type: long
+                      device: ${devicename}
+                - delay: 500ms
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 100ms
+        invalid_cooldown: 100ms
+        then:
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                name: extra_top
+                type: single
+                device: ${devicename}
 
   - platform: gpio
     id: sw_extra_bottom
@@ -201,10 +225,33 @@ binary_sensor:
       mode:
         input: true
         pullup: true
-
-    on_press:
-      then:
-        - logger.log: "Extra Bottom"
+    on_multi_click:
+      - timing:
+          - ON for at least 1s
+        invalid_cooldown: 100ms
+        then:
+          - while:
+              condition:
+                binary_sensor.is_on: sw_extra_bottom
+              then:
+                - homeassistant.event:
+                    event: esphome.button_pressed
+                    data:
+                      name: extra_bottom
+                      type: long
+                      device: ${devicename}
+                - delay: 500ms
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 100ms
+        invalid_cooldown: 100ms
+        then:
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                name: extra_bottom
+                type: single
+                device: ${devicename}
 
 switch:
   - platform: gpio
