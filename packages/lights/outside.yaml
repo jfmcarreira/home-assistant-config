@@ -16,6 +16,5 @@ light:
             entity_id: light.front_door
         turn_off:
           - service: light.turn_off
-            entity_id: light.kitchen_door
-          - service: light.turn_off
-            entity_id: light.front_door
+            target:
+              area_id: outside

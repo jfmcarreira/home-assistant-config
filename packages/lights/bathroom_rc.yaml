@@ -14,6 +14,5 @@ light:
             entity_id: light.bathroom_rc_ceiling
         turn_off:
           - service: light.turn_off
-            entity_id: light.bathroom_rc_ceiling
-          - service: light.turn_off
-            entity_id: light.bathroom_rc_led
+            target:
+              area_id: bathroom_rc

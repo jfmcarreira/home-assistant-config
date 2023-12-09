@@ -12,8 +12,14 @@ light:
               is_state('light.hallway', 'on')
           }}
         turn_on:
-          - service: light.turn_on
-            entity_id: light.living_room
+          - choose:
+              - conditions: "{{ is_state('binary_sensor.night_mode', 'on') }}"
+                sequence:
+                  - service: light.turn_on
+                    entity_id: light.living_room_window
+            default:
+              - service: light.turn_on
+                entity_id: light.living_room
         turn_off:
           - service: light.turn_off
             target:
