@@ -13,3 +13,5 @@ recorder:
       - weather
       - device_tracker
       - automation
+      - timer
+      - remote

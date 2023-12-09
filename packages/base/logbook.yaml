@@ -6,6 +6,8 @@ logbook:
     domains:
       - automation
       - light
+      - cover
+      - fan
       - media_player
       - script
       - vacuum
