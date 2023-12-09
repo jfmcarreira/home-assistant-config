@@ -1,0 +1,2004 @@
+views:
+  - theme: Backend-selected
+    title: Dashboard Estores
+    path: dashboard-covers
+    icon: mdi:window-shutter
+    layout:
+      max_cols: 3
+    type: custom:horizontal-layout
+    subview: true
+    badges: []
+    cards:
+      - type: custom:mushroom-cover-card
+        name: Sala
+        entity: cover.living_room
+        fill_container: true
+        show_position_control: true
+        show_buttons_control: true
+        icon: mdi:sofa
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                name: Estore da Sala
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: >-
+                            esphome.bhonofre_cover_living_room_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.living_room
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_living_room
+                        - entity_id: input_number.*_position_living_room
+      - type: custom:mushroom-cover-card
+        entity: cover.office
+        fill_container: true
+        icon: mdi:desk
+        show_position_control: true
+        show_buttons_control: true
+        name: Escritório
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                name: Estore do Escritório
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: esphome.bhonofre_cover_office_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.office
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_office
+                        - entity_id: input_number.*_position_office
+      - type: custom:mushroom-cover-card
+        entity: cover.kitchen
+        fill_container: true
+        show_position_control: true
+        show_buttons_control: true
+        icon: mdi:stove
+        hold_action:
+          action: more-info
+        name: Cozinha
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                title: Estore da Cozinha
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: esphome.bhonofre_cover_kitchen_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.kitchen
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_kitchen
+                        - entity_id: input_number.*_position_kitchen
+      - type: custom:mushroom-cover-card
+        entity: cover.laundry
+        fill_container: true
+        hide_state: false
+        show_position_control: true
+        show_buttons_control: true
+        icon: mdi:washing-machine
+        name: Lavandaria
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                title: Estore da Lavandaria
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: esphome.bhonofre_cover_laundry_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.laundry
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_laundry
+                        - entity_id: input_number.*_position_laundry
+      - type: custom:mushroom-cover-card
+        entity: cover.bedroom_rc
+        fill_container: true
+        show_position_control: true
+        icon: mdi:wardrobe
+        show_buttons_control: true
+        name: Quarto de Arrumos
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                title: Estore do Quarto de Arrumos
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: esphome.bhonofre_cover_bedroom_rc_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.bedroom_rc
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_bedroom_rc
+                        - entity_id: input_number.*_position_bedroom_rc
+      - type: custom:mushroom-cover-card
+        entity: cover.bathroom
+        fill_container: true
+        show_position_control: true
+        show_buttons_control: true
+        name: Casa de Banho
+        icon: mdi:toilet
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                title: Estore Casa de Banho
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: esphome.bhonofre_cover_bathroom_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.bathroom
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_bathroom
+                        - entity_id: input_number.*_position_bathroom
+      - type: custom:mushroom-cover-card
+        entity: cover.master_bedroom
+        fill_container: true
+        show_position_control: true
+        icon: mdi:bed-double
+        show_buttons_control: true
+        name: Suite
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                title: Estore da Suite
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: esphome.bhonofre_cover_master_bed_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.master_bedroom
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_master_bedroom
+                        - entity_id: input_number.*_position_master_bedroom
+      - type: custom:mushroom-cover-card
+        entity: cover.bedroom_ricardo
+        fill_container: true
+        hide_state: false
+        show_position_control: true
+        show_buttons_control: true
+        icon: mdi:baby
+        name: Quarto do Ricardo
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                title: Estore do Quarto do Ricardo
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: >-
+                            esphome.bhonofre_cover_bedroom_ricardo_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.bedroom_ricardo
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_bedroom_ricardo
+                        - entity_id: input_number.*_position_bedroom_ricardo
+      - type: custom:mushroom-cover-card
+        entity: cover.bedroom_guest
+        fill_container: true
+        show_position_control: true
+        show_buttons_control: true
+        name: Quarto Extra
+        hold_action:
+          action: more-info
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              auto_close: false
+              large: false
+              content:
+                type: custom:vertical-stack-in-card
+                title: Estore do Quarto Extra
+                cards:
+                  - type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - type: button
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: >-
+                            esphome.bhonofre_cover_bedroom_guest_minimal_open_cover
+                      - type: button
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: cover.set_cover_position
+                          service_data:
+                            position: 60
+                            entity_id: cover.bedroom_guest
+                  - type: custom:auto-entities
+                    card:
+                      type: entities
+                    filter:
+                      include:
+                        - entity_id: input_boolean.cover_control_*_bedroom_guest
+                        - entity_id: input_number.*_position_bedroom_guest
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            icon_height: 45px
+            name: Abrir Todos
+            icon: mdi:window-shutter-open
+            tap_action:
+              action: call-service
+              service: cover.open_cover
+              data:
+                entity_id: cover.all_house
+              confirmation:
+                text: Tem a certeza que quer abrir os estores?
+          - show_name: true
+            show_icon: true
+            type: button
+            icon_height: 45px
+            name: Fechar Todos
+            icon: mdi:window-shutter
+            tap_action:
+              action: call-service
+              service: cover.close_cover
+              data:
+                entity_id: cover.all_house
+              confirmation:
+                text: Tem a certeza que quer fechar os estores?
+      - type: custom:mushroom-cover-card
+        entity: cover.all_house
+        fill_container: true
+        show_position_control: true
+        show_buttons_control: true
+        name: Todos
+        hold_action:
+          action: more-info
+        tap_action:
+          action: more-info
+        double_tap_action:
+          action: more-info
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            entity: input_boolean.cover_controls_bypass
+            icon_height: 35px
+            name: Controlos Off
+            icon: mdi:window-shutter-alert
+          - show_name: true
+            show_icon: true
+            type: button
+            entity: ''
+            icon_height: 45px
+            name: Routinas
+            icon: mdi:calendar-sync
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: entities
+                      title: Routinas dos Estores
+                    sort:
+                      method: name
+                    filter:
+                      include:
+                        - entity_id: automation.cover_*
+        view_layout:
+          column: 3
+      - chart_type: line
+        period: 5minute
+        days_to_show: 1
+        type: statistics-graph
+        entities:
+          - entity: sensor.temperature_living_room
+            name: Sala
+          - entity: sensor.temperature_hall
+            name: Sotão
+          - entity: sensor.temperature_master_bedroom_bathroom
+            name: Casa de Banho Suite
+          - entity: sensor.temperature_main_bathroom
+            name: Casa de Banho Principal
+          - entity: sensor.temperature_bathroom_rc
+            name: Casa de Banho Serviço
+        stat_types:
+          - mean
+        title: Temperatura (24h)
+      - chart_type: line
+        period: week
+        days_to_show: 180
+        type: statistics-graph
+        entities:
+          - entity: sensor.temperature_living_room
+            name: Sala
+          - entity: sensor.temperature_hall
+            name: Sotão
+          - entity: sensor.temperature_master_bedroom_bathroom
+            name: Casa de Banho Suite
+          - entity: sensor.temperature_main_bathroom
+            name: Casa de Banho Principal
+          - entity: sensor.temperature_bathroom_rc
+            name: Casa de Banho Serviço
+        stat_types:
+          - mean
+          - min
+          - max
+        title: Temperatura (6m)
+  - theme: Backend-selected
+    title: Dashboard Luzes
+    path: dashboard-lights
+    icon: mdi:lightbulb-group
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 3
+    subview: true
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.living_room
+            fill_container: true
+            name: Sala
+          - type: custom:mushroom-light-card
+            entity: light.living_room_window
+            show_brightness_control: true
+            use_light_color: true
+            collapsible_controls: true
+            name: Ambiente
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-light-card
+                entity: light.doorway
+                fill_container: true
+                name: Entrada
+              - type: custom:mushroom-light-card
+                entity: light.hallway
+                fill_container: true
+                name: Corredor
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-light-card
+                entity: light.office
+                fill_container: true
+                name: Escritório
+                hold_action:
+                  action: fire-dom-event
+                  browser_mod:
+                    service: browser_mod.popup
+                    data:
+                      auto_close: false
+                      large: false
+                      content:
+                        type: custom:auto-entities
+                        card:
+                          type: vertical-stack
+                          title: Luzes do Escritório
+                        card_param: cards
+                        show_empty: true
+                        filter:
+                          include:
+                            - entity_id: light.office_*
+                              options:
+                                type: custom:mushroom-light-card
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-light-card
+                entity: light.laundry
+                fill_container: true
+                name: Lavandaria
+                hold_action:
+                  action: fire-dom-event
+                  browser_mod:
+                    service: browser_mod.popup
+                    data:
+                      auto_close: false
+                      large: false
+                      content:
+                        type: custom:auto-entities
+                        card:
+                          type: vertical-stack
+                          title: Luzes da Lavandaria
+                        card_param: cards
+                        show_empty: true
+                        filter:
+                          include:
+                            - entity_id: light.laundry_*
+                              options:
+                                type: custom:mushroom-light-card
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.storage
+            fill_container: true
+            name: Casa de Arrumos
+            icon: mdi:greenhouse
+            hold_action:
+              action: ''
+          - type: custom:mushroom-light-card
+            entity: light.kitchen_door
+            fill_container: true
+            name: Porta da Cozinha
+          - type: custom:mushroom-light-card
+            entity: light.front_door
+            fill_container: true
+            name: Varanda
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-light-card
+                entity: light.exterior_wall_east
+                fill_container: true
+                name: Exterior Nascente
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-light-card
+                entity: light.exterior_wall_side
+                fill_container: true
+                name: Exterior Poente
+          - type: custom:mushroom-light-card
+            entity: light.exterior_wall_back
+            fill_container: true
+            name: Exterior Sul
+        view_layout:
+          column: 3
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.kitchen
+            fill_container: true
+            name: Cozinha
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  large: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes da Cozinha
+                    card_param: cards
+                    show_empty: true
+                    filter:
+                      include:
+                        - entity_id: light.kitchen_*
+                          options:
+                            type: custom:mushroom-light-card
+          - type: custom:mushroom-light-card
+            entity: light.stairs_down
+            fill_container: true
+            show_brightness_control: true
+            show_color_temp_control: true
+            use_light_color: false
+            collapsible_controls: true
+          - type: custom:mushroom-light-card
+            entity: light.stairs_group
+            fill_container: true
+            name: Escadas
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  large: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes das Escadas
+                    card_param: cards
+                    show_empty: true
+                    filter:
+                      exclude:
+                        - entity_id: light.stairs_group
+                        - entity_id: light.stairs_wall
+                      include:
+                        - entity_id: light.stairs_*
+                          options:
+                            type: custom:mushroom-light-card
+          - type: custom:mushroom-light-card
+            entity: light.hall_group
+            fill_container: true
+            name: Sotão
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  large: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes do Hall
+                    card_param: cards
+                    show_empty: true
+                    filter:
+                      include:
+                        - entity_id: light.hall
+                          options:
+                            type: custom:mushroom-light-card
+                        - entity_id: light.hall_side
+                          options:
+                            type: custom:mushroom-light-card
+        view_layout:
+          column: 2
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.main_bathroom
+            fill_container: false
+            name: Casa de Banho Principal
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes da Casa de Banho Principal
+                    card_param: cards
+                    show_empty: true
+                    filter:
+                      exclude:
+                        - entity_id: light.*group*
+                      include:
+                        - entity_id: light.main_bathroom_*
+                          options:
+                            type: custom:mushroom-light-card
+          - type: custom:mushroom-light-card
+            entity: light.master_bedroom_bathroom
+            fill_container: false
+            name: Casa de Banho da Suite
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes da Casa de Banho da Suite
+                    card_param: cards
+                    show_empty: true
+                    filter:
+                      exclude:
+                        - entity_id: light.*group*
+                      include:
+                        - entity_id: light.master_bedroom_bathroom_*
+                          options:
+                            type: custom:mushroom-light-card
+          - type: custom:mushroom-light-card
+            entity: light.bathroom_rc
+            fill_container: true
+            name: Casa de Banho R/C
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes da Casa de Banho R/C
+                    card_param: cards
+                    show_empty: true
+                    filter:
+                      exclude:
+                        - entity_id: light.*group*
+                      include:
+                        - entity_id: light.bathroom_rc_*
+                          options:
+                            type: custom:mushroom-light-card
+        view_layout:
+          column: 2
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.master_bedroom
+            fill_container: false
+            name: Suite
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes da Suite
+                    card_param: cards
+                    show_empty: false
+                    filter:
+                      exclude:
+                        - entity_id: light.*group*
+                        - entity_id: light.*bathroom*
+                      include:
+                        - entity_id: light.master_bedroom_*
+                          options:
+                            type: custom:mushroom-light-card
+          - type: custom:mushroom-light-card
+            entity: light.bedroom_ricardo_group
+            fill_container: false
+            name: Quarto do Ricardo
+            hold_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes do Quarto do Ricardo
+                    card_param: cards
+                    show_empty: true
+                    filter:
+                      exclude:
+                        - entity_id: light.*group*
+                      include:
+                        - entity_id: light.bedroom_ricardo_*
+                          options:
+                            type: custom:mushroom-light-card
+                            fill_container: true
+                            show_brightness_control: true
+                            show_color_temp_control: true
+                            use_light_color: true
+                            collapsible_controls: false
+        view_layout:
+          column: 1
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.xmas_group
+            fill_container: false
+            name: Luzes de Natal
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: custom:auto-entities
+                    card:
+                      type: vertical-stack
+                      title: Luzes de Natal
+                    card_param: cards
+                    show_empty: false
+                    filter:
+                      exclude:
+                        - entity_id: light.*group*
+                      include:
+                        - entity_id: light.xmas_*
+                          options:
+                            type: custom:mushroom-light-card
+        view_layout:
+          column: 3
+  - theme: Backend-selected
+    title: Configuração das Luzes
+    path: config-lights
+    icon: mdi:lightbulb-group
+    subview: true
+    badges: []
+    cards:
+      - type: entities
+        title: Luzes
+        entities:
+          - type: custom:auto-entities
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Luzes R/C
+                open: false
+              group_config:
+                secondary_info: last-changed
+            filter:
+              include:
+                - domain: light
+                  area: kitchen
+                - domain: light
+                  area: laundry
+                - domain: light
+                  area: living_room
+                - domain: light
+                  area: bedroom_rc
+                - domain: light
+                  area: office
+                - domain: light
+                  area: bathroom_rc
+              exclude:
+                - entity_id: light.*_group
+            sort:
+              method: entity_id
+              ignore_case: false
+          - type: custom:auto-entities
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Luzes 1º Andar
+                open: false
+              group_config:
+                secondary_info: last-changed
+            filter:
+              include:
+                - domain: light
+                  area: hall
+                - domain: light
+                  area: master_bedroom
+                - domain: light
+                  area: bedroom_ricardo
+                - domain: light
+                  area: bedroom_guest
+                - domain: light
+                  area: bathroom_main
+              exclude:
+                - entity_id: light.*_group
+            sort:
+              method: entity_id
+              ignore_case: false
+      - type: entities
+        entities:
+          - entity: input_boolean.automation_sw_all_motion_lights
+        title: Controlos Principais
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Cenários
+        filter:
+          include:
+            - entity_id: scene.lights_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Routinas
+        filter:
+          include:
+            - entity_id: script.lights_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Controlo por Movimento
+        filter:
+          include:
+            - entity_id: automation.lights_motion*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Sincronizar Luzes
+        filter:
+          include:
+            - entity_id: automation.lights_sync_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Desligar Automaticamente
+        filter:
+          include:
+            - entity_id: automation.lights_auto_off*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Automações Genéricas
+        filter:
+          include:
+            - entity_id: automation.lights_control_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Outras Automações
+        filter:
+          include:
+            - entity_id: automation.lights_*
+          exclude:
+            - entity_id: automation.lights_control_*
+            - entity_id: automation.lights_motion_*
+            - entity_id: automation.lights_sync_*
+            - entity_id: automation.lights_auto_off*
+  - theme: Backend-selected
+    icon: mdi:robot-vacuum
+    title: Dashboard  Roborock
+    path: dashboard-roborock
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 2
+    subview: true
+    badges: []
+    cards:
+      - view_layout:
+          column: 1
+        square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_hall
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_mainbathroom
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_masterbedroom
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_masterbedroombath
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_bedroomricardo
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_bedroomguest
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: call-service
+          service: python_script.vacuum_room
+          data:
+            room: switch_based
+        icon: mdi:vacuum
+        show_state: true
+        icon_height: 60px
+        view_layout:
+          column: 1
+      - type: custom:vacuum-card
+        entity: vacuum.roborock
+        image: default
+        compact_view: false
+        show_status: true
+        show_toolbar: true
+        show_name: false
+        map: camera.roborock_map
+        stats:
+          default:
+            - attribute: filter
+              unit: horas
+              subtitle: Filter
+            - attribute: sideBrush
+              unit: horas
+              subtitle: Side brush
+            - attribute: mainBrush
+              unit: horas
+              subtitle: Main brush
+            - attribute: sensor
+              unit: horas
+              subtitle: Sensors
+          cleaning:
+            - attribute: currentCleanTime
+              unit: minutos
+              subtitle: Tempo
+            - attribute: currentCleanArea
+              unit: m2
+              subtitle: Área
+  - theme: Backend-selected
+    title: Dashboard  Temperatura/Humidade
+    path: dashboard-temperature_humidity
+    icon: mdi:shower-head
+    type: sidebar
+    subview: true
+    badges: []
+    cards:
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-title-card
+            title: Casa de Banho Principal
+            alignment: center
+          - type: custom:mushroom-light-card
+            entity: light.main_bathroom_ceiling
+            name: Luz do Teto
+            fill_container: true
+            use_light_color: false
+          - type: custom:mushroom-light-card
+            entity: light.main_bathroom_led
+            name: Retro-Iluminação
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-fan-card
+                entity: fan.main_bathroom
+                name: Ventoinha
+                secondary_info: last-changed
+                primary_info: state
+              - type: custom:mushroom-entity-card
+                entity: automation.bathroom_main_bathroom_fan_control
+                name: Controlo da Ventoinha
+                primary_info: state
+                icon: mdi:fan-auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-entity-card
+                entity: sensor.temperature_main_bathroom
+                name: Temperatura
+                primary_info: state
+                secondary_info: last-updated
+              - type: custom:mushroom-entity-card
+                entity: sensor.humidity_main_bathroom
+                name: Humidade
+                primary_info: state
+                secondary_info: last-updated
+        view_layout:
+          position: sidebar
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-title-card
+            title: Casa de Banho da Suite
+            alignment: center
+          - type: custom:mushroom-light-card
+            entity: light.master_bedroom_bathroom_ceiling
+            name: Luz do Teto
+            fill_container: true
+            use_light_color: false
+          - type: custom:mushroom-light-card
+            entity: light.master_bedroom_bathroom_led
+            name: Retro-Iluminação
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-fan-card
+                entity: fan.bathroom_master_bedroom
+                name: Ventoinha
+                secondary_info: last-changed
+                primary_info: state
+              - type: custom:mushroom-entity-card
+                entity: automation.bathroom_master_bedroom_fan_control
+                name: Controlo da Ventoinha
+                primary_info: state
+                icon: mdi:fan-auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-entity-card
+                entity: sensor.temperature_master_bedroom_bathroom
+                name: Temperatura
+                primary_info: state
+                secondary_info: last-updated
+              - type: custom:mushroom-entity-card
+                entity: sensor.humidity_master_bedroom_bathroom
+                name: Humidade
+                primary_info: state
+                secondary_info: last-updated
+        view_layout:
+          position: sidebar
+      - chart_type: line
+        period: 5minute
+        days_to_show: 1
+        type: statistics-graph
+        entities:
+          - entity: sensor.humidity_master_bedroom_bathroom
+            name: Suite
+          - entity: sensor.humidity_main_bathroom
+            name: Principal
+          - entity: sensor.humidity_bathroom_rc
+            name: Serviço
+        stat_types:
+          - mean
+        title: Humidade (24h)
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-title-card
+            title: Casa de Banho de Serviço
+            alignment: center
+          - type: custom:mushroom-light-card
+            entity: light.bathroom_rc_ceiling
+            name: Luz do Teto
+            fill_container: true
+            use_light_color: false
+          - type: custom:mushroom-light-card
+            entity: light.bathroom_rc_led
+            name: Retro-Iluminação
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-fan-card
+                entity: fan.bathroom_rc
+                name: Ventoinha
+                secondary_info: last-changed
+                primary_info: state
+              - type: custom:mushroom-entity-card
+                entity: automation.bathroom_rc_fan_control
+                name: Controlo da Ventoinha
+                primary_info: state
+                icon: mdi:fan-auto
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-entity-card
+                entity: sensor.temperature_bathroom_rc
+                name: Temperatura
+                layout: horizontal
+                primary_info: state
+                secondary_info: last-updated
+              - type: custom:mushroom-entity-card
+                entity: sensor.humidity_bathroom_rc
+                name: Humidade
+                primary_info: state
+                secondary_info: last-updated
+        view_layout:
+          position: sidebar
+      - chart_type: line
+        period: hour
+        days_to_show: 5
+        type: statistics-graph
+        entities:
+          - entity: sensor.humidity_master_bedroom_bathroom
+            name: Suite
+          - entity: sensor.humidity_main_bathroom
+            name: Principal
+          - entity: sensor.humidity_bathroom_rc
+            name: Serviço
+        stat_types:
+          - mean
+          - min
+          - max
+        title: Humidade (10 Dias)
+      - type: humidifier
+        entity: humidifier.portable_dehumidifier
+        view_layout:
+          position: sidebar
+  - theme: Backend-selected
+    title: Dashboard  Termo-acumulador
+    path: dashboard-water-heater
+    icon: mdi:water-boiler
+    type: sidebar
+    subview: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_water_heater_top
+            name: Saída
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_water_heater_bottom
+            name: Entrada
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_solar_panel
+            name: Painel
+        view_layout:
+          position: sidebar
+      - type: custom:simple-thermostat
+        entity: climate.water_heater
+        layout:
+          step: row
+        header: false
+        control: true
+        sensors:
+          - entity: sensor.device_power_water_heater
+            name: Potência
+          - entity: sensor.device_daily_energy_water_heater
+            name: Diária
+          - entity: sensor.device_energy_water_heater
+            name: Total
+        view_layout:
+          position: sidebar
+      - type: custom:mushroom-entity-card
+        entity: switch.water_heater
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+        double_tap_action:
+          action: none
+        hide_icon: false
+        use_entity_picture: false
+        fill_container: true
+        layout: horizontal
+        view_layout:
+          position: sidebar
+      - type: custom:mushroom-entity-card
+        entity: binary_sensor.water_heater_pump_state
+        tap_action:
+          action: more-info
+        hold_action:
+          action: more-info
+        double_tap_action:
+          action: none
+        fill_container: true
+        layout: horizontal
+        view_layout:
+          position: sidebar
+      - type: horizontal-stack
+        cards:
+          - chart_type: line
+            period: 5minute
+            days_to_show: 2
+            type: statistics-graph
+            entities:
+              - entity: sensor.temperature_water_heater_bottom
+                name: Entrada
+              - entity: sensor.temperature_water_heater_top
+                name: Saída
+              - entity: sensor.temperature_solar_panel
+                name: Painel Solar
+            stat_types:
+              - mean
+            title: Histório 2 dias
+      - chart_type: bar
+        period: hour
+        days_to_show: 2
+        type: statistics-graph
+        entities:
+          - sensor.device_energy_water_heater
+        stat_types:
+          - change
+        title: Histório 2 dias
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.water_heater_pump_state
+        hours_to_show: 240
+        title: Estado da Bomba
+      - type: entities
+        title: Potência/Energia Consumida
+        entities:
+          - entity: sensor.device_power_solar_water_heater_pump
+          - entity: sensor.device_energy_water_heater
+        view_layout:
+          position: sidebar
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Automações
+        filter:
+          include:
+            - entity_id: automation.water_heater_*
+        view_layout:
+          position: sidebar
+  - theme: Backend-selected
+    path: dashboard-water-heater-graph
+    title: 'Gráficos do Aquecimento da Água '
+    icon: mdi:water-thermometer-outline
+    subview: true
+    type: sidebar
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - chart_type: line
+            period: 5minute
+            days_to_show: 10
+            type: statistics-graph
+            entities:
+              - entity: sensor.temperature_water_heater_bottom
+                name: Entrada
+              - entity: sensor.temperature_water_heater_top
+                name: Saída
+              - entity: sensor.temperature_solar_panel
+                name: Painel Solar
+            stat_types:
+              - mean
+            title: Temperatura 10 dias
+      - chart_type: bar
+        period: hour
+        days_to_show: 10
+        type: statistics-graph
+        entities:
+          - sensor.device_energy_water_heater
+        stat_types:
+          - change
+        title: Energia 10 dias
+      - chart_type: line
+        period: week
+        days_to_show: 180
+        type: statistics-graph
+        entities:
+          - entity: sensor.temperature_water_heater_bottom
+            name: Entrada
+          - entity: sensor.temperature_water_heater_top
+            name: Saída
+          - entity: sensor.temperature_solar_panel
+            name: Painel Solar
+        stat_types:
+          - min
+          - max
+          - mean
+        title: Temperatura 180 Dias
+      - chart_type: bar
+        period: week
+        days_to_show: 180
+        type: statistics-graph
+        entities:
+          - sensor.device_energy_water_heater
+        title: Energia 180 Dias
+        stat_types:
+          - change
+  - theme: Backend-selected
+    subview: true
+    icon: mdi:home-search
+    path: dashboard-house
+    title: Dashboard House Config
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 2
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - input_select.house_mode
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              data:
+                option: Evening
+                entity_id: input_select.house_mode
+            entity: input_select.house_mode
+            icon: mdi:weather-sunset
+            name: Ativar Modo Anoitecer
+            icon_height: 130px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              data:
+                option: Night
+                entity_id: input_select.house_mode
+            entity: input_select.house_mode
+            icon: mdi:weather-night
+            name: Ativar Modo Noite
+            icon_height: 130px
+        view_layout:
+          column: 1
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: input_boolean.house_guest
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: none
+            layout: vertical
+          - type: custom:mushroom-entity-card
+            entity: input_boolean.extended_away_mode
+            tap_action:
+              action: toggle
+            layout: vertical
+          - type: custom:mushroom-entity-card
+            entity: input_boolean.notification_active_non_disturb
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: none
+            layout: vertical
+        view_layout:
+          column: 1
+      - type: custom:mushroom-entity-card
+        entity: switch.insect_plug
+        icon: mdi:bug-outline
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+        view_layout:
+          column: 2
+      - type: entities
+        entities:
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Movimento
+            group_config:
+              secondary_info: last-changed
+            open: true
+            entities:
+              - entity: binary_sensor.motion_sensor_kitchen_door
+                name: Porta da Cozinha
+              - entity: binary_sensor.motion_sensor_stairs_top
+                name: Topo das Escadas
+              - entity: binary_sensor.motion_sensor_stairs_bottom
+                name: Inicio das Escadas
+              - entity: binary_sensor.motion_sensor_office
+                name: Escritório
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Luminusidade
+            group_config:
+              secondary_info: last-updated
+            open: false
+            entities:
+              - entity: sensor.light_sensor_living_room
+                name: Sala
+              - entity: sensor.light_sensor_office
+                name: Escritório
+              - entity: sensor.light_sensor_stairs
+                name: Escadas
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Portas
+            group_config:
+              secondary_info: last-updated
+            open: false
+            entities:
+              - entity: binary_sensor.kitchen_door
+                name: Cozinha
+              - entity: binary_sensor.kitchen_pantry_door
+                name: Despensa
+              - entity: binary_sensor.kitchen_extractor_fan_slider
+                name: Slider do Exaustor
+        title: Sensores
+        view_layout:
+          column: 2
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: switch.portable_heater
+            tap_action:
+              action: toggle
+            layout: vertical
+          - type: custom:mushroom-entity-card
+            entity: switch.dehumidifier
+            tap_action:
+              action: toggle
+            layout: vertical
+        view_layout:
+          column: 1
+  - theme: Backend-selected
+    title: Dashboard Automações
+    path: dashboard-automations
+    subview: true
+    icon: mdi:robot
+    badges: []
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Trigger de Rotinas
+        filter:
+          include:
+            - entity_id: automation.routines_trigger_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Trigger por Interruptores
+        filter:
+          include:
+            - entity_id: automation.switch_trigger_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Dispositivos
+        filter:
+          include:
+            - entity_id: automation.device_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: CCTV
+        filter:
+          include:
+            - entity_id: automation.cctv_*
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Outras
+        filter:
+          include:
+            - entity_id: automation.*
+          exclude:
+            - entity_id: automation.lights*
+            - entity_id: automation.cover*
+            - entity_id: automation.routines_trigger_*
+            - entity_id: automation.switch_trigger_*
+            - entity_id: automation.device_*
+            - entity_id: automation.*_fan_control
+  - theme: Backend-selected
+    title: Dashboard Potência
+    path: dashboard-power
+    icon: mdi:flash
+    type: sidebar
+    subview: true
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - entities:
+              - entity: sensor.bhpzem_main_power
+            height: 150
+            hours_to_show: 24
+            line_width: 1
+            name: Potência Consumida
+            points_per_hour: 10
+            show:
+              average: false
+              extrema: true
+              graph: line
+              labels_secondary: false
+              points: hover
+              state: true
+            type: custom:mini-graph-card
+      - chart_type: bar
+        period: hour
+        days_to_show: 5
+        type: statistics-graph
+        stat_types:
+          - change
+        entities:
+          - sensor.light_daily_energy_total
+          - sensor.device_energy_portable_heater
+          - sensor.device_energy_living_room_ac
+          - sensor.device_daily_energy_living_room_ac_heat
+          - sensor.device_daily_energy_living_room_ac_cold
+          - sensor.device_energy_dehumidifier
+          - sensor.device_energy_kitchen_oven
+          - sensor.device_energy_kitchen_plugs
+          - sensor.device_energy_dish_wash_machine
+          - sensor.device_energy_washing_machine
+          - sensor.device_energy_fridge
+          - sensor.device_energy_media_center
+        title: Energia (5 Dias)
+      - entities:
+          - entity: sensor.bhpzem_main_voltage
+            name: Tensão
+          - entity: sensor.bhpzem_main_current
+            name: Corrente
+          - entity: sensor.bhpzem_main_pf
+            name: PF
+          - entity: sensor.bhpzem_main_frequency
+            name: Frequência
+          - entity: sensor.daily_energy
+            name: Energia Diária
+          - entity: sensor.bhpzem_main_energy
+            name: Energia Total
+        show_icon: false
+        columns: 3
+        type: glance
+        view_layout:
+          position: sidebar
+      - type: entities
+        title: Potência
+        entities:
+          - type: custom:auto-entities
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Dispositivos
+                open: true
+              group_config:
+                secondary_info: last-changed
+            filter:
+              include:
+                - entity_id: sensor.device_power_*
+            sort:
+              method: state
+              numeric: true
+              reverse: true
+          - type: custom:auto-entities
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Luzes
+                open: true
+              group_config:
+                secondary_info: last-changed
+            filter:
+              include:
+                - entity_id: sensor.light_power_*
+            sort:
+              method: state
+              numeric: true
+              reverse: true
+        view_layout:
+          position: sidebar
+      - chart_type: bar
+        period: day
+        days_to_show: 15
+        type: statistics-graph
+        stat_types:
+          - change
+        entities:
+          - sensor.light_daily_energy_total
+          - sensor.device_energy_portable_heater
+          - sensor.device_energy_living_room_ac
+          - sensor.device_daily_energy_living_room_ac_heat
+          - sensor.device_daily_energy_living_room_ac_cold
+          - sensor.device_energy_dehumidifier
+          - sensor.device_energy_kitchen_oven
+          - sensor.device_energy_kitchen_plugs
+          - sensor.device_energy_dish_wash_machine
+          - sensor.device_energy_washing_machine
+          - sensor.device_energy_fridge
+          - sensor.device_energy_media_center
+          - sensor.device_energy_water_heater
+          - sensor.device_energy_it_rack
+        title: Energia (15 Dias)
+      - chart_type: bar
+        period: week
+        days_to_show: 60
+        type: statistics-graph
+        stat_types:
+          - change
+        entities:
+          - sensor.light_daily_energy_total
+          - sensor.device_energy_portable_heater
+          - sensor.device_energy_living_room_ac
+          - sensor.device_daily_energy_living_room_ac_heat
+          - sensor.device_daily_energy_living_room_ac_cold
+          - sensor.device_energy_dehumidifier
+          - sensor.device_energy_kitchen_oven
+          - sensor.device_energy_kitchen_plugs
+          - sensor.device_energy_dish_wash_machine
+          - sensor.device_energy_washing_machine
+          - sensor.device_energy_fridge
+          - sensor.device_energy_media_center
+          - sensor.device_energy_water_heater
+          - sensor.device_energy_it_rack
+        title: Energia (2 Meses)
+      - type: entities
+        title: Energia
+        entities:
+          - type: custom:auto-entities
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Dispositivos
+                open: false
+              group_config:
+                secondary_info: last-changed
+            filter:
+              include:
+                - entity_id: sensor.device_energy_*
+            sort:
+              method: state
+              numeric: true
+              reverse: true
+          - type: custom:auto-entities
+            card:
+              type: custom:fold-entity-row
+              head:
+                type: section
+                label: Luzes
+                open: false
+              group_config:
+                secondary_info: last-changed
+            filter:
+              include:
+                - entity_id: sensor.light_energy_*
+            sort:
+              method: state
+              numeric: true
+              reverse: true
+        view_layout:
+          position: sidebar
+  - theme: Backend-selected
+    title: Climatização
+    path: dashboard-climate
+    icon: mdi:home-thermometer-outline
+    subview: true
+    type: sidebar
+    badges: []
+    cards:
+      - type: custom:simple-thermostat
+        entity: climate.living_room
+        label:
+          temperature: Atual
+        layout:
+          step: column
+        sensors:
+          - entity: sensor.device_power_living_room_ac
+            name: Potência
+          - entity: sensor.device_daily_energy_living_room_ac_heat
+            name: Energia
+        control:
+          hvac:
+            'off':
+              name: 'Off'
+            fan_only:
+              name: Ventilar
+            heat_cool:
+              name: Auto
+            dry:
+              name: Desum.
+          preset: true
+        header: false
+        view_layout:
+          position: sidebar
+      - type: entities
+        title: Temperatura
+        entities:
+          - entity: sensor.temperature_living_room
+            name: Sala
+            secondary_info: last-updated
+          - entity: sensor.temperature_hall
+            name: Sotão
+            secondary_info: last-updated
+          - entity: sensor.temperature_master_bedroom_closet
+            name: Closet da Suite
+            secondary_info: last-updated
+          - entity: sensor.temperature_bathroom_rc
+            name: Casa de Banho de Serviço
+            secondary_info: last-updated
+          - entity: sensor.temperature_main_bathroom
+            name: Casa de Banho Principal
+            secondary_info: last-updated
+          - entity: sensor.temperature_master_bedroom_bathroom
+            name: Casa de Banho da Suite
+            secondary_info: last-updated
+          - entity: sensor.temperature_outside
+            name: Exterior
+            secondary_info: last-updated
+        view_layout:
+          position: sidebar
+      - chart_type: line
+        period: 5minute
+        days_to_show: 1
+        type: statistics-graph
+        entities:
+          - entity: sensor.temperature_living_room
+            name: Sala
+          - entity: sensor.temperature_hall
+            name: Sotão
+          - entity: sensor.temperature_master_bedroom_bathroom
+            name: Casa de Banho Suite
+          - entity: sensor.temperature_main_bathroom
+            name: Casa de Banho Principal
+          - entity: sensor.temperature_bathroom_rc
+            name: Casa de Banho Serviço
+        stat_types:
+          - mean
+        title: Temperatura (24h)
+      - type: entities
+        title: Humidade
+        entities:
+          - entity: sensor.humidity_hall
+            name: Sotão
+            secondary_info: last-updated
+          - entity: sensor.humidity_master_bedroom_closet
+            name: Closet da Suite
+            secondary_info: last-updated
+          - entity: sensor.humidity_bathroom_rc
+            name: Casa de Banho de Serviço
+            secondary_info: last-updated
+          - entity: sensor.humidity_main_bathroom
+            name: Casa de Banho Principal
+            secondary_info: last-updated
+          - entity: sensor.humidity_master_bedroom_bathroom
+            name: Casa de Banho da Suite
+            secondary_info: last-updated
+          - entity: sensor.humidity_outside
+            name: Exterior
+            secondary_info: last-updated
+        view_layout:
+          position: sidebar
+      - chart_type: bar
+        period: hour
+        days_to_show: 1
+        type: statistics-graph
+        stat_types:
+          - change
+        entities:
+          - sensor.device_daily_energy_living_room_ac_heat
+          - sensor.device_daily_energy_living_room_ac_cold
+        title: Energia AC (24h)
+        view_layout:
+          position: main
+  - theme: Backend-selected
+    path: dashboard-climate-graphs
+    title: Gráficos Temperatura/Humidade
+    subview: true
+    icon: mdi:home-thermometer
+    type: sidebar
+    badges: []
+    cards:
+      - chart_type: line
+        period: hour
+        days_to_show: 10
+        type: statistics-graph
+        entities:
+          - entity: sensor.temperature_living_room
+            name: Sala
+          - entity: sensor.temperature_hall
+            name: Sotão
+          - entity: sensor.temperature_master_bedroom_bathroom
+            name: Casa de Banho Suite
+          - entity: sensor.temperature_main_bathroom
+            name: Casa de Banho Principal
+          - entity: sensor.temperature_bathroom_rc
+            name: Casa de Banho Serviço
+        stat_types:
+          - mean
+        title: Temperatura (10 Dias)
+      - chart_type: bar
+        period: day
+        days_to_show: 10
+        type: statistics-graph
+        stat_types:
+          - change
+        entities:
+          - sensor.device_daily_energy_living_room_ac_heat
+          - sensor.device_daily_energy_living_room_ac_cold
+        title: Energia AC (10 Dias)
+        view_layout:
+          position: main

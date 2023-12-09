@@ -1,0 +1,1262 @@
+views:
+  - theme: Backend-selected
+    title: Dashboard Downstairs
+    path: main
+    icon: mdi:home
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 2
+    badges: []
+    cards:
+      - type: custom:bignumber-card
+        entity: sensor.date_time_frontend
+        scale: 40px
+        view_layout:
+          column: 1
+      - show_current: true
+        show_forecast: true
+        type: weather-forecast
+        entity: weather.home
+        view_layout:
+          column: 1
+      - type: conditional
+        conditions:
+          - entity: sensor.salicru_rack_ups_status
+            state: On Battery
+        card:
+          type: gauge
+          entity: sensor.salicru_rack_ups_battery_charge
+          name: Bateria da UPS
+          unit: '%'
+          min: 0
+          max: 100
+          needle: false
+          severity:
+            green: 60
+            yellow: 20
+            red: 2
+        view_layout:
+          column: 2
+      - type: conditional
+        conditions:
+          - entity: light.living_room_window
+            state: 'on'
+        card:
+          type: custom:mushroom-light-card
+          entity: light.living_room_window
+          use_light_color: true
+          show_brightness_control: true
+          show_color_temp_control: true
+          collapsible_controls: false
+        view_layout:
+          column: 2
+      - type: conditional
+        conditions:
+          - entity: light.stairs_down
+            state: 'on'
+        card:
+          type: custom:mushroom-light-card
+          entity: light.stairs_down
+          use_light_color: true
+          show_brightness_control: true
+          show_color_temp_control: true
+          collapsible_controls: false
+        view_layout:
+          column: 2
+      - type: custom:auto-entities
+        view_layout:
+          column: 2
+        card:
+          type: entities
+        show_empty: false
+        filter:
+          exclude:
+            - entity_id: light.all_*
+            - entity_id: light.*_group
+            - entity_id: light.fire_tablet_screen
+            - entity_id: light.hallway
+            - entity_id: light.doorway
+            - entity_id: light.laundry_*
+            - entity_id: light.storage_*
+            - entity_id: light.xmas_*
+            - entity_id: light.living_room
+            - entity_id: light.living_room_window
+            - entity_id: light.office_*
+            - entity_id: light.kitchen_led
+            - entity_id: light.kitchen_window
+            - entity_id: light.main_bathroom_*
+            - entity_id: light.bathroom_rc_*
+            - entity_id: light.master_bedroom_bathroom_*
+            - entity_id: light.master_bedroom_ceiling
+            - entity_id: light.master_bedroom_entry
+            - entity_id: light.stairs_down
+            - entity_id: fan.kitchen_extractor
+          include:
+            - domain: light
+              state: 'on'
+              area: Exterior
+            - domain: light
+              state: 'on'
+              area: Cozinha
+            - domain: light
+              state: 'on'
+              area: Escritório
+            - domain: light
+              state: 'on'
+              area: Lavandaria
+            - domain: light
+              state: 'on'
+              area: Hall
+            - domain: light
+              state: 'on'
+              area: Casa de Banho de Serviço
+            - domain: light
+              state: 'on'
+              area: Casa de Banho Principal
+            - domain: light
+              state: 'on'
+              area: Suite
+            - domain: light
+              state: 'on'
+              area: Quarto do Ricardo
+            - domain: light
+              state: 'on'
+              area: Quarto Extra
+            - domain: fan
+              state: 'on'
+            - entity_id: switch.portable_heater
+              state: 'on'
+            - entity_id: switch.dehumidifier
+              state: 'on'
+      - type: conditional
+        view_layout:
+          column: 2
+        conditions:
+          - entity: binary_sensor.roborock_state
+            state: 'on'
+        card:
+          type: custom:mushroom-vacuum-card
+          entity: vacuum.roborock
+          commands:
+            - start_pause
+            - stop
+            - return_home
+          fill_container: false
+          secondary_info: last-changed
+          primary_info: state
+      - type: conditional
+        view_layout:
+          column: 2
+        conditions:
+          - entity: binary_sensor.water_filter_needs_replacement
+            state: 'on'
+        card:
+          type: custom:mushroom-template-card
+          primary: Trocar Filtro da Água
+          secondary: ''
+          icon: mdi:filter
+          multiline_secondary: false
+          tap_action:
+            action: call-service
+            service: automation.trigger
+            data: {}
+            target:
+              entity_id: automation.task_water_filter_replacement
+          hold_action:
+            action: none
+          double_tap_action:
+            action: none
+      - type: conditional
+        view_layout:
+          column: 2
+        conditions:
+          - entity: binary_sensor.cat_litter_box_need_change
+            state: 'on'
+        card:
+          type: custom:mushroom-template-card
+          primary: Trocar Areia das Gatas
+          secondary: ''
+          icon: mdi:swap-horizontal
+          multiline_secondary: false
+          tap_action:
+            action: call-service
+            service: script.cat_litter_change
+            data: {}
+          hold_action:
+            action: none
+          double_tap_action:
+            action: none
+      - type: conditional
+        conditions:
+          - entity: input_boolean.cover_controls_bypass
+            state: 'on'
+        card:
+          type: custom:mushroom-entity-card
+          entity: input_boolean.cover_controls_bypass
+          tap_action:
+            action: call-service
+            service: input_boolean.turn_off
+            data: {}
+            target:
+              entity_id:
+                - input_boolean.cover_controls_bypass
+          hold_action:
+            action: none
+          double_tap_action:
+            action: none
+          name: Controlo dos Estores OFF
+        view_layout:
+          column: 2
+      - type: conditional
+        view_layout:
+          column: 2
+        conditions:
+          - entity: sun.sun
+            state: below_horizon
+        card:
+          type: custom:auto-entities
+          card:
+            type: vertical-stack
+          card_param: cards
+          show_empty: false
+          filter:
+            include:
+              - domain: cover
+                attributes:
+                  current_position: '>= 50'
+                options:
+                  type: custom:mushroom-cover-card
+                  hide_state: false
+                  show_position_control: true
+                  show_buttons_control: true
+            exclude:
+              - entity_id: cover.all_*
+              - entity_id: cover.*_floor
+      - type: custom:auto-entities
+        view_layout:
+          column: 2
+        card:
+          type: vertical-stack
+        show_empty: false
+        card_param: cards
+        filter:
+          include:
+            - entity_id: script.routine_*
+              state: 'on'
+              options:
+                type: custom:mushroom-entity-card
+                secondary_info: last-changed
+                tap_action:
+                  action: call-service
+                  service: script.turn_off
+                  data:
+                    entity_id: this.entity_id
+                layout: horizontal
+                fill_container: false
+                primary_info: name
+                hold_action:
+                  action: more-info
+      - type: conditional
+        view_layout:
+          column: 2
+        conditions:
+          - entity: input_boolean.house_guest
+            state: 'on'
+        card:
+          type: custom:mushroom-entity-card
+          entity: input_boolean.house_guest
+          name: Modo de Convidados
+          tap_action:
+            action: call-service
+            service: input_boolean.turn_off
+            data: {}
+            target:
+              entity_id: input_boolean.house_guest
+          hold_action:
+            action: none
+          double_tap_action:
+            action: none
+      - type: conditional
+        conditions:
+          - entity: input_boolean.extended_away_mode
+            state: 'on'
+        card:
+          type: custom:mushroom-entity-card
+          entity: input_boolean.extended_away_mode
+          name: Modo de Férias
+          tap_action:
+            action: call-service
+            service: input_boolean.turn_off
+            data: {}
+            target:
+              entity_id: input_boolean.extended_away_mode
+          hold_action:
+            action: none
+          double_tap_action:
+            action: none
+        view_layout:
+          column: 2
+      - square: false
+        columns: 4
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            entity: ''
+            name: Luzes
+            icon: mdi:lightbulb-group
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-lights
+            hold_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/config-lights
+            icon_height: 60px
+          - show_name: true
+            show_icon: true
+            type: button
+            entity: ''
+            name: Estores
+            icon: mdi:window-shutter
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-covers
+            icon_height: 60px
+          - show_name: true
+            show_icon: true
+            type: button
+            entity: vacuum.roborock
+            name: Roborock
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-dashboard/dashboard-roborock
+            icon_height: 60px
+          - show_name: true
+            show_icon: true
+            type: button
+            entity: ''
+            name: Cameras
+            icon: mdi:cctv
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-dashboard/dashboard-cctv
+            hold_action:
+              action: navigate
+              navigation_path: /lovelace-dashboard/dashboard-doorbell-video
+            icon_height: 60px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.bhpzem_main_power
+            name: Potência
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-power
+            primary_info: state
+            secondary_info: name
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_outside
+            name: Exterior
+            primary_info: state
+            secondary_info: name
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: vertical-stack
+                    cards:
+                      - type: grid
+                        square: false
+                        columns: 2
+                        cards:
+                          - type: custom:mushroom-entity-card
+                            entity: sensor.temperature_outside
+                            name: Temperatura
+                            primary_info: state
+                            secondary_info: last-updated
+                          - type: custom:mushroom-entity-card
+                            entity: sensor.humidity_outside
+                            name: Humidade
+                            primary_info: state
+                            secondary_info: last-updated
+                      - type: custom:sun-card
+                      - square: false
+                        columns: 2
+                        type: grid
+                        cards:
+                          - type: entity
+                            entity: sun.sun
+                            attribute: azimuth
+                            name: Orientação do Sol
+                            icon: mdi:sun-compass
+                            unit: º
+                          - type: entity
+                            entity: sun.sun
+                            attribute: elevation
+                            name: Elevação do Sol
+                            icon: mdi:elevation-rise
+                            unit: º
+          - type: custom:mushroom-entity-card
+            entity: sensor.average_temperature
+            name: Temperatura Média
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-climate
+            hold_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-climate-graphste
+            primary_info: state
+            secondary_info: last-updated
+          - type: custom:mushroom-entity-card
+            entity: sensor.average_humidity
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-temperature_humidity
+            name: Humidade  Média
+            secondary_info: last-updated
+            primary_info: state
+            icon_type: icon
+        view_layout:
+          column: 2
+      - square: false
+        columns: 5
+        type: grid
+        cards:
+          - type: custom:button-card
+            icon_height: 30px
+            aspect_ratio: 7/6
+            name: AC
+            color_type: icon
+            color: auto
+            show_state: false
+            entity: climate.living_room
+            icon: mdi:hvac
+            triggers_update:
+              - sensor.temperature_living_room
+              - sensor.device_power_living_room_ac
+              - switch.water_heater
+            state:
+              - operator: template
+                value: |
+                  [[[ return states['climate.living_room'].state === 'off' ]]]
+                icon: mdi:hvac-off
+              - operator: template
+                value: |
+                  [[[ return states['climate.living_room'].state === 'heat' ]]]
+                icon: mdi:hvac
+                color: var(--primary-color)
+            custom_fields:
+              temp: |
+                [[[
+                  return `${states['sensor.temperature_living_room'].state}°`
+                ]]]
+              target: |
+                [[[
+                  return `${states['climate.living_room'].attributes.temperature}°`
+                ]]]
+              power: |
+                [[[
+                  return `${states['sensor.device_power_living_room_ac'].state}W`
+                ]]]
+              heating: |
+                [[[
+                  if (states['climate.living_room'].state == "heat")
+                    return `<ha-icon icon="mdi:thermometer-plus"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+              cooling: |
+                [[[
+                  if (states['climate.living_room'].state == "cool")
+                    return `<ha-icon icon="mdi:thermometer-minus"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-climate
+            hold_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-climate-graphs
+            styles:
+              icon:
+                - margin-left: '-40%'
+                - width: 40%
+              custom_fields:
+                heating:
+                  - position: absolute
+                  - left: 5%
+                  - bottom: 5%
+                cooling:
+                  - position: absolute
+                  - left: 5%
+                  - bottom: 5%
+                temp:
+                  - position: absolute
+                  - right: 10%
+                  - top: 5%
+                  - font-size: 10px
+                target:
+                  - position: absolute
+                  - right: 10%
+                  - top: 28%
+                  - font-size: 10px
+                power:
+                  - position: absolute
+                  - right: 10%
+                  - top: 50%
+                  - font-size: 10px
+              grid:
+                - position: relative
+          - type: custom:button-card
+            icon_height: 30px
+            aspect_ratio: 7/6
+            name: Água
+            color_type: icon
+            show_state: false
+            entity: climate.water_heater
+            icon: mdi:water-boiler
+            triggers_update:
+              - sensor.temperature_water_heater_top
+              - sensor.device_power_water_heater
+              - switch.water_heater
+            state:
+              - operator: template
+                value: |
+                  [[[ return states['climate.water_heater'].state === 'off' ]]]
+                icon: mdi:water-boiler-off
+              - operator: template
+                value: |
+                  [[[ return states['climate.water_heater'].state === 'heat' ]]]
+                icon: mdi:water-boiler
+                color: var(--primary-color)
+            custom_fields:
+              temp: |
+                [[[
+                  return `${states['sensor.temperature_water_heater_top'].state}°`
+                ]]]
+              target: |
+                [[[
+                  return `${states['climate.water_heater'].attributes.temperature}°`
+                ]]]
+              power: |
+                [[[
+                  return `${states['sensor.device_power_water_heater'].state}W`
+                ]]]
+              heating: |
+                [[[
+                  if (states['switch.water_heater'].state == "on")
+                    return `<ha-icon icon="mdi:thermometer-plus"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-water-heater
+            hold_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-water-heater-graph
+            styles:
+              icon:
+                - margin-left: '-40%'
+                - width: 40%
+              custom_fields:
+                heating:
+                  - position: absolute
+                  - left: 5%
+                  - bottom: 5%
+                temp:
+                  - position: absolute
+                  - right: 10%
+                  - top: 5%
+                  - font-size: 10px
+                target:
+                  - position: absolute
+                  - right: 10%
+                  - top: 28%
+                  - font-size: 10px
+                power:
+                  - position: absolute
+                  - right: 10%
+                  - top: 50%
+                  - font-size: 10px
+              grid:
+                - position: relative
+          - type: custom:button-card
+            icon_height: 30px
+            aspect_ratio: 7/6
+            icon: mdi:calendar-clock
+            show_state: false
+            color_type: icon
+            custom_fields:
+              wet_clothes: |
+                [[[
+                  if (states['binary_sensor.wash_machine_wet_clothes'].state == "on")
+                    return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+              dry_clothes: |
+                [[[
+                  if (states['binary_sensor.dryer_machine_need_emtpy'].state == "on")
+                    return `<ha-icon icon="mdi:tshirt-crew"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+              clean_dishes: |
+                [[[
+                  if (states['binary_sensor.dish_wash_machine_clean'].state == "on")
+                    return `<ha-icon icon="mdi:silverware-clean"      style="width: 18px; height: 18px;"> </ha-icon>`
+                ]]]
+            name: Tarefas
+            styles:
+              custom_fields:
+                wet_clothes:
+                  - position: absolute
+                  - left: 10%
+                  - top: 10%
+                dry_clothes:
+                  - position: absolute
+                  - right: 10%
+                  - top: 10%
+                clean_dishes:
+                  - position: absolute
+                  - left: 10%
+                  - top: 30%
+              grid:
+                - position: relative
+          - type: custom:button-card
+            icon_height: 40px
+            aspect_ratio: 7/6
+            show_state: true
+            color_type: icon
+            show_name: false
+            entity: sensor.house_mode
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-house
+            hold_action:
+              action: navigate
+              navigation_path: /lovelace-subviews/dashboard-automations
+          - type: custom:button-card
+            icon_height: 30px
+            aspect_ratio: 7/6
+            state_display: 'no'
+            color_type: icon
+            name: Routinas
+            icon: mdi:calendar-sync
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  auto_close: false
+                  content:
+                    type: grid
+                    square: false
+                    columns: 2
+                    cards:
+                      - show_name: true
+                        show_icon: true
+                        type: button
+                        tap_action:
+                          action: call-service
+                          service: script.routine_dinner_time
+                          data: {}
+                          target: {}
+                        entity: script.routine_dinner_time
+                        icon: mdi:silverware-fork-knife
+                        name: Routina de Refeição
+                      - show_name: true
+                        show_icon: true
+                        type: button
+                        tap_action:
+                          action: call-service
+                          service: script.routine_good_moorning
+                          data: {}
+                          target: {}
+                        entity: script.routine_good_moorning
+                        icon: mdi:weather-sunset
+                        name: Bom Dia
+                      - show_name: true
+                        show_icon: true
+                        type: button
+                        tap_action:
+                          action: call-service
+                          service: script.routine_bedtime_all_off
+                          data: {}
+                          target: {}
+                        entity: script.routine_bedtime_all_off
+                        icon: mdi:sleep
+                        name: Bom Noite (Desligar)
+                      - show_name: true
+                        show_icon: true
+                        type: button
+                        tap_action:
+                          action: call-service
+                          service: script.routine_exit_house_all_off
+                          data: {}
+                          target: {}
+                        entity: script.routine_exit_house_all_off
+                        icon: mdi:exit-run
+                        name: Sair de Casa (Desligar)
+  - theme: Backend-selected
+    path: shores
+    title: Tarefas
+    icon: mdi:calendar-check-outline
+    type: custom:horizontal-layout
+    badges: []
+    cards:
+      - type: vertical-stack
+        title: Lista de Tarefas
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Trocar Filtro da Água
+            secondary: ''
+            icon: mdi:filter
+            multiline_secondary: false
+            tap_action:
+              action: call-service
+              service: automation.trigger
+              data: {}
+              target:
+                entity_id: automation.task_water_filter_replacement
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-template-card
+            primary: Retirar Roupa da Máquina de Lavar
+            secondary: ''
+            icon: mdi:hanger
+            multiline_secondary: false
+            tap_action:
+              action: call-service
+              service: automation.trigger
+              data: {}
+              target:
+                entity_id: automation.task_washing_machine
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-template-card
+            primary: Retirar Roupa da Máquina de Secar
+            secondary: ''
+            icon: mdi:tshirt-crew
+            multiline_secondary: false
+            tap_action:
+              action: call-service
+              service: automation.trigger
+              data: {}
+              target:
+                entity_id: automation.task_dryer_machine
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-template-card
+            primary: Retirar Loiça da Máquina
+            secondary: ''
+            icon: mdi:silverware
+            multiline_secondary: false
+            tap_action:
+              action: call-service
+              service: automation.trigger
+              data: {}
+              target:
+                entity_id: automation.task_dish_wash_machine
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-template-card
+            primary: Limpar Areia das Gatas
+            secondary: ''
+            icon: mdi:shovel
+            multiline_secondary: false
+            tap_action:
+              action: call-service
+              service: script.cat_litter_clean
+              data: {}
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-template-card
+            primary: Trocar Areia das Gatas
+            secondary: ''
+            icon: mdi:swap-horizontal
+            multiline_secondary: false
+            tap_action:
+              action: call-service
+              service: script.cat_litter_change
+              data: {}
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+      - type: entities
+        entities:
+          - entity: sensor.washing_machine_state
+            name: Estado
+          - entity: binary_sensor.wash_machine_wet_clothes
+            name: Roupa Para Retirar
+          - entity: sensor.task_washing_clothes_last_done
+            name: Roupa Lavada
+          - entity: sensor.task_remove_washing_clothes_last_done
+            name: Roupa Retirada
+          - entity: binary_sensor.washing_machine_door
+            name: Porta
+          - entity: sensor.device_power_washing_machine
+            name: Potência Consumida
+          - entity: sensor.device_energy_washing_machine
+            name: Energia Total
+          - entity: automation.task_washing_machine
+        title: Máquina de Lavar Roupa
+        state_color: true
+      - type: entities
+        entities:
+          - entity: sensor.dryer_machine_state
+            name: Estado
+          - entity: binary_sensor.dryer_machine_need_emtpy
+            name: Roupa Para Retirar
+          - entity: sensor.task_dryer_last_done
+            name: Secagem da Roupa
+          - entity: sensor.task_dryer_empty_last_done
+            name: Roupa Retirada
+          - entity: binary_sensor.dryer_machine_door
+            name: Porta
+          - entity: sensor.device_power_dryer_machine
+            name: Potência Consumida
+          - entity: sensor.device_energy_dryer_machine
+            name: Energia Total
+          - entity: automation.task_dryer_machine
+        title: Máquina de Secar Roupa
+        state_color: true
+      - type: entities
+        entities:
+          - entity: sensor.dish_wash_machine_state
+            name: Estado
+          - entity: binary_sensor.dish_wash_machine_clean
+            name: Loiça Para Retirar
+          - entity: sensor.task_dish_wash_machine_clean_last_done
+            name: Loiça Lavada
+          - entity: sensor.task_dish_wash_machine_empty_last_done
+            name: Loiça Retirada
+          - entity: binary_sensor.dish_wash_machine_door
+            name: Porta
+          - entity: sensor.device_power_dish_wash_machine
+            name: Potência Consumida
+          - entity: sensor.device_energy_dish_wash_machine
+            name: Energia Total
+          - entity: automation.task_dish_wash_machine
+        title: Máquina de Lavar Loiça
+        state_color: true
+      - type: entities
+        entities:
+          - entity: binary_sensor.water_filter_needs_replacement
+            name: Substituir Filtro
+          - entity: sensor.water_filter_remaing_days
+            name: Duração Restante
+          - entity: sensor.water_filter_replacement_last_done
+            name: Última Substituição
+          - entity: input_number.water_filter_replacement_days
+          - entity: automation.task_water_filter_replacement
+        title: Filtro da Água
+      - type: entities
+        entities:
+          - entity: binary_sensor.cat_litter_box_need_clean
+          - entity: sensor.cat_litter_box_last_clean
+          - entity: binary_sensor.cat_litter_box_need_change
+          - entity: sensor.cat_litter_box_last_change
+          - entity: automation.task_cat_litter_clean_reminder
+          - entity: automation.task_cat_litter_clean_done
+          - entity: automation.task_cat_litter_clean_done_no_vaccum
+        title: Areia das Gatas
+  - theme: Backend-selected
+    title: Sensores
+    path: house-sensors
+    icon: mdi:account-multiple
+    type: custom:horizontal-layout
+    badges: []
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: input_select.house_mode
+        primary_info: state
+        secondary_info: last-changed
+        fill_container: false
+        view_layout:
+          column: 1
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: input_boolean.house_guest
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: none
+            layout: vertical
+          - type: custom:mushroom-entity-card
+            entity: input_boolean.extended_away_mode
+            tap_action:
+              action: toggle
+            layout: vertical
+          - type: custom:mushroom-entity-card
+            entity: input_boolean.notification_active_non_disturb
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: none
+            layout: vertical
+        view_layout:
+          column: 1
+      - type: entities
+        entities:
+          - entity: binary_sensor.joao_home
+          - entity: person.joao_carreira
+          - entity: sensor.magnesium_next_alarm
+          - entity: sensor.magnesium_do_not_disturb
+          - entity: sensor.magnesium_audio_mode
+          - entity: sensor.magnesium_light_sensor
+        title: João Carreira
+        view_layout:
+          column: 2
+      - type: entities
+        entities:
+          - entity: binary_sensor.bianca_home
+          - entity: person.bianca_pires
+          - entity: sensor.calcium_next_alarm
+          - entity: sensor.calcium_do_not_disturb_sensor
+          - entity: sensor.calcium_audio_mode
+          - entity: sensor.calcium_light_sensor
+        title: Bianca Pires
+        view_layout:
+          column: 3
+      - type: entities
+        entities:
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Movimento
+            group_config:
+              secondary_info: last-changed
+            open: true
+            entities:
+              - entity: binary_sensor.motion_sensor_kitchen_door
+                name: Porta da Cozinha
+              - entity: binary_sensor.motion_sensor_stairs_top
+                name: Topo das Escadas
+              - entity: binary_sensor.motion_sensor_stairs_bottom
+                name: Inicio das Escadas
+              - entity: binary_sensor.motion_sensor_office
+                name: Escritório
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Luminusidade
+            group_config:
+              secondary_info: last-updated
+            open: true
+            entities:
+              - entity: sensor.light_sensor_living_room
+                name: Sala
+              - entity: sensor.light_sensor_office
+                name: Escritório
+              - entity: sensor.light_sensor_stairs
+                name: Escadas
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Portas
+            group_config:
+              secondary_info: last-updated
+            open: true
+            entities:
+              - entity: binary_sensor.kitchen_door
+                name: Cozinha
+              - entity: binary_sensor.kitchen_pantry_door
+                name: Despensa
+        title: Sensores
+  - theme: Backend-selected
+    title: Utilidades
+    path: utilities
+    icon: mdi:counter
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 3
+    badges: []
+    cards:
+      - type: markdown
+        content: |
+          # Pagamentos
+
+          ## Utilidades (valor fixo)
+          **MEO:** 52€
+          **Netflix:** 5€
+          **Spotify:** 4€
+
+          ## Moradia
+          **IMI:** 1x em Maio | 2x Maio e Novembro
+
+          ## Seguro
+          | **Toyota Yaris**      || **Ford Focus**        ||
+          |:------------|---------:|:------------|---------:|
+          | Outubro     |     145€ | Setembro    |     112€ |
+          | Abril       |     138€ | Março       |     107€ |
+          | Total       |     283€ | Total       |     219€ |
+        layout:
+          column: 1
+      - view_layout:
+          column: 2
+        type: custom:vertical-stack-in-card
+        title: Electricidade
+        cards:
+          - type: markdown
+            content: |
+              **CPE:** PT0002000028962547WF
+              **Potência:** 6.9kVA
+              **Avarias:** 800 506 506
+              **Atendimento:** 808 53 53 53
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.daily_energy
+                name: Consumo Diário
+              - entity: sensor.bhpzem_main_energy
+                name: Consumo Total
+              - type: section
+                label: Contador
+              - entity: sensor.electricity_last_meter
+                name: Última Contagem
+              - entity: sensor.electricity_meter
+                name: Contagem Total
+              - entity: sensor.electricity_meter_offpeak
+                name: Vazio
+              - entity: sensor.electricity_meter_peak
+                name: Pontas
+              - entity: sensor.electricity_meter_full
+                name: Cheias
+      - view_layout:
+          column: 3
+        type: custom:vertical-stack-in-card
+        title: Água
+        cards:
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.water_last_meter
+                name: Última Contagem
+              - entity: sensor.water_meter
+                name: Contagem
+      - view_layout:
+          column: 3
+        type: custom:vertical-stack-in-card
+        title: Facturas
+        cards:
+          - type: markdown
+            content: |
+              **Facturas da Moradia do Casal do Relvas**
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.edp_invoice
+                name: Electrecidade
+                icon: mdi:flash
+              - entity: sensor.water_invoice
+                name: Água
+                icon: mdi:water
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: input_boolean.meter_tracking_edit
+          - type: conditional
+            conditions:
+              - entity: input_boolean.meter_tracking_edit
+                state: 'on'
+            card:
+              type: entities
+              show_header_toggle: false
+              title: Contagens
+              entities:
+                - entity: input_number.electricity_meter_offpeak
+                  name: Elect. Vazio
+                - entity: input_number.electricity_meter_peak
+                  name: Elect. Pontas
+                - entity: input_number.electricity_meter_full
+                  name: Elect.  Cheias
+                - entity: input_number.water_meter
+                  name: Água
+  - theme: Backend-selected
+    icon: mdi:robot-vacuum
+    title: Dashboard  Roborock
+    path: dashboard-roborock
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 2
+    subview: true
+    badges: []
+    cards:
+      - view_layout:
+          column: 1
+        square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_hall
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_mainbathroom
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_masterbedroom
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_masterbedroombath
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_bedroomricardo
+          - show_name: true
+            show_icon: true
+            icon_height: 50px
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_boolean.vacuum_bedroomguest
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: call-service
+          service: python_script.vacuum_room
+          data:
+            room: switch_based
+        icon: mdi:vacuum
+        show_state: true
+        icon_height: 60px
+        view_layout:
+          column: 1
+      - type: custom:vacuum-card
+        entity: vacuum.roborock
+        image: default
+        compact_view: false
+        show_status: true
+        show_toolbar: true
+        show_name: false
+        map: camera.roborock_map
+        stats:
+          default:
+            - attribute: filter
+              unit: horas
+              subtitle: Filter
+            - attribute: sideBrush
+              unit: horas
+              subtitle: Side brush
+            - attribute: mainBrush
+              unit: horas
+              subtitle: Main brush
+            - attribute: sensor
+              unit: horas
+              subtitle: Sensors
+          cleaning:
+            - attribute: currentCleanTime
+              unit: minutos
+              subtitle: Tempo
+            - attribute: currentCleanArea
+              unit: m2
+              subtitle: Área
+  - theme: Backend-selected
+    title: Dashboard  Cameras
+    path: dashboard-cctv
+    icon: mdi:cctv
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 2
+    subview: true
+    badges: []
+    cards:
+      - camera_view: live
+        type: picture-glance
+        entity: camera.front_camera
+        title: Frente
+        entities:
+          - entity: binary_sensor.front_camera_motion
+          - entity: binary_sensor.front_camera_person_detected
+          - entity: binary_sensor.front_camera_vehicle_detected
+          - entity: binary_sensor.front_camera_pet_detected
+          - entity: switch.front_camera_recording
+          - entity: automation.cctv_notify_front_camera
+        camera_image: camera.front_camera_sub
+      - camera_view: live
+        type: picture-glance
+        entity: camera.backyard_camera
+        title: Traseiras
+        entities:
+          - entity: binary_sensor.backyard_camera_motion
+          - entity: binary_sensor.backyard_camera_person_detected
+          - entity: binary_sensor.backyard_camera_vehicle_detected
+          - entity: binary_sensor.backyard_camera_pet_detected
+          - entity: switch.backyard_camera_recording
+          - entity: automation.cctv_notify_backyard_camera
+        camera_image: camera.backyard_camera_sub
+      - type: logbook
+        entities:
+          - binary_sensor.front_camera_smart_detection
+        view_layout:
+          position: sidebar
+      - type: logbook
+        entities:
+          - binary_sensor.backyard_camera_smart_detection
+        view_layout:
+          position: sidebar
+      - show_state: true
+        show_name: true
+        camera_view: live
+        type: picture-entity
+        entity: camera.baby_monitor
+        camera_image: camera.baby_monitor
+        name: Baby Monitor
+  - theme: Backend-selected
+    icon: mdi:doorbell-video
+    title: Door Bell Video
+    path: dashboard-doorbell-video
+    type: panel
+    subview: true
+    badges: []
+    cards:
+      - show_state: true
+        show_name: true
+        camera_view: live
+        type: picture-entity
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        camera_image: camera.door_bell_snapshot
+        entity: camera.door_bell_snapshot

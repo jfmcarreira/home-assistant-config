@@ -41,7 +41,7 @@ binary_sensor:
 
 button:
   - platform: output
-    name: gate_open_single
+    id: gate_open_single_internal
     output: relay_2
     duration: 750ms
 
@@ -50,6 +50,17 @@ button:
     name: gate_open
     output: relay_1
     duration: 750ms
+
+  - platform: template
+    name: gate_open_single
+    on_press:
+      then:
+        - if:
+            condition:
+              and:
+                - binary_sensor.is_off: gate_open_sensor
+            then:
+              - button.press: gate_open_single_internal
 
 cover:
   - platform: feedback
