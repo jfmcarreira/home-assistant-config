@@ -1,0 +1,12 @@
+substitutions:
+  devicename: bhonofre_cover_laundry
+  Address: !secret bhonofre_cover_laundry_ip
+  CoverName: Laundry
+  Open: "2"
+  Close: "14"
+  ExtraTop: "12"
+  ExtraBottom: "13"
+  CoverTime: "12s"
+  SmallOpenPosition: 17%
+
+<<: !include bhonofre_base_cover.yml

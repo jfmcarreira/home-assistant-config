@@ -1,0 +1,16 @@
+wifi:
+  domain: .home
+  ssid: !secret esp_ssid
+  password: !secret esp_password
+  use_address: ${Address}
+
+logger:
+
+api:
+
+ota:
+  reboot_timeout: 0s
+
+web_server:
+
+captive_portal:

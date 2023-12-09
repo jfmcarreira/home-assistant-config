@@ -1,0 +1,61 @@
+substitutions:
+  devicename: bhpzemmain
+  upper_devicename: BHPZEM Main
+  Address: !secret bhpzem_main_ip
+
+<<: !include common.yml
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: nodemcu
+  # Reset sensor
+  #on_boot:
+  #  priority: -100.0
+  #  then:
+  #    - pzemac.reset_energy: pzemac_1
+
+uart:
+  rx_pin: GPIO4
+  tx_pin: GPIO5
+  baud_rate: 9600
+  stop_bits: 1
+
+# Enable time component to reset energy at midnight
+time:
+  - platform: sntp
+    id: my_time
+
+sensor:
+  - platform: total_daily_energy
+    name: "Daily Energy"
+    power_id: pzem_power
+    filters:
+      - multiply: 0.001
+
+  - platform: pzemac
+    id: pzemac_1
+    energy:
+      name: ${upper_devicename} Energy
+      filters:
+        - multiply: 0.001
+      unit_of_measurement: "kWh"
+      accuracy_decimals: 2
+    current:
+      name: ${upper_devicename} Current
+      accuracy_decimals: 2
+    voltage:
+      name: ${upper_devicename} Voltage
+      accuracy_decimals: 0
+    power:
+      id: pzem_power
+      name: ${upper_devicename} Power
+      accuracy_decimals: 2
+    frequency:
+      name: ${upper_devicename} Frequency
+      accuracy_decimals: 1
+    power_factor:
+      name: ${upper_devicename} PF
+      accuracy_decimals: 2
+    update_interval: 5s
+

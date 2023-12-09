@@ -1,0 +1,8 @@
+.cloud
+.storage
+.HA_VERSION
+secrets.yaml
+home-assistant.log*
+blueprints/**
+custom_components/**
+www/community/**

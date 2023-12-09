@@ -1,0 +1,20 @@
+################################################################################
+## Logbook
+################################################################################
+logbook:
+  include:
+    domains:
+      - automation
+      - light
+      - media_player
+      - script
+      - vacuum
+      - climate
+      - person
+  exclude:
+    domains:
+      - updater
+      - weblink
+      - zone
+      - sun
+      - weather

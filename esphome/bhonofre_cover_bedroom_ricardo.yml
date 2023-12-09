@@ -1,0 +1,12 @@
+substitutions:
+  devicename: bhonofre_cover_bedroom_ricardo
+  Address: !secret bhonofre_cover_bedroom_ricardo_ip
+  CoverName: Bedroom Ricardo
+  Open: "13"
+  Close: "12"
+  ExtraTop: "2"
+  ExtraBottom: "14"
+  CoverTime: "11s"
+  SmallOpenPosition: 15%
+
+<<: !include bhonofre_base_cover.yml

@@ -1,0 +1,23 @@
+################################################################
+## Electricity
+################################################################
+homeassistant:
+  customize:
+    sensor.electricity_meter:
+      last_reset: "1970-01-01T00:00:00+00:00"
+      device_class: energy
+      state_class: total_increasing
+
+sensor meter:
+  - platform: template
+    sensors:
+      electricity_meter:
+        friendly_name: Consumo Total de Electricidade
+        unit_of_measurement: kWh
+        value_template: >
+          {{ ( states('sensor.bhpzem_main_energy') | float ) + ( states('input_number.electricity_meter_pzem_offset') | float ) }}
+      electricity_meter_frontend:
+        friendly_name: Consumo de Electricidade
+        unit_of_measurement: kWh
+        value_template: >
+          {{ states('sensor.electricity_meter') | int }}

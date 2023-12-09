@@ -1,0 +1,170 @@
+<<: !include common.yml
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: nodemcu
+
+binary_sensor:
+  - platform: gpio
+    id: sw_open
+    pin:
+      number: ${Open}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+           - if:
+              condition:
+                - binary_sensor.is_on: sw_extra_top
+              then:
+                - mqtt.publish:
+                    topic: esphome/cover/trigger/open_all
+                    payload: ""
+              else:
+                - logger.log: "Cover going to 50"
+                - cover.control:
+                    id: cover_1
+                    position: 50%
+      - timing:
+          - ON for at most 2s
+          - OFF for at least 100ms
+        then:
+          - logger.log: "Cover Open"
+          - lambda: |-
+              auto call = id(cover_1).make_call();
+              if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
+                call.set_command_stop();
+              } else {
+                call.set_command_open();
+              }
+              call.perform();
+
+  - platform: gpio
+    id: sw_close
+    pin:
+      number: ${Close}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+          - if:
+              condition:
+                - binary_sensor.is_on: sw_extra_bottom
+              then:
+                - mqtt.publish:
+                    topic: esphome/cover/trigger/close_all
+                    payload: ""
+              else:
+                - logger.log: "Cover going to just open"
+                - cover.close: cover_1
+                - wait_until:
+                    lambda: |-
+                      return id(cover_1).position == COVER_CLOSED;
+                - delay: 1s
+                - cover.control:
+                    id: cover_1
+                    position: ${SmallOpenPosition}
+      - timing:
+          - ON for at most 2s
+          - OFF for at least 100ms
+        then:
+          - logger.log: "Cover closing"
+          - lambda: |-
+              auto call = id(cover_1).make_call();
+              if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_CLOSING){
+                call.set_command_stop();
+              } else {
+                call.set_command_close();
+              }
+              call.perform();
+
+
+  - platform: gpio
+    id: sw_extra_top
+    pin:
+      number: ${ExtraTop}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    on_press:
+      then:
+          - logger.log: "Extra Top"
+
+  - platform: gpio
+    id: sw_extra_bottom
+    pin:
+      number: ${ExtraBottom}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+
+    on_press:
+      then:
+        - logger.log: "Extra Bottom"
+
+switch:
+  - platform: gpio
+    id: relay_power
+    pin: GPIO4
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: gpio
+    id: relay_direction
+    pin: GPIO5
+    restore_mode: RESTORE_DEFAULT_OFF
+
+cover:
+  - platform: time_based
+    id: cover_1
+    name: "${CoverName}"
+    device_class: shutter
+    assumed_state: false
+    open_action:
+      - switch.turn_off: relay_power
+      - delay: 400ms
+      - switch.turn_on: relay_direction
+      - delay: 400ms
+      - switch.turn_on: relay_power
+      - delay: 400ms
+    close_action:
+      - switch.turn_off: relay_power
+      - delay: 400ms
+      - switch.turn_off: relay_direction
+      - delay: 400ms
+      - switch.turn_on: relay_power
+      - delay: 400ms
+    stop_action:
+      - switch.turn_off: relay_power
+    close_duration: ${CoverTime}
+    open_duration: ${CoverTime}
+
+
+mqtt:
+  reboot_timeout: 0s
+  broker: !secret mqtt_broker
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  on_message:
+    - topic: esphome/cover/trigger/close_all
+      qos: 0
+      then:
+        - cover.close: cover_1
+    - topic: esphome/cover/trigger/open_all
+      qos: 0
+      then:
+        - cover.open: cover_1
+    - topic: esphome/cover/trigger/stop_all
+      qos: 0
+      then:
+        - cover.stop: cover_1

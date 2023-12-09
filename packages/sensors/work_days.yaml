@@ -1,0 +1,11 @@
+binary_sensor:
+  - platform: workday
+    name: Workday
+    country: PT
+    excludes: [sat, sun, holiday]
+
+  - platform: workday
+    name: Workday Tomorrow
+    country: PT
+    excludes: [sat, sun, holiday]
+    days_offset: 1

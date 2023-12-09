@@ -1,0 +1,12 @@
+substitutions:
+  devicename: bhonofre_cover_bathroom
+  Address: !secret bhonofre_cover_bathroom_ip
+  CoverName: Bathroom
+  Open: "12"
+  Close: "13"
+  ExtraTop: "14"
+  ExtraBottom: "2"
+  CoverTime: "11s"
+  SmallOpenPosition: 18%
+
+<<: !include bhonofre_base_cover.yml

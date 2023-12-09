@@ -1,0 +1,9 @@
+substitutions:
+  DeviceName: shelly25_bedroom_ricardo
+  FriendlyName: Shelly 25 Bedroom Ricardo
+  InputPin: GPIO5
+  Light_A_Name: Bedroom Ricardo Ceiling
+  Light_B_Name: Bedroom Ricardo Closet
+  Address: !secret shelly25_bedroom_ricardo_ip
+
+<<: !include shelly25_base_one_switch_two_lights.yml

@@ -1,0 +1,13 @@
+substitutions:
+  devicename: bhonofre_cover_living_room
+  Address: !secret bhonofre_cover_living_room_ip
+  CoverName: Living Room
+  Open: "13"
+  Close: "12"
+  ExtraTop: "14"
+  ExtraBottom: "2"
+  CoverTime: "23s"
+  SmallOpenPosition: 15%
+
+
+<<: !include bhonofre_base_cover.yml

@@ -1,0 +1,38 @@
+- id: '1650403799573'
+  alias: 'Cover Open Floor 1 Morning '
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:30:00
+  condition: []
+  action:
+  - service: cover.open_cover
+    data: {}
+    target:
+      area_id:
+      - quarto_do_ricardo
+      - bedroom
+      - quarto_1o_andar
+  mode: single
+- id: '1650903302899'
+  alias: Fan Control Bathroom RC
+  description: ''
+  use_blueprint:
+    path: nest/fan_light_combo.yaml
+    input:
+      light_device: 883b7d67edad812fb1e7f0fea1566ee0
+      ceiling_light: light.bathroom_rc_ceiling
+      extractor_fan: fan.bathroom_rc
+      time_when_light_is_off: 10
+- id: '1651018838807'
+  alias: Cover Close All Evening
+  description: ''
+  trigger:
+  - platform: time
+    at: '20:00:00'
+  condition: []
+  action:
+  - service: cover.close_cover
+    data:
+      entity_id: all
+  mode: single
