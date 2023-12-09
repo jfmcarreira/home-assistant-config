@@ -142,7 +142,7 @@ binary_sensor:
                 - wait_until:
                     lambda: |-
                       return id(cover_1).position == COVER_CLOSED;
-                - delay: 1s
+                - delay: 5s
                 - cover.control:
                     id: cover_1
                     position: ${SmallOpenPosition}
@@ -383,6 +383,7 @@ cover:
     name: "${CoverName}"
     device_class: shutter
     assumed_state: false
+    has_built_in_endstop: true
     open_action:
       - switch.turn_off: relay_power
       - delay: 500ms
