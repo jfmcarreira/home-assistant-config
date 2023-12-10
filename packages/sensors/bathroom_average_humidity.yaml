@@ -1,3 +1,12 @@
+homeassistant:
+  customize:
+    sensor.humidity_main_bathroom_average:
+      state_class: measurement
+    sensor.humidity_master_bedroom_bathroom_average:
+      state_class: measurement
+    sensor.humidity_bathroom_rc_average:
+      state_class: measurement
+
 sensor:
   - platform: filter
     name: humidity_main_bathroom_average
