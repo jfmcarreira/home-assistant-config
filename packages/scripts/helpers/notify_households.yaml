@@ -9,13 +9,11 @@ script:
                     entity:
                         filter:
                             domain: script
-
-
         sequence:
             - choose:
                   - conditions:
                         - condition: state
-                          entity_id: person.joao
+                          entity_id: person.joao_carreira
                           state: home
                     sequence:
                         - service: "{{ script_to_call }}"
@@ -24,7 +22,7 @@ script:
             - choose:
                   - conditions:
                         - condition: state
-                          entity_id: person.bianca
+                          entity_id: person.bianca_pires
                           state: home
                     sequence:
                         - service: "{{ script_to_call }}"

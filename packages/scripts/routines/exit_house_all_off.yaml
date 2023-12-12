@@ -1,0 +1,43 @@
+script:
+  routine_exit_house_all_off:
+    alias: Routina de Sair de Casa (Desligar Tudo)
+    mode: single
+    icon: mdi:exit-run
+    sequence:
+      - service: script.turn_on
+        data: {}
+        target:
+          entity_id: script.house_turn_all_off
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - condition: numeric_state
+        entity_id: sun.sun
+        attribute: elevation
+        below: "0"
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id:
+            - light.kitchen_led
+            - light.kitchen_door
+            - light.exterior_wall_side
+      - service: script.sequence_door_open
+      - service: light.turn_off
+        data: {}
+        target:
+          area_id: kitchen
+      - delay:
+          hours: 0
+          minutes: 3
+          seconds: 0
+          milliseconds: 0
+      - service: light.turn_off
+        data:
+          entity_id: all
+      - type: turn_off
+        device_id: 2ae8ef1981d03f83e4144debe519a697
+        entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
+        domain: switch

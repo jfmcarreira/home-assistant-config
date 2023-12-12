@@ -1,0 +1,63 @@
+script:
+  routine_exit_house_to_work_bianca:
+    alias: Routina ir Trabalhar - Bianca
+    mode: single
+    icon: mdi:exit-run
+    sequence:
+      - service: script.sequence_door_open
+        data: {}
+      - condition: state
+        entity_id: binary_sensor.bianca_home
+        state: "on"
+      - service: cover.open_cover
+        data: {}
+        target:
+          entity_id: cover.gate
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - binary_sensor.bianca_home
+            to: "off"
+            from: "on"
+        timeout: 00:05:00
+      - condition: state
+        entity_id: binary_sensor.bianca_home
+        state: "off"
+      - service: cover.close_cover
+        data: {}
+        target:
+          entity_id: cover.gate
+
+  routine_exit_house_to_work_joao:
+    alias: Routina ir Trabalhar - Joao
+    mode: single
+    icon: mdi:exit-run
+    sequence:
+      - service: script.turn_on
+        target:
+          entity_id: script.routine_exit_house_all_off
+        data: {}
+      - service: script.sequence_door_open
+        data: {}
+      - condition: state
+        entity_id: binary_sensor.joao_home
+        state: "on"
+      - service: cover.open_cover
+        data: {}
+        target:
+          entity_id: cover.gate
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - binary_sensor.joao_home
+            to: "off"
+            from: "on"
+        timeout: 00:05:00
+      - condition: state
+        entity_id: binary_sensor.joao_home
+        state: "off"
+      - service: cover.close_cover
+        data: {}
+        target:
+          entity_id: cover.gate
+

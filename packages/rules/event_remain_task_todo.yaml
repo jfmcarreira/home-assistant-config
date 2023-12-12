@@ -4,7 +4,8 @@ homeassistant:
       friendly_name: Gerar Evento Para Lembrar Tarefas a Realizar
 
 automation:
-  - alias: event_remain_task_todo
+  - id: event_remain_task_todo
+    alias: event_remain_task_todo
     mode: single
     trigger:
       - platform: time_pattern

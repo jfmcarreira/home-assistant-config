@@ -1,0 +1,94 @@
+automation:
+  - id: "1651018838807"
+    mode: single
+    alias: Cover Close All Evening
+    description: ""
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: 00:00:00
+    condition:
+      - condition: state
+        entity_id: binary_sensor.notify_home
+        state: "off"
+    action:
+      - service: script.cover_group_action
+        data:
+          action_to_run: cover.close_cover
+          control_switch: close_sunset
+
+  - id: "1652141596083"
+    alias: Cover Open All Sunrise
+    description: ""
+    mode: single
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: 00:30:00
+      - platform: time
+        at: 08:00:00
+    condition:
+      - condition: time
+        after: 07:50:00
+        before: "12:00:00"
+      - condition: numeric_state
+        entity_id: sun.sun
+        attribute: elevation
+        above: "0"
+      - condition: template
+        value_template:
+          "{{ ( ( (now() | as_timestamp) - (states.automation.cover_open_all_sunrise.attributes.last_triggered
+          | as_timestamp) ) / 60 / 60 ) > 18 }}"
+      - condition: state
+        entity_id: binary_sensor.workday
+        state: ""
+    action:
+      - service: script.cover_group_action
+        data:
+          action_to_run: cover.open_cover
+          control_switch: open_sunrise
+
+  - id: "1663526552935"
+    alias: cover close when raining
+    description: ""
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: weather.home
+        attribute: precipitation_unit
+        above: 70
+    condition: []
+    action:
+      - service: script.cover_group_action
+        data:
+          action_to_run: script.cover_close_to_when_raining
+          control_switch: close_in_rain
+
+  - id: "1689293787806"
+    alias: cover_partial_close
+    description: ""
+    trigger:
+      - platform: time
+        at: "11:00:00"
+      - platform: time
+        at: "18:00:00"
+    condition: []
+    action:
+      - service: script.cover_group_action
+        data:
+          action_to_run: script.cover_to_partial_close
+          control_switch: open_sunrise
+    mode: single
+  - id: "1689293902907"
+    alias: cover_partial_open
+    description: ""
+    trigger:
+      - platform: time
+        at: "11:30:00"
+    condition: []
+    action:
+      - service: script.cover_group_action
+        data:
+          action_to_run: script.cover_to_partial_open
+          control_switch: open_sunrise
+    mode: single

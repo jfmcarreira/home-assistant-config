@@ -1,0 +1,42 @@
+script:
+  lights_arriving_home:
+    alias: "Lights Arriving Home"
+    mode: single
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id:
+            - light.exterior_wall_back
+            - light.exterior_wall_side
+            - light.kitchen_door
+        data: {}
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - binary_sensor.kitchen_door
+            to: "on"
+        timeout:
+          minutes: 30
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.kitchen_led
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - binary_sensor.kitchen_door
+            to: "off"
+        timeout:
+          minutes: 30
+      - delay:
+          hours: 0
+          minutes: 5
+          seconds: 0
+          milliseconds: 0
+      - service: light.turn_off
+        target:
+          entity_id:
+            - light.exterior_wall_side
+            - light.exterior_wall_back
+            - light.kitchen_door
+        data: {}

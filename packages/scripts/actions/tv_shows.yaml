@@ -1,0 +1,8 @@
+script:
+  show_word_party:
+    alias: Festa das Palavras na Televisão
+    mode: single
+    sequence:
+      - service: python_script.netflix_play_show
+        data:
+          show: festa das palavras
