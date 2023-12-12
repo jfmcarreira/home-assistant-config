@@ -4,12 +4,12 @@ climate:
     unique_id: water_heater
     heater: switch.water_heater
     target_sensor: sensor.temperature_water_heater_top
-    min_temp: 35
-    max_temp: 50
+    min_temp: 38
+    max_temp: 55
     target_temp: 40
     cold_tolerance: 0
     hot_tolerance: 1
     keep_alive: true
     precision: 0.5
-    away_temp: 40
-    comfort_temp: 45
+    away_temp: 42
+    comfort_temp: 50
