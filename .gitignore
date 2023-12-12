@@ -2,13 +2,16 @@
 .storage
 .HA_VERSION
 secrets.yaml
+daikin.yaml
 home-assistant.log*
 www/community/**
 .DS_Store
 zigbee.db
 appdaemon/apps/__pycache__/**
 themes/**
+custom_components/**
 tts/**
 zigbee.db-*
 node-red/**
 www/**
+.omv_cookies.json
