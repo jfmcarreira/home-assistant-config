@@ -7,9 +7,11 @@
         minutes: 1
       delay_off:
         minutes: 2
+      availability: >-
+        {{ is_number(states('sensor.device_power_dryer_machine')) }}
       state: >-
         {% if is_state( 'binary_sensor.dryer_machine_state', 'on' )  %}
-            {%- if states("sensor.device_power_dryer_machine") | int < 3 %}
+            {%- if states("sensor.device_power_dryer_machine") | int(0) < 3 %}
                 False
             {%- else %}
                 True
