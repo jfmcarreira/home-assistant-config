@@ -1,96 +1,46 @@
 ################################################################
 ## Cat Litter
 ################################################################
-homeassistant:
-  customize:
-    sensor.cat_litter_box_last_clean:
-      friendly_name: "Última Limpeza da Areia das"
-      icon: mdi:clock-outline
-      device_class: timestamp
-    sensor.cat_litter_box_last_change:
-      friendly_name: "Última Subtituição da Areia das Gatas"
-      icon: mdi:clock-outline
-      device_class: timestamp
-
-sensor:
-  - platform: sql
-    db_url: !secret db_custom_url
-    queries:
-      - name: cat_litter_box_last_clean
-        query: >-
-          SELECT * FROM tasks
-          WHERE task_name LIKE 'Cat_Litter_Clean'
-          ORDER BY date  DESC LIMIT 1;
-        column: date
-
-      - name: cat_litter_box_last_change
-        query: >-
-          SELECT * FROM tasks
-          WHERE task_name LIKE 'Cat_Litter_Change'
-          ORDER BY date  DESC LIMIT 1;
-        column: date
-
-binary_sensor cleaning:
-  - platform: template
-    sensors:
-      cat_litter_box_need_clean:
-        friendly_name: Limpeza da Areia das Gatas
-        device_class: problem
-        value_template: >
-          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d %H", true) ) - as_timestamp( as_timestamp( states('sensor.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H", true) ) ) / 60.0 / 60.0 ) > 20 }}
-        attribute_templates:
-          last_done: >
-            {{ as_timestamp( states('sensor.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-
-      cat_litter_box_need_change:
-        friendly_name: Mudança da Areia das Gatas
-        device_class: problem
-        value_template: >
-          {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('sensor.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M", true) ) ) / 24.0 / 60.0 / 60.0 ) > 8 }}
-        attribute_templates:
-          last_done: >
-            {{ as_timestamp( states('sensor.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
-
 script:
-  cat_clean_notification:
-    alias: Task Litter Box Clean Notification
-    sequence:
-      - service: python_script.light_store
-        data:
-          store_name: cat_litter_flash_store
-          operation: save
-          entity_id:
-            - light.living_room_tv_leds
-      - service: light.turn_on
-        data:
-          entity_id: light.living_room_tv_leds
-          rgb_color:
-            - 255
-            - 0
-            - 0
-          brightness: 50
-          white_value: 0
-      - delay:
-          milliseconds: 200
-      - service: light.turn_off
-        data:
-          entity_id: light.living_room_tv_leds
-      - delay:
-          milliseconds: 200
-      - service: light.turn_on
-        data:
-          entity_id: light.living_room_tv_leds
-      - delay:
-          milliseconds: 200
-      - service: light.turn_off
-        data:
-          entity_id: light.living_room_tv_leds
-      - delay:
-          seconds: 1
-      - service: python_script.light_store
-        data:
-          operation: restore
-          store_name: cat_litter_flash_store
+  # cat_clean_notification:
+  #   alias: Task Litter Box Clean Notification
+  #   sequence:
+  #     - service: python_script.light_store
+  #       data:
+  #         store_name: cat_litter_flash_store
+  #         operation: save
+  #         entity_id:
+  #           - light.living_room_tv_leds
+  #     - service: light.turn_on
+  #       data:
+  #         entity_id: light.living_room_tv_leds
+  #         rgb_color:
+  #           - 255
+  #           - 0
+  #           - 0
+  #         brightness: 50
+  #         white_value: 0
+  #     - delay:
+  #         milliseconds: 200
+  #     - service: light.turn_off
+  #       data:
+  #         entity_id: light.living_room_tv_leds
+  #     - delay:
+  #         milliseconds: 200
+  #     - service: light.turn_on
+  #       data:
+  #         entity_id: light.living_room_tv_leds
+  #     - delay:
+  #         milliseconds: 200
+  #     - service: light.turn_off
+  #       data:
+  #         entity_id: light.living_room_tv_leds
+  #     - delay:
+  #         seconds: 1
+  #     - service: python_script.light_store
+  #       data:
+  #         operation: restore
+  #         store_name: cat_litter_flash_store
 
   cat_litter_clean_no_vaccum:
     alias: Task Litter Box Mark Clean
@@ -191,7 +141,7 @@ automation:
       - choose:
           - conditions:
               - condition: state
-                entity_id: person.joao
+                entity_id: person.joao_carreira
                 state: home
             sequence:
               - service: notify.mobile_app_magnesium

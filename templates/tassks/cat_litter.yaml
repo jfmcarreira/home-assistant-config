@@ -1,0 +1,22 @@
+- binary_sensor:
+    - name: cat_litter_box_need_clean
+      unique_id: cat_litter_box_need_clean
+      #friendly_name: Limpeza da Areia das Gatas
+      device_class: problem
+      state: >
+        {{
+          ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d %H", true) ) - as_timestamp( as_timestamp( states('sensor.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H", true) ) ) / 60.0 / 60.0 ) > 20
+        }}
+      attributes:
+        Última Substituição: >
+          {{ as_timestamp( states('sensor.cat_litter_box_last_clean') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+    - name: cat_litter_box_need_change
+      unique_id: cat_litter_box_need_change
+      #friendly_name: Mudança da Areia das Gatas
+      device_class: problem
+      state: >
+        {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('sensor.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M", true) ) ) / 24.0 / 60.0 / 60.0 ) > 8 }}
+      attributes:
+        Última Substituição: >
+          {{ as_timestamp( states('sensor.cat_litter_box_last_change') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}

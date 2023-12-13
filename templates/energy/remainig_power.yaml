@@ -1,0 +1,21 @@
+- sensor:
+    - name: device_remaining_power
+      unique_id: device_remaining_power
+      device_class: power
+      unit_of_measurement: "W"
+      state_class: measurement
+      state: >-
+        {% set ns = namespace(states=[]) %}
+        {% for s in states.sensor %}
+          {% if s.object_id.startswith('device_power_') %}
+            {% set ns.states = ns.states + [ s.state | float(0.0) ] %}
+          {% endif %}
+          {% if s.object_id.startswith('light_power_') %}
+            {% set ns.states = ns.states + [ s.state | float(0.0) ] %}
+          {% endif %}
+        {% endfor %}
+        {{ [(states('sensor.bhpzem_main_power') | float(0.0)) - (ns.states | sum | round(2)), 0] | max | round(2) }}
+
+
+
+
