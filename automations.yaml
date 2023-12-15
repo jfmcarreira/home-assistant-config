@@ -393,8 +393,6 @@
       notification_action: Loiça Retirada
       notification_action_id: task_dish_wash_empty
       task_done_door_time: 5
-
-
 - id: "1658672750916"
   alias: cctv control push notifications
   description: ""
@@ -578,7 +576,6 @@
       blocker_on_entity: light.office
       disable_in_sleep: true
       presence_sensor: none
-
 - id: "1665241197738"
   alias: lights_master_bedroom_bed_triggers
   description: ""
@@ -1058,47 +1055,6 @@
       data: {}
       target:
         entity_id: switch.dehumidifier
-  mode: single
-- id: "1677573303585"
-  alias: AC Ligar Auto - Manhã
-  description: ""
-  trigger:
-    - platform: time
-      at: 06:30:00
-  condition:
-    - condition: state
-      entity_id: binary_sensor.workday
-      state: "on"
-    - condition: numeric_state
-      entity_id: sensor.temperature_living_room
-      below: 20
-    - condition: state
-      entity_id: input_boolean.extended_away_mode
-      state: "off"
-  action:
-    - service: climate.turn_on
-      data: {}
-      target:
-        entity_id: climate.living_room
-    - service: climate.set_hvac_mode
-      data:
-        hvac_mode: heat
-      target:
-        entity_id: climate.living_room
-    - service: climate.set_fan_mode
-      data:
-        fan_mode: 3D
-      target:
-        entity_id: climate.living_room
-    - delay:
-        hours: 1
-        minutes: 30
-        seconds: 0
-        milliseconds: 0
-    - service: climate.turn_off
-      data: {}
-      target:
-        entity_id: climate.living_room
   mode: single
 - id: "1678915034155"
   alias: device_turn_on_dehumidifier_morning
@@ -1624,28 +1580,6 @@
     - service: script.notification_ricardo_out_bed
       data: {}
   mode: single
-- id: "1699055333899"
-  alias: AC Desligar Auto - Noite
-  description: ""
-  trigger:
-    - platform: time
-      at: 00:30:00
-    - platform: time
-      at: 01:30:00
-  condition:
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.workday_tomorrow
-          state: "on"
-        - condition: time
-          after: 00:20:00
-  action:
-    - service: climate.turn_off
-      data: {}
-      target:
-        entity_id: climate.living_room
-  mode: single
 - id: "1699195635629"
   alias: Desligar Termo-acumulador Noite
   description: ""
@@ -1780,38 +1714,7 @@
       blocker_on_entity: light.laundry
       disable_in_sleep: true
       presence_sensor: none
-- id: "1701822648736"
-  alias: AC Ligar Auto - Tarde
-  description: ""
-  trigger:
-    - platform: time
-      at: "17:00:00"
-  condition:
-    - condition: numeric_state
-      entity_id: sensor.temperature_living_room
-      below: 20
-    - condition: state
-      entity_id: input_boolean.extended_away_mode
-      state: "off"
-    - condition: state
-      entity_id: binary_sensor.notify_home
-      state: "off"
-  action:
-    - service: climate.turn_on
-      data: {}
-      target:
-        entity_id: climate.living_room
-    - service: climate.set_hvac_mode
-      data:
-        hvac_mode: heat
-      target:
-        entity_id: climate.living_room
-    - service: climate.set_fan_mode
-      data:
-        fan_mode: 3D
-      target:
-        entity_id: climate.living_room
-  mode: single
+
 - id: "1701986497262"
   alias: Atualizar Localização Bianca
   description: ""
@@ -1915,7 +1818,8 @@
       at: 03:00:00
   condition: []
   action:
-    - choose:
+    - alias: Controlar temperatura com base na estação do ano
+      choose:
         - conditions:
             - condition: state
               entity_id: sensor.season
@@ -1926,24 +1830,39 @@
           sequence:
             - service: climate.set_temperature
               target:
-                entity_id: climate.living_room
+                entity_id:
+                  - climate.living_room
+                  - climate.master_bedroom
+                  - climate.bedroom_ricardo
               data:
                 temperature: 18
       default:
         - service: climate.set_temperature
           target:
-            entity_id: climate.living_room
+            entity_id:
+              - climate.living_room
+              - climate.master_bedroom
+              - climate.bedroom_ricardo
           data:
             temperature: 22
-      alias: Controlar temperatura com base na estação do ano
     - service: climate.set_swing_mode
       target:
         entity_id: climate.living_room
       data:
         swing_mode: 3D
+    - service: select.select_option
+      target:
+        entity_id:
+          - select.master_bedroom_ac_swing
+          - select.bedroom_ricardo_ac_swing
+      data:
+        option: swing
     - service: climate.set_fan_mode
       target:
-        entity_id: climate.living_room
+        entity_id:
+          - climate.living_room
+          - climate.master_bedroom
+          - climate.bedroom_ricardo
       data:
         fan_mode: auto
   mode: single

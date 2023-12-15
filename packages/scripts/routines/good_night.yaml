@@ -1,13 +1,21 @@
 script:
   routine_bedtime_all_off:
     alias: Routina de Boa Noite (Desligar Tudo)
-    sequence:
-      - service: script.house_turn_all_off
-        data: {}
-      - service: script.routine_good_night
-        data: {}
     mode: single
     icon: mdi:sleep
+    sequence:
+      - service: script.routine_good_night
+        data: {}
+      - paralel:
+          - service: script.house_turn_all_off
+            data: {}
+          - service: climate.turn_off
+            data: {}
+            target:
+              entity_id:
+                - climate.living_room
+                - climate.master_bedroom
+                - climate.bedroom_ricardo
 
   routine_good_night:
     alias: Routina de Boa Noite
@@ -19,11 +27,6 @@ script:
         target:
           entity_id: light.stairs_wall
       - parallel:
-          - delay:
-              hours: 0
-              minutes: 0
-              seconds: 35
-              milliseconds: 0
           - service: cover.close_cover
             data: {}
             target:
@@ -45,6 +48,11 @@ script:
                 title: Routinas
                 data:
                   tag: 923
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 35
+          milliseconds: 0
       - service: input_select.select_option
         data:
           option: Sleep

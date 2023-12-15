@@ -6,7 +6,6 @@ climate:
     target_sensor: sensor.temperature_water_heater_top
     min_temp: 38
     max_temp: 55
-    target_temp: 40
     cold_tolerance: 0
     hot_tolerance: 1
     keep_alive: true

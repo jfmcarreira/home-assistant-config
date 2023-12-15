@@ -3,15 +3,14 @@ homeassistant:
     humidifier.portable_dehumidifier:
       friendly_name: "Desumidificador"
 
-
 generic_hygrostat:
   - name: Portable Dehumidifier
+    unique_id: portable_dehumidifier
     device_class: dehumidifier
     humidifier: switch.dehumidifier
     target_sensor: sensor.dehumidifier_humidity
     min_humidity: 50
     max_humidity: 90
-    target_humidity: 70
     dry_tolerance: 2
     wet_tolerance: 2
     min_cycle_duration:

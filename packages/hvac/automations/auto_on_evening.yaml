@@ -1,0 +1,71 @@
+automation:
+  - id: "1701822648736"
+    alias: AC Ligar Auto - Tarde
+    mode: single
+    description: ""
+    trigger:
+      - platform: time
+        at: input_datetime.hvac_auto_on_evening
+    condition:
+      - condition: state
+        entity_id: input_boolean.extended_away_mode
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.notify_home
+        state: "off"
+      - condition: numeric_state
+        entity_id: sensor.average_temperature
+        below: 21
+    action:
+      - if:
+          - condition: numeric_state
+            entity_id: sensor.temperature_living_room
+            below: 20
+        then:
+          - service: climate.turn_on
+            data: {}
+            target:
+              entity_id: climate.living_room
+          - service: climate.set_temperature
+            data:
+              hvac_mode: heat
+              temperature: 21
+            target:
+              entity_id: climate.living_room
+          - service: climate.set_fan_mode
+            data:
+              fan_mode: 3D
+            target:
+              entity_id: climate.living_room
+
+      - if:
+          - condition: numeric_state
+            entity_id: sensor.temperature_master_bedroom
+            below: 20
+        then:
+          - service: climate.turn_on
+            data: {}
+            target:
+              entity_id: climate.master_bedroom
+          - service: climate.set_temperature
+            data:
+              hvac_mode: heat
+              temperature: 21
+            target:
+              entity_id: climate.master_bedroom
+
+      - if:
+          - condition: numeric_state
+            entity_id: sensor.temperature_master_bedroom
+            below: 20
+        then:
+          - service: climate.turn_on
+            data: {}
+            target:
+              entity_id: climate.bedroom_ricardo
+          - service: climate.set_temperature
+            data:
+              hvac_mode: heat
+              temperature: 21
+            target:
+              entity_id: climate.bedroom_ricardo

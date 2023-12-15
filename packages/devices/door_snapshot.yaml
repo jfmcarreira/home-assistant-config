@@ -1,0 +1,4 @@
+camera:
+  - platform: local_file
+    name: Door Bell Snapshot
+    file_path: /config/www/camera/snapshot_front_door.jpg
