@@ -61,31 +61,6 @@ script:
       - wait_template: "{{ is_state( 'sensor.living_room_tv_source', 'MEO' )  }}"
         timeout: "00:00:04"
 
-  routine_dinner_time:
-    alias: Routina Modo de Refeição
-    sequence:
-      - service: script.action_turn_on_living_room_tv_meo
-
-      - service: media_player.volume_set
-        entity_id: media_player.living_room_tv
-        data:
-          volume_level: 0.16
-      - delay:
-          hours: 0
-          minutes: 0
-          seconds: 6
-          milliseconds: 0
-
-      - service: python_script.change_meo_box_channel
-        data:
-          channel: SIC
-          entity_id: media_player.mediaroom_82_155_7_99
-
-      - delay: 00:00:03
-      - service: script.action_meo_reset_current_show
-
-    mode: single
-
   action_meo_play_main_channel:
     alias: Routina SIC na Televisão
     sequence:
@@ -120,3 +95,26 @@ script:
         data:
           entity_id: media_player.mediaroom_82_155_7_99
           show: Previous
+
+  action_meo_news_channel:
+    alias: Routina Noticias à refeição
+    sequence:
+      - service: script.action_turn_on_living_room_tv_meo
+
+      - service: media_player.volume_set
+        entity_id: media_player.living_room_tv
+        data:
+          volume_level: 0.16
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 6
+          milliseconds: 0
+
+      - service: python_script.change_meo_box_channel
+        data:
+          channel: SIC
+          entity_id: media_player.mediaroom_82_155_7_99
+
+      - delay: 00:00:03
+      - service: script.action_meo_reset_current_show

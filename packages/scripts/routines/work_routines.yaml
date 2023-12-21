@@ -37,6 +37,10 @@ script:
         target:
           entity_id: script.routine_exit_house_all_off
         data: {}
+      - service: script.turn_on
+        target:
+          entity_id: script.sequence_notify_tasks
+        continue_on_error: true
       - service: script.sequence_door_open
         data: {}
       - condition: state
@@ -60,4 +64,3 @@ script:
         data: {}
         target:
           entity_id: cover.gate
-

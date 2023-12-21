@@ -6,23 +6,8 @@ script:
       - variables:
           joao_was_home: "{{ is_state('binary_sensor.joao_home','on' ) }}"
           bianca_was_home: "{{ is_state('binary_sensor.bianca_home','on' ) }}"
-      - if:
-          - condition: state
-            entity_id: binary_sensor.kitchen_door
-            state: "off"
-        then:
-          - wait_for_trigger:
-              - platform: state
-                entity_id:
-                  - binary_sensor.kitchen_door
-                to: "on"
-            timeout: 00:05:00
-          - wait_for_trigger:
-              - platform: state
-                entity_id:
-                  - binary_sensor.kitchen_door
-                to: "off"
-            timeout: 00:01:00
+      - service: script.sequence_door_open
+        data: {}
       - condition: state
         entity_id: binary_sensor.joao_home
         state: "on"

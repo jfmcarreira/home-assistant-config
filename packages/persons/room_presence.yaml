@@ -1,14 +1,21 @@
 sensor presence:
+  # - platform: mqtt_room
+  #   name: Amazfit Joao
+  #   device_id: joao_amazfit
+  #   state_topic: room_presence
+  #   away_timeout: 60
+  #   timeout: 10
+
   - platform: mqtt_room
-    name: Amazfit Joao
-    device_id: amazfit_joao
+    name: Joao Galaxy Watch
+    device_id: joao_galaxy
     state_topic: room_presence
     away_timeout: 60
     timeout: 10
 
   - platform: mqtt_room
     name: Amazfit Bianca
-    device_id: amazfit_bianca
+    device_id: bianca_amazfit
     state_topic: room_presence
     away_timeout: 60
     timeout: 10
@@ -16,8 +23,11 @@ sensor presence:
 mqtt:
   device_tracker:
     #Note: This is used in combination with NodeRed and ESPHome
-    - name: joao_amazfit
-      state_topic: "home-assistant/location/joao_amazfit"
+    # - name: joao_amazfit
+    #   state_topic: "home-assistant/location/joao_amazfit"
+    #   source_type: bluetooth_le
+    - name: joao_galaxy_watch
+      state_topic: "home-assistant/location/joao_galaxy_watch"
       source_type: bluetooth_le
     - name: bianca_amazfit
       state_topic: "home-assistant/location/bianca_amazfit"

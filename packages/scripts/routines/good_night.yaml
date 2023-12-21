@@ -6,16 +6,39 @@ script:
     sequence:
       - service: script.routine_good_night
         data: {}
-      - paralel:
+      - parallel:
           - service: script.house_turn_all_off
             data: {}
+          - if:
+              - condition: not
+                conditions:
+                  - condition: state
+                    entity_id: climate.master_bedroom
+                    state: "off"
+            then:
+              - service: climate.turn_off
+                data: {}
+                target:
+                  entity_id:
+                    - climate.master_bedroom
+          - if:
+              - condition: not
+                conditions:
+                  - condition: state
+                    entity_id: climate.bedroom_ricardo
+                    state: "off"
+            then:
+              - service: climate.turn_off
+                data: {}
+                target:
+                  entity_id:
+                    - climate.bedroom_ricardo
+
           - service: climate.turn_off
             data: {}
             target:
               entity_id:
                 - climate.living_room
-                - climate.master_bedroom
-                - climate.bedroom_ricardo
 
   routine_good_night:
     alias: Routina de Boa Noite

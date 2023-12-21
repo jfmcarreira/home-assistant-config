@@ -8,6 +8,10 @@ script:
         data: {}
         target:
           entity_id: script.house_turn_all_off
+      - service: script.turn_on
+        target:
+          entity_id: script.sequence_notify_tasks
+        continue_on_error: true
       - delay:
           hours: 0
           minutes: 0

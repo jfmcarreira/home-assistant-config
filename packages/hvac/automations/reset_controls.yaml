@@ -1,0 +1,114 @@
+automation:
+  - id: ac_reset_living_room
+    alias: Ar Condicionado - Reset dos Controlos da Sala
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - climate.living_room
+        to: "off"
+        for:
+          seconds: 10
+    condition: []
+    action:
+      - service: climate.set_temperature
+        target:
+          entity_id: climate.living_room
+        data:
+          temperature: >
+            {% if is_state('sensor.season', 'summer') or  is_state('sensor.season', 'spring') %}
+              18
+            {% else %}
+              23
+            {% endif %}
+      - service: climate.set_fan_mode
+        target:
+          entity_id:
+            - climate.living_room
+        data:
+          fan_mode: auto
+      - service: climate.set_swing_mode
+        target:
+          entity_id: climate.living_room
+        data:
+          swing_mode: 3D
+
+  - id: ac_reset_master_bedroom
+    alias: Ar Condicionado - Reset dos Controlos da Suite
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - climate.master_bedroom
+        to: "off"
+        for:
+          seconds: 30
+
+    condition: []
+    action:
+      - service: climate.set_temperature
+        target:
+          entity_id: climate.master_bedroom
+        data:
+          temperature: >
+            {% if is_state('sensor.season', 'summer') or  is_state('sensor.season', 'spring') %}
+              18
+            {% else %}
+              23
+            {% endif %}
+      - service: climate.set_fan_mode
+        target:
+          entity_id:
+            - climate.master_bedroom
+        data:
+          fan_mode: auto
+      - service: climate.set_swing_mode
+        target:
+          entity_id: climate.master_bedroom
+        data:
+          swing_mode: both
+      # - service: select.select_option
+      #   data:
+      #     option: swing
+      #   target:
+      #     entity_id: select.master_bedroom_ac_swing
+
+  - id: ac_reset_bedroom_ricardo
+    alias: Ar Condicionado - Reset dos Controlos do Quarto do Ricardo
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - climate.bedroom_ricardo
+        to: "off"
+        for:
+          seconds: 30
+
+    condition: []
+    action:
+      - service: climate.set_temperature
+        target:
+          entity_id: climate.bedroom_ricardo
+        data:
+          temperature: >
+            {% if is_state('sensor.season', 'summer') or  is_state('sensor.season', 'spring') %}
+              18
+            {% else %}
+              23
+            {% endif %}
+      - service: climate.set_fan_mode
+        target:
+          entity_id:
+            - climate.bedroom_ricardo
+        data:
+          fan_mode: auto
+      - service: climate.set_swing_mode
+        target:
+          entity_id: climate.bedroom_ricardo
+        data:
+          swing_mode: both
+      # - service: select.select_option
+      #   data:
+      #     option: swing
+      #   target:
+      #     entity_id: select.bedroom_ricardo_ac_swing
