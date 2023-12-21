@@ -1,31 +1,6 @@
-magnesium_wifi:
-  name: Magnesium (Wifi)
-  mac: "98:09:cf:3a:70:2a"
-  icon: mdi:human-male
-  picture: /local/photos/img_joao_1_1.jpg
-  track: true
-
-calcium_wifi:
-  name: Calcium (Wifi)
-  mac:
-  icon: mdi:human-female
-  picture: /local/photos/img_bianca_1_1.jpg
-  track: true
-
-joao_macbook_pro_wifi:
-  name: Joao Mac Book (Wifi)
-  icon: mdi:laptop
-  track: true
-  mac: !secret joao_macbook_pro_wifi_mac
 
 bianca_amazfit:
   name: Amazfit Bianca
   icon: mdi:human-female
   picture: /local/photos/img_bianca_1_1.jpg
-  track: true
-
-joao_amazfit:
-  name: Amazfit Joao
-  icon: mdi:human-male
-  picture:
   track: true
