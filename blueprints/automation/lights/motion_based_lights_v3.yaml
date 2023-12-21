@@ -186,7 +186,7 @@ variables:
     {{
       required_house_mode == "Todos" or
       required_house_mode == house_mode or
-      ( required_house_mode == "Anoitecer+Noite" and ( states.sensor.house_mode.state == "Amanhecer/Anoitecer" or states.sensor.house_mode.state == "Noite" ) ) or 
+      ( required_house_mode == "Anoitecer+Noite" and ( states.sensor.house_mode.state == "Amanhecer/Anoitecer" or states.sensor.house_mode.state == "Noite" ) ) or
       ( required_house_mode == "Dia+Anoitecer" and ( states.sensor.house_mode.state == "Amanhecer/Anoitecer" or states.sensor.house_mode.state == "Ligada" ) )
     }}
 
@@ -245,6 +245,8 @@ condition:
       - condition: state
         entity_id: !input target_entity
         state: "off"
+        for:
+          seconds: 5
 
   - condition: or
     conditions:
@@ -290,19 +292,14 @@ action:
               sequence:
                 - service: light.turn_off
                   entity_id: !input target_entity
-                # Exit automation
-                - condition: template
-                  value_template: "{{ false }}"
+          - stop:
 
   - alias: "If we repeat this action twice in a short period of time keep light on"
-    choose:
-      - conditions:
-          - "{{ automation_previous_state == 0 }}"
-          - "{{ now().timestamp() - automation_last_triggered - no_motion_wait | as_timestamp < min_repetition_interval_sec }}"
-        sequence:
-          # Exit automation, therefore light will stay on
-          - condition: template
-            value_template: "{{ false }}"
+    if:
+      - "{{ automation_previous_state == 0 }}"
+      - "{{ now().timestamp() - automation_last_triggered - no_motion_wait | as_timestamp < min_repetition_interval_sec }}"
+    then:
+      - stop:
 
   - alias: "Check if motion is ON"
     condition: state
@@ -319,7 +316,7 @@ action:
   - alias: "Wait untill the room is empty"
     wait_template: >
       {{
-          presence_sensor == 'none' or 
+          presence_sensor == 'none' or
           states[presence_sensor].state == 'off' or
           states[target_entity].state == 'off'
       }}
