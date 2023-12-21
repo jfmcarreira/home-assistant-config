@@ -1,0 +1,19 @@
+homeassistant:
+  customize:
+    sensor.device_daily_energy_remaining:
+      unit_of_measurement: kWh
+      friendly_name: "Energia Diária Restante"
+
+sensor:
+  - platform: integration
+    source: sensor.device_remaining_power
+    name: device_remaining_energy
+    unique_id: device_remaining_energy
+    unit_prefix: k
+    unit_time: h
+    round: 2
+
+utility_meter:
+  device_daily_energy_remaining:
+    source: sensor.device_remaining_energy
+    cycle: daily
