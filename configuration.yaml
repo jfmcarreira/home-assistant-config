@@ -5,7 +5,6 @@ homeassistant:
   auth_providers:
     - type: homeassistant
   packages: !include_dir_named packages
-  customize: !include customize.yaml
 
 default_config:
 
