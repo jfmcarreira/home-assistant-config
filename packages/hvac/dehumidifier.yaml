@@ -18,3 +18,14 @@ generic_hygrostat:
     initial_state: false
     sensor_stale_duration:
       minutes: 60
+
+input_select:
+  dehumidifier_location:
+    name: Localização do Deshumidificador
+    icon: mdi:floor-plan
+    options:
+      - Casa de Banho Principal
+      - Casa de Banho da Suite
+      - Casa de Banho de Serviço
+      - Sotão
+      - Sala

@@ -10,3 +10,11 @@ climate:
     hot_tolerance: 0.5
     keep_alive: false
     precision: 0.5
+
+input_select:
+  portable_heater_location:
+    name: Localização do Termoventilador
+    icon: mdi:floor-plan
+    options:
+      - Casa de Banho Principal
+      - Casa de Banho da Suite
