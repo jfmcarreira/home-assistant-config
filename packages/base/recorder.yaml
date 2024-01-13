@@ -19,6 +19,7 @@ recorder:
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.query_*
+      - sensor.wifi_*
       - sensor.ble_scanner_*
       - sensor._*last_done*
       - sensor._*last_clean*

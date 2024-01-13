@@ -25,6 +25,7 @@ logbook:
       - light.office
     entity_globs:
       - light.*_group
+      - sensor.wifi_*
     domains:
       - updater
       - weblink
