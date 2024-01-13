@@ -6,6 +6,11 @@ substitutions:
 esphome:
   name: ${devicename}
   friendly_name: ${FriendlyName}
+  on_boot:
+    priority: 251
+    then:
+      - switch.turn_on: relay_1
+      - switch.turn_on: relay_on
 
 esp32:
   board: nodemcu-32s
@@ -121,7 +126,7 @@ output:
 
 switch:
   - platform: template
-    name: Water Heater
+    name: water_heater
     optimistic: true
     id: relay_1
     turn_off_action:
