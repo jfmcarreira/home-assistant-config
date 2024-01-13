@@ -665,69 +665,6 @@
         target:
           entity_id: light.master_bedroom_bed_window
   mode: single
-- id: '1665435183140'
-  alias: water_heater_turn_on_morning
-  description: ''
-  trigger:
-  - platform: time
-    at: 06:00:00
-  condition:
-  - condition: state
-    entity_id: input_boolean.extended_away_mode
-    state: 'off'
-  action:
-  - service: climate.turn_on
-    data: {}
-    target:
-      entity_id: climate.water_heater
-  mode: single
-- id: '1665435233424'
-  alias: Desligar Termo-acumulador Manhã
-  description: ''
-  trigger:
-  - platform: time
-    at: 08:30:00
-  - platform: time
-    at: '10:30:00'
-  condition:
-  - condition: or
-    conditions:
-    - condition: state
-      entity_id: binary_sensor.workday
-      state: 'on'
-    - condition: state
-      entity_id: weather.home
-      state: sunny
-  action:
-  - service: climate.turn_off
-    data: {}
-    target:
-      entity_id: climate.water_heater
-  mode: single
-- id: '1665435448806'
-  alias: water_heater_turn_on_evening
-  description: ''
-  trigger:
-  - platform: sun
-    event: sunset
-    offset: -01:00:00
-  - platform: time
-    at: '17:30:00'
-  - platform: time_pattern
-    minutes: '30'
-  condition:
-  - condition: time
-    after: '17:30:00'
-    before: '21:00:00'
-  - condition: state
-    entity_id: input_boolean.extended_away_mode
-    state: 'off'
-  action:
-  - service: climate.turn_on
-    data: {}
-    target:
-      entity_id: climate.water_heater
-  mode: single
 - id: '1668971106955'
   alias: Media Turn Off Google Home Hall
   description: ''
@@ -1132,9 +1069,6 @@
     to: opening
   condition: []
   action:
-  - service: notify.mobile_app_all
-    data:
-      message: request_location_update
   - condition: numeric_state
     entity_id: sun.sun
     attribute: elevation
@@ -1629,7 +1563,7 @@
     data: {}
     target:
       entity_id: light.outside_group
-  mode: single
+  mode: restart
 - id: '1701482615616'
   alias: Ligar Luzes da Árvore de Natal de Manhã
   description: ''
@@ -1673,27 +1607,7 @@
         entity_id: scene.lights_stairs_day
       metadata: {}
   mode: single
-- id: '1701640659897'
-  alias: Atualizar Localização Joao
-  description: ''
-  trigger:
-  - platform: time_pattern
-    seconds: '5'
-  condition:
-  - condition: state
-    entity_id: binary_sensor.joao_home
-    state: 'off'
-  - condition: state
-    entity_id: input_boolean.going_home_joao
-    state: 'on'
-  - condition: numeric_state
-    entity_id: proximity.distance_home_joao
-    below: 1000
-  action:
-  - service: notify.mobile_app_magnesium
-    data:
-      message: request_location_update
-  mode: single
+
 - id: '1701730252666'
   alias: Luzes por Mov. na Lavandaria
   description: ''
@@ -1713,27 +1627,6 @@
       blocker_on_entity: light.laundry
       disable_in_sleep: true
       presence_sensor: none
-- id: '1701986497262'
-  alias: Atualizar Localização Bianca
-  description: ''
-  trigger:
-  - platform: time_pattern
-    seconds: '5'
-  condition:
-  - condition: state
-    entity_id: binary_sensor.bianca_home
-    state: 'off'
-  - condition: state
-    entity_id: input_boolean.going_home_bianca
-    state: 'on'
-  - condition: numeric_state
-    entity_id: proximity.distance_home_bianca
-    below: 1000
-  action:
-  - service: notify.mobile_app_calcium
-    data:
-      message: request_location_update
-  mode: single
 - id: '1702942175908'
   alias: devices_clean_reminder_dish_washing_machine
   description: ''
@@ -1749,4 +1642,73 @@
     target:
       entity_id: input_boolean.reminder_dish_washing_machine
     data: {}
+  mode: single
+- id: '1704336080592'
+  alias: AC Sala Feedback Temperatura
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_temperatura_feedback.yaml
+    input:
+      temperature_sensor: sensor.temperature_living_room
+      target_temperature: input_number.hvac_target_temperature_living_room
+      hvac_unit: climate.living_room
+- id: '1704336142689'
+  alias: AC Suite Feedback Temperatura
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_temperatura_feedback.yaml
+    input:
+      temperature_sensor: sensor.temperature_master_bedroom
+      target_temperature: input_number.hvac_target_temperature_bedroom
+      hvac_unit: climate.master_bedroom
+- id: '1704336172254'
+  alias: AC Quarto Ricardo Feedback Temperatura
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_temperatura_feedback.yaml
+    input:
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      target_temperature: input_number.hvac_target_temperature_bedroom
+      hvac_unit: climate.bedroom_ricardo
+- id: '1704843370509'
+  alias: AC Quarto do Ricardo - Desligar Noite
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_toggle.yaml
+    input:
+      schedule: '20:30:00'
+      schedule_weekend: '21:30:00'
+      hvac_unit: climate.bedroom_ricardo
+      hvac_action: action_off
+- id: '1704843402395'
+  alias: AC Suite - Desligar Noite
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_toggle.yaml
+    input:
+      schedule_weekend: 00:00:00
+      schedule: '22:45:00'
+      hvac_unit: climate.master_bedroom
+      hvac_action: action_off
+- id: '1705111890973'
+  alias: device_alert_ups_usage
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.salicru_rack_ups_status
+    from: OL
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: binary_sensor.joao_home
+    state: 'off'
+  action:
+  - service: notify.mobile_app_magnesium
+    data:
+      title: Informação de Sistema
+      message: A UPS está em modo de bateria à mais de 1 minuto
   mode: single

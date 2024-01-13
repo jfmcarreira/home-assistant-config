@@ -19,7 +19,13 @@ automation:
           - binary_sensor.joao_home
         from: "off"
         to: "on"
-    condition: []
+    condition:
+      - condition: state
+        entity_id:
+          - cover.gate
+        state: "close"
+        for:
+          minutes: 10
     action:
       - if:
           - condition: state
