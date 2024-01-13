@@ -1,0 +1,125 @@
+blueprint:
+  name: "[HVAC] Controlo da Temperatura do Ar Condicionado"
+  description: >
+    Ajustar a temperatura do Ar Condicionado com base na temperatura da divisão
+
+  domain: automation
+  input:
+    temperature_sensor:
+      name: Temperatura
+      description: Sensor de Temperatura da divisão
+      selector:
+        entity:
+          domain: sensor
+          device_class: temperature
+
+    target_temperature:
+      name: Temperatura
+      description: Sensor de Temperatura da divisão
+      selector:
+        entity:
+          domain: input_number
+
+    hvac_unit:
+      name: Unidade a Controlar
+      description: Ar Condicionado a controlar
+      selector:
+        entity:
+          domain: climate
+
+mode: restart
+max_exceeded: silent
+trace:
+  stored_traces: 100
+
+variables:
+  temperature_hysteresis: 0.1
+  temperature_sensor: !input temperature_sensor
+  temperature_sensor_state: "{{ states(temperature_sensor) }}"
+  hvac_unit: !input hvac_unit
+  hvac_unit_state: "{{ states(hvac_unit) }}"
+  unit_temperature: "{{ state_attr(hvac_unit, 'temperature') }}"
+  max_hvac_temperature: >
+    {% if hvac_unit_state == 'heat' %}
+        24
+    {% else %}
+        22
+    {% endif %}
+  min_hvac_temperature: >
+    {% if hvac_unit_state == 'heat' %}
+        18
+    {% else %}
+        16
+    {% endif %}
+
+trigger:
+  - platform: state
+    entity_id: !input temperature_sensor
+
+  - platform: state
+    entity_id: !input target_temperature
+
+condition:
+  - condition: state
+    entity_id: !input hvac_unit
+    state:
+      - "heat"
+      - "cool"
+    for:
+      minutes: 30
+
+  - condition: template
+    value_template: >
+      {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 10 }}
+
+  - condition: template
+    value_template: >
+      {{ temperature_sensor_state | float(0) > 0  }}
+
+  - condition: or
+    conditions:
+      - condition: numeric_state
+        entity_id: !input temperature_sensor
+        value_template: "{{ float(state.state) + float(temperature_hysteresis) }}"
+        below: !input target_temperature
+
+      - condition: numeric_state
+        entity_id: !input temperature_sensor
+        value_template: "{{ float(state.state) - float(temperature_hysteresis) }}"
+        above: !input target_temperature
+
+action:
+  - if:
+      - alias: "Temperature Baixa"
+        condition: numeric_state
+        entity_id: !input temperature_sensor
+        value_template: "{{ float(state.state) + float(temperature_hysteresis) }}"
+        below: !input target_temperature
+    then:
+      - condition: "{{ unit_temperature < max_hvac_temperature }}"
+
+      - alias: "Aumentar a temperatura da unidade"
+        service: climate.set_temperature
+        target:
+          entity_id: !input hvac_unit
+        data:
+          temperature: "{{ unit_temperature + 1 }}"
+      - stop:
+
+  - if:
+      - alias: "Temperature Alta"
+        condition: numeric_state
+        entity_id: !input temperature_sensor
+        value_template: "{{ float(state.state) - float(temperature_hysteresis) }}"
+        above: !input target_temperature
+    then:
+      - condition: "{{ unit_temperature > min_hvac_temperature }}"
+
+      - alias: "Diminuir a temperatura da unidade"
+        service: climate.set_temperature
+        target:
+          entity_id: !input hvac_unit
+        data:
+          temperature: "{{ unit_temperature - 1 }}"
+
+      - stop:

@@ -1,6 +1,6 @@
 automation:
   - id: "1703619934344"
-    alias: hvac_fan_speed_to_eat
+    alias: Ajustar AC da Sala durante a refeição
     mode: single
     trigger:
       - platform: state
