@@ -952,20 +952,6 @@
       image: /local/camera/snapshot_front_door.jpg
       clickAction: /lovelace/cctv
   mode: single
-- id: '1674085777289'
-  alias: water_heater_turn_off_confort_mode
-  description: ''
-  trigger:
-  - platform: time
-    at: '22:00:00'
-  condition: []
-  action:
-  - service: climate.set_preset_mode
-    data:
-      preset_mode: none
-    target:
-      entity_id: climate.water_heater
-  mode: single
 - id: '1675112824745'
   alias: device_turn_off_dehumidifier
   description: ''

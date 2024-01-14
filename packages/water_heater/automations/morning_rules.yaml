@@ -1,6 +1,6 @@
 automation:
   - id: "1665435183140"
-    alias: Ligar Termo-acumulador Manhã
+    alias: Termo-acumulador - Ligar Manhã
     description: ""
     mode: single
     trigger:
@@ -17,14 +17,14 @@ automation:
           entity_id: climate.water_heater
 
   - id: "1665435233424"
-    alias: Desligar Termo-acumulador Manhã
+    alias: Termo-acumulador - Desligar Manhã
     mode: single
     description: ""
     trigger:
       - platform: time
         at: 08:30:00
       - platform: time
-        at: "10:30:00"
+        at: "09:30:00"
     condition:
       - condition: or
         conditions:

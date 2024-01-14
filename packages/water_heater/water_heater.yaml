@@ -9,6 +9,6 @@ climate:
     cold_tolerance: 0
     hot_tolerance: 1
     keep_alive: true
+    target_temp_step: 1.0
     precision: 0.5
-    away_temp: 42
     comfort_temp: 50
