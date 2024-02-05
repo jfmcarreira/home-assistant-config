@@ -21,7 +21,7 @@ switch:
     id: light_1
     name: ${Light_1_Name} SW
     output: relay_1
-    restore_mode: ALWAYS_ON
+    restore_mode: ALWAYS_OFF
 
 binary_sensor:
   - platform: homeassistant
