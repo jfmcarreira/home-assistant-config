@@ -1,6 +1,8 @@
 script:
   cover_to_partial_close:
     alias: Colocar Estores a Dois Terços
+    mode: parallel
+    max: 10
     fields:
       action_cover:
         name: Cover
@@ -21,6 +23,8 @@ script:
 
   cover_to_partial_open:
     alias: Colocar Estores a Um Terço
+    mode: parallel
+    max: 10
     fields:
       action_cover:
         name: Cover
@@ -41,6 +45,8 @@ script:
 
   cover_close_to_when_raining:
     alias: Fechar Estores Durante a Chuva
+    mode: parallel
+    max: 10
     fields:
       action_cover:
         name: Cover
@@ -54,10 +60,7 @@ script:
       cover_entitiy: cover.{{ action_cover }}
       cover_position: input_number.cover_rainy_position_{{ action_cover }}
     sequence:
-      - condition: template
-        value_template:
-          "{{ state_attr(cover_entitiy, 'current_position') | float >
-          states(cover_position) }}"
+      - condition: "{{ (state_attr(cover_entitiy, 'current_position') | float(0)) > (states(cover_position) | float(100))}}"
       - service: cover.close_cover
         target:
           entity_id: "{{ cover_entitiy }}"
@@ -67,12 +70,3 @@ script:
           position: "{{ states(cover_position) }}"
         target:
           entity_id: "{{ cover_entitiy }}"
-
-  routine_cover_rain_mode:
-    alias: Routina Modo de Chuva
-    sequence:
-      - service: script.cover_group_action
-        data:
-          action_to_run: script.cover_close_to_when_raining
-          control_switch: close_in_rain
-    mode: single

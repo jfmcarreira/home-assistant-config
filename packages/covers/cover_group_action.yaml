@@ -28,16 +28,14 @@ script:
             - bedroom_ricardo
             - bedroom_guest
           sequence:
-            - condition:
-                "{{ is_state('input_boolean.cover_control_' + control_switch + '_'
-                + repeat.item, 'on') }}"
+            - condition: "{{ is_state('input_boolean.cover_control_' + control_switch + '_' + repeat.item, 'on') }}"
             - choose:
                 - conditions: "{{ 'script.' in action_to_run }}"
                   sequence:
                     - service: "{{ action_to_run }}"
                       data:
-                        action_cover: '{{ repeat.item }}'
+                        action_cover: "{{ repeat.item }}"
               default:
                 - service: "{{ action_to_run }}"
                   target:
-                    entity_id: 'cover.{{ repeat.item }}'
+                    entity_id: "cover.{{ repeat.item }}"
