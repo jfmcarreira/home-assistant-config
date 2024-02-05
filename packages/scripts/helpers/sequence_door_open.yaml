@@ -5,19 +5,18 @@ script:
     icon: mdi:door
     sequence:
       - if:
-          - condition: state
-            entity_id: binary_sensor.kitchen_door
-            state: "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.kitchen_door
+                state: "on"
         then:
           - wait_for_trigger:
               - platform: state
-                entity_id:
-                  - binary_sensor.kitchen_door
+                entity_id: binary_sensor.kitchen_door
                 to: "on"
-            timeout: 00:05:00
-      - service: light.turn_off
-        target:
-          entity_id: light.kitchen_pantry
+            timeout: 00:5:00
+
       - wait_for_trigger:
           - platform: state
             entity_id:

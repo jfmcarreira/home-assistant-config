@@ -1,0 +1,35 @@
+script:
+  sequence_open_close_gate:
+    alias: Sequência de Abrir e Fechar o Portão
+    mode: single
+    icon: mdi:gate
+    sequence:
+      - service: script.sequence_door_open
+        data: {}
+      - delay:
+          seconds: 20
+      - condition:
+          - or:
+              - condition: state
+                entity_id: binary_sensor.joao_home
+                state: "on"
+              - condition: state
+                entity_id: binary_sensor.bianca_home
+                state: "on"
+      - service: cover.open_cover
+        data: {}
+        target:
+          entity_id: cover.gate
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - binary_sensor.bianca_home
+              - binary_sensor.joao_home
+            from: "on"
+            to: "off"
+        timeout: 00:10:00
+        continue_on_timeout: false
+      - service: cover.close_cover
+        data: {}
+        target:
+          entity_id: cover.gate

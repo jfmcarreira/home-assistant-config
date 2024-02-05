@@ -8,40 +8,74 @@ script:
         data: {}
         target:
           entity_id: script.house_turn_all_off
-      - service: script.turn_on
-        target:
-          entity_id: script.sequence_notify_tasks
-        continue_on_error: true
+
       - delay:
           hours: 0
           minutes: 0
           seconds: 2
           milliseconds: 0
-      - condition: numeric_state
-        entity_id: sun.sun
-        attribute: elevation
-        below: "0"
+
       - service: light.turn_on
         data: {}
         target:
           entity_id:
             - light.kitchen_led
-            - light.kitchen_door
-            - light.exterior_wall_side
+            - light.hallway
+
+      - service: script.turn_on
+        target:
+          entity_id: script.sequence_notify_tasks
+        continue_on_error: true
+
+      - service: script.turn_on
+        data: {}
+        target:
+          entity_id: script.sequence_leaving_home_lights
+
+      - service: script.turn_on
+        data: {}
+        target:
+          entity_id: script.sequence_open_close_gate
+
+      - condition: numeric_state
+        entity_id: sun.sun
+        attribute: elevation
+        below: "0"
+
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id:
+            - light.kitchen_led
+            - light.hallway
+
       - service: script.sequence_door_open
+
       - service: light.turn_off
         data: {}
         target:
-          area_id: kitchen
-      - delay:
-          hours: 0
-          minutes: 3
-          seconds: 0
-          milliseconds: 0
-      - service: light.turn_off
+          entity_id:
+            - light.kitchen_led
+            - light.hallway
+
+      - service: input_select.select_option
         data:
-          entity_id: all
+          option: "Off"
+        target:
+          entity_id: input_select.house_mode
+
       - type: turn_off
         device_id: 2ae8ef1981d03f83e4144debe519a697
         entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
         domain: switch
+
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - binary_sensor.notify_home
+            to: "on"
+        timeout: 00:20:00
+
+      - service: light.turn_off
+        data:
+          entity_id: all

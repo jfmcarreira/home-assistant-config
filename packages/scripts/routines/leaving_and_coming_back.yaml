@@ -6,27 +6,17 @@ script:
       - variables:
           joao_was_home: "{{ is_state('binary_sensor.joao_home','on' ) }}"
           bianca_was_home: "{{ is_state('binary_sensor.bianca_home','on' ) }}"
-      - service: script.sequence_door_open
-        data: {}
-      - condition: state
-        entity_id: binary_sensor.joao_home
-        state: "on"
-      - service: cover.open_cover
+
+      - service: script.turn_on
         data: {}
         target:
-          entity_id: cover.gate
-      - wait_for_trigger:
-          - platform: state
-            entity_id:
-              - binary_sensor.bianca_home
-              - binary_sensor.joao_home
-            to: "off"
-            from: "on"
-        timeout: 00:05:00
-      - service: cover.close_cover
+          entity_id: script.sequence_leaving_home_lights
+
+      - service: script.turn_on
         data: {}
         target:
-          entity_id: cover.gate
+          entity_id: script.sequence_open_close_gate
+
       - if:
           - condition: template
             value_template: "{{ joao_was_home }}"

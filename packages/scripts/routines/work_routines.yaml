@@ -19,7 +19,7 @@ script:
               - binary_sensor.bianca_home
             to: "off"
             from: "on"
-        timeout: 00:05:00
+        timeout: 00:10:00
       - condition: state
         entity_id: binary_sensor.bianca_home
         state: "off"
@@ -37,6 +37,7 @@ script:
         target:
           entity_id: script.routine_exit_house_all_off
         data: {}
+        continue_on_error: true
       - service: script.turn_on
         target:
           entity_id: script.sequence_notify_tasks
@@ -54,9 +55,9 @@ script:
           - platform: state
             entity_id:
               - binary_sensor.joao_home
-            to: "off"
             from: "on"
-        timeout: 00:05:00
+            to: "off"
+        timeout: 00:10:00
       - condition: state
         entity_id: binary_sensor.joao_home
         state: "off"

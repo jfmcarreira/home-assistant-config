@@ -16,7 +16,7 @@ script:
               - binary_sensor.kitchen_door
             to: "on"
         timeout:
-          minutes: 30
+          minutes: 10
       - service: light.turn_on
         data: {}
         target:
@@ -27,16 +27,27 @@ script:
               - binary_sensor.kitchen_door
             to: "off"
         timeout:
-          minutes: 30
-      - delay:
-          hours: 0
-          minutes: 5
-          seconds: 0
-          milliseconds: 0
+          minutes: 10
       - service: light.turn_off
         target:
           entity_id:
             - light.exterior_wall_side
             - light.exterior_wall_back
+        data: {}
+      - wait_for_trigger:
+          - platform: state
+            entity_id:
+              - light.kitchen_door
+            from: "on"
+            to: "off"
+        timeout:
+          minutes: 10
+        continue_on_timeout: true
+      - condition: state
+        entity_id: light.kitchen_door
+        state: "on"
+      - service: light.turn_off
+        target:
+          entity_id:
             - light.kitchen_door
         data: {}

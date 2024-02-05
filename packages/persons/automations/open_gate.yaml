@@ -23,9 +23,9 @@ automation:
       - condition: state
         entity_id:
           - cover.gate
-        state: "close"
+        state: "closed"
         for:
-          minutes: 10
+          minutes: 5
     action:
       - if:
           - condition: state
