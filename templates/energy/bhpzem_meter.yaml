@@ -1,0 +1,8 @@
+- sensor:
+    - name: bhpzem_meter
+      unique_id: bhpzem_meter
+      device_class: energy
+      unit_of_measurement: "kWh"
+      state_class: total_increasing
+      state: "{{ states('sensor.bhpzem_main_energy') | int(0) }}"
+      availability: "{{ not is_state('sensor.bhpzem_main_energy', 'unavailable')  }}"
