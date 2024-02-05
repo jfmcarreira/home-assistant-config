@@ -2,7 +2,7 @@ packages:
   two_lights: !include shelly25_two_lights.yml
 
 globals:
-  - id: should_toggle_lights
+  - id: should_turn_off_both_lights
     type: bool
     restore_value: no
     initial_value: "false"
@@ -12,11 +12,11 @@ script:
     mode: restart
     then:
       - globals.set:
-          id: should_toggle_lights
+          id: should_turn_off_both_lights
           value: "false"
       - delay: 30s
       - globals.set:
-          id: should_toggle_lights
+          id: should_turn_off_both_lights
           value: "true"
       - logger.log: "Turning both lights off count finished"
 
@@ -32,30 +32,34 @@ binary_sensor:
         then:
           - if:
               condition:
-                and:
-                  - lambda: "return id(should_toggle_lights);"
-                  - or:
-                      - light.is_on: light_1
-                      - light.is_on: light_2
+                or:
+                  - and:
+                    - light.is_on: light_1
+                    - light.is_on: light_2
+                  - and:
+                    - lambda: "return id(should_turn_off_both_lights);"
+                    - or:
+                        - light.is_on: light_1
+                        - light.is_on: light_2
               then:
                 - globals.set:
-                    id: should_toggle_lights
+                    id: should_turn_off_both_lights
                     value: "false"
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
                 - if:
                     condition:
-                      and:
-                        - light.is_on: light_1
-                        - light.is_on: light_2
+                      - light.is_on: ${input_a_light}
                     then:
-                      - light.turn_off: light_1
-                      - light.turn_off: light_2
+                      - light.turn_off: ${input_a_light}
+                      - globals.set:
+                          id: should_turn_off_both_lights
+                          value: "false"
                     else:
-                      - light.toggle: ${input_a_light}
+                      - light.turn_on: ${input_a_light}
+                      - script.execute: bathroom_toggle_lights_countdown
 
-                - script.execute: bathroom_toggle_lights_countdown
       - timing:
           - ON for at least 1000ms
         invalid_cooldown: 100ms
@@ -77,27 +81,34 @@ binary_sensor:
         then:
           - if:
               condition:
-                lambda: "return id(should_toggle_lights);"
+                or:
+                  - and:
+                    - light.is_on: light_1
+                    - light.is_on: light_2
+                  - and:
+                    - lambda: "return id(should_turn_off_both_lights);"
+                    - or:
+                        - light.is_on: light_1
+                        - light.is_on: light_2
               then:
                 - globals.set:
-                    id: should_toggle_lights
+                    id: should_turn_off_both_lights
                     value: "false"
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
                 - if:
                     condition:
-                      or:
-                        - lambda: "return id(should_toggle_lights);"
-                        - and:
-                            - light.is_on: light_1
-                            - light.is_on: light_2
+                      - light.is_on: ${input_b_light}
                     then:
-                      - light.turn_off: light_1
-                      - light.turn_off: light_2
+                      - light.turn_off: ${input_b_light}
+                      - globals.set:
+                          id: should_turn_off_both_lights
+                          value: "false"
                     else:
-                      - light.toggle: ${input_b_light}
-                - script.execute: bathroom_toggle_lights_countdown
+                      - light.turn_on: ${input_b_light}
+                      - script.execute: bathroom_toggle_lights_countdown
+
       - timing:
           - ON for at least 1000ms
         invalid_cooldown: 100ms
