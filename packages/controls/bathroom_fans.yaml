@@ -9,7 +9,6 @@ input_boolean:
 input_number:
   bathroom_fan_humidity_threshold:
     name: Threshold Humidade
-    initial: 15
     min: 5
     max: 80
     step: 1
@@ -18,7 +17,6 @@ input_number:
     mode: slider
   bathroom_fan_timeout:
     name: Temporizador Ventoinha Casas de Banho
-    initial: 60
     min: 5
     max: 1200
     step: 10
@@ -27,7 +25,6 @@ input_number:
     mode: slider
   bathroom_fan_max_timeout:
     name: Tempo Máximo Ventoinha Casas de Banho
-    initial: 30
     min: 5
     max: 120
     step: 1

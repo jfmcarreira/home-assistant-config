@@ -5,10 +5,12 @@
       state_class: measurement
       unit_of_measurement: "%"
       availability: >-
-        {% if is_state( 'input_select.dehumidifier_location', 'Suite' )  %}
+        {% if is_state( 'input_select.dehumidifier_location', 'Casa de Banho da Suite' )  %}
           {{ is_number(states('sensor.humidity_master_bedroom_bathroom')) }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Casa de Banho Principal' )  %}
           {{ is_number(states('sensor.humidity_main_bathroom')) }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Casa de Banho de Serviço' )  %}
+          {{ is_number(states('sensor.humidity_bathroom_rc')) }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Sotão' )  %}
           {{ is_number(states('sensor.humidity_hall')) }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Sala' )  %}
@@ -17,10 +19,12 @@
           False
         {% endif %}
       state: >-
-        {% if is_state( 'input_select.dehumidifier_location', 'Suite' )  %}
+        {% if is_state( 'input_select.dehumidifier_location', 'Casa de Banho da Suite' )  %}
           {{ states('sensor.humidity_master_bedroom_bathroom') }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Casa de Banho Principal' )  %}
           {{ states('sensor.humidity_main_bathroom') }}
+        {% elif is_state( 'input_select.dehumidifier_location', 'Casa de Banho de Serviço' )  %}
+          {{ states('sensor.humidity_bathroom_rc') }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Sotão' )  %}
             {{ states('sensor.humidity_hall') }}
         {% elif is_state( 'input_select.dehumidifier_location', 'Sala' )  %}
