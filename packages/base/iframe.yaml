@@ -11,11 +11,11 @@ panel_iframe:
     title: "Sonarr"
     url: !secret sonarr_url
     icon: mdi:television-play
+  immich:
+    title: "Immich"
+    url: !secret immich_url
+    icon: mdi:image-multiple
   photoprism:
     title: "Photoprism"
     url: !secret photoprism_url
     icon: mdi:image-multiple
-  grocy:
-    title: "Grocy"
-    url: !secret grocy_url
-    icon: mdi:cart
