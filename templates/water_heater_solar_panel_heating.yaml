@@ -1,0 +1,13 @@
+- binary_sensor:
+    - name: water_heater_panel_heating
+      unique_id: water_heater_panel_heating
+      device_class: heat
+      delay_on:
+        seconds: 0
+      delay_off:
+        minutes: 30
+      state: >
+        {{
+            is_state('binary_sensor.temperature_solar_panel_trend', 'on') or
+            is_state('binary_sensor.water_heater_pump_state', 'on')
+        }}

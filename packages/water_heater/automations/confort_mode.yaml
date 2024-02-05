@@ -40,6 +40,6 @@ automation:
           entity_id: climate.water_heater
       - service: climate.set_preset_mode
         data:
-          preset_mode: Confort
+          preset_mode: comfort
         target:
           entity_id: climate.water_heater

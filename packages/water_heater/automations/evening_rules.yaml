@@ -1,23 +1,41 @@
 automation:
   - id: "1665435448806"
     alias: Ligar Termo-acumulador Tarde
-    description: ""
     mode: single
     trigger:
       - platform: sun
         event: sunset
         offset: -01:00:00
       - platform: time
-        at: "17:30:00"
-      - platform: time_pattern
-        minutes: "30"
+        at:
+          - "15:00:00"
+          - "16:00:00"
+          - "17:00:00"
+          - "17:30:00"
+          - "18:00:00"
+          - "18:30:00"
+          - "19:00:00"
+          - "19:30:00"
+          - "20:00:00"
+          - "20:30:00"
+      - platform: state
+        entity_id: binary_sensor.water_heater_panel_heating
+        from: "on"
+        to: "off"
+        for:
+          minutes: 30
     condition:
-      - condition: time
-        after: "17:30:00"
-        before: "21:00:00"
       - condition: state
         entity_id: input_boolean.extended_away_mode
         state: "off"
+      - condition: time
+        after: "15:00:00"
+        before: "22:00:00"
+      - condition: state
+        entity_id: binary_sensor.water_heater_panel_heating
+        state: "off"
+        for:
+          minutes: 10
     action:
       - service: climate.turn_on
         data: {}
