@@ -1593,7 +1593,6 @@
         entity_id: scene.lights_stairs_day
       metadata: {}
   mode: single
-
 - id: '1701730252666'
   alias: Luzes por Mov. na Lavandaria
   description: ''
@@ -1660,22 +1659,22 @@
   alias: AC Quarto do Ricardo - Desligar Noite
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_toggle.yaml
+    path: hvac/hvac_time_turn_off.yaml
     input:
       schedule: '20:30:00'
       schedule_weekend: '21:30:00'
       hvac_unit: climate.bedroom_ricardo
-      hvac_action: action_off
+      run_on_weekends: true
 - id: '1704843402395'
   alias: AC Suite - Desligar Noite
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_toggle.yaml
+    path: hvac/hvac_time_turn_off.yaml
     input:
       schedule_weekend: 00:00:00
       schedule: '22:45:00'
       hvac_unit: climate.master_bedroom
-      hvac_action: action_off
+      run_on_weekends: true
 - id: '1705111890973'
   alias: device_alert_ups_usage
   description: ''
@@ -1698,3 +1697,97 @@
       title: Informação de Sistema
       message: A UPS está em modo de bateria à mais de 1 minuto
   mode: single
+- id: '1705326881056'
+  alias: AC Suite - Desligar Manhã
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_off.yaml
+    input:
+      schedule_weekend: 08:45:00
+      schedule: 08:45:00
+      hvac_unit: climate.master_bedroom
+      run_on_weekends: false
+- id: '1705326979364'
+  alias: AC Sala - Desligar Manhã
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_off.yaml
+    input:
+      schedule_weekend: 08:00:00
+      schedule: 08:15:00
+      hvac_unit: climate.living_room
+      run_on_weekends: false
+- id: '1705327069565'
+  alias: AC Sala - Desligar Noite
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_off.yaml
+    input:
+      schedule_weekend: 01:30:00
+      schedule: '23:30:00'
+      hvac_unit: climate.living_room
+- id: '1705368338092'
+  alias: AC Suite - Ligar de Manhã
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      schedule_weekend: 07:45:00
+      schedule: 07:45:00
+      hvac_unit: climate.master_bedroom
+      run_on_weekends: false
+      hvac_temperature: 22
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_master_bedroom
+- id: '1705368431534'
+  alias: AC Sala - Ligar de Manhã
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      schedule_weekend: 08:00:00
+      schedule: 06:30:00
+      hvac_unit: climate.living_room
+      run_on_weekends: true
+      hvac_temperature: 21
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_living_room
+- id: '1705596272069'
+  alias: AC Suite - Ligar Tarde
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      schedule_weekend: '17:30:00'
+      schedule: '17:30:00'
+      hvac_unit: climate.master_bedroom
+      run_on_weekends: true
+      hvac_temperature: 21
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_master_bedroom
+- id: '1705596348371'
+  alias: AC Quarto do Ricardo - Ligar Tarde
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      schedule_weekend: '17:30:00'
+      schedule: '17:30:00'
+      hvac_unit: climate.bedroom_ricardo
+      run_on_weekends: true
+      hvac_temperature: 21
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+- id: '1705596387713'
+  alias: AC Sala - Ligar Tarde
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      schedule_weekend: '17:30:00'
+      schedule: '17:30:00'
+      hvac_unit: climate.living_room
+      run_on_weekends: true
+      hvac_temperature: 21
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_living_room
