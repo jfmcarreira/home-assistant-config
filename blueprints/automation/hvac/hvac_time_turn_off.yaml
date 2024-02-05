@@ -1,0 +1,72 @@
+blueprint:
+  name: "[HVAC] Controlo Horário - Desligar Ar Condicionado"
+  description: Desligar Ar condicionado a uma determinada hora
+
+  domain: automation
+  input:
+    hvac_unit:
+      name: Unidade a Controlar
+      selector:
+        entity:
+          domain: climate
+
+    schedule:
+      name: Horário
+      description: Horário da acção
+      selector:
+        time:
+
+    schedule_weekend:
+      name: Horário (Fim de Semana)
+      description: Horário da acção durante o fim de semana
+      selector:
+        time:
+
+    run_on_weekends:
+      name: Fim de Semana
+      default: "off"
+      selector:
+        boolean:
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  run_on_weekends: !input run_on_weekends
+
+trigger:
+  - platform: time
+    id: normal_time
+    at: !input schedule
+
+  - platform: time
+    id: weekend_time
+    at: !input schedule_weekend
+
+condition:
+  - condition: state
+    entity_id: !input hvac_unit
+    state:
+      - "heat"
+      - "cool"
+
+  - condition: or
+    conditions:
+      - "{{ run_on_weekends }}"
+      - condition: trigger
+        id:
+          - normal_time
+
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.workday_tomorrow
+        state: "on"
+      - condition: trigger
+        id:
+          - weekend_time
+
+action:
+  - service: climate.turn_off
+    target:
+      entity_id: !input hvac_unit

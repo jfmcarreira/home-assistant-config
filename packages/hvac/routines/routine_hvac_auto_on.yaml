@@ -1,0 +1,94 @@
+script:
+  hvac_auto_on:
+    alias: Routina de Climatização de Inverno
+    mode: restart
+    sequence:
+      - if:
+          - condition: numeric_state
+            entity_id: sensor.temperature_living_room
+            below: 20
+        then:
+          - service: climate.turn_on
+            data: {}
+            target:
+              entity_id: climate.living_room
+          - service: climate.set_temperature
+            data:
+              hvac_mode: heat
+              temperature: >
+                {{ states('input_number.hvac_target_temperature_living_room') }}
+            target:
+              entity_id: climate.living_room
+          - service: climate.set_fan_mode
+            data:
+              fan_mode: 3D
+            target:
+              entity_id: climate.living_room
+
+      - if:
+          - condition: numeric_state
+            entity_id: sensor.temperature_master_bedroom
+            below: 20
+        then:
+          - service: climate.turn_on
+            data: {}
+            target:
+              entity_id: climate.master_bedroom
+          - delay:
+              seconds: 5
+          - service: climate.set_temperature
+            data:
+              hvac_mode: heat
+              temperature: >
+                {{ states('input_number.hvac_target_temperature_bedroom') }}
+            target:
+              entity_id: climate.master_bedroom
+          - delay:
+              seconds: 5
+          - service: climate.set_fan_mode
+            data:
+              fan_mode: auto
+            target:
+              entity_id: climate.master_bedroom
+          - delay:
+              seconds: 5
+          - service: climate.set_swing_mode
+            data:
+              swing_mode: vertical
+            target:
+              entity_id: climate.master_bedroom
+
+      - if:
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_ricardo
+            below: 20
+          - condition: time
+            after: "10:00:00"
+        then:
+          - service: climate.turn_on
+            data: {}
+            target:
+              entity_id: climate.bedroom_ricardo
+          - delay:
+              seconds: 5
+          - service: climate.set_temperature
+            data:
+              hvac_mode: heat
+              temperature: >
+                {{ states('input_number.hvac_target_temperature_bedroom') }}
+            target:
+              entity_id: climate.bedroom_ricardo
+          - delay:
+              seconds: 5
+          - service: climate.set_fan_mode
+            data:
+              fan_mode: auto
+            target:
+              entity_id: climate.bedroom_ricardo
+          - delay:
+              seconds: 5
+          - service: climate.set_swing_mode
+            data:
+              swing_mode: vertical
+            target:
+              entity_id: climate.bedroom_ricardo

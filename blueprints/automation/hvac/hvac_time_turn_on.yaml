@@ -1,0 +1,107 @@
+blueprint:
+  name: "[HVAC] Controlo Horário - Ligar Ar Condicionado"
+  description: Ligar Ar condicionado a uma determinada hora
+
+  domain: automation
+  input:
+    hvac_unit:
+      name: Unidade a Controlar
+      selector:
+        entity:
+          domain: climate
+
+    schedule:
+      name: Horário
+      description: Horário da acção
+      selector:
+        time:
+
+    schedule_weekend:
+      name: Horário (Fim de Semana)
+      description: Horário da acção durante o fim de semana
+      selector:
+        time:
+
+    run_on_weekends:
+      name: Fim de Semana
+      default: "off"
+      selector:
+        boolean:
+
+    hvac_temperature:
+      name: Temperatura do AC
+      default: 20
+      selector:
+        number:
+          min: 18
+          max: 25
+
+    temperature_sensor:
+      name: Sensor de Temperatura
+      default:
+      selector:
+        entity:
+          domain: sensor
+          device_class: temperature
+
+    room_temperature:
+      name: Temperatura da Divisão
+      default: 20
+      selector:
+        number:
+          min: 18
+          max: 25
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  run_on_weekends: !input run_on_weekends
+
+trigger:
+  - platform: time
+    id: normal_time
+    at: !input schedule
+
+  - platform: time
+    id: weekend_time
+    at: !input schedule_weekend
+
+condition:
+  - condition: state
+    entity_id: !input hvac_unit
+    state:
+      - "off"
+
+  - condition: or
+    conditions:
+      - "{{ run_on_weekends }}"
+      - condition: trigger
+        id:
+          - normal_time
+
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.workday
+        state: "on"
+      - condition: and
+        conditions:
+          - "{{ run_on_weekends }}"
+          - condition: trigger
+            id:
+              - weekend_time
+
+  - condition: numeric_state
+    entity_id: !input temperature_sensor
+    below: !input room_temperature
+
+action:
+  - service: climate.turn_on
+    target:
+      entity_id: !input hvac_unit
+  - service: climate.set_temperature
+    target:
+      entity_id: !input hvac_unit
+    data:
+      temperature: !input hvac_temperature

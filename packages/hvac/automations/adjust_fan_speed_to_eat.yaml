@@ -1,6 +1,6 @@
 automation:
   - id: "1703619934344"
-    alias: Ajustar AC da Sala durante a refeição
+    alias: AC Sala - Ajustar durante a refeição
     mode: single
     trigger:
       - platform: state
