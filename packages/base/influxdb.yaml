@@ -16,6 +16,7 @@ influxdb:
       - fan
     entity_globs:
       # Power
+      - sensor.power_gate_single_leaf
       - sensor.bhpzem*
       - sensor.device_power_*
       - sensor.device_energy_*

@@ -14,3 +14,5 @@ history:
       - zone
       - sun
       - weather
+    entity_globs:
+      - sensor.wifi_*
