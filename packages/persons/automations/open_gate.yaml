@@ -6,8 +6,8 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id:
-          - proximity.distance_home_bianca
-          - proximity.distance_home_joao
+          - sensor.distance_home_bianca
+          - sensor.distance_home_joao
         for:
           hours: 0
           minutes: 0
@@ -43,11 +43,10 @@ automation:
                       - condition: and
                         conditions:
                           - condition: numeric_state
-                            entity_id: proximity.distance_home_bianca
+                            entity_id: sensor.distance_home_bianca
                             below: 300
                           - condition: state
-                            entity_id: proximity.distance_home_bianca
-                            attribute: dir_of_travel
+                            entity_id: sensor.distance_home_direction_bianca
                             state: towards
                       - condition: state
                         entity_id: binary_sensor.bianca_home
@@ -61,11 +60,10 @@ automation:
                       - condition: and
                         conditions:
                           - condition: numeric_state
-                            entity_id: proximity.distance_home_joao
+                            entity_id: sensor.distance_home_joao
                             below: 300
                           - condition: state
-                            entity_id: proximity.distance_home_joao
-                            attribute: dir_of_travel
+                            entity_id: sensor.distance_home_direction_joao
                             state: towards
                       - condition: state
                         entity_id: binary_sensor.joao_home
