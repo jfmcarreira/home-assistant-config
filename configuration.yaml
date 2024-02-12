@@ -4,7 +4,7 @@
 homeassistant:
   auth_providers:
     - type: homeassistant
-  packages: !include_dir_named packages
+      packages: !include_dir_named packages
 
 default_config:
 
@@ -61,6 +61,7 @@ media_source:
 ################################################################################
 automation: !include automations.yaml
 script: !include scripts.yaml
+script split: !include_dir_list scripts
 group: !include groups.yaml
 scene: !include scenes.yaml
 template: !include_dir_merge_list templates
