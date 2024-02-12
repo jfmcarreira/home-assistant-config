@@ -12,10 +12,7 @@ script:
         target:
           entity_id: script.sequence_leaving_home_lights
 
-      - service: script.turn_on
-        data: {}
-        target:
-          entity_id: script.sequence_open_close_gate
+      - service: script.sequence_open_close_gate
 
       - if:
           - condition: template

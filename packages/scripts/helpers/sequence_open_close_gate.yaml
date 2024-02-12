@@ -7,7 +7,7 @@ script:
       - service: script.sequence_door_open
         data: {}
       - delay:
-          seconds: 20
+          seconds: 10
       - condition:
           - or:
               - condition: state

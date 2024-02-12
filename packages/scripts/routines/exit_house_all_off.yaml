@@ -37,17 +37,18 @@ script:
         target:
           entity_id: script.sequence_open_close_gate
 
-      - condition: numeric_state
-        entity_id: sun.sun
-        attribute: elevation
-        below: "0"
-
-      - service: light.turn_on
-        data: {}
-        target:
-          entity_id:
-            - light.kitchen_led
-            - light.hallway
+      - if:
+          - condition: numeric_state
+            entity_id: sun.sun
+            attribute: elevation
+            below: "0"
+        then:
+          - service: light.turn_on
+            data: {}
+            target:
+              entity_id:
+                - light.kitchen_led
+                - light.hallway
 
       - service: script.sequence_door_open
 
