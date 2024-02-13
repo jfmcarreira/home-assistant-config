@@ -1,0 +1,69 @@
+sequence_leaving_home_lights:
+  alias: Sequência de Ligar as Luzes ao Sair de Casa
+  mode: single
+  sequence:
+    - condition: numeric_state
+      entity_id: sun.sun
+      attribute: elevation
+      below: "5"
+
+    - if:
+        - condition: state
+          entity_id: binary_sensor.kitchen_door
+          state: "off"
+      then:
+        - wait_for_trigger:
+            - platform: state
+              entity_id:
+                - binary_sensor.kitchen_door
+              to: "on"
+          timeout: 00:05:00
+          continue_on_timeout: false
+
+    - service: light.turn_on
+      target:
+        entity_id:
+          - light.exterior_wall_back
+          - light.exterior_wall_side
+          - light.kitchen_door
+      data: {}
+
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.kitchen_door
+          to: "off"
+      timeout: 00:05:00
+      continue_on_timeout: true
+
+    - delay:
+        minutes: 1
+
+    - service: light.turn_off
+      data: {}
+      target:
+        entity_id:
+          - light.exterior_wall_back
+          - light.kitchen_door
+
+    - if:
+        - condition: not
+          conditions:
+            - condition: state
+              entity_id: cover.gate
+              state: "closed"
+      then:
+        - wait_for_trigger:
+            - platform: state
+              entity_id:
+                - cover.gate
+              to: "closed"
+          timeout: 00:10:00
+
+    - service: light.turn_off
+      target:
+        entity_id:
+          - light.exterior_wall_back
+          - light.exterior_wall_side
+          - light.kitchen_door
+      data: {}

@@ -1,0 +1,17 @@
+sequence_notify_tasks:
+  alias: Sequência de Notificar sobre as Tarefas
+  mode: single
+  icon: mdi:alert
+  sequence:
+    - if:
+        - condition: state
+          entity_id: input_boolean.reminder_dish_washing_machine
+          state: "on"
+      then:
+        - service: tts.cloud_say
+          data:
+            cache: true
+            entity_id:
+              - media_player.ghm_kitchen
+            message: Deve ligar a máquina de lavar a loiça
+            language: pt-PT

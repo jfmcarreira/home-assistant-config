@@ -1,0 +1,98 @@
+routine_bedtime_all_off:
+  alias: Routina de Boa Noite (Desligar Tudo)
+  mode: single
+  icon: mdi:sleep
+  sequence:
+    - service: script.routine_good_night
+      data: {}
+    - parallel:
+        - service: script.house_turn_all_off
+          data: {}
+        - if:
+            - condition: not
+              conditions:
+                - condition: state
+                  entity_id: climate.master_bedroom
+                  state: "off"
+          then:
+            - service: climate.turn_off
+              data: {}
+              target:
+                entity_id:
+                  - climate.master_bedroom
+        - if:
+            - condition: not
+              conditions:
+                - condition: state
+                  entity_id: climate.bedroom_ricardo
+                  state: "off"
+          then:
+            - service: climate.turn_off
+              data: {}
+              target:
+                entity_id:
+                  - climate.bedroom_ricardo
+
+        - service: climate.turn_off
+          data: {}
+          target:
+            entity_id:
+              - climate.living_room
+
+routine_good_night:
+  alias: Routina de Boa Noite
+  mode: single
+  icon: mdi:sleep
+  sequence:
+    - service: light.turn_on
+      data: {}
+      target:
+        entity_id: light.stairs_wall
+    - parallel:
+        - service: cover.close_cover
+          data: {}
+          target:
+            entity_id: cover.gate
+        - if:
+            - condition: or
+              conditions:
+                - condition: state
+                  entity_id: sensor.magnesium_next_alarm
+                  state: unknown
+                - condition: state
+                  entity_id: sensor.magnesium_next_alarm
+                  state: unavailable
+          then:
+            - device_id: 9fb26e914719ad2a416b2847f915b00a
+              domain: mobile_app
+              type: notify
+              message: Deve configurar o alarme para amanhã!
+              title: Routinas
+              data:
+                tag: 923
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 35
+        milliseconds: 0
+    - service: input_select.select_option
+      data:
+        option: Sleep
+      target:
+        entity_id: input_select.house_mode
+    - type: turn_off
+      device_id: 2ae8ef1981d03f83e4144debe519a697
+      entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
+      domain: switch
+    - service: notify.mobile_app_all
+      data:
+        message: clear_notification
+        data:
+          tag: 923
+          dismiss: true
+    - service: light.turn_off
+      data: {}
+      target:
+        area_id:
+          - hall
+          - master_bedroom

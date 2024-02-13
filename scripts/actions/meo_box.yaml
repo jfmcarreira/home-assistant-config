@@ -1,0 +1,119 @@
+action_living_room_tv_change_source:
+  alias: Ligar Televisão da sala no Input
+  fields:
+    source:
+      description: Source to activate
+      example: MEO
+  sequence:
+    - service: media_player.turn_on
+      entity_id: media_player.living_room_tv
+
+    - wait_template: "{{ is_state( 'binary_sensor.living_room_tv_state', 'on' )  }}"
+      timeout: "00:00:04"
+
+    - service: media_player.select_source
+      entity_id: media_player.living_room_tv
+      data:
+        source: "{{ source }}"
+
+action_turn_on_living_room_tv_meo:
+  alias: Routina Ligar Televisão no MEO
+  sequence:
+    - service: script.action_living_room_tv_change_source
+      entity_id: media_player.living_room_tv
+
+    # # If MEO box is off give it a bit of time to boot up before continuing
+    # - choose:
+    #     - conditions: "{{ not is_state('switch.living_room_tv_meo_box', 'on') }}"
+    #       sequence:
+    #         - service: switch.turn_on
+    #           target:
+    #             entity_id: switch.living_room_tv_meo_box
+    #         - delay: 00:00:10
+
+    - service: media_player.turn_on
+      entity_id: media_player.mediaroom_82_155_7_99
+
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ is_state( 'media_player.mediaroom_82_155_7_99', 'unavailable' )  }}"
+          sequence:
+            - service: remote.send_command
+              data:
+                entity_id: remote.living_room_tv
+                device: meo
+                command: ENTER
+                num_repeats: 1
+      default:
+        - service: media_player.turn_on
+          entity_id: media_player.mediaroom_82_155_7_99
+
+    - wait_template: "{{ is_state( 'binary_sensor.living_room_tv_state', 'on' )  }}"
+      timeout: "00:00:04"
+
+    - service: media_player.select_source
+      entity_id: media_player.living_room_tv
+      data:
+        source: MEO
+
+    - wait_template: "{{ is_state( 'sensor.living_room_tv_source', 'MEO' )  }}"
+      timeout: "00:00:04"
+
+action_meo_play_main_channel:
+  alias: Routina SIC na Televisão
+  sequence:
+    - service: script.action_turn_on_living_room_tv_meo
+
+    - service: python_script.change_meo_box_channel
+      data:
+        channel: SIC
+        entity_id: media_player.mediaroom_82_155_7_99
+
+action_meo_play_kids_channel:
+  alias: Routina Bonecos na Televisão
+  sequence:
+    - service: script.action_turn_on_living_room_tv_meo
+    - service: python_script.change_meo_box_channel
+      data:
+        channel: Baby TV
+        entity_id: media_player.mediaroom_82_155_7_99
+
+action_meo_reset_current_show:
+  alias: Routina Reiniciar Programa Atual
+  sequence:
+    - service: python_script.meo_box_reset_show
+      data:
+        entity_id: media_player.mediaroom_82_155_7_99
+        show: Current
+
+action_meo_reset_previous_show:
+  alias: Routina Reiniciar Programa Anterior
+  sequence:
+    - service: python_script.meo_box_reset_show
+      data:
+        entity_id: media_player.mediaroom_82_155_7_99
+        show: Previous
+
+action_meo_news_channel:
+  alias: Routina Noticias à refeição
+  sequence:
+    - service: script.action_turn_on_living_room_tv_meo
+
+    - service: media_player.volume_set
+      entity_id: media_player.living_room_tv
+      data:
+        volume_level: 0.16
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 6
+        milliseconds: 0
+
+    - service: python_script.change_meo_box_channel
+      data:
+        channel: SIC
+        entity_id: media_player.mediaroom_82_155_7_99
+
+    - delay: 00:00:03
+    - service: script.action_meo_reset_current_show

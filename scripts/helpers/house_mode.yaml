@@ -1,0 +1,44 @@
+select_next_house_mode:
+  sequence:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: input_select.house_mode
+              state: "On"
+          sequence:
+            - service: input_select.select_option
+              data:
+                entity_id: input_select.house_mode
+                option: "Evening"
+        - conditions:
+            - condition: state
+              entity_id: input_select.house_mode
+              state: "Evening"
+          sequence:
+            - service: input_select.select_option
+              data:
+                entity_id: input_select.house_mode
+                option: "Night"
+        - conditions:
+            - condition: state
+              entity_id: input_select.house_mode
+              state: "Night"
+          sequence:
+            - service: input_select.select_option
+              data:
+                entity_id: input_select.house_mode
+                option: "On"
+        - conditions:
+            - condition: state
+              entity_id: input_select.house_mode
+              state: "Sleep"
+          sequence:
+            - service: input_select.select_option
+              data:
+                entity_id: input_select.house_mode
+                option: "Night"
+      default:
+        - service: input_select.select_option
+          data:
+            entity_id: input_select.house_mode
+            option: "On"

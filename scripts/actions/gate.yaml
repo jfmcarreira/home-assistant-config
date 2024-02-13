@@ -1,0 +1,8 @@
+gate_passagem_pedonal:
+  alias: Passagem Pedonal
+  sequence:
+    - device_id: f9e1ca6ea2ed7c2fdb83d37101b15e52
+      domain: button
+      entity_id: d4f53843675d3ea74dbce99c4e7419ee
+      type: press
+  mode: single
