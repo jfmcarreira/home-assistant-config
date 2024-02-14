@@ -3,23 +3,50 @@ routine_exit_house_all_off:
   mode: single
   icon: mdi:exit-run
   sequence:
-    - service: script.turn_on
-      data: {}
-      target:
-        entity_id: script.house_turn_all_off
+    - if:
+        - condition: numeric_state
+          entity_id: sun.sun
+          attribute: elevation
+          below: "0"
+      then:
+        - service: light.turn_on
+          data: {}
+          target:
+            entity_id:
+              - light.kitchen_led
+              - light.hallway
 
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 2
-        milliseconds: 0
+    - parallel:
+        - service: light.turn_off
+          data: {}
+          target:
+            area_id:
+              - bathroom_main
+              - bathroom_rc
+              - guest_bedroom
+              - master_bedroom
+              - bedroom_ricardo
+              - bedroom_rc
+              - office
+              - laundry
+              - hall
 
-    - service: light.turn_on
-      data: {}
-      target:
-        entity_id:
-          - light.kitchen_led
-          - light.hallway
+        - service: media_player.turn_off
+          data: {}
+          target:
+            entity_id:
+              - media_player.google_home_speakers
+              - media_player.living_room_tv
+
+        - service: homeassistant.turn_off
+          target:
+            area_id: xmas
+          data: {}
+
+        - service: climate.turn_off
+          target:
+            entity_id: climate.portable_heater
+          data: {}
 
     - service: script.turn_on
       target:
@@ -36,27 +63,14 @@ routine_exit_house_all_off:
       target:
         entity_id: script.sequence_open_close_gate
 
-    - if:
-        - condition: numeric_state
-          entity_id: sun.sun
-          attribute: elevation
-          below: "0"
-      then:
-        - service: light.turn_on
-          data: {}
-          target:
-            entity_id:
-              - light.kitchen_led
-              - light.hallway
-
     - service: script.sequence_door_open
 
     - service: light.turn_off
       data: {}
       target:
-        entity_id:
-          - light.kitchen_led
-          - light.hallway
+        area_id:
+          - kitchen
+          - living_room
 
     - service: input_select.select_option
       data:

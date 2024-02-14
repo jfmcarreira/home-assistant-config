@@ -20,13 +20,6 @@ house_turn_all_off:
               - bedroom_ricardo
               - living_room
               - master_bedroom
-        - service: fan.turn_off
-          target:
-            area_id:
-              - bathroom_main
-              - bathroom_rc
-              - master_bedroom
-          data: {}
         - service: media_player.turn_off
           data: {}
           target:
