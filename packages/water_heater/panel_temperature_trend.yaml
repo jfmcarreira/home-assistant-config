@@ -1,8 +1,0 @@
-binary_sensor:
-  - platform: trend
-    sensors:
-      temperature_solar_panel_trend:
-        entity_id: sensor.temperature_solar_panel
-        sample_duration: 7200
-        max_samples: 120
-        min_gradient: 0.0008
