@@ -1,0 +1,16 @@
+automation:
+  - id: "1663526552935"
+    alias: cover close when raining
+    description: ""
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: weather.home
+        attribute: precipitation_unit
+        above: 70
+    condition: []
+    action:
+      - service: script.cover_group_action
+        data:
+          action_to_run: script.cover_close_to_when_raining
+          control_switch: close_in_rain
