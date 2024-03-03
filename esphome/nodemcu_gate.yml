@@ -2,8 +2,23 @@ substitutions:
   devicename: nodemcu_gate
   FriendlyName: Gate
 
+logger:
+  level: DEBUG
+
+
 esphome:
   name: ${devicename}
+  on_boot:
+    priority: -100
+    then:
+      - if:
+          condition:
+            - binary_sensor.is_on: gate_open_sensor
+          then:
+            - state_machine.set: "Open"
+          else:
+            - state_machine.set: "Close"
+
 
 esp8266:
   board: nodemcuv2
@@ -46,6 +61,10 @@ binary_sensor:
       inverted: true
       number: D5
       mode: INPUT_PULLUP
+    on_press:
+      then:
+        - state_machine.transition: transition_fully_close
+
   - platform: gpio
     id: gate_open_sensor
     name: gate_open
@@ -61,7 +80,7 @@ binary_sensor:
       return id(main_power).state > 100;
     on_release:
       then:
-        - state_machine.transition: stop
+        - state_machine.transition: transition_stop
 
   - platform: template
     id: gate_starts_opening
@@ -70,7 +89,7 @@ binary_sensor:
       return id(gate_open_sensor).state || id(leaf_power).state > 100;
     on_press:
       then:
-        - state_machine.transition: start_opening
+        - state_machine.transition: transition_start_opening
 
   - platform: template
     id: gate_starts_closing
@@ -79,7 +98,7 @@ binary_sensor:
       return id(leaf_power).state < 100;
     on_press:
       then:
-        - state_machine.transition: start_closing
+        - state_machine.transition: transition_start_closing
 
   - platform: template
     id: gate_is_open
@@ -112,13 +131,13 @@ state_machine:
                 - binary_sensor.is_on: gate_open_sensor
               then:
                 - logger.log: "From stop to open"
-                - state_machine.transition: fully_open
+                - state_machine.transition: transition_fully_open
           - if:
               condition:
                 - binary_sensor.is_on: gate_close_sensor
               then:
                 - logger.log: "From stop to close"
-                - state_machine.transition: fully_close
+                - state_machine.transition: transition_fully_close
         on_set:
           - delay: 5s
           - if:
@@ -136,21 +155,22 @@ state_machine:
       - name: "Close"
       - name: "Closing"
     inputs:
-      - name: stop
+      - name: transition_stop
         transitions:
+          - Open -> Stopped
           - Opening -> Stopped
           - Closing -> Stopped
-      - name: fully_open
+      - name: transition_fully_open
         transitions:
           - Stopped -> Open
-      - name: fully_close
+      - name: transition_fully_close
         transitions:
           - Stopped -> Close
-      - name: start_opening
+      - name: transition_start_opening
         transitions:
           - Stopped -> Opening
           - Close -> Opening
-      - name: start_closing
+      - name: transition_start_closing
         transitions:
           - Stopped -> Closing
           - Open -> Closing
