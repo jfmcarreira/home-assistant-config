@@ -508,16 +508,19 @@
       - cover.kitchen
   mode: single
 - id: '1661120403152'
-  alias: Abrir Estores da Suite
+  alias: 'Abrir Estores da Suite Fim de Semana '
   description: ''
   trigger:
   - platform: time_pattern
-    hours: '7'
-    minutes: '50'
+    hours: '10'
+    minutes: '00'
   condition:
   - condition: state
     entity_id: binary_sensor.workday
-    state: 'on'
+    state: 'off'
+  - condition: state
+    entity_id: cover.master_bedroom
+    state: closed
   action:
   - service: cover.open_cover
     data: {}
@@ -1662,16 +1665,21 @@
     path: hvac/hvac_time_turn_off.yaml
     input:
       schedule: '20:30:00'
-      schedule_weekend: '21:30:00'
       hvac_unit: climate.bedroom_ricardo
-      run_on_weekends: true
+      run_on_weekends: false
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - sun
+      weekend_tomorrow: false
 - id: '1704843402395'
   alias: AC Suite - Desligar Noite
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule_weekend: 00:00:00
       schedule: '22:45:00'
       hvac_unit: climate.master_bedroom
       run_on_weekends: true
@@ -1703,7 +1711,6 @@
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule_weekend: 08:45:00
       schedule: 08:45:00
       hvac_unit: climate.master_bedroom
       run_on_weekends: false
@@ -1713,81 +1720,289 @@
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule_weekend: 08:00:00
-      schedule: 08:15:00
+      schedule: 08:20:00
       hvac_unit: climate.living_room
       run_on_weekends: false
+      weekend_tomorrow: false
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
 - id: '1705327069565'
   alias: AC Sala - Desligar Noite
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule_weekend: 01:30:00
       schedule: '23:30:00'
       hvac_unit: climate.living_room
+      run_on_weekends: true
 - id: '1705368338092'
   alias: AC Suite - Ligar de Manhã
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
-      schedule_weekend: 07:45:00
       schedule: 07:45:00
       hvac_unit: climate.master_bedroom
       run_on_weekends: false
-      hvac_temperature: 22
+      hvac_temperature: 21
       room_temperature: 20
       temperature_sensor: sensor.temperature_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
 - id: '1705368431534'
   alias: AC Sala - Ligar de Manhã
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
-      schedule_weekend: 08:00:00
       schedule: 06:30:00
       hvac_unit: climate.living_room
       run_on_weekends: true
       hvac_temperature: 21
       room_temperature: 20
       temperature_sensor: sensor.temperature_living_room
+      weekday:
+      - mon
+      - wed
+      - thu
+      - fri
+      - tue
+      - sat
+      - sun
 - id: '1705596272069'
   alias: AC Suite - Ligar Tarde
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
-      schedule_weekend: '17:30:00'
       schedule: '17:30:00'
       hvac_unit: climate.master_bedroom
-      run_on_weekends: true
+      run_on_weekends: false
       hvac_temperature: 21
-      room_temperature: 20
+      room_temperature: 21
       temperature_sensor: sensor.temperature_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
 - id: '1705596348371'
   alias: AC Quarto do Ricardo - Ligar Tarde
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
-      schedule_weekend: '17:30:00'
       schedule: '17:30:00'
       hvac_unit: climate.bedroom_ricardo
-      run_on_weekends: true
+      run_on_weekends: false
       hvac_temperature: 21
-      room_temperature: 20
+      room_temperature: 21
       temperature_sensor: sensor.temperature_bedroom_ricardo
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
 - id: '1705596387713'
   alias: AC Sala - Ligar Tarde
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
-      schedule_weekend: '17:30:00'
       schedule: '17:30:00'
       hvac_unit: climate.living_room
-      run_on_weekends: true
+      run_on_weekends: false
       hvac_temperature: 21
-      room_temperature: 20
+      room_temperature: 21
       temperature_sensor: sensor.temperature_living_room
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+- id: '1707834041529'
+  alias: Abrir Estores da Suite
+  description: ''
+  trigger:
+  - platform: time_pattern
+    hours: 08
+    minutes: '00'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: 'on'
+  - condition: state
+    entity_id: cover.master_bedroom
+    state: closed
+  action:
+  - service: cover.open_cover
+    data: {}
+    target:
+      entity_id: cover.master_bedroom
+  mode: single
+- id: '1709085608234'
+  alias: AC Quarto do Ricardo - Desligar Noite Fim de Semana
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_off.yaml
+    input:
+      schedule: '22:00:00'
+      hvac_unit: climate.bedroom_ricardo
+      run_on_weekends: true
+      weekday: []
+      weekend_tomorrow: true
+- id: '1709203065180'
+  alias: AC Suite - Desligar Noite Fim de Semana
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_off.yaml
+    input:
+      schedule: '23:45:00'
+      hvac_unit: climate.master_bedroom
+      run_on_weekends: true
+      weekday: []
+- id: "1658360353381"
+  alias: Tablet Control Motion Detection
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id:
+        - input_select.house_mode
+        - binary_sensor.notify_home
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: or
+              conditions:
+                - condition: state
+                  entity_id: sensor.house_mode
+                  state: "Off"
+                - condition: state
+                  entity_id: sensor.house_mode
+                  state: Sleep
+                - condition: state
+                  entity_id: binary_sensor.notify_home
+                  state: "off"
+          sequence:
+            - service: switch.turn_off
+              data: {}
+              target:
+                entity_id: switch.fire_tablet_motion_detection
+            - type: turn_off
+              device_id: 2ae8ef1981d03f83e4144debe519a697
+              entity_id: switch.fire_tablet_screen
+              domain: switch
+      default:
+        - service: switch.turn_on
+          data: {}
+          target:
+            entity_id: switch.fire_tablet_motion_detection
+
+- id: "1658541474586"
+  alias: Tablet Reset Home Screen
+  mode: single
+  trigger:
+    - platform: device
+      type: turned_off
+      device_id: 2ae8ef1981d03f83e4144debe519a697
+      entity_id: switch.fire_tablet_screen
+      domain: switch
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 5
+    - platform: state
+      entity_id:
+        - input_select.house_mode
+      to: Sleep
+    - platform: state
+      entity_id:
+        - input_select.house_mode
+      to: "Off"
+    - platform: state
+      entity_id:
+        - binary_sensor.notify_home
+      to: "off"
+    - platform: state
+      entity_id:
+        - binary_sensor.motion_sensor_living_room
+        - binary_sensor.motion_sensor_kitchen
+        - binary_sensor.motion_sensor_stairs
+      to: "off"
+      for:
+        minutes: 2
+  action:
+    - service: fully_kiosk.load_url
+      data:
+        url: http://10.20.107.2/lovelace-dashboard/dashboard-main?deviceID=6ed070de-066872d1
+      target:
+        device_id: 2ae8ef1981d03f83e4144debe519a697
+    - device_id: 2ae8ef1981d03f83e4144debe519a697
+      domain: button
+      entity_id: button.fire_tablet_load_start_url
+      type: press
+
+- id: "1658542474586"
+  alias: Tablet Turn Off Screen
+  mode: single
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.motion_sensor_living_room
+      to: "off"
+      for:
+        hours: 1
+    - platform: state
+      entity_id:
+        - binary_sensor.notify_home
+      to: "off"
+  condition: []
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.fire_tablet_screen
+
+- id: "1708474653467"
+  alias: Tablet Screen Timeout
+  trigger:
+    - platform: state
+      entity_id:
+        - input_select.house_mode
+  condition: []
+  action:
+    - if:
+        or:
+          - condition: state
+            entity_id: input_select.house_mode
+            state: "On"
+          - condition: state
+            entity_id: input_select.house_mode
+            state: Evening
+          - condition: state
+            entity_id: input_select.house_mode
+            state: Night
+      then:
+        - service: number.set_value
+          target:
+            entity_id: number.fire_tablet_screen_off_timer
+          data:
+            value: "0"
+      else:
+        - service: number.set_value
+          target:
+            entity_id: number.fire_tablet_screen_off_timer
+          data:
+            value: "120"
+  mode: single
