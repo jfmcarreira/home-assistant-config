@@ -1,7 +1,7 @@
 automation:
   - id: "1651018838807"
     mode: single
-    alias: Cover Close All Evening
+    alias: Estores - Fechar ao Por do Sol
     description: ""
     trigger:
       - platform: sun

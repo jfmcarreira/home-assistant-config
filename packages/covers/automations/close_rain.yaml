@@ -1,6 +1,6 @@
 automation:
   - id: "1663526552935"
-    alias: cover close when raining
+    alias: Estores - Fechar quando chove
     description: ""
     mode: single
     trigger:

@@ -1,6 +1,6 @@
 automation:
   - id: "1689293787806"
-    alias: cover_partial_close
+    alias: Estores - Parcialmente Fechados Manhã/Tarde
     description: ""
     trigger:
       - platform: time
@@ -14,9 +14,9 @@ automation:
           action_to_run: script.cover_to_partial_close
           control_switch: open_sunrise
     mode: single
-    
+
   - id: "1689293902907"
-    alias: cover_partial_open
+    alias: Estores - Parcialmente Abertos Tarde
     description: ""
     trigger:
       - platform: time
