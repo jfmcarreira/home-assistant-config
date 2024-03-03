@@ -1,0 +1,9 @@
+routine_exit_house_to_work_joao:
+  alias: Routina ir Trabalhar - Joao
+  mode: single
+  icon: mdi:exit-run
+  sequence:
+    - service: script.turn_on
+      target:
+        entity_id: script.routine_exit_house_all_off
+      data: {}
