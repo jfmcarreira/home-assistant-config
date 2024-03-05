@@ -19,11 +19,6 @@ homeassistant:
       friendly_name: "Posição Modo Chuva"
 
 input_boolean:
-  cover_master_control_close_south:
-    name: "[AD] Fechar Janelas a Sul"
-  cover_master_control_close_west:
-    name: "[AD] Fechar Janelas a Poente"
-
   cover_control_group_living_room:
     name: Controlo em Grupo do Estore da Sala de Estar
     icon: mdi:window-shutter-alert

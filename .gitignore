@@ -15,3 +15,6 @@ zigbee.db-*
 node-red/**
 www/**
 .omv_cookies.json
+image/**
+blueprints/**/homeassistant/**
+auth_providers/trusted_networks.yaml

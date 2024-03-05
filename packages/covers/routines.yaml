@@ -1,9 +1,0 @@
-script:
-  routine_cover_rain_mode:
-    alias: Routina Modo de Chuva
-    mode: single
-    sequence:
-      - service: script.cover_group_action
-        data:
-          action_to_run: script.cover_close_to_when_raining
-          control_switch: close_in_rain

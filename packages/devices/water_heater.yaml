@@ -8,7 +8,8 @@ climate:
     max_temp: 55
     cold_tolerance: 0
     hot_tolerance: 1
-    keep_alive: true
+    min_cycle_duration:
+      minutes: 5
     target_temp_step: 1.0
     precision: 0.5
     comfort_temp: 50

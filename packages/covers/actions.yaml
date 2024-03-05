@@ -1,5 +1,5 @@
 script:
-  cover_to_partial_close:
+  cover_partial_close:
     alias: Colocar Estores a Dois Terços
     mode: parallel
     max: 10
@@ -21,7 +21,7 @@ script:
         target:
           entity_id: "{{ cover_entitiy }}"
 
-  cover_to_partial_open:
+  cover_partial_open:
     alias: Colocar Estores a Um Terço
     mode: parallel
     max: 10
@@ -43,7 +43,7 @@ script:
         target:
           entity_id: "{{ cover_entitiy }}"
 
-  cover_close_to_when_raining:
+  cover_close_when_raining:
     alias: Fechar Estores Durante a Chuva
     mode: parallel
     max: 10

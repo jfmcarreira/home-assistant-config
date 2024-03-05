@@ -1021,7 +1021,7 @@
       presence_sensor: none
       blocker_on_entity: binary_sensor.hallway_automation_blocker
 - id: '1689453293699'
-  alias: cover first floor parcial open
+  alias: Abrir Parcialmente Estores do Primeiro Andar
   description: ''
   trigger:
   - platform: sun
@@ -1872,137 +1872,579 @@
       hvac_unit: climate.master_bedroom
       run_on_weekends: true
       weekday: []
-- id: "1658360353381"
+- id: '1658360353381'
   alias: Tablet Control Motion Detection
   mode: queued
   trigger:
-    - platform: state
-      entity_id:
-        - input_select.house_mode
-        - binary_sensor.notify_home
+  - platform: state
+    entity_id:
+    - input_select.house_mode
+    - binary_sensor.notify_home
   condition: []
   action:
-    - choose:
-        - conditions:
-            - condition: or
-              conditions:
-                - condition: state
-                  entity_id: sensor.house_mode
-                  state: "Off"
-                - condition: state
-                  entity_id: sensor.house_mode
-                  state: Sleep
-                - condition: state
-                  entity_id: binary_sensor.notify_home
-                  state: "off"
-          sequence:
-            - service: switch.turn_off
-              data: {}
-              target:
-                entity_id: switch.fire_tablet_motion_detection
-            - type: turn_off
-              device_id: 2ae8ef1981d03f83e4144debe519a697
-              entity_id: switch.fire_tablet_screen
-              domain: switch
-      default:
-        - service: switch.turn_on
-          data: {}
-          target:
-            entity_id: switch.fire_tablet_motion_detection
-
-- id: "1658541474586"
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: sensor.house_mode
+          state: 'Off'
+        - condition: state
+          entity_id: sensor.house_mode
+          state: Sleep
+        - condition: state
+          entity_id: binary_sensor.notify_home
+          state: 'off'
+      sequence:
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.fire_tablet_motion_detection
+      - type: turn_off
+        device_id: 2ae8ef1981d03f83e4144debe519a697
+        entity_id: switch.fire_tablet_screen
+        domain: switch
+    default:
+    - service: switch.turn_on
+      data: {}
+      target:
+        entity_id: switch.fire_tablet_motion_detection
+- id: '1658541474586'
   alias: Tablet Reset Home Screen
   mode: single
   trigger:
-    - platform: device
-      type: turned_off
-      device_id: 2ae8ef1981d03f83e4144debe519a697
-      entity_id: switch.fire_tablet_screen
-      domain: switch
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 5
-    - platform: state
-      entity_id:
-        - input_select.house_mode
-      to: Sleep
-    - platform: state
-      entity_id:
-        - input_select.house_mode
-      to: "Off"
-    - platform: state
-      entity_id:
-        - binary_sensor.notify_home
-      to: "off"
-    - platform: state
-      entity_id:
-        - binary_sensor.motion_sensor_living_room
-        - binary_sensor.motion_sensor_kitchen
-        - binary_sensor.motion_sensor_stairs
-      to: "off"
-      for:
-        minutes: 2
+  - platform: device
+    type: turned_off
+    device_id: 2ae8ef1981d03f83e4144debe519a697
+    entity_id: switch.fire_tablet_screen
+    domain: switch
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  - platform: state
+    entity_id:
+    - input_select.house_mode
+    to: Sleep
+  - platform: state
+    entity_id:
+    - input_select.house_mode
+    to: 'Off'
+  - platform: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+  - platform: state
+    entity_id:
+    - binary_sensor.motion_sensor_living_room
+    - binary_sensor.motion_sensor_kitchen
+    - binary_sensor.motion_sensor_stairs
+    to: 'off'
+    for:
+      minutes: 2
   action:
-    - service: fully_kiosk.load_url
-      data:
-        url: http://10.20.107.2/lovelace-dashboard/dashboard-main?deviceID=6ed070de-066872d1
-      target:
-        device_id: 2ae8ef1981d03f83e4144debe519a697
-    - device_id: 2ae8ef1981d03f83e4144debe519a697
-      domain: button
-      entity_id: button.fire_tablet_load_start_url
-      type: press
-
-- id: "1658542474586"
+  - service: fully_kiosk.load_url
+    data:
+      url: http://10.20.107.2/lovelace-dashboard/dashboard-main?deviceID=6ed070de-066872d1
+    target:
+      device_id: 2ae8ef1981d03f83e4144debe519a697
+  - device_id: 2ae8ef1981d03f83e4144debe519a697
+    domain: button
+    entity_id: button.fire_tablet_load_start_url
+    type: press
+- id: '1658542474586'
   alias: Tablet Turn Off Screen
   mode: single
   trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.motion_sensor_living_room
-      to: "off"
-      for:
-        hours: 1
-    - platform: state
-      entity_id:
-        - binary_sensor.notify_home
-      to: "off"
+  - platform: state
+    entity_id:
+    - binary_sensor.motion_sensor_living_room
+    to: 'off'
+    for:
+      hours: 1
+  - platform: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
   condition: []
   action:
-    - service: switch.turn_off
-      target:
-        entity_id: switch.fire_tablet_screen
-
-- id: "1708474653467"
+  - service: switch.turn_off
+    target:
+      entity_id: switch.fire_tablet_screen
+- id: '1708474653467'
   alias: Tablet Screen Timeout
   trigger:
-    - platform: state
-      entity_id:
-        - input_select.house_mode
+  - platform: state
+    entity_id:
+    - input_select.house_mode
   condition: []
   action:
-    - if:
-        or:
-          - condition: state
-            entity_id: input_select.house_mode
-            state: "On"
-          - condition: state
-            entity_id: input_select.house_mode
-            state: Evening
-          - condition: state
-            entity_id: input_select.house_mode
-            state: Night
-      then:
-        - service: number.set_value
-          target:
-            entity_id: number.fire_tablet_screen_off_timer
-          data:
-            value: "0"
-      else:
-        - service: number.set_value
-          target:
-            entity_id: number.fire_tablet_screen_off_timer
-          data:
-            value: "120"
+  - if:
+      or:
+      - condition: state
+        entity_id: input_select.house_mode
+        state: 'On'
+      - condition: state
+        entity_id: input_select.house_mode
+        state: Evening
+      - condition: state
+        entity_id: input_select.house_mode
+        state: Night
+    then:
+    - service: number.set_value
+      target:
+        entity_id: number.fire_tablet_screen_off_timer
+      data:
+        value: '0'
+    else:
+    - service: number.set_value
+      target:
+        entity_id: number.fire_tablet_screen_off_timer
+      data:
+        value: '120'
   mode: single
+- id: '1689293787806'
+  alias: Fechar Parcialment Estores de Manhã/Tarde
+  description: ''
+  trigger:
+  - platform: time
+    at: '11:00:00'
+  - platform: time
+    at: '18:00:00'
+  condition: []
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_partial_close
+      control_switch: open_sunrise
+  mode: single
+- id: '1689293902907'
+  alias: Abrir Parcialmente Estores à Tarde
+  description: ''
+  trigger:
+  - platform: time
+    at: '11:30:00'
+  condition: []
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_partial_open
+      control_switch: open_sunrise
+  mode: single
+- id: '1652141596083'
+  alias: Abrir Estores ao Nascer do Sol
+  description: ''
+  mode: single
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: 00:30:00
+  - platform: time
+    at: 08:00:00
+  condition:
+  - condition: time
+    after: 07:50:00
+    before: '12:00:00'
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: '0'
+  - condition: template
+    value_template: '{{ ( ( (now() | as_timestamp) - (states.automation.cover_open_all_sunrise.attributes.last_triggered
+      | as_timestamp) ) / 60 / 60 ) > 18 }}'
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: ''
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: cover.open_cover
+      control_switch: open_sunrise
+- id: '1663526552935'
+  alias: Fechar Estores quando chove
+  description: ''
+  mode: single
+  trigger:
+  - platform: numeric_state
+    entity_id: weather.home
+    attribute: precipitation_unit
+    above: 70
+  condition: []
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_close_when_raining
+      control_switch: close_in_rain
+- id: '1651018838807'
+  mode: single
+  alias: Fechar Estores ao Por do Sol
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: 00:00:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  action:
+  - service: script.cover_group_action
+    data:
+      action_to_run: cover.close_cover
+      control_switch: close_sunset
+- id: '1703619934344'
+  alias: AC Sala - Ajustar durante a refeição
+  mode: single
+  trigger:
+  - platform: state
+    entity_id:
+    - light.living_room_table
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+  condition:
+  - condition: state
+    entity_id: climate.living_room
+    state: heat
+  action:
+  - service: climate.set_fan_mode
+    target:
+      entity_id: climate.living_room
+    data:
+      fan_mode: Silence
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - light.living_room_table
+      from: 'on'
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 10
+    timeout:
+      hours: 1
+      minutes: 45
+      seconds: 0
+      milliseconds: 0
+  - service: climate.set_fan_mode
+    target:
+      entity_id: climate.living_room
+    data:
+      fan_mode: auto
+- id: '1665435183140'
+  alias: Termo-acumulador - Ligar Manhã
+  description: ''
+  mode: single
+  trigger:
+  - platform: time
+    at: 06:00:00
+  condition:
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
+  action:
+  - service: climate.turn_on
+    data: {}
+    target:
+      entity_id: climate.water_heater
+- id: '1665435233424'
+  alias: Termo-acumulador - Desligar Manhã
+  mode: single
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:30:00
+  - platform: time
+    at: 09:30:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: weather.home
+      state: sunny
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.workday
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.day_off_work
+        state: 'off'
+  action:
+  - service: climate.turn_off
+    data: {}
+    target:
+      entity_id: climate.water_heater
+- id: '1665435448806'
+  alias: Termo-acumulador - Ligar Tarde
+  mode: single
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -01:00:00
+  - platform: time
+    at:
+    - '15:00:00'
+    - '16:00:00'
+    - '17:00:00'
+    - '17:30:00'
+    - '18:00:00'
+    - '18:30:00'
+    - '19:00:00'
+    - '19:30:00'
+    - '20:00:00'
+    - '20:30:00'
+  - platform: state
+    entity_id: binary_sensor.water_heater_panel_heating
+    from: 'on'
+    to: 'off'
+    for:
+      minutes: 30
+  condition:
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
+  - condition: time
+    after: '15:00:00'
+    before: '22:00:00'
+  - condition: state
+    entity_id: binary_sensor.water_heater_panel_heating
+    state: 'off'
+    for:
+      minutes: 10
+  action:
+  - service: climate.turn_on
+    data: {}
+    target:
+      entity_id: climate.water_heater
+- id: '1674085777289'
+  alias: Termo-acumulador - Desligar Modo de Conforto
+  mode: single
+  trigger:
+  - platform: time
+    at: '22:30:00'
+  condition: []
+  action:
+  - service: climate.set_preset_mode
+    data:
+      preset_mode: none
+    target:
+      entity_id: climate.water_heater
+- id: turn_on_confort_mode_weekens
+  alias: Termo-acumulador - Modo Conforto Manhã
+  mode: single
+  trigger:
+  - platform: time
+    at: 09:31:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.workday
+      state: 'off'
+    - condition: state
+      entity_id: input_boolean.day_off_work
+      state: 'on'
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: weather.home
+      state: sunny
+  action:
+  - service: climate.turn_on
+    data: {}
+    target:
+      entity_id: climate.water_heater
+  - service: climate.set_preset_mode
+    data:
+      preset_mode: comfort
+    target:
+      entity_id: climate.water_heater
+- id: '1701641659897'
+  alias: Atualizar Localização
+  mode: single
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.backyard_camera_person_detected
+    - binary_sensor.backyard_camera_vehicle_detected
+    - binary_sensor.front_camera_vehicle_detected
+    - binary_sensor.front_camera_person_detected
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id:
+    - cover.gate
+    to: opening
+  - platform: state
+    entity_id:
+    - cover.gate
+    to: open
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.joao_home
+      state: 'off'
+    then:
+    - repeat:
+        while: '{{ is_state(''binary_sensor.joao_home'', ''off'') and repeat.index
+          < 5 }}'
+        sequence:
+        - service: notify.mobile_app_magnesium
+          data:
+            message: request_location_update
+        - delay:
+            seconds: 20
+  - if:
+    - condition: state
+      entity_id: binary_sensor.bianca_home
+      state: 'off'
+    then:
+    - repeat:
+        while: '{{ is_state(''binary_sensor.bianca_home'', ''off'') and repeat.index
+          < 5 }}'
+        sequence:
+        - service: notify.mobile_app_calcium
+          data:
+            message: request_location_update
+        - delay:
+            seconds: 20
+- id: '1701986636577'
+  alias: Abrir Portão Alguém Chegar a Casa
+  description: ''
+  mode: single
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.distance_home_bianca
+    - sensor.distance_home_joao
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+    below: 300
+  - platform: state
+    entity_id:
+    - binary_sensor.bianca_home
+    - binary_sensor.joao_home
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id:
+    - cover.gate
+    state: closed
+    for:
+      minutes: 5
+  action:
+  - if:
+    - condition: state
+      entity_id: cover.gate
+      state: closed
+    - condition: or
+      conditions:
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: binary_sensor.bianca_home_with_hysteresis
+          state: 'off'
+        - condition: or
+          conditions:
+          - condition: and
+            conditions:
+            - condition: numeric_state
+              entity_id: sensor.distance_home_bianca
+              below: 300
+            - condition: state
+              entity_id: sensor.distance_home_direction_bianca
+              state: towards
+          - condition: state
+            entity_id: binary_sensor.bianca_home
+            state: 'on'
+      - and:
+        - condition: state
+          entity_id: binary_sensor.joao_home_with_hysteresis
+          state: 'off'
+        - condition: or
+          conditions:
+          - condition: and
+            conditions:
+            - condition: numeric_state
+              entity_id: sensor.distance_home_joao
+              below: 300
+            - condition: state
+              entity_id: sensor.distance_home_direction_joao
+              state: towards
+          - condition: state
+            entity_id: binary_sensor.joao_home
+            state: 'on'
+    then:
+    - service: cover.open_cover
+      target:
+        entity_id: cover.gate
+      data: {}
+  - if:
+    - condition: state
+      entity_id: binary_sensor.bianca_home
+      state: 'on'
+    then:
+    - service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.going_home_bianca
+      data: {}
+  - if:
+    - condition: state
+      entity_id: binary_sensor.joao_home
+      state: 'on'
+    then:
+    - service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.going_home_joao
+      data: {}
+  - delay:
+      seconds: 10
+- id: '1701640659897'
+  alias: Localização - Atualizar Joao
+  mode: single
+  trigger:
+  - platform: time_pattern
+    seconds: '5'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.joao_home
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.going_home_joao
+    state: 'on'
+  - condition: numeric_state
+    entity_id: sensor.distance_home_joao
+    below: 1000
+  action:
+  - service: notify.mobile_app_magnesium
+    data:
+      message: request_location_update
+- id: '1701986497262'
+  alias: Localização - Atualizar Bianca
+  mode: single
+  trigger:
+  - platform: time_pattern
+    seconds: '5'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.bianca_home
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.going_home_bianca
+    state: 'on'
+  - condition: numeric_state
+    entity_id: sensor.distance_home_bianca
+    below: 1000
+  action:
+  - service: notify.mobile_app_calcium
+    data:
+      message: request_location_update
