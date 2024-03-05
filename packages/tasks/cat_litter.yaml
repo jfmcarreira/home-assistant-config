@@ -156,8 +156,6 @@ automation:
                     sticky: true
                     clickAction: "/lovelace/task"
                     actions:
-                      - action: task_cat_litter_clean
-                        title: "Activar Limpeza"
                       - action: task_cat_litter_clean_no_vaccum
                         title: "Registar Limpeza"
 
@@ -175,7 +173,7 @@ automation:
     action:
       - service: persistent_notification.dismiss
         data:
-          notification_id: persistent_dish_wash_remove_dishes
+          notification_id: persistent_task_cat_litter_clean
 
       - service: notify.mobile_app_all
         data:
@@ -204,7 +202,7 @@ automation:
     action:
       - service: persistent_notification.dismiss
         data:
-          notification_id: persistent_dish_wash_remove_dishes
+          notification_id: persistent_task_cat_litter_clean
 
       - service: notify.mobile_app_all
         data:

@@ -136,7 +136,7 @@
       android_task_id: 20
       notification_action_id: washing_machine_clothes_off
 - id: '1655462775855'
-  alias: Task Water Filter Replacement
+  alias: Tarefa do Filtro da Água
   description: ''
   use_blueprint:
     path: tasks/tracked_tasks.yaml
@@ -159,7 +159,7 @@
   mode: queued
   max: 10
 - id: '1655496730769'
-  alias: Task Dryer Machine
+  alias: Tarefa da Máquina de Secar
   description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
@@ -2448,3 +2448,27 @@
   - service: notify.mobile_app_calcium
     data:
       message: request_location_update
+- id: '1709598685655'
+  alias: Tarefa de Substituição da Areia das Gatas
+  description: ''
+  use_blueprint:
+    path: tasks/tracked_tasks.yaml
+    input:
+      task_needs_attention: binary_sensor.cat_litter_box_need_change
+      task_done_code_name: Cat_Litter_Change
+      notification_message: A Areia das Gatas Necessita de Substituição
+      notification_action: Registar Substituição
+      android_task_id: 31
+      notification_action_id: cat_litter_change
+- id: '1709598896541'
+  alias: Tarefa de Limpeza da Areia das Gatas
+  description: ''
+  use_blueprint:
+    path: tasks/tracked_tasks.yaml
+    input:
+      task_needs_attention: binary_sensor.cat_litter_box_need_clean
+      task_done_code_name: Cat_Litter_Clean
+      notification_message: A Areia das Gatas Necessita de Limpeza
+      notification_action: Registar Limpeza
+      android_task_id: 32
+      notification_action_id: cat_litter_clean
