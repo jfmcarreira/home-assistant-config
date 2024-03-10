@@ -2,9 +2,6 @@ substitutions:
   devicename: nodemcu_gate
   FriendlyName: Gate
 
-logger:
-  level: DEBUG
-
 
 esphome:
   name: ${devicename}
@@ -38,12 +35,12 @@ output:
   - platform: gpio
     id: relay_1
     pin:
-      number: D2
+      number: D1
 
   - platform: gpio
     id: relay_2
     pin:
-      number: D1
+      number: D2
 
 sensor:
   - platform: mqtt_subscribe
@@ -61,6 +58,8 @@ binary_sensor:
       inverted: true
       number: D5
       mode: INPUT_PULLUP
+    filters:
+      - delayed_on: 750ms
     on_press:
       then:
         - state_machine.transition: transition_fully_close
@@ -72,6 +71,8 @@ binary_sensor:
       number: D6
       inverted: true
       mode: INPUT_PULLUP
+    filters:
+      - delayed_on: 750ms
 
   - platform: template
     id: gate_moving
