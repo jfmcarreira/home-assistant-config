@@ -506,7 +506,7 @@
       - cover.kitchen
   mode: single
 - id: '1661120403152'
-  alias: 'Abrir Estores da Suite Fim de Semana '
+  alias: 'Abrir Estores da Suite Fim de Semana'
   description: ''
   trigger:
   - platform: time_pattern
@@ -519,6 +519,9 @@
   - condition: state
     entity_id: cover.master_bedroom
     state: closed
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: "off"
   action:
   - service: cover.open_cover
     data: {}
@@ -1740,6 +1743,12 @@
   - condition: state
     entity_id: cover.master_bedroom
     state: closed
+  - condition: state
+    entity_id: input_boolean.day_off_work
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
   action:
   - service: cover.open_cover
     data: {}
@@ -1929,7 +1938,6 @@
 - id: '1652141596083'
   alias: Abrir Estores ao Nascer do Sol
   description: ''
-  mode: single
   trigger:
   - platform: sun
     event: sunrise
@@ -1949,12 +1957,16 @@
       | as_timestamp) ) / 60 / 60 ) > 18 }}'
   - condition: state
     entity_id: binary_sensor.workday
-    state: ''
+    state: 'on'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
   action:
   - service: script.cover_group_action
     data:
       action_to_run: cover.open_cover
       control_switch: open_sunrise
+  mode: single
 - id: '1663526552935'
   alias: Fechar Estores quando chove
   description: ''

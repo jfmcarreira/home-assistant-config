@@ -3,7 +3,36 @@ routine_exit_house_to_work_joao:
   mode: single
   icon: mdi:exit-run
   sequence:
-    - service: script.turn_on
-      target:
-        entity_id: script.routine_exit_house_all_off
-      data: {}
+    - if:
+        - condition: state
+          entity_id: input_boolean.day_off_work
+          state: "off"
+      then:
+        - service: script.turn_on
+          target:
+            entity_id: script.routine_exit_house_all_off
+          data: {}
+      else:
+        - service: script.sequence_door_open
+          data: {}
+        - condition: state
+          entity_id: binary_sensor.joao_home
+          state: "on"
+        - service: cover.open_cover
+          data: {}
+          target:
+            entity_id: cover.gate
+        - wait_for_trigger:
+            - platform: state
+              entity_id:
+                - binary_sensor.joao_home
+              to: "off"
+              from: "on"
+          timeout: 00:10:00
+        - condition: state
+          entity_id: binary_sensor.joao_home
+          state: "off"
+        - service: cover.close_cover
+          data: {}
+          target:
+            entity_id: cover.gate
