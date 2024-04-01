@@ -62,10 +62,9 @@
   - condition: state
     entity_id: light.exterior_wall_back
     state: 'off'
-  - condition: numeric_state
-    entity_id: sun.sun
-    attribute: elevation
-    below: '5'
+  - condition: state
+    entity_id: binary_sensor.sun_bellow_horizont
+    state: 'on'
   action:
   - service: light.turn_on
     data: {}
@@ -313,10 +312,9 @@
     - binary_sensor.backyard_camera_vehicle_detected
     from: 'off'
   condition:
-  - condition: numeric_state
-    entity_id: sun.sun
-    attribute: elevation
-    below: '5'
+  - condition: state
+    entity_id: binary_sensor.sun_bellow_horizont
+    state: 'on'
   - condition: or
     conditions:
     - condition: and
@@ -580,7 +578,7 @@
       disable_in_sleep: true
       presence_sensor: none
 - id: '1665241197738'
-  alias: lights_master_bedroom_bed_triggers
+  alias: Trigger Botões da Cama da Suite
   description: ''
   trigger:
   - platform: device
@@ -620,17 +618,12 @@
       sequence:
       - if:
         - condition: state
-          entity_id: light.master_bedroom
           state: 'off'
-        - condition: state
-          entity_id: light.master_bedroom_bathroom
-          state: 'off'
-        - condition: state
-          entity_id: light.hall_group
-          state: 'off'
-        - condition: state
-          entity_id: light.stairs_group
-          state: 'off'
+          entity_id:
+          - light.master_bedroom
+          - light.master_bedroom_bathroom
+          - light.hall_group
+          - light.stairs_group
         then:
         - service: light.turn_on
           data: {}
@@ -641,12 +634,12 @@
         - service: light.turn_off
           data: {}
           target:
-            entity_id:
-            - light.master_bedroom
-            - light.master_bedroom_bathroom
-            - light.hall_group
-            - light.stairs_down
-            - light.stairs_group
+            area_id:
+            - hall
+            - bathroom_main
+            - master_bedroom_bathroom
+            - master_bedroom
+      alias: Long Press
     - conditions:
       - condition: or
         conditions:
@@ -657,6 +650,7 @@
         data: {}
         target:
           entity_id: light.master_bedroom_bed_wall
+      alias: Left Short
     - conditions:
       - condition: or
         conditions:
@@ -667,6 +661,7 @@
         data: {}
         target:
           entity_id: light.master_bedroom_bed_window
+      alias: Right Short
   mode: single
 - id: '1668971106955'
   alias: Media Turn Off Google Home Hall
@@ -736,7 +731,7 @@
       disable_in_sleep: true
       presence_sensor: none
 - id: '1669853572469'
-  alias: device_turn_portable_heater_off_with_lights
+  alias: Termoventilador - Desligar Automáticamente
   description: ''
   trigger:
   - platform: state
@@ -787,10 +782,11 @@
     data: {}
     target:
       entity_id: climate.portable_heater
-  - type: turn_off
-    device_id: 8983d6e0684741d520208b62eaba8c89
-    entity_id: switch.portable_heater
-    domain: switch
+  - service: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.dehumidifier
   mode: single
 - id: '1669853950698'
   alias: device_toggle_portable_heater_bathroom_main_light_switch
@@ -1058,17 +1054,26 @@
     to: opening
   condition: []
   action:
-  - condition: numeric_state
-    entity_id: sun.sun
-    attribute: elevation
-    below: 5
+  - condition: state
+    entity_id: binary_sensor.sun_bellow_horizont
+    state: 'on'
   - service: light.turn_on
     data: {}
     target:
       entity_id: light.exterior_wall_side
   - delay:
       hours: 0
-      minutes: 2
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - cover.gate
+      to: closed
+    timeout:
+      hours: 0
+      minutes: 20
       seconds: 0
       milliseconds: 0
   - condition: state
@@ -1079,97 +1084,6 @@
     target:
       entity_id: light.exterior_wall_side
   mode: single
-- id: '1693047682630'
-  alias: gate_alert_open
-  description: ''
-  trigger:
-  - platform: state
-    id: trigger_gate_open
-    entity_id:
-    - cover.gate
-    to: open
-    for:
-      hours: 0
-      minutes: 1
-      seconds: 0
-  - platform: state
-    id: trigger_gate_close
-    entity_id:
-    - cover.gate
-    to: close
-  - platform: state
-    id: trigger_house_empty
-    entity_id:
-    - binary_sensor.notify_home
-    to: 'off'
-    for:
-      hours: 0
-      minutes: 1
-      seconds: 0
-  - id: trigger_notification_gate_notification_action_close
-    platform: event
-    event_type: mobile_app_notification_action
-    event_data:
-      action: gate_notification_action_close
-  - id: trigger_notification_gate_notification_action_keep_open
-    platform: event
-    event_type: mobile_app_notification_action
-    event_data:
-      action: gate_notification_action_keep_open
-  condition: []
-  action:
-  - service: notify.mobile_app_all
-    data:
-      message: clear_notification
-      data:
-        tag: 300
-        dismiss: true
-  - if:
-    - condition: trigger
-      id:
-      - trigger_notification_gate_notification_action_close
-    then:
-    - service: cover.close_cover
-      data: {}
-      target:
-        entity_id: cover.gate
-    - stop: Portão fechado
-  - condition: state
-    entity_id: cover.gate
-    state: open
-  - if:
-    - condition: trigger
-      id:
-      - trigger_notification_gate_notification_action_keep_open
-    then:
-    - delay:
-        hours: 0
-        minutes: 10
-        seconds: 0
-        milliseconds: 0
-  - condition: state
-    entity_id: cover.gate
-    state: open
-  - condition: state
-    entity_id: binary_sensor.notify_home
-    state: 'off'
-  - service: notify.mobile_app_magnesium
-    data:
-      title: Portão da Rua
-      message: O Portão da Rua está Aberto
-      data:
-        tag: '300'
-        priority: high
-        persistent: true
-        channel: Home
-        sticky: true
-        clickAction: /lovelace-subviews/dashboard-exterior
-        actions:
-        - action: gate_notification_action_keep_open
-          title: Deixar Aberto
-        - action: gate_notification_action_close
-          title: Fechar o Portao
-  mode: restart
 - id: '1695063109671'
   alias: lights_trigger_master_bedroom_cover_buttons
   trigger:
@@ -1396,7 +1310,7 @@
     domain: light
   mode: single
 - id: '1696606723356'
-  alias: lights_sync_hallway
+  alias: Sincronizar Luzes do Corredor
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -1631,33 +1545,6 @@
       entity_id: input_boolean.reminder_dish_washing_machine
     data: {}
   mode: single
-- id: '1704336080592'
-  alias: AC Sala Feedback Temperatura
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_temperatura_feedback.yaml
-    input:
-      temperature_sensor: sensor.temperature_living_room
-      target_temperature: input_number.hvac_target_temperature_living_room
-      hvac_unit: climate.living_room
-- id: '1704336142689'
-  alias: AC Suite Feedback Temperatura
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_temperatura_feedback.yaml
-    input:
-      temperature_sensor: sensor.temperature_master_bedroom
-      target_temperature: input_number.hvac_target_temperature_bedroom
-      hvac_unit: climate.master_bedroom
-- id: '1704336172254'
-  alias: AC Quarto Ricardo Feedback Temperatura
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_temperatura_feedback.yaml
-    input:
-      temperature_sensor: sensor.temperature_bedroom_ricardo
-      target_temperature: input_number.hvac_target_temperature_bedroom
-      hvac_unit: climate.bedroom_ricardo
 - id: '1704843370509'
   alias: AC Quarto do Ricardo - Desligar Noite
   description: ''
@@ -1684,7 +1571,7 @@
       hvac_unit: climate.master_bedroom
       run_on_weekends: true
 - id: '1705111890973'
-  alias: device_alert_ups_usage
+  alias: Alertar UPS activa
   description: ''
   trigger:
   - platform: state
@@ -1711,16 +1598,23 @@
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule: 08:45:00
+      schedule: 08:50:00
       hvac_unit: climate.master_bedroom
       run_on_weekends: false
+      weekend_tomorrow: false
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
 - id: '1705326979364'
   alias: AC Sala - Desligar Manhã
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule: 08:20:00
+      schedule: 08:40:00
       hvac_unit: climate.living_room
       run_on_weekends: false
       weekend_tomorrow: false
@@ -1736,9 +1630,10 @@
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule: '23:30:00'
+      schedule: 01:00:00
       hvac_unit: climate.living_room
       run_on_weekends: true
+      weekend_tomorrow: false
 - id: '1705368338092'
   alias: AC Suite - Ligar de Manhã
   description: ''
@@ -1787,7 +1682,7 @@
       hvac_unit: climate.master_bedroom
       run_on_weekends: false
       hvac_temperature: 21
-      room_temperature: 21
+      room_temperature: 20
       temperature_sensor: sensor.temperature_master_bedroom
       weekday:
       - mon
@@ -1805,7 +1700,7 @@
       hvac_unit: climate.bedroom_ricardo
       run_on_weekends: false
       hvac_temperature: 21
-      room_temperature: 21
+      room_temperature: 20
       temperature_sensor: sensor.temperature_bedroom_ricardo
       weekday:
       - mon
@@ -1823,7 +1718,7 @@
       hvac_unit: climate.living_room
       run_on_weekends: false
       hvac_temperature: 21
-      room_temperature: 21
+      room_temperature: 20
       temperature_sensor: sensor.temperature_living_room
       weekday:
       - mon
@@ -2317,7 +2212,6 @@
 - id: '1701986636577'
   alias: Abrir Portão Alguém Chegar a Casa
   description: ''
-  mode: single
   trigger:
   - platform: numeric_state
     entity_id:
@@ -2388,6 +2282,8 @@
       target:
         entity_id: cover.gate
       data: {}
+    - service: script.lights_arriving_home
+      data: {}
   - if:
     - condition: state
       entity_id: binary_sensor.bianca_home
@@ -2408,6 +2304,7 @@
       data: {}
   - delay:
       seconds: 10
+  mode: single
 - id: '1701640659897'
   alias: Localização - Atualizar Joao
   mode: single
@@ -2472,3 +2369,149 @@
       notification_action: Registar Limpeza
       android_task_id: 32
       notification_action_id: cat_litter_clean
+- id: '1709743628443'
+  alias: Alertar Portão Aberto com a Casa Vazia
+  description: ''
+  trigger:
+  - platform: state
+    id: trigger_gate_open
+    entity_id:
+    - cover.gate
+    to: open
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  - platform: state
+    id: trigger_gate_close
+    entity_id:
+    - cover.gate
+    to: close
+  - platform: state
+    id: trigger_house_empty
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  - id: trigger_notification_gate_notification_action_close
+    platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: gate_notification_action_close
+  - id: trigger_notification_gate_notification_action_keep_open
+    platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: gate_notification_action_keep_open
+  condition: []
+  action:
+  - service: notify.mobile_app_all
+    data:
+      message: clear_notification
+      data:
+        tag: 300
+        dismiss: true
+  - alias: Se Acção é Fechar Portão
+    if:
+    - condition: trigger
+      id:
+      - trigger_notification_gate_notification_action_close
+    then:
+    - condition: state
+      entity_id: cover.gate
+      state: open
+    - service: cover.close_cover
+      data: {}
+      target:
+        entity_id: cover.gate
+    - stop: Portão fechado
+  - if:
+    - condition: trigger
+      id:
+      - trigger_notification_gate_notification_action_keep_open
+    then:
+    - delay:
+        hours: 0
+        minutes: 10
+        seconds: 0
+        milliseconds: 0
+    alias: Se Acção é Deixar Aberto
+  - condition: state
+    entity_id: cover.gate
+    state: open
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  - service: notify.mobile_app_magnesium
+    data:
+      title: Portão da Rua
+      message: O Portão da Rua está Aberto
+      data:
+        tag: '300'
+        priority: high
+        persistent: true
+        sticky: true
+        channel: Home
+        clickAction: /lovelace-subviews/dashboard-exterior
+        actions:
+        - action: gate_notification_action_keep_open
+          title: Deixar Aberto
+        - action: gate_notification_action_close
+          title: Fechar o Portao
+  mode: restart
+- id: '1711849617966'
+  alias: Alertar Alarme Magnesium Dias de Trabalho
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  - platform: time
+    at: '23:30:00'
+  - platform: time
+    at: 00:00:00
+  - platform: time
+    at: 00:30:00
+  - platform: time
+    at: 01:00:00
+  - platform: time
+    at: 01:30:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: sensor.magnesium_next_alarm
+      state: unknown
+    - condition: state
+      entity_id: sensor.magnesium_next_alarm
+      state: unavailable
+    alias: Magnesium Without Alarm
+  - condition: or
+    conditions:
+    - condition: and
+      conditions:
+      - condition: time
+        after: 00:00:00
+        before: 07:00:00
+      - condition: state
+        entity_id: binary_sensor.workday
+        state: 'on'
+    - condition: and
+      conditions:
+      - condition: time
+        after: 07:00:00
+        before: 00:00:00
+      - condition: state
+        entity_id: binary_sensor.workday_tomorrow
+        state: 'on'
+  action:
+  - device_id: 9fb26e914719ad2a416b2847f915b00a
+    domain: mobile_app
+    type: notify
+    message: Deve configurar o alarme para amanhã!
+    title: Routinas
+    data:
+      tag: 923
+  mode: single
