@@ -10,6 +10,7 @@ house_turn_all_off:
             area_id:
               - bathroom_main
               - bathroom_rc
+              - master_bedroom_bathroom
               - kitchen
               - office
               - outside

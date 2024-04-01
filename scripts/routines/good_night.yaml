@@ -8,26 +8,6 @@ routine_good_night:
       target:
         entity_id: light.stairs_wall
 
-    - if:
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: sensor.magnesium_next_alarm
-              state: unknown
-            - condition: state
-              entity_id: sensor.magnesium_next_alarm
-              state: unavailable
-      then:
-        - device_id: 9fb26e914719ad2a416b2847f915b00a
-          domain: mobile_app
-          type: notify
-          message: Deve configurar o alarme para amanhã!
-          title: Routinas
-          data:
-            tag: 923
-        - delay:
-            seconds: 30
-
     - parallel:
         - delay:
             hours: 0
@@ -133,7 +113,13 @@ routine_good_night:
       data: {}
       target:
         area_id:
+          - bathroom_main
+          - bathroom_rc
+          - kitchen
+          - office
+          - outside
+          - laundry
+          - guest_bedroom
+          - bedroom_rc
           - hall
           - living_room
-          - master_bedroom
-          - bedroom_ricardo
