@@ -1,0 +1,4 @@
+zha:
+  zigpy_config:
+    ota:
+      sonoff_provider: true
