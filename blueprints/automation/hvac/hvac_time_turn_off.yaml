@@ -16,32 +16,52 @@ blueprint:
       selector:
         time:
 
-    schedule_weekend:
-      name: Horário (Fim de Semana)
-      description: Horário da acção durante o fim de semana
-      selector:
-        time:
-
     run_on_weekends:
       name: Fim de Semana
       default: "off"
       selector:
         boolean:
 
+    weekend_tomorrow:
+      name: Verificar Dia Seguinte
+      default: "off"
+      selector:
+        boolean:
+
+    weekday:
+      name: Dia da Semana
+      default: [mon, tue, wed, thu, fri, sat, sun]
+      selector:
+        select:
+          options:
+            - label: Segunda-feira
+              value: mon
+            - label: Terça-feira
+              value: tue
+            - label: Quarta-feira
+              value: wed
+            - label: Quinta-feira
+              value: thu
+            - label: Sexta-feira
+              value: fri
+            - label: Sábado
+              value: sat
+            - label: Domingo
+              value: sun
+          custom_value: false
+          multiple: true
+
 mode: restart
 max_exceeded: silent
 
 variables:
   run_on_weekends: !input run_on_weekends
+  weekend_tomorrow: !input weekend_tomorrow
 
 trigger:
   - platform: time
     id: normal_time
     at: !input schedule
-
-  - platform: time
-    id: weekend_time
-    at: !input schedule_weekend
 
 condition:
   - condition: state
@@ -52,19 +72,22 @@ condition:
 
   - condition: or
     conditions:
-      - "{{ run_on_weekends }}"
-      - condition: trigger
-        id:
-          - normal_time
-
-  - condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.workday_tomorrow
-        state: "on"
-      - condition: trigger
-        id:
-          - weekend_time
+      - condition: time
+        weekday: !input "weekday"
+      - condition: and
+        conditions:
+          - "{{ not weekend_tomorrow }}"
+          - "{{ run_on_weekends }}"
+          - condition: state
+            entity_id: binary_sensor.workday
+            state: "on"
+      - condition: and
+        conditions:
+          - "{{ weekend_tomorrow }}"
+          - "{{ run_on_weekends }}"
+          - condition: state
+            entity_id: binary_sensor.workday_tomorrow
+            state: "on"
 
 action:
   - service: climate.turn_off

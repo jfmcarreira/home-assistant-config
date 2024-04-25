@@ -16,17 +16,34 @@ blueprint:
       selector:
         time:
 
-    schedule_weekend:
-      name: Horário (Fim de Semana)
-      description: Horário da acção durante o fim de semana
-      selector:
-        time:
-
     run_on_weekends:
       name: Fim de Semana
       default: "off"
       selector:
         boolean:
+
+    weekday:
+      name: Dia da Semana
+      default: [mon, tue, wed, thu, fri, sat, sun]
+      selector:
+        select:
+          options:
+            - label: Segunda-feira
+              value: mon
+            - label: Terça-feira
+              value: tue
+            - label: Quarta-feira
+              value: wed
+            - label: Quinta-feira
+              value: thu
+            - label: Sexta-feira
+              value: fri
+            - label: Sábado
+              value: sat
+            - label: Domingo
+              value: sun
+          custom_value: false
+          multiple: true
 
     hvac_temperature:
       name: Temperatura do AC
@@ -63,10 +80,6 @@ trigger:
     id: normal_time
     at: !input schedule
 
-  - platform: time
-    id: weekend_time
-    at: !input schedule_weekend
-
 condition:
   - condition: state
     entity_id: !input hvac_unit
@@ -75,31 +88,26 @@ condition:
 
   - condition: or
     conditions:
-      - "{{ run_on_weekends }}"
-      - condition: trigger
-        id:
-          - normal_time
-
-  - condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.workday
-        state: "on"
+      - condition: time
+        weekday: !input "weekday"
       - condition: and
         conditions:
           - "{{ run_on_weekends }}"
-          - condition: trigger
-            id:
-              - weekend_time
+          - condition: state
+            entity_id: binary_sensor.workday
+            state: "off"
 
   - condition: numeric_state
     entity_id: !input temperature_sensor
     below: !input room_temperature
 
 action:
-  - service: climate.turn_on
+  - service: climate.set_hvac_mode
     target:
       entity_id: !input hvac_unit
+    data:
+      hvac_mode: heat
+
   - service: climate.set_temperature
     target:
       entity_id: !input hvac_unit
