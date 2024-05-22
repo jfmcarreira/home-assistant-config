@@ -7,10 +7,20 @@ esphome:
   name: ${devicename}
   friendly_name: ${FriendlyName}
   on_boot:
-    priority: 251
+    priority: -100
     then:
-      - switch.turn_on: relay_1
-      - switch.turn_on: relay_on
+      - wait_until:
+          condition:
+            api.connected:
+          timeout: 30s
+      - if:
+          condition:
+            not:
+              api.connected:
+          then:
+            - logger.log: "API not connected, turning switch on"
+            - switch.turn_on: relay_1
+            - switch.turn_on: relay_on
 
 esp32:
   board: nodemcu-32s
@@ -33,7 +43,6 @@ uart:
 
 sensor:
   - platform: cse7766
-    update_interval: 2s
     current:
       id: current_sensor
     voltage:
