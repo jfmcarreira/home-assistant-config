@@ -22,3 +22,8 @@ captive_portal:
 time:
   - platform: homeassistant
     id: homeassistant_time
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi ${devicename}"
+    update_interval: 60s
