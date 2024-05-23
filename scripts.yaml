@@ -22,6 +22,8 @@ lights_arriving_home:
               - light.exterior_wall_side
               - light.kitchen_door
           data: {}
+        - service: script.lights_control_gate_front_lights
+          data: {}
     - wait_for_trigger:
         - platform: state
           entity_id:
@@ -53,3 +55,32 @@ lights_arriving_home:
           - light.exterior_wall_back
           - light.kitchen_door
       data: {}
+lights_control_gate_front_lights:
+  alias: Lights Control Gate Front Lights
+  sequence:
+    - condition: state
+      entity_id: binary_sensor.sun_bellow_horizont
+      state: "on"
+    - service: light.turn_on
+      target:
+        entity_id: light.gate_lights
+      data: {}
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - cover.gate
+          to: closed
+          for:
+            hours: 0
+            minutes: 0
+            seconds: 30
+      timeout:
+        hours: 0
+        minutes: 30
+        seconds: 0
+        milliseconds: 0
+    - service: light.turn_off
+      target:
+        entity_id: light.gate_lights
+      data: {}
+  mode: single

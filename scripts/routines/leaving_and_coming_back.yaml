@@ -12,26 +12,4 @@ routine_leaving_and_coming_back:
         entity_id: script.sequence_leaving_home_lights
 
     - service: script.sequence_open_close_gate
-
-    - if:
-        - condition: template
-          value_template: "{{ joao_was_home }}"
-        - condition: state
-          entity_id: binary_sensor.joao_home
-          state: "off"
-      then:
-        - service: input_boolean.turn_on
-          data: {}
-          target:
-            entity_id: input_boolean.going_home_joao
-    - if:
-        - condition: template
-          value_template: "{{ bianca_was_home }}"
-        - condition: state
-          entity_id: binary_sensor.bianca_home
-          state: "off"
-      then:
-        - service: input_boolean.turn_on
-          data: {}
-          target:
-            entity_id: input_boolean.going_home_bianca
+    
