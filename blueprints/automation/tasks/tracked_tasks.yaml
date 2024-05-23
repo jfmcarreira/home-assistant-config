@@ -64,6 +64,15 @@ trigger:
     event_data:
       action: !input notification_action_id
 
+condition:
+  condition: or
+  conditions:
+    - "{{ trigger.id == 'trigger_task_overdue' }}"
+    - "{{ trigger.id == 'trigger_send_notification' }}"
+    - condition: state
+      entity_id: !input task_needs_attention
+      state: "on"
+
 action:
   - choose:
       - conditions: "{{ trigger.id == 'trigger_task_overdue' or trigger.id == 'trigger_send_notification' }}"
@@ -83,15 +92,8 @@ action:
               task_action: !input notification_action_id
               task_action_message: !input notification_action
               task_id: !input android_task_id
-          # - service: persistent_notification.create
-          #   data:
-          #     title: Tarefa Doméstica
-          #     message: !input notification_message
-          #     notification_id: !input notification_action_id
 
     default:
-      #- conditions: "{{ trigger.id == 'trigger_restart_machine' or trigger.id == 'trigger_notification_action' or trigger.id == 'trigger_notification_action' }}"
-      #sequence:
       - service: notify.mobile_app_all
         data:
           message: clear_notification
@@ -101,10 +103,6 @@ action:
       - service: persistent_notification.dismiss
         data:
           notification_id: !input notification_action_id
-
-      - condition: state
-        entity_id: !input task_needs_attention
-        state: "on"
 
       - service: shell_command.external_my_sql_insert
         data:
