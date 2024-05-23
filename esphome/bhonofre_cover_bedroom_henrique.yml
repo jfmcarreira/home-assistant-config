@@ -1,6 +1,6 @@
 substitutions:
-  devicename: bhonofre_cover_bedroom_guest
-  CoverName: Bedroom Guest
+  devicename: bhonofre_cover_bedroom_henrique
+  CoverName: Bedroom Henrique
   Open: "13"
   Close: "12"
   ExtraTop: "2"
