@@ -16,7 +16,7 @@ house_turn_all_off:
               - outside
               - hall
               - laundry
-              - guest_bedroom
+              - bedroom_henrique
               - bedroom_rc
               - bedroom_ricardo
               - living_room

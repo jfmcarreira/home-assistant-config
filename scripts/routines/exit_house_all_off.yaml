@@ -24,7 +24,7 @@ routine_exit_house_all_off:
               - bathroom_main
               - bathroom_rc
               - master_bedroom_bathroom
-              - guest_bedroom
+              - bedroom_henrique
               - master_bedroom
               - bedroom_ricardo
               - bedroom_rc

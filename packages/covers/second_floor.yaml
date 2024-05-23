@@ -20,8 +20,8 @@ cover:
             {% set position_sum = position_sum + (state_attr('cover.bedroom_ricardo','current_position') | round(precision = 2.0, default = 0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
-          {% if is_state('input_boolean.cover_control_group_bedroom_guest', 'on') %}
-            {% set position_sum = position_sum + (state_attr('cover.bedroom_guest','current_position') | round(precision = 2.0, default = 0)) %}
+          {% if is_state('input_boolean.cover_control_group_bedroom_henrique', 'on') %}
+            {% set position_sum = position_sum + (state_attr('cover.bedroom_henrique','current_position') | round(precision = 2.0, default = 0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
           {{ (position_sum / position_count) | round(0, default = 0) }}
@@ -36,8 +36,8 @@ cover:
               {% if is_state('input_boolean.cover_control_group_bedroom_ricardo', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_ricardo'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bedroom_guest', 'on') %}
-                {% set list_of_covers = list_of_covers + ['cover.bedroom_guest'] %}
+              {% if is_state('input_boolean.cover_control_group_bedroom_henrique', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bedroom_henrique'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}
         close_cover:
@@ -51,8 +51,8 @@ cover:
               {% if is_state('input_boolean.cover_control_group_bedroom_ricardo', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_ricardo'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bedroom_guest', 'on') %}
-                {% set list_of_covers = list_of_covers + ['cover.bedroom_guest'] %}
+              {% if is_state('input_boolean.cover_control_group_bedroom_henrique', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bedroom_henrique'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}
         stop_cover:
@@ -66,7 +66,7 @@ cover:
               {% if is_state('input_boolean.cover_control_group_bedroom_ricardo', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_ricardo'] %}
               {% endif %}
-              {% if is_state('input_boolean.cover_control_group_bedroom_guest', 'on') %}
-                {% set list_of_covers = list_of_covers + ['cover.bedroom_guest'] %}
+              {% if is_state('input_boolean.cover_control_group_bedroom_henrique', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.bedroom_henrique'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}
