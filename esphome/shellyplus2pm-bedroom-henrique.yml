@@ -1,0 +1,42 @@
+substitutions:
+  devicename: shellyplus2pm-bedroom-henrique
+
+packages:
+  esphome_base: !include packages/common.yml
+  home_state: !include packages/home_state.yml
+
+  device_base: !include
+    file: packages/shelly_plus_2pm.yml
+    vars:
+      name: Shelly Plus 2PM Bedroom Henrique
+
+  lights_base: !include
+    file: packages/shelly_plus_2pm_lights.yml
+    vars:
+      Light_1_Name: Bedroom Henrique Ceiling
+      Light_2_Name: Bedroom Henrique Closet
+
+binary_sensor:
+  #Shelly Switch Input 1
+  - platform: gpio
+    id: sw_1
+    pin: GPIO5
+    #small delay to prevent debouncing
+    filters:
+      - delayed_on_off: 50ms
+    # config for state change of input button
+    on_state:
+      then:
+        - light.toggle: light_1
+
+  #Shelly Switch Input 2
+  - platform: gpio
+    id: sw_2
+    pin: GPIO18
+    #small delay to prevent debouncing
+    filters:
+      - delayed_on_off: 50ms
+    # config for state change of input button
+    on_state:
+      then:
+        - light.toggle: light_2

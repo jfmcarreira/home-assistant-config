@@ -1,0 +1,79 @@
+# For PCB v0.1.9 with dual core ESP32
+esphome:
+  name: "${devicename}"
+
+esp32:
+  board: esp32doit-devkit-v1
+  framework:
+    type: arduino
+
+i2c:
+  sda: GPIO26
+  scl: GPIO25
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO13
+
+  - platform: gpio
+    id: relay_2
+    pin: GPIO12
+
+button:
+  - platform: restart
+    id: restart_device
+
+binary_sensor:
+  - platform: gpio
+    id: reset_button
+    pin:
+      number: GPIO4
+      inverted: yes
+      mode:
+        input: true
+        pullup: true
+    on_press:
+      then:
+        - button.press: restart_device
+    filters:
+      - delayed_on_off: 5ms
+    internal: true
+
+sensor:
+  - platform: ntc
+    sensor: temp_resistance_reading
+    name: Device Temperature ${name}
+    unit_of_measurement: "°C"
+    calibration:
+      #These default values don't seem accurate
+      b_constant: 3350
+      reference_resistance: 10kOhm
+      reference_temperature: 298.15K
+    on_value_range:
+      - above: 85
+        then:
+          - output.turn_off: relay_1
+          - output.turn_off: relay_2
+          - homeassistant.service:
+              service: persistent_notification.create
+              data:
+                title: Message from ${name}
+              data_template:
+                message: Switch turned off because max temperature was exceeded
+
+  - platform: resistance
+    id: temp_resistance_reading
+    sensor: temp_analog_reading
+    configuration: DOWNSTREAM
+    resistor: 10kOhm
+
+  - platform: adc
+    id: temp_analog_reading
+    pin: GPIO35
+    attenuation: 12db
+
+status_led:
+  pin:
+    number: GPIO0
+    inverted: true
