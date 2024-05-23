@@ -1,0 +1,16 @@
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+output:
+  - platform: gpio
+    pin: GPIO04
+    id: relay_1
+
+light:
+  - id: light_1
+    name: ${Light_Name}
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF

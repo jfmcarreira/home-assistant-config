@@ -1,25 +1,28 @@
 substitutions:
   devicename: shelly25_lights_kitchen
-  FriendlyName: Shelly25 Kitchen
-  Light_1_Name: Kitchen LED
-  Light_2_Name: Kitchen Window
 
 packages:
   esphome_base: !include packages/common.yml
   home_state: !include packages/home_state.yml
-  device_lights: !include packages/shelly25_lights.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
+    vars:
+      name: Shelly25 Kitchen
+
+  lights_base: !include
+    file: packages/shelly25_lights.yml
+    vars:
+      Light_1_Name: Kitchen LED
+      Light_2_Name: Kitchen Window
 
 light:
-  - id: light_2
-    name: ${Light_2_Name}
-    platform: binary
-    output: relay_2
-    restore_mode: RESTORE_AND_OFF
+  - id: !remove light_1
 
 switch:
   - platform: output
     id: light_1
-    name: ${Light_1_Name} SW
+    name: Kitchen LED SW
     output: relay_1
     restore_mode: ALWAYS_OFF
 

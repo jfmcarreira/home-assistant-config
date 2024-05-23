@@ -1,5 +1,15 @@
-packages:
-  device_base: !include shelly25.yml
+light:
+  - id: light_1
+    name: ${Light_1_Name}
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - id: light_2
+    name: ${Light_2_Name}
+    platform: binary
+    output: relay_2
+    restore_mode: RESTORE_DEFAULT_OFF
 
 sensor:
   - platform: ade7953_i2c
@@ -28,7 +38,7 @@ sensor:
             - homeassistant.service:
                 service: persistent_notification.create
                 data:
-                  title: Message from ${FriendlyName}
+                  title: Message from Shelly 2.5 with ${Light_1_Name} and ${Light_2_Name} lights
                 data_template:
                   message: Switch turned off because max power was exceeded
     active_power_b:
@@ -48,7 +58,7 @@ sensor:
             - homeassistant.service:
                 service: persistent_notification.create
                 data:
-                  title: Message from ${FriendlyName}
+                  title: Message from Shelly 2.5 with ${Light_1_Name} and ${Light_2_Name} lights
                 data_template:
                   message: Switch turned off because power exceeded max power
 

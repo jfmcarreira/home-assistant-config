@@ -1,29 +1,31 @@
 substitutions:
   devicename: shelly25_lights_laundry
-  FriendlyName: Shelly25 Laundry
   InputPin: GPIO13
-  Light_1_Name: Laundry Main
-  Light_2_Name: Laundry Extra
 
 packages:
   esphome_base: !include packages/common.yml
   home_state: !include packages/home_state.yml
-  base: !include packages/shelly25_two_lights_one_switch.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
+    vars:
+      name: Shelly25 Laundry
+
+  lights_base: !include
+    file: packages/shelly25_lights.yml
+    vars:
+      Light_1_Name: Laundry Main
+      Light_2_Name: Laundry Extra
+
+  room_controls: !include
+    file: packages/room_lights.yml
+    vars:
+      light_state_count: 2
+
 
 script:
   - id: smart_light_state
     then:
-      - globals.set:
-          id: lights_state
-          value: !lambda "return id(lights_state)+=1;"
-      - if:
-          condition:
-            lambda: "return id(lights_state) > 1;"
-          then:
-            - globals.set:
-                id: lights_state
-                value: "0"
-
       - if:
           condition:
             lambda: "return id(lights_state) == 0;"
@@ -58,7 +60,7 @@ binary_sensor:
                 - light.turn_off: light_2
                 - globals.set:
                     id: lights_state
-                    value: "0"
+                    value: "-1"
               else:
                 - if:
                     condition:
@@ -67,23 +69,13 @@ binary_sensor:
                         - binary_sensor.is_on: house_mode_night
                     then:
                       - logger.log: "Turning lights in Night mode"
-                      - light.turn_on: light_1
                       - globals.set:
                           id: lights_state
                           value: "1"
+                      - script.execute: smart_light_state
                     else:
                       - logger.log: "Turning both lights ON"
-                      - light.turn_on: light_1
-                      - light.turn_on: light_2
                       - globals.set:
                           id: lights_state
                           value: "0"
-      - timing:
-          - ON for at least 1000ms
-        invalid_cooldown: 100ms
-        then:
-          - if:
-              condition:
-                - api.connected:
-              then:
-                - script.execute: smart_light_state
+                      - script.execute: smart_light_state

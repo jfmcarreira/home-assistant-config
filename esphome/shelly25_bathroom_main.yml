@@ -1,16 +1,24 @@
 substitutions:
   devicename: shelly25_bathroom_main
-  FriendlyName: Shelly 25 Main Bathroom
-  Light_1_Name: Main Bathroom Ceiling
-  Light_2_Name: Main Bathroom LED
 
 packages:
   esphome_base: !include packages/common.yml
-  home_state: !include packages/home_state.yml
-  base: !include
-    file: packages/shelly25_bathroom.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
     vars:
-      name: ${devicename}
+      name: Shelly 25 Main Bathroom
+
+  lights_base: !include
+    file: packages/shelly25_lights.yml
+    vars:
+      Light_1_Name: Main Bathroom LED
+      Light_2_Name: Main Bathroom Ceiling
+
+  bathroom_controls: !include
+    file: packages/bathroom_controls.yml
+    vars:
+      devicename: ${devicename}
       input_a_light: light_2
       input_b_light: light_1
       fan: fan.main_bathroom

@@ -1,6 +1,3 @@
-packages:
-  two_lights: !include shelly25_two_lights.yml
-
 globals:
   - id: should_turn_off_both_lights
     type: bool
@@ -119,4 +116,4 @@ binary_sensor:
               data:
                 name: button_2
                 type: long
-                device: ${name}
+                device: ${devicename}

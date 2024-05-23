@@ -1,13 +1,20 @@
 substitutions:
   devicename: shelly25_lights_stairs
-  FriendlyName: Shelly 2.5 Stairs
-  Light_1_Name: Stairs Lamp
-  Light_2_Name: Stairs Wall
 
 packages:
   esphome_base: !include packages/common.yml
   home_state: !include packages/home_state.yml
-  lights_base: !include packages/shelly25_two_lights.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
+    vars:
+      name: Shelly 2.5 Stairs
+
+  lights_base: !include
+    file: packages/shelly25_lights.yml
+    vars:
+      Light_1_Name: Stairs Lamp
+      Light_2_Name: Stairs Wall
 
 binary_sensor:
   - platform: homeassistant

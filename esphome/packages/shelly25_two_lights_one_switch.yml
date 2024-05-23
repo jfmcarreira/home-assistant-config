@@ -1,8 +1,0 @@
-packages:
-  device_two_lights: !include shelly25_two_lights.yml
-
-globals:
-  - id: lights_state
-    type: int
-    restore_value: no
-    initial_value: "0"

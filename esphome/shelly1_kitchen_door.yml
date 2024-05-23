@@ -1,30 +1,17 @@
 substitutions:
   devicename: shelly1_kitchen_door
-  FriendlyName: Shelly 1 Kitchen Door
+
+esphome:
+  friendly_name: Shelly 1 Kitchen Door
 
 packages:
   esphome_base: !include packages/common.yml
 
-esphome:
-  name: ${devicename}
-  platform: ESP8266
-  board: esp01_1m
+  device_base: !include
+    file: packages/shelly1.yml
+    vars:
+      Light_Name: Kitchen Door
 
-# Enable Home Assistant API
-api:
-  reboot_timeout: 600s
-
-output:
-  - platform: gpio
-    pin: GPIO04
-    id: relay_1
-
-light:
-  - id: light_1
-    name: Kitchen Door
-    platform: binary
-    output: relay_1
-    restore_mode: RESTORE_AND_OFF
 
 binary_sensor:
   - platform: homeassistant

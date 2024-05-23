@@ -1,13 +1,20 @@
 substitutions:
   devicename: shelly25_lights_hall
-  FriendlyName: Shelly25 Hall
-  Light_1_Name: Hall Side
-  Light_2_Name: Hall
 
 packages:
   esphome_base: !include packages/common.yml
   home_state: !include packages/home_state.yml
-  lights_base: !include packages/shelly25_two_lights.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
+    vars:
+      name: Shelly 25 Hall
+
+  lights_base: !include
+    file: packages/shelly25_lights.yml
+    vars:
+      Light_1_Name: Hall Side
+      Light_2_Name: Hall
 
 binary_sensor:
   - platform: homeassistant
