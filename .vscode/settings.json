@@ -1,6 +1,16 @@
 {
-    "files.associations": {
-        "*.yaml": "home-assistant",
-        "**/esphome/**/*.yml": "esphome"
-    }
+  "files.associations": {
+    "*.yaml": "home-assistant",
+    "**/esphome/**/*.yml": "esphome"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "yaml.customTags": [
+    "!input"
+  ],
+  "editor.formatOnSave": true
 }
