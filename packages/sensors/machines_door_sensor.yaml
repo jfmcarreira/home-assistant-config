@@ -18,3 +18,10 @@ mqtt:
       state_topic: "binary_rf_sensors/kitchen_fan_slider"
       qos: 1
       off_delay: 30
+
+    - name: gate_bell_button
+      unique_id: gate_bell_button
+      device_class: power
+      state_topic: "binary_rf_sensors/gate_bell_button"
+      qos: 1
+      off_delay: 5
