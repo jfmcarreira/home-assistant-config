@@ -12,22 +12,18 @@ light:
     restore_mode: RESTORE_DEFAULT_OFF
 
 sensor:
-  #power monitoring
   - platform: ade7953_i2c
     update_interval: 5s
     irq_pin: GPIO27 # Prevent overheating by setting this
     voltage:
       id: shelly_voltage
-    # On the Shelly 2.5 channels are mixed ch1=B ch2=A
     current_a:
-      id: shelly_current_B
-    current_b:
-      id: shelly_current_A
+      id: shelly_current_a
     active_power_a:
-      name: Light Power ${Light_2_Name}
-      id: power_channel_2
-      # active_power_a is normal, so don't multiply by -1
+      name: Light Power ${Light_1_Name}
+      id: power_channel_a
       filters:
+        - multiply: -1
         - lambda: >
             if (x < 0.0) return 0.0;
             return x;
@@ -42,9 +38,11 @@ sensor:
                   title: Message from Shelly 2.5 with ${Light_1_Name} and ${Light_2_Name} lights
                 data_template:
                   message: Switch turned off because max power was exceeded
+    current_b:
+      id: shelly_current_b
     active_power_b:
-      name: Light Power ${Light_1_Name}
-      id: power_channel_1
+      name: Light Power ${Light_2_Name}
+      id: power_channel_b
       # active_power_b is inverted, so multiply by -1
       filters:
         - multiply: -1
@@ -65,14 +63,14 @@ sensor:
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_1_Name}
-    power_id: power_channel_1
+    power_id: power_channel_a
     unit_of_measurement: Wh
     state_class: total_increasing
     device_class: energy
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_2_Name}
-    power_id: power_channel_2
+    power_id: power_channel_b
     unit_of_measurement: Wh
     restore: false
     state_class: total_increasing
