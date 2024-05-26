@@ -1,0 +1,93 @@
+blueprint:
+  name: Notify camera snapshot when motion is detected
+  description:
+    "This automation blueprint creates a camera snapshot if motion is detected  and
+    sends a notification to your phone with the picture.
+    "
+  domain: automation
+  input:
+    motion_sensor:
+      name: Motion sensor
+      description: The sensor wich triggers the snapshot creation
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+          multiple: false
+    camera:
+      name: Camera
+      description: The camera which creates the snapshot
+      selector:
+        entity:
+          domain: camera
+          multiple: false
+    notify_joao:
+      name: Notifcar João
+      description: Alternar para notificar o João
+      selector:
+        boolean: {}
+      default: false
+    notify_bianca:
+      name: Notifcar Bianca
+      description: Alternar para notificar a Bianca
+      selector:
+        boolean: {}
+      default: false
+    notification_title:
+      name: Notification title (Optional)
+      description: 'Default: "Movimento Detectado!"'
+      default: Movimento Detectado!
+    notification_message:
+      name: Notification message (Optional)
+      description: 'Default: "{{ motion_sensor_name }}!"'
+      default: "{{ motion_sensor_name }}!"
+
+trigger:
+  platform: state
+  entity_id: !input motion_sensor
+  from: "off"
+  to: "on"
+
+variables:
+  notify_joao: !input notify_joao
+  notify_bianca: !input notify_bianca
+  motion_sensor: !input motion_sensor
+  motion_sensor_name: "{{ states[motion_sensor].name }}"
+  camera: !input camera
+  notification_title: !input notification_title
+  notification_message: !input notification_message
+  snapshot_create_file_path: /config/www/camera/snapshot_{{ states[camera].object_id}}.jpg
+  snapshot_access_file_path: "{{ snapshot_create_file_path | replace('/config/www','/local')}}"
+
+condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: "off"
+
+action:
+  - service: camera.snapshot
+    entity_id: !input camera
+    data:
+      filename: "{{ snapshot_create_file_path }}"
+  - choose:
+      - conditions: "{{ notify_joao }}"
+        sequence:
+          - device_id: 2a682060bb472236a68fdd3ff33a221a
+            domain: mobile_app
+            type: notify
+            title: "{{ notification_title }}"
+            message: "{{ notification_message }}"
+            data:
+              image: "{{ snapshot_access_file_path }}"
+              clickAction: "/lovelace/cctv"
+
+      - conditions: "{{ notify_bianca }}"
+        sequence:
+          - device_id: 086fd6ff05201d28b4bc0fbdbd707c86
+            domain: mobile_app
+            type: notify
+            title: "{{ notification_title }}"
+            message: "{{ notification_message }}"
+            data:
+              image: "{{ snapshot_access_file_path }}"
+              clickAction: "/lovelace/cctv"
