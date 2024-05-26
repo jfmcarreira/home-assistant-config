@@ -2,85 +2,148 @@ routine_cover_rain_mode:
   alias: Routina Modo de Chuva
   mode: single
   sequence:
-    - service: script.cover_group_action
-      data:
-        action_to_run: script.cover_close_when_raining
-        control_switch: close_in_rain
+  - service: script.cover_group_action
+    data:
+      action_to_run: script.cover_close_when_raining
+      control_switch: close_in_rain
 lights_arriving_home:
   alias: Routina de Chegar a Casa
   mode: single
   sequence:
-    - if:
-        - condition: state
-          entity_id: binary_sensor.sun_bellow_horizont
-          state: "on"
-      then:
-        - service: light.turn_on
-          target:
-            entity_id:
-              - light.exterior_wall_back
-              - light.exterior_wall_side
-              - light.kitchen_door
-          data: {}
-        - service: script.lights_control_gate_front_lights
-          data: {}
-    - wait_for_trigger:
-        - platform: state
-          entity_id:
-            - binary_sensor.kitchen_door
-          to: "on"
-      timeout:
-        minutes: 10
+  - if:
+    - condition: state
+      entity_id: binary_sensor.sun_bellow_horizont
+      state: 'on'
+    then:
     - service: light.turn_on
-      data: {}
-      target:
-        entity_id: light.kitchen_led
-    - wait_for_trigger:
-        - platform: state
-          entity_id:
-            - binary_sensor.kitchen_door
-          to: "off"
-          for:
-            minutes: 5
-        - platform: state
-          entity_id:
-            - light.kitchen_door
-          to: "off"
-      timeout:
-        minutes: 10
-    - service: light.turn_off
       target:
         entity_id:
-          - light.exterior_wall_side
-          - light.exterior_wall_back
-          - light.kitchen_door
+        - light.exterior_wall_back
+        - light.exterior_wall_side
+        - light.kitchen_door
       data: {}
+    - service: script.lights_control_gate_front_lights
+      data: {}
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.kitchen_door
+      to: 'on'
+    timeout:
+      minutes: 10
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.kitchen_led
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.kitchen_door
+      to: 'off'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id:
+      - light.kitchen_door
+      to: 'off'
+    timeout:
+      minutes: 10
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.exterior_wall_side
+      - light.exterior_wall_back
+      - light.kitchen_door
+    data: {}
 lights_control_gate_front_lights:
   alias: Lights Control Gate Front Lights
   sequence:
-    - condition: state
-      entity_id: binary_sensor.sun_bellow_horizont
-      state: "on"
-    - service: light.turn_on
-      target:
-        entity_id: light.gate_lights
-      data: {}
-    - wait_for_trigger:
-        - platform: state
-          entity_id:
-            - cover.gate
-          to: closed
-          for:
-            hours: 0
-            minutes: 0
-            seconds: 30
-      timeout:
+  - condition: state
+    entity_id: binary_sensor.sun_bellow_horizont
+    state: 'on'
+  - service: light.turn_on
+    target:
+      entity_id: light.gate_lights
+    data: {}
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - cover.gate
+      to: closed
+      for:
         hours: 0
-        minutes: 30
-        seconds: 0
-        milliseconds: 0
-    - service: light.turn_off
-      target:
-        entity_id: light.gate_lights
-      data: {}
+        minutes: 0
+        seconds: 30
+    timeout:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      entity_id: light.gate_lights
+    data: {}
   mode: single
+gate_notify_door_bell_snapshot:
+  alias: Campainha - Notificar App
+  mode: single
+  variables:
+    snapshot_create_file_path: /config/www/camera/snapshot_front_door.jpg
+    snapshot_access_file_path: '{{ snapshot_create_file_path | replace(''/config/www'',''/local'')}}'
+  sequence:
+  - service: camera.snapshot
+    entity_id: camera.front_camera
+    data:
+      filename: '{{ snapshot_create_file_path }}'
+  - service: notify.mobile_app_all
+    metadata: {}
+    data:
+      title: Exterior
+      message: Campainha accionada
+      data:
+        image: '{{ snapshot_access_file_path }}'
+        clickAction: entityId:camera.front_camera
+gate_display_front_camere_tablet:
+  alias: Campainha - Mostrar Camera da Frente Tablet
+  mode: single
+  sequence:
+  - service: browser_mod.more_info
+    target: {}
+    data:
+      entity: camera.front_camera
+      large: true
+      ignore_popup_card: true
+      browser_id:
+      - fea7f0ab-b9871cee
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.kitchen_door
+      - binary_sensor.front_door
+      from:
+      to: 'on'
+    - platform: state
+      entity_id:
+      - lock.gate_door
+      from:
+      to: unlocked
+    - platform: state
+      entity_id:
+      - cover.gate
+      from: closed
+      to: opening
+    - platform: state
+      entity_id:
+      - cover.gate
+      from:
+      to: open
+    timeout:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: browser_mod.close_popup
+    metadata: {}
+    data:
+      browser_id:
+      - fea7f0ab-b9871cee
