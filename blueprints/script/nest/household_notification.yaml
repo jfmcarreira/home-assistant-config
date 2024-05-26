@@ -35,29 +35,29 @@ blueprint:
 mode: restart
 
 sequence:
-    - choose:
-          - conditions:
-                - condition: state
-                  entity_id: person.joao_carreira
-                  state: home
-            sequence:
-                - service: notify.mobile_app_magnesium
-                  data:
-                    title: !input title
-                    message: !input message
-                    data:
-                      #priority: !input priority
-                      persistent: !input persistent
-    - choose:
-          - conditions:
-                - condition: state
-                  entity_id: person.bianca_pires
-                  state: home
-            sequence:
-                - service: notify.mobile_app_calcium
-                  data:
-                    title: !input title
-                    message: !input message
-                    data:
-                      #priority: !input priority
-                      persistent: !input persistent
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: person.joao_carreira
+            state: home
+        sequence:
+          - service: notify.mobile_app_radium
+            data:
+              title: !input title
+              message: !input message
+              data:
+                #priority: !input priority
+                persistent: !input persistent
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: person.bianca_pires
+            state: home
+        sequence:
+          - service: notify.mobile_app_calcium
+            data:
+              title: !input title
+              message: !input message
+              data:
+                #priority: !input priority
+                persistent: !input persistent

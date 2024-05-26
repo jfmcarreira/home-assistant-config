@@ -1213,7 +1213,7 @@
   action:
     - service: notify.mobile_app_all
       data:
-        title: Frigorifico
+        title: Equipamentos
         message: O frigorifico está desligado à mais de 1 hora!
         data:
           tag: "1000"
@@ -1551,17 +1551,17 @@
       from: OL
       for:
         hours: 0
-        minutes: 1
-        seconds: 0
+        minutes: 0
+        seconds: 30
   condition:
     - condition: state
       entity_id: binary_sensor.joao_home
       state: "off"
   action:
-    - service: notify.mobile_app_magnesium
+    - service: notify.mobile_app_radium
       data:
-        title: Informação de Sistema
-        message: A UPS está em modo de bateria à mais de 1 minuto
+        title: Equipamentos
+        message: A UPS está em modo de bateria à mais de 30 segundos
   mode: single
 - id: "1705326881056"
   alias: AC Suite - Desligar Manhã
@@ -2178,7 +2178,7 @@
               "{{ is_state('binary_sensor.joao_home', 'off') and repeat.index
               < 5 }}"
             sequence:
-              - service: notify.mobile_app_magnesium
+              - service: notify.mobile_app_radium
                 data:
                   message: request_location_update
               - delay:
@@ -2292,7 +2292,7 @@
       entity_id: sensor.distance_home_joao
       below: 1000
   action:
-    - service: notify.mobile_app_magnesium
+    - service: notify.mobile_app_radium
       data:
         message: request_location_update
   mode: single
@@ -2416,9 +2416,9 @@
     - condition: state
       entity_id: binary_sensor.notify_home
       state: "off"
-    - service: notify.mobile_app_magnesium
+    - service: notify.mobile_app_radium
       data:
-        title: Portão da Rua
+        title: Exterior
         message: O Portão da Rua está Aberto
         data:
           tag: "300"

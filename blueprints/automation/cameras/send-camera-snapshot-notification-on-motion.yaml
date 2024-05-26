@@ -79,7 +79,7 @@ action:
             message: "{{ notification_message }}"
             data:
               image: "{{ snapshot_access_file_path }}"
-              clickAction: "/lovelace/cctv"
+              clickAction: "/lovelace/dashboard-cctv"
 
       - conditions: "{{ notify_bianca }}"
         sequence:
@@ -90,4 +90,4 @@ action:
             message: "{{ notification_message }}"
             data:
               image: "{{ snapshot_access_file_path }}"
-              clickAction: "/lovelace/cctv"
+              clickAction: "/lovelace/dashboard-cctv"

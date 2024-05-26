@@ -3,25 +3,25 @@ task_notification_dismiss:
     - choose:
         - conditions: "{{ not is_state('person.joao_carreira','home') }}"
           sequence:
-            - service: notify.mobile_app_magnesium
+            - service: notify.mobile_app_radium
               data:
                 message: clear_notification
                 data:
                   tag: 30
                   dismiss: true
-            - service: notify.mobile_app_magnesium
+            - service: notify.mobile_app_radium
               data:
                 message: clear_notification
                 data:
                   tag: 20
                   dismiss: true
-            - service: notify.mobile_app_magnesium
+            - service: notify.mobile_app_radium
               data:
                 message: clear_notification
                 data:
                   tag: 21
                   dismiss: true
-            - service: notify.mobile_app_magnesium
+            - service: notify.mobile_app_radium
               data:
                 message: clear_notification
                 data:
@@ -77,7 +77,7 @@ task_notification:
               entity_id: person.joao_carreira
               state: home
           sequence:
-            - service: notify.mobile_app_magnesium
+            - service: notify.mobile_app_radium
               data:
                 title: Tarefa Doméstica
                 message: "{{ task_message }}"
