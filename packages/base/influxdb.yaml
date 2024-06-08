@@ -33,6 +33,9 @@ influxdb:
       - sensor.average_humidity
       # Gas
       - sensor.pulse_counter_gas
+      # Electricity
+      - sensor.ibelectra_price
+      - sensor.omie_spot_price_pt
       # # Devices
       # - binary_sensor.dish_wash_machine_state
       # - binary_sensor.washing_machine_state
