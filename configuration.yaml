@@ -35,8 +35,6 @@ wake_on_lan:
 
 stream:
 
-media_extractor:
-
 input_boolean:
 
 input_datetime:
