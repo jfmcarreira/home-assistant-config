@@ -5,5 +5,5 @@ notify:
   - platform: group
     name: mobile_app_all
     services:
-      - service: mobile_app_magnesium
+      - service: mobile_app_radium
       - service: mobile_app_calcium
