@@ -1,0 +1,23 @@
+substitutions:
+  devicename: sonoff-basic-gate-lights
+  FriendlyName: Sonoff Basic Gate Lights
+
+packages:
+  esphome_base: !include packages/common.yml
+
+esphome:
+  name: ${devicename}
+  platform: ESP8266
+  board: esp01_1m
+
+light:
+  - id: light_1
+    name: Gate Lights
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
