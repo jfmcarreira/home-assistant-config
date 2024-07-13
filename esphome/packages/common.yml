@@ -12,12 +12,11 @@ logger:
   level: INFO
 
 ota:
-  reboot_timeout: 5min
+  - platform: esphome
 
 web_server:
 
 captive_portal:
-
 
 time:
   - platform: homeassistant
