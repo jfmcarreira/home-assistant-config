@@ -22,9 +22,6 @@ packages:
     vars:
       light_state_count: 2
 
-wifi:
-  use_address: 10.20.107.176
-
 script:
   - id: smart_light_state
     then:

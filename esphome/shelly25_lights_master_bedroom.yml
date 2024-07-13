@@ -22,7 +22,6 @@ packages:
     vars:
       light_state_count: 2
 
-
 script:
   - id: smart_light_state
     then:
@@ -87,4 +86,3 @@ binary_sensor:
                           id: lights_state
                           value: "0"
                       - script.execute: smart_light_state
-
