@@ -104,10 +104,13 @@ routine_good_night:
         option: Sleep
       target:
         entity_id: input_select.house_mode
-    - type: turn_off
-      device_id: 2ae8ef1981d03f83e4144debe519a697
-      entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
-      domain: switch
+
+    - service: switch.turn_off
+      continue_on_error: true
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.fire_tablet_screen
 
     - service: light.turn_off
       data: {}
@@ -122,4 +125,5 @@ routine_good_night:
           - bedroom_henrique
           - bedroom_rc
           - hall
+          - stairs
           - living_room

@@ -15,8 +15,5 @@ light:
             entity_id: light.stairs_wall
         turn_off:
           - service: light.turn_off
-            entity_id: light.stairs
-          - service: light.turn_off
-            entity_id: light.stairs_wall
-          - service: light.turn_off
-            entity_id: light.stairs_down
+            target:
+              area_id: stairs

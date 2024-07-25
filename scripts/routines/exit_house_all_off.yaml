@@ -7,7 +7,10 @@ routine_exit_house_all_off:
         - condition: numeric_state
           entity_id: sun.sun
           attribute: elevation
-          below: "0"
+          below: "20"
+        - condition: numeric_state
+          entity_id: sensor.light_sensor_living_room
+          below: "20"
       then:
         - service: light.turn_on
           data: {}
@@ -18,19 +21,21 @@ routine_exit_house_all_off:
 
     - parallel:
         - service: light.turn_off
+          continue_on_error: true
           data: {}
           target:
             area_id:
               - bathroom_main
               - bathroom_rc
               - master_bedroom_bathroom
-              - bedroom_henrique
               - master_bedroom
               - bedroom_ricardo
+              - bedroom_henrique
               - bedroom_rc
               - office
               - laundry
               - hall
+              - stairs
 
         - service: media_player.turn_off
           data: {}
@@ -50,16 +55,18 @@ routine_exit_house_all_off:
           data: {}
 
     - service: script.turn_on
+      continue_on_error: true
       target:
         entity_id: script.sequence_notify_tasks
-      continue_on_error: true
 
     - service: script.turn_on
+      continue_on_error: true
       data: {}
       target:
         entity_id: script.sequence_leaving_home_lights
 
     - service: script.turn_on
+      continue_on_error: true
       data: {}
       target:
         entity_id: script.sequence_open_close_gate

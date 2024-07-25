@@ -5,6 +5,7 @@ house_turn_all_off:
   sequence:
     - parallel:
         - service: light.turn_off
+          continue_on_error: true
           data: {}
           target:
             area_id:
@@ -15,6 +16,7 @@ house_turn_all_off:
               - office
               - outside
               - hall
+              - stairs
               - laundry
               - bedroom_henrique
               - bedroom_rc
