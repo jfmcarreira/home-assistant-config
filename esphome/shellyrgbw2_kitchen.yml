@@ -28,7 +28,7 @@ light:
   - platform: monochromatic
     name: ${upper_devicename}
     output: output_r
-    restore_mode: ALWAYS_ON
+    restore_mode: RESTORE_DEFAULT_OFF
 
   # - platform: monochromatic
   #   name: ${upper_devicename} r

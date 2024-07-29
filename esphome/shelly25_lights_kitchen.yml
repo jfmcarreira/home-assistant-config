@@ -24,7 +24,7 @@ switch:
     id: light_1
     name: Kitchen LED SW
     output: relay_1
-    restore_mode: ALWAYS_OFF
+    restore_mode: ALWAYS_ON
 
 binary_sensor:
   - platform: homeassistant
