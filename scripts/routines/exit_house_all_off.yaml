@@ -9,7 +9,7 @@ routine_exit_house_all_off:
           attribute: elevation
           below: "20"
         - condition: numeric_state
-          entity_id: sensor.light_sensor_living_room
+          entity_id: sensor.light_living_room
           below: "20"
       then:
         - service: light.turn_on
