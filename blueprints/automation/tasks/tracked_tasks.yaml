@@ -86,13 +86,30 @@ action:
           - condition: template
             value_template: >
               {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
-          - service: script.task_notification
-            data:
-              task_message: !input notification_message
-              task_action: !input notification_action_id
-              task_action_message: !input notification_action
-              task_id: !input android_task_id
-
+          - repeat:
+              for_each:
+                - person: person.joao_carreira
+                  device: notify.mobile_app_radium
+                - person: person.bianca_pires
+                  device: notify.mobile_app_calcium
+              sequence:
+                - if:
+                    - "{{ is_state(repeat.item.person, 'home') }}"
+                  then:
+                    - service: "{{ repeat.item.device }}"
+                      data:
+                        title: Tarefa Doméstica
+                        message: !input notification_message
+                        data:
+                          tag: !input android_task_id
+                          priority: high
+                          persistent: false
+                          channel: Tasks
+                          sticky: true
+                          clickAction: "/lovelace/shores"
+                          actions:
+                            - action: !input notification_action_id
+                              title: !input notification_action
     default:
       - service: notify.mobile_app_all
         data:

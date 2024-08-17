@@ -154,17 +154,30 @@ action:
           - condition: template
             value_template: >
               {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
-          - service: script.task_notification
-            data:
-              task_message: !input machine_finish_message
-              task_action: !input notification_action_id
-              task_action_message: !input notification_action
-              task_id: !input android_task_id
-          # - service: persistent_notification.create
-          #   data:
-          #     title: Tarefa Doméstica
-          #     message: !input machine_finish_message
-          #     notification_id: !input notification_action_id
+          - repeat:
+              for_each:
+                - person: person.joao_carreira
+                  device: notify.mobile_app_radium
+                - person: person.bianca_pires
+                  device: notify.mobile_app_calcium
+              sequence:
+                - if:
+                    - "{{ is_state(repeat.item.person, 'home') }}"
+                  then:
+                    - service: "{{ repeat.item.device }}"
+                      data:
+                        title: Tarefa Doméstica
+                        message: !input machine_finish_message
+                        data:
+                          tag: !input android_task_id
+                          priority: high
+                          persistent: false
+                          channel: Tasks
+                          sticky: true
+                          clickAction: "/lovelace/shores"
+                          actions:
+                            - action: !input notification_action_id
+                              title: !input notification_action
 
     default:
       #- conditions: "{{ trigger.id == 'trigger_restart_machine' or trigger.id == 'trigger_notification_action' or trigger.id == 'trigger_notification_action' }}"
