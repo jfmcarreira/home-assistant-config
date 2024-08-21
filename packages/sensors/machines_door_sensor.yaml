@@ -3,25 +3,31 @@ mqtt:
     - name: "Dryer Machine Door"
       unique_id: mqtt_dryer_machine_door
       device_class: door
-      state_topic: "binary_rf_sensors/dryer_machine_door"
-      qos: 1
+      payload_on: "58940A"
+      payload_off: "58940E"
+      state_topic: "tele/tasmota_sonoff_rf_bridge/RESULT"
+      value_template: "{{ value_json.RfReceived.Data }}"
 
     - name: "Washing Machine Door"
       unique_id: mqtt_washing_machine_door
       device_class: door
-      state_topic: "binary_rf_sensors/washing_machine_door"
-      qos: 1
+      payload_on: "57E10A"
+      payload_off: "57E10E"
+      state_topic: "tele/tasmota_sonoff_rf_bridge/RESULT"
+      value_template: "{{ value_json.RfReceived.Data }}"
 
     - name: "Kitchen Extractor Fan Slider"
       unique_id: kitchen_fan_slider
       device_class: door
-      state_topic: "binary_rf_sensors/kitchen_fan_slider"
-      qos: 1
+      payload_on: "E11841"
       off_delay: 30
+      state_topic: "tele/tasmota_sonoff_rf_bridge/RESULT"
+      value_template: "{{ value_json.RfReceived.Data }}"
 
     - name: gate_bell_button
       unique_id: gate_bell_button
       device_class: power
-      state_topic: "binary_rf_sensors/gate_bell_button"
-      qos: 1
+      payload_on: "C29AD8"
       off_delay: 5
+      state_topic: "tele/tasmota_sonoff_rf_bridge/RESULT"
+      value_template: "{{ value_json.RfReceived.Data }}"
