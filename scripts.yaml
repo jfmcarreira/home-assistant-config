@@ -8,22 +8,22 @@ routine_cover_rain_mode:
       control_switch: close_in_rain
 lights_arriving_home:
   alias: Routina de Chegar a Casa
-  mode: single
+  mode: restart
   sequence:
   - if:
     - condition: state
       entity_id: binary_sensor.sun_bellow_horizont
       state: 'on'
     then:
-    - service: light.turn_on
-      target:
+    - target:
         entity_id:
         - light.exterior_wall_back
         - light.exterior_wall_side
         - light.kitchen_door
       data: {}
-    - service: script.lights_control_gate_front_lights
-      data: {}
+      action: light.turn_on
+    - data: {}
+      action: script.lights_control_gate_front_lights
   - wait_for_trigger:
     - platform: state
       entity_id:
@@ -31,10 +31,15 @@ lights_arriving_home:
       to: 'on'
     timeout:
       minutes: 10
-  - service: light.turn_on
-    data: {}
-    target:
-      entity_id: light.kitchen_led
+  - if:
+    - condition: state
+      entity_id: sun.sun
+      state: below_horizon
+    then:
+    - data: {}
+      target:
+        entity_id: light.kitchen_led
+      action: light.turn_on
   - wait_for_trigger:
     - platform: state
       entity_id:
@@ -48,13 +53,13 @@ lights_arriving_home:
       to: 'off'
     timeout:
       minutes: 10
-  - service: light.turn_off
-    target:
+  - target:
       entity_id:
       - light.exterior_wall_side
       - light.exterior_wall_back
       - light.kitchen_door
     data: {}
+    action: light.turn_off
 lights_control_gate_front_lights:
   alias: Lights Control Gate Front Lights
   sequence:
@@ -95,7 +100,15 @@ gate_notify_door_bell_snapshot:
     entity_id: camera.front_camera
     data:
       filename: '{{ snapshot_create_file_path }}'
-  - service: notify.mobile_app_all
+  - service: notify.mobile_app_radium
+    metadata: {}
+    data:
+      title: Exterior
+      message: Campainha accionada
+      data:
+        image: '{{ snapshot_access_file_path }}'
+        clickAction: entityId:camera.front_camera
+  - service: notify.mobile_app_calcium
     metadata: {}
     data:
       title: Exterior
@@ -114,7 +127,7 @@ gate_display_front_camere_tablet:
       large: true
       ignore_popup_card: true
       browser_id:
-      - fea7f0ab-b9871cee
+      - fire-tablet
   - wait_for_trigger:
     - platform: state
       entity_id:
@@ -146,4 +159,38 @@ gate_display_front_camere_tablet:
     metadata: {}
     data:
       browser_id:
-      - fea7f0ab-b9871cee
+      - fire-tablet
+routine_dinner_time:
+  alias: Routina Modo de Refeição
+  mode: restart
+  sequence:
+  - target:
+      entity_id:
+      - light.living_room_table
+    action: light.turn_on
+    data: {}
+  - action: remote.turn_on
+    data:
+      activity: ottapp://
+    target:
+      entity_id: remote.living_room_tv_meo_box
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - if:
+    - condition: state
+      entity_id: remote.living_room_tv_meo_box
+      state: 'off'
+    then:
+    - wait_for_trigger:
+      - platform: state
+        entity_id:
+        - remote.living_room_tv_meo_box
+        to: 'on'
+      timeout:
+        hours: 0
+        minutes: 0
+        seconds: 10
+        milliseconds: 0
