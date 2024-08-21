@@ -23,7 +23,7 @@ influxdb:
       # Temperature / Humidity
       - sensor.temperature_*
       - sensor.humidity_*
-      - sensor.light_sensor_*
+      - sensor.light_*
       # Sensors Battery
       - sensor.sensor_battery_*
     entities:
