@@ -13,11 +13,9 @@ generic_hygrostat:
     max_humidity: 90
     dry_tolerance: 2
     wet_tolerance: 2
-    min_cycle_duration:
-      seconds: 30
+    min_cycle_duration: "00:00:15"
     initial_state: false
-    sensor_stale_duration:
-      minutes: 60
+    sensor_stale_duration: "00:60:00"
 
 input_select:
   dehumidifier_location:
