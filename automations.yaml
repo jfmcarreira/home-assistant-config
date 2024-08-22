@@ -809,21 +809,6 @@
     before: '23:30'
   action: []
   mode: restart
-- id: '1670520386584'
-  alias: Kitchen Extractor Fan Control
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - binary_sensor.kitchen_extractor_fan_slider
-    to: 'on'
-  condition: []
-  action:
-  - service: fan.turn_on
-    data: {}
-    target:
-      entity_id: fan.kitchen_extractor
-  mode: single
 - id: '1670674527026'
   alias: lights_auto_off_stairs_with_lux
   description: ''
@@ -2796,4 +2781,37 @@
         sticky: false
         clickAction: /lovelace-subviews/dashboard-ac
     action: notify.mobile_app_all
+  mode: single
+- id: '1724277480761'
+  alias: lights_turn_on_kitchen_led_switch
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.kitchen_led
+    to: unavailable
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+  condition:
+  - condition: state
+    entity_id: switch.kitchen_led_sw
+    state: 'off'
+  action:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.kitchen_led_sw
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.kitchen_led
   mode: single

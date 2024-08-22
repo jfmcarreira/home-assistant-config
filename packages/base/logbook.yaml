@@ -23,9 +23,11 @@ logbook:
       - light.master_bedroom_bathroom
       - light.kitchen
       - light.office
+      - script.select_next_house_mode
     entity_globs:
       - light.*_group
       - sensor.wifi_*
+      - script.sequence_*
     domains:
       - updater
       - weblink
