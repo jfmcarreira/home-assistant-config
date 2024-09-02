@@ -53,10 +53,6 @@ binary_sensor:
               then:
                 - light.turn_off: light_1
                 - light.turn_off: light_2
-                - homeassistant.service:
-                    service: light.turn_off
-                    data:
-                      entity_id: light.bedroom_ricardo_lamp
               else:
                 - if:
                     condition:
@@ -64,7 +60,7 @@ binary_sensor:
                         - api.connected:
                         - binary_sensor.is_on: house_mode_night
                     then:
-                      - light.turn_on: light_1
+                      - light.turn_on: light_2
                       - globals.set:
                           id: lights_state
                           value: "1"
