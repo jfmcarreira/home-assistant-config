@@ -1,0 +1,152 @@
+climate:
+  - platform: haier
+    id: haier_ac
+    icon: mdi:air-conditioner
+    protocol: hon
+    name: ${AcName}
+    uart_id: haier_uart
+    wifi_signal: true
+    answer_timeout: 500ms
+    beeper: true
+    display: true
+    visual:
+      min_temperature: 16 °C
+      max_temperature: 30 °C
+      temperature_step: 1 °C
+    supported_modes:
+      - "OFF"
+      - HEAT_COOL
+      - COOL
+      - HEAT
+      - DRY
+      - FAN_ONLY
+    supported_swing_modes:
+      - "OFF"
+      - VERTICAL
+    supported_presets:
+      - AWAY
+      - ECO
+      - BOOST
+      - SLEEP
+    on_alarm_start:
+      then:
+        - logger.log:
+            level: WARN
+            format: 'Alarm activated. Code: %d. Message: "%s"'
+            args: [code, message]
+    on_alarm_end:
+      then:
+        - logger.log:
+            level: INFO
+            format: 'Alarm deactivated. Code: %d. Message: "%s"'
+            args: [code, message]
+    on_status_message:
+      then:
+        - logger.log:
+            level: INFO
+            format: "New status message received, size=%d, subcmd=%02X%02X"
+            args: ["data_size", "data[0]", "data[1]"]
+
+select:
+  - platform: template
+    name: ${AcName} AC Vertical Swing
+    entity_category: ""
+    icon: mdi:arrow-expand-vertical
+    update_interval: 5s
+    options:
+      - Auto
+      - Máximo Cima
+      - Cima
+      - Centrado
+      - Baixo
+      - Máximo Baixo
+      - Baixo Saudável
+      - Cima Saudável
+    lambda: >-
+      switch (id(haier_ac).get_vertical_airflow().value_or(esphome::haier::hon_protocol::VerticalSwingMode::CENTER))
+      {
+          case esphome::haier::hon_protocol::VerticalSwingMode::HEALTH_UP:
+              return std::string("Cima Saudável");
+          case esphome::haier::hon_protocol::VerticalSwingMode::MAX_UP:
+              return std::string("Máximo Cima");
+          case esphome::haier::hon_protocol::VerticalSwingMode::UP:
+              return std::string("Cima");
+          default:
+          case esphome::haier::hon_protocol::VerticalSwingMode::CENTER:
+              return std::string("Centrado");
+          case esphome::haier::hon_protocol::VerticalSwingMode::DOWN:
+              return std::string("Baixo");
+          case esphome::haier::hon_protocol::VerticalSwingMode::MAX_DOWN:
+              return std::string("Máximo Baixo");
+          case esphome::haier::hon_protocol::VerticalSwingMode::HEALTH_DOWN:
+              return std::string("Baixo Saudável");
+          case esphome::haier::hon_protocol::VerticalSwingMode::AUTO:
+          case esphome::haier::hon_protocol::VerticalSwingMode::AUTO_SPECIAL:
+              return std::string("Auto");
+      }
+    set_action:
+      - climate.haier.set_vertical_airflow:
+          id: haier_ac
+          vertical_airflow: !lambda >-
+            if (x == "Cima Saudável")
+                return esphome::haier::hon_protocol::VerticalSwingMode::HEALTH_UP;
+            else if (x == "Máximo Cima")
+                return esphome::haier::hon_protocol::VerticalSwingMode::MAX_UP;
+            else if (x == "Cima")
+                return esphome::haier::hon_protocol::VerticalSwingMode::UP;
+            else if (x == "Baixo")
+                return esphome::haier::hon_protocol::VerticalSwingMode::DOWN;
+            else if (x == "Máximo Baixo")
+                return esphome::haier::hon_protocol::VerticalSwingMode::MAX_DOWN;
+            else if (x == "Baixo Saudável")
+                return esphome::haier::hon_protocol::VerticalSwingMode::HEALTH_DOWN;
+            else if (x == "Auto")
+                return esphome::haier::hon_protocol::VerticalSwingMode::AUTO;
+            else
+                return esphome::haier::hon_protocol::VerticalSwingMode::CENTER;
+
+sensor:
+  - platform: haier
+    haier_id: haier_ac
+    indoor_coil_temperature:
+      name: ${AcName} AC Temperature Indoor Coil
+      entity_category: ""
+    expansion_valve_open_degree:
+      name: ${AcName} AC Expansion Valve Open Degree
+      entity_category: ""
+
+switch:
+  - platform: template
+    entity_category: config
+    name: ${AcName} AC Beep
+    icon: mdi:volume-high
+    restore_mode: RESTORE_DEFAULT_OFF
+    lambda: |-
+      return id(haier_ac).get_beeper_state();
+    turn_on_action:
+      climate.haier.beeper_on: haier_ac
+    turn_off_action:
+      climate.haier.beeper_off: haier_ac
+
+  - platform: template
+    name: ${AcName} AC Display
+    icon: mdi:led-on
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    lambda: |-
+      return id(haier_ac).get_display_state();
+    turn_on_action:
+      climate.haier.display_on: haier_ac
+    turn_off_action:
+      climate.haier.display_off: haier_ac
+
+  - platform: template
+    name: ${AcName} AC Health Mode
+    icon: mdi:leaf
+    restore_mode: RESTORE_DEFAULT_OFF
+    lambda: |-
+      return id(haier_ac).get_health_mode();
+    turn_on_action:
+      climate.haier.health_on: haier_ac
+    turn_off_action:
+      climate.haier.health_off: haier_ac

@@ -1,0 +1,18 @@
+esphome:
+  friendly_name: D1 Mini Haier Bedroom Ricardo
+  name: d1-mini-haier-bedroom-ricardo
+  platform: ESP8266
+  board: d1_mini
+
+packages:
+  esphome_base: !include packages/common.yml
+  haier_ac: !include
+    file: packages/haier_ac.yml
+    vars:
+      AcName: Bedroom Ricardo
+
+uart:
+  - id: haier_uart
+    baud_rate: 9600
+    tx_pin: GPIO15
+    rx_pin: GPIO13
