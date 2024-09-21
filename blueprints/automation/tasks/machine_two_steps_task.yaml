@@ -44,6 +44,11 @@ blueprint:
       name: Código quando a máquina termina (Dryer_Machine_Clean)
     task_done_code_name:
       name: Código quando a tarefa é executada (Dryer_Machine_Empty)
+    send_notification:
+      name: Enviar notificações
+      default: "on"
+      selector:
+        boolean:
     machine_finish_message:
       name: Mensagem na Notificação
       description: >
@@ -79,6 +84,7 @@ variables:
   energy_usage: >
     {{ states(machine_energy) | float - state_attr(task_needs_attention, 'energia_total') | float(0) }}
   tts_message_timming: "00:00:10"
+  send_notification: !input send_notification
 
 trigger:
   - id: trigger_machine_finished
@@ -145,6 +151,8 @@ action:
   - choose:
       - conditions: "{{ trigger.id == 'trigger_machine_finished' or trigger.id == 'trigger_send_notification' }}"
         sequence:
+          - condition: template
+            value_template: "{{ send_notification == True }}"
           - condition: state
             entity_id: binary_sensor.notification_non_disturb
             state: "off"

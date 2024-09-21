@@ -15,6 +15,19 @@ blueprint:
           domain: binary_sensor
     task_done_code_name:
       name: Código quando a tarefa é executada (Dryer_Machine_Empty)
+    task_sensor:
+      name: Sensor com última realização
+      description: Sensor SQL que guarda a última execução da tarefaz
+      selector:
+        entity:
+          integration: sql
+          domain: sensor
+    send_notification:
+      name: Notificação
+      description: Controlo para enviar notificações
+      default: "on"
+      selector:
+        boolean:
     notification_message:
       name: Mensagem na Notificação
       description: >
@@ -46,6 +59,7 @@ variables:
   record_timestamp: "{{ now().timestamp() | timestamp_custom('%Y-%m-%d %H:%M:%S') }}"
   task_needs_attention: !input task_needs_attention
   tts_message_timming: "00:00:10"
+  send_notification: !input send_notification
 
 trigger:
   - id: trigger_task_overdue
@@ -77,6 +91,8 @@ action:
   - choose:
       - conditions: "{{ trigger.id == 'trigger_task_overdue' or trigger.id == 'trigger_send_notification' }}"
         sequence:
+          - condition: template
+            value_template: "{{ send_notification == True }}"
           - condition: state
             entity_id: binary_sensor.notification_non_disturb
             state: "off"
@@ -131,3 +147,9 @@ action:
             "{{ record_timestamp}}"
           save_string: "true"
           save_date_time: "true"
+
+      - delay: 00:00:01
+
+      - action: homeassistant.update_entity
+        data:
+          entity_id: !input task_sensor
