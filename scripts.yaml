@@ -2,195 +2,566 @@ routine_cover_rain_mode:
   alias: Routina Modo de Chuva
   mode: single
   sequence:
-  - service: script.cover_group_action
-    data:
-      action_to_run: script.cover_close_when_raining
-      control_switch: close_in_rain
+    - service: script.cover_group_action
+      data:
+        action_to_run: script.cover_close_when_raining
+        control_switch: close_in_rain
 lights_arriving_home:
   alias: Routina de Chegar a Casa
   mode: restart
   sequence:
-  - if:
-    - condition: state
-      entity_id: binary_sensor.sun_bellow_horizont
-      state: 'on'
-    then:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.sun_bellow_horizont
+          state: "on"
+      then:
+        - target:
+            entity_id:
+              - light.exterior_wall_back
+              - light.exterior_wall_side
+              - light.kitchen_door
+          data: {}
+          action: light.turn_on
+        - data: {}
+          action: script.lights_control_gate_front_lights
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.kitchen_door
+          to: "on"
+      timeout:
+        minutes: 10
+    - if:
+        - condition: state
+          entity_id: sun.sun
+          state: below_horizon
+      then:
+        - data: {}
+          target:
+            entity_id: light.kitchen_led
+          action: light.turn_on
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.kitchen_door
+          to: "off"
+          for:
+            minutes: 5
+        - platform: state
+          entity_id:
+            - light.kitchen_door
+          to: "off"
+      timeout:
+        minutes: 10
     - target:
         entity_id:
-        - light.exterior_wall_back
-        - light.exterior_wall_side
-        - light.kitchen_door
+          - light.exterior_wall_side
+          - light.exterior_wall_back
+          - light.kitchen_door
       data: {}
-      action: light.turn_on
-    - data: {}
-      action: script.lights_control_gate_front_lights
-  - wait_for_trigger:
-    - platform: state
-      entity_id:
-      - binary_sensor.kitchen_door
-      to: 'on'
-    timeout:
-      minutes: 10
-  - if:
-    - condition: state
-      entity_id: sun.sun
-      state: below_horizon
-    then:
-    - data: {}
-      target:
-        entity_id: light.kitchen_led
-      action: light.turn_on
-  - wait_for_trigger:
-    - platform: state
-      entity_id:
-      - binary_sensor.kitchen_door
-      to: 'off'
-      for:
-        minutes: 5
-    - platform: state
-      entity_id:
-      - light.kitchen_door
-      to: 'off'
-    timeout:
-      minutes: 10
-  - target:
-      entity_id:
-      - light.exterior_wall_side
-      - light.exterior_wall_back
-      - light.kitchen_door
-    data: {}
-    action: light.turn_off
+      action: light.turn_off
 lights_control_gate_front_lights:
   alias: Lights Control Gate Front Lights
   sequence:
-  - condition: state
-    entity_id: binary_sensor.sun_bellow_horizont
-    state: 'on'
-  - service: light.turn_on
-    target:
-      entity_id: light.gate_lights
-    data: {}
-  - wait_for_trigger:
-    - platform: state
-      entity_id:
-      - cover.gate
-      to: closed
-      for:
+    - condition: state
+      entity_id: binary_sensor.sun_bellow_horizont
+      state: "on"
+    - service: light.turn_on
+      target:
+        entity_id: light.gate_lights
+      data: {}
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - cover.gate
+          to: closed
+          for:
+            hours: 0
+            minutes: 0
+            seconds: 30
+      timeout:
         hours: 0
-        minutes: 0
-        seconds: 30
-    timeout:
-      hours: 0
-      minutes: 30
-      seconds: 0
-      milliseconds: 0
-  - service: light.turn_off
-    target:
-      entity_id: light.gate_lights
-    data: {}
+        minutes: 30
+        seconds: 0
+        milliseconds: 0
+    - service: light.turn_off
+      target:
+        entity_id: light.gate_lights
+      data: {}
   mode: single
 gate_notify_door_bell_snapshot:
   alias: Campainha - Notificar App
   mode: single
   variables:
     snapshot_create_file_path: /config/www/camera/snapshot_front_door.jpg
-    snapshot_access_file_path: '{{ snapshot_create_file_path | replace(''/config/www'',''/local'')}}'
+    snapshot_access_file_path: "{{ snapshot_create_file_path | replace('/config/www','/local')}}"
   sequence:
-  - service: camera.snapshot
-    entity_id: camera.front_camera
-    data:
-      filename: '{{ snapshot_create_file_path }}'
-  - service: notify.mobile_app_radium
-    metadata: {}
-    data:
-      title: Exterior
-      message: Campainha accionada
+    - service: camera.snapshot
+      entity_id: camera.front_camera
       data:
-        image: '{{ snapshot_access_file_path }}'
-        clickAction: entityId:camera.front_camera
-  - service: notify.mobile_app_calcium
-    metadata: {}
-    data:
-      title: Exterior
-      message: Campainha accionada
+        filename: "{{ snapshot_create_file_path }}"
+    - service: notify.mobile_app_radium
+      metadata: {}
       data:
-        image: '{{ snapshot_access_file_path }}'
-        clickAction: entityId:camera.front_camera
+        title: Exterior
+        message: Campainha accionada
+        data:
+          image: "{{ snapshot_access_file_path }}"
+          clickAction: entityId:camera.front_camera
+    - service: notify.mobile_app_calcium
+      metadata: {}
+      data:
+        title: Exterior
+        message: Campainha accionada
+        data:
+          image: "{{ snapshot_access_file_path }}"
+          clickAction: entityId:camera.front_camera
 gate_display_front_camere_tablet:
   alias: Campainha - Mostrar Camera da Frente Tablet
   mode: single
   sequence:
-  - service: browser_mod.more_info
-    target: {}
-    data:
-      entity: camera.front_camera
-      large: true
-      ignore_popup_card: true
-      browser_id:
-      - fire-tablet
-  - wait_for_trigger:
-    - platform: state
-      entity_id:
-      - binary_sensor.kitchen_door
-      - binary_sensor.front_door
-      from:
-      to: 'on'
-    - platform: state
-      entity_id:
-      - lock.gate_door
-      from:
-      to: unlocked
-    - platform: state
-      entity_id:
-      - cover.gate
-      from: closed
-      to: opening
-    - platform: state
-      entity_id:
-      - cover.gate
-      from:
-      to: open
-    timeout:
-      hours: 0
-      minutes: 5
-      seconds: 0
-      milliseconds: 0
-  - service: browser_mod.close_popup
-    metadata: {}
-    data:
-      browser_id:
-      - fire-tablet
+    - service: browser_mod.more_info
+      target: {}
+      data:
+        entity: camera.front_camera
+        large: true
+        ignore_popup_card: true
+        browser_id:
+          - fire-tablet
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.kitchen_door
+            - binary_sensor.front_door
+          from:
+          to: "on"
+        - platform: state
+          entity_id:
+            - lock.gate_door
+          from:
+          to: unlocked
+        - platform: state
+          entity_id:
+            - cover.gate
+          from: closed
+          to: opening
+        - platform: state
+          entity_id:
+            - cover.gate
+          from:
+          to: open
+      timeout:
+        hours: 0
+        minutes: 5
+        seconds: 0
+        milliseconds: 0
+    - service: browser_mod.close_popup
+      metadata: {}
+      data:
+        browser_id:
+          - fire-tablet
 routine_dinner_time:
   alias: Routina Modo de Refeição
   mode: restart
   sequence:
-  - target:
-      entity_id:
-      - light.living_room_table
-    action: light.turn_on
-    data: {}
-  - action: remote.turn_on
-    data:
-      activity: ottapp://
-    target:
-      entity_id: remote.living_room_tv_meo_box
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 3
-      milliseconds: 0
-  - if:
-    - condition: state
-      entity_id: remote.living_room_tv_meo_box
-      state: 'off'
-    then:
-    - wait_for_trigger:
-      - platform: state
+    - target:
         entity_id:
-        - remote.living_room_tv_meo_box
-        to: 'on'
-      timeout:
+          - light.living_room_table
+      action: light.turn_on
+      data: {}
+    - action: remote.turn_on
+      data:
+        activity: ottapp://
+      target:
+        entity_id: remote.living_room_tv_meo_box
+    - delay:
         hours: 0
         minutes: 0
-        seconds: 10
+        seconds: 3
         milliseconds: 0
+    - if:
+        - condition: state
+          entity_id: remote.living_room_tv_meo_box
+          state: "off"
+      then:
+        - wait_for_trigger:
+            - platform: state
+              entity_id:
+                - remote.living_room_tv_meo_box
+              to: "on"
+          timeout:
+            hours: 0
+            minutes: 0
+            seconds: 10
+            milliseconds: 0
+routine_exit_house_to_work_bianca:
+  alias: Routina ir Trabalhar - Bianca
+  mode: single
+  icon: mdi:exit-run
+  sequence:
+    - if:
+        - condition: state
+          entity_id: input_boolean.day_off_work
+          state: "off"
+        - condition: state
+          entity_id: input_select.last_going_work
+          state: "Bianca"
+      then:
+        - service: script.turn_on
+          target:
+            entity_id: script.routine_exit_house_all_off
+          data: {}
+      else:
+        - service: script.turn_on
+          data: {}
+          target:
+            entity_id: script.sequence_leaving_home_lights
+        - condition: state
+          entity_id: binary_sensor.bianca_home
+          state: "on"
+        - service: cover.open_cover
+          data: {}
+          target:
+            entity_id: cover.gate
+        - wait_for_trigger:
+            - platform: state
+              entity_id:
+                - binary_sensor.bianca_home
+              to: "off"
+              from: "on"
+          timeout: 00:10:00
+        - condition: state
+          entity_id: binary_sensor.bianca_home
+          state: "off"
+        - service: cover.close_cover
+          data: {}
+          target:
+            entity_id: cover.gate
+routine_exit_house_to_work_joao:
+  alias: Routina ir Trabalhar - Joao
+  mode: single
+  icon: mdi:exit-run
+  sequence:
+    - if:
+        - condition: state
+          entity_id: input_boolean.day_off_work
+          state: "off"
+        - condition: state
+          entity_id: input_select.last_going_work
+          state: "João"
+      then:
+        - service: script.turn_on
+          target:
+            entity_id: script.routine_exit_house_all_off
+          data: {}
+      else:
+        - service: script.turn_on
+          data: {}
+          target:
+            entity_id: script.sequence_leaving_home_lights
+        - condition: state
+          entity_id: binary_sensor.joao_home
+          state: "on"
+        - service: cover.open_cover
+          data: {}
+          target:
+            entity_id: cover.gate
+        - wait_for_trigger:
+            - platform: state
+              entity_id:
+                - binary_sensor.joao_home
+              to: "off"
+              from: "on"
+          timeout: 00:10:00
+        - condition: state
+          entity_id: binary_sensor.joao_home
+          state: "off"
+        - service: cover.close_cover
+          data: {}
+          target:
+            entity_id: cover.gate
+routine_leaving_and_coming_back:
+  alias: Vou Ali e Já Venho
+  mode: single
+  sequence:
+    - variables:
+        joao_was_home: "{{ is_state('binary_sensor.joao_home','on' ) }}"
+        bianca_was_home: "{{ is_state('binary_sensor.bianca_home','on' ) }}"
+
+    - service: script.turn_on
+      data: {}
+      target:
+        entity_id: script.sequence_leaving_home_lights
+
+    - service: script.sequence_open_close_gate
+house_turn_all_off:
+  alias: Desligar a Casa Toda
+  mode: restart
+  icon: mdi:home-off
+  sequence:
+    - parallel:
+        - service: light.turn_off
+          continue_on_error: true
+          data: {}
+          target:
+            area_id:
+              - bathroom_main
+              - bathroom_rc
+              - master_bedroom_bathroom
+              - kitchen
+              - office
+              - outside
+              - hall
+              - stairs
+              - laundry
+              - bedroom_henrique
+              - bedroom_rc
+              - bedroom_ricardo
+              - living_room
+              - master_bedroom
+        - service: media_player.turn_off
+          data: {}
+          target:
+            entity_id:
+              - media_player.google_home_speakers
+              - media_player.living_room_tv
+        - service: homeassistant.turn_off
+          target:
+            area_id: xmas
+          data: {}
+        - service: climate.turn_off
+          target:
+            entity_id: climate.portable_heater
+          data: {}
+routine_good_night:
+  alias: Routina de Boa Noite
+  mode: single
+  icon: mdi:sleep
+  sequence:
+    - service: light.turn_on
+      data: {}
+      target:
+        entity_id: light.stairs_wall
+
+    - parallel:
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 30
+            milliseconds: 0
+
+        - service: notify.mobile_app_all
+          data:
+            message: clear_notification
+            data:
+              tag: 923
+              dismiss: true
+        - service: cover.close_cover
+          data: {}
+          target:
+            entity_id: cover.gate
+        - service: light.turn_off
+          data: {}
+          target:
+            area_id:
+              - bathroom_main
+              - bathroom_rc
+              - kitchen
+              - office
+              - outside
+              - laundry
+              - bedroom_henrique
+              - bedroom_rc
+
+        - service: fan.turn_off
+          target:
+            area_id:
+              - bathroom_main
+              - bathroom_rc
+              - master_bedroom
+          data: {}
+
+        - service: media_player.turn_off
+          data: {}
+          target:
+            entity_id:
+              - media_player.google_home_speakers
+              - media_player.living_room_tv
+
+        - service: homeassistant.turn_off
+          target:
+            area_id: xmas
+          data: {}
+
+        - service: climate.turn_off
+          target:
+            entity_id: climate.portable_heater
+          data: {}
+
+        - service: humidifier.turn_off
+          data: {}
+          target:
+            entity_id: humidifier.portable_dehumidifier
+
+        - if:
+            - condition: not
+              conditions:
+                - condition: state
+                  entity_id: climate.master_bedroom
+                  state: "off"
+          then:
+            - service: climate.turn_off
+              data: {}
+              target:
+                entity_id:
+                  - climate.master_bedroom
+        - if:
+            - condition: not
+              conditions:
+                - condition: state
+                  entity_id: climate.bedroom_ricardo
+                  state: "off"
+          then:
+            - service: climate.turn_off
+              data: {}
+              target:
+                entity_id:
+                  - climate.bedroom_ricardo
+
+        - service: climate.turn_off
+          data: {}
+          target:
+            entity_id:
+              - climate.living_room
+
+    - service: input_select.select_option
+      data:
+        option: Sleep
+      target:
+        entity_id: input_select.house_mode
+
+    - service: switch.turn_off
+      continue_on_error: true
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.fire_tablet_screen
+
+    - service: light.turn_off
+      data: {}
+      target:
+        area_id:
+          - bathroom_main
+          - bathroom_rc
+          - kitchen
+          - office
+          - outside
+          - laundry
+          - bedroom_henrique
+          - bedroom_rc
+          - hall
+          - stairs
+          - living_room
+routine_exit_house_all_off:
+  alias: Routina de Sair de Casa (Desligar Tudo)
+  mode: single
+  icon: mdi:exit-run
+  sequence:
+    - if:
+        - condition: numeric_state
+          entity_id: sun.sun
+          attribute: elevation
+          below: "20"
+        - condition: numeric_state
+          entity_id: sensor.light_living_room
+          below: "20"
+      then:
+        - service: light.turn_on
+          data: {}
+          target:
+            entity_id:
+              - light.kitchen_led
+              - light.hallway
+
+    - parallel:
+        - service: light.turn_off
+          continue_on_error: true
+          data: {}
+          target:
+            area_id:
+              - bathroom_main
+              - bathroom_rc
+              - master_bedroom_bathroom
+              - master_bedroom
+              - bedroom_ricardo
+              - bedroom_henrique
+              - bedroom_rc
+              - office
+              - laundry
+              - hall
+              - stairs
+
+        - service: media_player.turn_off
+          data: {}
+          target:
+            entity_id:
+              - media_player.google_home_speakers
+              - media_player.living_room_tv
+
+        - service: homeassistant.turn_off
+          target:
+            area_id: xmas
+          data: {}
+
+        - service: climate.turn_off
+          target:
+            entity_id: climate.portable_heater
+          data: {}
+
+    - service: script.turn_on
+      continue_on_error: true
+      target:
+        entity_id: script.sequence_notify_tasks
+
+    - service: script.turn_on
+      continue_on_error: true
+      data: {}
+      target:
+        entity_id: script.sequence_leaving_home_lights
+
+    - service: script.turn_on
+      continue_on_error: true
+      data: {}
+      target:
+        entity_id: script.sequence_open_close_gate
+
+    - service: script.sequence_door_open
+
+    - service: light.turn_off
+      data: {}
+      target:
+        area_id:
+          - kitchen
+          - living_room
+
+    - service: input_select.select_option
+      data:
+        option: "Off"
+      target:
+        entity_id: input_select.house_mode
+
+    - type: turn_off
+      device_id: 2ae8ef1981d03f83e4144debe519a697
+      entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
+      domain: switch
+
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.notify_home
+          to: "on"
+      timeout: 00:20:00
+
+    - service: light.turn_off
+      data:
+        entity_id: all

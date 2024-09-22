@@ -5,7 +5,7 @@ sequence_leaving_home_lights:
     - condition: numeric_state
       entity_id: sun.sun
       attribute: elevation
-      below: "5"
+      below: "10"
 
     - if:
         - condition: state
