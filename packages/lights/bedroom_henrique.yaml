@@ -1,7 +1,7 @@
 light:
   - platform: template
     lights:
-      bedroom_henrique_group:
+      bedroom_henrique:
         unique_id: lights_bedroom_henrique_group
         friendly_name: Luzes do Quarto do henrique
         value_template: >-
