@@ -12,4 +12,4 @@
         {% else %}
             mdi:water-pump-off
         {% endif %}
-      state: "{{ states('sensor.device_power_solar_water_heater_pump') | round(1, default=0) | int > 2 }}"
+      state: "{{ states('sensor.solar_panel_pump_speed') | round(1, default=0) | int > 10 }}"
