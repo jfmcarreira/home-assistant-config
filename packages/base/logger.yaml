@@ -1,4 +1,2 @@
 logger:
   default: error
-  logs:
-    homeassistant.components.shell_command: debug
