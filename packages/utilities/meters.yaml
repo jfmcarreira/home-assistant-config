@@ -3,7 +3,7 @@
 ################################################################
 homeassistant:
   customize:
-    automation.meters_save_water_gas_meters_counter_to_db:
+    automation.meters_save_water_meter_counter_to_db:
       friendly_name: Guardar Contagens da Água/Gás na BD
     automation.meters_save_electricity_meters_counter_to_db:
       friendly_name: Guardar Contagens da Electrecidade na BD
@@ -59,7 +59,7 @@ input_number:
     mode: box
 
 automation:
-  - alias: meters_save_water_gas_meters_counter_to_db
+  - alias: meters_save_water_meter_counter_to_db
     initial_state: true
     mode: queued
     max: 20
@@ -78,8 +78,6 @@ automation:
           column: >
             {% if trigger.entity_id == "input_number.water_meter" %}
               water_meter
-            {% elif trigger.entity_id == "input_number.gas_meter" %}
-              gas_meter
             {% endif %}
 
   - alias: meters_save_electricity_meters_counter_to_db
@@ -110,7 +108,6 @@ automation:
             {% elif trigger.entity_id == "input_number.electricity_meter_offpeak" %}
               electricity_meter_offpeak
             {% endif %}
-
       # - service: shell_command.external_my_sql_insert
       #   data_template:
       #     table: meters_tracking
