@@ -25,12 +25,5 @@ light:
                 entity_id: light.master_bedroom_entry
         turn_off:
           - service: light.turn_off
-            entity_id: light.master_bedroom_ceiling
-          - service: light.turn_off
-            entity_id: light.master_bedroom_entry
-          - service: light.turn_off
-            entity_id: light.master_bedroom_closet
-          - service: light.turn_off
-            entity_id: light.master_bedroom_bed_wall
-          - service: light.turn_off
-            entity_id: light.master_bedroom_bed_window
+            target:
+              area_id: master_bedroom

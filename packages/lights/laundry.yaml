@@ -22,6 +22,5 @@ light:
                 entity_id: light.laundry_extra
         turn_off:
           - service: light.turn_off
-            entity_id: light.laundry_main
-          - service: light.turn_off
-            entity_id: light.laundry_extra
+            target:
+              area_id: laundry

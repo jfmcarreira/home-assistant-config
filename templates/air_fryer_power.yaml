@@ -1,8 +1,0 @@
-- sensor:
-    - name: device_power_air_fryer
-      unique_id: device_power_air_fryer
-      device_class: power
-      unit_of_measurement: "W"
-      state_class: measurement
-      state: >-
-        {{ states('sensor.device_plug_power_air_fryer') | float(0.0) | round(3) }}
