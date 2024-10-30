@@ -14,5 +14,13 @@ packages:
 uart:
   - id: haier_uart
     baud_rate: 9600
-    tx_pin: GPIO15
-    rx_pin: GPIO13
+    tx_pin: D1 # White
+    rx_pin: D2 # Green
+
+# light:
+#   - platform: status_led
+#     id: light_status_led
+#     pin:
+#       number: GPIO02
+#       inverted: true
+#     internal: true

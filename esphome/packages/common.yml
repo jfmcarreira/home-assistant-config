@@ -24,5 +24,5 @@ time:
 
 sensor:
   - platform: wifi_signal
-    name: "WiFi ${devicename}"
+    id: wifi_signal_sensor
     update_interval: 60s
