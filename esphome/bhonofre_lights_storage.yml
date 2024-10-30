@@ -14,7 +14,7 @@ binary_sensor:
   - platform: gpio
     id: sw_1
     pin:
-      number: GPIO2
+      number: GPIO14
       mode: INPUT_PULLUP
       inverted: true
     on_press:
@@ -23,7 +23,7 @@ binary_sensor:
   - platform: gpio
     id: sw_2
     pin:
-      number: GPIO12
+      number: GPIO13
       mode: INPUT_PULLUP
       inverted: true
     on_press:
@@ -32,27 +32,41 @@ binary_sensor:
   - platform: gpio
     id: sw_3
     pin:
-      number: GPIO14
+      number: GPIO2
       mode: INPUT_PULLUP
       inverted: true
-    on_press:
-      - homeassistant.service:
-          service: light.toggle
-          data:
-            entity_id: light.kitchen_door
+    on_multi_click:
+      - timing:
+          - ON for at most 1000ms
+          - OFF for at least 100ms
+        then:
+          - homeassistant.service:
+              service: light.toggle
+              data:
+                entity_id: light.kitchen_door
+      - timing:
+          - ON for at least 1000ms
+        then:
+          - homeassistant.service:
+              service: switch.toggle
+              data:
+                entity_id: switch.pool_pump
+
+    # on_press:
+    #
 
   - platform: gpio
     id: sw_4
     pin:
-      number: GPIO13
+      number: GPIO15
       mode: INPUT_PULLUP
       inverted: true
-    on_press:
-      - homeassistant.service:
-          service: light.toggle
-          data:
-            entity_id: light.exterior_wall_back
-            #entity_id: light.exterior_wall_side
+    # on_press:
+    #   - homeassistant.service:
+    #       service: light.toggle
+    #       data:
+    #         entity_id: light.exterior_wall_back
+    #         #entity_id: light.exterior_wall_side
 
 output:
   - platform: gpio
@@ -77,3 +91,5 @@ light:
     platform: binary
     output: relay_2
     restore_mode: ALWAYS_OFF
+# logger:
+#   level: DEBUG
