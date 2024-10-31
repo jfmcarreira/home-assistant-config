@@ -40,6 +40,14 @@ script:
 
 binary_sensor:
   - platform: homeassistant
+    id: master_bedroom_bed_wall
+    entity_id: light.master_bedroom_bed_wall
+
+  - platform: homeassistant
+    id: master_bedroom_bed_window
+    entity_id: light.master_bedroom_bed_window
+
+  - platform: homeassistant
     id: master_bedroom_closet_state
     entity_id: light.master_bedroom_closet
 
@@ -56,6 +64,8 @@ binary_sensor:
                   - light.is_on: light_1
                   - light.is_on: light_2
                   - binary_sensor.is_on: master_bedroom_closet_state
+                  - binary_sensor.is_on: master_bedroom_bed_wall
+                  - binary_sensor.is_on: master_bedroom_bed_window
               then:
                 - light.turn_off: light_1
                 - light.turn_off: light_2
@@ -67,6 +77,14 @@ binary_sensor:
                           service: light.turn_off
                           data:
                             entity_id: light.master_bedroom_closet
+                      - homeassistant.service:
+                          service: light.turn_off
+                          data:
+                            entity_id: light.master_bedroom_bed_wall
+                      - homeassistant.service:
+                          service: light.turn_off
+                          data:
+                            entity_id: light.master_bedroom_bed_window
                 - globals.set:
                     id: lights_state
                     value: "-1"
