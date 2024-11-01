@@ -31,13 +31,13 @@ binary_sensor:
               condition:
                 or:
                   - and:
-                    - light.is_on: light_1
-                    - light.is_on: light_2
+                      - light.is_on: light_1
+                      - light.is_on: light_2
                   - and:
-                    - lambda: "return id(should_turn_off_both_lights);"
-                    - or:
-                        - light.is_on: light_1
-                        - light.is_on: light_2
+                      - lambda: "return id(should_turn_off_both_lights);"
+                      - or:
+                          - light.is_on: light_1
+                          - light.is_on: light_2
               then:
                 - globals.set:
                     id: should_turn_off_both_lights
@@ -80,13 +80,13 @@ binary_sensor:
               condition:
                 or:
                   - and:
-                    - light.is_on: light_1
-                    - light.is_on: light_2
+                      - light.is_on: light_1
+                      - light.is_on: light_2
                   - and:
-                    - lambda: "return id(should_turn_off_both_lights);"
-                    - or:
-                        - light.is_on: light_1
-                        - light.is_on: light_2
+                      - lambda: "return id(should_turn_off_both_lights);"
+                      - or:
+                          - light.is_on: light_1
+                          - light.is_on: light_2
               then:
                 - globals.set:
                     id: should_turn_off_both_lights
