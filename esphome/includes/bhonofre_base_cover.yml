@@ -23,8 +23,10 @@ globals:
     type: int
     restore_value: no
     initial_value: "0"
-
-
+  - id: covers_should_send_events
+    type: bool
+    restore_value: no
+    initial_value: "true"
 
 binary_sensor:
   - platform: homeassistant
@@ -82,7 +84,6 @@ binary_sensor:
                             - api.connected:
                         - binary_sensor.is_on: cover_controls_enabled
                     then:
-                      - logger.log: "Cover Open"
                       - lambda: |-
                           auto call = id(cover_1).make_call();
                           if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
@@ -240,39 +241,19 @@ switch:
       inverted: ${InvertRelayDirection}
     restore_mode: ALWAYS_OFF
 
-  # - platform: template
-  #   name: "cover_control_group_${CoverName}"
-  #   device_class: switch
-  #   restore_state: RESTORE_DEFAULT_OFF
-  #   lambda: |-
-  #     return {};
-  #   optimistic: yes
-
-  # - platform: template
-  #   name: "cover_control_open_sunrise_${CoverName}"
-  #   device_class: switch
-  #   restore_state: RESTORE_DEFAULT_OFF
-  #   lambda: |-
-  #     return {};
-  #   optimistic: yes
-
-  # - platform: template
-  #   name: "cover_control_close_sunset_${CoverName}"
-  #   device_class: switch
-  #   restore_state: RESTORE_DEFAULT_OFF
-  #   lambda: |-
-  #     return {};
-  #   optimistic: yes
-
-  # - platform: template
-  #   name: "cover_control_close_in_rain_${CoverName}"
-  #   device_class: switch
-  #   restore_state: RESTORE_DEFAULT_OFF
-  #   lambda: |-
-  #     return {};
-  #   optimistic: yes
-
 script:
+  - id: covers_block_extra_buttons_event
+    mode: restart
+    then:
+      - globals.set:
+          id: covers_should_send_events
+          value: "false"
+      - delay: 30s
+      - globals.set:
+          id: covers_should_send_events
+          value: "true"
+      - logger.log: "Countdown finished"
+
   - id: special_cover_controls
     then:
       - if:
