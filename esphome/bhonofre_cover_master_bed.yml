@@ -15,4 +15,4 @@ substitutions:
 
 packages:
   esphome_base: !include packages/common.yml
-  cover: !include includes/bhonofre_base_cover.yml
+  cover: !include packages/bhonofre_cover.yml
