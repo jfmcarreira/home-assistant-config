@@ -1,39 +1,39 @@
 substitutions:
-  devicename: shellyrgbw2_kitchen
-  upper_devicename: Kitchen LED
-
-packages:
-  esphome_base: !include packages/common.yml
+  devicename: shellyrgbw2_living_room
+  upper_devicename: Living Room TV LEDs
 
 esphome:
   name: ${devicename}
   platform: ESP8266
   board: esp01_1m
 
+packages:
+  esphome_base: !include packages/common.yml
+
 # Unused pins
 # Status LED: GPIO02
 # Button: GPIO13
 
 light:
-  - platform: monochromatic
+  - platform: rgbw
     name: ${upper_devicename}
-    output: output_r
-    restore_mode: RESTORE_DEFAULT_OFF
+    id: rgbw_light
+    color_interlock: true
+    red: output_r
+    green: output_g
+    blue: output_b
+    white: output_w
 
 output:
   - platform: esp8266_pwm
     id: output_r
     pin: GPIO12
-    frequency: 1000 Hz
   - platform: esp8266_pwm
     id: output_g
-    frequency: 1000 Hz
     pin: GPIO15
   - platform: esp8266_pwm
     id: output_b
-    frequency: 1000 Hz
     pin: GPIO14
   - platform: esp8266_pwm
     id: output_w
-    frequency: 1000 Hz
     pin: GPIO4
