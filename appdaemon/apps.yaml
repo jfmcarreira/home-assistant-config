@@ -1,0 +1,30 @@
+HouseModeApp:
+  module: HouseMode
+  class: HouseMode
+
+MasterBedroomBathroom:
+  module: BathroomFan
+  class: BathroomFan
+  toggle: input_boolean.auto_fan_master_bedroom_bathroom
+  fan_entity: fan.bathroom_master_bedroom
+  light_entity: light.master_bedroom_bathroom
+  humidity_entity: sensor.humidity_master_bedroom_bathroom
+  average_humidity_entity: sensor.humidity_master_bedroom_bathroom_average
+
+BathroomRC:
+  module: BathroomFan
+  class: BathroomFan
+  toggle: input_boolean.auto_fan_bathroom_rc
+  fan_entity: fan.bathroom_rc
+  light_entity: light.bathroom_rc
+  humidity_entity: sensor.humidity_bathroom_rc
+  average_humidity_entity: sensor.humidity_bathroom_rc_average
+
+MainBathroom:
+  module: BathroomFan
+  class: BathroomFan
+  toggle: input_boolean.auto_fan_main_bathroom
+  fan_entity: fan.main_bathroom
+  light_entity: light.main_bathroom
+  humidity_entity: sensor.humidity_main_bathroom
+  average_humidity_entity: sensor.humidity_main_bathroom_average
