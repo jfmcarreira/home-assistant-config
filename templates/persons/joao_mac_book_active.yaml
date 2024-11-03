@@ -1,11 +1,4 @@
 - binary_sensor:
     - name: joao_mac_book_active_home
       unique_id: joao_mac_book_active_home
-      state: >-
-        {% if   is_state('binary_sensor.joao_macbook_pro_wifi', 'on') and 
-                is_state('sensor.joao_macbook_pro_ssid', 'JB') and 
-                is_state('binary_sensor.joao_macbook_pro_active', 'on')  %}
-            True
-        {% else %}
-            False
-        {% endif %}
+      state: "{{ is_state('binary_sensor.joao_macbook_pro_wifi', 'on') and is_state('binary_sensor.joao_macbook_pro_active', 'on')  }}"
