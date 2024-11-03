@@ -7,7 +7,6 @@ TIMEOUT_ENTITY = "input_number.bathroom_fan_timeout"
 MAX_TIMEOUT_ENTITY = "input_number.bathroom_fan_max_timeout"
 THRESHOLD_HUMIDITY = "input_number.bathroom_fan_humidity_threshold"
 
-
 AUTO_TIME_BEGIN = "07:00:00"
 AUTO_TIME_END = "22:00:00"
 
@@ -211,7 +210,6 @@ class BathroomFan(hass.Hass):
 
     def on_enter_light_on_fan_on(self):
         self.turn_on(self.fan_entity)
-        return
 
     def on_enter_fan_on_timeout(self):
         self.turn_on(self.fan_entity)
