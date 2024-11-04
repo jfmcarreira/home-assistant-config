@@ -1,7 +1,5 @@
 import hassapi as hass
 from statemachine import StateMachine, State
-import state_machines.WaterHeaterStateMachine
-
 
 TEMPERATURE_COLD = 40.0
 TEMPERATURE_TARGET_ENTITY = "input_number.water_heater_temperature"
@@ -17,6 +15,51 @@ SENSOR_HOUSEOCCUPIED_ENTITY = "binary_sensor.notify_home"
 
 WATER_HEATER_STATE = "input_select.water_heater_state"
 WATER_HEATER_ENTITY = "switch.water_heater"
+
+class WaterStateMachine(StateMachine):
+    off = State(initial=True)
+    idle = State()
+    cold = State()
+    hot = State()
+
+    state_update = (
+        # To Off
+        off.to(off, unless=["is_active_time"])
+        | idle.to(off, unless=["is_active_time"])
+        | hot.to(off, unless=["is_active_time"])
+        | cold.to(off, unless=["is_active_time"])
+
+        # To Hot
+        | off.to(hot, cond=["is_hot"])
+        | idle.to(hot, cond=["is_hot"])
+        | hot.to(hot, cond=["is_hot"])
+        | cold.to(hot, cond=["is_hot"])
+
+        | off.to(idle, cond=["is_solar_panel_heating"])
+        | idle.to(idle, cond=["is_solar_panel_heating"])
+        | hot.to(idle, cond=["is_solar_panel_heating"])
+        | cold.to(idle, cond=["is_solar_panel_heating"])
+
+        | off.to(idle, cond=["is_positive_weather_forecast"])
+        | idle.to(idle, cond=["is_positive_weather_forecast"])
+        | cold.to(idle, cond=["is_positive_weather_forecast"])
+        | hot.to(idle, cond=["is_positive_weather_forecast"])
+
+        | idle.to(cold)
+        | hot.to(cold)
+
+        # To Cold
+        | off.to(cold, cond=["is_cold", "is_active_time"])
+        | idle.to(cold, cond=["is_cold", "is_active_time"])
+        | hot.to(cold, cond=["is_cold", "is_active_time"])
+        | cold.to(cold, cond=["is_cold", "is_active_time"])
+
+        # To itself
+        | off.to.itself()
+        | idle.to.itself()
+        | cold.to.itself()
+        | hot.to.itself()
+    )
 
 class WaterHeater(hass.Hass):
 
@@ -79,7 +122,15 @@ class WaterHeater(hass.Hass):
         # Windy, cloudy: It is windy and cloudy. windy-variant.
         # Exceptional: Exceptional weather conditions are occurring. exceptional.
         weather = self.get_state(WEATHER_ENTITY)
-        return weather == "partlycloudy" or weather == "sunny" or weather == "windy" or weather == "windy-variant"
+
+        is_pre_sun_rise =  self.now_is_between("01:00:00", "10:00:00") and not self.is_sun_up()
+        if is_pre_sun_rise:
+            return True
+
+        if self.now_is_between("00:00:00", "16:00:00"):
+            return weather == "partlycloudy" or weather == "sunny" or weather == "windy" or weather == "windy-variant"
+
+        return False
 
     def is_active_time(self):
         return self.now_is_between("06:00:00", "23:00:00")
@@ -92,7 +143,7 @@ class WaterHeater(hass.Hass):
         target_temp = float(self.get_state(TEMPERATURE_TARGET_ENTITY))
         temperature = float(self.get_state(TEMPERATURE_TOP_ENTITY))
         if self.is_heating:
-            return temperature > target_temp + 3
+            return temperature > target_temp + 2
         return temperature > target_temp
 
     def is_solar_panel_heating(self):
@@ -102,9 +153,6 @@ class WaterHeater(hass.Hass):
             or self.get_state(SENSOR_SOLAR_PANNEL_PUMP_ENTITY) == "on")
         )
         return result
-
-    def house_occupied(self):
-        return self.get_state(SENSOR_HOUSEOCCUPIED_ENTITY) == "on"
 
     def on_enter_state(self, source, target, event):
         if source is None or source == target:
