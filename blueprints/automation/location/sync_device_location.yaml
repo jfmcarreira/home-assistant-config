@@ -1,0 +1,64 @@
+blueprint:
+  domain: automation
+  name: "[Location] Sync Device Location"
+  description: >-
+    Request GPS location untill it matches wifi information
+
+  input:
+    mobile_device:
+      name: Device
+      description: Mobile device to track location
+      default: ""
+      selector:
+        device:
+          entity:
+            domain: device_tracker
+          filter:
+            integration: mobile_app
+    wifi_location:
+      name: Wifi Tracker
+      selector:
+        entity:
+          filter:
+            - domain: device_tracker
+    mobile_location:
+      name: Mobile Tracker
+      selector:
+        entity:
+          filter:
+            - domain: device_tracker
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - platform: state
+    entity_id: !input wifi_location
+
+condition:
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: !input wifi_location
+        state: "home"
+
+action:
+  - repeat:
+      while:
+        - condition: not
+          conditions:
+            - condition: state
+              entity_id: !input wifi_location
+              state: "home"
+        - condition: state
+          entity_id: !input mobile_location
+          state: "home"
+        - condition: template
+          value_template: "{{ repeat.index <= 20 }}"
+      sequence:
+        - device_id: !input mobile_device
+          domain: mobile_app
+          type: notify
+          message: request_location_update
+        - delay:
+            seconds: 20
