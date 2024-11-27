@@ -47,16 +47,22 @@ mode: restart
 max_exceeded: silent
 
 variables:
-  master_light: !input master_light
   sync_exclusive: !input sync_exclusive
   sync_on: !input sync_on
   sync_off: !input sync_off
   sync_off_from_slave: !input sync_off_from_slave
 
 trigger:
-  - id: master_light_trigger
+  - id: master_light_trigger_on
     platform: state
     entity_id: !input master_light
+    from: "off"
+    to: "on"
+  - id: master_light_trigger_off
+    platform: state
+    entity_id: !input master_light
+    from: "on"
+    to: "off"
   - id: extra_light_trigger
     platform: state
     entity_id: !input slave_light
@@ -65,7 +71,8 @@ trigger:
 
 action:
   - choose:
-      - conditions: "{{ trigger.id == 'extra_light_trigger' }}"
+      - conditions:
+          - "{{ trigger.id == 'extra_light_trigger' }}"
         sequence:
           - condition: state
             entity_id: !input slave_light
@@ -75,20 +82,23 @@ action:
             data:
               entity_id: !input master_light
 
-      - conditions: "{{ trigger.id == 'master_light_trigger' and states[master_light].state == 'on' and sync_exclusive == True}}"
+      - conditions: "{{ trigger.id == 'master_light_trigger_on'}}"
         sequence:
+          - condition: "{{ sync_exclusive == True }}"
           - service: homeassistant.turn_off
             data:
               entity_id: !input slave_light
 
-      - conditions: "{{ trigger.id == 'master_light_trigger' and states[master_light].state == 'on' and sync_on == True }}"
+      - conditions: "{{ trigger.id == 'master_light_trigger_on'}}"
         sequence:
+          - condition: "{{ sync_on == True }}"
           - service: homeassistant.turn_on
             data:
               entity_id: !input slave_light
 
-      - conditions: "{{ trigger.id == 'master_light_trigger' and  states[master_light].state == 'off' and sync_off == True }}"
+      - conditions: "{{ trigger.id == 'master_light_trigger_off' }}"
         sequence:
+          - condition: "{{ sync_off == True }}"
           - service: homeassistant.turn_off
             data:
               entity_id: !input slave_light
