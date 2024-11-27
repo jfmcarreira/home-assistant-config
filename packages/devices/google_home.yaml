@@ -6,8 +6,6 @@ homeassistant:
       friendly_name: Google Home Configurar Volume de Fim de Dia
     automation.media_google_home_night_volume:
       friendly_name: Google Home Configurar Volume de Noite
-    automation.media_google_home_night_volume_ricardo:
-      friendly_name: Google Home Configurar Volume de Noite no Quarto do Ricardo
 
 group:
   google_assistant_speakers:
@@ -129,24 +127,3 @@ automation:
         data_template:
           volume_level: >
             {{ ( states( 'input_number.google_home_volume_night' ) | int ) / 100 }}
-
-  # - alias: media_google_home_night_volume_ricardo
-  #   trigger:
-  #     - platform: homeassistant
-  #       event: start
-  #     - platform: time
-  #       at: "21:45:00"
-  #     - platform: state
-  #       entity_id: media_player.ghm_bedroom_ricardo
-  #   condition:
-  #     - condition: time
-  #       after: "21:45:00"
-  #       before: "08:00:00"
-  #     - condition: state
-  #       entity_id: media_player.ghm_bedroom_ricardo
-  #       state: "off"
-  #   action:
-  #     - entity_id: media_player.ghm_bedroom_ricardo
-  #       service: media_player.volume_set
-  #       data_template:
-  #         volume_level: 0.02
