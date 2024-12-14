@@ -17,6 +17,18 @@ script:
           value: "true"
       - logger.log: "Turning both lights off count finished"
 
+light:
+  - id: !extend light_1
+    on_turn_off:
+      - globals.set:
+          id: should_turn_off_both_lights
+          value: "false"
+  - id: !extend light_2
+    on_turn_off:
+      - globals.set:
+          id: should_turn_off_both_lights
+          value: "false"
+
 binary_sensor:
   - id: sw_1
     platform: gpio
@@ -39,9 +51,6 @@ binary_sensor:
                           - light.is_on: light_1
                           - light.is_on: light_2
               then:
-                - globals.set:
-                    id: should_turn_off_both_lights
-                    value: "false"
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
@@ -50,9 +59,6 @@ binary_sensor:
                       - light.is_on: ${input_a_light}
                     then:
                       - light.turn_off: ${input_a_light}
-                      - globals.set:
-                          id: should_turn_off_both_lights
-                          value: "false"
                     else:
                       - light.turn_on: ${input_a_light}
                       - script.execute: bathroom_toggle_lights_countdown
@@ -88,9 +94,6 @@ binary_sensor:
                           - light.is_on: light_1
                           - light.is_on: light_2
               then:
-                - globals.set:
-                    id: should_turn_off_both_lights
-                    value: "false"
                 - light.turn_off: light_1
                 - light.turn_off: light_2
               else:
@@ -99,9 +102,6 @@ binary_sensor:
                       - light.is_on: ${input_b_light}
                     then:
                       - light.turn_off: ${input_b_light}
-                      - globals.set:
-                          id: should_turn_off_both_lights
-                          value: "false"
                     else:
                       - light.turn_on: ${input_b_light}
                       - script.execute: bathroom_toggle_lights_countdown
