@@ -47,6 +47,13 @@ blueprint:
       selector:
         entity:
           domain: light
+    disable_switch_button:
+      name: Botão para desabilitar os toggles físicos
+      description: Botão para desativar temporáriamente os botões físicos para evitar alterar novamente para off
+      default: []
+      selector:
+        entity:
+          domain: button
     no_motion_wait:
       name: Duração
       description: Duração para manter a luz ligada após não existir movimento
@@ -309,6 +316,10 @@ action:
   - alias: "Turning light ON"
     service: light.turn_on
     entity_id: !input target_entity
+
+  - alias: "Trigger event to prevent double toggle"
+    service: button.press
+    entity_id: !input disable_switch_button
 
   - delay:
       seconds: 1
