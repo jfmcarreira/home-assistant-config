@@ -41,13 +41,85 @@ input_boolean:
     icon: mdi:bed-double
   vacuum_bedroomricardo:
     name: Quarto do Ricardo
+    icon: mdi:human-child
+  vacuum_bedroomhenrique:
+    name: Quarto do Henrique
     icon: mdi:baby-face-outline
-  vacuum_bedroomguest:
-    name: Quarto Extra
-    icon: mdi:bed-double
   vacuum_mainbathroom:
     name: Casa de Banho Principal
     icon: mdi:toilet
   vacuum_masterbedroombath:
     name: WC da Suite
     icon: mdi:shower-head
+
+script:
+  roborock_vacuum_selected_rooms:
+    alias: "Roborock Vacuum Selected Rooms"
+    sequence:
+      - condition: template
+        value_template: >
+          {% set rooms = namespace(segments=[]) %}
+          {% if is_state('input_boolean.vacuum_hall', 'on') %}
+            {% set rooms.segments = rooms.segments + ['18'] %}
+          {% endif %}
+          {% if is_state('input_boolean.vacuum_masterbedroom', 'on') %}
+            {% set rooms.segments = rooms.segments + ['20'] %}
+          {% endif %}
+          {% if is_state('input_boolean.vacuum_bedroomricardo', 'on') %}
+            {% set rooms.segments = rooms.segments + ['16'] %}
+          {% endif %}
+          {% if is_state('input_boolean.vacuum_bedroomhenrique', 'on') %}
+            {% set rooms.segments = rooms.segments + ['17'] %}
+          {% endif %}
+          {% if is_state('input_boolean.vacuum_mainbathroom', 'on') %}
+            {% set rooms.segments = rooms.segments + ['19'] %}
+          {% endif %}
+          {% if is_state('input_boolean.vacuum_masterbedroombath', 'on') %}
+            {% set rooms.segments = rooms.segments + ['21'] %}
+          {% endif %}
+          {{ rooms.segments|length > 0 }}
+
+      - action: mqtt.publish
+        data:
+          topic: valetudo/WeakPassionateBarracuda/MapSegmentationCapability/clean/set
+          payload: >
+            {% set rooms = namespace(segments=[]) %}
+            {% if is_state('input_boolean.vacuum_hall', 'on') %}
+              {% set rooms.segments = rooms.segments + ['18'] %}
+            {% endif %}
+            {% if is_state('input_boolean.vacuum_masterbedroom', 'on') %}
+              {% set rooms.segments = rooms.segments + ['20'] %}
+            {% endif %}
+            {% if is_state('input_boolean.vacuum_bedroomricardo', 'on') %}
+              {% set rooms.segments = rooms.segments + ['16'] %}
+            {% endif %}
+            {% if is_state('input_boolean.vacuum_bedroomhenrique', 'on') %}
+              {% set rooms.segments = rooms.segments + ['17'] %}
+            {% endif %}
+            {% if is_state('input_boolean.vacuum_mainbathroom', 'on') %}
+              {% set rooms.segments = rooms.segments + ['19'] %}
+            {% endif %}
+            {% if is_state('input_boolean.vacuum_masterbedroombath', 'on') %}
+              {% set rooms.segments = rooms.segments + ['21'] %}
+            {% endif %}
+            {
+              "action": "start_segment_action",
+              "segment_ids": {{ rooms.segments|tojson }},
+              "iterations": 1,
+              "customOrder": true
+            }
+
+      # Turn off all input_booleans after starting
+      - service: input_boolean.turn_off
+        target:
+          entity_id:
+            - input_boolean.vacuum_livingroom
+            - input_boolean.vacuum_hallway
+            - input_boolean.vacuum_kitchen
+            - input_boolean.vacuum_office
+            - input_boolean.vacuum_hall
+            - input_boolean.vacuum_masterbedroom
+            - input_boolean.vacuum_bedroomricardo
+            - input_boolean.vacuum_bedroomhenrique
+            - input_boolean.vacuum_mainbathroom
+            - input_boolean.vacuum_masterbedroombath
