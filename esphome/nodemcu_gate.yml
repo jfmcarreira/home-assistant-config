@@ -2,7 +2,6 @@ substitutions:
   devicename: nodemcu_gate
   FriendlyName: Gate
 
-
 esphome:
   name: ${devicename}
   on_boot:
@@ -16,14 +15,12 @@ esphome:
           else:
             - state_machine.set: "Close"
 
-
 esp8266:
   board: nodemcuv2
   early_pin_init: false
 
 packages:
   esphome_base: !include packages/common.yml
-  mqtt: !include packages/mqtt.yml
 
 external_components:
   - source:
@@ -43,12 +40,9 @@ output:
       number: D2
 
 sensor:
-  - platform: mqtt_subscribe
+  - platform: homeassistant
     id: main_power
-    topic: shellies/shellyem-34945478023D/emeter/0/power
-  - platform: mqtt_subscribe
-    id: leaf_power
-    topic: shellies/shellyem-34945478023D/emeter/1/power
+    entity_id: sensor.device_power_gate
 
 binary_sensor:
   - platform: gpio
@@ -79,27 +73,12 @@ binary_sensor:
     name: Gate Moving
     lambda: |-
       return id(main_power).state > 100;
+    on_press:
+      then:
+        - state_machine.transition: transition_start_moving
     on_release:
       then:
         - state_machine.transition: transition_stop
-
-  - platform: template
-    id: gate_starts_opening
-    lambda: |-
-      if (!id(gate_moving).state) return false;
-      return id(gate_open_sensor).state || id(leaf_power).state > 100;
-    on_press:
-      then:
-        - state_machine.transition: transition_start_opening
-
-  - platform: template
-    id: gate_starts_closing
-    lambda: |-
-      if (!id(gate_moving).state) return false;
-      return id(leaf_power).state < 100;
-    on_press:
-      then:
-        - state_machine.transition: transition_start_closing
 
   - platform: template
     id: gate_is_open
@@ -167,13 +146,10 @@ state_machine:
       - name: transition_fully_close
         transitions:
           - Stopped -> Close
-      - name: transition_start_opening
+      - name: transition_start_moving
         transitions:
           - Stopped -> Opening
           - Close -> Opening
-      - name: transition_start_closing
-        transitions:
-          - Stopped -> Closing
           - Open -> Closing
 
 button:
@@ -211,6 +187,7 @@ cover:
               - binary_sensor.is_off: gate_open_sensor
           then:
             - button.press: gate_open
+            - state_machine.transition: transition_start_moving
     close_action:
       - if:
           condition:
@@ -218,6 +195,7 @@ cover:
               - binary_sensor.is_off: gate_close_sensor
           then:
             - button.press: gate_open
+            - state_machine.transition: transition_start_moving
     stop_action:
       - if:
           condition:
