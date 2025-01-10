@@ -10,17 +10,17 @@ blueprint:
         entity:
           domain: climate
 
-    schedule:
-      name: Horário
+    schedule_start:
+      name: Horário de ínicio de controlo
       description: Horário da acção
       selector:
         time:
 
-    run_on_weekends:
-      name: Fim de Semana
-      default: "off"
+    schedule_end:
+      name: Horário de fim de controlo
+      description: Horário da acção
       selector:
-        boolean:
+        time:
 
     weekday:
       name: Dia da Semana
@@ -53,6 +53,21 @@ blueprint:
           min: 18
           max: 25
 
+    extra_hvac_actions:
+      name: Acções Extra
+      default: []
+      selector:
+        action:
+
+    hvac_delayed_temperature_offset:
+      name: Temperatura do AC Após 1h
+      default: 0
+      selector:
+        number:
+          mode: box
+          min: -2
+          max: +2
+
     temperature_sensor:
       name: Sensor de Temperatura
       default:
@@ -68,17 +83,49 @@ blueprint:
         number:
           min: 18
           max: 25
+          step: 0.1
+          unit_of_measurement: "ºC"
+
+    selected_season:
+      name: Estação do Ano
+      default: [spring, summer, autumn, winter]
+      selector:
+        select:
+          options:
+            - label: Primavera
+              value: spring
+            - label: Verão
+              value: summer
+            - label: Outono
+              value: autumn
+            - label: Inverno
+              value: winter
+          custom_value: false
+          multiple: true
 
 mode: restart
 max_exceeded: silent
 
 variables:
-  run_on_weekends: !input run_on_weekends
+  hvac_temperature: !input hvac_temperature
+  hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
 
 trigger:
-  - platform: time
+  - trigger: time
     id: normal_time
-    at: !input schedule
+    at: !input schedule_start
+
+  - trigger: time
+    id: normal_time
+    at: !input schedule_end
+
+  - trigger: numeric_state
+    entity_id: !input temperature_sensor
+    below: !input room_temperature
+
+  - trigger: numeric_state
+    entity_id: !input temperature_sensor
+    above: !input room_temperature
 
 condition:
   - condition: state
@@ -86,30 +133,44 @@ condition:
     state:
       - "off"
 
-  - condition: or
-    conditions:
-      - condition: time
-        weekday: !input "weekday"
-      - condition: and
-        conditions:
-          - "{{ run_on_weekends }}"
-          - condition: state
-            entity_id: binary_sensor.workday
-            state: "off"
+  - condition: state
+    entity_id: sensor.season
+    state: !input "selected_season"
+
+  - condition: time
+    after: !input schedule_start
+    before: !input schedule_end
+
+  - condition: time
+    weekday: !input "weekday"
 
   - condition: numeric_state
     entity_id: !input temperature_sensor
     below: !input room_temperature
 
 action:
-  - service: climate.set_hvac_mode
+  - action: climate.set_hvac_mode
     target:
       entity_id: !input hvac_unit
     data:
       hvac_mode: heat
 
-  - service: climate.set_temperature
+  - action: climate.set_temperature
     target:
       entity_id: !input hvac_unit
     data:
       temperature: !input hvac_temperature
+
+  - sequence: !input extra_hvac_actions
+
+  - condition: template
+    value_template: "{{ (hvac_delayed_temperature_offset | int | abs) > 0  }}"
+
+  - delay:
+      hours: 1
+
+  - action: climate.set_temperature
+    target:
+      entity_id: !input hvac_unit
+    data:
+      temperature: "{{ hvac_temperature + hvac_delayed_temperature_offset }}"
