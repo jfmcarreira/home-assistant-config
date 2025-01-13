@@ -16,6 +16,12 @@ packages:
       Light_1_Name: Hall
       Light_2_Name: Hall Side
 
+esp32_ble_tracker:
+  scan_parameters:
+    active: true
+
+bluetooth_proxy:
+
 binary_sensor:
   - platform: homeassistant
     id: hall_presence_state
