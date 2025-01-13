@@ -1,3 +1,6 @@
+packages:
+  motion_light: !include motion_light.yml
+
 globals:
   - id: should_turn_off_both_lights
     type: bool
@@ -41,27 +44,34 @@ binary_sensor:
         then:
           - if:
               condition:
-                or:
-                  - and:
-                      - light.is_on: light_1
-                      - light.is_on: light_2
-                  - and:
-                      - lambda: "return id(should_turn_off_both_lights);"
-                      - or:
-                          - light.is_on: light_1
-                          - light.is_on: light_2
+                - script.is_running: light_turn_on_action
               then:
-                - light.turn_off: light_1
-                - light.turn_off: light_2
+                - logger.log: "Skipping due to auto on"
+                - script.stop: light_turn_on_action
               else:
                 - if:
                     condition:
-                      - light.is_on: ${input_a_light}
+                      or:
+                        - and:
+                            - light.is_on: light_1
+                            - light.is_on: light_2
+                        - and:
+                            - lambda: "return id(should_turn_off_both_lights);"
+                            - or:
+                                - light.is_on: light_1
+                                - light.is_on: light_2
                     then:
-                      - light.turn_off: ${input_a_light}
+                      - light.turn_off: light_1
+                      - light.turn_off: light_2
                     else:
-                      - light.turn_on: ${input_a_light}
-                      - script.execute: bathroom_toggle_lights_countdown
+                      - if:
+                          condition:
+                            - light.is_on: ${input_a_light}
+                          then:
+                            - light.turn_off: ${input_a_light}
+                          else:
+                            - light.turn_on: ${input_a_light}
+                            - script.execute: bathroom_toggle_lights_countdown
 
       - timing:
           - ON for at least 1000ms
@@ -84,27 +94,34 @@ binary_sensor:
         then:
           - if:
               condition:
-                or:
-                  - and:
-                      - light.is_on: light_1
-                      - light.is_on: light_2
-                  - and:
-                      - lambda: "return id(should_turn_off_both_lights);"
-                      - or:
-                          - light.is_on: light_1
-                          - light.is_on: light_2
+                - script.is_running: light_turn_on_action
               then:
-                - light.turn_off: light_1
-                - light.turn_off: light_2
+                - logger.log: "Skipping due to auto on"
+                - script.stop: light_turn_on_action
               else:
                 - if:
                     condition:
-                      - light.is_on: ${input_b_light}
+                      or:
+                        - and:
+                            - light.is_on: light_1
+                            - light.is_on: light_2
+                        - and:
+                            - lambda: "return id(should_turn_off_both_lights);"
+                            - or:
+                                - light.is_on: light_1
+                                - light.is_on: light_2
                     then:
-                      - light.turn_off: ${input_b_light}
+                      - light.turn_off: light_1
+                      - light.turn_off: light_2
                     else:
-                      - light.turn_on: ${input_b_light}
-                      - script.execute: bathroom_toggle_lights_countdown
+                      - if:
+                          condition:
+                            - light.is_on: ${input_b_light}
+                          then:
+                            - light.turn_off: ${input_b_light}
+                          else:
+                            - light.turn_on: ${input_b_light}
+                            - script.execute: bathroom_toggle_lights_countdown
 
       - timing:
           - ON for at least 1000ms

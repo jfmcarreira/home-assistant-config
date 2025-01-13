@@ -46,7 +46,6 @@ script:
             - light.turn_on: light_1
             - light.turn_off: light_2
 
-
 binary_sensor:
   - id: !extend sw_1
     on_multi_click:
@@ -57,11 +56,9 @@ binary_sensor:
         then:
           - if:
               condition:
-                - lambda: "return id(prevent_light_toggle) == true;"
+                - script.is_running: light_turn_on_action
               then:
-                - globals.set:
-                    id: prevent_light_toggle
-                    value: "false"
+                - script.stop: light_turn_on_action
               else:
                 - if:
                     condition:
@@ -90,8 +87,6 @@ binary_sensor:
                                 id: lights_state
                                 value: "0"
                             - script.execute: smart_light_state
-
-
 # binary_sensor:
 #   - id: sw_1
 #     platform: gpio
