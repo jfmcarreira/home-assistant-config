@@ -1,0 +1,166 @@
+blueprint:
+  name: "[Devices] Controls for BHOnfre buttons"
+  description: >
+    Actions for buttons from the cover controls of BHOnfre using ESPHome
+
+  domain: automation
+  input:
+    device:
+      name: Device
+      selector:
+        text:
+    single_top_action:
+      name: Single Top
+      default: []
+      selector:
+        action:
+    single_bottom_action:
+      name: Single Bottom
+      default: []
+      selector:
+        action:
+    double_top_action:
+      name: Double Top
+      default: []
+      selector:
+        action:
+    double_bottom_action:
+      name: Double Bottom
+      default: []
+      selector:
+        action:
+    triple_top_action:
+      name: Triple Top
+      default: []
+      selector:
+        action:
+    triple_bottom_action:
+      name: Triple Bottom
+      default: []
+      selector:
+        action:
+    long_top_action:
+      name: Long Top
+      default: []
+      selector:
+        action:
+    long_bottom_action:
+      name: Long Bottom
+      default: []
+      selector:
+        action:
+
+mode: single
+max_exceeded: silent
+
+triggers:
+  - trigger: event
+    id: single_top
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_top
+      type: single
+      device: !input device
+
+  - trigger: event
+    id: single_bottom
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_bottom
+      type: single
+      device: !input device
+
+  - trigger: event
+    id: long_top
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_top
+      type: long
+      device: !input device
+
+  - trigger: event
+    id: long_bottom
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_bottom
+      type: long
+      device: !input device
+
+  - trigger: event
+    id: double_top
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_top
+      type: double
+      device: !input device
+
+  - trigger: event
+    id: double_bottom
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_bottom
+      type: double
+      device: !input device
+
+  - trigger: event
+    id: triple_top
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_top
+      type: triple
+      device: !input device
+
+  - trigger: event
+    id: triple_bottom
+    event_type: esphome.button_pressed
+    event_data:
+      name: extra_bottom
+      type: triple
+      device: !input device
+
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - single_top
+        sequence: !input single_top_action
+      - conditions:
+          - condition: trigger
+            id:
+              - single_bottom
+        sequence: !input single_bottom_action
+
+      - conditions:
+          - condition: trigger
+            id:
+              - double_top
+        sequence: !input double_top_action
+      - conditions:
+          - condition: trigger
+            id:
+              - double_bottom
+        sequence: !input double_bottom_action
+
+      - conditions:
+          - condition: trigger
+            id:
+              - triple_top
+        sequence: !input triple_top_action
+      - conditions:
+          - condition: trigger
+            id:
+              - triple_bottom
+        sequence: !input triple_bottom_action
+
+      - conditions:
+          - condition: trigger
+            id:
+              - long_top
+        sequence: !input long_top_action
+      - conditions:
+          - condition: trigger
+            id:
+              - long_bottom
+        sequence: !input single_bottom_action
