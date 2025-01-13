@@ -167,6 +167,7 @@ binary_sensor:
     on_multi_click:
       - timing:
           - ON for at least 1s
+        trigger_id: extra_top_long
         invalid_cooldown: 100ms
         then:
           - while:
@@ -181,8 +182,9 @@ binary_sensor:
                       device: ${devicename}
                 - delay: 500ms
       - timing:
-          - ON for at most 1s
-          - OFF for at least 100ms
+          - ON for at most 500ms
+          - OFF for at least 500ms
+        trigger_id: extra_top_single
         invalid_cooldown: 100ms
         then:
           - homeassistant.event:
@@ -190,6 +192,38 @@ binary_sensor:
               data:
                 name: extra_top
                 type: single
+                device: ${devicename}
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 400ms
+        trigger_id: extra_top_double
+        invalid_cooldown: 100ms
+        then:
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                name: extra_top
+                type: double
+                device: ${devicename}
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 300ms
+        trigger_id: extra_top_triple
+        invalid_cooldown: 100ms
+        then:
+          - lambda: |-
+              id(extra_top_single).cancel();
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                name: extra_top
+                type: triple
                 device: ${devicename}
 
   - platform: gpio
@@ -203,6 +237,7 @@ binary_sensor:
     on_multi_click:
       - timing:
           - ON for at least 1s
+        trigger_id: extra_bottom_long
         invalid_cooldown: 100ms
         then:
           - while:
@@ -217,8 +252,9 @@ binary_sensor:
                       device: ${devicename}
                 - delay: 500ms
       - timing:
-          - ON for at most 1s
-          - OFF for at least 100ms
+          - ON for at most 500ms
+          - OFF for at least 500ms
+        trigger_id: extra_bottom_single
         invalid_cooldown: 100ms
         then:
           - homeassistant.event:
@@ -226,6 +262,38 @@ binary_sensor:
               data:
                 name: extra_bottom
                 type: single
+                device: ${devicename}
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 400ms
+        trigger_id: extra_bottom_double
+        invalid_cooldown: 100ms
+        then:
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                name: extra_bottom
+                type: double
+                device: ${devicename}
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at most 500ms
+          - ON for at most 500ms
+          - OFF for at least 300ms
+        trigger_id: extra_bottom_triple
+        invalid_cooldown: 100ms
+        then:
+          - lambda: |-
+              id(extra_bottom_single).cancel();
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                name: extra_bottom
+                type: triple
                 device: ${devicename}
 
 switch:
@@ -330,20 +398,6 @@ mqtt:
             call.set_command_stop();
           }
           call.perform();
-
-  # on_message:
-  #   - topic: esphome/cover/trigger/close_all
-  #     qos: 0
-  #     then:
-  #       - cover.close: cover_1
-  #   - topic: esphome/cover/trigger/open_all
-  #     qos: 0
-  #     then:
-  #       - cover.open: cover_1
-  #   - topic: esphome/cover/trigger/stop_all
-  #     qos: 0
-  #     then:
-  #       - cover.stop: cover_1
 
 cover:
   - platform: time_based
