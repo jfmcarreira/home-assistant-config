@@ -64,6 +64,14 @@ binary_sensor:
           - ON for at most 1s
           - OFF for at least 100ms
         then:
+          - lambda: |-
+              id(extra_top_single).cancel();
+          - lambda: |-
+              id(extra_top_long).cancel();
+          - lambda: |-
+              id(extra_bottom_single).cancel();
+          - lambda: |-
+              id(extra_bottom_long).cancel();
           - globals.set:
               id: cover_action
               value: !lambda |-
@@ -127,6 +135,14 @@ binary_sensor:
           - OFF for at least 100ms
         invalid_cooldown: 100ms
         then:
+          - lambda: |-
+              id(extra_top_single).cancel();
+          - lambda: |-
+              id(extra_top_long).cancel();
+          - lambda: |-
+              id(extra_bottom_single).cancel();
+          - lambda: |-
+              id(extra_bottom_long).cancel();
           - globals.set:
               id: cover_action
               value: !lambda |-
@@ -324,6 +340,9 @@ script:
 
   - id: special_cover_controls
     then:
+      - logger.log:
+          format: "Special cover control"
+          level: INFO
       - if:
           condition:
             and:
