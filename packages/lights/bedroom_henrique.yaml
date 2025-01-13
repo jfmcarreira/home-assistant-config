@@ -3,7 +3,7 @@ light:
     lights:
       bedroom_henrique:
         unique_id: lights_bedroom_henrique_group
-        friendly_name: Luzes do Quarto do henrique
+        friendly_name: Luzes do Quarto do Henrique
         value_template: >-
           {{
               is_state('light.bedroom_henrique_ceiling', 'on') or
