@@ -118,6 +118,12 @@ blueprint:
       default: binary_sensor.notify_home
       selector:
         entity:
+    required_conditions:
+      name: Condições para ativar a Luz
+      description: Automção é excluída se estas condições não passarem todas
+      default: []
+      selector:
+        condition:
     required_house_mode:
       name: Ativar no modo de funcionamento
       description: Nome do modo de funcionamento para esta automação
@@ -239,7 +245,10 @@ condition:
   - condition: or
     conditions:
       - "{{ automation_previous_state == 1 }}"
-      - "{{ (blocker_off_entity == 'none') or (not states[blocker_off_entity].state == 'off') }}"
+      - condition: and
+        conditions:
+          - "{{ (blocker_off_entity == 'none') or (not states[blocker_off_entity].state == 'off') }}"
+          - condition: !input required_conditions
 
   # These are the conditions to enter in automatic mode
   # This conditions matter if the light is not in automatic mode

@@ -262,8 +262,8 @@
       illuminance_sensor: sensor.light_stairs
       illuminance_cutoff: 10
       only_after_sunset: false
-      disable_in_guest: true
-      blocker_on_entity: binary_sensor.stairs_automation_blocker
+      disable_in_guest: false
+      blocker_on_entity: light.stairs_group
       blocker_off_entity: binary_sensor.notify_home
       required_house_mode: Dia+Anoitecer
       room_name: Stairs
@@ -371,7 +371,7 @@
       send_notification: true
       notification_action: Loiça Retirada
       notification_action_id: task_dish_wash_empty
-      task_done_door_time: 5
+      task_done_door_time: 2
 - id: '1658672750916'
   alias: cctv control push notifications
   description: ''
@@ -958,6 +958,10 @@
       disable_in_sleep: true
       presence_sensor: none
       blocker_on_entity: binary_sensor.hallway_automation_blocker
+      required_conditions:
+      - condition: state
+        entity_id: light.hallway
+        state: 'off'
 - id: '1689453293699'
   alias: Abrir Parcialmente Estores do Primeiro Andar
   description: ''
@@ -1026,78 +1030,6 @@
     target:
       entity_id: light.exterior_wall_side
   mode: single
-- id: '1695063666478'
-  alias: Trigger Botões dos Estores do Quarto do Ricardo - Candeeiro
-  description: ''
-  triggers:
-  - id: short_top
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: single
-      device: bhonofre_cover_bedroom_ricardo
-    trigger: event
-  - id: long_top
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: long
-      device: bhonofre_cover_bedroom_ricardo
-    trigger: event
-  - id: short_bottom
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: single
-      device: bhonofre_cover_bedroom_ricardo
-    trigger: event
-  - id: long_bottom
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: long
-      device: bhonofre_cover_bedroom_ricardo
-    trigger: event
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - short_top
-      sequence:
-      - type: turn_on
-        device_id: 46354c1616f79a3fd1314d9e3b187d46
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
-        domain: light
-    - conditions:
-      - condition: trigger
-        id:
-        - short_bottom
-      sequence:
-      - type: turn_off
-        device_id: 46354c1616f79a3fd1314d9e3b187d46
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
-        domain: light
-    - conditions:
-      - condition: trigger
-        id:
-        - long_top
-      sequence:
-      - device_id: 46354c1616f79a3fd1314d9e3b187d46
-        domain: light
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
-        type: brightness_increase
-    - conditions:
-      - condition: trigger
-        id:
-        - long_bottom
-      sequence:
-      - device_id: 46354c1616f79a3fd1314d9e3b187d46
-        domain: light
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
-        type: brightness_decrease
-  mode: single
 - id: '1696123178186'
   alias: device_alert_fridge_power
   description: ''
@@ -1123,46 +1055,6 @@
         channel: Home
         sticky: false
         clickAction: /lovelace-subviews/dashboard-power
-  mode: single
-- id: '1696169649567'
-  alias: Trigger Botões dos Estores da Cozinha - Luzes da Despensa
-  description: ''
-  triggers:
-  - id: short_top
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: single
-      device: bhonofre_cover_kitchen
-    trigger: event
-  - id: short_bottom
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: single
-      device: bhonofre_cover_kitchen
-    trigger: event
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - short_top
-      sequence:
-      - type: turn_on
-        device_id: 157313d13fb325a54a0135d57c4b348d
-        entity_id: 9dab43fcbf34eb171de511e464b28018
-        domain: light
-    - conditions:
-      - condition: trigger
-        id:
-        - short_bottom
-      sequence:
-      - type: turn_off
-        device_id: 157313d13fb325a54a0135d57c4b348d
-        entity_id: 9dab43fcbf34eb171de511e464b28018
-        domain: light
   mode: single
 - id: '1696606664632'
   alias: lights_trigger_hallway_presence
@@ -1524,6 +1416,7 @@
       selected_season:
       - winter
       hvac_delayed_temperature_offset: -1
+      window_sensor: binary_sensor.window_living_room
 - id: '1705596272069'
   alias: AC Suite - Ligar Tarde Inverno
   description: ''
@@ -1561,6 +1454,7 @@
           swing_mode: vertical
         target:
           entity_id: climate.master_bedroom
+      window_sensor: binary_sensor.window_master_bedroom
 - id: '1705596348371'
   alias: AC Quarto do Ricardo - Ligar Tarde Inverno
   description: ''
@@ -1598,6 +1492,7 @@
           swing_mode: vertical
         target:
           entity_id: climate.bedroom_ricardo
+      window_sensor: binary_sensor.window_bedroom_ricardo
 - id: '1705596387713'
   alias: AC Sala - Ligar Tarde
   description: ''
@@ -3220,70 +3115,6 @@
       disable_in_sleep: true
       presence_sensor: none
       no_motion_wait: 180
-- id: '1730469759776'
-  alias: Trigger Botões dos Estores da Suite - Luzes da Cama
-  description: ''
-  triggers:
-  - id: short_top
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: single
-      device: bhonofre_cover_master_bed
-    trigger: event
-  - id: long_top
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: long
-      device: bhonofre_cover_master_bed
-    trigger: event
-  - id: short_bottom
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: single
-      device: bhonofre_cover_master_bed
-    trigger: event
-  - id: long_bottom
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: long
-      device: bhonofre_cover_master_bed
-    trigger: event
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - short_top
-      sequence:
-      - type: toggle
-        device_id: 055d18283ca2d4c5701c5fcd53242090
-        entity_id: 5f431f49a6cdce71c3f87837ecf63104
-        domain: light
-    - conditions:
-      - condition: trigger
-        id:
-        - short_bottom
-      sequence:
-      - type: toggle
-        device_id: 055d18283ca2d4c5701c5fcd53242090
-        entity_id: 453071f9e3838bcf0acc1b3859b3a1e2
-        domain: light
-    - conditions:
-      - condition: trigger
-        id:
-        - long_top
-      sequence: []
-    - conditions:
-      - condition: trigger
-        id:
-        - long_bottom
-      sequence: []
-  mode: single
 - id: '1731973582356'
   alias: lights_trigger_gate_door
   description: ''
@@ -3381,155 +3212,34 @@
 - id: '1735221054299'
   alias: Trigger Botões dos Estores da Casa de Banho do R/C
   description: ''
-  triggers:
-  - id: top_button
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: double
+  use_blueprint:
+    path: devices/bhonofre_cover_buttons.yaml
+    input:
       device: bhonofre_cover_bathroom_rc
-    trigger: event
-  - id: bottom_button
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: double
-      device: bhonofre_cover_bathroom_rc
-    trigger: event
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - top_button
-      sequence:
+      single_top_action:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: light.bathroom_rc
-    - conditions:
-      - condition: trigger
-        id:
-        - bottom_button
-      sequence:
+          entity_id: light.bathroom_rc_led
+      single_bottom_action:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.bathroom_rc
-  mode: single
-- id: '1735221336453'
-  alias: Trigger Botões dos Estores da Suite - Ar Condicionado
-  description: ''
-  triggers:
-  - id: double_top
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: double
-      device: bhonofre_cover_master_bed
-    trigger: event
-  - id: double_bottom
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: double
-      device: bhonofre_cover_master_bed
-    trigger: event
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - double_top
-      sequence:
-      - action: climate.set_hvac_mode
-        metadata: {}
-        data:
-          hvac_mode: heat
-        target:
-          entity_id: climate.master_bedroom
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.master_bedroom
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: 22
-        target:
-          entity_id: climate.master_bedroom
-    - conditions:
-      - condition: trigger
-        id:
-        - double_bottom
-      sequence:
-      - action: climate.turn_off
+          entity_id: light.bathroom_rc_led
+      triple_top_action:
+      - action: light.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: climate.master_bedroom
-  mode: single
-- id: '1735221559695'
-  alias: Trigger Botões dos Estores do Quarto do Ricardo - Ar Condicionado
-  description: ''
-  triggers:
-  - id: double_top
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_top
-      type: double
-      device: bhonofre_cover_bedroom_ricardo
-    trigger: event
-  - id: double_bottom
-    event_type: esphome.button_pressed
-    event_data:
-      name: extra_bottom
-      type: double
-      device: bhonofre_cover_bedroom_ricardo
-    trigger: event
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - double_top
-      sequence:
-      - action: climate.set_hvac_mode
-        metadata: {}
-        data:
-          hvac_mode: heat
-        target:
-          entity_id: climate.bedroom_ricardo
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.bedroom_ricardo
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: 22
-        target:
-          entity_id: climate.bedroom_ricardo
-    - conditions:
-      - condition: trigger
-        id:
-        - double_bottom
-      sequence:
-      - action: climate.turn_off
+          entity_id: light.bathroom_rc_ceiling
+      triple_bottom_action:
+      - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: climate.bedroom_ricardo
-  mode: single
+          entity_id: light.bathroom_rc_ceiling
 - id: '1735385296449'
   alias: task_trigger_change_cat_litter
   description: ''
@@ -3562,4 +3272,244 @@
     action: media_player.turn_off
     target:
       entity_id: media_player.ghm_main_bathroom
+  mode: single
+- id: '1736718854079'
+  alias: Trigger Botões dos Estores da Cozinha
+  description: ''
+  use_blueprint:
+    path: devices/bhonofre_cover_buttons.yaml
+    input:
+      device: bhonofre_cover_kitchen
+      single_top_action:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.kitchen_pantry
+      single_bottom_action:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.kitchen_pantry
+- id: '1736719371438'
+  alias: Trigger Botões dos Estores da Suite
+  description: ''
+  use_blueprint:
+    path: devices/bhonofre_cover_buttons.yaml
+    input:
+      device: bhonofre_cover_master_bed
+      single_top_action:
+      - type: toggle
+        device_id: 055d18283ca2d4c5701c5fcd53242090
+        entity_id: 5f431f49a6cdce71c3f87837ecf63104
+        domain: light
+      single_bottom_action:
+      - type: toggle
+        device_id: 055d18283ca2d4c5701c5fcd53242090
+        entity_id: 453071f9e3838bcf0acc1b3859b3a1e2
+        domain: light
+      double_top_action:
+      - action: climate.set_hvac_mode
+        metadata: {}
+        data:
+          hvac_mode: heat
+        target:
+          entity_id: climate.master_bedroom
+      - action: climate.set_swing_mode
+        metadata: {}
+        data:
+          swing_mode: vertical
+        target:
+          entity_id: climate.master_bedroom
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: 22
+        target:
+          entity_id: climate.master_bedroom
+      double_bottom_action:
+      - action: climate.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: climate.master_bedroom
+      triple_top_action:
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: '{{ state_attr(''climate.master_bedroom'', ''temperature'')
+            + 1 }}'
+        target:
+          entity_id: climate.master_bedroom
+      triple_bottom_action:
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: '{{ state_attr(''climate.master_bedroom'', ''temperature'')
+            - 1 }}'
+        target:
+          entity_id: climate.master_bedroom
+- id: '1736719479439'
+  alias: Trigger Botões dos Estores do Quarto do Ricardo
+  description: ''
+  use_blueprint:
+    path: devices/bhonofre_cover_buttons.yaml
+    input:
+      device: bhonofre_cover_bedroom_ricardo
+      single_top_action:
+      - type: turn_on
+        device_id: 46354c1616f79a3fd1314d9e3b187d46
+        entity_id: c9e6abd07a77da4e516ba9c680e5248e
+        domain: light
+      single_bottom_action:
+      - type: turn_off
+        device_id: 46354c1616f79a3fd1314d9e3b187d46
+        entity_id: c9e6abd07a77da4e516ba9c680e5248e
+        domain: light
+      double_top_action:
+      - action: climate.set_hvac_mode
+        metadata: {}
+        data:
+          hvac_mode: heat
+        target:
+          entity_id: climate.bedroom_ricardo
+      - action: climate.set_swing_mode
+        metadata: {}
+        data:
+          swing_mode: vertical
+        target:
+          entity_id: climate.bedroom_ricardo
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: 22
+        target:
+          entity_id: climate.bedroom_ricardo
+      double_bottom_action:
+      - action: climate.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: climate.bedroom_ricardo
+      triple_top_action:
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: '{{ state_attr(''climate.bedroom_ricardo'', ''temperature'')
+            + 1 }}'
+        target:
+          entity_id: climate.bedroom_ricardo
+      triple_bottom_action:
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: '{{ state_attr(''climate.bedroom_ricardo'', ''temperature'')
+            - 1 }}'
+        target:
+          entity_id: climate.bedroom_ricardo
+      long_top_action:
+      - device_id: 46354c1616f79a3fd1314d9e3b187d46
+        domain: light
+        entity_id: c9e6abd07a77da4e516ba9c680e5248e
+        type: brightness_increase
+      long_bottom_action:
+      - device_id: 46354c1616f79a3fd1314d9e3b187d46
+        domain: light
+        entity_id: c9e6abd07a77da4e516ba9c680e5248e
+        type: brightness_decrease
+- id: '1736764669175'
+  alias: Desumidificador - Ligar com a Tomada
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - switch.dehumidifier
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+  conditions:
+  - condition: state
+    entity_id: humidifier.portable_dehumidifier
+    state: 'off'
+  actions:
+  - action: humidifier.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: humidifier.portable_dehumidifier
+  mode: single
+- id: '1736788353807'
+  alias: Ajustar Volume dos Assistentes
+  description: ''
+  triggers:
+  - event: start
+    trigger: homeassistant
+  - entity_id: input_number.assistant_volume_day
+    trigger: state
+  - entity_id: input_number.assistant_volume_evening
+    trigger: state
+  - entity_id: input_number.assistant_volume_night
+    trigger: state
+  - minutes: 30
+    trigger: time_pattern
+  - at: 08:00:00
+    trigger: time
+  - at: '21:00:00'
+    trigger: time
+  - at: 00:00:00
+    trigger: time
+  conditions: []
+  actions:
+  - repeat:
+      for_each:
+      - media_player.ghm_kitchen
+      - media_player.ghm_living_room
+      - media_player.ghm_hall
+      - media_player.ghm_master_bedroom
+      - media_player.ghm_main_bathroom
+      - media_player.home_assistant_voice_office
+      sequence:
+      - condition: template
+        value_template: '{{ is_state(repeat.item, ''off'') or is_state(repeat.item,
+          ''idle'') }}'
+      - choose:
+        - conditions:
+          - condition: time
+            after: 08:00:00
+            before: '21:00:00'
+          sequence:
+          - action: media_player.volume_set
+            target:
+              entity_id: '{{ repeat.item }}'
+            data:
+              volume_level: '{{ ( states( ''input_number.assistant_volume_day'' )
+                | int ) / 100 }}
+
+                '
+        - conditions:
+          - condition: time
+            after: '21:00:00'
+            before: '23:45:00'
+          sequence:
+          - action: media_player.volume_set
+            target:
+              entity_id: '{{ repeat.item }}'
+            data:
+              volume_level: '{{ ( states( ''input_number.assistant_volume_evening''
+                ) | int ) / 100 }}
+
+                '
+        default:
+        - action: media_player.volume_set
+          target:
+            entity_id: '{{ repeat.item }}'
+          data_template:
+            volume_level: '{{ ( states( ''input_number.assistant_volume_night'' )
+              | int ) / 100 }}
+
+              '
   mode: single
