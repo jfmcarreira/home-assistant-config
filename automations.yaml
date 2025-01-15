@@ -264,7 +264,6 @@
       only_after_sunset: false
       disable_in_guest: false
       blocker_on_entity: light.stairs_group
-      blocker_off_entity: binary_sensor.notify_home
       required_house_mode: Dia+Anoitecer
       room_name: Stairs
       disable_in_sleep: true
@@ -563,7 +562,6 @@
       only_after_sunset: false
       disable_in_guest: false
       required_house_mode: Todos
-      blocker_off_entity: binary_sensor.notify_home
       room_name: Escritório
       blocker_on_entity: light.office
       disable_in_sleep: true
@@ -717,7 +715,6 @@
       only_after_sunset: 'off'
       disable_in_guest: true
       required_house_mode: Todos
-      blocker_off_entity: binary_sensor.notify_home
       room_name: Escritório
       blocker_on_entity: light.kitchen
       disable_in_sleep: true
@@ -953,14 +950,24 @@
       only_after_sunset: false
       disable_in_guest: true
       required_house_mode: Todos
-      blocker_off_entity: binary_sensor.notify_home
       room_name: Sala
       disable_in_sleep: true
       presence_sensor: none
-      blocker_on_entity: binary_sensor.hallway_automation_blocker
       required_conditions:
       - condition: state
         entity_id: light.hallway
+        state: 'off'
+      - condition: state
+        entity_id: light.doorway
+        state: 'off'
+      - condition: state
+        entity_id: light.hallway
+        state: 'off'
+      - condition: state
+        entity_id: light.living_room_group
+        state: 'off'
+      - condition: state
+        entity_id: light.stairs_down
         state: 'off'
 - id: '1689453293699'
   alias: Abrir Parcialmente Estores do Primeiro Andar
@@ -1263,7 +1270,6 @@
       only_after_sunset: false
       disable_in_guest: true
       required_house_mode: Todos
-      blocker_off_entity: binary_sensor.notify_home
       room_name: Lavandaria
       blocker_on_entity: light.laundry
       disable_in_sleep: true
@@ -3088,7 +3094,6 @@
       only_after_sunset: false
       disable_in_guest: false
       required_house_mode: Ligada
-      blocker_off_entity: binary_sensor.notify_home
       room_name: Hall
       blocker_on_entity: light.hall_group
       disable_in_sleep: true
@@ -3109,7 +3114,6 @@
       only_after_sunset: false
       disable_in_guest: false
       required_house_mode: Todos
-      blocker_off_entity: binary_sensor.notify_home
       room_name: Casa de Banho de Serviço
       blocker_on_entity: light.bathroom_rc
       disable_in_sleep: true
