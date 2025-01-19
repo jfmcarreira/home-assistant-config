@@ -143,9 +143,16 @@ state_machine:
       - name: transition_fully_open
         transitions:
           - Stopped -> Open
+          - Stopped -> Open
+          - Opening -> Open
+          - Closing -> Open
+          - Close -> Open
       - name: transition_fully_close
         transitions:
           - Stopped -> Close
+          - Opening -> Close
+          - Closing -> Close
+          - Open -> Close
       - name: transition_start_moving
         transitions:
           - Stopped -> Opening
