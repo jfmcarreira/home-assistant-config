@@ -1,3 +1,10 @@
+button:
+  - platform: template
+    name: auto_on
+    entity_category: config
+    on_press:
+      - script.execute: light_turn_on_action
+
 script:
   - id: light_turn_on_action
     mode: restart
