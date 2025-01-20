@@ -10,7 +10,8 @@ light:
               is_state('light.master_bedroom_entry', 'on') or
               is_state('light.master_bedroom_closet', 'on') or
               is_state('light.master_bedroom_bed_wall', 'on') or
-              is_state('light.master_bedroom_bed_window', 'on')
+              is_state('light.master_bedroom_bed_window', 'on') or
+              is_state('light.master_bedroom_lamp', 'on')
           }}
         turn_on:
           - choose:
