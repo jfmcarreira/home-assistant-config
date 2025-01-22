@@ -9,14 +9,10 @@ api:
   services:
     - service: minimal_open_cover
       then:
-        - cover.close: cover_1
-        - wait_until:
-            lambda: |-
-              return id(cover_1).position == COVER_CLOSED;
-        - delay: 1s
-        - cover.control:
-            id: cover_1
-            position: ${SmallOpenPosition}
+        - script.execute: cover_small_open
+    - service: middle_open_cover
+      then:
+        - script.execute: cover_middle_open_cover
 
 globals:
   - id: cover_action
@@ -27,6 +23,14 @@ globals:
     type: bool
     restore_value: no
     initial_value: "true"
+
+sensor:
+  - platform: homeassistant
+    id: cover_lower_position
+    entity_id: input_number.cover_lower_position_${CoverName}
+  - platform: homeassistant
+    id: cover_higher_position
+    entity_id: input_number.cover_higher_position_${CoverName}
 
 binary_sensor:
   - platform: homeassistant
@@ -56,10 +60,11 @@ binary_sensor:
                       - api.connected:
                   - binary_sensor.is_on: cover_controls_enabled
               then:
-                - logger.log: "Cover going to 50"
+                - logger.log: "Cover going to Middle"
                 - cover.control:
                     id: cover_1
-                    position: 50%
+                    position: !lambda |-
+                      return id(cover_higher_position).state / 100.0;
       - timing:
           - ON for at most 1s
           - OFF for at least 100ms
@@ -121,15 +126,7 @@ binary_sensor:
                       - api.connected:
                   - binary_sensor.is_on: cover_controls_enabled
               then:
-                - logger.log: "Cover going to just open"
-                - cover.close: cover_1
-                - wait_until:
-                    lambda: |-
-                      return id(cover_1).position == COVER_CLOSED;
-                - delay: 5s
-                - cover.control:
-                    id: cover_1
-                    position: ${SmallOpenPosition}
+                - script.execute: cover_small_open
       - timing:
           - ON for at most 1s
           - OFF for at least 100ms
@@ -326,6 +323,28 @@ switch:
     restore_mode: ALWAYS_OFF
 
 script:
+  - id: cover_small_open
+    mode: single
+    then:
+      - logger.log: "Cover going to just open"
+      - cover.close: cover_1
+      - wait_until:
+          lambda: |-
+            return id(cover_1).position == COVER_CLOSED;
+      - delay: 1s
+      - cover.control:
+          id: cover_1
+          position: !lambda |-
+            return id(cover_lower_position).state / 100.0;
+  - id: cover_middle_open_cover
+    mode: single
+    then:
+      - logger.log: "Cover going to the middle"
+      - cover.control:
+          id: cover_1
+          position: !lambda |-
+            return id(cover_higher_position).state / 100.0;
+
   - id: covers_block_extra_buttons_event
     mode: restart
     then:

@@ -1,6 +1,6 @@
 substitutions:
-  devicename: bhonofre_cover_bathroom_rc
-  CoverName: Bathroom
+  devicename: bhonofre_cover_bathroom
+  CoverName: bathroom
   Open: "12"
   Close: "13"
   ExtraTop: "14"

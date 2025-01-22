@@ -1,6 +1,6 @@
 substitutions:
   devicename: bhonofre_cover_laundry
-  CoverName: Laundry
+  CoverName: laundry
   Open: "2"
   Close: "14"
   ExtraTop: "12"

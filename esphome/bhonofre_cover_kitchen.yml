@@ -1,6 +1,6 @@
 substitutions:
   devicename: bhonofre_cover_kitchen
-  CoverName: Kitchen
+  CoverName: kitchen
   Open: "12"
   Close: "13"
   ExtraTop: "2"
