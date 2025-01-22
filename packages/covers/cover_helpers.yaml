@@ -13,6 +13,8 @@ homeassistant:
       friendly_name: "Controlar Estores em Grupo"
     "input_number.cover_lower_position_*":
       friendly_name: "Posição Inferior"
+    "input_number.cover_middle_position_*":
+      friendly_name: "Posição Intermédia"
     "input_number.cover_higher_position_*":
       friendly_name: "Posição Superior"
     "input_number.cover_rainy_position_*":
@@ -204,6 +206,80 @@ input_number:
     step: 1
     mode: slider
     unit_of_measurement: "%"
+
+  cover_middle_position_living_room:
+    name: Posição Intermédia do Estore da Sala de Estar
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_kitchen:
+    name: Posição Intermédia do Estore da Cozinha
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_laundry:
+    name: Posição Intermédia do Estore da Lavandaria
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_bedroom_rc:
+    name: Posição Intermédia do Estore do Quarto do R/C
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_bathroom:
+    name: Posição Intermédia do Estore da Casa de Banho
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_office:
+    name: Posição Intermédia do Estore do Escritório
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_master_bedroom:
+    name: Posição Intermédia do Estore do Quarto Principal
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_bedroom_ricardo:
+    name: Posição Intermédia do Estore do Quarto do Ricardo
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_middle_position_bedroom_henrique:
+    name: Posição Intermédia do Estore do Quarto do Henrique
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 20
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+
   cover_higher_position_living_room:
     name: Posição Superior do Estore da Sala de Estar
     icon: mdi:window-shutter-alert
