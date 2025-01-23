@@ -1,0 +1,43 @@
+sensor:
+  - platform: statistics
+    name: temperature_living_room_average
+    unique_id: temperature_living_room_average
+    entity_id: sensor.temperature_living_room
+    state_characteristic: mean
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: temperature_office_average
+    unique_id: temperature_office_average
+    entity_id: sensor.temperature_office
+    state_characteristic: mean
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: temperature_hall_average
+    unique_id: temperature_hall_average
+    entity_id: sensor.temperature_hall
+    state_characteristic: mean
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: temperature_master_bedroom_average
+    unique_id: temperature_master_bedroom_average
+    entity_id: sensor.temperature_master_bedroom
+    state_characteristic: mean
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: temperature_bedroom_ricardo_average
+    unique_id: temperature_bedroom_ricardo_average
+    entity_id: sensor.temperature_bedroom_ricardo
+    state_characteristic: mean
+    max_age:
+      hours: 24
+  - platform: statistics
+    name: temperature_bedroom_henrique_average
+    unique_id: temperature_bedroom_henrique_average
+    entity_id: sensor.temperature_bedroom_henrique
+    state_characteristic: mean
+    max_age:
+      hours: 24
