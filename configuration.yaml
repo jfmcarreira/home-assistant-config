@@ -47,9 +47,10 @@ input_text:
 
 media_source:
 
-#device_tracker:
-#  - platform: bluetooth_le_tracker
-#    track_new_devices: false
+history:
+
+logger:
+  default: error
 
 ################################################################################
 ## Includes
