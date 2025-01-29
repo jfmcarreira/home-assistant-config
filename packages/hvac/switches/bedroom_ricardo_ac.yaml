@@ -8,10 +8,65 @@ switch:
             not is_state('climate.bedroom_ricardo', 'off')
           }}
         turn_on:
-          - service: climate.turn_on
+          - choose:
+              - conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id: sensor.season
+                        state: spring
+                      - condition: state
+                        entity_id: sensor.season
+                        state: summer
+                sequence:
+                  - action: climate.set_hvac_mode
+                    metadata: {}
+                    data:
+                      hvac_mode: cool
+                    target:
+                      entity_id: climate.bedroom_ricardo
+                  - action: climate.set_temperature
+                    target:
+                      entity_id: climate.bedroom_ricardo
+                    data:
+                      temperature: 25
+              - conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id: sensor.season
+                        state: winter
+                      - condition: state
+                        entity_id: sensor.season
+                        state: autumn
+                sequence:
+                  - action: climate.set_hvac_mode
+                    metadata: {}
+                    data:
+                      hvac_mode: heat
+                    target:
+                      entity_id: climate.bedroom_ricardo
+                  - action: climate.set_temperature
+                    target:
+                      entity_id: climate.bedroom_ricardo
+                    data:
+                      temperature: 21
+            default:
+              - action: climate.turn_on
+                metadata: {}
+                data: {}
+                target:
+                  entity_id: climate.bedroom_ricardo
+          - action: climate.set_fan_mode
+            data:
+              fan_mode: auto
             target:
-              entity_id:
-                - climate.bedroom_ricardo
+              entity_id: climate.bedroom_ricardo
+          - action: climate.set_swing_mode
+            data:
+              swing_mode: swing
+            target:
+              entity_id: climate.bedroom_ricardo
         turn_off:
           - condition: not
             conditions:
