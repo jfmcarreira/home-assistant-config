@@ -1,5 +1,5 @@
 blueprint:
-  name: Configurar Luz com Base no Estado da Casa
+  name: "[Lights] Configurar Luz com Base no Estado da Casa"
   description: >
     Configurar temperatura e brilho das luzes com base na hora/modo de funcionamento da casa
 

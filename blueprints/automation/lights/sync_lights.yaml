@@ -1,5 +1,5 @@
 blueprint:
-  name: Sync Light State
+  name: "[Lights] Sync Light State"
   description: >
     Sync On/Off state of the lights
 
