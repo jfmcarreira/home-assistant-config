@@ -9,6 +9,7 @@ blueprint:
       selector:
         entity:
           domain: climate
+          multiple: true
 
     schedule:
       name: Horário
@@ -90,6 +91,16 @@ condition:
             state: "on"
 
 action:
+  - action: switch.turn_on
+    data: {}
+    target:
+      entity_id:
+        - switch.hall_ac_echo
+        - switch.office_ac_echo
+        - switch.bedroom_henrique_ac_echo
+        - switch.master_bedroom_ac_echo
+        - switch.bedroom_ricardo_ac_echo
+
   - service: climate.turn_off
     target:
       entity_id: !input hvac_unit

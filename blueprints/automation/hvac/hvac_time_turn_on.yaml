@@ -9,6 +9,7 @@ blueprint:
       selector:
         entity:
           domain: climate
+          multiple: true
 
     schedule_start:
       name: Horário de ínicio de controlo
@@ -76,6 +77,14 @@ blueprint:
           domain: sensor
           device_class: temperature
 
+    window_sensor:
+      name: Sensor da Janelas
+      default: []
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: window
+
     room_temperature:
       name: Temperatura da Divisão
       default: 20
@@ -109,6 +118,7 @@ max_exceeded: silent
 variables:
   hvac_temperature: !input hvac_temperature
   hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
+  window_sensor_entity: !input window_sensor
 
 trigger:
   - trigger: time
@@ -148,7 +158,21 @@ condition:
     entity_id: !input temperature_sensor
     below: !input room_temperature
 
+  - alias: "Window Closed"
+    condition: template
+    value_template: "{{ (light_target|length <= 0) or (states[window_sensor_entity].state == 'off') }}"
+
 action:
+  - action: switch.turn_on
+    data: {}
+    target:
+      entity_id:
+        - switch.hall_ac_echo
+        - switch.office_ac_echo
+        - switch.bedroom_henrique_ac_echo
+        - switch.master_bedroom_ac_echo
+        - switch.bedroom_ricardo_ac_echo
+
   - action: climate.set_hvac_mode
     target:
       entity_id: !input hvac_unit
@@ -160,6 +184,18 @@ action:
       entity_id: !input hvac_unit
     data:
       temperature: !input hvac_temperature
+
+  - action: climate.set_fan_mode
+    data:
+      fan_mode: auto
+    target:
+      entity_id: !input hvac_unit
+
+  - action: climate.set_swing_mode
+    data:
+      swing_mode: swing
+    target:
+      entity_id: !input hvac_unit
 
   - sequence: !input extra_hvac_actions
 
