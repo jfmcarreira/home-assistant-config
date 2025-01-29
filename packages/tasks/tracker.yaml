@@ -1,0 +1,13 @@
+template:
+  - binary_sensor:
+      - name: tasks
+        unique_id: tasks
+        device_class: update
+        state: >
+          {{
+            is_state( 'binary_sensor.water_filter_needs_replacement', 'on' ) or
+            is_state( 'binary_sensor.dryer_machine_need_emtpy', 'on' ) or
+            is_state( 'binary_sensor.wash_machine_wet_clothes', 'on' ) or
+            is_state( 'binary_sensor.dish_wash_machine_clean', 'on' ) or
+            is_state( 'binary_sensor.cat_litter_box_need_change', 'on' )
+          }}

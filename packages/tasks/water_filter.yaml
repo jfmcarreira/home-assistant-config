@@ -1,3 +1,4 @@
+template:
 - sensor:
     - name: water_filter_remaing_days
       unique_id: water_filter_remaing_days

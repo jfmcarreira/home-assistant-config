@@ -1,3 +1,4 @@
+template:
 - binary_sensor:
     - name: cat_litter_box_need_clean
       unique_id: cat_litter_box_need_clean

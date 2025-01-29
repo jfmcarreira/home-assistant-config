@@ -1,3 +1,4 @@
+template:
 - sensor:
     - name: dehumidifier_humidity
       unique_id: dehumidifier_humidity

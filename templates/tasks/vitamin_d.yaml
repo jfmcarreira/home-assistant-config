@@ -1,9 +1,0 @@
-- binary_sensor:
-    - name: task_vitamin_d
-      unique_id: task_vitamin_d
-      device_class: problem
-      state: >
-        {{ ( ( as_timestamp( now().timestamp() | timestamp_custom("%Y-%m-%d", true) ) - as_timestamp( as_timestamp( states('sensor.vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d", true) ) ) > 0 ) and (( now().timestamp() - as_timestamp( states('sensor.vitamin_d_last_done') ) ) / 3600 > 6 )}}
-      attributes:
-        Última Realização: >
-          {{ as_timestamp( states('sensor.vitamin_d_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}

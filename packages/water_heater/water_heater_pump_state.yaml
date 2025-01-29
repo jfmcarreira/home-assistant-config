@@ -1,3 +1,4 @@
+template:
 - binary_sensor:
     - name: water_heater_pump_state
       unique_id: water_heater_pump_state

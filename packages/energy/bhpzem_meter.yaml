@@ -1,4 +1,5 @@
-- sensor:
+template:
+  - sensor:
     - name: bhpzem_meter
       unique_id: bhpzem_meter
       device_class: energy

@@ -1,0 +1,26 @@
+template:
+  - sensor:
+      - name: gate_state
+        unique_id: gate_state
+        state: >-
+          {% if is_state('cover.gate', 'opening' )  %}
+              A Abrir
+          {% elif is_state('cover.gate', 'closing' )  %}
+              A Fechar
+          {% else %}
+              {% if is_state('binary_sensor.gate_open', 'on' )  %}
+                  Aberto
+              {% elif is_state('binary_sensor.gate_close', 'on' )  %}
+                  Fechado
+              {% else %}
+                  Parcialmente Aberto
+              {% endif %}
+          {% endif %}
+        icon: >-
+          {% if is_state('binary_sensor.gate_open', 'on' )  %}
+            mdi:gate-open
+          {% elif is_state('binary_sensor.gate_close', 'on' )  %}
+            mdi:gate
+          {% else %}
+            mdi:gate-alert
+          {% endif %}

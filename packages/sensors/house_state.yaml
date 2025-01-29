@@ -1,3 +1,4 @@
+template:
 - sensor:
     - name: house_mode
       unique_id: sensor_house_mode
@@ -30,7 +31,7 @@
     - name: Night Mode
       unique_id: night_mode
       state: >
-        {{  is_state('input_select.house_mode', 'Night') or 
+        {{  is_state('input_select.house_mode', 'Night') or
             is_state('input_select.house_mode', 'Sleep')
         }}
 
@@ -40,6 +41,6 @@
       device_class: occupancy
       state: >
         {{ is_state('input_boolean.house_guest', 'on') or
-            is_state('binary_sensor.joao_home', 'on') or 
-            is_state('binary_sensor.bianca_home', 'on') 
+            is_state('binary_sensor.joao_home', 'on') or
+            is_state('binary_sensor.bianca_home', 'on')
         }}

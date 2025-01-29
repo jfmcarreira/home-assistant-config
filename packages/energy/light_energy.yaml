@@ -1,9 +1,10 @@
+template:
 - sensor:
     - name: light_daily_energy_total
       unique_id: light_daily_energy_total
       device_class: energy
       unit_of_measurement: "kWh"
-      state_class: total_increasing
+      state_class: total
       state: >-
         {% set ns = namespace(states=[]) %}
         {% for s in states.sensor %}

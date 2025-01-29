@@ -1,3 +1,4 @@
+template:
 - binary_sensor:
     - name: washing_machine_state
       unique_id: washing_machine_state

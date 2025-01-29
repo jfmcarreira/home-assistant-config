@@ -1,3 +1,4 @@
+template:
 - sensor:
     - name: humidity_main_bathroom_light_off
       unique_id: humidity_main_bathroom_light_off

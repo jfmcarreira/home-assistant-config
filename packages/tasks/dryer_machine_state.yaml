@@ -1,0 +1,63 @@
+template:
+  - binary_sensor:
+      - name: dryer_machine_state
+        unique_id: dryer_machine_state
+        icon: mdi:tumble-dryer
+        device_class: plug
+        delay_on:
+          minutes: 1
+        delay_off:
+          minutes: 2
+        availability: >-
+          {{ is_number(states('sensor.device_power_dryer_machine')) }}
+        state: >-
+          {% if is_state( 'binary_sensor.dryer_machine_state', 'on' )  %}
+              {%- if states("sensor.device_power_dryer_machine") | int(0) < 3 %}
+                  False
+              {%- else %}
+                  True
+              {%- endif %}
+          {%- else %}
+              {%- if states("sensor.device_power_dryer_machine") | int > 50 %}
+                  True
+              {%- else %}
+                  False
+              {%- endif %}
+          {%- endif %}
+        attributes:
+          Lavagem da Roupa: >
+            {{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+      - name: dryer_machine_need_emtpy
+        unique_id: dryer_machine_need_emtpy
+        state: >
+          {{ as_timestamp( states('sensor.task_dryer_last_done') ) - as_timestamp( states('sensor.task_dryer_empty_last_done') ) > 0 }}
+        attributes:
+          energia_total: "{{ state_attr('sensor.task_dryer_last_done', 'total_energy')  }}"
+          roupa_seca: "{{ as_timestamp( states('sensor.task_dryer_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+          roupa_retirada: >
+            {{ as_timestamp( states('sensor.task_dryer_empty_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+  - sensor:
+      - name: dryer_machine_state
+        unique_id: dryer_machine_state
+        state: >-
+          {% if is_state( 'binary_sensor.dryer_machine_door', 'on' )  %}
+            Aberta
+          {% else %}
+              {% if is_state( 'binary_sensor.dryer_machine_state', 'on' )  %}
+                  A Secar
+              {% elif is_state( 'binary_sensor.dryer_machine_need_emtpy', 'on' )  %}
+                Roupa Seca
+              {% else %}
+                Desligada
+              {% endif %}
+          {% endif %}
+        icon: >-
+          {% if is_state( 'binary_sensor.dryer_machine_state', 'on' )  %}
+            mdi:tumble-dryer
+          {% elif is_state( 'binary_sensor.dryer_machine_need_emtpy', 'on' )  %}
+            mdi:tumble-dryer-alert
+          {% else %}
+            mdi:tumble-dryer-off
+          {% endif %}

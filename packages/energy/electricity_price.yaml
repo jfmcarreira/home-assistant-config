@@ -1,0 +1,28 @@
+template:
+  - sensor:
+      - unique_id: ibelectra_price
+        name: ibelectra_price
+        unit_of_measurement: "€/kWh"
+        availability: "{{ is_number(states('sensor.omie_spot_pt_month_to_date')) }}"
+        state_class: measurement
+        state: >
+          {% set OMIE = state_attr(this.entity_id, 'OMIE') -%}
+          {% set CGS = state_attr(this.entity_id, 'CGS') -%}
+          {% set Perdas = state_attr(this.entity_id, 'Perdas') -%}
+          {% set k = state_attr(this.entity_id, 'k') -%}
+          {% set TAR = state_attr(this.entity_id, 'TAR') -%}
+          {% set FTS = state_attr(this.entity_id, 'FTS') -%}
+
+          {% if None in [CGS, Perdas, k, TAR, FTS] %}
+            {{ None }}
+          {% else %}
+            {{ (((OMIE+CGS)*(1+Perdas)+k+TAR+FTS) / 1000.0) | round(3) }}
+          {% endif %}
+        attributes:
+          formula: (OMIE+CGS)*(1+Perdas)+k+TAR+FTS
+          OMIE: "{{ states('sensor.omie_spot_pt_month_to_date') }}"
+          CGS: "{{ 7 }}"
+          Perdas: "{{ 0.1604 }}"
+          k: "{{ 3.5 }}"
+          TAR: "{{ 36.5 if now().date().isoformat() < '2024-06-01' else 62.50 }}"
+          FTS: "{{ 0 if now().date().isoformat() < '2024-06-20' else 2.893 }}"

@@ -1,0 +1,60 @@
+template:
+  - binary_sensor:
+      - name: dish_wash_machine_state
+        unique_id: dish_wash_machine_state
+        icon: mdi:dishwasher
+        device_class: plug
+        delay_on:
+          minutes: 1
+        delay_off:
+          minutes: 2
+        state: >-
+          {% if is_state('binary_sensor.dish_wash_machine_state', 'on') %}
+              {%- if ( states("sensor.device_power_dish_wash_machine") | int(0) ) < 3 %}
+                  False
+              {%- else %}
+                  True
+              {%- endif %}
+          {%- else %}
+              {%- if ( states("sensor.device_power_dish_wash_machine") | int(0) ) > 50 %}
+                  True
+              {%- else %}
+                  False
+              {%- endif %}
+          {%- endif %}
+        attributes:
+          Lavagem da Roupa: >
+            {{ as_timestamp( states('sensor.task_dish_wash_machine_clean_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+      - name: dish_wash_machine_clean
+        unique_id: dish_wash_machine_clean
+        icon: mdi:silverware
+        state: "{{ as_timestamp( states('sensor.task_dish_wash_machine_clean_last_done') ) - as_timestamp( states('sensor.task_dish_wash_machine_empty_last_done') ) > 0 }}"
+        attributes:
+          energia_total: "{{ state_attr('sensor.task_dish_wash_machine_clean_last_done', 'total_energy')  }}"
+          Loiça Lavada: "{{ as_timestamp( states('sensor.task_dish_wash_machine_clean_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+          Loiça Retirada: "{{ as_timestamp( states('sensor.task_dish_wash_machine_empty_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+
+  - sensor:
+      - name: dish_wash_machine_state
+        unique_id: dish_wash_machine_state
+        state: >-
+          {% if is_state( 'binary_sensor.dish_wash_machine_door', 'on' )  %}
+            Aberta
+          {% else %}
+            {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+              A Lavar
+            {% elif is_state( 'binary_sensor.dish_wash_machine_clean', 'on' )  %}
+              Loiça Lavada
+            {% else %}
+              Desligada
+            {% endif %}
+          {% endif %}
+        icon: >-
+          {% if is_state( 'binary_sensor.dish_wash_machine_state', 'on' )  %}
+              mdi:dishwasher
+          {% elif is_state( 'binary_sensor.dish_wash_machine_clean', 'on' )  %}
+            mdi:dishwasher-alert
+          {% else %}
+            mdi:dishwasher-off
+          {% endif %}
