@@ -64,3 +64,7 @@ template: !include_dir_merge_list templates
 python_script:
 frontend:
   themes: !include_dir_merge_named themes
+
+light:
+  - platform: template
+    lights: !include_dir_named lights/
