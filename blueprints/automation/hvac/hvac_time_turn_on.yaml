@@ -139,6 +139,10 @@ trigger:
 
 condition:
   - condition: state
+    entity_id: input_boolean.automation_bypass_hvac
+    state: "off"
+
+  - condition: state
     entity_id: !input hvac_unit
     state:
       - "off"
@@ -160,7 +164,12 @@ condition:
 
   - alias: "Window Closed"
     condition: template
-    value_template: "{{ (light_target|length <= 0) or (states[window_sensor_entity].state == 'off') }}"
+    value_template: "{{ (window_sensor_entity|length <= 0) or (states[window_sensor_entity].state == 'off') }}"
+
+  - alias: "Run once a day (wait at least 12 hours)"
+    condition: template
+    value_template: >
+      {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 60 * 12 }}
 
 action:
   - action: switch.turn_on
