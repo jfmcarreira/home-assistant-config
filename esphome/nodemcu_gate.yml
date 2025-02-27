@@ -21,6 +21,7 @@ esp8266:
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
 
 external_components:
   - source:
@@ -56,6 +57,7 @@ binary_sensor:
       - delayed_on: 750ms
     on_press:
       then:
+        - delay: 5s
         - state_machine.transition: transition_fully_close
 
   - platform: gpio
@@ -67,6 +69,10 @@ binary_sensor:
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 750ms
+    on_press:
+      then:
+        - delay: 5s
+        - state_machine.transition: transition_fully_open
 
   - platform: template
     id: gate_moving
@@ -187,6 +193,7 @@ cover:
     name: "Gate"
     device_class: gate
     has_built_in_endstop: true
+    assumed_state: false
     open_action:
       - if:
           condition:
@@ -220,3 +227,20 @@ cover:
     close_duration: 20s
     max_duration: 40s
     direction_change_wait_time: 5s
+# cover:
+#   - platform: feedback
+#     name: "Gate"
+#     device_class: gate
+#     has_built_in_endstop: true
+#     open_action:
+#       - logger.log: "Open action"
+#     close_action:
+#       - logger.log: "Close action"
+#     stop_action:
+#       - logger.log: "Stop action"
+#     open_endstop: gate_is_open
+#     close_endstop: gate_is_close
+#     open_duration: 20s
+#     close_duration: 20s
+#     max_duration: 40s
+#     direction_change_wait_time: 5s

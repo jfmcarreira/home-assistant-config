@@ -14,10 +14,6 @@ logger:
 ota:
   - platform: esphome
 
-web_server:
-
-captive_portal:
-
 time:
   - platform: homeassistant
     id: homeassistant_time

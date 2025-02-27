@@ -4,11 +4,13 @@ substitutions:
 
 esphome:
   name: ${devicename}
-  platform: ESP8266
+
+esp8266:
   board: esp01_1m
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
 
 # Unused pins
 # Status LED: GPIO02

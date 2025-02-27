@@ -3,6 +3,7 @@ substitutions:
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
 
   device_base: !include
     file: packages/shelly25.yml

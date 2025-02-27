@@ -1,6 +1,6 @@
 substitutions:
   devicename: phosphorus
-  FriendlyName: Phosphorus
+  FriendlyName: Phosphorus (Water Heater)
 
 esphome:
   name: phosphorus
@@ -13,6 +13,7 @@ esp32:
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
 
 esp32_ble_tracker:
   scan_parameters:

@@ -3,6 +3,7 @@ substitutions:
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
   home_state: !include packages/home_state.yml
 
   device_base: !include

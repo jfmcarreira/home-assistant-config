@@ -4,6 +4,7 @@ substitutions:
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
   home_state: !include packages/home_state.yml
 
   device_base: !include
@@ -58,11 +59,19 @@ script:
                 service: light.turn_off
                 data:
                   entity_id: light.master_bedroom_bed_window
+            - homeassistant.service:
+                service: light.turn_off
+                data:
+                  entity_id: light.master_bedroom_lamp
             - globals.set:
                 id: lights_state
                 value: "-1"
 
 binary_sensor:
+  - platform: homeassistant
+    id: master_bedroom_lamp
+    entity_id: light.master_bedroom_lamp
+
   - platform: homeassistant
     id: master_bedroom_bed_wall
     entity_id: light.master_bedroom_bed_wall
@@ -91,6 +100,7 @@ binary_sensor:
                       or:
                         - light.is_on: light_1
                         - light.is_on: light_2
+                        - binary_sensor.is_on: master_bedroom_lamp
                         - binary_sensor.is_on: master_bedroom_closet_state
                         - binary_sensor.is_on: master_bedroom_bed_wall
                         - binary_sensor.is_on: master_bedroom_bed_window
