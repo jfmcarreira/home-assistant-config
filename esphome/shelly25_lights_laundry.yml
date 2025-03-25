@@ -23,6 +23,8 @@ packages:
     vars:
       light_state_count: 2
 
+  motion_light: !include packages/motion_light.yml
+
 script:
   - id: smart_light_state
     then:
@@ -49,31 +51,37 @@ binary_sensor:
         then:
           - if:
               condition:
-                or:
-                  - light.is_on: light_1
-                  - light.is_on: light_2
+                - script.is_running: light_turn_on_action
               then:
-                - logger.log: "Turning lights OFF"
-                - light.turn_off: light_1
-                - light.turn_off: light_2
-                - globals.set:
-                    id: lights_state
-                    value: "-1"
+                - script.stop: light_turn_on_action
               else:
                 - if:
                     condition:
-                      and:
-                        - api.connected:
-                        - binary_sensor.is_on: house_mode_night
+                      or:
+                        - light.is_on: light_1
+                        - light.is_on: light_2
                     then:
-                      - logger.log: "Turning lights in Night mode"
+                      - logger.log: "Turning lights OFF"
+                      - light.turn_off: light_1
+                      - light.turn_off: light_2
                       - globals.set:
                           id: lights_state
-                          value: "1"
-                      - script.execute: smart_light_state
+                          value: "-1"
                     else:
-                      - logger.log: "Turning both lights ON"
-                      - globals.set:
-                          id: lights_state
-                          value: "0"
-                      - script.execute: smart_light_state
+                      - if:
+                          condition:
+                            and:
+                              - api.connected:
+                              - binary_sensor.is_on: house_mode_night
+                          then:
+                            - logger.log: "Turning lights in Night mode"
+                            - globals.set:
+                                id: lights_state
+                                value: "1"
+                            - script.execute: smart_light_state
+                          else:
+                            - logger.log: "Turning both lights ON"
+                            - globals.set:
+                                id: lights_state
+                                value: "0"
+                            - script.execute: smart_light_state
