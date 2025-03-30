@@ -1,0 +1,11 @@
+automation:
+  - alias: Sonoff RF Bridge Demultiplexer
+    mode: queued
+    max: 100
+    trigger:
+      - platform: mqtt
+        topic: tele/tasmota_sonoff_rf_bridge/RESULT
+    action:
+      - service: python_script.rf_bridge_demux
+        data:
+          payload: '{{ trigger.payload_json.RfReceived.Data }}'
