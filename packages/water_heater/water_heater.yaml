@@ -13,4 +13,5 @@ climate:
     keep_alive: true
     target_temp_step: 1.0
     precision: 0.5
+    eco_temp: 40
     comfort_temp: 50

@@ -10,7 +10,7 @@ generic_hygrostat:
     humidifier: switch.dehumidifier
     target_sensor: sensor.dehumidifier_humidity
     min_humidity: 50
-    max_humidity: 90
+    max_humidity: 85
     dry_tolerance: 2
     wet_tolerance: 2
     min_cycle_duration: "00:00:15"
