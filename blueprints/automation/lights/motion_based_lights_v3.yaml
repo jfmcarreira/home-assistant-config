@@ -178,7 +178,7 @@ trigger:
 variables:
   motion_sensor: !input motion_sensor
   target_entity: !input target_entity
-  illuminance_currently: !input illuminance_sensor
+  illuminance_entity: !input illuminance_sensor
   illuminance_cutoff: !input illuminance_cutoff
   blocker_on_entity: !input blocker_on_entity
   blocker_off_entity: !input blocker_off_entity
@@ -278,11 +278,10 @@ condition:
     conditions:
       # Run if the light is in automatic mode (automation is already running)
       - "{{ automation_previous_state == 1 }}"
-      - "{{ illuminance_currently == 'none' }}"
+      - "{{ illuminance_entity == '' }}"
+      - "{{ illuminance_entity == 'none' }}"
       - "{{ illuminance_cutoff == '0' }}"
-      - condition: numeric_state
-        entity_id: !input illuminance_sensor
-        below: !input illuminance_cutoff
+      - "{{ states[illuminance_entity].state | float < illuminance_cutoff }}"
       - condition: not
         conditions:
           - condition: state
