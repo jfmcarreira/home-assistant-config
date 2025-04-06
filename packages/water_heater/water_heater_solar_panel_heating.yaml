@@ -9,6 +9,7 @@ template:
           minutes: 30
         state: >
           {{
-              is_state('binary_sensor.temperature_solar_panel_trend', 'on') or
-              is_state('binary_sensor.water_heater_pump_state', 'on')
+              (state_attr('sun.sun', 'elevation') > 10)  and
+              (is_state('binary_sensor.temperature_solar_panel_trend', 'on') or
+              is_state('binary_sensor.water_heater_pump_state', 'on'))
           }}
