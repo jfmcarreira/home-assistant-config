@@ -4,6 +4,8 @@ esphome:
 esp8266:
   board: nodemcu
   restore_from_flash: true
+  framework:
+    version: recommended
 
 api:
   services:
@@ -49,6 +51,9 @@ binary_sensor:
       mode:
         input: true
         pullup: true
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
     on_multi_click:
       - timing:
           - ON for at least 1s
@@ -114,6 +119,9 @@ binary_sensor:
       mode:
         input: true
         pullup: true
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
     on_multi_click:
       - timing:
           - ON for at least 1s
