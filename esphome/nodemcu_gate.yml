@@ -4,16 +4,6 @@ substitutions:
 
 esphome:
   name: ${devicename}
-  on_boot:
-    priority: -100
-    then:
-      - if:
-          condition:
-            - binary_sensor.is_on: gate_open_sensor
-          then:
-            - state_machine.set: "Open"
-          else:
-            - state_machine.set: "Close"
 
 esp8266:
   board: nodemcuv2
@@ -55,10 +45,6 @@ binary_sensor:
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 750ms
-    on_press:
-      then:
-        - delay: 5s
-        - state_machine.transition: transition_fully_close
 
   - platform: gpio
     id: gate_open_sensor
@@ -69,101 +55,6 @@ binary_sensor:
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 750ms
-    on_press:
-      then:
-        - delay: 5s
-        - state_machine.transition: transition_fully_open
-
-  - platform: template
-    id: gate_moving
-    name: Gate Moving
-    lambda: |-
-      return id(main_power).state > 100;
-    on_press:
-      then:
-        - state_machine.transition: transition_start_moving
-    on_release:
-      then:
-        - state_machine.transition: transition_stop
-
-  - platform: template
-    id: gate_is_open
-    lambda: |-
-      return id(gate_state).current_state() == "Open";
-
-  - platform: template
-    id: gate_is_close
-    lambda: |-
-      return id(gate_state).current_state() == "Close";
-
-  - platform: template
-    id: gate_is_opening
-    lambda: |-
-      return id(gate_state).current_state() == "Opening";
-
-  - platform: template
-    id: gate_is_closing
-    lambda: |-
-      return id(gate_state).current_state() == "Closing";
-
-state_machine:
-  - name: Gate State
-    id: gate_state
-    states:
-      - name: "Stopped"
-        on_enter:
-          - if:
-              condition:
-                - binary_sensor.is_on: gate_open_sensor
-              then:
-                - logger.log: "From stop to open"
-                - state_machine.transition: transition_fully_open
-          - if:
-              condition:
-                - binary_sensor.is_on: gate_close_sensor
-              then:
-                - logger.log: "From stop to close"
-                - state_machine.transition: transition_fully_close
-        on_set:
-          - delay: 5s
-          - if:
-              condition:
-                - binary_sensor.is_on: gate_open_sensor
-              then:
-                - state_machine.set: Open
-          - if:
-              condition:
-                - binary_sensor.is_on: gate_close_sensor
-              then:
-                - state_machine.set: Close
-      - name: "Open"
-      - name: "Opening"
-      - name: "Close"
-      - name: "Closing"
-    inputs:
-      - name: transition_stop
-        transitions:
-          - Open -> Stopped
-          - Opening -> Stopped
-          - Closing -> Stopped
-      - name: transition_fully_open
-        transitions:
-          - Stopped -> Open
-          - Stopped -> Open
-          - Opening -> Open
-          - Closing -> Open
-          - Close -> Open
-      - name: transition_fully_close
-        transitions:
-          - Stopped -> Close
-          - Opening -> Close
-          - Closing -> Close
-          - Open -> Close
-      - name: transition_start_moving
-        transitions:
-          - Stopped -> Opening
-          - Close -> Opening
-          - Open -> Closing
 
 button:
   - platform: output
@@ -201,7 +92,6 @@ cover:
               - binary_sensor.is_off: gate_open_sensor
           then:
             - button.press: gate_open
-            - state_machine.transition: transition_start_moving
     close_action:
       - if:
           condition:
@@ -209,7 +99,6 @@ cover:
               - binary_sensor.is_off: gate_close_sensor
           then:
             - button.press: gate_open
-            - state_machine.transition: transition_start_moving
     stop_action:
       - if:
           condition:
@@ -219,28 +108,9 @@ cover:
           then:
             - button.press: gate_open
 
-    open_sensor: gate_is_opening
-    open_endstop: gate_is_open
-    close_sensor: gate_is_closing
-    close_endstop: gate_is_close
+    open_endstop: gate_open_sensor
+    close_endstop: gate_close_sensor
     open_duration: 17s
     close_duration: 20s
     max_duration: 40s
     direction_change_wait_time: 5s
-# cover:
-#   - platform: feedback
-#     name: "Gate"
-#     device_class: gate
-#     has_built_in_endstop: true
-#     open_action:
-#       - logger.log: "Open action"
-#     close_action:
-#       - logger.log: "Close action"
-#     stop_action:
-#       - logger.log: "Stop action"
-#     open_endstop: gate_is_open
-#     close_endstop: gate_is_close
-#     open_duration: 20s
-#     close_duration: 20s
-#     max_duration: 40s
-#     direction_change_wait_time: 5s
