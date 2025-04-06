@@ -1,6 +1,5 @@
 substitutions:
   devicename: sonoff-basic-gate-lights
-  FriendlyName: Sonoff Basic Gate Lights
 
 packages:
   esphome_base: !include packages/common.yml
@@ -8,13 +7,15 @@ packages:
 
 esphome:
   name: ${devicename}
-  platform: ESP8266
+  friendly_name: Sonoff Basic Gate Lights
+
+esp8266:
   board: esp01_1m
 
 light:
-  - id: light_1
-    name: Gate Lights
-    platform: binary
+  - platform: binary
+    id: light_1
+    name: "Gate Lights"
     output: relay_1
     restore_mode: RESTORE_AND_OFF
 
