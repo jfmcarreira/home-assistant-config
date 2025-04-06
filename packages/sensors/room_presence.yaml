@@ -1,24 +1,24 @@
-sensor presence:
-  # - platform: mqtt_room
-  #   name: Amazfit Joao
-  #   device_id: joao_amazfit
-  #   state_topic: room_presence
-  #   away_timeout: 60
-  #   timeout: 10
+#sensor presence:
+# - platform: mqtt_room
+#   name: Amazfit Joao
+#   device_id: joao_amazfit
+#   state_topic: room_presence
+#   away_timeout: 60
+#   timeout: 10
 
-  - platform: mqtt_room
-    name: Joao Galaxy Watch
-    device_id: joao_galaxy
-    state_topic: room_presence
-    away_timeout: 60
-    timeout: 10
+# - platform: mqtt_room
+#   name: Joao Galaxy Watch
+#   device_id: joao_galaxy
+#   state_topic: room_presence
+#   away_timeout: 60
+#   timeout: 10
 
-  - platform: mqtt_room
-    name: Amazfit Bianca
-    device_id: bianca_amazfit
-    state_topic: room_presence
-    away_timeout: 60
-    timeout: 10
+# - platform: mqtt_room
+#   name: Amazfit Bianca
+#   device_id: bianca_amazfit
+#   state_topic: room_presence
+#   away_timeout: 60
+#   timeout: 10
 
 mqtt:
   device_tracker:
