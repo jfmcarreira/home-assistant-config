@@ -24,6 +24,8 @@ logbook:
       - light.kitchen
       - light.office
       - script.select_next_house_mode
+      - binary_sensor.bianca_home_with_hysteresis
+      - binary_sensor.joao_home_with_hysteresis
     entity_globs:
       - light.*_group
       - sensor.wifi_*

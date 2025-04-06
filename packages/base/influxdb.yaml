@@ -44,3 +44,10 @@ influxdb:
       - sensor.speedtest_download
       # Water Heater
       - binary_sensor.water_heater_pump_state
+      # Health
+      - sensor.radium_watch_heart_rate
+      - sensor.radium_watch_steps_sensor
+      - sensor.radium_watch_daily_calories
+      - sensor.radium_watch_daily_distance
+      - sensor.radium_watch_daily_steps
+
