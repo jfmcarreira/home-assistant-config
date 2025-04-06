@@ -189,7 +189,7 @@ variables:
   ## Automation states
   min_repetition_interval_sec: !input min_repetition_interval_sec
   automation_last_triggered: "{{ this.attributes.last_triggered }}"
-  automation_previous_state: "{{ this.attributes.current }}"
+  automation_is_running: "{{ this.attributes.current == 1 }}"
   ## House Mode
   disable_in_guest: !input disable_in_guest
   disable_in_sleep: !input disable_in_sleep
@@ -232,19 +232,19 @@ condition:
   # Only run in specific house mode
   - condition: or
     conditions:
-      - "{{ automation_previous_state == 1 }}"
+      - "{{ automation_is_running }}"
       - "{{ house_mode_requirement }}"
 
   # Do not run if this blocker is ON
   - condition: or
     conditions:
-      - "{{ automation_previous_state == 1 }}"
+      - "{{ automation_is_running }}"
       - "{{ (blocker_on_entity == 'none') or (not states[blocker_on_entity].state == 'on') }}"
 
   # Do not run if the blocker is OFF
   - condition: or
     conditions:
-      - "{{ automation_previous_state == 1 }}"
+      - "{{ automation_is_running }}"
       - condition: and
         conditions:
           - "{{ (blocker_off_entity == 'none') or (not states[blocker_off_entity].state == 'off') }}"
@@ -256,7 +256,7 @@ condition:
   - condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
-      - "{{ automation_previous_state == 1 }}"
+      - "{{ automation_is_running }}"
       # Do not run if light is on (manually turn on)
       - condition: state
         entity_id: !input target_entity
@@ -267,7 +267,7 @@ condition:
   - condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
-      - "{{ automation_previous_state == 1 }}"
+      - "{{ automation_is_running }}"
       - "{{ only_after_sunset == false }}"
       - condition: numeric_state
         entity_id: sun.sun
@@ -277,7 +277,7 @@ condition:
   - condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
-      - "{{ automation_previous_state == 1 }}"
+      - "{{ automation_is_running }}"
       - "{{ illuminance_entity == '' }}"
       - "{{ illuminance_entity == 'none' }}"
       - "{{ illuminance_cutoff == '0' }}"
@@ -346,17 +346,8 @@ action:
   - alias: "Wait while room has presence"
     wait_template: >
       {% if room_name %}
-        {% set is_device_in_room = namespace(value=0) %}
-        {% for device in states.device_tracker %}
-          {% if device.state == room_name %}
-            {% set is_device_in_room.value = is_device_in_room.value + 1 %}
-          {% endif %}
-        {% endfor %}
-        {% if states[target_entity].state == 'off' or is_device_in_room.value == 0 %}
-          True
-        {% else %}
-          False
-        {% endif %}
+        {% set devices_in_room = states.device_tracker | selectattr('state', 'eq', room_name) | list %}
+        {{ states[target_entity].state == 'off' or devices_in_room | length == 0 }}
       {% else %}
         True
       {% endif %}
