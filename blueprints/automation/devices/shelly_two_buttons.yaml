@@ -1,0 +1,144 @@
+blueprint:
+  name: "[Devices] Shelly Device Two Buttons"
+  description: >
+    Triggers for Shelly with two buttons
+
+  domain: automation
+  input:
+    device:
+      name: Device
+      selector:
+        device:
+          filter:
+            - integration: shelly
+              manufacturer: Shelly
+    button_1_short:
+      name: Botão 1 (Short)
+      selector:
+        action:
+      default: []
+    button_2_short:
+      name: Botão 2 (Short)
+      selector:
+        action:
+      default: []
+    button_1_long:
+      name: Botão 1 (Long)
+      selector:
+        action:
+      default: []
+    button_2_long:
+      name: Botão 2 (Long)
+      selector:
+        action:
+      default: []
+    merge_long:
+      name: Único Long Press
+      selector:
+        boolean:
+      default: []
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  merge_long: !input merge_long
+
+trigger:
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: single
+    id: first_short_1
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: single_push
+    id: first_short_2
+
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: long
+    id: first_long_1
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: long_push
+    id: first_long_2
+
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button2
+    type: single
+    id: second_short_1
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button2
+    type: single_push
+    id: second_short_2
+
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button2
+    type: long
+    id: second_long_1
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button2
+    type: long_push
+    id: second_long_2
+
+action:
+  - choose:
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: first_short_1
+              - condition: trigger
+                id: first_short_2
+        alias: Button One Short
+        sequence: !input button_1_short
+
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: second_short_1
+              - condition: trigger
+                id: second_short_2
+        alias: Button Two Short
+        sequence: !input button_2_short
+
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: first_long_1
+              - condition: trigger
+                id: first_long_2
+        alias: Button One Long
+        sequence: !input button_1_long
+
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: second_long_1
+              - condition: trigger
+                id: second_long_2
+        alias: Button Two Long
+        sequence:
+          - if:
+              - "{{ merge_long == true }}"
+            then: !input button_1_long
+            else: !input button_2_long

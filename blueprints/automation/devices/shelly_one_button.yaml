@@ -1,0 +1,76 @@
+blueprint:
+  name: "[Devices] Shelly Device One Button"
+  description: >
+    Triggers for Shelly with one button
+
+  domain: automation
+  input:
+    device:
+      name: Device
+      selector:
+        device:
+          filter:
+            - integration: shelly
+              manufacturer: Shelly
+    button_short:
+      name: Short Press
+      selector:
+        action:
+      default: []
+    button_long:
+      name: Long Press
+      selector:
+        action:
+      default: []
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: single
+    id: first_short_1
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: single_push
+    id: first_short_2
+
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: long
+    id: first_long_1
+  - trigger: device
+    device_id: !input device
+    domain: shelly
+    subtype: button1
+    type: long_push
+    id: first_long_2
+
+action:
+  - choose:
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: first_short_1
+              - condition: trigger
+                id: first_short_2
+        alias: Button One Short
+        sequence: !input button_short
+
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: first_long_1
+              - condition: trigger
+                id: first_long_2
+        alias: Button One Long
+        sequence: !input button_long
