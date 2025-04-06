@@ -1,17 +1,17 @@
 # Basic Config
 substitutions:
   devicename: pow-elite-16a
-  FriendlyName: Sonoff Pow First Floor
 
 esphome:
   name: ${devicename}
-  friendly_name: ${FriendlyName}
+  friendly_name: Sonoff Pow First Floor
 
 esp32:
   board: nodemcu-32s
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
 
 esp32_ble_tracker:
   scan_parameters:
