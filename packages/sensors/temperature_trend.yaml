@@ -1,0 +1,45 @@
+binary_sensor:
+  - platform: trend
+    sensors:
+      temperature_rising_living_room:
+        entity_id: sensor.temperature_living_room
+        sample_duration: 3600
+        max_samples: 50
+        min_samples: 20
+        min_gradient: 0.0008
+        device_class: heat
+      temperature_rising_office:
+        entity_id: sensor.temperature_office
+        sample_duration: 3600
+        max_samples: 50
+        min_samples: 20
+        min_gradient: 0.0008
+        device_class: heat
+      temperature_rising_hall:
+        entity_id: sensor.temperature_hall
+        sample_duration: 3600
+        max_samples: 50
+        min_samples: 20
+        min_gradient: 0.0008
+        device_class: heat
+      temperature_rising_master_bedroom:
+        entity_id: sensor.temperature_master_bedroom
+        sample_duration: 3600
+        max_samples: 50
+        min_samples: 20
+        min_gradient: 0.0008
+        device_class: heat
+      temperature_rising_bedroom_ricardo:
+        entity_id: sensor.temperature_bedroom_ricardo
+        sample_duration: 3600
+        max_samples: 50
+        min_samples: 20
+        min_gradient: 0.0008
+        device_class: heat
+      temperature_rising_bedroom_henrique:
+        entity_id: sensor.temperature_bedroom_henrique
+        sample_duration: 3600
+        max_samples: 50
+        min_samples: 20
+        min_gradient: 0.0008
+        device_class: heat
