@@ -28,6 +28,12 @@ blueprint:
       default: "on"
       selector:
         boolean:
+    notification_max_time:
+      name: Horário Máximo de Notificação
+      description: Hora a partir da qual já não são enviadas notificações
+      default: "23:00:00"
+      selector:
+        time:
     notification_message:
       name: Mensagem na Notificação
       description: >
@@ -93,6 +99,8 @@ action:
         sequence:
           - condition: template
             value_template: "{{ send_notification == True }}"
+          - condition: time
+            before: !input notification_max_time
           - condition: state
             entity_id: binary_sensor.notification_non_disturb
             state: "off"
