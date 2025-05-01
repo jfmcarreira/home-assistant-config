@@ -118,16 +118,11 @@ max_exceeded: silent
 variables:
   hvac_temperature: !input hvac_temperature
   hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
-  window_sensor_entity: !input window_sensor
 
 trigger:
   - trigger: time
     id: normal_time
     at: !input schedule_start
-
-  - trigger: time
-    id: normal_time
-    at: !input schedule_end
 
   - trigger: numeric_state
     entity_id: !input temperature_sensor
@@ -174,6 +169,12 @@ condition:
     condition: state
     entity_id: !input window_sensor
     state: "off"
+
+  - alias: "All Windows Closed"
+    condition: state
+    entity_id: binary_sensor.window_all_house
+    state:
+      - "off"
 
   - alias: "Run once a day (wait at least 12 hours)"
     condition: template
