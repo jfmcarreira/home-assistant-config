@@ -10,6 +10,7 @@ class Event(Enum):
     LIGHT_ON = auto()
     MOTION = auto()
     NO_MOTION = auto()
+    COVERS = auto()
     TIME = auto()
 
 
@@ -18,16 +19,16 @@ class HouseMode(hass.Hass):
         self.house_mode = self.get_state("input_select.house_mode")
 
         self.trackCovers = [
-            "cover.kitchen"
-            "cover.living_room"
-            "cover.office"
-            "cover.office"
-            "cover.laundry"
-            "cover.bedroom_rc"
-            "cover.bathroom"
-            "cover.master_bedroom"
-            "cover.bedroom_ricardo"
-            "cover.bedroom_henrique"
+            "cover.kitchen",
+            "cover.living_room",
+            "cover.office",
+            "cover.office",
+            "cover.laundry",
+            "cover.bedroom_rc",
+            "cover.bathroom",
+            "cover.master_bedroom",
+            "cover.bedroom_ricardo",
+            "cover.bedroom_henrique",
         ]
 
         self.trackWorkingLights = [
@@ -38,10 +39,11 @@ class HouseMode(hass.Hass):
             "light.laundry",
             "light.hall_group",
             "light.bathroom_rc",
-            "light.main_bathroom"
+            "light.main_bathroom",
         ]
 
         self.trackLights = [
+            "light.hallway",
             "light.living_room_group",
             "light.all_bedrooms",
             "light.all_bathrooms",
@@ -85,13 +87,19 @@ class HouseMode(hass.Hass):
         for entity in self.trackMotion:
             self.listen_state(self.motion_callback, entity)
 
+        for entity in self.trackCovers:
+            self.listen_state(self.cover_state_callback, entity)
+
         self.listen_state(self.house_mode_callback, "input_select.house_mode")
 
         self.timer = None
 
         self.run_daily(self.update_house_mode_at_given_time, "08:05:00")
+        self.run_daily(self.update_house_mode_at_given_time, "09:05:00")
+        self.run_daily(self.update_house_mode_at_given_time, "10:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "21:05:00")
-        self.run_daily(self.update_house_mode_at_given_time, "22:35:00")
+        self.run_daily(self.update_house_mode_at_given_time, "21:35:00")
+        self.run_daily(self.update_house_mode_at_given_time, "22:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "00:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "01:05:00")
 
@@ -106,8 +114,8 @@ class HouseMode(hass.Hass):
         self.timer = None
 
     def timer_delay(self):
-        if self.now_is_between("02:00:00", "07:00:00"):
-            return 5 * 60
+        if self.now_is_between("01:00:00", "07:00:00"):
+            return 2 * 60
         else:
             return 36 * 60
 
@@ -128,12 +136,12 @@ class HouseMode(hass.Hass):
 
     def preffered_house_mode(self):
         newMode = "On"
-        if self.now_is_between("07:30:00", "08:30:00"):
+        if self.now_is_between("06:30:00", "07:30:00"):
             newMode = "Evening"
-        elif self.now_is_between("21:00:00", "22:00:00"):
+        elif self.now_is_between("19:30:00", "21:30:00"):
             newMode = "Evening"
-        elif self.now_is_between("22:00:00", "08:00:00"):
-            guest_mode = self.get_state('input_boolean.house_guest') == "on"
+        elif self.now_is_between("21:30:00", "08:00:00"):
+            guest_mode = self.get_state('binary_sensor.house_guest') == "on"
             if guest_mode:
                 newMode = "Evening"
             else:
@@ -157,12 +165,16 @@ class HouseMode(hass.Hass):
 
     def new_house_mode_from_evening(self, trigger):
         newMode = "Evening"
+        preffered_mode = self.preffered_house_mode()
         if trigger == Event.WORKING_LIGHT_OFF:
-            newMode = self.preffered_house_mode()
+            newMode = preffered_mode
         elif trigger == Event.NO_MOTION:
-            newMode = self.preffered_house_mode()
+            newMode = preffered_mode
             if not self.is_device_on() and self.is_sleep_time():
                 newMode = "Sleep"
+        elif trigger == Event.TIME:
+            if preffered_mode == "On":
+                newMode = "On"
         return newMode
 
     def new_house_mode_from_night(self, trigger):
@@ -204,6 +216,11 @@ class HouseMode(hass.Hass):
 
     def tracking_callback(self, entity, attribute, old, new, kwargs):
         self.set_new_house_mode_from_trigger(Event.PRESENCE)
+
+    def cover_state_callback(self, entity, attribute, old, new, kwargs):
+        if not new == "open":
+            return
+        self.set_new_house_mode_from_trigger(Event.COVERS)
 
     def motion_callback(self, entity, attribute, old, new, kwargs):
         haveMotion = False
