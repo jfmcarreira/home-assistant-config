@@ -1,0 +1,18 @@
+switch:
+  - platform: template
+    switches:
+      water_heater_comfort_mode:
+        unique_id: water_heater_comfort_mode
+        value_template: "{{ state_attr('climate.water_heater', 'preset_mode') == 'comfort' }}"
+        turn_on:
+          action: climate.set_preset_mode
+          target:
+            entity_id: climate.water_heater
+          data:
+            preset_mode: comfort
+        turn_off:
+          action: climate.set_preset_mode
+          target:
+            entity_id: climate.water_heater
+          data:
+            preset_mode: none
