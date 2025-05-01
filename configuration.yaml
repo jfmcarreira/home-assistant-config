@@ -49,6 +49,9 @@ media_source:
 
 history:
 
+zha:
+  custom_quirks_path: /config/zha_quirks/
+
 logger:
   default: error
 
