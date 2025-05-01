@@ -551,5 +551,52 @@ routine_dinner_time:
     data: {}
     target:
       entity_id: climate.living_room
-  alias: routine_dinner_time
+  alias: Routina Modo de Refeição
   description: ''
+routine_night_mode:
+  sequence:
+  - variables:
+      is_living_room_light_on: '{{ is_state(''light.living_room'', ''on'') or is_state(''light.living_room_table'',
+        ''on'') or is_state(''light.hallway'', ''on'') }}'
+      is_office_light_on: '{{ is_state(''light.office'', ''on'') }}'
+  - action: input_select.select_option
+    metadata: {}
+    data:
+      option: Night
+    target:
+      entity_id: input_select.house_mode
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      floor_id: outside
+      area_id:
+      - laundry
+      - bedroom_rc
+      - kitchen
+      - living_room
+      entity_id:
+      - light.living_room_table
+      - light.doorway
+      - light.office
+  - if:
+    - condition: template
+      value_template: '{{ is_living_room_light_on }}'
+    then:
+    - action: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.living_room_window
+  - if:
+    - condition: template
+      value_template: '{{ is_office_light_on }}'
+    then:
+    - action: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.office
+  alias: Routina Modo Noite
+  description: ''
+  fields: {}

@@ -219,7 +219,7 @@ condition:
     conditions:
       - "{{ disable_in_guest == false }}"
       - condition: state
-        entity_id: input_boolean.house_guest
+        entity_id: binary_sensor.house_guest
         state: "off"
 
   - condition: not
@@ -340,16 +340,17 @@ action:
           states[target_entity].state == 'off'
       }}
 
-  - alias: "Wait untill the motion sensor is off and the room is empty"
-    wait_template: "{{ states[motion_sensor].state == 'off' or states[target_entity].state == 'off' }}"
-
-  - alias: "Wait while room has presence"
+  - alias: "Wait while room has presence or motion sensor is on"
     wait_template: >
-      {% if room_name %}
-        {% set devices_in_room = states.device_tracker | selectattr('state', 'eq', room_name) | list %}
-        {{ states[target_entity].state == 'off' or devices_in_room | length == 0 }}
-      {% else %}
+      {% if states[target_entity].state == 'off' %}
         True
+      {% else %}
+        {% if room_name %}
+          {% set devices_in_room = states.device_tracker | selectattr('state', 'eq', room_name) | list %}
+          {{ states[motion_sensor].state == 'off' and devices_in_room | length == 0 }}
+        {% else %}
+          {{ states[motion_sensor].state == 'off' }}
+        {% endif %}
       {% endif %}
 
   - alias: "Wait a defined time or cancel if target is already off"
@@ -360,3 +361,6 @@ action:
   - alias: "Turn light OFF"
     service: light.turn_off
     entity_id: !input target_entity
+
+  - delay:
+      seconds: 6
