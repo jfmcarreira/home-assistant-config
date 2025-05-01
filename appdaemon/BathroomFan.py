@@ -10,6 +10,7 @@ THRESHOLD_HUMIDITY = "input_number.bathroom_fan_humidity_threshold"
 AUTO_TIME_BEGIN = "07:00:00"
 AUTO_TIME_END = "22:00:00"
 
+
 class MovingAverage:
     average = 0.0
     points = []
@@ -37,6 +38,7 @@ class BathroomFanMachine(StateMachine):
     fan_manual_on = State()
     light_on = State()
     light_on_fan_on = State()
+    light_on_fan_off = State()
     fan_on_high_humidity = State()
     fan_on_timeout = State()
 
@@ -52,18 +54,23 @@ class BathroomFanMachine(StateMachine):
             unless=["is_light_on"],
         )
         | light_on_fan_on.to(fan_on_timeout, cond=["is_fan_on"], unless=["is_light_on"])
-        | light_on_fan_on.to(light_on, cond=["is_light_on"], unless=["is_fan_on"])
+        | light_on_fan_on.to(light_on_fan_off, cond=["is_light_on"], unless=["is_fan_on"])
+        | light_on_fan_off.to(light_on_fan_on, cond=["is_light_on", "is_fan_on"])
+        | light_on_fan_off.to(light_on, cond=["is_light_on"], unless=["is_fan_on"])
+        | light_on_fan_off.to(fan_on_high_humidity, cond=["is_high_humidity"], unless=["is_light_on"])
         | fan_on_high_humidity.to(light_on_fan_on, cond=["is_light_on"])
         | fan_on_timeout.to(light_on_fan_on, cond=["is_light_on"])
         | off.from_(light_on, unless=["is_light_on", "is_fan_on"])
         | off.from_(fan_manual_on, unless=["is_fan_on"])
         | off.from_(light_on_fan_on, unless=["is_light_on", "is_fan_on"])
+        | off.from_(light_on_fan_off, unless=["is_light_on", "is_fan_on"])
         | off.from_(fan_on_high_humidity, unless=["is_light_on", "is_fan_on"])
         | off.from_(fan_on_timeout, unless=["is_light_on", "is_fan_on"])
         | off.to.itself()
         | fan_manual_on.to.itself()
         | light_on.to.itself()
         | light_on_fan_on.to.itself()
+        | light_on_fan_off.to.itself()
         | fan_on_high_humidity.to.itself()
         | fan_on_timeout.to.itself()
     )
@@ -80,6 +87,7 @@ class BathroomFanMachine(StateMachine):
         | fan_manual_on.to.itself()
         | light_on.to.itself()
         | light_on_fan_on.to.itself()
+        | light_on_fan_off.to.itself()
         | fan_on_high_humidity.to.itself()
         | fan_on_timeout.to.itself()
     )
@@ -91,6 +99,7 @@ class BathroomFanMachine(StateMachine):
         | off.to.itself(internal=True)
         | light_on.to.itself()
         | light_on_fan_on.to.itself()
+        | light_on_fan_off.to.itself()
         | fan_on_high_humidity.to.itself()
         | fan_on_timeout.to.itself()
     )
@@ -102,6 +111,13 @@ class BathroomFan(hass.Hass):
         self.fan_entity = self.args["fan_entity"]
         self.light_entity = self.args["light_entity"]
 
+        self.dehumidifier_entity = None
+        # self.dehumidifier_entity = self.args["dehumidifier_entity"]
+        # if self.dehumidifier_entity == "":
+        #     self.dehumidifier_entity = None
+
+        if self.dehumidifier_entity is not None:
+            self.log("Using dehumidifier", level="INFO")
 
         self.current_humidity = 50.0
         self.average_humidity = None
@@ -170,6 +186,8 @@ class BathroomFan(hass.Hass):
         self.machine.state_update()
 
     def humidity_state_changed(self, entity, attribute, old, new, kwargs):
+        if new is 'unavailable':
+            return
         if self.average_humidity is None:
             self.average_humidity = MovingAverage(
                 360, float(self.get_state(self.args["average_humidity_entity"]))
@@ -198,6 +216,8 @@ class BathroomFan(hass.Hass):
         if source is None or source.id == "off":
             return
         self.turn_off(self.fan_entity)
+        if self.dehumidifier_entity is not None:
+            self.turn_off(self.dehumidifier_entity)
 
     def on_enter_light_on(self, source):
         if source is None or source.id == "off":
@@ -210,6 +230,11 @@ class BathroomFan(hass.Hass):
 
     def on_enter_light_on_fan_on(self):
         self.turn_on(self.fan_entity)
+        if self.dehumidifier_entity is not None:
+            self.turn_on(self.dehumidifier_entity)
+
+    def on_enter_light_on_fan_off(self):
+        return
 
     def on_enter_fan_on_timeout(self):
         self.turn_on(self.fan_entity)
@@ -219,6 +244,8 @@ class BathroomFan(hass.Hass):
 
     def on_enter_fan_on_high_humidity(self):
         self.turn_on(self.fan_entity)
+        if self.dehumidifier_entity is not None:
+            self.turn_on(self.dehumidifier_entity)
         self.timer_machine_handle = self.run_in(
             self.state_update_timer, self.get_fan_max_timeout()
         )
