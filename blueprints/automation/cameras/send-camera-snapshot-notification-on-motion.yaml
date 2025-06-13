@@ -72,22 +72,20 @@ action:
   - choose:
       - conditions: "{{ notify_joao }}"
         sequence:
-          - device_id: 2a682060bb472236a68fdd3ff33a221a
-            domain: mobile_app
-            type: notify
-            title: "{{ notification_title }}"
-            message: "{{ notification_message }}"
+          - service: notify.mobile_app_radium
             data:
-              image: "{{ snapshot_access_file_path }}"
-              clickAction: "/lovelace/dashboard-cctv"
+              title: "{{ notification_title }}"
+              message: "{{ notification_message }}"
+              data:
+                image: "{{ snapshot_access_file_path }}"
+                clickAction: "/lovelace/dashboard-cctv"
 
       - conditions: "{{ notify_bianca }}"
         sequence:
-          - device_id: 086fd6ff05201d28b4bc0fbdbd707c86
-            domain: mobile_app
-            type: notify
-            title: "{{ notification_title }}"
-            message: "{{ notification_message }}"
+          - service: notify.mobile_app_calcium
             data:
-              image: "{{ snapshot_access_file_path }}"
-              clickAction: "/lovelace/dashboard-cctv"
+              title: "{{ notification_title }}"
+              message: "{{ notification_message }}"
+              data:
+                image: "{{ snapshot_access_file_path }}"
+                clickAction: "/lovelace/dashboard-cctv"
