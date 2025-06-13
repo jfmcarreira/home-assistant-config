@@ -186,7 +186,7 @@ class BathroomFan(hass.Hass):
         self.machine.state_update()
 
     def humidity_state_changed(self, entity, attribute, old, new, kwargs):
-        if new is 'unavailable':
+        if new == 'unavailable':
             return
         if self.average_humidity is None:
             self.average_humidity = MovingAverage(
