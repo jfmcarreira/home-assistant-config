@@ -12,6 +12,7 @@ class Event(Enum):
     NO_MOTION = auto()
     COVERS = auto()
     TIME = auto()
+    STATE_TRANSISTION_DELAY = auto()
 
 
 class HouseMode(hass.Hass):
@@ -19,13 +20,6 @@ class HouseMode(hass.Hass):
         self.house_mode = self.get_state("input_select.house_mode")
 
         self.trackCovers = [
-            "cover.kitchen",
-            "cover.living_room",
-            "cover.office",
-            "cover.office",
-            "cover.laundry",
-            "cover.bedroom_rc",
-            "cover.bathroom",
             "cover.master_bedroom",
             "cover.bedroom_ricardo",
             "cover.bedroom_henrique",
@@ -53,8 +47,10 @@ class HouseMode(hass.Hass):
             "binary_sensor.motion_sensor_stairs",
             "binary_sensor.motion_sensor_office",
             "binary_sensor.motion_sensor_kitchen",
+            "binary_sensor.motion_sensor_hallway",
             "binary_sensor.motion_sensor_living_room",
             "binary_sensor.motion_sensor_laundry",
+            "binary_sensor.motion_sensor_bathroom_rc",
         ]
 
         self.trackState = [
@@ -92,7 +88,11 @@ class HouseMode(hass.Hass):
 
         self.listen_state(self.house_mode_callback, "input_select.house_mode")
 
-        self.timer = None
+        self.state_change_delay_timer = None
+        self.lights_motion_timer = None
+        self.door_closed_delay = True
+        self.door_timer = None
+        self.listen_state(self.door_changed_callback, "binary_sensor.kitchen_door")
 
         self.run_daily(self.update_house_mode_at_given_time, "08:05:00")
         self.run_daily(self.update_house_mode_at_given_time, "09:05:00")
@@ -109,9 +109,14 @@ class HouseMode(hass.Hass):
         self.house_mode = new
 
     def cancel_tracking_timer(self):
-        if self.timer is not None and self.timer_running(self.timer):
-            self.cancel_timer(self.timer)
-        self.timer = None
+        if self.lights_motion_timer is not None and self.timer_running(self.lights_motion_timer):
+            self.cancel_timer(self.lights_motion_timer)
+        self.lights_motion_timer = None
+
+    def cancel_door_timer(self):
+        if self.door_timer is not None and self.timer_running(self.door_timer):
+            self.cancel_timer(self.door_timer)
+        self.door_timer = None
 
     def timer_delay(self):
         if self.now_is_between("01:00:00", "07:00:00"):
@@ -170,10 +175,13 @@ class HouseMode(hass.Hass):
             newMode = preffered_mode
         elif trigger == Event.NO_MOTION:
             newMode = preffered_mode
-            if not self.is_device_on() and self.is_sleep_time():
+            if not self.is_device_on() and self.is_sleep_time() and self.door_closed_delay:
                 newMode = "Sleep"
         elif trigger == Event.TIME:
             if preffered_mode == "On":
+                newMode = "On"
+        elif trigger == Event.STATE_TRANSISTION_DELAY:
+            if self.now_is_between("06:00:00", "019:00:00"):
                 newMode = "On"
         return newMode
 
@@ -182,7 +190,7 @@ class HouseMode(hass.Hass):
         #if trigger == Event.LIGHT_ON:
         #    newMode = self.preffered_house_mode()
         if trigger == Event.NO_MOTION:
-            if not self.is_device_on() and self.is_sleep_time():
+            if not self.is_device_on() and self.is_sleep_time() and self.door_closed_delay:
                 newMode = "Sleep"
         if trigger == Event.TIME:
             newMode = self.preffered_house_mode()
@@ -191,11 +199,12 @@ class HouseMode(hass.Hass):
 
     def new_house_mode_from_sleep(self, trigger):
         newMode = "Sleep"
-        if trigger == Event.LIGHT_ON or trigger == Event.PRESENCE:
+        if trigger == Event.LIGHT_ON or trigger == Event.PRESENCE or trigger == Event.COVERS:
             newMode = self.preffered_house_mode()
         return newMode
 
     def set_new_house_mode_from_trigger(self, trigger):
+        oldMode = self.house_mode
         newMode = self.house_mode
         if self.noone_home(person=True):
             newMode = "Off"
@@ -212,7 +221,9 @@ class HouseMode(hass.Hass):
                 newMode = self.new_house_mode_from_sleep(trigger)
 
         self.select_option("input_select.house_mode", newMode)
-        return
+
+        if oldMode != newMode:
+            self.state_change_delay_timer = self.run_in(self.timeout_state_changed, 20*60)
 
     def tracking_callback(self, entity, attribute, old, new, kwargs):
         self.set_new_house_mode_from_trigger(Event.PRESENCE)
@@ -227,7 +238,7 @@ class HouseMode(hass.Hass):
         for entity in self.trackMotion:
             haveMotion = haveMotion or self.get_state(entity) == "on"
         if not haveMotion:
-            self.timer = self.run_in(self.timeout_callback_no_motion, self.timer_delay())
+            self.lights_motion_timer = self.run_in(self.timeout_callback_no_motion, self.timer_delay())
         else:
             self.cancel_tracking_timer()
             self.set_new_house_mode_from_trigger(Event.MOTION)
@@ -238,7 +249,7 @@ class HouseMode(hass.Hass):
             isLightsOn = isLightsOn or self.get_state(l) == "on"
         self.cancel_tracking_timer()
         if not isLightsOn:
-            self.timer = self.run_in(self.timeout_callback_no_motion, self.timer_delay())
+            self.lights_motion_timer = self.run_in(self.timeout_callback_no_motion, self.timer_delay())
 
     def working_light_callback(self, entity, attribute, old, new, kwargs):
         isLightsOn = False
@@ -247,7 +258,16 @@ class HouseMode(hass.Hass):
         self.cancel_tracking_timer()
         if not isLightsOn:
             self.set_new_house_mode_from_trigger(Event.WORKING_LIGHT_OFF)
-            self.timer = self.run_in(self.timeout_callback_working_lights_off, self.timer_delay())
+            self.lights_motion_timer = self.run_in(self.timeout_callback_working_lights_off, self.timer_delay())
+
+
+    def door_changed_callback(self, entity, attribute, old, new, kwargs):
+        isDoorClosed = self.get_state(entity)
+        self.door_closed_delay = False
+        if isDoorClosed:
+            self.door_timer = self.run_in(self.timeout_door_closed, 10*60)
+        else:
+            self.cancel_door_timer()
 
     def light_callback_awake_up(self, entity, attribute, old, new, kwargs):
         if new == "on":
@@ -256,9 +276,14 @@ class HouseMode(hass.Hass):
     def timeout_callback_no_motion(self, kwargs):
         self.set_new_house_mode_from_trigger(Event.NO_MOTION)
 
+    def timeout_door_closed(self, kwargs):
+        self.door_closed_delay = True
+
+    def timeout_state_changed(self, kwargs):
+        self.set_new_house_mode_from_trigger(Event.STATE_TRANSISTION_DELAY)
+
     def timeout_callback_working_lights_off(self, kwargs):
         self.set_new_house_mode_from_trigger(Event.WORKING_LIGHT_OFF)
 
     def update_house_mode_at_given_time(self, kwargs):
         self.set_new_house_mode_from_trigger(Event.TIME)
-
