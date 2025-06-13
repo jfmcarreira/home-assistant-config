@@ -1,0 +1,110 @@
+homeassistant:
+  customize_glob:
+    "input_boolean.cover_control_close_in_rain_*":
+      friendly_name: "Fechar Quando Chove"
+      icon: mdi:weather-pouring
+    "input_number.cover_rainy_position_*":
+      friendly_name: "Posição Modo Chuva"
+
+input_boolean:
+  cover_control_close_in_rain_living_room:
+    name: Controlo Fechar Quando Chove Estore da Sala de Estar
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_kitchen:
+    name: Controlo Fechar Quando Chove Estore da Cozinha
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_laundry:
+    name: Controlo Fechar Quando Chove Estore da Lavandaria
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_bedroom_rc:
+    name: Controlo Fechar Quando Chove Estore do Quarto do R/C
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_bathroom:
+    name: Controlo Fechar Quando Chove Estore da Casa de Banho
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_office:
+    name: Controlo Fechar Quando Chove Estore do Escritório
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_master_bedroom:
+    name: Controlo Fechar Quando Chove Estore do Quarto Principal
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_bedroom_ricardo:
+    name: Controlo Fechar Quando Chove Estore do Quarto do Ricardo
+    icon: mdi:weather-pouring
+  cover_control_close_in_rain_bedroom_henrique:
+    name: Controlo Fechar Quando Chove Estore do Quarto do Henrique
+    icon: mdi:weather-pouring
+
+input_number:
+  cover_rainy_position_living_room:
+    name: Posição com Chuva do Estore da Sala de Estar
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_kitchen:
+    name: Posição com Chuva do Estore da Cozinha
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_laundry:
+    name: Posição com Chuva do Estore da Lavandaria
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_bedroom_rc:
+    name: Posição com Chuva do Estore do Quarto do R/C
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_bathroom:
+    name: Posição com Chuva do Estore da Casa de Banho
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_office:
+    name: Posição com Chuva do Estore do Escritório
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_master_bedroom:
+    name: Posição com Chuva do Estore do Quarto Principal
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_bedroom_ricardo:
+    name: Posição com Chuva do Estore do Quarto do Ricardo
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
+  cover_rainy_position_bedroom_henrique:
+    name: Posição com Chuva do Estore do Quarto do Henrique
+    icon: mdi:window-shutter-alert
+    max: 100
+    min: 0
+    step: 1
+    mode: slider
+    unit_of_measurement: "%"
