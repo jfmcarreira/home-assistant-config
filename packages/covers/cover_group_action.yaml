@@ -21,6 +21,7 @@ script:
             - living_room
             - kitchen
             - office
+            - stairs
             - laundry
             - bathroom
             - bedroom_rc
