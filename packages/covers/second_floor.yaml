@@ -24,6 +24,10 @@ cover:
             {% set position_sum = position_sum + (state_attr('cover.bedroom_henrique','current_position') | round(precision = 2.0, default = 0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
+          {% if is_state('input_boolean.cover_control_group_stairs', 'on') %}
+            {% set position_sum = position_sum + (state_attr('cover.stairs','current_position') | round(precision = 2.0, default = 0)) %}
+            {% set position_count = position_count + 1 %}
+          {% endif %}
           {{ (position_sum / position_count) | round(0, default = 0) }}
         open_cover:
           service: cover.open_cover
@@ -38,6 +42,9 @@ cover:
               {% endif %}
               {% if is_state('input_boolean.cover_control_group_bedroom_henrique', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_henrique'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_stairs', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.stairs'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}
         close_cover:
@@ -54,6 +61,9 @@ cover:
               {% if is_state('input_boolean.cover_control_group_bedroom_henrique', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_henrique'] %}
               {% endif %}
+              {% if is_state('input_boolean.cover_control_group_stairs', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.stairs'] %}
+              {% endif %}
               {{ list_of_covers|join(',') }}
         stop_cover:
           service: cover.stop_cover
@@ -68,5 +78,8 @@ cover:
               {% endif %}
               {% if is_state('input_boolean.cover_control_group_bedroom_henrique', 'on') %}
                 {% set list_of_covers = list_of_covers + ['cover.bedroom_henrique'] %}
+              {% endif %}
+              {% if is_state('input_boolean.cover_control_group_stairs', 'on') %}
+                {% set list_of_covers = list_of_covers + ['cover.stairs'] %}
               {% endif %}
               {{ list_of_covers|join(',') }}
