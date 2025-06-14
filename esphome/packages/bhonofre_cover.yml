@@ -34,6 +34,28 @@ sensor:
     id: cover_higher_position
     entity_id: input_number.cover_higher_position_${CoverName}
 
+event:
+  - platform: template
+    id: extra_top_button_event
+    name: Extra Top Button
+    icon: mdi:button-pointer
+    device_class: button
+    event_types:
+      - single
+      - long
+      - double
+      - triple
+  - platform: template
+    id: extra_bottom_button_event
+    name: Extra Bottom Button
+    icon: mdi:button-pointer
+    device_class: button
+    event_types:
+      - single
+      - long
+      - double
+      - triple
+
 binary_sensor:
   - platform: homeassistant
     id: notify_home
@@ -102,6 +124,9 @@ binary_sensor:
                             - api.connected:
                         - binary_sensor.is_on: cover_controls_enabled
                     then:
+                      - select.set_index:
+                          id: last_action
+                          index: 0
                       - lambda: |-
                           auto call = id(cover_1).make_call();
                           if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_OPENING){
@@ -168,6 +193,9 @@ binary_sensor:
                             - api.connected:
                         - binary_sensor.is_on: cover_controls_enabled
                     then:
+                      - select.set_index:
+                          id: last_action
+                          index: 0
                       - lambda: |-
                           auto call = id(cover_1).make_call();
                           if(id(cover_1).current_operation == CoverOperation::COVER_OPERATION_CLOSING){
@@ -195,6 +223,9 @@ binary_sensor:
               condition:
                 binary_sensor.is_on: sw_extra_top
               then:
+                - event.trigger:
+                    id: extra_top_button_event
+                    event_type: long
                 - homeassistant.event:
                     event: esphome.button_pressed
                     data:
@@ -208,6 +239,9 @@ binary_sensor:
         trigger_id: extra_top_single
         invalid_cooldown: 100ms
         then:
+          - event.trigger:
+              id: extra_top_button_event
+              event_type: single
           - homeassistant.event:
               event: esphome.button_pressed
               data:
@@ -222,6 +256,9 @@ binary_sensor:
         trigger_id: extra_top_double
         invalid_cooldown: 100ms
         then:
+          - event.trigger:
+              id: extra_top_button_event
+              event_type: double
           - homeassistant.event:
               event: esphome.button_pressed
               data:
@@ -240,6 +277,9 @@ binary_sensor:
         then:
           - lambda: |-
               id(extra_top_single).cancel();
+          - event.trigger:
+              id: extra_top_button_event
+              event_type: triple
           - homeassistant.event:
               event: esphome.button_pressed
               data:
@@ -265,6 +305,9 @@ binary_sensor:
               condition:
                 binary_sensor.is_on: sw_extra_bottom
               then:
+                - event.trigger:
+                    id: extra_bottom_button_event
+                    event_type: long
                 - homeassistant.event:
                     event: esphome.button_pressed
                     data:
@@ -278,6 +321,9 @@ binary_sensor:
         trigger_id: extra_bottom_single
         invalid_cooldown: 100ms
         then:
+          - event.trigger:
+              id: extra_bottom_button_event
+              event_type: single
           - homeassistant.event:
               event: esphome.button_pressed
               data:
@@ -292,6 +338,9 @@ binary_sensor:
         trigger_id: extra_bottom_double
         invalid_cooldown: 100ms
         then:
+          - event.trigger:
+              id: extra_bottom_button_event
+              event_type: double
           - homeassistant.event:
               event: esphome.button_pressed
               data:
@@ -310,6 +359,9 @@ binary_sensor:
         then:
           - lambda: |-
               id(extra_bottom_single).cancel();
+          - event.trigger:
+              id: extra_bottom_button_event
+              event_type: triple
           - homeassistant.event:
               event: esphome.button_pressed
               data:
@@ -391,6 +443,9 @@ script:
             - logger.log: "Special control using HA finished"
 
           else:
+            - select.set_index:
+                id: last_action
+                index: 2
             - mqtt.publish_json:
                 topic: esphome/cover/control_control
                 payload: |-
@@ -444,6 +499,26 @@ mqtt:
             call.set_command_stop();
           }
           call.perform();
+
+select:
+  - platform: template
+    name: cover_${CoverName}_last_action
+    id: last_action
+    icon: mdi:gesture-double-tap
+    options:
+      - "Manualmente"
+      - "Grupo"
+      - "Fachada/Andar"
+      - "Sunrise"
+      - "Sunset"
+      - "Sol"
+      - "Chuva"
+    initial_option: "Manualmente"
+    optimistic: true
+    set_action:
+      - logger.log:
+          format: "Last action set to: %s"
+          args: ["x.c_str()"]
 
 cover:
   - platform: time_based
