@@ -30,6 +30,20 @@ script:
             - bedroom_henrique
           sequence:
             - condition: "{{ is_state('input_boolean.cover_control_' + control_switch + '_' + repeat.item, 'on') }}"
+            - action: select.select_option
+              data:
+                option: >
+                  {% if control_switch == "open_sunrise" %}
+                    Sunrise
+                  {% elif control_switch == "close_sunset" %}
+                    Sunset
+                  {% elif control_switch == "close_in_rain" %}
+                    Chuva
+                  {% else %}
+                    Grupo
+                  {% endif %}
+              target:
+                entity_id: select.cover_{{ repeat.item }}_last_action
             - choose:
                 - conditions: "{{ 'script.' in action_to_run }}"
                   sequence:
