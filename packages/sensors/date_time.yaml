@@ -1,11 +1,20 @@
 sensor:
-- platform: time_date
-  display_options:
-    - 'time'
-    - 'date'
-    - 'date_time'
+  - platform: time_date
+    display_options:
+      - "time"
+      - "date"
+      - "date_time"
 
-- platform: template
-  sensors:
-    date_time_frontend:
-      value_template: "{{ as_timestamp( now() ) | timestamp_custom('%d/%m/%Y %H:%M') }}"
+template:
+  - sensor:
+      - name: date_time_frontend
+        unique_id: date_time_frontend
+        state: "{{ as_timestamp( now() ) | timestamp_custom('%d/%m/%Y %H:%M') }}"
+
+      - name: date_frontend
+        unique_id: date_frontend
+        state: "{{ as_timestamp( now() ) | timestamp_custom('%d/%m/%Y') }}"
+
+      - name: time_frontend
+        unique_id: time_frontend
+        state: "{{ as_timestamp( now() ) | timestamp_custom('%H:%M') }}"
