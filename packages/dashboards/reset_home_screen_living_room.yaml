@@ -1,0 +1,47 @@
+automation:
+  - alias: Tablet Reset Home Screen Living Room
+    description: ""
+    triggers:
+      - entity_id:
+          - switch.lenovo_tablet_screen
+        from:
+        to: "off"
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 6
+        trigger: state
+      - entity_id:
+          - input_select.house_mode
+        to: Sleep
+        trigger: state
+      - entity_id:
+          - input_select.house_mode
+        to: "Off"
+        trigger: state
+      - entity_id:
+          - binary_sensor.notify_home
+        to: "off"
+        trigger: state
+      - entity_id:
+          - binary_sensor.motion_sensor_living_room
+          - binary_sensor.motion_sensor_hallway
+          - binary_sensor.motion_sensor_kitchen
+          - binary_sensor.motion_sensor_stairs
+        to: "off"
+        for:
+          minutes: 2
+        trigger: state
+    conditions:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: sensor.lenovo_tablet_current_page
+            state: !secret dashboard_living_room_url
+    actions:
+      - data:
+          url: !secret dashboard_living_room_url
+        action: fully_kiosk.load_url
+        target:
+          device_id: 070256d058f9215d8c746c4242331023
+    mode: single

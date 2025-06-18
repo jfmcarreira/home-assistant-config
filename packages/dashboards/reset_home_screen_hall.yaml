@@ -1,0 +1,43 @@
+automation:
+  - alias: Tablet Reset Home Screen Hall
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.fire_tablet_screen
+        from:
+        to: "off"
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 6
+      - platform: state
+        entity_id:
+          - input_select.house_mode
+        to: Sleep
+      - platform: state
+        entity_id:
+          - input_select.house_mode
+        to: "Off"
+      - platform: state
+        entity_id:
+          - binary_sensor.notify_home
+        to: "off"
+      - platform: state
+        entity_id:
+          - binary_sensor.motion_sensor_stairs
+        to: "off"
+        for:
+          minutes: 2
+    condition:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: sensor.fire_tablet_current_page
+            state: !secret dashboard_hall_url
+    action:
+      - action: fully_kiosk.load_url
+        data:
+          url: !secret dashboard_hall_url
+        target:
+          device_id: 2ae8ef1981d03f83e4144debe519a697
