@@ -20,3 +20,4 @@ blueprints/**/homeassistant/**
 auth_providers/trusted_networks.yaml
 additional_ca/**
 zha_quirks/__pycache__/**
+logs/**
