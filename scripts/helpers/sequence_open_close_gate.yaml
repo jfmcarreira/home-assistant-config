@@ -2,9 +2,9 @@ sequence_open_close_gate:
   alias: Sequência de Abrir e Fechar o Portão
   mode: single
   icon: mdi:gate
+  trace:
+    stored_traces: 1
   sequence:
-    - service: script.sequence_door_open
-      data: {}
     - delay:
         seconds: 10
     - condition:
@@ -19,6 +19,11 @@ sequence_open_close_gate:
       data: {}
       target:
         entity_id: cover.gate
+    - action: input_text.set_value
+      target:
+        entity_id: input_text.script_step_message
+      data:
+        value: "Aguardar alguém sair de casa"
     - wait_for_trigger:
         - platform: state
           entity_id:
@@ -28,7 +33,17 @@ sequence_open_close_gate:
           to: "off"
       timeout: 00:10:00
       continue_on_timeout: false
+    - action: input_text.set_value
+      target:
+        entity_id: input_text.script_step_message
+      data:
+        value: "Fechar o portão"
     - service: cover.close_cover
       data: {}
       target:
         entity_id: cover.gate
+    - action: input_text.set_value
+      target:
+        entity_id: input_text.script_step_message
+      data:
+        value: ""

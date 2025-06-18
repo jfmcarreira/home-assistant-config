@@ -2,6 +2,8 @@ sequence_door_open:
   alias: Sequência Esperar Pela Abertura da Porta da Cozinha
   mode: single
   icon: mdi:door
+  trace:
+    stored_traces: 1
   sequence:
     - if:
         - condition: not
@@ -10,15 +12,30 @@ sequence_door_open:
               entity_id: binary_sensor.kitchen_door
               state: "on"
       then:
+        - action: input_text.set_value
+          target:
+            entity_id: input_text.script_step_message
+          data:
+            value: Aguardar pela Porta da Cozinha Abrir
         - wait_for_trigger:
             - platform: state
               entity_id: binary_sensor.kitchen_door
               to: "on"
           timeout: 00:5:00
 
+    - action: input_text.set_value
+      target:
+        entity_id: input_text.script_step_message
+      data:
+        value: Aguardar pela Porta da Cozinha Fechar
     - wait_for_trigger:
         - platform: state
           entity_id:
             - binary_sensor.kitchen_door
           to: "off"
       timeout: 00:01:00
+    - action: input_text.set_value
+      target:
+        entity_id: input_text.script_step_message
+      data:
+        value: ""

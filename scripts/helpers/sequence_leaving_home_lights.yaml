@@ -1,6 +1,8 @@
 sequence_leaving_home_lights:
   alias: Sequência de Ligar as Luzes ao Sair de Casa
   mode: single
+  trace:
+    stored_traces: 1
   sequence:
     - condition: numeric_state
       entity_id: sun.sun
