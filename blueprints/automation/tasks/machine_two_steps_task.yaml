@@ -116,6 +116,27 @@ trigger:
     to: "on"
     for:
       minutes: !input task_done_door_time
+condition:
+  - condition: or
+    conditions:
+      - condition: not
+        conditions:
+          - condition: trigger
+            id: "0"
+      - condition: and
+        conditions:
+          - condition: template
+            value_template: "{{ send_notification == True }}"
+          - condition: state
+            entity_id: binary_sensor.notification_non_disturb
+            state: "off"
+          - condition: state
+            entity_id: !input task_needs_attention
+            state: "on"
+          - condition: template
+            value_template: >
+              {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 50 }}
+
 action:
   - choose:
       - conditions: "{{ trigger.id == 'trigger_machine_finished' }}"
