@@ -16,7 +16,24 @@ logbook:
       - device_tracker
       - binary_sensor
   exclude:
+    domains:
+      - updater
+      - weblink
+      - zone
+      - sun
+      - weather
+    entity_globs:
+      - light.*_group
+      - sensor.wifi_*
+      - script.sequence_*
+      - binary_sensor.motion_sensor_*_group
+      - binary_sensor.temperature_rising_*
+      - binary_sensor.temperature_decreasing_*
     entities:
+      # Helpers
+      - binary_sensor.workday
+      - binary_sensor.workday_tomorrow
+      - automation.event_remain_task_todo
       # Light group
       - light.bathroom_rc
       - light.main_bathroom
@@ -26,13 +43,9 @@ logbook:
       - script.select_next_house_mode
       - binary_sensor.bianca_home_with_hysteresis
       - binary_sensor.joao_home_with_hysteresis
-    entity_globs:
-      - light.*_group
-      - sensor.wifi_*
-      - script.sequence_*
-    domains:
-      - updater
-      - weblink
-      - zone
-      - sun
-      - weather
+      # Sensor Groups
+      - binary_sensor.motion_sensor_stairs_hallway
+      - binary_sensor.motion_sensor_stairs
+      - binary_sensor.tasks
+      # Recurring automations
+      - automation.media_assistant_ajust_volume
