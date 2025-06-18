@@ -355,7 +355,7 @@
       metadata: {}
   mode: single
 - id: '1658177571375'
-  alias: task_dish_wash_machine
+  alias: Tarefa da Máquina de Lavar a Loiça
   description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
@@ -458,23 +458,41 @@
 - id: '1661088354800'
   alias: Fechar Estores Fachada Poente
   description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.temperature_outside
+  triggers:
+  - entity_id: sensor.temperature_outside
     for:
       hours: 0
       minutes: 30
       seconds: 0
     above: 20
-  - platform: numeric_state
-    entity_id: sun.sun
+    trigger: numeric_state
+  - entity_id: sun.sun
     for:
       hours: 0
       minutes: 30
       seconds: 0
     above: 180
     attribute: azimuth
-  condition:
+    trigger: numeric_state
+  - entity_id:
+    - sun.sun
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+    above: 180
+    attribute: azimuth
+    trigger: numeric_state
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  conditions:
   - condition: numeric_state
     entity_id: sensor.temperature_outside
     above: 25
@@ -485,13 +503,20 @@
     entity_id: sun.sun
     attribute: azimuth
     above: 180
-  action:
-  - service: cover.close_cover
+  actions:
+  - action: cover.close_cover
     data: {}
     target:
       entity_id:
       - cover.master_bedroom
       - cover.kitchen
+  - action: select.select_option
+    data:
+      option: Sol
+    target:
+      entity_id:
+      - select.cover_master_bedroom_last_action
+      - select.cover_kitchen_last_action
   mode: single
 - id: '1661120403152'
   alias: Abrir Estores da Suite Fim de Semana
@@ -519,19 +544,32 @@
 - id: '1661196402455'
   alias: Fechar Estores Fachada Sul
   description: ''
-  trigger:
-  - platform: time_pattern
-    hours: '10'
+  triggers:
+  - hours: '10'
     minutes: '00'
     seconds: '00'
-  - platform: numeric_state
-    entity_id: sensor.temperature_outside
+    trigger: time_pattern
+  - hours: '10'
+    minutes: '30'
+    seconds: '00'
+    trigger: time_pattern
+  - entity_id: sensor.temperature_outside
     for:
       hours: 0
       minutes: 30
       seconds: 0
     above: 23
-  condition:
+    trigger: numeric_state
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  conditions:
   - condition: numeric_state
     entity_id: sensor.temperature_outside
     above: 25
@@ -541,13 +579,21 @@
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'off'
-  action:
-  - service: cover.close_cover
-    data: {}
+  actions:
+  - data: {}
     target:
       entity_id:
       - cover.laundry
       - cover.bedroom_rc
+      - cover.stairs
+    action: cover.close_cover
+  - action: select.select_option
+    data:
+      option: Sol
+    target:
+      entity_id:
+      - select.cover_laundry_last_action
+      - select.cover_bedroom_rc_last_action
   mode: single
 - id: '1661643560066'
   alias: Luzes por Mov. no Escritório
@@ -823,36 +869,40 @@
   action: []
   mode: restart
 - id: '1670674527026'
-  alias: lights_auto_off_stairs_with_lux
+  alias: Desligar Luzes das Escadas com a Luminosidade
   description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.light_stairs
+  triggers:
+  - entity_id: sensor.light_stairs
     for:
       hours: 0
       minutes: 5
       seconds: 0
     above: 60
-  - platform: state
-    entity_id:
+    trigger: numeric_state
+  - entity_id:
     - light.stairs_group
     to: 'on'
     for:
       hours: 0
       minutes: 5
       seconds: 0
-  condition:
+    trigger: state
+  conditions:
   - condition: numeric_state
     entity_id: sensor.light_stairs
     above: 50
-  action:
-  - service: light.turn_off
-    data: {}
+  - condition: state
+    entity_id: light.stairs_group
+    state: ''
+  actions:
+  - data: {}
     target:
       entity_id:
       - light.stairs_lamp
       - light.stairs_wall
       - light.stairs_down
+      - light.stairs_group
+    action: light.turn_off
   mode: single
 - id: '1673206351942'
   alias: cctv_control_recording
@@ -1401,7 +1451,7 @@
       hvac_unit:
       - climate.living_room
       hvac_temperature: 19
-      room_temperature: 21
+      room_temperature: 20.5
       temperature_sensor: sensor.temperature_living_room
       window_sensor: binary_sensor.window_ground_floor
       weekday:
@@ -1547,64 +1597,25 @@
           entity_id: binary_sensor.notify_home
           state: 'off'
       sequence:
-      - service: switch.turn_off
+      - action: switch.turn_off
         data: {}
         target:
-          entity_id: switch.fire_tablet_motion_detection
-      - type: turn_off
-        device_id: 2ae8ef1981d03f83e4144debe519a697
-        entity_id: switch.fire_tablet_screen
-        domain: switch
+          entity_id:
+          - switch.fire_tablet_motion_detection
+          - switch.lenovo_tablet_motion_detection
+      - action: switch.turn_off
+        data: {}
+        target:
+          entity_id:
+          - switch.fire_tablet_screen
+          - switch.lenovo_tablet_screen
     default:
     - service: switch.turn_on
       data: {}
       target:
-        entity_id: switch.fire_tablet_motion_detection
-- id: '1658541474586'
-  alias: Tablet Reset Home Screen
-  trigger:
-  - platform: state
-    entity_id:
-    - switch.fire_tablet_screen
-    from:
-    to: 'off'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 6
-  - platform: state
-    entity_id:
-    - input_select.house_mode
-    to: Sleep
-  - platform: state
-    entity_id:
-    - input_select.house_mode
-    to: 'Off'
-  - platform: state
-    entity_id:
-    - binary_sensor.notify_home
-    to: 'off'
-  - platform: state
-    entity_id:
-    - binary_sensor.motion_sensor_living_room
-    - binary_sensor.motion_sensor_kitchen
-    - binary_sensor.motion_sensor_stairs
-    to: 'off'
-    for:
-      minutes: 2
-  condition:
-  - condition: not
-    conditions:
-    - condition: state
-      entity_id: sensor.fire_tablet_current_page
-      state: http://10.20.107.2/lovelace-dashboard/dashboard-main
-  action:
-  - data:
-      url: http://10.20.107.2/lovelace-dashboard/dashboard-main
-    target:
-      device_id: 2ae8ef1981d03f83e4144debe519a697
-    action: fully_kiosk.load_url
-  mode: single
+        entity_id:
+        - switch.fire_tablet_motion_detection
+        - switch.lenovo_tablet_motion_detection
 - id: '1658542474586'
   alias: Tablet Turn Off Screen
   mode: single
@@ -1612,6 +1623,7 @@
   - platform: state
     entity_id:
     - binary_sensor.motion_sensor_living_room
+    - binary_sensor.motion_sensor_stairs
     to: 'off'
     for:
       hours: 1
@@ -1623,17 +1635,19 @@
   action:
   - service: switch.turn_off
     target:
-      entity_id: switch.fire_tablet_screen
+      entity_id:
+      - switch.fire_tablet_screen
+      - switch.lenovo_tablet_screen
 - id: '1708474653467'
-  alias: Tablet Screen Timeout
-  trigger:
-  - platform: state
-    entity_id:
+  alias: Tablet Screen Timeout Living Room
+  triggers:
+  - entity_id:
     - input_select.house_mode
-  condition: []
-  action:
+    trigger: state
+  conditions: []
+  actions:
   - if:
-      or:
+    - or:
       - condition: state
         entity_id: input_select.house_mode
         state: 'On'
@@ -1644,17 +1658,19 @@
         entity_id: input_select.house_mode
         state: Night
     then:
-    - service: number.set_value
-      target:
-        entity_id: number.fire_tablet_screen_off_timer
+    - target:
+        entity_id:
+        - number.lenovo_tablet_screen_off_timer
       data:
         value: '0'
+      action: number.set_value
     else:
-    - service: number.set_value
-      target:
-        entity_id: number.fire_tablet_screen_off_timer
+    - target:
+        entity_id:
+        - number.lenovo_tablet_screen_off_timer
       data:
         value: '120'
+      action: number.set_value
   mode: single
 - id: '1689293787806'
   alias: Fechar Parcialment Estores de Manhã/Tarde
@@ -1935,7 +1951,13 @@
   triggers:
   - at: '22:30:00'
     trigger: time
-  conditions: []
+  conditions:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: climate.water_heater
+      attribute: preset_mode
+      state: none
   actions:
   - data:
       preset_mode: none
@@ -2007,8 +2029,6 @@
   mode: single
 - id: '1701641659897'
   alias: Atualizar Localização
-  trace:
-    stored_traces: 40
   triggers:
   - entity_id:
     - binary_sensor.backyard_camera_person
@@ -2030,37 +2050,28 @@
   actions:
   - repeat:
       while:
+      - condition: state
+        entity_id: binary_sensor.joao_home
+        state: 'off'
+      - condition: state
+        entity_id: binary_sensor.bianca_home
+        state: 'off'
       - condition: template
-        value_template: '{{ is_state(''binary_sensor.joao_home'', ''off'') or is_state(''binary_sensor.bianca_home'',
-          ''off'') }}'
-      - condition: template
-        value_template: '{{ repeat.index <= 20 }}'
+        value_template: '{{ repeat.index <= 5 }}'
       sequence:
       - parallel:
-        - if:
-          - condition: state
-            entity_id: binary_sensor.joao_home
-            state: 'off'
-          then:
-          - action: script.gps_update_joao
-          - condition: state
-            entity_id: binary_sensor.joao_home
-            state: 'off'
-        - if:
-          - condition: state
-            entity_id: binary_sensor.bianca_home
-            state: 'off'
-          then:
-          - action: script.gps_update_bianca
-          - condition: state
-            entity_id: binary_sensor.bianca_home
-            state: 'off'
+        - action: script.gps_update_joao
+          data: {}
+        - action: script.gps_update_bianca
+          data: {}
       - delay:
           hours: 0
           minutes: 0
           seconds: 10
           milliseconds: 0
-  mode: single
+  trace:
+    stored_traces: 40
+  mode: restart
 - id: '1701986636577'
   alias: Abrir Portão João Chegar a Casa
   description: ''
@@ -2113,11 +2124,9 @@
   mode: single
 - id: '1701640659897'
   alias: Localização - Atualizar Joao
-  trace:
-    stored_traces: 40
   triggers:
-  - seconds: '5'
-    trigger: time_pattern
+  - trigger: time_pattern
+    seconds: /5
   conditions:
   - condition: state
     entity_id: binary_sensor.joao_home
@@ -2133,15 +2142,16 @@
     state: 'off'
   actions:
   - action: script.gps_update_joao
+    data: {}
+  trace:
+    stored_traces: 40
   mode: single
 - id: '1701986497262'
   alias: Localização - Atualizar Bianca
-  trace:
-    stored_traces: 40
-  trigger:
-  - platform: time_pattern
-    seconds: '5'
-  condition:
+  triggers:
+  - trigger: time_pattern
+    seconds: /5
+  conditions:
   - condition: state
     entity_id: binary_sensor.bianca_home
     state: 'off'
@@ -2154,8 +2164,11 @@
   - condition: state
     entity_id: input_boolean.walking_routine
     state: 'off'
-  action:
+  actions:
   - action: script.gps_update_bianca
+    data: {}
+  trace:
+    stored_traces: 40
   mode: single
 - id: '1709598685655'
   alias: Tarefa de Substituição da Areia das Gatas
@@ -3095,23 +3108,7 @@
     path: devices/shelly_one_button.yaml
     input:
       device: 26c8a6c331839dece04f2bf801d991d9
-      button_short:
-      - if:
-        - condition: state
-          entity_id: light.outside_group
-          state: 'on'
-        then:
-        - action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            area_id: outside
-        else:
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.kitchen_door
+      button_short: []
       button_long:
       - action: light.turn_on
         metadata: {}
@@ -3266,6 +3263,9 @@
         entity_id: 453071f9e3838bcf0acc1b3859b3a1e2
         domain: light
       double_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_hvac_mode
         metadata: {}
         data:
@@ -3291,6 +3291,9 @@
         target:
           entity_id: climate.master_bedroom
       triple_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_temperature
         metadata: {}
         data:
@@ -3299,6 +3302,9 @@
         target:
           entity_id: climate.master_bedroom
       triple_bottom_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_temperature
         metadata: {}
         data:
@@ -3324,6 +3330,9 @@
         entity_id: c9e6abd07a77da4e516ba9c680e5248e
         domain: light
       double_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_hvac_mode
         metadata: {}
         data:
@@ -3349,6 +3358,9 @@
         target:
           entity_id: climate.bedroom_ricardo
       triple_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_temperature
         metadata: {}
         data:
@@ -3357,6 +3369,9 @@
         target:
           entity_id: climate.bedroom_ricardo
       triple_bottom_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_temperature
         metadata: {}
         data:
@@ -3664,6 +3679,9 @@
         target:
           entity_id: light.bedroom_henrique_lamp
       double_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_hvac_mode
         metadata: {}
         data:
@@ -3689,6 +3707,9 @@
         target:
           entity_id: climate.bedroom_henrique
       triple_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_temperature
         metadata: {}
         data:
@@ -3697,6 +3718,9 @@
         target:
           entity_id: climate.bedroom_henrique
       triple_bottom_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.set_temperature
         metadata: {}
         data:
@@ -3835,4 +3859,62 @@
     data: {}
     target:
       entity_id: cover.gate
+  mode: single
+- id: '1749604497079'
+  alias: AC Hall - Ligar de Tarde no Verão
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '19:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 24
+      room_temperature: 24
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1750200265692'
+  alias: Tablet Screen Timeout Hall
+  description: ''
+  triggers:
+  - entity_id:
+    - input_select.house_mode
+    trigger: state
+  conditions: []
+  actions:
+  - if:
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state: 'On'
+      - condition: state
+        entity_id: input_select.house_mode
+        state: Evening
+    then:
+    - target:
+        entity_id:
+        - number.fire_tablet_screen_off_timer
+      data:
+        value: '0'
+      action: number.set_value
+    else:
+    - target:
+        entity_id:
+        - number.fire_tablet_screen_off_timer
+      data:
+        value: '60'
+      action: number.set_value
   mode: single
