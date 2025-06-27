@@ -202,7 +202,7 @@ routine_exit_house_to_work_bianca:
     target:
       entity_id: input_text.script_step_message
     data:
-      value: "Aguardar a Bianca sair de casa"
+      value: Aguardar a Bianca sair de casa
   - wait_for_trigger:
     - entity_id:
       - binary_sensor.bianca_home
@@ -260,7 +260,7 @@ routine_exit_house_to_work_joao:
     target:
       entity_id: input_text.script_step_message
     data:
-      value: "Aguardar o João sair de casa"
+      value: Aguardar o João sair de casa
   - wait_for_trigger:
     - entity_id:
       - binary_sensor.joao_home
@@ -295,13 +295,13 @@ routine_leaving_and_coming_back:
     target:
       entity_id: input_text.script_step_message
     data:
-      value: "Abrir o portão"
+      value: Abrir o portão
   - service: script.sequence_open_close_gate
   - action: input_text.set_value
     target:
       entity_id: input_text.script_step_message
     data:
-      value: ""
+      value: ''
 house_turn_all_off:
   alias: Desligar a Casa Toda
   mode: restart
@@ -415,14 +415,6 @@ routine_good_night:
       option: Sleep
     target:
       entity_id: input_select.house_mode
-  - continue_on_error: true
-    metadata: {}
-    data: {}
-    target:
-      entity_id:
-        - switch.fire_tablet_screen
-        - switch.lenovo_tablet_screen
-    action: switch.turn_off
   - data: {}
     target:
       area_id:
@@ -438,6 +430,19 @@ routine_good_night:
       - stairs
       - living_room
     action: light.turn_off
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 15
+      milliseconds: 0
+  - continue_on_error: true
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - switch.fire_tablet_screen
+      - switch.lenovo_tablet_screen
+    action: switch.turn_off
 routine_exit_house_all_off:
   alias: Routina de Sair de Casa (Desligar Tudo)
   mode: single

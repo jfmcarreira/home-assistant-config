@@ -1574,15 +1574,15 @@
       entity_id: cover.master_bedroom
   mode: single
 - id: '1658360353381'
-  alias: Tablet Control Motion Detection
-  mode: queued
-  trigger:
-  - platform: state
-    entity_id:
+  alias: Tablet Control Motion Detection Living Room
+  description: ''
+  triggers:
+  - entity_id:
     - input_select.house_mode
     - binary_sensor.notify_home
-  condition: []
-  action:
+    trigger: state
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: or
@@ -1601,45 +1601,45 @@
         data: {}
         target:
           entity_id:
-          - switch.fire_tablet_motion_detection
           - switch.lenovo_tablet_motion_detection
       - action: switch.turn_off
         data: {}
         target:
           entity_id:
-          - switch.fire_tablet_screen
           - switch.lenovo_tablet_screen
     default:
-    - service: switch.turn_on
-      data: {}
+    - data: {}
       target:
         entity_id:
-        - switch.fire_tablet_motion_detection
         - switch.lenovo_tablet_motion_detection
+      action: switch.turn_on
+  mode: queued
 - id: '1658542474586'
-  alias: Tablet Turn Off Screen
-  mode: single
-  trigger:
-  - platform: state
-    entity_id:
+  alias: FireTablet Turn Off Screen
+  description: ''
+  triggers:
+  - entity_id:
     - binary_sensor.motion_sensor_living_room
     - binary_sensor.motion_sensor_stairs
     to: 'off'
     for:
       hours: 1
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - binary_sensor.notify_home
     to: 'off'
-  condition: []
-  action:
-  - service: switch.turn_off
-    target:
+    trigger: state
+  conditions: []
+  actions:
+  - target:
       entity_id:
-      - switch.fire_tablet_screen
       - switch.lenovo_tablet_screen
+    action: switch.turn_off
+    data: {}
+  mode: single
 - id: '1708474653467'
   alias: Tablet Screen Timeout Living Room
+  description: ''
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -1664,6 +1664,10 @@
       data:
         value: '0'
       action: number.set_value
+    - type: turn_on
+      device_id: 070256d058f9215d8c746c4242331023
+      entity_id: b856d2fd4dd80e2b1d02e391c347fc75
+      domain: switch
     else:
     - target:
         entity_id:
@@ -1905,29 +1909,26 @@
 - id: '1665435448806'
   alias: Água Quente - Ligar Tarde
   description: ''
-  trigger:
-  - platform: sun
-    event: sunset
+  triggers:
+  - event: sunset
     offset: -01:00:00
-  - platform: time
-    at:
+    trigger: sun
+  - at:
     - '15:00:00'
     - '16:00:00'
     - '17:00:00'
-    - '17:30:00'
     - '18:00:00'
-    - '18:30:00'
     - '19:00:00'
-    - '19:30:00'
     - '20:00:00'
-    - '20:30:00'
-  - platform: state
-    entity_id: binary_sensor.water_heater_panel_heating
+    - '21:00:00'
+    trigger: time
+  - entity_id: binary_sensor.water_heater_panel_heating
     from: 'on'
     to: 'off'
     for:
       minutes: 30
-  condition:
+    trigger: state
+  conditions:
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
@@ -1939,11 +1940,17 @@
     state: 'off'
     for:
       minutes: 10
-  action:
-  - service: climate.turn_on
-    data: {}
+  - condition: template
+    value_template: '{{ now().timestamp() - this.attributes.last_triggered | as_timestamp
+      > 60 * 60 * 12 }}'
+  - condition: numeric_state
+    entity_id: sensor.temperature_water_heater_top
+    below: 60
+  actions:
+  - data: {}
     target:
       entity_id: climate.water_heater
+    action: climate.turn_on
   mode: single
 - id: '1674085777289'
   alias: Água Quente - Desligar Presets
@@ -3266,22 +3273,50 @@
       - condition: state
         entity_id: binary_sensor.house_guest
         state: 'off'
-      - action: climate.set_hvac_mode
-        metadata: {}
-        data:
-          hvac_mode: heat
-        target:
-          entity_id: climate.master_bedroom
+      - if:
+        - condition: not
+          conditions:
+          - condition: numeric_state
+            entity_id: sensor.temperature_master_bedroom
+            below: 20
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: sensor.season
+            state: summer
+          - condition: numeric_state
+            entity_id: sensor.temperature_master_bedroom
+            above: 24
+        then:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: cool
+          target:
+            entity_id: climate.master_bedroom
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 25
+          target:
+            entity_id: climate.master_bedroom
+        else:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: heat
+          target:
+            entity_id: climate.master_bedroom
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 22
+          target:
+            entity_id: climate.master_bedroom
       - action: climate.set_swing_mode
         metadata: {}
         data:
           swing_mode: vertical
-        target:
-          entity_id: climate.master_bedroom
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: 22
         target:
           entity_id: climate.master_bedroom
       double_bottom_action:
@@ -3333,22 +3368,50 @@
       - condition: state
         entity_id: binary_sensor.house_guest
         state: 'off'
-      - action: climate.set_hvac_mode
-        metadata: {}
-        data:
-          hvac_mode: heat
-        target:
-          entity_id: climate.bedroom_ricardo
+      - if:
+        - condition: not
+          conditions:
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_ricardo
+            below: 20
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: sensor.season
+            state: summer
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_ricardo
+            above: 24
+        then:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: cool
+          target:
+            entity_id: climate.bedroom_ricardo
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 25
+          target:
+            entity_id: climate.bedroom_ricardo
+        else:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: heat
+          target:
+            entity_id: climate.bedroom_ricardo
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 22
+          target:
+            entity_id: climate.bedroom_ricardo
       - action: climate.set_swing_mode
         metadata: {}
         data:
           swing_mode: vertical
-        target:
-          entity_id: climate.bedroom_ricardo
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: 22
         target:
           entity_id: climate.bedroom_ricardo
       double_bottom_action:
@@ -3682,12 +3745,46 @@
       - condition: state
         entity_id: binary_sensor.house_guest
         state: 'off'
-      - action: climate.set_hvac_mode
-        metadata: {}
-        data:
-          hvac_mode: heat
-        target:
-          entity_id: climate.bedroom_henrique
+      - if:
+        - condition: not
+          conditions:
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_henrique
+            below: 20
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: sensor.season
+            state: summer
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_henrique
+            above: 24
+        then:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: cool
+          target:
+            entity_id: climate.bedroom_henrique
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 25
+          target:
+            entity_id: climate.bedroom_henrique
+        else:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: heat
+          target:
+            entity_id: climate.bedroom_henrique
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 22
+          target:
+            entity_id: climate.bedroom_henrique
       - action: climate.set_swing_mode
         metadata: {}
         data:
@@ -3736,12 +3833,24 @@
   triggers:
   - trigger: time
     at: '22:00:00'
+  - trigger: time
+    at: '23:00:00'
+  - trigger: state
+    entity_id:
+    - climate.hall
+    from: 'off'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
   conditions:
   - condition: not
     conditions:
     - condition: state
       entity_id: climate.hall
       state: 'off'
+  - condition: time
+    after: '22:00:00'
   actions:
   - action: climate.set_preset_mode
     metadata: {}
@@ -3885,36 +3994,88 @@
       - summer
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- id: '1750200265692'
-  alias: Tablet Screen Timeout Hall
-  description: ''
+- id: '1750634052202'
+  alias: Tablet Control Hall Screen
   triggers:
   - entity_id:
     - input_select.house_mode
+    - binary_sensor.notify_home
     trigger: state
   conditions: []
   actions:
-  - if:
-    - condition: or
-      conditions:
-      - condition: state
-        entity_id: input_select.house_mode
-        state: 'On'
-      - condition: state
-        entity_id: input_select.house_mode
-        state: Evening
-    then:
-    - target:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: input_select.house_mode
+          state: 'Off'
+        - condition: state
+          entity_id: input_select.house_mode
+          state: Sleep
+        - condition: state
+          entity_id: binary_sensor.notify_home
+          state: 'off'
+      sequence:
+      - device_id: 2ae8ef1981d03f83e4144debe519a697
+        domain: number
+        entity_id: c1fda8db1584b621a11a335919b54d27
+        type: set_value
+        value: 100
+      - action: number.set_value
+        data:
+          value: '60'
+        target:
+          entity_id:
+          - number.fire_tablet_screen_off_timer
+      - action: switch.turn_off
+        data: {}
+        target:
+          entity_id:
+          - switch.fire_tablet_motion_detection
+      - action: switch.turn_off
+        target:
+          entity_id:
+          - switch.fire_tablet_screen
+        data: {}
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: input_select.house_mode
+          state: Night
+      sequence:
+      - device_id: 2ae8ef1981d03f83e4144debe519a697
+        domain: number
+        entity_id: c1fda8db1584b621a11a335919b54d27
+        type: set_value
+        value: 100
+      - action: number.set_value
+        data:
+          value: '60'
+        target:
+          entity_id:
+          - number.fire_tablet_screen_off_timer
+      - action: switch.turn_off
+        data: {}
+        target:
+          entity_id:
+          - switch.fire_tablet_motion_detection
+    default:
+    - device_id: 2ae8ef1981d03f83e4144debe519a697
+      domain: number
+      entity_id: c1fda8db1584b621a11a335919b54d27
+      type: set_value
+      value: 255
+    - action: number.set_value
+      data:
+        value: '1200'
+      target:
         entity_id:
         - number.fire_tablet_screen_off_timer
-      data:
-        value: '0'
-      action: number.set_value
-    else:
-    - target:
+    - action: switch.turn_on
+      data: {}
+      target:
         entity_id:
-        - number.fire_tablet_screen_off_timer
-      data:
-        value: '60'
-      action: number.set_value
-  mode: single
+        - switch.fire_tablet_motion_detection
+  mode: restart
