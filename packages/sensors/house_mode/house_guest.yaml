@@ -1,12 +1,12 @@
 template:
-- binary_sensor:
+  - binary_sensor:
       - name: house_guest
         unique_id: binary_house_guest
         state: >-
-            {% if is_state("input_boolean.house_guest", "on") or
-                is_state("calendar.cleaning", "on")
-            %}
-                True
-            {% else %}
-                False
-            {% endif %}
+          {% if is_state("input_boolean.house_guest", "on") or
+              is_state("calendar.cleaning", "on")
+          %}
+              True
+          {% else %}
+              False
+          {% endif %}
