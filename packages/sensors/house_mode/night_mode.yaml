@@ -1,0 +1,8 @@
+template:
+  - binary_sensor:
+      - name: Night Mode
+        unique_id: night_mode
+        state: >
+          {{  is_state('input_select.house_mode', 'Night') or
+              is_state('input_select.house_mode', 'Sleep')
+          }}
