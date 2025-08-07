@@ -9,43 +9,63 @@ blueprint:
       name: Device
       selector:
         text:
+    main_double_top_action:
+      name: Cover Double Top
+      default: []
+      selector:
+        action:
+    main_double_bottom_action:
+      name: Cover Double Bottom
+      default: []
+      selector:
+        action:
+    main_triple_top_action:
+      name: Cover Triple Top
+      default: []
+      selector:
+        action:
+    main_triple_bottom_action:
+      name: Cover Triple Bottom
+      default: []
+      selector:
+        action:
     single_top_action:
-      name: Single Top
+      name: Extra Single Top
       default: []
       selector:
         action:
     single_bottom_action:
-      name: Single Bottom
+      name: Extra Single Bottom
       default: []
       selector:
         action:
     double_top_action:
-      name: Double Top
+      name: Extra Double Top
       default: []
       selector:
         action:
     double_bottom_action:
-      name: Double Bottom
+      name: Extra Double Bottom
       default: []
       selector:
         action:
     triple_top_action:
-      name: Triple Top
+      name: Extra Triple Top
       default: []
       selector:
         action:
     triple_bottom_action:
-      name: Triple Bottom
+      name: Extra Triple Bottom
       default: []
       selector:
         action:
     long_top_action:
-      name: Long Top
+      name: Extra Long Top
       default: []
       selector:
         action:
     long_bottom_action:
-      name: Long Bottom
+      name: Extra Long Bottom
       default: []
       selector:
         action:
@@ -55,7 +75,39 @@ max_exceeded: silent
 
 triggers:
   - trigger: event
-    id: single_top
+    id: cover_double_top
+    event_type: esphome.button_pressed
+    event_data:
+      name: main_top
+      type: double
+      device: !input device
+
+  - trigger: event
+    id: cover_double_bottom
+    event_type: esphome.button_pressed
+    event_data:
+      name: main_bottom
+      type: double
+      device: !input device
+
+  - trigger: event
+    id: cover_triple_top
+    event_type: esphome.button_pressed
+    event_data:
+      name: main_top
+      type: triple
+      device: !input device
+
+  - trigger: event
+    id: cover_triple_bottom
+    event_type: esphome.button_pressed
+    event_data:
+      name: main_bottom
+      type: triple
+      device: !input device
+
+  - trigger: event
+    id: extra_single_top
     event_type: esphome.button_pressed
     event_data:
       name: extra_top
@@ -63,7 +115,7 @@ triggers:
       device: !input device
 
   - trigger: event
-    id: single_bottom
+    id: extra_single_bottom
     event_type: esphome.button_pressed
     event_data:
       name: extra_bottom
@@ -71,7 +123,7 @@ triggers:
       device: !input device
 
   - trigger: event
-    id: long_top
+    id: extra_long_top
     event_type: esphome.button_pressed
     event_data:
       name: extra_top
@@ -79,7 +131,7 @@ triggers:
       device: !input device
 
   - trigger: event
-    id: long_bottom
+    id: extra_long_bottom
     event_type: esphome.button_pressed
     event_data:
       name: extra_bottom
@@ -87,7 +139,7 @@ triggers:
       device: !input device
 
   - trigger: event
-    id: double_top
+    id: extra_double_top
     event_type: esphome.button_pressed
     event_data:
       name: extra_top
@@ -95,7 +147,7 @@ triggers:
       device: !input device
 
   - trigger: event
-    id: double_bottom
+    id: extra_double_bottom
     event_type: esphome.button_pressed
     event_data:
       name: extra_bottom
@@ -103,7 +155,7 @@ triggers:
       device: !input device
 
   - trigger: event
-    id: triple_top
+    id: extra_triple_top
     event_type: esphome.button_pressed
     event_data:
       name: extra_top
@@ -111,7 +163,7 @@ triggers:
       device: !input device
 
   - trigger: event
-    id: triple_bottom
+    id: extra_triple_bottom
     event_type: esphome.button_pressed
     event_data:
       name: extra_bottom
@@ -124,43 +176,63 @@ actions:
       - conditions:
           - condition: trigger
             id:
-              - single_top
-        sequence: !input single_top_action
+              - cover_double_top
+        sequence: !input main_double_top_action
       - conditions:
           - condition: trigger
             id:
-              - single_bottom
-        sequence: !input single_bottom_action
+              - cover_double_bottom
+        sequence: !input main_double_bottom_action
 
       - conditions:
           - condition: trigger
             id:
-              - double_top
+              - cover_triple_top
+        sequence: !input main_triple_top_action
+      - conditions:
+          - condition: trigger
+            id:
+              - cover_triple_bottom
+        sequence: !input main_triple_bottom_action
+      - conditions:
+          - condition: trigger
+            id:
+              - extra_single_top
+        sequence: !input single_top_action
+      - conditions:
+          - condition: trigger
+            id:
+              - extra_single_bottom
+        sequence: !input single_bottom_action
+      - conditions:
+          - condition: trigger
+            id:
+              - extra_double_top
         sequence: !input double_top_action
       - conditions:
           - condition: trigger
             id:
-              - double_bottom
+              - extra_double_bottom
         sequence: !input double_bottom_action
 
       - conditions:
           - condition: trigger
             id:
-              - triple_top
+              - extra_triple_top
         sequence: !input triple_top_action
       - conditions:
           - condition: trigger
             id:
-              - triple_bottom
+              - extra_triple_bottom
         sequence: !input triple_bottom_action
 
       - conditions:
           - condition: trigger
             id:
-              - long_top
+              - extra_long_top
         sequence: !input long_top_action
       - conditions:
           - condition: trigger
             id:
-              - long_bottom
+              - extra_long_bottom
         sequence: !input single_bottom_action
