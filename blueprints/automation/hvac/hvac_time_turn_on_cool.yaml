@@ -1,6 +1,6 @@
 blueprint:
-  name: "[HVAC] Controlo Horário - Ligar Ar Condicionado (Quente)"
-  description: Ligar Modo Aquecimento do Ar condicionado a uma determinada hora
+  name: "[HVAC] Controlo Horário - Ligar Ar Condicionado (Frio)"
+  description: Ligar modo arrefecimento do Ar condicionado a uma determinada hora
 
   domain: automation
   input:
@@ -91,7 +91,7 @@ blueprint:
       selector:
         number:
           min: 18
-          max: 25
+          max: 28
           step: 0.1
           unit_of_measurement: "ºC"
 
@@ -126,13 +126,13 @@ trigger:
 
   - trigger: numeric_state
     entity_id: !input temperature_sensor
-    below: !input room_temperature
+    above: !input room_temperature
     for:
       minutes: 10
 
   - trigger: numeric_state
     entity_id: sensor.temperature_outside
-    below: !input room_temperature
+    above: !input room_temperature
     for:
       minutes: 10
 
@@ -159,22 +159,18 @@ condition:
 
   - condition: numeric_state
     entity_id: !input temperature_sensor
-    below: !input room_temperature
-
-  - condition: numeric_state
-    entity_id: sensor.temperature_outside
-    below: !input room_temperature
+    above: !input room_temperature
 
   - alias: "Window Closed"
     condition: state
     entity_id: !input window_sensor
     state: "off"
 
-  - alias: "All Windows Closed"
-    condition: state
-    entity_id: binary_sensor.window_all_house
-    state:
-      - "off"
+  #- alias: "All Windows Closed"
+  #  condition: state
+  #  entity_id: binary_sensor.window_all_house
+  #  state:
+  #    - "off"
 
   - alias: "Run once a day (wait at least 12 hours)"
     condition: template
@@ -198,7 +194,7 @@ action:
     target:
       entity_id: !input hvac_unit
     data:
-      hvac_mode: heat
+      hvac_mode: cool
 
   - action: climate.set_temperature
     target:
