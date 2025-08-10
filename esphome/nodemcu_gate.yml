@@ -1,9 +1,9 @@
 substitutions:
   devicename: nodemcu_gate
-  FriendlyName: Gate
 
 esphome:
   name: ${devicename}
+  friendly_name: NodeMCU do Portão
 
 esp8266:
   board: nodemcuv2
@@ -12,12 +12,6 @@ esp8266:
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
-
-external_components:
-  - source:
-      type: git
-      url: https://github.com/muxa/esphome-state-machine.git
-    components: [state_machine]
 
 output:
   - platform: gpio
@@ -44,7 +38,7 @@ binary_sensor:
       number: D5
       mode: INPUT_PULLUP
     filters:
-      - delayed_on: 750ms
+      - delayed_on: 250ms
 
   - platform: gpio
     id: gate_open_sensor
@@ -54,11 +48,12 @@ binary_sensor:
       inverted: true
       mode: INPUT_PULLUP
     filters:
-      - delayed_on: 750ms
+      - delayed_on: 250ms
 
 button:
   - platform: output
-    id: gate_open_single_internal
+    id: gate_open_single
+    name: gate_open_single
     output: relay_2
     duration: 750ms
 
@@ -67,17 +62,6 @@ button:
     name: gate_open
     output: relay_1
     duration: 750ms
-
-  - platform: template
-    name: gate_open_single
-    on_press:
-      then:
-        - if:
-            condition:
-              and:
-                - binary_sensor.is_off: gate_open_sensor
-            then:
-              - button.press: gate_open_single_internal
 
 cover:
   - platform: feedback
@@ -89,14 +73,14 @@ cover:
       - if:
           condition:
             and:
-              - binary_sensor.is_off: gate_open_sensor
+              - binary_sensor.is_on: gate_close_sensor
           then:
             - button.press: gate_open
     close_action:
       - if:
           condition:
             and:
-              - binary_sensor.is_off: gate_close_sensor
+              - binary_sensor.is_on: gate_open_sensor
           then:
             - button.press: gate_open
     stop_action:
@@ -112,5 +96,5 @@ cover:
     close_endstop: gate_close_sensor
     open_duration: 17s
     close_duration: 20s
-    max_duration: 40s
+    max_duration: 25s
     direction_change_wait_time: 5s
