@@ -37,6 +37,7 @@ class HouseMode(hass.Hass):
         ]
 
         self.trackLights = [
+            "light.kitchen",
             "light.hallway",
             "light.living_room_group",
             "light.all_bedrooms",
