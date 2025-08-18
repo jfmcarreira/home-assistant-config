@@ -22,6 +22,7 @@ recorder:
       - sensor.query_*
       - sensor.wifi_*
       - sensor.ble_scanner_*
+      - sensor.*distance*
       - sensor._*last_done*
       - sensor._*last_clean*
       - binary_sensor.motion_sensor_*_group
