@@ -270,28 +270,28 @@
       disable_in_sleep: true
       presence_sensor: none
 - id: '1657981029516'
-  alias: Lights Turn On Exterior Lights When Arriving Home
+  alias: Activar Rotina de Chegar a Casa
   description: ''
-  trigger:
+  triggers:
   - id: joao_trigger
-    platform: state
     entity_id:
     - binary_sensor.joao_home
     from: 'off'
     to: 'on'
+    trigger: state
   - id: bianca_trigger
-    platform: state
     entity_id:
     - binary_sensor.bianca_home
     from: 'off'
     to: 'on'
+    trigger: state
   - id: car_trigger
-    platform: state
     entity_id:
     - binary_sensor.front_camera_vehicle
     - binary_sensor.backyard_camera_vehicle
     from: 'off'
-  condition:
+    trigger: state
+  conditions:
   - condition: state
     entity_id: binary_sensor.sun_bellow_horizont
     state: 'on'
@@ -323,9 +323,9 @@
         state: 'off'
       - condition: template
         value_template: '{{ trigger.id == ''bianca_trigger'' }}'
-  action:
-  - service: script.lights_arriving_home
-    data: {}
+  actions:
+  - data: {}
+    action: script.lights_arriving_home
   mode: restart
 - id: '1658004941042'
   alias: Controlar Luz da Cozinha Day/Night
@@ -459,12 +459,22 @@
   alias: Fechar Estores Fachada Poente
   description: ''
   triggers:
-  - entity_id: sensor.temperature_outside
+  - entity_id:
+    - sensor.temperature_outside
     for:
       hours: 0
-      minutes: 30
+      minutes: 15
       seconds: 0
-    above: 20
+    above: 25
+    trigger: numeric_state
+  - entity_id:
+    - sun.sun
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+    above: 180
+    attribute: azimuth
     trigger: numeric_state
   - entity_id: sun.sun
     for:
@@ -502,21 +512,18 @@
   - condition: numeric_state
     entity_id: sun.sun
     attribute: azimuth
-    above: 180
+    above: 179
+  - condition: state
+    entity_id: binary_sensor.house_guest
+    state: 'off'
   actions:
-  - action: cover.close_cover
-    data: {}
-    target:
-      entity_id:
-      - cover.master_bedroom
-      - cover.kitchen
-  - action: select.select_option
-    data:
-      option: Sol
-    target:
-      entity_id:
-      - select.cover_master_bedroom_last_action
-      - select.cover_kitchen_last_action
+  - data:
+      action_to_run: cover.close_cover
+      control_switch: close_with_heat
+      covers_list:
+      - master_bedroom
+      - kitchen
+    action: script.cover_group_action
   mode: single
 - id: '1661120403152'
   alias: Abrir Estores da Suite Fim de Semana
@@ -579,21 +586,18 @@
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'off'
+  - condition: state
+    entity_id: binary_sensor.house_guest
+    state: 'off'
   actions:
-  - data: {}
-    target:
-      entity_id:
-      - cover.laundry
-      - cover.bedroom_rc
-      - cover.stairs
-    action: cover.close_cover
-  - action: select.select_option
-    data:
-      option: Sol
-    target:
-      entity_id:
-      - select.cover_laundry_last_action
-      - select.cover_bedroom_rc_last_action
+  - data:
+      action_to_run: cover.close_cover
+      control_switch: close_with_heat
+      covers_list:
+      - stairs
+      - bedroom_rc
+      - laundry
+    action: script.cover_group_action
   mode: single
 - id: '1661643560066'
   alias: Luzes por Mov. no Escritório
@@ -619,27 +623,27 @@
   alias: Trigger Botões da Cama da Suite
   description: ''
   triggers:
-  - device_id: 055d18283ca2d4c5701c5fcd53242090
+  - device_id: 0917b5ae15c6e0fb6aa33f8f6a9fc492
     domain: shelly
-    type: long
+    type: long_push
     subtype: button1
     id: first_long
     trigger: device
-  - device_id: 055d18283ca2d4c5701c5fcd53242090
+  - device_id: 0917b5ae15c6e0fb6aa33f8f6a9fc492
     domain: shelly
-    type: long
+    type: long_push
     subtype: button2
     id: second_long
     trigger: device
-  - device_id: 055d18283ca2d4c5701c5fcd53242090
+  - device_id: 0917b5ae15c6e0fb6aa33f8f6a9fc492
     domain: shelly
-    type: single
+    type: single_push
     subtype: button1
     id: first_short
     trigger: device
-  - device_id: 055d18283ca2d4c5701c5fcd53242090
+  - device_id: 0917b5ae15c6e0fb6aa33f8f6a9fc492
     domain: shelly
-    type: single
+    type: single_push
     subtype: button2
     id: second_short
     trigger: device
@@ -1690,6 +1694,17 @@
     data:
       action_to_run: script.cover_partial_close
       control_switch: open_sunrise
+      covers_list:
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
   mode: single
 - id: '1689293902907'
   alias: Abrir Parcialmente Estores à Tarde
@@ -1703,27 +1718,38 @@
     data:
       action_to_run: script.cover_partial_open
       control_switch: open_sunrise
+      covers_list:
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
   mode: single
 - id: '1652141596083'
   alias: Abrir Estores ao Nascer do Sol
   description: ''
-  trigger:
-  - platform: sun
-    event: sunrise
+  triggers:
+  - event: sunrise
     offset: 00:30:00
-  - platform: time
-    at: 08:00:00
-  condition:
+    trigger: sun
+  - at: 08:01:00
+    trigger: time
+  conditions:
   - condition: time
-    after: 07:50:00
+    after: 08:00:00
     before: '12:00:00'
   - condition: numeric_state
     entity_id: sun.sun
     attribute: elevation
     above: '0'
   - condition: template
-    value_template: '{{ ( ( (now() | as_timestamp) - (states.automation.cover_open_all_sunrise.attributes.last_triggered
-      | as_timestamp) ) / 60 / 60 ) > 18 }}
+    value_template: '{{ ( ( (now() | as_timestamp) - ((this.attributes.last_triggered
+      | int(0)) | as_timestamp) ) / 60 / 60 ) > 18 }}
 
       '
   - condition: state
@@ -1732,11 +1758,22 @@
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
-  action:
-  - service: script.cover_group_action
-    data:
+  actions:
+  - data:
       action_to_run: cover.open_cover
       control_switch: open_sunrise
+      covers_list:
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
+    action: script.cover_group_action
   mode: single
 - id: '1663526552935'
   alias: Fechar Estores quando chove
@@ -1753,6 +1790,17 @@
     data:
       action_to_run: script.cover_close_when_raining
       control_switch: close_in_rain
+      covers_list:
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
 - id: '1651018838807'
   alias: Fechar Estores ao Por do Sol
   description: ''
@@ -1776,8 +1824,9 @@
     entity_id: binary_sensor.notify_home
     state: 'off'
   - condition: template
-    value_template: '{{ now().timestamp() - this.attributes.last_triggered | as_timestamp
-      > 60 * 60 * 12 }}
+    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
+      > hours * 3600 }}
 
       '
   - condition: sun
@@ -1786,6 +1835,17 @@
   - data:
       action_to_run: cover.close_cover
       control_switch: close_sunset
+      covers_list:
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
     action: script.cover_group_action
   mode: single
 - id: '1703619934344'
@@ -1941,8 +2001,8 @@
     for:
       minutes: 10
   - condition: template
-    value_template: '{{ now().timestamp() - this.attributes.last_triggered | as_timestamp
-      > 60 * 60 * 12 }}'
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | int(0))
+      | as_timestamp > 60 * 60 * 12 }}'
   - condition: numeric_state
     entity_id: sensor.temperature_water_heater_top
     below: 60
@@ -2082,26 +2142,21 @@
 - id: '1701986636577'
   alias: Abrir Portão João Chegar a Casa
   description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id:
+  triggers:
+  - entity_id:
     - sensor.distance_home_joao
     for:
       hours: 0
       minutes: 0
       seconds: 2
     below: 200
-  - platform: state
-    entity_id:
+    trigger: numeric_state
+  - entity_id:
     - binary_sensor.joao_home
     from: 'off'
     to: 'on'
-  condition:
-  - condition: state
-    entity_id: cover.gate
-    state: closed
-    for:
-      minutes: 5
+    trigger: state
+  conditions:
   - condition: state
     entity_id: binary_sensor.joao_home_with_hysteresis
     state: 'off'
@@ -2121,7 +2176,14 @@
   - condition: state
     entity_id: input_boolean.walking_routine
     state: 'off'
-  action:
+  - condition: state
+    entity_id: cover.gate
+    state: closed
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  actions:
   - target:
       entity_id: cover.gate
     data: {}
@@ -2409,62 +2471,101 @@
       data:
         filename: /media/Campainha/{{now().year}}-{{"%02d" | format(now().month)}}-{{"%02d"
           | format(now().day)}}_{{"%02d" | format(now().hour)}}h{{"%02d" | format(now().minute)}}.jpg
-    - sequence:
+    - if:
+      - condition: state
+        entity_id: binary_sensor.notify_home
+        state: 'on'
+      - condition: state
+        entity_id: binary_sensor.notification_non_disturb
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.door_bell_sound
+        state: 'on'
+      then:
+      - action: media_player.volume_set
+        target:
+          entity_id:
+          - media_player.ghm_living_room
+          - media_player.ghm_hall
+          - media_player.ghm_kitchen
+        data:
+          volume_level: 0.005
+      - repeat:
+          for_each:
+          - media_player.ghm_living_room
+          - media_player.ghm_hall
+          - media_player.ghm_kitchen
+          sequence:
+          - action: tts.cloud_say
+            data:
+              cache: true
+              entity_id: '{{ repeat.item }}'
+              message: This is a broadcast message
+      - action: media_player.volume_set
+        target:
+          entity_id:
+          - media_player.ghm_living_room
+          - media_player.ghm_hall
+          - media_player.ghm_kitchen
+        data:
+          volume_level: 0.7
+      - target:
+          entity_id:
+          - media_player.home_assistant_voice_office
+          - media_player.ghm_living_room
+          - media_player.ghm_hall
+          - media_player.ghm_kitchen
+        data:
+          media_content_id: media-source://media_source/local/door_bell.wav
+          media_content_type: audio/x-wav
+        metadata:
+          title: Door Bell
+          thumbnail:
+          media_class: music
+          children_media_class:
+          navigateIds:
+          - {}
+          - media_content_type: app
+            media_content_id: media-source://media_source
+        action: media_player.play_media
       - if:
-        - condition: state
-          entity_id: binary_sensor.notify_home
-          state: 'on'
-        - condition: state
-          entity_id: binary_sensor.notification_non_disturb
-          state: 'off'
+        - condition: time
+          after: 09:00:00
+          before: '21:00:00'
         then:
-        - if:
-          - condition: state
-            entity_id: input_boolean.door_bell_sound
-            state: 'on'
-          then:
-          - action: media_player.volume_set
-            target:
-              entity_id:
-              - media_player.ghm_living_room
-              - media_player.ghm_hall
-            data:
-              volume_level: 0.005
-          - repeat:
-              for_each:
-              - media_player.ghm_living_room
-              - media_player.ghm_hall
-              sequence:
-              - action: tts.cloud_say
-                data:
-                  cache: true
-                  entity_id: media_player.ghm_office
-                  message: This is a broadcast message
-          - action: media_player.volume_set
-            target:
-              entity_id:
-              - media_player.ghm_living_room
-              - media_player.ghm_hall
-            data:
-              volume_level: 0.4
-          - target:
-              entity_id:
-              - media_player.home_assistant_voice_office
-              - media_player.ghm_living_room
-              - media_player.ghm_hall
-            data:
-              media_content_id: media-source://media_source/local/Sounds/door_bell.wav
-              media_content_type: audio/x-wav
-            metadata:
-              title: Door Bell
-              thumbnail:
-              media_class: music
-              children_media_class:
-              navigateIds:
-              - {}
-              - media_content_type: app
-                media_content_id: media-source://media_source
-            action: media_player.play_media
+        - action: media_player.volume_set
+          target:
+            entity_id:
+            - media_player.ghm_hall
+          data:
+            volume_level: 0.005
+        - action: tts.cloud_say
+          data:
+            cache: true
+            entity_id: media_player.ghm_hall
+            message: This is a broadcast message
+        - action: media_player.volume_set
+          target:
+            entity_id:
+            - media_player.ghm_hall
+          data:
+            volume_level: 0.7
+        - target:
+            entity_id:
+            - media_player.ghm_hall
+          data:
+            media_content_id: media-source://media_source/local/door_bell.wav
+            media_content_type: audio/x-wav
+          metadata:
+            title: Door Bell
+            thumbnail:
+            media_class: music
+            children_media_class:
+            navigateIds:
+            - {}
+            - media_content_type: app
+              media_content_id: media-source://media_source
+          action: media_player.play_media
   mode: single
 - id: '1717504841456'
   alias: 'Notificar Abertura Portão/Portas '
@@ -2583,26 +2684,21 @@
 - id: '1721089640569'
   alias: Abrir Portão Bianca Chegar a Casa
   description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id:
+  triggers:
+  - entity_id:
     - sensor.distance_home_bianca
     for:
       hours: 0
       minutes: 0
       seconds: 2
     below: 200
-  - platform: state
-    entity_id:
+    trigger: numeric_state
+  - entity_id:
     - binary_sensor.bianca_home
     from: 'off'
     to: 'on'
-  condition:
-  - condition: state
-    entity_id: cover.gate
-    state: closed
-    for:
-      minutes: 5
+    trigger: state
+  conditions:
   - condition: state
     entity_id: binary_sensor.bianca_home_with_hysteresis
     state: 'off'
@@ -2622,7 +2718,14 @@
   - condition: state
     entity_id: input_boolean.walking_routine
     state: 'off'
-  action:
+  - condition: state
+    entity_id: cover.gate
+    state: closed
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  actions:
   - target:
       entity_id: cover.gate
     data: {}
@@ -2935,14 +3038,17 @@
 - id: '1724364182177'
   alias: Modo de Caminhada - Iniciar
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - input_boolean.walking_routine
     from: 'off'
     to: 'on'
-  condition: []
-  action:
+    trigger: state
+  conditions: []
+  actions:
+  - condition: state
+    entity_id: binary_sensor.sun_bellow_horizont
+    state: 'on'
   - action: light.turn_on
     metadata: {}
     data: {}
@@ -3125,50 +3231,6 @@
           - light.kitchen_door
           - light.exterior_wall_side
           - light.exterior_wall_back
-- id: '1732728436131'
-  alias: Trigger Botões da Cama da Suite
-  description: ''
-  use_blueprint:
-    path: devices/shelly_two_buttons.yaml
-    input:
-      device: 055d18283ca2d4c5701c5fcd53242090
-      button_1_short:
-      - action: light.toggle
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.master_bedroom_bed_wall
-      button_2_short:
-      - action: light.toggle
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.master_bedroom_bed_window
-      merge_long: true
-      button_1_long:
-      - if:
-        - condition: state
-          state: 'off'
-          entity_id:
-          - light.master_bedroom
-          - light.master_bedroom_bathroom
-          - light.hall_group
-          - light.stairs_group
-        then:
-        - data: {}
-          target:
-            entity_id:
-            - light.master_bedroom
-          action: light.turn_on
-        else:
-        - data: {}
-          target:
-            area_id:
-            - hall
-            - bathroom_main
-            - master_bedroom_bathroom
-            - master_bedroom
-          action: light.turn_off
 - id: '1735221054299'
   alias: Trigger Botões dos Estores da Casa de Banho do R/C
   description: ''
@@ -3252,101 +3314,6 @@
         data: {}
         target:
           entity_id: light.kitchen_pantry
-- id: '1736719371438'
-  alias: Trigger Botões dos Estores da Suite
-  description: ''
-  use_blueprint:
-    path: devices/bhonofre_cover_buttons.yaml
-    input:
-      device: bhonofre_cover_master_bed
-      single_top_action:
-      - type: toggle
-        device_id: 055d18283ca2d4c5701c5fcd53242090
-        entity_id: 5f431f49a6cdce71c3f87837ecf63104
-        domain: light
-      single_bottom_action:
-      - type: toggle
-        device_id: 055d18283ca2d4c5701c5fcd53242090
-        entity_id: 453071f9e3838bcf0acc1b3859b3a1e2
-        domain: light
-      double_top_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - if:
-        - condition: not
-          conditions:
-          - condition: numeric_state
-            entity_id: sensor.temperature_master_bedroom
-            below: 20
-        - condition: or
-          conditions:
-          - condition: state
-            entity_id: sensor.season
-            state: summer
-          - condition: numeric_state
-            entity_id: sensor.temperature_master_bedroom
-            above: 24
-        then:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: cool
-          target:
-            entity_id: climate.master_bedroom
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 25
-          target:
-            entity_id: climate.master_bedroom
-        else:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: heat
-          target:
-            entity_id: climate.master_bedroom
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 22
-          target:
-            entity_id: climate.master_bedroom
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.master_bedroom
-      double_bottom_action:
-      - action: climate.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: climate.master_bedroom
-      triple_top_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: '{{ state_attr(''climate.master_bedroom'', ''temperature'')
-            + 1 }}'
-        target:
-          entity_id: climate.master_bedroom
-      triple_bottom_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: '{{ state_attr(''climate.master_bedroom'', ''temperature'')
-            - 1 }}'
-        target:
-          entity_id: climate.master_bedroom
 - id: '1736719479439'
   alias: Trigger Botões dos Estores do Quarto do Ricardo
   description: ''
@@ -3354,16 +3321,73 @@
     path: devices/bhonofre_cover_buttons.yaml
     input:
       device: bhonofre_cover_bedroom_ricardo
+      main_double_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
+      - if:
+        - condition: not
+          conditions:
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_ricardo
+            below: 20
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: sensor.season
+            state: summer
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_ricardo
+            above: 24
+        then:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: cool
+          target:
+            entity_id: climate.bedroom_ricardo
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 25
+          target:
+            entity_id: climate.bedroom_ricardo
+        else:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: heat
+          target:
+            entity_id: climate.bedroom_ricardo
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 22
+          target:
+            entity_id: climate.bedroom_ricardo
+      - action: climate.set_swing_mode
+        metadata: {}
+        data:
+          swing_mode: vertical
+        target:
+          entity_id: climate.bedroom_ricardo
+      main_double_bottom_action:
+      - action: climate.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: climate.bedroom_ricardo
       single_top_action:
-      - type: turn_on
-        device_id: 46354c1616f79a3fd1314d9e3b187d46
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
-        domain: light
+      - action: light.turn_on
+        data: {}
+        target:
+          entity_id: light.bedroom_ricardo_lamp
       single_bottom_action:
-      - type: turn_off
-        device_id: 46354c1616f79a3fd1314d9e3b187d46
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
-        domain: light
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_ricardo_lamp
       double_top_action:
       - condition: state
         entity_id: binary_sensor.house_guest
@@ -3443,14 +3467,14 @@
         target:
           entity_id: climate.bedroom_ricardo
       long_top_action:
-      - device_id: 46354c1616f79a3fd1314d9e3b187d46
+      - device_id: c7002942ba7f47c421aa7f13dfe25821
         domain: light
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
+        entity_id: f9fd747a176070ae121da1a9d423245f
         type: brightness_increase
       long_bottom_action:
-      - device_id: 46354c1616f79a3fd1314d9e3b187d46
+      - device_id: c7002942ba7f47c421aa7f13dfe25821
         domain: light
-        entity_id: c9e6abd07a77da4e516ba9c680e5248e
+        entity_id: f9fd747a176070ae121da1a9d423245f
         type: brightness_decrease
 - id: '1736764669175'
   alias: Desumidificador - Ligar com a Tomada
@@ -3729,18 +3753,70 @@
     path: devices/bhonofre_cover_buttons.yaml
     input:
       device: bhonofre_cover_bedroom_henrique
-      single_top_action:
-      - action: light.turn_on
+      main_double_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
+      - if:
+        - condition: not
+          conditions:
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_henrique
+            below: 20
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: sensor.season
+            state: summer
+          - condition: numeric_state
+            entity_id: sensor.temperature_bedroom_henrique
+            above: 24
+        then:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: cool
+          target:
+            entity_id: climate.bedroom_henrique
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 25
+          target:
+            entity_id: climate.bedroom_henrique
+        else:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: heat
+          target:
+            entity_id: climate.bedroom_henrique
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 22
+          target:
+            entity_id: climate.bedroom_henrique
+      - action: climate.set_swing_mode
+        metadata: {}
+        data:
+          swing_mode: vertical
+        target:
+          entity_id: climate.bedroom_henrique
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: 22
+        target:
+          entity_id: climate.bedroom_henrique
+      main_double_bottom_action:
+      - action: climate.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.bedroom_henrique_lamp
-      single_bottom_action:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_henrique_lamp
+          entity_id: climate.bedroom_henrique
+      single_top_action: []
+      single_bottom_action: []
       double_top_action:
       - condition: state
         entity_id: binary_sensor.house_guest
@@ -3843,6 +3919,14 @@
       hours: 0
       minutes: 30
       seconds: 0
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
   conditions:
   - condition: not
     conditions:
@@ -3851,6 +3935,9 @@
       state: 'off'
   - condition: time
     after: '22:00:00'
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'on'
   actions:
   - action: climate.set_preset_mode
     metadata: {}
@@ -3858,76 +3945,6 @@
       preset_mode: sleep
     target:
       entity_id: climate.hall
-  mode: single
-- id: '1739030390683'
-  alias: Controlo dos  Butões da Areia das Gatas
-  description: ''
-  triggers:
-  - alias: Short Up
-    device_id: 3f3ffa642945272545f5c2cf460aec71
-    domain: zha
-    type: remote_button_short_press
-    subtype: turn_on
-    trigger: device
-  - alias: Long Up
-    device_id: 3f3ffa642945272545f5c2cf460aec71
-    domain: zha
-    type: remote_button_long_press
-    subtype: dim_up
-    trigger: device
-  - alias: Short Down
-    device_id: 3f3ffa642945272545f5c2cf460aec71
-    domain: zha
-    type: remote_button_short_press
-    subtype: turn_off
-    trigger: device
-  - alias: Long Down
-    device_id: 3f3ffa642945272545f5c2cf460aec71
-    domain: zha
-    type: remote_button_long_press
-    subtype: dim_down
-    trigger: device
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - short_up
-      sequence:
-      - data: {}
-        target:
-          entity_id: automation.task_cat_litter_clean
-        action: automation.trigger
-    - conditions:
-      - condition: trigger
-        id:
-        - long_up
-      sequence:
-      - data:
-          skip_condition: true
-        target:
-          entity_id: automation.task_cat_litter_clean
-        action: automation.trigger
-    - conditions:
-      - condition: trigger
-        id:
-        - short_down
-      sequence:
-      - data: {}
-        target:
-          entity_id: automation.task_cat_litter_change
-        action: automation.trigger
-    - conditions:
-      - condition: trigger
-        id:
-        - long_down
-      sequence:
-      - data:
-          skip_condition: true
-        target:
-          entity_id: automation.task_cat_litter_change
-        action: automation.trigger
   mode: single
 - id: '1739048652626'
   alias: Desligar Coluna da Suite com as Luzes
@@ -3975,7 +3992,7 @@
   use_blueprint:
     path: hvac/hvac_time_turn_on_cool.yaml
     input:
-      schedule_start: '19:00:00'
+      schedule_start: '16:00:00'
       schedule_end: '20:30:00'
       hvac_unit:
       - climate.hall
@@ -3988,8 +4005,6 @@
       - wed
       - thu
       - fri
-      - sat
-      - sun
       selected_season:
       - summer
       extra_hvac_actions: []
@@ -4079,3 +4094,318 @@
         entity_id:
         - switch.fire_tablet_motion_detection
   mode: restart
+- id: '1751200610784'
+  alias: AC da Sala - Ligar de Tarde no Verão
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '17:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.living_room
+      hvac_temperature: 24
+      room_temperature: 24
+      temperature_sensor: sensor.temperature_living_room
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_ground_floor
+- id: '1751200671929'
+  alias: AC Hall - Ligar de Tarde no Verão (Fim de Semana)
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '14:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 24
+      room_temperature: 24
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - sat
+      - sun
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1751552957136'
+  alias: Fechar Estores Com Temperatura Elevada
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.temperature_outside
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    above: 28
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.house_guest
+    state: 'off'
+  actions:
+  - data:
+      action_to_run: cover.close_cover
+      control_switch: close_with_heat
+      covers_list:
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
+    action: script.cover_group_action
+  mode: single
+- id: '1749602497079'
+  alias: AC Bedroom Ricardo - Ligar de Tarde no Verão
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.bedroom_ricardo
+      hvac_temperature: 25
+      room_temperature: 27
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1739604497079'
+  alias: AC Bedroom Henrique - Ligar de Tarde no Verão
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.bedroom_henrique
+      hvac_temperature: 25
+      room_temperature: 27
+      temperature_sensor: sensor.temperature_bedroom_henrique
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1749604597079'
+  alias: AC Suite - Ligar de Tarde no Verão
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.master_bedroom
+      hvac_temperature: 25
+      room_temperature: 27
+      temperature_sensor: sensor.temperature_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1754488924870'
+  alias: helper_clear_routine_message
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - script.routine_good_night
+    - script.routine_exit_house_all_off
+    - script.routine_exit_house_to_work_bianca
+    - script.routine_exit_house_to_work_joao
+    - script.routine_leaving_and_coming_back
+    from: 'on'
+    to: 'off'
+  conditions: []
+  actions:
+  - action: input_text.set_value
+    metadata: {}
+    data:
+      value: ' '
+    target:
+      entity_id: input_text.script_step_message
+  mode: single
+- id: '1755213453554'
+  alias: Ar Condicionados - Ajustar com a casa vazia
+  description: Define o modo da ventoinha para 'auto' e o modo de oscilação para 'swing'
+    em todos os aparelhos de ar condicionado quando a casa está vazia por 10 minutos.
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  actions:
+  - action: climate.set_fan_mode
+    metadata: {}
+    data:
+      fan_mode: auto
+    target:
+      entity_id:
+      - climate.master_bedroom
+      - climate.living_room
+      - climate.bedroom_ricardo
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+  - action: climate.set_swing_mode
+    metadata: {}
+    data:
+      swing_mode: swing
+    target:
+      entity_id:
+      - climate.master_bedroom
+      - climate.living_room
+      - climate.bedroom_ricardo
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+  mode: single
+- id: '1736719371438'
+  alias: Trigger Botões dos Estores da Suite
+  description: ''
+  use_blueprint:
+    path: devices/bhonofre_cover_buttons.yaml
+    input:
+      device: bhonofre_cover_master_bed
+      single_top_action:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.master_bedroom_bed_window
+      single_bottom_action:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.master_bedroom_bed_wall
+      double_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
+      - if:
+        - condition: not
+          conditions:
+          - condition: numeric_state
+            entity_id: sensor.temperature_master_bedroom
+            below: 20
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: sensor.season
+            state: summer
+          - condition: numeric_state
+            entity_id: sensor.temperature_master_bedroom
+            above: 24
+        then:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: cool
+          target:
+            entity_id: climate.master_bedroom
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 25
+          target:
+            entity_id: climate.master_bedroom
+        else:
+        - action: climate.set_hvac_mode
+          metadata: {}
+          data:
+            hvac_mode: heat
+          target:
+            entity_id: climate.master_bedroom
+        - action: climate.set_temperature
+          metadata: {}
+          data:
+            temperature: 22
+          target:
+            entity_id: climate.master_bedroom
+      - action: climate.set_swing_mode
+        metadata: {}
+        data:
+          swing_mode: vertical
+        target:
+          entity_id: climate.master_bedroom
+      double_bottom_action:
+      - action: climate.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: climate.master_bedroom
+      triple_top_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: '{{ state_attr(''climate.master_bedroom'', ''temperature'')
+            + 1 }}'
+        target:
+          entity_id: climate.master_bedroom
+      triple_bottom_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: '{{ state_attr(''climate.master_bedroom'', ''temperature'')
+            - 1 }}'
+        target:
+          entity_id: climate.master_bedroom

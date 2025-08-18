@@ -6,6 +6,17 @@ routine_cover_rain_mode:
     data:
       action_to_run: script.cover_close_when_raining
       control_switch: close_in_rain
+      covers_list:
+        - living_room
+        - stairs
+        - bedroom_henrique
+        - bedroom_ricardo
+        - master_bedroom
+        - bathroom
+        - bedroom_rc
+        - laundry
+        - kitchen
+        - office
 lights_arriving_home:
   alias: Routina de Chegar a Casa
   mode: restart
@@ -59,7 +70,7 @@ lights_arriving_home:
     data: {}
     action: light.turn_off
 lights_control_gate_front_lights:
-  alias: Lights Control Gate Front Lights
+  alias: Controlar Luzes do Portão
   sequence:
   - condition: state
     entity_id: binary_sensor.sun_bellow_horizont
@@ -78,8 +89,8 @@ lights_control_gate_front_lights:
         seconds: 40
       trigger: state
     timeout:
-      hours: 0
-      minutes: 30
+      hours: 1
+      minutes: 0
       seconds: 0
       milliseconds: 0
   - target:
@@ -87,6 +98,7 @@ lights_control_gate_front_lights:
     data: {}
     action: light.turn_off
   mode: single
+  description: ''
 gate_notify_door_bell_snapshot:
   alias: Campainha - Notificar App
   mode: single
@@ -308,8 +320,7 @@ house_turn_all_off:
   icon: mdi:home-off
   sequence:
   - parallel:
-    - service: light.turn_off
-      continue_on_error: true
+    - continue_on_error: true
       data: {}
       target:
         area_id:
@@ -327,20 +338,20 @@ house_turn_all_off:
         - bedroom_ricardo
         - living_room
         - master_bedroom
-    - service: media_player.turn_off
-      data: {}
+      action: light.turn_off
+    - data: {}
       target:
         entity_id:
         - media_player.assistant_speakers
-        - media_player.living_room_tv
-    - service: homeassistant.turn_off
-      target:
+      action: media_player.turn_off
+    - target:
         area_id: xmas
       data: {}
-    - service: climate.turn_off
-      target:
+      action: homeassistant.turn_off
+    - target:
         entity_id: climate.portable_heater
       data: {}
+      action: climate.turn_off
 routine_good_night:
   alias: Routina de Boa Noite
   mode: single
@@ -385,7 +396,6 @@ routine_good_night:
       target:
         entity_id:
         - media_player.assistant_speakers
-        - media_player.living_room_tv
       action: media_player.turn_off
     - target:
         area_id: xmas
@@ -481,7 +491,6 @@ routine_exit_house_all_off:
       target:
         entity_id:
         - media_player.assistant_speakers
-        - media_player.living_room_tv
       action: media_player.turn_off
     - target:
         area_id: xmas
@@ -502,11 +511,12 @@ routine_exit_house_all_off:
       entity_id: script.sequence_leaving_home_lights
     action: script.turn_on
   - action: script.sequence_door_open
-  - service: script.turn_on
-    continue_on_error: true
+    data: {}
+  - continue_on_error: true
     data: {}
     target:
       entity_id: script.sequence_open_close_gate
+    action: script.turn_on
   - data: {}
     target:
       area_id:
@@ -596,8 +606,8 @@ routine_night_mode:
     metadata: {}
     data: {}
     target:
-      floor_id: outside
       area_id:
+      - outside
       - laundry
       - bedroom_rc
       - kitchen
