@@ -1,0 +1,37 @@
+homeassistant:
+  customize_glob:
+    "input_boolean.cover_control_close_with_heat_*":
+      friendly_name: "Fechar Quando Está Calor/Sol"
+      icon: mdi:sun-thermometer-outline
+
+input_boolean:
+  cover_control_close_with_heat_living_room:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore da Sala de Estar
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_kitchen:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore da Cozinha
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_laundry:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore da Lavandaria
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_bedroom_rc:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore do Quarto do R/C
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_bathroom:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore da Casa de Banho
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_office:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore do Escritório
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_master_bedroom:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore do Quarto Principal
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_bedroom_ricardo:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore do Quarto do Ricardo
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_bedroom_henrique:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore do Quarto do Henrique
+    icon: mdi:sun-thermometer-outline
+  cover_control_close_with_heat_stairs:
+    name: Controlo Fechar Quando Estiver Sol e Temperatura Elevada Estore das Escadas
+    icon: mdi:sun-thermometer-outline

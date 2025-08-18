@@ -3,6 +3,46 @@ script:
     alias: Controlo Grupo de Estores
     mode: single
     fields:
+      covers_list:
+        description: List of covers
+        example: cover.open
+        required: true
+        default:
+          - living_room
+          - kitchen
+          - office
+          - stairs
+          - laundry
+          - bathroom
+          - bedroom_rc
+          - master_bedroom
+          - bedroom_ricardo
+          - bedroom_henrique
+        selector:
+          select:
+            multiple: true
+            mode: list
+            options:
+              - label: Sala
+                value: living_room
+              - label: office
+                value: office
+              - label: Cozinha
+                value: kitchen
+              - label: Lavandaria
+                value: laundry
+              - label: Quarto de Arrumos
+                value: bedroom_rc
+              - label: Casa de Banho
+                value: bathroom
+              - label: Suite
+                value: master_bedroom
+              - label: Quarto do Ricardo
+                value: bedroom_ricardo
+              - label: Quarto do Henrique
+                value: bedroom_henrique
+              - label: Escadas
+                value: stairs
       action_to_run:
         description: Service to run on the covers.
         example: cover.open
@@ -17,17 +57,7 @@ script:
           text:
     sequence:
       - repeat:
-          for_each:
-            - living_room
-            - kitchen
-            - office
-            - stairs
-            - laundry
-            - bathroom
-            - bedroom_rc
-            - master_bedroom
-            - bedroom_ricardo
-            - bedroom_henrique
+          for_each: "{{ covers_list }}"
           sequence:
             - condition: "{{ is_state('input_boolean.cover_control_' + control_switch + '_' + repeat.item, 'on') }}"
             - action: select.select_option
@@ -39,6 +69,8 @@ script:
                     Sunset
                   {% elif control_switch == "close_in_rain" %}
                     Chuva
+                  {% elif control_switch == "close_with_heat" %}
+                    Sol
                   {% else %}
                     Grupo
                   {% endif %}
