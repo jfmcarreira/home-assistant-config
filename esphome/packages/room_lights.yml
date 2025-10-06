@@ -3,10 +3,6 @@ globals:
     type: int
     restore_value: no
     initial_value: "0"
-  - id: light_state_count
-    type: int
-    restore_value: no
-    initial_value: ${light_state_count}
 
 script:
   - id: smart_light_sw_action
@@ -16,7 +12,7 @@ script:
           value: !lambda "return id(lights_state)+=1;"
       - if:
           condition:
-            lambda: "return id(lights_state) > id(light_state_count)-1;"
+            lambda: "return id(lights_state) > ${light_state_count}-1;"
           then:
             - globals.set:
                 id: lights_state
@@ -24,7 +20,7 @@ script:
       - logger.log:
           format: "Activating light state %d"
           level: INFO
-          args: [ 'id(lights_state)' ]
+          args: ["id(lights_state)"]
 
       - script.execute: smart_light_state
 
@@ -43,4 +39,3 @@ binary_sensor:
                   - api.connected:
               then:
                 - script.execute: smart_light_sw_action
-

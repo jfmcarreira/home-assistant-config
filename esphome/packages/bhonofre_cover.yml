@@ -527,9 +527,8 @@ script:
           then:
             - logger.log: "Special control using HA to close control all"
             - homeassistant.service:
-                service: script.cover_group_action
+                service: script.cover_group_action_all
                 data:
-                  control_switch: "group"
                   action_to_run: !lambda |-
                     if (id(cover_action) == 1) {
                       return "cover.open_cover";

@@ -11,19 +11,14 @@ packages:
     vars:
       AcName: Master Bedroom
 
+logger:
+  baud_rate: 0
+
 uart:
   - id: haier_uart
     baud_rate: 9600
-    tx_pin: D1
-    rx_pin: D2
-
-# light:
-#   - platform: status_led
-#     id: light_status_led
-#     pin:
-#       number: GPIO02
-#       inverted: true
-#     internal: true
+    tx_pin: GPIO1
+    rx_pin: GPIO3
 
 sensor:
   - platform: haier

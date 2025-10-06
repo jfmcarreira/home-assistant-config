@@ -13,6 +13,7 @@ external_components:
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
 
 # dallas:
 #   - pin: D7

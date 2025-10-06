@@ -6,10 +6,11 @@ wifi:
   reboot_timeout: 20min
 
 api:
-  reboot_timeout: 20min
+  #reboot_timeout: 20min
+  reboot_timeout: 0s
 
 logger:
-  level: INFO
+  level: DEBUG
 
 ota:
   - platform: esphome

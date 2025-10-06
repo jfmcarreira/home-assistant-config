@@ -67,6 +67,7 @@ sensor:
     unit_of_measurement: Wh
     state_class: total_increasing
     device_class: energy
+    icon: "mdi:meter-electric"
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_2_Name}
@@ -75,3 +76,4 @@ sensor:
     restore: false
     state_class: total_increasing
     device_class: energy
+    icon: "mdi:meter-electric"

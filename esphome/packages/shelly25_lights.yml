@@ -68,6 +68,7 @@ sensor:
     unit_of_measurement: Wh
     state_class: total_increasing
     device_class: energy
+    icon: "mdi:meter-electric"
     #method: trapezoid
 
   - platform: total_daily_energy
@@ -76,4 +77,5 @@ sensor:
     unit_of_measurement: Wh
     restore: false
     state_class: total_increasing
+    icon: "mdi:meter-electric"
     device_class: energy

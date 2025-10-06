@@ -1,24 +1,53 @@
 substitutions:
   devicename: nitrogen
-  FriendlyName: Nitrogen (First Floor)
+  FriendlyName: Nitrogen
 
 esphome:
   name: nitrogen
-  platform: ESP32
+
+esp32:
   board: nodemcu-32s
+  framework:
+    type: arduino
+    version: recommended
+
+logger:
+  level: VERY_VERBOSE
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+  haier_ac: !include
+    file: packages/haier_ac.yml
+    vars:
+      AcName: Master Bedroom
 
-bluetooth_proxy:
+#bluetooth_proxy:
 
 # For bluetooth devices
-esp32_ble_tracker:
-  scan_parameters:
-    interval: 320ms
-    duration: 10s
+# esp32_ble_tracker:
+#   scan_parameters:
+#     interval: 320ms
+#     duration: 10s
 
-text_sensor:
-  - platform: ble_scanner
-    id: ble_hall
-    name: BLE Scanner Hall
+uart:
+  - id: haier_uart
+    baud_rate: 9600
+    tx_pin: GPIO17
+    rx_pin: GPIO16
+
+sensor:
+  - platform: haier
+    haier_id: haier_ac
+    outdoor_temperature:
+      name: Haier AC Temperature Outdoor
+      entity_category: "diagnostic"
+    outdoor_in_air_temperature:
+      name: Haier AC Temperature Outdoor In Air
+      entity_category: "diagnostic"
+    outdoor_out_air_temperature:
+      name: Haier AC Temperature Outdoor Out Air
+      entity_category: "diagnostic"
+    compressor_frequency:
+      name: Haier AC Compressor Frequency
+      entity_category: "diagnostic"

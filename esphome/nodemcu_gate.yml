@@ -13,6 +13,12 @@ packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
 
+external_components:
+  - source:
+      type: local
+      path: components/
+    components: [sc_cover]
+
 output:
   - platform: gpio
     id: relay_1
@@ -39,7 +45,17 @@ binary_sensor:
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 250ms
+    # on_press:
+    #   then:
+    #     - cover.template.publish:
+    #         id: gate
+    #         state: CLOSED
 
+    # on_release:
+    #   then:
+    #     - cover.template.publish:
+    #         id: gate
+    #         current_operation: OPENING
   - platform: gpio
     id: gate_open_sensor
     name: gate_open
@@ -49,6 +65,16 @@ binary_sensor:
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 250ms
+    # on_press:
+    #   then:
+    #     - cover.template.publish:
+    #         id: gate
+    #         state: OPEN
+    # on_release:
+    #   then:
+    #     - cover.template.publish:
+    #         id: gate
+    #         current_operation: CLOSING
 
 button:
   - platform: output
@@ -64,37 +90,76 @@ button:
     duration: 750ms
 
 cover:
-  - platform: feedback
+  - platform: sc_cover
     name: "Gate"
+    id: gate
     device_class: gate
-    has_built_in_endstop: true
-    assumed_state: false
-    open_action:
-      - if:
-          condition:
-            and:
-              - binary_sensor.is_on: gate_close_sensor
-          then:
-            - button.press: gate_open
-    close_action:
-      - if:
-          condition:
-            and:
-              - binary_sensor.is_on: gate_open_sensor
-          then:
-            - button.press: gate_open
-    stop_action:
-      - if:
-          condition:
-            and:
-              - binary_sensor.is_off: gate_open_sensor
-              - binary_sensor.is_off: gate_close_sensor
-          then:
-            - button.press: gate_open
-
+    activation_button: gate_open
+    switch_interval: 1500ms
     open_endstop: gate_open_sensor
     close_endstop: gate_close_sensor
     open_duration: 17s
     close_duration: 20s
-    max_duration: 25s
-    direction_change_wait_time: 5s
+
+  # - platform: template
+  #   name: "Gate"
+  #   id: gate
+  #   device_class: gate
+  #   lambda: |-
+  #     if (id(gate_open)) {
+  #       return COVER_OPEN;
+  #     } else if (id(gate_close_sensor)) {
+  #       return COVER_CLOSED;
+  #     }
+  #     return {};
+  #   open_action:
+  #     - if:
+  #         condition:
+  #           and:
+  #             - binary_sensor.is_on: gate_close_sensor
+  #         then:
+  #           - button.press: gate_open
+  #   close_action:
+  #     - if:
+  #         condition:
+  #           and:
+  #             - binary_sensor.is_on: gate_open_sensor
+  #         then:
+  #           - button.press: gate_open
+  #   optimistic: false
+  #   has_position: false
+
+  # - platform: feedback
+  #   name: "Gate"
+  #   device_class: gate
+  #   has_built_in_endstop: true
+  #   assumed_state: false
+  #   open_action:
+  #     - if:
+  #         condition:
+  #           and:
+  #             - binary_sensor.is_on: gate_close_sensor
+  #         then:
+  #           - button.press: gate_open
+  #   close_action:
+  #     - if:
+  #         condition:
+  #           and:
+  #             - binary_sensor.is_on: gate_open_sensor
+  #         then:
+  #           - button.press: gate_open
+  #   stop_action:
+  #     - if:
+  #         condition:
+  #           and:
+  #             - binary_sensor.is_off: gate_open_sensor
+  #             - binary_sensor.is_off: gate_close_sensor
+  #         then:
+  #           - button.press: gate_open
+
+  #   open_endstop: gate_open_sensor
+  #   close_endstop: gate_close_sensor
+  #   open_duration: 17s
+  #   close_duration: 20s
+  #   max_duration: 25s
+  #   direction_change_wait_time: 5s

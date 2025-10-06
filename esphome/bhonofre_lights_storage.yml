@@ -4,12 +4,22 @@ substitutions:
 
 esphome:
   name: ${devicename}
-  platform: ESP8266
+
+esp8266:
   board: nodemcu
+  restore_from_flash: true
+  framework:
+    version: recommended
 
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
+
+# Pins:
+# GPIO2
+# GPIO13
+# GPIO14
+# GPIO15
 
 binary_sensor:
   - platform: gpio
@@ -84,13 +94,13 @@ light:
   - id: light_1
     name: Storage Workbench LED
     platform: binary
-    output: relay_1
+    output: relay_2
     restore_mode: ALWAYS_OFF
 
   - id: light_2
     name: Storage Ceiling
     platform: binary
-    output: relay_2
+    output: relay_1
     restore_mode: ALWAYS_OFF
 # logger:
 #   level: DEBUG
