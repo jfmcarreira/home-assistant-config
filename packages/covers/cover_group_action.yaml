@@ -1,4 +1,31 @@
 script:
+  cover_group_action_all:
+    alias: Controlo Grupo de Estores
+    mode: single
+    fields:
+      action_to_run:
+        description: Service to run on the covers.
+        example: cover.open
+        required: true
+        selector:
+          text:
+    sequence:
+      - service: script.cover_group_action
+        data:
+          action_to_run: "{{ action_to_run }}"
+          control_switch: "group"
+          covers_list:
+            - living_room
+            - stairs
+            - bedroom_henrique
+            - bedroom_ricardo
+            - master_bedroom
+            - bathroom
+            - bedroom_rc
+            - laundry
+            - kitchen
+            - office
+
   cover_group_action:
     alias: Controlo Grupo de Estores
     mode: single
