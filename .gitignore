@@ -4,6 +4,7 @@
 secrets.yaml
 daikin.yaml
 home-assistant.log*
+home-assistant_v2.db
 www/community/**
 .DS_Store
 zigbee.db
@@ -21,3 +22,6 @@ auth_providers/trusted_networks.yaml
 additional_ca/**
 zha_quirks/__pycache__/**
 logs/**
+zigbee2mqtt/**
+.ha_run.lock
+
