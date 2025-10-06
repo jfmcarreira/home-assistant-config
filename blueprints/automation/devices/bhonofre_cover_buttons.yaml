@@ -235,4 +235,4 @@ actions:
           - condition: trigger
             id:
               - extra_long_bottom
-        sequence: !input single_bottom_action
+        sequence: !input long_bottom_action
