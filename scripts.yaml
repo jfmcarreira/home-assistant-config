@@ -7,24 +7,24 @@ routine_cover_rain_mode:
       action_to_run: script.cover_close_when_raining
       control_switch: close_in_rain
       covers_list:
-        - living_room
-        - stairs
-        - bedroom_henrique
-        - bedroom_ricardo
-        - master_bedroom
-        - bathroom
-        - bedroom_rc
-        - laundry
-        - kitchen
-        - office
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
 lights_arriving_home:
   alias: Routina de Chegar a Casa
   mode: restart
   sequence:
   - if:
     - condition: state
-      entity_id: binary_sensor.sun_bellow_horizont
-      state: 'on'
+      entity_id: binary_sensor.night
+      state: "on"
     then:
     - target:
         entity_id:
@@ -86,7 +86,7 @@ lights_control_gate_front_lights:
       for:
         hours: 0
         minutes: 0
-        seconds: 40
+        seconds: 10
       trigger: state
     timeout:
       hours: 1
@@ -180,20 +180,9 @@ routine_exit_house_to_work_bianca:
       entity_id: input_boolean.day_off_work
       state: 'off'
     - condition: state
-      entity_id: input_select.last_going_work
-      state: Bianca
+      entity_id: binary_sensor.joao_home
+      state: 'off'
     then:
-    - action: climate.turn_off
-      metadata: {}
-      data: {}
-      target:
-        entity_id:
-        - climate.living_room
-        - climate.office
-        - climate.hall
-        - climate.master_bedroom
-        - climate.bedroom_ricardo
-        - climate.bedroom_henrique
     - target:
         entity_id: script.routine_exit_house_all_off
       data: {}
@@ -239,19 +228,9 @@ routine_exit_house_to_work_joao:
       entity_id: input_boolean.day_off_work
       state: 'off'
     - condition: state
-      entity_id: input_select.last_going_work
-      state: João
+      entity_id: binary_sensor.bianca_home
+      state: 'off'
     then:
-    - action: climate.turn_off
-      metadata: {}
-      data: {}
-      target:
-        entity_id:
-        - climate.living_room
-        - climate.office
-        - climate.master_bedroom
-        - climate.bedroom_ricardo
-        - climate.bedroom_henrique
     - action: script.turn_on
       data: {}
       target:

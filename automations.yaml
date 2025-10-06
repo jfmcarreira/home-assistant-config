@@ -1,19 +1,26 @@
 - id: '1651441102640'
   alias: Desligar Tudo se a Casa Estiver Vazia
   description: ''
-  trigger:
-  - platform: time_pattern
-    minutes: /30
-  condition:
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  conditions:
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'off'
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
-  action:
-  - service: script.house_turn_all_off
-    data: {}
+  actions:
+  - data: {}
+    action: script.house_turn_all_off
   mode: single
 - id: '1652213927460'
   alias: Sincronizar Luzes do Hall
@@ -414,20 +421,24 @@
   use_blueprint:
     path: cameras/send-camera-snapshot-notification-on-motion.yaml
     input:
+      notification_title: Segurança - Camerara da Frente
       notify_joao: true
       camera: camera.front_camera
       motion_sensor: binary_sensor.front_camera_smart_detection
       notify_bianca: true
+      notification_tag: 1101
 - id: '1658676096110'
   alias: cctv notify backyard camera
   description: ''
   use_blueprint:
     path: cameras/send-camera-snapshot-notification-on-motion.yaml
     input:
+      notification_title: Segurança - Camerara das Traseiras
       notify_joao: true
       camera: camera.backyard
       motion_sensor: binary_sensor.backyard_camera_smart_detection
       notify_bianca: true
+      notification_tag: 1102
 - id: '1659187275200'
   alias: 'Desligar Luzes da Despensa com Temporizador '
   description: ''
@@ -516,6 +527,9 @@
   - condition: state
     entity_id: binary_sensor.house_guest
     state: 'off'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
   actions:
   - data:
       action_to_run: cover.close_cover
@@ -588,6 +602,9 @@
     state: 'off'
   - condition: state
     entity_id: binary_sensor.house_guest
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
     state: 'off'
   actions:
   - data:
@@ -690,7 +707,7 @@
       sequence:
       - data: {}
         target:
-          entity_id: light.master_bedroom_bed_wall
+          entity_id: light.master_bedroom_bed_window
         action: light.toggle
       alias: Left Short
     - conditions:
@@ -701,7 +718,7 @@
       sequence:
       - data: {}
         target:
-          entity_id: light.master_bedroom_bed_window
+          entity_id: light.master_bedroom_bed_wall
         action: light.toggle
       alias: Right Short
   mode: single
@@ -1026,32 +1043,32 @@
         entity_id: light.stairs_down
         state: 'off'
 - id: '1689453293699'
-  alias: Abrir Parcialmente Estores do Primeiro Andar
+  alias: Abrir Parcialmente Estores Noite do Primeiro Andar
   description: ''
-  trigger:
-  - platform: sun
-    event: sunset
+  triggers:
+  - event: sunset
     offset: 00:05:00
-  condition:
+    trigger: sun
+  conditions:
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'off'
-  action:
-  - service: cover.close_cover
-    data: {}
+  actions:
+  - data: {}
     target:
       entity_id:
       - cover.bedroom_ricardo
       - cover.master_bedroom
       - cover.bedroom_henrique
-  - service: cover.set_cover_position
-    data:
+    action: cover.close_cover
+  - data:
       position: 25
     target:
       entity_id:
       - cover.master_bedroom
       - cover.bedroom_ricardo
       - cover.bedroom_henrique
+    action: cover.set_cover_position
   mode: single
 - id: '1692141921133'
   alias: lights turn on with gate
@@ -1383,6 +1400,7 @@
   - data:
       title: Equipamentos
       message: A UPS está em modo de bateria à mais de 30 segundos
+      channel: Home
     action: notify.mobile_app_radium
   - if:
     - condition: state
@@ -1392,6 +1410,7 @@
     - data:
         title: Equipamentos
         message: A UPS está em modo de bateria à mais de 30 segundos
+        channel: Home
       action: notify.mobile_app_joaocarreira_macbook_pro
   mode: single
 - id: '1705326979364'
@@ -1618,29 +1637,6 @@
         - switch.lenovo_tablet_motion_detection
       action: switch.turn_on
   mode: queued
-- id: '1658542474586'
-  alias: FireTablet Turn Off Screen
-  description: ''
-  triggers:
-  - entity_id:
-    - binary_sensor.motion_sensor_living_room
-    - binary_sensor.motion_sensor_stairs
-    to: 'off'
-    for:
-      hours: 1
-    trigger: state
-  - entity_id:
-    - binary_sensor.notify_home
-    to: 'off'
-    trigger: state
-  conditions: []
-  actions:
-  - target:
-      entity_id:
-      - switch.lenovo_tablet_screen
-    action: switch.turn_off
-    data: {}
-  mode: single
 - id: '1708474653467'
   alias: Tablet Screen Timeout Living Room
   description: ''
@@ -1755,9 +1751,6 @@
   - condition: state
     entity_id: binary_sensor.workday
     state: 'on'
-  - condition: state
-    entity_id: input_boolean.extended_away_mode
-    state: 'off'
   actions:
   - data:
       action_to_run: cover.open_cover
@@ -1784,7 +1777,13 @@
     entity_id: weather.home
     attribute: precipitation_unit
     above: 70
-  condition: []
+  condition:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
   action:
   - service: script.cover_group_action
     data:
@@ -2183,6 +2182,9 @@
       hours: 0
       minutes: 5
       seconds: 0
+  - condition: state
+    entity_id: input_boolean.gate_automatic_open
+    state: 'on'
   actions:
   - target:
       entity_id: cover.gate
@@ -2463,6 +2465,10 @@
               title: Exterior
               message: Campainha accionada
               data:
+                channel: Segurança
+                priority: high
+                persistent: true
+                sticky: true
                 image: '{{ snapshot_access_file_path }}'
                 clickAction: entityId:camera.front_camera
             action: '{{ repeat.item.device }}'
@@ -2580,7 +2586,7 @@
     for:
       hours: 0
       minutes: 0
-      seconds: 30
+      seconds: 5
   - entity_id:
     - cover.gate
     from: closed
@@ -2599,7 +2605,7 @@
       message: '{{ trigger.to_state.attributes.friendly_name }} foi aberta!'
       title: Segurança
       data:
-        tag: '900'
+        tag: '1201'
         priority: high
         channel: Segurança
         clickAction: /lovelace-subviews/dashboard-house
@@ -2725,6 +2731,9 @@
       hours: 0
       minutes: 5
       seconds: 0
+  - condition: state
+    entity_id: input_boolean.gate_automatic_open
+    state: 'on'
   actions:
   - target:
       entity_id: cover.gate
@@ -3963,7 +3972,7 @@
       entity_id: media_player.ghm_master_bedroom
   mode: single
 - id: '1744465759830'
-  alias: gate_close_when_house_empty
+  alias: Fechar o Portão com a Casa Vazia
   description: ''
   triggers:
   - trigger: state
@@ -4409,3 +4418,143 @@
             - 1 }}'
         target:
           entity_id: climate.master_bedroom
+- id: '1755902487203'
+  alias: Abrir Parcialmente Estores Noite do R/C
+  description: ''
+  triggers:
+  - event: sunset
+    offset: 00:05:00
+    trigger: sun
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  actions:
+  - data: {}
+    action: cover.close_cover
+    target:
+      entity_id:
+      - cover.laundry
+      - cover.living_room
+  - data:
+      position: 30
+    action: cover.set_cover_position
+    target:
+      entity_id: cover.laundry
+  - data:
+      position: 25
+    action: cover.set_cover_position
+    target:
+      entity_id:
+      - cover.living_room
+  mode: single
+- id: '1756997660207'
+  alias: security_alert_door_open
+  description: ''
+  triggers:
+  - entity_id:
+    - binary_sensor.kitchen_door
+    - binary_sensor.front_door
+    to: open
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    trigger: state
+  - id: trigger_house_empty
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 15
+    trigger: state
+  conditions:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.kitchen_door
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.front_door
+      state: 'on'
+    alias: Se alguma das portas está aberta
+  actions:
+  - data:
+      title: Exterior
+      message: O Portão da Rua está Aberto
+      data:
+        tag: 301
+        priority: high
+        persistent: true
+        sticky: true
+        channel: Segurança
+        clickAction: /lovelace-subviews/dashboard-exterior
+        actions:
+        - action: gate_notification_action_keep_open
+          title: Deixar Aberto
+        - action: gate_notification_action_close
+          title: Fechar o Portao
+    action: notify.mobile_app_all
+  mode: restart
+- id: '1759091348299'
+  alias: rain_set_last_event
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.rain
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+  conditions: []
+  actions:
+  - action: input_datetime.set_datetime
+    metadata: {}
+    data:
+      timestamp: '{{ now().timestamp() }}'
+    target:
+      entity_id: input_datetime.last_rain
+  mode: single
+- id: '1759755648327'
+  alias: Alertar Portão em Movimento
+  description: ''
+  triggers:
+  - id: trigger_gate_open
+    entity_id:
+    - cover.gate
+    to: open
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    trigger: state
+  - id: trigger_gate_close
+    entity_id:
+    - cover.gate
+    to: close
+    trigger: state
+  conditions: []
+  actions:
+  - data:
+      message: clear_notification
+      data:
+        tag: 302
+        dismiss: true
+    action: notify.mobile_app_all
+  - action: notify.mobile_app_joao
+    data:
+      title: Exterior
+      message: O Portão da Rua está em Movimento à mais de 5 min
+      data:
+        tag: 302
+        priority: high
+        persistent: true
+        sticky: true
+        channel: Segurança
+        clickAction: /lovelace-subviews/dashboard-exterior
+  mode: restart
