@@ -4,13 +4,17 @@ substitutions:
 
 esphome:
   name: ${devicename}
-  platform: ESP8266
-  board: nodemcu
   # Reset sensor
   # on_boot:
   #  priority: -100.0
   #  then:
   #    - pzemac.reset_energy: pzemac_1
+
+esp8266:
+  board: nodemcu
+  restore_from_flash: true
+  framework:
+    version: recommended
 
 packages:
   esphome_base: !include packages/common.yml
