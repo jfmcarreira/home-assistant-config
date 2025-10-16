@@ -17,8 +17,12 @@ sensor:
     irq_pin: GPIO27 # Prevent overheating by setting this
     voltage:
       id: shelly_voltage
+      unit_of_measurement: V
+      accuracy_decimals: 1
     current_a:
       id: shelly_current_a
+      unit_of_measurement: A
+      accuracy_decimals: 3
     active_power_a:
       name: Light Power ${Light_1_Name}
       id: power_channel_a
