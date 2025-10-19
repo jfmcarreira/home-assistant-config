@@ -424,8 +424,10 @@
       notification_title: Segurança - Camerara da Frente
       notify_joao: true
       camera: camera.front_camera
-      motion_sensor: binary_sensor.front_camera_smart_detection
-      notify_bianca: true
+      motion_sensor:
+      - binary_sensor.front_camera_smart_detection
+      - binary_sensor.front_person_occupancy
+      notify_bianca: false
       notification_tag: 1101
 - id: '1658676096110'
   alias: cctv notify backyard camera
@@ -436,8 +438,10 @@
       notification_title: Segurança - Camerara das Traseiras
       notify_joao: true
       camera: camera.backyard
-      motion_sensor: binary_sensor.backyard_camera_smart_detection
-      notify_bianca: true
+      motion_sensor:
+      - binary_sensor.backyard_camera_smart_detection
+      - binary_sensor.backyard_person_occupancy
+      notify_bianca: false
       notification_tag: 1102
 - id: '1659187275200'
   alias: 'Desligar Luzes da Despensa com Temporizador '
@@ -3581,7 +3585,7 @@
               '
   mode: single
 - id: '1737152867015'
-  alias: security_open_kitchen_door_notify_mac_book
+  alias: Alertar MacBook Porta da Cozinha Aberta
   description: ''
   triggers:
   - trigger: state
@@ -3600,7 +3604,7 @@
       message: A Porta da Cozinha foi Aberta
   mode: single
 - id: '1737152931894'
-  alias: security_open_kitchen_door_notify_mac_book
+  alias: Alertar MacBook Porta da Frente Aberta
   description: ''
   triggers:
   - trigger: state
@@ -4527,7 +4531,16 @@
   - id: trigger_gate_open
     entity_id:
     - cover.gate
-    to: open
+    to: opening
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    trigger: state
+  - id: trigger_gate_open
+    entity_id:
+    - cover.gate
+    to: closing
     for:
       hours: 0
       minutes: 5
@@ -4558,3 +4571,41 @@
         channel: Segurança
         clickAction: /lovelace-subviews/dashboard-exterior
   mode: restart
+- id: '1760144253958'
+  alias: Alertar o MacBook Henrique a Chorar
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.baby_monitor_henrique_cough_sound
+    to: 'on'
+  conditions:
+  - condition: state
+    state: 'on'
+    entity_id: binary_sensor.joao_home
+  actions:
+  - action: notify.mobile_app_joao
+    metadata: {}
+    data:
+      title: Baby Monitor
+      message: O Henrique está a chorar
+  mode: single
+- id: '1760144554168'
+  alias: Alertar o MacBook Ricardo a Chorar
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.baby_monitor_ricardo_crying_sound
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.joao_home
+    state: 'on'
+  actions:
+  - action: notify.mobile_app_joao
+    metadata: {}
+    data:
+      title: Baby Monitor
+      message: O Ricardo está a chorar
+  mode: single

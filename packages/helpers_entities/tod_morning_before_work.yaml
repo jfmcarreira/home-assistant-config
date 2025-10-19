@@ -1,0 +1,8 @@
+template:
+  - binary_sensor:
+      - name: tod_morning_before_work
+        unique_id: tod_morning_before_work
+        state: >-
+          {% set t = now().time() %}
+          {% set is_time_to_work = t >= strptime('07:30', '%H:%M').time() and t <= strptime('10:00', '%H:%M').time() %}
+          {{ is_state('binary_sensor.workday', 'on') and is_time_to_work }}
