@@ -24,4 +24,5 @@ zha_quirks/__pycache__/**
 logs/**
 zigbee2mqtt/**
 .ha_run.lock
+**/__pycache__/
 
