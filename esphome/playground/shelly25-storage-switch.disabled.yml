@@ -1,0 +1,75 @@
+substitutions:
+  devicename: shelly25-storage-switch
+
+packages:
+  esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+  home_state: !include packages/home_state.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
+    vars:
+      name: Shelly 25 Storage Switches
+
+switch:
+  - platform: output
+    name: "Pool Pump"
+    output: relay_2
+    restore_mode: RESTORE_DEFAULT_OFF
+
+sensor:
+  - platform: ade7953_i2c
+    update_interval: 5s
+    # Prevent overheating by setting this
+    irq_pin: GPIO16
+    voltage:
+      id: shelly_voltage
+    current_a:
+      id: shelly_current_B
+    current_b:
+      id: shelly_current_A
+    active_power_a:
+      id: power_usage_output_1
+      # active_power_a is normal, so don't multiply by -1
+      filters:
+        - lambda: >
+            if (x < 0.0) return 0.0;
+            return x;
+      on_value_range:
+        - above: 2000.0
+          then:
+            - output.turn_off: relay_1
+            - output.turn_off: relay_2
+            - homeassistant.service:
+                service: persistent_notification.create
+                data:
+                  title: Message from Shelly 2.5
+                data_template:
+                  message: Switch turned off because max power was exceeded
+    active_power_b:
+      name: Device Power Pool Pump
+      id: power_usage_output_2
+      # active_power_b is inverted, so take the absolute value
+      filters:
+        - multiply: -1
+        - lambda: >
+            if (x < 0.0) return 0.0;
+            return x;
+      on_value_range:
+        - above: 2000.0
+          then:
+            - output.turn_off: relay_1
+            - output.turn_off: relay_2
+            - homeassistant.service:
+                service: persistent_notification.create
+                data:
+                  title: Message from Shelly 2.5
+                data_template:
+                  message: Switch turned off because power exceeded max power
+
+  - platform: total_daily_energy
+    name: device_daily_energy_pool_pump
+    power_id: power_usage_output_2
+    unit_of_measurement: Wh
+    state_class: total_increasing
+    device_class: energy
