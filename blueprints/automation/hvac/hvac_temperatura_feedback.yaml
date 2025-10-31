@@ -70,7 +70,7 @@ condition:
 
   - condition: template
     value_template: >
-      {{ now().timestamp() - this.attributes.last_triggered | as_timestamp > 60 * 10 }}
+      {{ now().timestamp() - (this.attributes.last_triggered | as_timestamp | int(0)) > 60 * 10 }}
 
   - condition: template
     value_template: >

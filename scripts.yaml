@@ -1,3 +1,153 @@
+hvac_turn_on_bedroom_ricardo:
+  alias: hvac_turn_on_bedroom_ricardo
+  mode: single
+  sequence:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.hot_months
+      state: 'true'
+    then:
+    - condition: numeric_state
+      entity_id: sensor.temperature_bedroom_ricardo
+      above: 24
+    - action: climate.set_hvac_mode
+      metadata: {}
+      data:
+        hvac_mode: cool
+      target:
+        entity_id: climate.bedroom_ricardo
+    - action: climate.set_temperature
+      metadata: {}
+      data:
+        temperature: 25
+      target:
+        entity_id: climate.bedroom_ricardo
+    else:
+    - condition: numeric_state
+      entity_id: sensor.temperature_bedroom_ricardo
+      below: 22
+    - action: climate.set_hvac_mode
+      metadata: {}
+      data:
+        hvac_mode: heat
+      target:
+        entity_id: climate.bedroom_ricardo
+    - action: climate.set_temperature
+      metadata: {}
+      data:
+        temperature: 22
+      target:
+        entity_id: climate.bedroom_ricardo
+  - action: climate.set_swing_mode
+    metadata: {}
+    data:
+      swing_mode: vertical
+    target:
+      entity_id: climate.bedroom_ricardo
+  - action: climate.set_temperature
+    metadata: {}
+    data:
+      temperature: 22
+    target:
+      entity_id: climate.bedroom_ricardo
+hvac_turn_on_bedroom_henrique:
+  alias: hvac_turn_on_bedroom_henrique
+  mode: single
+  sequence:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.hot_months
+      state: 'true'
+    then:
+    - condition: numeric_state
+      entity_id: sensor.temperature_bedroom_henrique
+      above: 24
+    - action: climate.set_hvac_mode
+      metadata: {}
+      data:
+        hvac_mode: cool
+      target:
+        entity_id: climate.bedroom_henrique
+    - action: climate.set_temperature
+      metadata: {}
+      data:
+        temperature: 25
+      target:
+        entity_id: climate.bedroom_henrique
+    else:
+    - condition: numeric_state
+      entity_id: sensor.temperature_bedroom_henrique
+      below: 22
+    - action: climate.set_hvac_mode
+      metadata: {}
+      data:
+        hvac_mode: heat
+      target:
+        entity_id: climate.bedroom_henrique
+    - action: climate.set_temperature
+      metadata: {}
+      data:
+        temperature: 22
+      target:
+        entity_id: climate.bedroom_henrique
+  - action: climate.set_swing_mode
+    metadata: {}
+    data:
+      swing_mode: vertical
+    target:
+      entity_id: climate.bedroom_henrique
+  - action: climate.set_temperature
+    metadata: {}
+    data:
+      temperature: 22
+    target:
+      entity_id: climate.bedroom_henrique
+hvac_turn_on_master_bedroom:
+  alias: hvac_turn_on_master_bedroom
+  mode: single
+  sequence:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.hot_months
+      state: 'true'
+    then:
+    - condition: numeric_state
+      entity_id: sensor.temperature_master_bedroom
+      above: 24
+    - action: climate.set_hvac_mode
+      metadata: {}
+      data:
+        hvac_mode: cool
+      target:
+        entity_id: climate.master_bedroom
+    - action: climate.set_temperature
+      metadata: {}
+      data:
+        temperature: 25
+      target:
+        entity_id: climate.master_bedroom
+    else:
+    - condition: numeric_state
+      entity_id: sensor.temperature_master_bedroom
+      below: 22
+    - action: climate.set_hvac_mode
+      metadata: {}
+      data:
+        hvac_mode: heat
+      target:
+        entity_id: climate.master_bedroom
+    - action: climate.set_temperature
+      metadata: {}
+      data:
+        temperature: 22
+      target:
+        entity_id: climate.master_bedroom
+  - action: climate.set_swing_mode
+    metadata: {}
+    data:
+      swing_mode: vertical
+    target:
+      entity_id: climate.master_bedroom
 routine_cover_rain_mode:
   alias: Routina Modo de Chuva
   mode: single
@@ -24,7 +174,7 @@ lights_arriving_home:
   - if:
     - condition: state
       entity_id: binary_sensor.night
-      state: "on"
+      state: 'on'
     then:
     - target:
         entity_id:
@@ -106,70 +256,73 @@ gate_notify_door_bell_snapshot:
     snapshot_create_file_path: /config/www/camera/snapshot_front_door.jpg
     snapshot_access_file_path: '{{ snapshot_create_file_path | replace(''/config/www'',''/local'')}}'
   sequence:
-  - service: camera.snapshot
-    entity_id: camera.front_camera
+  - action: camera.snapshot
+    entity_id: camera.front
     data:
       filename: '{{ snapshot_create_file_path }}'
-  - service: notify.mobile_app_radium
-    metadata: {}
-    data:
-      title: Exterior
-      message: Campainha accionada
-      data:
-        image: '{{ snapshot_access_file_path }}'
-        clickAction: entityId:camera.front_camera
-  - service: notify.mobile_app_calcium
-    metadata: {}
-    data:
-      title: Exterior
-      message: Campainha accionada
-      data:
-        image: '{{ snapshot_access_file_path }}'
-        clickAction: entityId:camera.front_camera
+  - repeat:
+      for_each:
+      - person: person.joao_carreira
+        device: notify.mobile_app_radium
+      - person: person.bianca_pires
+        device: notify.mobile_app_calcium
+      sequence:
+      - metadata: {}
+        data:
+          title: Exterior
+          message: Campainha accionada
+          data:
+            channel: Segurança
+            priority: high
+            persistent: true
+            sticky: true
+            image: '{{ snapshot_access_file_path }}'
+            clickAction: entityId:camera.front
+        action: '{{ repeat.item.device }}'
 gate_display_front_camere_tablet:
   alias: Campainha - Mostrar Camera da Frente Tablet
   mode: single
   sequence:
-  - service: browser_mod.more_info
-    target: {}
+  - target: {}
     data:
-      entity: camera.front_camera
+      entity: camera.front
       large: true
       ignore_popup_card: true
       browser_id:
-      - fire-tablet
+      - browser_mod_d95bc50a_a72ebf8b
+    action: browser_mod.more_info
   - wait_for_trigger:
-    - platform: state
-      entity_id:
+    - entity_id:
       - binary_sensor.kitchen_door
       - binary_sensor.front_door
       from:
       to: 'on'
-    - platform: state
-      entity_id:
+      trigger: state
+    - entity_id:
       - lock.gate_door
       from:
       to: unlocked
-    - platform: state
-      entity_id:
+      trigger: state
+    - entity_id:
       - cover.gate
       from: closed
       to: opening
-    - platform: state
-      entity_id:
+      trigger: state
+    - entity_id:
       - cover.gate
       from:
       to: open
+      trigger: state
     timeout:
       hours: 0
       minutes: 5
       seconds: 0
       milliseconds: 0
-  - service: browser_mod.close_popup
-    metadata: {}
+  - action: browser_mod.more_info
+    target: {}
     data:
       browser_id:
-      - fire-tablet
+      - browser_mod_d95bc50a_a72ebf8b
 routine_exit_house_to_work_bianca:
   alias: Routina ir Trabalhar - Bianca
   mode: single
@@ -616,3 +769,39 @@ routine_night_mode:
   alias: Routina Modo Noite
   description: ''
   fields: {}
+assistant_light_toggle:
+  sequence:
+  - action: assist_satellite.ask_question
+    metadata: {}
+    data:
+      question: Queres ligar a luz?
+      preannounce: true
+      entity_id: assist_satellite.home_assistant_voice_097232_satelite_do_assist
+      answers:
+      - id: sim
+        sentences:
+        - Sim
+      - id: nao
+        sentences:
+        - Não
+    response_variable: response
+  - if:
+    - condition: template
+      value_template: '{{ response.id == "sim" }}'
+    then:
+    - action: light.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.office
+  - if:
+    - condition: template
+      value_template: '{{ response.id == "nao" }}'
+    then:
+    - action: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.office
+  alias: assistant_light_toggle
+  description: ''

@@ -423,7 +423,7 @@
     input:
       notification_title: Segurança - Camerara da Frente
       notify_joao: true
-      camera: camera.front_camera
+      camera: camera.front
       motion_sensor:
       - binary_sensor.front_camera_smart_detection
       - binary_sensor.front_person_occupancy
@@ -1748,10 +1748,8 @@
     attribute: elevation
     above: '0'
   - condition: template
-    value_template: '{{ ( ( (now() | as_timestamp) - ((this.attributes.last_triggered
-      | int(0)) | as_timestamp) ) / 60 / 60 ) > 18 }}
-
-      '
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
+      | int(0)) > 60 * 60 *18 }}'
   - condition: state
     entity_id: binary_sensor.workday
     state: 'on'
@@ -2004,8 +2002,8 @@
     for:
       minutes: 10
   - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | int(0))
-      | as_timestamp > 60 * 60 * 12 }}'
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
+      | int(0)) > 60 * 60 * 12 }}'
   - condition: numeric_state
     entity_id: sensor.temperature_water_heater_top
     below: 60
@@ -2448,39 +2446,13 @@
     trigger: state
   conditions: []
   actions:
-  - variables:
-      snapshot_create_file_path: /config/www/camera/snapshot_front_door.jpg
-      snapshot_access_file_path: '{{ snapshot_create_file_path | replace(''/config/www'',''/local'')}}'
   - parallel:
-    - sequence:
-      - entity_id: camera.front_camera
-        data:
-          filename: '{{ snapshot_create_file_path }}'
-        action: camera.snapshot
-      - repeat:
-          for_each:
-          - person: person.joao_carreira
-            device: notify.mobile_app_radium
-          - person: person.bianca_pires
-            device: notify.mobile_app_calcium
-          sequence:
-          - metadata: {}
-            data:
-              title: Exterior
-              message: Campainha accionada
-              data:
-                channel: Segurança
-                priority: high
-                persistent: true
-                sticky: true
-                image: '{{ snapshot_access_file_path }}'
-                clickAction: entityId:camera.front_camera
-            action: '{{ repeat.item.device }}'
-    - action: camera.snapshot
-      entity_id: camera.front_camera
-      data:
-        filename: /media/Campainha/{{now().year}}-{{"%02d" | format(now().month)}}-{{"%02d"
-          | format(now().day)}}_{{"%02d" | format(now().hour)}}h{{"%02d" | format(now().minute)}}.jpg
+    - action: script.turn_on
+      target:
+        entity_id: script.gate_display_front_camera_tablet
+    - action: script.turn_on
+      target:
+        entity_id: script.gate_notify_door_bell_snapshot
     - if:
       - condition: state
         entity_id: binary_sensor.notify_home
@@ -2526,17 +2498,18 @@
           - media_player.ghm_hall
           - media_player.ghm_kitchen
         data:
-          media_content_id: media-source://media_source/local/door_bell.wav
-          media_content_type: audio/x-wav
-        metadata:
-          title: Door Bell
-          thumbnail:
-          media_class: music
-          children_media_class:
-          navigateIds:
-          - {}
-          - media_content_type: app
-            media_content_id: media-source://media_source
+          media:
+            media_content_id: media-source://media_source/local/door_bell.wav
+            media_content_type: audio/x-wav
+            metadata:
+              title: Door Bell
+              thumbnail:
+              media_class: music
+              children_media_class:
+              navigateIds:
+              - {}
+              - media_content_type: app
+                media_content_id: media-source://media_source
         action: media_player.play_media
       - if:
         - condition: time
@@ -2564,18 +2537,24 @@
             entity_id:
             - media_player.ghm_hall
           data:
-            media_content_id: media-source://media_source/local/door_bell.wav
-            media_content_type: audio/x-wav
-          metadata:
-            title: Door Bell
-            thumbnail:
-            media_class: music
-            children_media_class:
-            navigateIds:
-            - {}
-            - media_content_type: app
-              media_content_id: media-source://media_source
+            media:
+              media_content_id: media-source://media_source/local/door_bell.wav
+              media_content_type: audio/x-wav
+              metadata:
+                title: Door Bell
+                thumbnail:
+                media_class: music
+                children_media_class:
+                navigateIds:
+                - {}
+                - media_content_type: app
+                  media_content_id: media-source://media_source
           action: media_player.play_media
+    - action: camera.snapshot
+      entity_id: camera.front
+      data:
+        filename: /media/Campainha/{{now().year}}-{{"%02d" | format(now().month)}}-{{"%02d"
+          | format(now().day)}}_{{"%02d" | format(now().hour)}}h{{"%02d" | format(now().minute)}}.jpg
   mode: single
 - id: '1717504841456'
   alias: 'Notificar Abertura Portão/Portas '
@@ -3338,53 +3317,11 @@
       - condition: state
         entity_id: binary_sensor.house_guest
         state: 'off'
-      - if:
-        - condition: not
-          conditions:
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_ricardo
-            below: 20
-        - condition: or
-          conditions:
-          - condition: state
-            entity_id: sensor.season
-            state: summer
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_ricardo
-            above: 24
-        then:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: cool
-          target:
-            entity_id: climate.bedroom_ricardo
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 25
-          target:
-            entity_id: climate.bedroom_ricardo
-        else:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: heat
-          target:
-            entity_id: climate.bedroom_ricardo
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 22
-          target:
-            entity_id: climate.bedroom_ricardo
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.bedroom_ricardo
+      - action: script.hvac_turn_on_bedroom_ricardo
       main_double_bottom_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.turn_off
         metadata: {}
         data: {}
@@ -3402,55 +3339,7 @@
         target:
           entity_id: light.bedroom_ricardo_lamp
       double_top_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - if:
-        - condition: not
-          conditions:
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_ricardo
-            below: 20
-        - condition: or
-          conditions:
-          - condition: state
-            entity_id: sensor.season
-            state: summer
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_ricardo
-            above: 24
-        then:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: cool
-          target:
-            entity_id: climate.bedroom_ricardo
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 25
-          target:
-            entity_id: climate.bedroom_ricardo
-        else:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: heat
-          target:
-            entity_id: climate.bedroom_ricardo
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 22
-          target:
-            entity_id: climate.bedroom_ricardo
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.bedroom_ricardo
+      - action: script.hvac_turn_on_bedroom_ricardo
       double_bottom_action:
       - action: climate.turn_off
         metadata: {}
@@ -3770,59 +3659,11 @@
       - condition: state
         entity_id: binary_sensor.house_guest
         state: 'off'
-      - if:
-        - condition: not
-          conditions:
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_henrique
-            below: 20
-        - condition: or
-          conditions:
-          - condition: state
-            entity_id: sensor.season
-            state: summer
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_henrique
-            above: 24
-        then:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: cool
-          target:
-            entity_id: climate.bedroom_henrique
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 25
-          target:
-            entity_id: climate.bedroom_henrique
-        else:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: heat
-          target:
-            entity_id: climate.bedroom_henrique
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 22
-          target:
-            entity_id: climate.bedroom_henrique
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.bedroom_henrique
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: 22
-        target:
-          entity_id: climate.bedroom_henrique
+      - action: script.hvac_turn_on_bedroom_henrique
       main_double_bottom_action:
+      - condition: state
+        entity_id: binary_sensor.house_guest
+        state: 'off'
       - action: climate.turn_off
         metadata: {}
         data: {}
@@ -3831,61 +3672,7 @@
       single_top_action: []
       single_bottom_action: []
       double_top_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - if:
-        - condition: not
-          conditions:
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_henrique
-            below: 20
-        - condition: or
-          conditions:
-          - condition: state
-            entity_id: sensor.season
-            state: summer
-          - condition: numeric_state
-            entity_id: sensor.temperature_bedroom_henrique
-            above: 24
-        then:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: cool
-          target:
-            entity_id: climate.bedroom_henrique
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 25
-          target:
-            entity_id: climate.bedroom_henrique
-        else:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: heat
-          target:
-            entity_id: climate.bedroom_henrique
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 22
-          target:
-            entity_id: climate.bedroom_henrique
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.bedroom_henrique
-      - action: climate.set_temperature
-        metadata: {}
-        data:
-          temperature: 22
-        target:
-          entity_id: climate.bedroom_henrique
+      - action: script.hvac_turn_on_bedroom_henrique
       double_bottom_action:
       - action: climate.turn_off
         metadata: {}
@@ -4344,56 +4131,13 @@
         data: {}
         target:
           entity_id: light.master_bedroom_bed_wall
-      double_top_action:
+      main_double_top_action:
       - condition: state
         entity_id: binary_sensor.house_guest
         state: 'off'
-      - if:
-        - condition: not
-          conditions:
-          - condition: numeric_state
-            entity_id: sensor.temperature_master_bedroom
-            below: 20
-        - condition: or
-          conditions:
-          - condition: state
-            entity_id: sensor.season
-            state: summer
-          - condition: numeric_state
-            entity_id: sensor.temperature_master_bedroom
-            above: 24
-        then:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: cool
-          target:
-            entity_id: climate.master_bedroom
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 25
-          target:
-            entity_id: climate.master_bedroom
-        else:
-        - action: climate.set_hvac_mode
-          metadata: {}
-          data:
-            hvac_mode: heat
-          target:
-            entity_id: climate.master_bedroom
-        - action: climate.set_temperature
-          metadata: {}
-          data:
-            temperature: 22
-          target:
-            entity_id: climate.master_bedroom
-      - action: climate.set_swing_mode
-        metadata: {}
-        data:
-          swing_mode: vertical
-        target:
-          entity_id: climate.master_bedroom
+      - action: script.hvac_turn_on_master_bedroom
+      double_top_action:
+      - action: script.hvac_turn_on_master_bedroom
       double_bottom_action:
       - action: climate.turn_off
         metadata: {}
