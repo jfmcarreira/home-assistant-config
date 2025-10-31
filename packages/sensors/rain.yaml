@@ -1,0 +1,15 @@
+template:
+  - binary_sensor:
+      - name: rain
+        unique_id: rain
+        delay_off:
+          minutes: 15
+        state: >-
+          {{ is_state('sensor.rain', 'raining') }}
+        icon: >-
+          {% if is_state('binary_sensor.rain', 'on' )  %}
+            mdi:water
+          {% else %}
+            mdi:water-off
+          {% endif %}
+
