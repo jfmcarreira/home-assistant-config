@@ -30,7 +30,7 @@ def main(args):
     if args.date is not None:
         dt = datetime.datetime.strptime(args.date, "%Y-%m-%d %H:%M:%S")
     if args.use_date_time:
-      formatted_date = dt.strftime("%Y-%m-%d %H:%M")
+      formatted_date = dt.strftime("%Y-%m-%d %H:%M:%S")
       date_type = "DATETIME"
     else:
       formatted_date = dt.strftime("%Y-%m-%d")
