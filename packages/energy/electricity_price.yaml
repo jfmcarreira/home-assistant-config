@@ -24,5 +24,5 @@ template:
           CGS: "{{ 7 }}"
           Perdas: "{{ 0.1604 }}"
           k: "{{ 3.5 }}"
-          TAR: "{{ 36.5 if now().date().isoformat() < '2024-06-01' else 62.50 }}"
+          TAR: "{{ 60.0 }}"
           FTS: "{{ 0 if now().date().isoformat() < '2024-06-20' else 2.893 }}"
