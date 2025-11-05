@@ -51,6 +51,7 @@ blueprint:
       default: 20
       selector:
         number:
+          step: 0.5
           min: 18
           max: 26
 
