@@ -12,5 +12,5 @@
   "yaml.customTags": [
     "!input"
   ],
-  "editor.formatOnSave": true
+  "editor.formatOnSave": false
 }
