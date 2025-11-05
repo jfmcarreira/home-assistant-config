@@ -1,5 +1,5 @@
-- id: '1651441102640'
-  alias: Desligar Tudo se a Casa Estiver Vazia
+- alias: Desligar Tudo se a Casa Estiver Vazia
+  id: '1651441102640'
   description: ''
   triggers:
   - trigger: state
@@ -22,8 +22,8 @@
   - data: {}
     action: script.house_turn_all_off
   mode: single
-- id: '1652213927460'
-  alias: Sincronizar Luzes do Hall
+- alias: Sincronizar Luzes do Hall
+  id: '1652213927460'
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -34,8 +34,8 @@
       sync_on: false
       sync_off: true
       sync_off_from_slave: true
-- id: '1653347146334'
-  alias: Controlo da Luz da Despensa com a Porta
+- alias: Controlo da Luz da Despensa com a Porta
+  id: '1653347146334'
   description: ''
   trigger:
   - platform: state
@@ -59,8 +59,8 @@
       target:
         entity_id: light.kitchen_pantry
   mode: single
-- id: '1653354558079'
-  alias: Lights Turn On Exterior With Kitchen Door
+- alias: Lights Turn On Exterior With Kitchen Door
+  id: '1653354558079'
   description: ''
   trigger:
   - platform: state
@@ -107,8 +107,8 @@
       entity_id:
       - light.exterior_wall_back
   mode: single
-- id: '1653947527310'
-  alias: Lights Turn On Kitchen Light
+- alias: Lights Turn On Kitchen Light
+  id: '1653947527310'
   description: ''
   trigger:
   - platform: state
@@ -127,8 +127,8 @@
     target:
       entity_id: light.kitchen_led
   mode: single
-- id: '1655079401495'
-  alias: Tarefa Máquina de Lavar Roupa
+- alias: Tarefa Máquina de Lavar Roupa
+  id: '1655079401495'
   description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
@@ -145,8 +145,8 @@
       notification_action: Roupa Retirada
       android_task_id: 20
       notification_action_id: washing_machine_clothes_off
-- id: '1655462775855'
-  alias: Tarefa do Filtro da Água
+- alias: Tarefa do Filtro da Água
+  id: '1655462775855'
   description: ''
   use_blueprint:
     path: tasks/tracked_tasks.yaml
@@ -160,8 +160,8 @@
       notification_action: Filtro Substituido
       android_task_id: 30
       notification_action_id: water_filter_replaced
-- id: '1655496730769'
-  alias: Tarefa da Máquina de Secar
+- alias: Tarefa da Máquina de Secar
+  id: '1655496730769'
   description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
@@ -178,49 +178,8 @@
       android_task_id: 21
       notification_action_id: dryer_machine_clothes_off
       task_done_door_time: 0
-- id: '1655769049761'
-  alias: Bathroom Master Bedroom Bathroom Fan Control
-  description: ''
-  use_blueprint:
-    path: nest/bathroom_fan.yaml
-    input:
-      bathroom_light: light.master_bedroom_bathroom
-      extractor_fan: fan.bathroom_master_bedroom
-      humidity_sensor: sensor.humidity_master_bedroom_bathroom
-      average_humidity: sensor.humidity_master_bedroom_bathroom_average
-      max_time_fan_on: 20
-      humidity_threshold: 10
-      automatic_turn_on: true
-- id: '1655769658775'
-  alias: Bathroom Main Bathroom Fan Control
-  description: ''
-  use_blueprint:
-    path: nest/bathroom_fan.yaml
-    input:
-      bathroom_light: light.main_bathroom
-      extractor_fan: fan.main_bathroom
-      humidity_sensor: sensor.humidity_main_bathroom
-      average_humidity: sensor.humidity_main_bathroom_average
-      max_time_fan_on: 15
-      humidity_threshold: 10
-      automatic_turn_on: false
-      time_to_auto_fan_on: 2
-- id: '1656144735044'
-  alias: Bathroom RC Fan Control
-  description: ''
-  use_blueprint:
-    path: nest/bathroom_fan.yaml
-    input:
-      bathroom_light: light.bathroom_rc
-      extractor_fan: fan.bathroom_rc
-      humidity_sensor: sensor.humidity_bathroom_rc
-      average_humidity: sensor.humidity_bathroom_rc_average
-      max_time_fan_on: 5
-      humidity_threshold: 10
-      automatic_turn_on: false
-      time_to_auto_fan_on: 5
-- id: '1656374052136'
-  alias: Sincronizar Luzes da Cozinha
+- alias: Sincronizar Luzes da Cozinha
+  id: '1656374052136'
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -231,8 +190,8 @@
       sync_on: false
       sync_off: true
       sync_off_from_slave: true
-- id: '1657064426365'
-  alias: Controlar Luz da Sala Day/Night
+- alias: Controlar Luz da Sala Day/Night
+  id: '1657064426365'
   description: ''
   trigger:
   - platform: state
@@ -258,8 +217,8 @@
         entity_id: scene.lights_living_room_day
       metadata: {}
   mode: single
-- id: '1657408193240'
-  alias: Luzes por Mov. nas Escadas
+- alias: Luzes por Mov. nas Escadas
+  id: '1657408193240'
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -276,8 +235,8 @@
       room_name: Stairs
       disable_in_sleep: true
       presence_sensor: none
-- id: '1657981029516'
-  alias: Activar Rotina de Chegar a Casa
+- alias: Activar Rotina de Chegar a Casa
+  id: '1657981029516'
   description: ''
   triggers:
   - id: joao_trigger
@@ -334,8 +293,8 @@
   - data: {}
     action: script.lights_arriving_home
   mode: restart
-- id: '1658004941042'
-  alias: Controlar Luz da Cozinha Day/Night
+- alias: Controlar Luz da Cozinha Day/Night
+  id: '1658004941042'
   description: ''
   trigger:
   - platform: state
@@ -361,8 +320,8 @@
         entity_id: scene.lights_kitchen_day
       metadata: {}
   mode: single
-- id: '1658177571375'
-  alias: Tarefa da Máquina de Lavar a Loiça
+- alias: Tarefa da Máquina de Lavar a Loiça
+  id: '1658177571375'
   description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
@@ -379,8 +338,8 @@
       notification_action: Loiça Retirada
       notification_action_id: task_dish_wash_empty
       task_done_door_time: 2
-- id: '1658672750916'
-  alias: cctv control push notifications
+- alias: cctv control push notifications
+  id: '1658672750916'
   description: ''
   trigger:
   - platform: state
@@ -415,8 +374,8 @@
         - switch.backyard_camera_push_notifications
         - switch.front_camera_push_notifications
   mode: single
-- id: '1658675704141'
-  alias: cctv notify front camera
+- alias: cctv notify front camera
+  id: '1658675704141'
   description: ''
   use_blueprint:
     path: cameras/send-camera-snapshot-notification-on-motion.yaml
@@ -429,8 +388,8 @@
       - binary_sensor.front_person_occupancy
       notify_bianca: false
       notification_tag: 1101
-- id: '1658676096110'
-  alias: cctv notify backyard camera
+- alias: cctv notify backyard camera
+  id: '1658676096110'
   description: ''
   use_blueprint:
     path: cameras/send-camera-snapshot-notification-on-motion.yaml
@@ -443,8 +402,8 @@
       - binary_sensor.backyard_person_occupancy
       notify_bianca: false
       notification_tag: 1102
-- id: '1659187275200'
-  alias: 'Desligar Luzes da Despensa com Temporizador '
+- alias: 'Desligar Luzes da Despensa com Temporizador '
+  id: '1659187275200'
   description: ''
   triggers:
   - type: turned_on
@@ -470,8 +429,8 @@
     entity_id: light.kitchen_pantry
     domain: light
   mode: single
-- id: '1661088354800'
-  alias: Fechar Estores Fachada Poente
+- alias: Fechar Estores Fachada Poente
+  id: '1661088354800'
   description: ''
   triggers:
   - entity_id:
@@ -543,8 +502,8 @@
       - kitchen
     action: script.cover_group_action
   mode: single
-- id: '1661120403152'
-  alias: Abrir Estores da Suite Fim de Semana
+- alias: Abrir Estores da Suite Fim de Semana
+  id: '1661120403152'
   description: ''
   trigger:
   - platform: time_pattern
@@ -566,8 +525,8 @@
     target:
       entity_id: cover.master_bedroom
   mode: single
-- id: '1661196402455'
-  alias: Fechar Estores Fachada Sul
+- alias: Fechar Estores Fachada Sul
+  id: '1661196402455'
   description: ''
   triggers:
   - hours: '10'
@@ -620,8 +579,8 @@
       - laundry
     action: script.cover_group_action
   mode: single
-- id: '1661643560066'
-  alias: Luzes por Mov. no Escritório
+- alias: Luzes por Mov. no Escritório
+  id: '1661643560066'
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -640,8 +599,8 @@
       presence_sensor: none
       no_motion_wait: 10
       disable_switch_button: button.shelly25_lights_office_auto_on
-- id: '1665241197738'
-  alias: Trigger Botões da Cama da Suite
+- alias: Trigger Botões da Cama da Suite
+  id: '1665241197738'
   description: ''
   triggers:
   - device_id: 0917b5ae15c6e0fb6aa33f8f6a9fc492
@@ -726,8 +685,8 @@
         action: light.toggle
       alias: Right Short
   mode: single
-- id: '1668971106955'
-  alias: Desligar Coluna do Hall com as Luzes
+- alias: Desligar Coluna do Hall com as Luzes
+  id: '1668971106955'
   description: ''
   triggers:
   - entity_id:
@@ -774,8 +733,8 @@
     data: {}
     entity_id: light.xmas_tree
   mode: restart
-- id: '1669853123196'
-  alias: Luzes por Mov. na Cozinha
+- alias: Luzes por Mov. na Cozinha
+  id: '1669853123196'
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -793,8 +752,8 @@
       disable_in_sleep: true
       presence_sensor: none
       no_motion_wait: 10
-- id: '1669853572469'
-  alias: Termoventilador - Desligar Automáticamente
+- alias: Termoventilador - Desligar Automáticamente
+  id: '1669853572469'
   description: ''
   trigger:
   - platform: state
@@ -851,8 +810,8 @@
     target:
       entity_id: switch.portable_heater
   mode: single
-- id: '1669853950698'
-  alias: device_toggle_portable_heater_bathroom_main_light_switch
+- alias: device_toggle_portable_heater_bathroom_main_light_switch
+  id: '1669853950698'
   description: ''
   trigger:
   - platform: event
@@ -879,8 +838,8 @@
       target:
         entity_id: climate.portable_heater
   mode: single
-- id: '1670373784711'
-  alias: Xmas Lights Outside
+- alias: Xmas Lights Outside
+  id: '1670373784711'
   description: ''
   trigger:
   - platform: template
@@ -893,8 +852,8 @@
     before: '23:30'
   action: []
   mode: restart
-- id: '1670674527026'
-  alias: Desligar Luzes das Escadas com a Luminosidade
+- alias: Desligar Luzes das Escadas com a Luminosidade
+  id: '1670674527026'
   description: ''
   triggers:
   - entity_id: sensor.light_stairs
@@ -929,8 +888,8 @@
       - light.stairs_group
     action: light.turn_off
   mode: single
-- id: '1673206351942'
-  alias: cctv_control_recording
+- alias: cctv_control_recording
+  id: '1673206351942'
   description: ''
   trigger:
   - platform: state
@@ -970,8 +929,8 @@
         - switch.front_camera_record
         - switch.backyard_camera_record
   mode: single
-- id: '1675112824745'
-  alias: Deshumidificador - Desligar Automáticamente
+- alias: Deshumidificador - Desligar Automáticamente
+  id: '1675112824745'
   description: ''
   triggers:
   - entity_id:
@@ -997,8 +956,8 @@
       entity_id: switch.dehumidifier
     action: switch.turn_off
   mode: single
-- id: '1678915034155'
-  alias: Deshumidificador - Ligar Automáticamente Manhã
+- alias: Deshumidificador - Ligar Automáticamente Manhã
+  id: '1678915034155'
   description: ''
   triggers:
   - at: 07:15:00
@@ -1013,8 +972,8 @@
       entity_id: humidifier.portable_dehumidifier
     action: humidifier.turn_on
   mode: single
-- id: '1683763190674'
-  alias: Luzes por Mov. na Sala
+- alias: Luzes por Mov. na Sala
+  id: '1683763190674'
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -1046,8 +1005,8 @@
       - condition: state
         entity_id: light.stairs_down
         state: 'off'
-- id: '1689453293699'
-  alias: Abrir Parcialmente Estores Noite do Primeiro Andar
+- alias: Abrir Parcialmente Estores Noite do Primeiro Andar
+  id: '1689453293699'
   description: ''
   triggers:
   - event: sunset
@@ -1074,8 +1033,8 @@
       - cover.bedroom_henrique
     action: cover.set_cover_position
   mode: single
-- id: '1692141921133'
-  alias: lights turn on with gate
+- alias: lights turn on with gate
+  id: '1692141921133'
   description: ''
   trigger:
   - platform: state
@@ -1114,8 +1073,8 @@
     target:
       entity_id: light.exterior_wall_side
   mode: single
-- id: '1696123178186'
-  alias: device_alert_fridge_power
+- alias: device_alert_fridge_power
+  id: '1696123178186'
   description: ''
   trigger:
   - platform: numeric_state
@@ -1140,8 +1099,8 @@
         sticky: false
         clickAction: /lovelace-subviews/dashboard-power
   mode: single
-- id: '1696606664632'
-  alias: lights_trigger_hallway_presence
+- alias: lights_trigger_hallway_presence
+  id: '1696606664632'
   description: ''
   triggers:
   - device_id: 65801262e841d379b0b0b71f3ff22624
@@ -1156,8 +1115,8 @@
     data: {}
     action: light.toggle
   mode: single
-- id: '1696606723356'
-  alias: Sincronizar Luzes do Corredor
+- alias: Sincronizar Luzes do Corredor
+  id: '1696606723356'
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -1168,8 +1127,8 @@
       sync_on: false
       sync_off: true
       sync_off_from_slave: false
-- id: '1696716423195'
-  alias: Comutar Deshumidificador Casa de Banho da Suite
+- alias: Comutar Deshumidificador Casa de Banho da Suite
+  id: '1696716423195'
   description: ''
   trigger:
   - platform: event
@@ -1209,8 +1168,8 @@
       target:
         entity_id: switch.dehumidifier
   mode: single
-- id: '1696854410563'
-  alias: hvac_adjust_dehumidifier_target
+- alias: hvac_adjust_dehumidifier_target
+  id: '1696854410563'
   description: ''
   trigger:
   - platform: state
@@ -1229,8 +1188,8 @@
     target:
       entity_id: humidifier.portable_dehumidifier
   mode: single
-- id: '1699195635629'
-  alias: Água Quente - Desligar Noite
+- alias: Água Quente - Desligar Noite
+  id: '1699195635629'
   description: ''
   trigger:
   - platform: time
@@ -1242,8 +1201,8 @@
     target:
       entity_id: climate.water_heater
   mode: single
-- id: '1699342762120'
-  alias: AC Desligar Auto - Manhã
+- alias: AC Desligar Auto - Manhã
+  id: '1699342762120'
   description: ''
   triggers:
   - at: 09:00:00
@@ -1265,8 +1224,8 @@
       - climate.portable_heater
     action: climate.turn_off
   mode: single
-- id: '1699840344840'
-  alias: 'Desligar Luzes da Rua com Temporizador '
+- alias: 'Desligar Luzes da Rua com Temporizador '
+  id: '1699840344840'
   description: ''
   trigger:
   - platform: state
@@ -1297,8 +1256,8 @@
     target:
       entity_id: light.outside_group
   mode: restart
-- id: '1701482615616'
-  alias: Ligar Luzes da Árvore de Natal de Manhã
+- alias: Ligar Luzes da Árvore de Natal de Manhã
+  id: '1701482615616'
   description: ''
   trigger:
   - platform: time
@@ -1313,8 +1272,8 @@
       entity_id: light.xmas_tree
     data: {}
   mode: single
-- id: '1701541427434'
-  alias: 'Controlar Luz das Escadas Day/Night '
+- alias: 'Controlar Luz das Escadas Day/Night '
+  id: '1701541427434'
   description: ''
   trigger:
   - platform: state
@@ -1340,8 +1299,8 @@
         entity_id: scene.lights_stairs_day
       metadata: {}
   mode: single
-- id: '1701730252666'
-  alias: Luzes por Mov. na Lavandaria
+- alias: Luzes por Mov. na Lavandaria
+  id: '1701730252666'
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -1359,8 +1318,8 @@
       disable_in_sleep: true
       presence_sensor: none
       disable_switch_button: button.shelly25_lights_laundry_auto_on
-- id: '1702942175908'
-  alias: Máq. Lavar Loica - Alertar para iniciar
+- alias: Máq. Lavar Loica - Alertar para iniciar
+  id: '1702942175908'
   description: ''
   trigger:
   - platform: state
@@ -1375,8 +1334,8 @@
       entity_id: input_boolean.reminder_dish_washing_machine
     data: {}
   mode: single
-- id: '1704843402395'
-  alias: AC Quartos - Desligar Noite
+- alias: AC Quartos - Desligar Noite
+  id: '1704843402395'
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
@@ -1387,8 +1346,8 @@
       - climate.bedroom_henrique
       - climate.bedroom_ricardo
       run_on_weekends: true
-- id: '1705111890973'
-  alias: Alertar UPS activa
+- alias: Alertar UPS activa
+  id: '1705111890973'
   description: ''
   triggers:
   - entity_id:
@@ -1417,8 +1376,8 @@
         channel: Home
       action: notify.mobile_app_joaocarreira_macbook_pro
   mode: single
-- id: '1705326979364'
-  alias: AC Sala - Desligar Manhã
+- alias: AC Sala - Desligar Manhã
+  id: '1705326979364'
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
@@ -1433,8 +1392,8 @@
       - wed
       - thu
       - fri
-- id: '1705327069565'
-  alias: AC Sala - Desligar Noite
+- alias: AC Sala - Desligar Noite
+  id: '1705327069565'
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
@@ -1444,144 +1403,14 @@
       - climate.living_room
       run_on_weekends: true
       weekend_tomorrow: false
-- id: '1705368338092'
-  alias: AC Suite - Ligar de Manhã Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: 07:45:00
-      schedule_end: 08:30:00
-      hvac_unit: climate.master_bedroom
-      hvac_temperature: 20
-      room_temperature: 19
-      temperature_sensor: sensor.temperature_master_bedroom
-      window_sensor: binary_sensor.window_master_bedroom
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - winter
-      - spring
-      - autumn
-- id: '1705368431534'
-  alias: AC Sala - Ligar de Manhã no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: 06:30:00
-      schedule_end: 08:00:00
-      hvac_unit:
-      - climate.living_room
-      hvac_temperature: 19
-      room_temperature: 20.5
-      temperature_sensor: sensor.temperature_living_room
-      window_sensor: binary_sensor.window_ground_floor
-      weekday:
-      - mon
-      - wed
-      - thu
-      - fri
-      - tue
-      - sat
-      - sun
-      selected_season:
-      - winter
-      - autumn
-      - spring
-      hvac_delayed_temperature_offset: -1
-- id: '1705596272069'
-  alias: AC Suite - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: '16:30:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.master_bedroom
-      hvac_temperature: 21
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_master_bedroom
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      hvac_delayed_temperature_offset: 0
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_master_bedroom
-- id: '1705596348371'
-  alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: '16:30:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.bedroom_ricardo
-      hvac_temperature: 21
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_bedroom_ricardo
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      hvac_delayed_temperature_offset: 0
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_ricardo
-- id: '1705596387713'
-  alias: AC Sala - Ligar Tarde de Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: '17:00:00'
-      schedule_end: '18:00:00'
-      hvac_unit:
-      - climate.living_room
-      hvac_temperature: 20
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_living_room
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      window_sensor: binary_sensor.window_ground_floor
 - id: '1707834041529'
   alias: Abrir Estores da Suite
   description: ''
-  trigger:
-  - platform: time_pattern
-    hours: 08
-    minutes: '00'
-  condition:
+  triggers:
+  - hours: '7'
+    minutes: '45'
+    trigger: time_pattern
+  conditions:
   - condition: state
     entity_id: binary_sensor.workday
     state: 'on'
@@ -1594,14 +1423,14 @@
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
-  action:
-  - service: cover.open_cover
-    data: {}
+  actions:
+  - data: {}
     target:
       entity_id: cover.master_bedroom
+    action: cover.open_cover
   mode: single
-- id: '1658360353381'
-  alias: Tablet Control Motion Detection Living Room
+- alias: Tablet Control Motion Detection Living Room
+  id: '1658360353381'
   description: ''
   triggers:
   - entity_id:
@@ -1641,8 +1470,8 @@
         - switch.lenovo_tablet_motion_detection
       action: switch.turn_on
   mode: queued
-- id: '1708474653467'
-  alias: Tablet Screen Timeout Living Room
+- alias: Tablet Screen Timeout Living Room
+  id: '1708474653467'
   description: ''
   triggers:
   - entity_id:
@@ -1680,8 +1509,8 @@
         value: '120'
       action: number.set_value
   mode: single
-- id: '1689293787806'
-  alias: Fechar Parcialment Estores de Manhã/Tarde
+- alias: Fechar Parcialment Estores de Manhã/Tarde
+  id: '1689293787806'
   description: ''
   trigger:
   - platform: time
@@ -1706,8 +1535,8 @@
       - kitchen
       - office
   mode: single
-- id: '1689293902907'
-  alias: Abrir Parcialmente Estores à Tarde
+- alias: Abrir Parcialmente Estores à Tarde
+  id: '1689293902907'
   description: ''
   trigger:
   - platform: time
@@ -1730,8 +1559,8 @@
       - kitchen
       - office
   mode: single
-- id: '1652141596083'
-  alias: Abrir Estores ao Nascer do Sol
+- alias: Abrir Estores ao Nascer do Sol
+  id: '1652141596083'
   description: ''
   triggers:
   - event: sunrise
@@ -1770,8 +1599,8 @@
       - office
     action: script.cover_group_action
   mode: single
-- id: '1663526552935'
-  alias: Fechar Estores quando chove
+- alias: Fechar Estores quando chove
+  id: '1663526552935'
   description: ''
   mode: single
   trigger:
@@ -1802,8 +1631,8 @@
       - laundry
       - kitchen
       - office
-- id: '1651018838807'
-  alias: Fechar Estores ao Por do Sol
+- alias: Fechar Estores ao Por do Sol
+  id: '1651018838807'
   description: ''
   triggers:
   - event: sunset
@@ -1849,8 +1678,8 @@
       - office
     action: script.cover_group_action
   mode: single
-- id: '1703619934344'
-  alias: AC Sala - Ajustar durante a refeição
+- alias: AC Sala - Ajustar durante a refeição
+  id: '1703619934344'
   triggers:
   - entity_id:
     - light.living_room_table
@@ -1895,8 +1724,8 @@
       fan_mode: auto
     action: climate.set_fan_mode
   mode: single
-- id: '1665435183140'
-  alias: Água Quente - Ligar Manhã
+- alias: Água Quente - Ligar Manhã
+  id: '1665435183140'
   description: ''
   triggers:
   - at: 06:01:00
@@ -1933,8 +1762,8 @@
       entity_id: climate.water_heater
     action: climate.turn_on
   mode: single
-- id: '1665435233424'
-  alias: Água Quente - Desligar Manhã
+- alias: Água Quente - Desligar Manhã
+  id: '1665435233424'
   description: ''
   triggers:
   - at: 08:30:00
@@ -1967,8 +1796,8 @@
       entity_id: climate.water_heater
     action: climate.turn_off
   mode: single
-- id: '1665435448806'
-  alias: Água Quente - Ligar Tarde
+- alias: Água Quente - Ligar Tarde
+  id: '1665435448806'
   description: ''
   triggers:
   - event: sunset
@@ -2013,8 +1842,8 @@
       entity_id: climate.water_heater
     action: climate.turn_on
   mode: single
-- id: '1674085777289'
-  alias: Água Quente - Desligar Presets
+- alias: Água Quente - Desligar Presets
+  id: '1674085777289'
   description: ''
   triggers:
   - at: '22:30:00'
@@ -2033,8 +1862,8 @@
       entity_id: climate.water_heater
     action: climate.set_preset_mode
   mode: single
-- id: turn_on_confort_mode_weekens
-  alias: Água Quente - Modo Conforto Manhã
+- alias: Água Quente - Modo Conforto Manhã
+  id: turn_on_confort_mode_weekens
   description: ''
   trigger:
   - platform: time
@@ -2095,8 +1924,8 @@
     target:
       entity_id: climate.water_heater
   mode: single
-- id: '1701641659897'
-  alias: Atualizar Localização
+- alias: Atualizar Localização
+  id: '1701641659897'
   triggers:
   - entity_id:
     - binary_sensor.backyard_camera_person
@@ -2140,8 +1969,8 @@
   trace:
     stored_traces: 40
   mode: restart
-- id: '1701986636577'
-  alias: Abrir Portão João Chegar a Casa
+- alias: Abrir Portão João Chegar a Casa
+  id: '1701986636577'
   description: ''
   triggers:
   - entity_id:
@@ -2195,8 +2024,8 @@
   - data: {}
     action: script.lights_arriving_home
   mode: single
-- id: '1701640659897'
-  alias: Localização - Atualizar Joao
+- alias: Localização - Atualizar Joao
+  id: '1701640659897'
   triggers:
   - trigger: time_pattern
     seconds: /5
@@ -2219,8 +2048,8 @@
   trace:
     stored_traces: 40
   mode: single
-- id: '1701986497262'
-  alias: Localização - Atualizar Bianca
+- alias: Localização - Atualizar Bianca
+  id: '1701986497262'
   triggers:
   - trigger: time_pattern
     seconds: /5
@@ -2243,8 +2072,8 @@
   trace:
     stored_traces: 40
   mode: single
-- id: '1709598685655'
-  alias: Tarefa de Substituição da Areia das Gatas
+- alias: Tarefa de Substituição da Areia das Gatas
+  id: '1709598685655'
   description: ''
   use_blueprint:
     path: tasks/tracked_tasks.yaml
@@ -2258,8 +2087,8 @@
       notification_action: Registar Substituição
       android_task_id: 31
       notification_action_id: cat_litter_change
-- id: '1709598896541'
-  alias: Tarefa de Limpeza da Areia das Gatas
+- alias: Tarefa de Limpeza da Areia das Gatas
+  id: '1709598896541'
   description: ''
   use_blueprint:
     path: tasks/tracked_tasks.yaml
@@ -2273,8 +2102,8 @@
       notification_action: Registar Limpeza
       android_task_id: 32
       notification_action_id: cat_litter_clean
-- id: '1709743628443'
-  alias: Alertar Portão Aberto com a Casa Vazia
+- alias: Alertar Portão Aberto com a Casa Vazia
+  id: '1709743628443'
   description: ''
   trigger:
   - platform: state
@@ -2366,8 +2195,8 @@
         - action: gate_notification_action_close
           title: Fechar o Portao
   mode: restart
-- id: '1711849617966'
-  alias: Alertar Alarme Joao Dias de Trabalho
+- alias: Alertar Alarme Joao Dias de Trabalho
+  id: '1711849617966'
   description: ''
   trigger:
   - platform: time
@@ -2421,8 +2250,8 @@
       data:
         tag: 923
   mode: single
-- id: '1716079775767'
-  alias: Controlar Luzes do Portão
+- alias: Controlar Luzes do Portão
+  id: '1716079775767'
   description: ''
   triggers:
   - entity_id:
@@ -2435,8 +2264,8 @@
   - data: {}
     action: script.lights_control_gate_front_lights
   mode: single
-- id: '1716575201372'
-  alias: Campainha - Accionar campainha portão
+- alias: Campainha - Accionar campainha portão
+  id: '1716575201372'
   description: ''
   triggers:
   - entity_id:
@@ -2556,8 +2385,8 @@
         filename: /media/Campainha/{{now().year}}-{{"%02d" | format(now().month)}}-{{"%02d"
           | format(now().day)}}_{{"%02d" | format(now().hour)}}h{{"%02d" | format(now().minute)}}.jpg
   mode: single
-- id: '1717504841456'
-  alias: 'Notificar Abertura Portão/Portas '
+- alias: 'Notificar Abertura Portão/Portas '
+  id: '1717504841456'
   description: ''
   triggers:
   - entity_id:
@@ -2594,8 +2423,8 @@
         clickAction: /lovelace-subviews/dashboard-house
     action: notify.mobile_app_all
   mode: single
-- id: '1717852934831'
-  alias: Desligar Modo de Férias
+- alias: Desligar Modo de Férias
+  id: '1717852934831'
   description: ''
   trigger:
   - platform: state
@@ -2621,8 +2450,8 @@
       entity_id: input_boolean.extended_away_mode
     data: {}
   mode: single
-- id: '1717889364762'
-  alias: Localização - Atualizar com base nas pessoas
+- alias: Localização - Atualizar com base nas pessoas
+  id: '1717889364762'
   trace:
     stored_traces: 40
   description: ''
@@ -2670,8 +2499,8 @@
   - action: script.gps_update_joao
   - action: script.gps_update_bianca
   mode: single
-- id: '1721089640569'
-  alias: Abrir Portão Bianca Chegar a Casa
+- alias: Abrir Portão Bianca Chegar a Casa
+  id: '1721089640569'
   description: ''
   triggers:
   - entity_id:
@@ -2725,8 +2554,8 @@
   - data: {}
     action: script.lights_arriving_home
   mode: single
-- id: '1723197292654'
-  alias: Abrir Estores ao Nascer do Sol - Modo de Férias
+- alias: Abrir Estores ao Nascer do Sol - Modo de Férias
+  id: '1723197292654'
   description: ''
   trigger:
   - platform: sun
@@ -2746,8 +2575,8 @@
     target:
       label_id: covers
   mode: single
-- id: '1723197551703'
-  alias: Fechar Estores ao Por do Sol - Modo de Férias
+- alias: Fechar Estores ao Por do Sol - Modo de Férias
+  id: '1723197551703'
   description: ''
   trigger:
   - platform: sun
@@ -2779,8 +2608,8 @@
     target:
       entity_id: cover.laundry
   mode: single
-- id: '1723712743167'
-  alias: Temporizador Bomba da Piscina
+- alias: Temporizador Bomba da Piscina
+  id: '1723712743167'
   description: ''
   trigger:
   - platform: state
@@ -2799,8 +2628,8 @@
     target:
       entity_id: switch.pool_pump
   mode: single
-- id: '1723936636115'
-  alias: Ar Condicionado - Notificar Janelas Abertas Quartos
+- alias: Ar Condicionado - Notificar Janelas Abertas Quartos
+  id: '1723936636115'
   description: ''
   triggers:
   - entity_id:
@@ -2880,8 +2709,8 @@
         clickAction: /lovelace-subviews/dashboard-ac
     action: notify.mobile_app_all
   mode: single
-- id: '1723937695759'
-  alias: Ar Condicionado - Notificar Janelas Abertas Sala
+- alias: Ar Condicionado - Notificar Janelas Abertas Sala
+  id: '1723937695759'
   description: ''
   triggers:
   - entity_id:
@@ -2941,8 +2770,8 @@
         clickAction: /lovelace-subviews/dashboard-ac
     action: notify.mobile_app_all
   mode: single
-- id: '1724277480761'
-  alias: lights_turn_on_kitchen_led_switch
+- alias: lights_turn_on_kitchen_led_switch
+  id: '1724277480761'
   description: ''
   trigger:
   - platform: state
@@ -2974,8 +2803,8 @@
     target:
       entity_id: light.kitchen_led
   mode: single
-- id: '1724363986092'
-  alias: Modo Caminhada - Desligar Automaticamente
+- alias: Modo Caminhada - Desligar Automaticamente
+  id: '1724363986092'
   description: ''
   trigger:
   - platform: state
@@ -3007,8 +2836,8 @@
       entity_id: input_boolean.walking_routine
     data: {}
   mode: single
-- id: '1724364138858'
-  alias: Modo Caminhada - Terminar
+- alias: Modo Caminhada - Terminar
+  id: '1724364138858'
   description: ''
   trigger:
   - platform: state
@@ -3027,8 +2856,8 @@
       - light.exterior_wall_side
       - light.exterior_wall_back
   mode: single
-- id: '1724364182177'
-  alias: Modo de Caminhada - Iniciar
+- alias: Modo de Caminhada - Iniciar
+  id: '1724364182177'
   description: ''
   triggers:
   - entity_id:
@@ -3050,8 +2879,8 @@
       - light.exterior_wall_side
       - light.exterior_wall_back
   mode: single
-- id: '1724969557801'
-  alias: Tarefa da Vitamina D
+- alias: Tarefa da Vitamina D
+  id: '1724969557801'
   description: ''
   triggers:
   - id: trigger_send_notification
@@ -3139,8 +2968,8 @@
         save_string: 'true'
         save_date_time: 'true'
       action: shell_command.external_my_sql_insert
-- id: '1727984098644'
-  alias: Sincronizar Luzes da Rua
+- alias: Sincronizar Luzes da Rua
+  id: '1727984098644'
   description: ''
   use_blueprint:
     path: lights/sync_lights.yaml
@@ -3151,8 +2980,8 @@
       sync_on: false
       sync_off_from_slave: false
       sync_off: true
-- id: '1728490959918'
-  alias: Localização - Sincronizar Dispositivos João
+- alias: Localização - Sincronizar Dispositivos João
+  id: '1728490959918'
   description: ''
   use_blueprint:
     path: location/sync_device_location.yaml
@@ -3160,8 +2989,8 @@
       mobile_device: 2a682060bb472236a68fdd3ff33a221a
       wifi_location: device_tracker.radium_wifi
       mobile_location: device_tracker.radium
-- id: '1728491015669'
-  alias: Localização - Sincronizar Dispositivos Bianca
+- alias: Localização - Sincronizar Dispositivos Bianca
+  id: '1728491015669'
   description: ''
   use_blueprint:
     path: location/sync_device_location.yaml
@@ -3169,8 +2998,8 @@
       mobile_device: 086fd6ff05201d28b4bc0fbdbd707c86
       wifi_location: device_tracker.calcium_wifi
       mobile_location: device_tracker.calcium
-- id: '1729990082630'
-  alias: Luzes por Mov. Casa de Banho de Serviço
+- alias: Luzes por Mov. Casa de Banho de Serviço
+  id: '1729990082630'
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -3189,8 +3018,8 @@
       no_motion_wait: 0
       illuminance_cutoff: 75
       illuminance_sensor: none
-- id: '1731973582356'
-  alias: lights_trigger_gate_door
+- alias: Trigger Abrir Cancela
+  id: '1731973582356'
   description: ''
   triggers:
   - device_id: c19fefbddb20592f460908bcdb303d5d
@@ -3206,8 +3035,8 @@
     target:
       entity_id: lock.gate_door
   mode: single
-- id: '1732671997843'
-  alias: Trigger Botão da Luz da Porta da Cozinha
+- alias: Trigger Botão da Luz da Porta da Cozinha
+  id: '1732671997843'
   description: ''
   use_blueprint:
     path: devices/shelly_one_button.yaml
@@ -3223,8 +3052,8 @@
           - light.kitchen_door
           - light.exterior_wall_side
           - light.exterior_wall_back
-- id: '1735221054299'
-  alias: Trigger Botões dos Estores da Casa de Banho do R/C
+- alias: Trigger Botões dos Estores da Casa de Banho do R/C
+  id: '1735221054299'
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
@@ -3254,8 +3083,8 @@
         data: {}
         target:
           entity_id: light.bathroom_rc_ceiling
-- id: '1735385296449'
-  alias: task_trigger_change_cat_litter
+- alias: task_trigger_change_cat_litter
+  id: '1735385296449'
   description: ''
   triggers:
   - trigger: conversation
@@ -3271,8 +3100,8 @@
     target:
       entity_id: automation.task_cat_litter_change
   mode: single
-- id: '1735500742595'
-  alias: Desligar Coluna da Casa de Banho Principal com as Luzes
+- alias: Desligar Coluna da Casa de Banho Principal com as Luzes
+  id: '1735500742595'
   description: ''
   triggers:
   - entity_id:
@@ -3287,8 +3116,8 @@
     target:
       entity_id: media_player.ghm_main_bathroom
   mode: single
-- id: '1736718854079'
-  alias: Trigger Botões dos Estores da Cozinha
+- alias: Trigger Botões dos Estores da Cozinha
+  id: '1736718854079'
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
@@ -3306,8 +3135,8 @@
         data: {}
         target:
           entity_id: light.kitchen_pantry
-- id: '1736719479439'
-  alias: Trigger Botões dos Estores do Quarto do Ricardo
+- alias: Trigger Botões dos Estores do Quarto do Ricardo
+  id: '1736719479439'
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
@@ -3378,8 +3207,8 @@
         domain: light
         entity_id: f9fd747a176070ae121da1a9d423245f
         type: brightness_decrease
-- id: '1736764669175'
-  alias: Desumidificador - Ligar com a Tomada
+- alias: Desumidificador - Ligar com a Tomada
+  id: '1736764669175'
   description: ''
   triggers:
   - trigger: state
@@ -3402,8 +3231,8 @@
     target:
       entity_id: humidifier.portable_dehumidifier
   mode: single
-- id: '1736788353807'
-  alias: Ajustar Volume dos Assistentes
+- alias: Ajustar Volume dos Assistentes
+  id: '1736788353807'
   description: ''
   triggers:
   - event: start
@@ -3473,8 +3302,8 @@
 
               '
   mode: single
-- id: '1737152867015'
-  alias: Alertar MacBook Porta da Cozinha Aberta
+- alias: Alertar MacBook Porta da Cozinha Aberta
+  id: '1737152867015'
   description: ''
   triggers:
   - trigger: state
@@ -3492,8 +3321,8 @@
       title: Segurança
       message: A Porta da Cozinha foi Aberta
   mode: single
-- id: '1737152931894'
-  alias: Alertar MacBook Porta da Frente Aberta
+- alias: Alertar MacBook Porta da Frente Aberta
+  id: '1737152931894'
   description: ''
   triggers:
   - trigger: state
@@ -3511,145 +3340,8 @@
       title: Segurança
       message: A Porta da Frente foi Aberta
   mode: single
-- id: '1737768400854'
-  alias: AC Hall - Ligar de Manhã no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: 06:30:00
-      schedule_end: 08:00:00
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 19
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - mon
-      - wed
-      - thu
-      - fri
-      - tue
-      - sat
-      - sun
-      selected_season:
-      - winter
-      - autumn
-      - spring
-      hvac_delayed_temperature_offset: 0
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1737768630507'
-  alias: AC Hall - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: '16:35:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 20
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - winter
-      - autumn
-      - spring
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1737770376538'
-  alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: '16:30:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.bedroom_henrique
-      hvac_temperature: 19
-      room_temperature: 19
-      temperature_sensor: sensor.temperature_bedroom_henrique
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_henrique
-- id: '1737772761289'
-  alias: AC Escritório - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: '16:30:00'
-      schedule_end: '20:00:00'
-      hvac_unit: climate.office
-      hvac_temperature: 20
-      room_temperature: 19.5
-      temperature_sensor: sensor.temperature_office
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      hvac_delayed_temperature_offset: 0
-      extra_hvac_actions: []
-- id: '1737850856162'
-  alias: AC Quartos - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
-    input:
-      schedule_start: '16:25:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.hall
-      - climate.bedroom_henrique
-      - climate.bedroom_ricardo
-      - climate.master_bedroom
-      hvac_temperature: 20
-      room_temperature: 19.5
-      temperature_sensor: sensor.temperature_bedrooms
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1737928610211'
-  alias: Trigger Botões dos Estores do Quarto do Henrique
+- alias: Trigger Botões dos Estores do Quarto do Henrique
+  id: '1737928610211'
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
@@ -3703,8 +3395,8 @@
           entity_id: climate.bedroom_henrique
       long_top_action: []
       long_bottom_action: []
-- id: '1738114770861'
-  alias: AC Hall - Ligar Modo Noturno
+- alias: AC Hall - Ligar Modo Noturno
+  id: '1738114770861'
   description: ''
   triggers:
   - trigger: time
@@ -3746,8 +3438,8 @@
     target:
       entity_id: climate.hall
   mode: single
-- id: '1739048652626'
-  alias: Desligar Coluna da Suite com as Luzes
+- alias: Desligar Coluna da Suite com as Luzes
+  id: '1739048652626'
   description: ''
   triggers:
   - entity_id:
@@ -3762,8 +3454,8 @@
     target:
       entity_id: media_player.ghm_master_bedroom
   mode: single
-- id: '1744465759830'
-  alias: Fechar o Portão com a Casa Vazia
+- alias: Fechar o Portão com a Casa Vazia
+  id: '1744465759830'
   description: ''
   triggers:
   - trigger: state
@@ -3786,31 +3478,8 @@
     target:
       entity_id: cover.gate
   mode: single
-- id: '1749604497079'
-  alias: AC Hall - Ligar de Tarde no Verão
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
-    input:
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 24
-      room_temperature: 24
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1750634052202'
-  alias: Tablet Control Hall Screen
+- alias: Tablet Control Hall Screen
+  id: '1750634052202'
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -3894,53 +3563,8 @@
         entity_id:
         - switch.fire_tablet_motion_detection
   mode: restart
-- id: '1751200610784'
-  alias: AC da Sala - Ligar de Tarde no Verão
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
-    input:
-      schedule_start: '17:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.living_room
-      hvac_temperature: 24
-      room_temperature: 24
-      temperature_sensor: sensor.temperature_living_room
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_ground_floor
-- id: '1751200671929'
-  alias: AC Hall - Ligar de Tarde no Verão (Fim de Semana)
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
-    input:
-      schedule_start: '14:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 24
-      room_temperature: 24
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - sat
-      - sun
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1751552957136'
-  alias: Fechar Estores Com Temperatura Elevada
+- alias: Fechar Estores Com Temperatura Elevada
+  id: '1751552957136'
   description: ''
   triggers:
   - trigger: numeric_state
@@ -3978,77 +3602,8 @@
       - office
     action: script.cover_group_action
   mode: single
-- id: '1749602497079'
-  alias: AC Bedroom Ricardo - Ligar de Tarde no Verão
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
-    input:
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.bedroom_ricardo
-      hvac_temperature: 25
-      room_temperature: 27
-      temperature_sensor: sensor.temperature_bedroom_ricardo
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1739604497079'
-  alias: AC Bedroom Henrique - Ligar de Tarde no Verão
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
-    input:
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.bedroom_henrique
-      hvac_temperature: 25
-      room_temperature: 27
-      temperature_sensor: sensor.temperature_bedroom_henrique
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1749604597079'
-  alias: AC Suite - Ligar de Tarde no Verão
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
-    input:
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.master_bedroom
-      hvac_temperature: 25
-      room_temperature: 27
-      temperature_sensor: sensor.temperature_master_bedroom
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1754488924870'
-  alias: helper_clear_routine_message
+- alias: helper_clear_routine_message
+  id: '1754488924870'
   description: ''
   triggers:
   - trigger: state
@@ -4069,8 +3624,8 @@
     target:
       entity_id: input_text.script_step_message
   mode: single
-- id: '1755213453554'
-  alias: Ar Condicionados - Ajustar com a casa vazia
+- alias: Ar Condicionados - Ajustar com a casa vazia
+  id: '1755213453554'
   description: Define o modo da ventoinha para 'auto' e o modo de oscilação para 'swing'
     em todos os aparelhos de ar condicionado quando a casa está vazia por 10 minutos.
   triggers:
@@ -4112,8 +3667,8 @@
       - climate.bedroom_henrique
       - climate.hall
   mode: single
-- id: '1736719371438'
-  alias: Trigger Botões dos Estores da Suite
+- alias: Trigger Botões dos Estores da Suite
+  id: '1736719371438'
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
@@ -4166,8 +3721,8 @@
             - 1 }}'
         target:
           entity_id: climate.master_bedroom
-- id: '1755902487203'
-  alias: Abrir Parcialmente Estores Noite do R/C
+- alias: Abrir Parcialmente Estores Noite do R/C
+  id: '1755902487203'
   description: ''
   triggers:
   - event: sunset
@@ -4196,8 +3751,8 @@
       entity_id:
       - cover.living_room
   mode: single
-- id: '1756997660207'
-  alias: security_alert_door_open
+- alias: security_alert_door_open
+  id: '1756997660207'
   description: ''
   triggers:
   - entity_id:
@@ -4246,8 +3801,8 @@
           title: Fechar o Portao
     action: notify.mobile_app_all
   mode: restart
-- id: '1759091348299'
-  alias: rain_set_last_event
+- alias: rain_set_last_event
+  id: '1759091348299'
   description: ''
   triggers:
   - trigger: state
@@ -4268,8 +3823,8 @@
     target:
       entity_id: input_datetime.last_rain
   mode: single
-- id: '1759755648327'
-  alias: Alertar Portão em Movimento
+- alias: Alertar Portão em Movimento
+  id: '1759755648327'
   description: ''
   triggers:
   - id: trigger_gate_open
@@ -4315,8 +3870,8 @@
         channel: Segurança
         clickAction: /lovelace-subviews/dashboard-exterior
   mode: restart
-- id: '1760144253958'
-  alias: Alertar o MacBook Henrique a Chorar
+- alias: Alertar o MacBook Henrique a Chorar
+  id: '1760144253958'
   description: ''
   triggers:
   - trigger: state
@@ -4334,8 +3889,8 @@
       title: Baby Monitor
       message: O Henrique está a chorar
   mode: single
-- id: '1760144554168'
-  alias: Alertar o MacBook Ricardo a Chorar
+- alias: Alertar o MacBook Ricardo a Chorar
+  id: '1760144554168'
   description: ''
   triggers:
   - trigger: state
@@ -4353,3 +3908,427 @@
       title: Baby Monitor
       message: O Ricardo está a chorar
   mode: single
+- alias: AC da Sala - Ligar de Tarde no Verão
+  id: '1751200610784'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '17:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.living_room
+      hvac_temperature: 24
+      room_temperature: 24
+      temperature_sensor: sensor.temperature_living_room
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_ground_floor
+- alias: AC Hall - Ligar de Tarde no Verão (Fim de Semana)
+  id: '1751200671929'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '14:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 24
+      room_temperature: 24
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - sat
+      - sun
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Hall - Ligar de Tarde no Verão
+  id: '1749604497079'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 24
+      room_temperature: 24
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Bedroom Ricardo - Ligar de Tarde no Verão
+  id: '1749602497079'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.bedroom_ricardo
+      hvac_temperature: 25
+      room_temperature: 27
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Bedroom Henrique - Ligar de Tarde no Verão
+  id: '1739604497079'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.bedroom_henrique
+      hvac_temperature: 25
+      room_temperature: 27
+      temperature_sensor: sensor.temperature_bedroom_henrique
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Suite - Ligar de Tarde no Verão
+  id: '1749604597079'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_cool.yaml
+    input:
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.master_bedroom
+      hvac_temperature: 25
+      room_temperature: 27
+      temperature_sensor: sensor.temperature_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Sala - Ligar de Manhã no Inverno
+  id: '1705368431534'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: 06:30:00
+      schedule_end: 08:00:00
+      hvac_unit:
+      - climate.living_room
+      hvac_temperature: 21
+      room_temperature: 20.5
+      temperature_sensor: sensor.temperature_living_room
+      window_sensor: binary_sensor.window_ground_floor
+      weekday:
+      - mon
+      - wed
+      - thu
+      - fri
+      - tue
+      - sat
+      - sun
+      selected_season:
+      - winter
+      - autumn
+      - spring
+      hvac_delayed_temperature_offset: -1
+- alias: AC Hall - Ligar de Manhã no Inverno
+  id: '1737768400854'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: 06:30:00
+      schedule_end: 08:00:00
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 21
+      room_temperature: 20.5
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - mon
+      - wed
+      - thu
+      - fri
+      - tue
+      - sat
+      - sun
+      selected_season:
+      - winter
+      - autumn
+      - spring
+      hvac_delayed_temperature_offset: 0
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1705368338092'
+  alias: AC Suite - Ligar de Manhã no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: 07:15:00
+      schedule_end: 08:00:00
+      hvac_unit: climate.master_bedroom
+      hvac_temperature: 21
+      room_temperature: 19
+      temperature_sensor: sensor.temperature_master_bedroom
+      window_sensor: binary_sensor.window_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - winter
+      - spring
+      - autumn
+- alias: AC Sala - Ligar de Tarde no Inverno
+  id: '1705596387713'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: '16:30:00'
+      schedule_end: '18:00:00'
+      hvac_unit:
+      - climate.living_room
+      hvac_temperature: 20
+      room_temperature: 21
+      temperature_sensor: sensor.temperature_living_room
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      window_sensor: binary_sensor.window_ground_floor
+- alias: AC Escritório - Ligar de Tarde no Inverno
+  id: '1737772761289'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: '16:30:00'
+      schedule_end: '20:00:00'
+      hvac_unit: climate.office
+      hvac_temperature: 20
+      room_temperature: 19.5
+      temperature_sensor: sensor.temperature_office
+      window_sensor: binary_sensor.window_ground_floor
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      hvac_delayed_temperature_offset: 0
+      extra_hvac_actions: []
+- alias: AC Quartos - Ligar de Tarde no Inverno
+  id: '1737850856162'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: '16:30:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.hall
+      - climate.bedroom_henrique
+      - climate.bedroom_ricardo
+      - climate.master_bedroom
+      hvac_temperature: 20
+      room_temperature: 19
+      temperature_sensor: sensor.temperature_bedrooms
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Hall - Ligar de Tarde no Inverno
+  id: '1737768630507'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: '16:45:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 21
+      room_temperature: 21
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - winter
+      - autumn
+      - spring
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Suite - Ligar de Tarde no Inverno
+  id: '1705596272069'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: '17:00:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.master_bedroom
+      hvac_temperature: 21
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      hvac_delayed_temperature_offset: 0
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
+  id: '1705596348371'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: '17:00:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.bedroom_ricardo
+      hvac_temperature: 21
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      hvac_delayed_temperature_offset: 0
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
+  id: '1737770376538'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_heat.yaml
+    input:
+      schedule_start: '17:00:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.bedroom_henrique
+      hvac_temperature: 21
+      room_temperature: 20
+      temperature_sensor: sensor.temperature_bedroom_henrique
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1762307515538'
+  alias: Luzes por Mov. no Quarto de Arrumos
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights_v3.yaml
+    input:
+      motion_sensor: binary_sensor.motion_sensor_bedroom_rc
+      target_entity: light.bedroom_rc
+      min_repetition_interval_sec: 10
+      only_after_sunset: false
+      disable_in_guest: true
+      required_house_mode: Dia+Anoitecer
+      room_name: Quarto de Arrumos
+      blocker_on_entity: light.bedroom_rc
+      disable_in_sleep: true
+      presence_sensor: none
+      no_motion_wait: 60
+      illuminance_cutoff: 75
+      illuminance_sensor: none
