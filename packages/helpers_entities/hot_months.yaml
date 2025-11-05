@@ -1,0 +1,11 @@
+template:
+  - binary_sensor:
+      - name: hot_months
+        unique_id: hot_months
+        state: >-
+          {% set m = now().month %}
+          {% if 4 <= m <= 9 %}
+            {{ true }}
+          {% else %}
+            {{ false }}
+          {% endif %}
