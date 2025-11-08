@@ -10,8 +10,7 @@ api:
   reboot_timeout: 0s
 
 logger:
-  level: DEBUG
-  baud_rate: 0 # disable serial uart logging
+  level: INFO
 
 ota:
   - platform: esphome

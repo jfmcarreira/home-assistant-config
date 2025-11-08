@@ -57,45 +57,38 @@ script:
       #       #     service: light.turn_on
       #       #     data:
       #       #       entity_id: light.bedroom_ricardo_lamp
+  - id: standard_light_sw_action
+    then:
+      - if:
+          condition:
+            or:
+              - light.is_on: light_1
+              - light.is_on: light_2
+              #- binary_sensor.is_on: bedroom_ricardo_lamp_state
+          then:
+            - light.turn_off: light_1
+            - light.turn_off: light_2
+            - homeassistant.service:
+                service: light.turn_off
+                data:
+                  entity_id: light.bedroom_ricardo_lamp
+          else:
+            - if:
+                condition:
+                  - binary_sensor.is_on: house_mode_night
+                then:
+                  - light.turn_on: light_1
+                  - globals.set:
+                      id: lights_state
+                      value: "1"
+                else:
+                  - light.turn_on: light_1
+                  - light.turn_on: light_2
+                  - globals.set:
+                      id: lights_state
+                      value: "0"
 
 binary_sensor:
   - platform: homeassistant
     id: bedroom_ricardo_lamp_state
     entity_id: light.bedroom_ricardo_lamp
-
-  - id: !extend sw_1
-    on_multi_click:
-      - timing:
-          - ON for at most 1000ms
-          - OFF for at least 100ms
-        then:
-          - if:
-              condition:
-                or:
-                  - light.is_on: light_1
-                  - light.is_on: light_2
-                  #- binary_sensor.is_on: bedroom_ricardo_lamp_state
-              then:
-                - light.turn_off: light_1
-                - light.turn_off: light_2
-                - homeassistant.service:
-                    service: light.turn_off
-                    data:
-                      entity_id: light.bedroom_ricardo_lamp
-              else:
-                - if:
-                    condition:
-                      and:
-                        - api.connected:
-                        - binary_sensor.is_on: house_mode_night
-                    then:
-                      - light.turn_on: light_1
-                      - globals.set:
-                          id: lights_state
-                          value: "1"
-                    else:
-                      - light.turn_on: light_1
-                      - light.turn_on: light_2
-                      - globals.set:
-                          id: lights_state
-                          value: "0"

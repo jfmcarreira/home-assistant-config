@@ -66,6 +66,33 @@ script:
             - globals.set:
                 id: lights_state
                 value: "-1"
+  - id: standard_light_sw_action
+    then:
+      - if:
+          condition:
+            or:
+              - light.is_on: light_1
+              - light.is_on: light_2
+              - binary_sensor.is_on: master_bedroom_lamp
+              - binary_sensor.is_on: master_bedroom_closet_state
+              - binary_sensor.is_on: master_bedroom_bed_wall
+              - binary_sensor.is_on: master_bedroom_bed_window
+          then:
+            - script.execute: turn_off_all_lights
+          else:
+            - if:
+                condition:
+                  - binary_sensor.is_on: house_mode_night
+                then:
+                  - globals.set:
+                      id: lights_state
+                      value: "1"
+                  - script.execute: smart_light_state
+                else:
+                  - globals.set:
+                      id: lights_state
+                      value: "0"
+                  - script.execute: smart_light_state
 
 binary_sensor:
   - platform: homeassistant
@@ -83,56 +110,6 @@ binary_sensor:
   - platform: homeassistant
     id: master_bedroom_closet_state
     entity_id: light.master_bedroom_closet
-
-  - id: !extend sw_1
-    on_multi_click:
-      - timing:
-          - ON for at most 1000ms
-          - OFF for at least 100ms
-        invalid_cooldown: 100ms
-        then:
-          - if:
-              condition:
-                - api.connected:
-              then:
-                - if:
-                    condition:
-                      or:
-                        - light.is_on: light_1
-                        - light.is_on: light_2
-                        - binary_sensor.is_on: master_bedroom_lamp
-                        - binary_sensor.is_on: master_bedroom_closet_state
-                        - binary_sensor.is_on: master_bedroom_bed_wall
-                        - binary_sensor.is_on: master_bedroom_bed_window
-                    then:
-                      - script.execute: turn_off_all_lights
-
-                    else:
-                      - if:
-                          condition:
-                            - binary_sensor.is_on: house_mode_night
-                          then:
-                            - globals.set:
-                                id: lights_state
-                                value: "1"
-                            - script.execute: smart_light_state
-                          else:
-                            - globals.set:
-                                id: lights_state
-                                value: "0"
-                            - script.execute: smart_light_state
-              else:
-                - if:
-                    condition:
-                      or:
-                        - light.is_on: light_1
-                        - light.is_on: light_2
-                    then:
-                      - light.turn_off: light_1
-                      - light.turn_off: light_2
-                    else:
-                      - light.turn_on: light_1
-                      - light.turn_on: light_2
 
 logger:
   level: DEBUG

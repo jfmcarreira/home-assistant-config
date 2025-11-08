@@ -40,48 +40,39 @@ script:
           then:
             - light.turn_on: light_1
             - light.turn_off: light_2
-
-binary_sensor:
-  - id: !extend sw_1
-    on_multi_click:
-      - timing:
-          - ON for at most 1000ms
-          - OFF for at least 100ms
-        invalid_cooldown: 100ms
-        then:
-          - if:
-              condition:
-                - script.is_running: light_turn_on_action
-              then:
-                - script.stop: light_turn_on_action
-              else:
-                - if:
-                    condition:
-                      or:
-                        - light.is_on: light_1
-                        - light.is_on: light_2
-                    then:
-                      - logger.log: "Turning lights OFF"
-                      - light.turn_off: light_1
-                      - light.turn_off: light_2
-                      - globals.set:
-                          id: lights_state
-                          value: "-1"
-                    else:
-                      - if:
-                          condition:
-                            and:
-                              - api.connected:
-                              - binary_sensor.is_on: house_mode_night
-                          then:
-                            - logger.log: "Turning lights in Night mode"
-                            - globals.set:
-                                id: lights_state
-                                value: "1"
-                            - script.execute: smart_light_state
-                          else:
-                            - logger.log: "Turning both lights ON"
-                            - globals.set:
-                                id: lights_state
-                                value: "0"
-                            - script.execute: smart_light_state
+  - id: standard_light_sw_action
+    then:
+      - if:
+          condition:
+            - script.is_running: light_turn_on_action
+          then:
+            - script.stop: light_turn_on_action
+          else:
+            - if:
+                condition:
+                  or:
+                    - light.is_on: light_1
+                    - light.is_on: light_2
+                then:
+                  - logger.log: "Turning lights OFF"
+                  - light.turn_off: light_1
+                  - light.turn_off: light_2
+                  - globals.set:
+                      id: lights_state
+                      value: "-1"
+                else:
+                  - if:
+                      condition:
+                        - binary_sensor.is_on: house_mode_night
+                      then:
+                        - logger.log: "Turning lights in Night mode"
+                        - globals.set:
+                            id: lights_state
+                            value: "1"
+                        - script.execute: smart_light_state
+                      else:
+                        - logger.log: "Turning both lights ON"
+                        - globals.set:
+                            id: lights_state
+                            value: "0"
+                        - script.execute: smart_light_state
