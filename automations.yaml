@@ -1584,7 +1584,7 @@
     state: 'on'
   actions:
   - data:
-      action_to_run: cover.open_cover
+      action_to_run: script.cover_open_if_close
       control_switch: open_sunrise
       covers_list:
       - living_room
@@ -4072,8 +4072,8 @@
       - autumn
       - spring
       hvac_delayed_temperature_offset: -1
-- alias: AC Hall - Ligar de Manhã no Inverno
-  id: '1737768400854'
+- id: '1737768400854'
+  alias: AC Hall - Ligar de Manhã no Inverno
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
@@ -4083,7 +4083,7 @@
       hvac_unit:
       - climate.hall
       hvac_temperature: 21
-      room_temperature: 20.5
+      room_temperature: 21
       temperature_sensor: sensor.temperature_hall
       weekday:
       - mon
@@ -4203,8 +4203,8 @@
       - spring
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Hall - Ligar de Tarde no Inverno
-  id: '1737768630507'
+- id: '1737768630507'
+  alias: AC Hall - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
@@ -4214,7 +4214,7 @@
       hvac_unit:
       - climate.hall
       hvac_temperature: 21
-      room_temperature: 21
+      room_temperature: 21.5
       temperature_sensor: sensor.temperature_hall
       weekday:
       - mon

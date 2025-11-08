@@ -1,4 +1,26 @@
 script:
+  cover_open_if_close:
+    alias: Abrir Estores caso estejam fechados
+    mode: parallel
+    max: 10
+    fields:
+      action_cover:
+        name: Cover
+        description: Cover to control
+        example: cover.kitchen
+        selector:
+          entity:
+            multiple: false
+            domain: cover
+
+    variables:
+      cover_entitiy: cover.{{ action_cover }}
+    sequence:
+      - condition: "{{ is_state(cover_entitiy, 'closed') }}"
+      - service: cover.open_cover
+        target:
+          entity_id: "{{ cover_entitiy }}"
+
   cover_partial_close:
     alias: Colocar Estores a Dois Terços
     mode: parallel
