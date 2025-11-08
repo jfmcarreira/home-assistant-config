@@ -41,7 +41,7 @@ binary_sensor:
     name: gate_close
     pin:
       inverted: true
-      number: D5
+      number: D6
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 250ms
@@ -60,7 +60,7 @@ binary_sensor:
     id: gate_open_sensor
     name: gate_open
     pin:
-      number: D6
+      number: D5
       inverted: true
       mode: INPUT_PULLUP
     filters:
