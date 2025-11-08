@@ -63,10 +63,14 @@ binary_sensor:
               condition:
                 - api.connected:
               then:
-                - homeassistant.service:
-                    service: light.toggle
+                - homeassistant.action:
+                    action: light.turn_off
                     data:
-                      entity_id: light.hall_presence
+                      floor_id: bedrooms
+                - homeassistant.action:
+                    action: media_player.turn_off
+                    data:
+                      floor_id: bedrooms
 
   - id: sw_2
     platform: gpio
