@@ -1,60 +1,56 @@
 template:
-- binary_sensor:
-    - name: washing_machine_state
-      unique_id: washing_machine_state
-      icon: mdi:washing-machine
-      device_class: plug
-      delay_on:
-        minutes: 1
-      delay_off:
-        minutes: 2
-      state: >-
-        {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
-            {%- if (states("sensor.device_power_washing_machine") | int(0) )< 3 %}
-                False
-            {%- else %}
-                True
-            {%- endif %}
-        {%- else %}
-            {%- if (states("sensor.device_power_washing_machine") | int(0)) > 50 %}
-                True
-            {%- else %}
-                False
-            {%- endif %}
-        {%- endif %}
-      attributes:
-        Lavagem da Roupa: >
-          {{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+  - use_blueprint:
+      path: tasks/appliance_running_state.yaml
+      input:
+        power_sensor_entity: sensor.device_power_washing_machine
+        icon: mdi:washing-machine
+    name: washing_machine_state
+    unique_id: washing_machine_state
 
-    - name: wash_machine_wet_clothes
-      unique_id: wash_machine_wet_clothes
-      icon: mdi:hanger
-      state: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) - as_timestamp( states('sensor.task_remove_washing_clothes_last_done') ) > 0 }}"
-      attributes:
-        energia_total: "{{ state_attr('sensor.task_washing_clothes_last_done', 'total_energy')  }}"
-        Roupa Lavada: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
-        Roupa Retirada: "{{ as_timestamp( states('sensor.task_remove_washing_clothes_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+  - use_blueprint:
+      path: tasks/appliance_state.yaml
+      input:
+        appliance_running_state: binary_sensor.washing_machine_state
+        appliance_door: binary_sensor.washing_machine_door
+        appliance_task: binary_sensor.wash_machine_wet_clothes
+        appliance_task_running_name: A Lavar
+        appliance_task_name: Roupa Lavada
+        icon: mdi:washing-machine
+    name: washing_machine_state
+    unique_id: washing_machine_state
 
-- sensor:
-    - name: washing_machine_state
-      unique_id: washing_machine_state
-      state: >-
-        {% if is_state( 'binary_sensor.washing_machine_door', 'on' )  %}
-          Aberta
-        {% else %}
-          {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
-            A Lavar
-          {% elif is_state( 'binary_sensor.wash_machine_wet_clothes', 'on' )  %}
-            Roupa Lavada
-          {% else %}
-            Desligada
-          {% endif %}
-        {% endif %}
-      icon: >-
-        {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
-            mdi:washing-machine
-        {% elif is_state( 'binary_sensor.wash_machine_wet_clothes', 'on' )  %}
-          mdi:washing-machine-alert
-        {% else %}
-          mdi:washing-machine-off
-        {% endif %}
+  - binary_sensor:
+      # - name: washing_machine_state
+      #   unique_id: washing_machine_state
+      #   icon: mdi:washing-machine
+      #   device_class: plug
+      #   delay_on:
+      #     minutes: 1
+      #   delay_off:
+      #     minutes: 2
+      #   state: >-
+      #     {% if is_state( 'binary_sensor.washing_machine_state', 'on' )  %}
+      #         {%- if (states("sensor.device_power_washing_machine") | int(0) )< 3 %}
+      #             False
+      #         {%- else %}
+      #             True
+      #         {%- endif %}
+      #     {%- else %}
+      #         {%- if (states("sensor.device_power_washing_machine") | int(0)) > 50 %}
+      #             True
+      #         {%- else %}
+      #             False
+      #         {%- endif %}
+      #     {%- endif %}
+      #   attributes:
+      #     Lavagem da Roupa: >
+      #       {{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom("%Y-%m-%d %H:%M:%S", true) }}
+
+      - name: wash_machine_wet_clothes
+        unique_id: wash_machine_wet_clothes
+        icon: mdi:hanger
+        state: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) - as_timestamp( states('sensor.task_remove_washing_clothes_last_done') ) > 0 }}"
+        attributes:
+          energia_total: "{{ state_attr('sensor.task_washing_clothes_last_done', 'total_energy')  }}"
+          Roupa Lavada: "{{ as_timestamp( states('sensor.task_washing_clothes_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"
+          Roupa Retirada: "{{ as_timestamp( states('sensor.task_remove_washing_clothes_last_done') ) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}"

@@ -1,0 +1,64 @@
+blueprint:
+  name: appliance_state
+  description: Creates a sensor which holds the state of an appliance
+  domain: template
+  input:
+    appliance_running_state:
+      name: Maquina
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: plug
+    appliance_task:
+      name: Tarefa da Máquina
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: plug
+    appliance_door:
+      name: Porta da Máquina
+      selector:
+        entity:
+          domain: binary_sensor
+    appliance_task_running_name:
+      name: Tarefa da Máquina a Decorrer
+      selector:
+        text:
+    appliance_task_name:
+      name: Tarefa da Máquina Concluída
+      selector:
+        text:
+    icon:
+      name: Icon - Estado Normal
+      selector:
+        icon:
+variables:
+  appliance_running_state: !input appliance_running_state
+  appliance_task: !input appliance_task
+  appliance_door: !input appliance_door
+  appliance_task_running_name: !input appliance_task_running_name
+  appliance_task_name: !input appliance_task_name
+  icon: !input icon
+sensor:
+  availability: >
+    {{ states(appliance_running_state) not in ('unknown', 'unavailable') }}
+  state: >-
+    {% if is_state(appliance_door, 'on' )  %}
+      Aberta
+    {% else %}
+      {% if is_state(appliance_running_state, 'on' )  %}
+        {{ appliance_task_running_name }}
+      {% elif is_state(appliance_task, 'on' )  %}
+        {{ appliance_task_name }}
+      {% else %}
+        Desligada
+      {% endif %}
+    {% endif %}
+  icon: >-
+    {% if is_state(appliance_running_state, 'on' )  %}
+      {{ icon }}
+    {% elif is_state(appliance_task, 'on' )  %}
+      {{ icon ~ '-alert' }}
+    {% else %}
+      {{ icon ~ '-off' }}
+    {% endif %}

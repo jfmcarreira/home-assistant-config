@@ -1,0 +1,42 @@
+blueprint:
+  name: appliance_running_state
+  description: Creates a binary_sensor which holds the state of an appliance based on its power consumption
+  domain: template
+  input:
+    power_sensor_entity:
+      name: Power Sensor
+      description: The sensor which measures the power consumption of the appliance
+      selector:
+        entity:
+          domain: sensor
+          device_class: power
+    icon:
+      name: Icon
+      selector:
+        icon:
+
+variables:
+  power_sensor_entity: !input power_sensor_entity
+binary_sensor:
+  device_class: plug
+  icon: !input icon
+  delay_on:
+    minutes: 1
+  delay_off:
+    minutes: 2
+  availability: >
+    {{ states(power_sensor_entity) not in ('unknown', 'unavailable') }}
+  state: >
+    {% if is_state('binary_sensor.dish_wash_machine_state', 'on') %}
+        {%- if ( states(power_sensor_entity) | int(0) ) < 3 %}
+            False
+        {%- else %}
+            True
+        {%- endif %}
+    {%- else %}
+        {%- if ( states(power_sensor_entity) | int(0) ) > 50 %}
+            True
+        {%- else %}
+            False
+        {%- endif %}
+    {%- endif %}
