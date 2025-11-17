@@ -35,10 +35,15 @@ binary_sensor:
   - id: sw_1
     platform: gpio
     pin: GPIO05
-    on_click:
-      - min_length: 50ms
-        max_length: 1000ms
+    on_multi_click:
+      - timing:
+          - ON for at most 1000ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
         then:
+          - logger.log:
+              format: "SW 1 short"
+              level: INFO
           - if:
               condition:
                 and:
@@ -52,8 +57,9 @@ binary_sensor:
               else:
                 - logger.log: "Disconnected! Toggling the SW"
                 - switch.toggle: light_1
-      - min_length: 1000ms
-        max_length: 3000ms
+      - timing:
+          - ON for at least 1000ms
+        invalid_cooldown: 100ms
         then:
           - if:
               condition:
@@ -66,34 +72,40 @@ binary_sensor:
                       entity_id: light.exterior_wall_back
               else:
                 - light.toggle: light_2
-    on_double_click:
-      min_length: 50ms
-      max_length: 500ms
-      then:
-        - if:
-            condition:
-              and:
-                - api.connected:
-            then:
-              #- light.turn_on: light_2
-              - switch.turn_on: light_1
-              - delay: 500ms
-              - homeassistant.service:
-                  service: light.turn_on
-                  data:
-                    entity_id: light.kitchen_led
-              - delay: 500ms
-              - homeassistant.service:
-                  service: scene.turn_on
-                  data:
-                    entity_id: scene.lights_kitchen_day
+
+      - timing:
+          - ON for at most 400ms
+          - OFF for at most 400ms
+          - ON for at most 400ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
+        then:
+          - if:
+              condition:
+                and:
+                  - api.connected:
+              then:
+                #- light.turn_on: light_2
+                - switch.turn_on: light_1
+                - delay: 500ms
+                - homeassistant.service:
+                    service: light.turn_on
+                    data:
+                      entity_id: light.kitchen_led
+                - delay: 500ms
+                - homeassistant.service:
+                    service: scene.turn_on
+                    data:
+                      entity_id: scene.lights_kitchen_day
 
   - id: sw_2
     platform: gpio
     pin: GPIO13
-    on_click:
-      - min_length: 50ms
-        max_length: 1000ms
+    on_multi_click:
+      - timing:
+          - ON for at most 1000ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
         then:
           - if:
               condition:
@@ -104,8 +116,9 @@ binary_sensor:
               else:
                 - light.toggle: light_2
 
-      - min_length: 1000ms
-        max_length: 3000ms
+      - timing:
+          - ON for at least 1000ms
+        invalid_cooldown: 100ms
         then:
           - if:
               condition:

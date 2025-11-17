@@ -10,7 +10,11 @@ api:
   reboot_timeout: 0s
 
 logger:
-  level: INFO
+  level: ERROR
+  #level: DEBUG
+  #logs:
+    #main: DEBUG
+    #sensor: INFO
 
 ota:
   - platform: esphome

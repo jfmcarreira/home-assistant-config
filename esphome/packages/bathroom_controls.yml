@@ -47,13 +47,14 @@ binary_sensor:
       if (light_1_on && light_2_on) return true;
       if (!light_1_on && !light_2_on) return false;
       return id(should_turn_off_both_lights_flag);
+
   - id: sw_1
     platform: gpio
     pin: GPIO13
     on_multi_click:
       - timing:
           - ON for at most 1000ms
-          - OFF for at least 100ms
+          - OFF for at least 500ms
         invalid_cooldown: 100ms
         then:
           - if:
@@ -72,6 +73,15 @@ binary_sensor:
                       - light.turn_off: light_2
                     else:
                       - light.toggle: ${input_a_light}
+      - timing:
+          - ON for at most 400ms
+          - OFF for at most 400ms
+          - ON for at most 400ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
+        then:
+          - light.turn_on: light_1
+          - light.turn_on: light_2
 
       - timing:
           - ON for at least 1000ms
@@ -89,7 +99,7 @@ binary_sensor:
     on_multi_click:
       - timing:
           - ON for at most 1000ms
-          - OFF for at least 100ms
+          - OFF for at least 500ms
         invalid_cooldown: 100ms
         then:
           - if:
@@ -107,6 +117,16 @@ binary_sensor:
                       - light.turn_off: light_2
                     else:
                       - light.toggle: ${input_b_light}
+
+      - timing:
+          - ON for at most 400ms
+          - OFF for at most 400ms
+          - ON for at most 400ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
+        then:
+          - light.turn_on: light_1
+          - light.turn_on: light_2
 
       - timing:
           - ON for at least 1000ms
