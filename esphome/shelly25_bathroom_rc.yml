@@ -13,8 +13,8 @@ packages:
   lights_base: !include
     file: packages/shelly25_lights.yml
     vars:
-      Light_1_Name: Bathroom RC LED
-      Light_2_Name: Bathroom RC Ceiling
+      Light_1_Name: Bathroom RC Ceiling
+      Light_2_Name: Bathroom RC LED
 
   bathroom_controls: !include
     file: packages/bathroom_controls.yml

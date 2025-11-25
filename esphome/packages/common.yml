@@ -26,4 +26,10 @@ time:
 sensor:
   - platform: wifi_signal
     id: wifi_signal_sensor
+    name: Wifi Signal
     update_interval: 60s
+
+button:
+  - platform: restart
+    id: restart_button
+    name: Restart
