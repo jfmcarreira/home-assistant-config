@@ -61,9 +61,6 @@ logger:
 #  - platform: bluetooth_le_tracker
 #    track_new_devices: false
 
-# additional_ca:
-#   hon1: account2-hon-smarthome-com-1.pem
-#   hon2: account2-hon-smarthome-com-2.pem
 
 ################################################################################
 ## Includes
