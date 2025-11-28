@@ -1,6 +1,6 @@
 unique_id: lights_stairs_group
-friendly_name: Luzes da Escada
-value_template: >-
+name: Luzes da Escada
+state: >-
   {{
       is_state('light.stairs_lamp', 'on') or
       is_state('light.stairs_wall', 'on') or

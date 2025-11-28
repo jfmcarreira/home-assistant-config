@@ -1,12 +1,13 @@
+template:
 - binary_sensor:
     - name: Bianca Home
       unique_id: bianca_home
       device_class: presence
       icon: mdi:human-female
       state: >
-        {{  is_state('person.bianca_pires', 'home') or 
-            is_state('person.bianca_pires', 'Escritório') or 
-            is_state('person.bianca_pires', 'Sala de Estar') or 
+        {{  is_state('person.bianca_pires', 'home') or
+            is_state('person.bianca_pires', 'Escritório') or
+            is_state('person.bianca_pires', 'Sala de Estar') or
             is_state('person.bianca_pires', 'Quarto Principal')
         }}
       attributes:
@@ -22,5 +23,5 @@
         minutes: 10
       state: >
         {{
-            is_state('binary_sensor.bianca_home', 'on') 
+            is_state('binary_sensor.bianca_home', 'on')
         }}

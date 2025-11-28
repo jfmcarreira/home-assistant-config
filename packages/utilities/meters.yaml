@@ -21,15 +21,12 @@ homeassistant:
       icon: mdi:counter
     sensor.water_meter:
       icon: mdi:counter
-    sensor.electricity_meter:
-      icon: mdi:counter
 
-sensor:
-  - platform: template
-    sensors:
-      electricity_meter:
-        friendly_name: Electricity Meter
-        value_template: >
+template:
+  - sensor:
+      - name: electricity_meter
+        icon: mdi:counter
+        state: >
           {{ ( ( states('sensor.electricity_meter_offpeak') | float ) + ( states('sensor.electricity_meter_peak') | float ) + ( states('sensor.electricity_meter_full') | float ) ) | int }}
 
 input_number:

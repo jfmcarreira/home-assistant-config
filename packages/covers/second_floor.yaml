@@ -1,15 +1,9 @@
-homeassistant:
-  customize:
-    cover.second_floor:
-      assumed_state: true
-
-cover:
-  - platform: template
-    covers:
-      second_floor:
+template:
+  - cover:
+      - name: second_floor
+        unique_id: cover_second_floor
         device_class: shutter
-        friendly_name: Grupo de Estores do 1º Andar
-        position_template: >
+        position: >
           {% set position_sum = 0 %}
           {% set position_count = 0 %}
           {% if is_state('input_boolean.cover_control_group_master_bedroom', 'on') %}

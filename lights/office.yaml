@@ -1,6 +1,6 @@
 unique_id: lights_office_group
-friendly_name: Luzes do Escritório
-value_template: >-
+name: Luzes do Escritório
+state: >-
   {{
       is_state('light.office_main', 'on') or
       is_state('light.office_extra', 'on')

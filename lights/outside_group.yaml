@@ -1,6 +1,6 @@
 unique_id: lights_outside_group
-friendly_name: Luzes da Rua
-value_template: >-
+name: Luzes da Rua
+state: >-
   {{
       is_state('light.kitchen_door', 'on') or
       is_state('light.front_door', 'on') or

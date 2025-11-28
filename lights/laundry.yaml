@@ -1,6 +1,6 @@
 unique_id: lights_laundry_group
-friendly_name: Luz da Lavandaria
-value_template: >-
+name: Luz da Lavandaria
+state: >-
   {{
       is_state('light.laundry_main', 'on') or
       is_state('light.laundry_extra', 'on')

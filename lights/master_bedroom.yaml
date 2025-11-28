@@ -1,6 +1,6 @@
 unique_id: lights_master_bedroom_group
-friendly_name: Luzes da Suite
-value_template: >-
+name: Luzes da Suite
+state: >-
   {{
       is_state('light.master_bedroom_ceiling', 'on') or
       is_state('light.master_bedroom_entry', 'on') or

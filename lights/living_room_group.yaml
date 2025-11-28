@@ -1,6 +1,6 @@
 unique_id: lights_living_room_group
-friendly_name: Luzes da Sala
-value_template: >-
+name: Luzes da Sala
+state: >-
   {{
       is_state('light.living_room', 'on') or
       is_state('light.living_room_window', 'on') or

@@ -1,6 +1,6 @@
 unique_id: lights_master_bedroom_bathroom_group
-friendly_name: Luzes da Casa de Banho da Suite
-value_template: >-
+name: Luzes da Casa de Banho da Suite
+state: >-
   {{
       is_state('light.master_bedroom_bathroom_ceiling', 'on') or
       is_state('light.master_bedroom_bathroom_led', 'on')

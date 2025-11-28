@@ -1,6 +1,6 @@
 unique_id: lights_bathroom_rc_group
-friendly_name: Luzes da Casa de Banho de Serviço
-value_template: >-
+name: Luzes da Casa de Banho de Serviço
+state: >-
   {{
       is_state('light.bathroom_rc_ceiling', 'on') or
       is_state('light.bathroom_rc_led', 'on')

@@ -1,15 +1,9 @@
-homeassistant:
-  customize:
-    cover.first_floor:
-      assumed_state: true
-
-cover:
-  - platform: template
-    covers:
-      first_floor:
+template:
+  - cover:
+      - name: first_floor
+        unique_id: cover_first_floor
         device_class: shutter
-        friendly_name: Grupo de Estores do R/C
-        position_template: >
+        position: >
           {% set position_sum = 0 %}
           {% set position_count = 0 %}
           {% if is_state('input_boolean.cover_control_group_living_room', 'on') %}

@@ -1,6 +1,6 @@
 unique_id: lights_bedroom_ricardo_group
-friendly_name: Luzes do Quarto do Ricardo
-value_template: >-
+name: Luzes do Quarto do Ricardo
+state: >-
   {{
       is_state('light.bedroom_ricardo_ceiling', 'on') or
       is_state('light.bedroom_ricardo_closet', 'on') or

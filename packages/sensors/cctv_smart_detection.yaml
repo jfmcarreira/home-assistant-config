@@ -1,3 +1,4 @@
+template:
 - binary_sensor:
     - name: Backyard Camera Smart Detection
       unique_id: backyard_camera_smart_detection

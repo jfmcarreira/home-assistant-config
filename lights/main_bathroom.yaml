@@ -1,6 +1,6 @@
 unique_id: lights_main_bathroom_group
-friendly_name: Luzes da Casa de Banho Principal
-value_template: >-
+name: Luzes da Casa de Banho Principal
+state: >-
   {{
       is_state('light.main_bathroom_ceiling', 'on') or
       is_state('light.main_bathroom_led', 'on')

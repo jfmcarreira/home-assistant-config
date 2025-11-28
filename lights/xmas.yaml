@@ -1,8 +1,8 @@
 unique_id: xmas_lights
-friendly_name: Luzes da Árvore de Natal
-value_template: >-
+name: Luzes da Árvore de Natal
+state: >-
    False
-# value_template: "{{ is_state('switch.nedis_plug', 'on')  }}"
+# state: "{{ is_state('switch.nedis_plug', 'on')  }}"
 turn_on:
   - service: switch.turn_on
     entity_id: switch.nedis_plug

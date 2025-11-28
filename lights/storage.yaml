@@ -1,6 +1,6 @@
 unique_id: lights_storage
-friendly_name: Luzes da Casa de Arrumos
-value_template: >-
+name: Luzes da Casa de Arrumos
+state: >-
   {{
       is_state('light.storage_workbench_led', 'on') or
       is_state('light.storage_ceiling', 'on')

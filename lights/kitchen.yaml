@@ -1,6 +1,6 @@
 unique_id: lights_kitchen_group
-friendly_name: Luzes da Cozinha
-value_template: >-
+name: Luzes da Cozinha
+state: >-
   {{
       is_state('light.kitchen_led', 'on') or
       is_state('light.kitchen_window', 'on') or

@@ -1,3 +1,4 @@
+template:
 - binary_sensor:
     - name: joao_mac_book_active_home
       unique_id: joao_mac_book_active_home

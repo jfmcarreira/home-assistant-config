@@ -1,0 +1,33 @@
+name: air_conditioner
+unique_id: air_conditioner
+state: >-
+  {{
+    is_state('switch.living_room_ac', 'on') or
+    is_state('switch.office_ac', 'on') or
+    is_state('switch.hall_ac', 'on') or
+    is_state('switch.master_bedroom_ac', 'on') or
+    is_state('switch.bedroom_ricardo_ac', 'on') or
+    is_state('switch.bedroom_henrique_ac', 'on')
+  }}
+turn_on:
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id:
+        - switch.living_room_ac
+        - switch.office_ac
+        - switch.hall_ac
+        - switch.master_bedroom_ac
+        - switch.bedroom_ricardo_ac
+        - switch.bedroom_henrique_ac
+turn_off:
+  - service: switch.turn_off
+    data: {}
+    target:
+      entity_id:
+        - switch.living_room_ac
+        - switch.office_ac
+        - switch.hall_ac
+        - switch.master_bedroom_ac
+        - switch.bedroom_ricardo_ac
+        - switch.bedroom_henrique_ac

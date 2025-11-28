@@ -1,0 +1,71 @@
+name: master_bedroom_ac
+unique_id: master_bedroom_ac
+state: >-
+  {{
+    not is_state('climate.master_bedroom', 'off')
+  }}
+turn_on:
+  - choose:
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: sensor.season
+                state: spring
+              - condition: state
+                entity_id: sensor.season
+                state: summer
+        sequence:
+          - action: climate.set_hvac_mode
+            metadata: {}
+            data:
+              hvac_mode: cool
+            target:
+              entity_id: climate.master_bedroom
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: sensor.season
+                state: winter
+              - condition: state
+                entity_id: sensor.season
+                state: autumn
+        sequence:
+          - action: climate.set_hvac_mode
+            metadata: {}
+            data:
+              hvac_mode: heat
+            target:
+              entity_id: climate.master_bedroom
+          - action: climate.set_temperature
+            target:
+              entity_id: climate.master_bedroom
+            data:
+              temperature: 21
+    default:
+      - action: climate.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: climate.master_bedroom
+  - action: climate.set_fan_mode
+    data:
+      fan_mode: auto
+    target:
+      entity_id: climate.master_bedroom
+  - action: climate.set_swing_mode
+    data:
+      swing_mode: swing
+    target:
+      entity_id: climate.master_bedroom
+turn_off:
+  - condition: not
+    conditions:
+      - condition: state
+        entity_id: climate.master_bedroom
+        state: "off"
+  - service: climate.turn_off
+    target:
+      entity_id:
+        - climate.master_bedroom

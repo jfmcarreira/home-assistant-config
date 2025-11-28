@@ -12,13 +12,12 @@
 #         Ok
 #       {% endif %}
 
-binary_sensor:
-  - platform: template
-    sensors:
-      roborock_state:
-        icon_template: mdi:robot-vacuum
-        value_template: "{{ states('vacuum.roborock') != 'docked' }}"
-        friendly_name: "Aspirador Roborock"
+template:
+  - binary_sensor:
+      - name: roborock_state
+        unique_id: roborock_state
+        icon: mdi:robot-vacuum
+        state: "{{ states('vacuum.roborock') != 'docked' }}"
 
 input_boolean:
   vacuum_livingroom:
@@ -64,6 +63,7 @@ script:
           {% endif %}
           {% if is_state('input_boolean.vacuum_masterbedroom', 'on') %}
             {% set rooms.segments = rooms.segments + ['20'] %}
+            {% set rooms.segments = rooms.segments + ['22'] %}
           {% endif %}
           {% if is_state('input_boolean.vacuum_bedroomricardo', 'on') %}
             {% set rooms.segments = rooms.segments + ['16'] %}
