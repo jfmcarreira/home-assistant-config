@@ -374,34 +374,34 @@
         - switch.backyard_camera_push_notifications
         - switch.front_camera_push_notifications
   mode: single
-- alias: cctv notify front camera
-  id: '1658675704141'
+- id: '1658675704141'
+  alias: Notificar Deteção Câmara da Frente
   description: ''
   use_blueprint:
     path: cameras/send-camera-snapshot-notification-on-motion.yaml
     input:
-      notification_title: Segurança - Camerara da Frente
+      notification_title: Segurança - Câmara da Frente
+      notification_message: Pessoas ou Carros Detectados na Câmara da Frente
       notify_joao: true
       camera: camera.front
       motion_sensor:
       - binary_sensor.front_camera_smart_detection
-      - binary_sensor.front_person_occupancy
       notify_bianca: false
-      notification_tag: 1101
-- alias: cctv notify backyard camera
-  id: '1658676096110'
+      notification_tag: cctv_front_snapshot
+- id: '1658676096110'
+  alias: Notificar Deteção Câmara das Traseiras
   description: ''
   use_blueprint:
     path: cameras/send-camera-snapshot-notification-on-motion.yaml
     input:
-      notification_title: Segurança - Camerara das Traseiras
+      notification_title: Segurança - Câmara das Traseiras
+      notification_message: Pessoas ou Carros Detectados na Câmara das Traseiras
       notify_joao: true
       camera: camera.backyard
       motion_sensor:
       - binary_sensor.backyard_camera_smart_detection
-      - binary_sensor.backyard_person_occupancy
       notify_bianca: false
-      notification_tag: 1102
+      notification_tag: cctv_backyard_snapshot
 - alias: 'Desligar Luzes da Despensa com Temporizador '
   id: '1659187275200'
   description: ''
@@ -704,13 +704,15 @@
 - id: Lights Xmas Auto On
   alias: Ligar Luzes da Arvore de Natal Tarde
   description: ''
-  trigger:
-  - platform: template
-    value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
-  - platform: state
-    entity_id: binary_sensor.notify_home
+  triggers:
+  - entity_id: binary_sensor.notify_home
     to: 'on'
-  condition:
+    trigger: state
+  - trigger: numeric_state
+    entity_id:
+    - sensor.sun_solar_elevation
+    below: 15
+  conditions:
   - condition: template
     value_template: '{{ state_attr("sun.sun", "elevation") < 15 }}'
   - condition: state
@@ -719,19 +721,19 @@
   - condition: time
     after: '16:00:00'
     before: '23:30'
-  action:
-  - service: light.turn_on
-    entity_id: light.xmas_tree
+  actions:
+  - entity_id: light.xmas_tree
+    action: light.turn_on
   mode: restart
 - id: Lights Xmas Auto Off
   alias: Desligar Luzes de Natal
-  trigger:
-  - platform: time
-    at: 01:30:00
-  action:
-  - service: light.turn_off
-    data: {}
+  triggers:
+  - at: 02:00:00
+    trigger: time
+  actions:
+  - data: {}
     entity_id: light.xmas_tree
+    action: light.turn_off
   mode: restart
 - alias: Luzes por Mov. na Cozinha
   id: '1669853123196'
@@ -838,19 +840,40 @@
       target:
         entity_id: climate.portable_heater
   mode: single
-- alias: Xmas Lights Outside
-  id: '1670373784711'
+- id: '1670373784711'
+  alias: Xmas Lights Outside
   description: ''
-  trigger:
-  - platform: template
-    value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
-  condition:
-  - condition: template
-    value_template: '{{ state_attr("sun.sun", "elevation") < 0 }}'
-  - condition: time
-    after: '16:00:00'
-    before: '23:30'
-  action: []
+  triggers:
+  - trigger: sun
+    event: sunset
+    offset: '1:00:00'
+  - trigger: time
+    at: '17:00:00'
+  - trigger: time
+    at: 03:01:00
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: time
+          after: 03:00:00
+          before: '16:00:00'
+        - condition: sun
+          after: sunset
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        target:
+          entity_id: light.xmas_fence
+        data: {}
+    default:
+    - action: light.turn_on
+      metadata: {}
+      target:
+        entity_id: light.xmas_fence
+      data: {}
   mode: restart
 - alias: Desligar Luzes das Escadas com a Luminosidade
   id: '1670674527026'
@@ -1256,21 +1279,21 @@
     target:
       entity_id: light.outside_group
   mode: restart
-- alias: Ligar Luzes da Árvore de Natal de Manhã
-  id: '1701482615616'
+- id: '1701482615616'
+  alias: Ligar Luzes da Árvore de Natal de Manhã
   description: ''
-  trigger:
-  - platform: time
-    at: 07:30:00
-  condition:
+  triggers:
+  - at: 07:00:00
+    trigger: time
+  conditions:
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'on'
-  action:
-  - service: light.turn_on
-    target:
+  actions:
+  - target:
       entity_id: light.xmas_tree
     data: {}
+    action: light.turn_on
   mode: single
 - alias: 'Controlar Luz das Escadas Day/Night '
   id: '1701541427434'
@@ -1678,8 +1701,8 @@
       - office
     action: script.cover_group_action
   mode: single
-- alias: AC Sala - Ajustar durante a refeição
-  id: '1703619934344'
+- id: '1703619934344'
+  alias: AC Sala - Ajustar durante a refeição
   triggers:
   - entity_id:
     - light.living_room_table
@@ -1691,12 +1714,14 @@
       seconds: 10
     trigger: state
   conditions:
-  - condition: state
-    entity_id: climate.living_room
-    state: heat
-  - condition: state
-    entity_id: climate.living_room
-    state: cool
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: climate.living_room
+      state: cool
+    - condition: state
+      entity_id: climate.living_room
+      state: heat
   actions:
   - target:
       entity_id: climate.living_room
@@ -3870,18 +3895,38 @@
         channel: Segurança
         clickAction: /lovelace-subviews/dashboard-exterior
   mode: restart
-- alias: Alertar o MacBook Henrique a Chorar
-  id: '1760144253958'
+- id: '1760144253958'
+  alias: Alertar o Joao Henrique a Chorar
   description: ''
   triggers:
   - trigger: state
     entity_id:
-    - binary_sensor.baby_monitor_henrique_cough_sound
-    to: 'on'
+    - binary_sensor.baby_monitor_henrique_crying_sound
+    to:
+    - 'on'
   conditions:
   - condition: state
     state: 'on'
     entity_id: binary_sensor.joao_home
+  - condition: template
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
+      | int(0)) > 60 * 30 }}'
+  - condition: state
+    entity_id: light.bedroom_henrique
+    state:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  - condition: state
+    entity_id: cover.bedroom_henrique
+    state:
+    - closed
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
   actions:
   - action: notify.mobile_app_joao
     metadata: {}
@@ -3889,8 +3934,8 @@
       title: Baby Monitor
       message: O Henrique está a chorar
   mode: single
-- alias: Alertar o MacBook Ricardo a Chorar
-  id: '1760144554168'
+- id: '1760144554168'
+  alias: Alertar o Joao Ricardo a Chorar
   description: ''
   triggers:
   - trigger: state
@@ -3901,6 +3946,25 @@
   - condition: state
     entity_id: binary_sensor.joao_home
     state: 'on'
+  - condition: template
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
+      | int(0)) > 60 * 30 }}'
+  - condition: state
+    entity_id: light.bedroom_ricardo
+    state:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  - condition: state
+    entity_id: cover.bedroom_ricardo
+    state:
+    - closed
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
   actions:
   - action: notify.mobile_app_joao
     metadata: {}
@@ -3976,8 +4040,8 @@
       - summer
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Bedroom Ricardo - Ligar de Tarde no Verão
-  id: '1749602497079'
+- id: '1749602497079'
+  alias: AC Quarto do Ricardo - Ligar de Tarde no Verão
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_cool.yaml
@@ -3999,8 +4063,8 @@
       - summer
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Bedroom Henrique - Ligar de Tarde no Verão
-  id: '1739604497079'
+- id: '1739604497079'
+  alias: AC Quarto do Henrique - Ligar de Tarde no Verão
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_cool.yaml
@@ -4045,8 +4109,8 @@
       - summer
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Sala - Ligar de Manhã no Inverno
-  id: '1705368431534'
+- id: '1705368431534'
+  alias: AC Sala - Ligar de Manhã no Inverno
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
@@ -4055,8 +4119,8 @@
       schedule_end: 08:00:00
       hvac_unit:
       - climate.living_room
-      hvac_temperature: 21
-      room_temperature: 20.5
+      hvac_temperature: 22
+      room_temperature: 21
       temperature_sensor: sensor.temperature_living_room
       window_sensor: binary_sensor.window_ground_floor
       weekday:
@@ -4082,7 +4146,7 @@
       schedule_end: 08:00:00
       hvac_unit:
       - climate.hall
-      hvac_temperature: 21
+      hvac_temperature: 22
       room_temperature: 21
       temperature_sensor: sensor.temperature_hall
       weekday:
@@ -4122,8 +4186,8 @@
       - winter
       - spring
       - autumn
-- alias: AC Sala - Ligar de Tarde no Inverno
-  id: '1705596387713'
+- id: '1705596387713'
+  alias: AC Sala - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
@@ -4132,7 +4196,7 @@
       schedule_end: '18:00:00'
       hvac_unit:
       - climate.living_room
-      hvac_temperature: 20
+      hvac_temperature: 22
       room_temperature: 21
       temperature_sensor: sensor.temperature_living_room
       weekday:
@@ -4213,7 +4277,7 @@
       schedule_end: '20:00:00'
       hvac_unit:
       - climate.hall
-      hvac_temperature: 21
+      hvac_temperature: 22
       room_temperature: 21.5
       temperature_sensor: sensor.temperature_hall
       weekday:
@@ -4230,8 +4294,8 @@
       - spring
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Suite - Ligar de Tarde no Inverno
-  id: '1705596272069'
+- id: '1705596272069'
+  alias: AC Suite - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
@@ -4240,8 +4304,8 @@
       schedule_end: '20:00:00'
       hvac_unit:
       - climate.master_bedroom
-      hvac_temperature: 21
-      room_temperature: 20
+      hvac_temperature: 22
+      room_temperature: 21
       temperature_sensor: sensor.temperature_master_bedroom
       weekday:
       - mon
@@ -4258,8 +4322,8 @@
       hvac_delayed_temperature_offset: 0
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
-  id: '1705596348371'
+- id: '1705596348371'
+  alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
@@ -4268,8 +4332,8 @@
       schedule_end: '20:00:00'
       hvac_unit:
       - climate.bedroom_ricardo
-      hvac_temperature: 21
-      room_temperature: 20
+      hvac_temperature: 22
+      room_temperature: 21
       temperature_sensor: sensor.temperature_bedroom_ricardo
       weekday:
       - mon
@@ -4286,8 +4350,8 @@
       hvac_delayed_temperature_offset: 0
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
-  id: '1737770376538'
+- id: '1737770376538'
+  alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
@@ -4297,7 +4361,7 @@
       hvac_unit:
       - climate.bedroom_henrique
       hvac_temperature: 21
-      room_temperature: 20
+      room_temperature: 20.5
       temperature_sensor: sensor.temperature_bedroom_henrique
       weekday:
       - mon
@@ -4332,3 +4396,33 @@
       no_motion_wait: 60
       illuminance_cutoff: 75
       illuminance_sensor: none
+- id: '1763600787785'
+  alias: lights_auto_off_hallway_presence
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.living_room_group
+    - light.doorway
+    - light.hallway
+    to:
+    - 'on'
+  - trigger: state
+    entity_id:
+    - light.living_room_group
+    - light.doorway
+    - light.hallway
+    to:
+    - 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.hallway_presence
+  mode: single

@@ -192,13 +192,31 @@ lights_arriving_home:
       minutes: 10
   - if:
     - condition: state
-      entity_id: sun.sun
-      state: below_horizon
+      entity_id: binary_sensor.night
+      state: 'on'
     then:
     - data: {}
       target:
         entity_id: light.kitchen_led
       action: light.turn_on
+    - action: light.turn_on
+      metadata: {}
+      target:
+        entity_id: light.hallway
+      data: {}
+    - if:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: sensor.house_mode
+          state:
+          - Night
+      then:
+      - action: light.turn_on
+        metadata: {}
+        target:
+          entity_id: light.living_room
+        data: {}
   - wait_for_trigger:
     - entity_id:
       - binary_sensor.kitchen_door
@@ -477,10 +495,6 @@ house_turn_all_off:
         - media_player.assistant_speakers
       action: media_player.turn_off
     - target:
-        area_id: xmas
-      data: {}
-      action: homeassistant.turn_off
-    - target:
         entity_id: climate.portable_heater
       data: {}
       action: climate.turn_off
@@ -514,7 +528,6 @@ routine_good_night:
         - office
         - outside
         - laundry
-        - bedroom_henrique
         - bedroom_rc
       action: light.turn_off
     - target:
@@ -530,9 +543,9 @@ routine_good_night:
         - media_player.assistant_speakers
       action: media_player.turn_off
     - target:
-        area_id: xmas
+        entity_id: light.xmas_tree
       data: {}
-      action: homeassistant.turn_off
+      action: light.turn_off
     - target:
         entity_id: climate.portable_heater
       data: {}
@@ -544,10 +557,13 @@ routine_good_night:
     - action: climate.turn_off
       data: {}
       target:
-        entity_id:
-        - climate.master_bedroom
-        - climate.bedroom_ricardo
-        - climate.living_room
+        area_id:
+        - living_room
+        - office
+        - master_bedroom
+        - bedroom_ricardo
+        - bedroom_henrique
+        - bathroom_main
     - action: cover.close_cover
       target:
         entity_id: cover.gate
@@ -557,21 +573,14 @@ routine_good_night:
       option: Sleep
     target:
       entity_id: input_select.house_mode
-  - data: {}
+  - action: light.turn_off
     target:
+      floor_id:
+      - living_floor
+      - bedrooms
       area_id:
-      - bathroom_main
-      - bathroom_rc
-      - kitchen
-      - office
       - outside
-      - laundry
-      - bedroom_henrique
-      - bedroom_rc
-      - hall
-      - stairs
-      - living_room
-    action: light.turn_off
+    data: {}
   - delay:
       hours: 0
       minutes: 0
@@ -607,27 +616,27 @@ routine_exit_house_all_off:
       data: {}
       target:
         area_id:
-        - bathroom_main
         - bathroom_rc
-        - master_bedroom_bathroom
-        - master_bedroom
-        - bedroom_ricardo
-        - bedroom_henrique
         - bedroom_rc
         - office
         - laundry
-        - hall
         - stairs
+        floor_id: bedrooms
       action: light.turn_off
+    - action: script.device_control_magnesium
+      target: {}
+      data:
+        operation: screen_off
+      continue_on_error: true
     - data: {}
       target:
         entity_id:
         - media_player.assistant_speakers
       action: media_player.turn_off
     - target:
-        area_id: xmas
+        entity_id: light.xmas_tree
       data: {}
-      action: homeassistant.turn_off
+      action: light.turn_off
     - target:
         entity_id: climate.portable_heater
       data: {}
@@ -804,4 +813,46 @@ assistant_light_toggle:
       target:
         entity_id: light.office
   alias: assistant_light_toggle
+  description: ''
+device_control_magnesium:
+  sequence:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ operation == ''screen_on'' }}'
+      sequence:
+      - action: notify.mobile_app_magnesium
+        data:
+          message: command_screen_on
+    - conditions:
+      - condition: template
+        value_template: '{{ operation == ''screen_off'' }}'
+      sequence:
+      - action: notify.mobile_app_magnesium
+        data:
+          message: command_screen_off_timeout
+          data:
+            command: 30000
+      - action: notify.mobile_app_magnesium
+        data:
+          message: command_launch_app
+          data:
+            package_name: io.homeassistant.companion.android
+    - conditions:
+      - condition: template
+        value_template: '{{ operation == ''reolink'' }}'
+      sequence:
+      - action: notify.mobile_app_magnesium
+        data:
+          message: command_screen_on
+      - action: notify.mobile_app_magnesium
+        data:
+          message: command_launch_app
+          data:
+            package_name: com.mcu.reolink
+  fields:
+    operation:
+      selector:
+        text: {}
+  alias: device_control_magnesium
   description: ''
