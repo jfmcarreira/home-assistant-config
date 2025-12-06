@@ -4,10 +4,9 @@ sequence_leaving_home_lights:
   trace:
     stored_traces: 1
   sequence:
-    - condition: numeric_state
-      entity_id: sun.sun
-      attribute: elevation
-      below: "10"
+    - condition: state
+      entity_id: binary_sensor.night
+      state: 'on'
 
     - if:
         - condition: state
