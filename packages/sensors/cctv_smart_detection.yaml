@@ -6,16 +6,16 @@ template:
       icon: mdi:cctv
       availability: >-
         {{
+            (states('binary_sensor.backyard_camera_reolink_person') not in ('unknown', 'unavailable')) and
+            (states('binary_sensor.backyard_camera_reolink_vehicle') not in ('unknown', 'unavailable')) and
             (states('binary_sensor.backyard_camera_person') not in ('unknown', 'unavailable')) and
-            (states('binary_sensor.backyard_camera_vehicle') not in ('unknown', 'unavailable')) and
-            (states('binary_sensor.backyard_person') not in ('unknown', 'unavailable')) and
-            (states('binary_sensor.backyard_car') not in ('unknown', 'unavailable'))
+            (states('binary_sensor.backyard_camera_car') not in ('unknown', 'unavailable'))
         }}
       state: >
-        {{  is_state('binary_sensor.backyard_camera_person', 'on') or
-            is_state('binary_sensor.backyard_camera_vehicle', 'on') or
-            is_state('binary_sensor.backyard_person', 'on') or
-            is_state('binary_sensor.backyard_car', 'on')
+        {{  is_state('binary_sensor.backyard_camera_reolink_person', 'on') or
+            is_state('binary_sensor.backyard_camera_reolink_vehicle', 'on') or
+            is_state('binary_sensor.backyard_camera_person', 'on') or
+            is_state('binary_sensor.backyard_camera_car', 'on')
         }}
 
     - name: Front Camera Smart Detection
@@ -24,14 +24,14 @@ template:
       icon: mdi:cctv
       availability: >-
         {{
+            (states('binary_sensor.front_camera_reolink_person') not in ('unknown', 'unavailable')) and
+            (states('binary_sensor.front_camera_reolink_vehicle') not in ('unknown', 'unavailable')) and
             (states('binary_sensor.front_camera_person') not in ('unknown', 'unavailable')) and
-            (states('binary_sensor.front_camera_vehicle') not in ('unknown', 'unavailable')) and
-            (states('binary_sensor.front_person') not in ('unknown', 'unavailable')) and
-            (states('binary_sensor.front_car') not in ('unknown', 'unavailable'))
+            (states('binary_sensor.front_camera_car') not in ('unknown', 'unavailable'))
         }}
       state: >
-        {{  is_state('binary_sensor.front_camera_person', 'on') or
-            is_state('binary_sensor.front_camera_vehicle', 'on') or
-            is_state('binary_sensor.front_backyard_person', 'on') or
-            is_state('binary_sensor.front_backyard_car', 'on')
+        {{  is_state('binary_sensor.front_camera_reolink_person', 'on') or
+            is_state('binary_sensor.front_camera_reolink_vehicle', 'on') or
+            is_state('binary_sensor.front_camera_person', 'on') or
+            is_state('binary_sensor.front_camera_car', 'on')
         }}
