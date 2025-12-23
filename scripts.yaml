@@ -10,46 +10,16 @@ hvac_turn_on_bedroom_ricardo:
     - condition: numeric_state
       entity_id: sensor.temperature_bedroom_ricardo
       above: 24
-    - action: climate.set_hvac_mode
-      metadata: {}
-      data:
-        hvac_mode: cool
+    - action: switch.turn_on
       target:
-        entity_id: climate.bedroom_ricardo
-    - action: climate.set_temperature
-      metadata: {}
-      data:
-        temperature: 25
-      target:
-        entity_id: climate.bedroom_ricardo
+        entity_id: switch.bedroom_ricardo_ac
     else:
     - condition: numeric_state
       entity_id: sensor.temperature_bedroom_ricardo
       below: 22
-    - action: climate.set_hvac_mode
-      metadata: {}
-      data:
-        hvac_mode: heat
+    - action: switch.turn_on
       target:
-        entity_id: climate.bedroom_ricardo
-    - action: climate.set_temperature
-      metadata: {}
-      data:
-        temperature: 22
-      target:
-        entity_id: climate.bedroom_ricardo
-  - action: climate.set_swing_mode
-    metadata: {}
-    data:
-      swing_mode: vertical
-    target:
-      entity_id: climate.bedroom_ricardo
-  - action: climate.set_temperature
-    metadata: {}
-    data:
-      temperature: 22
-    target:
-      entity_id: climate.bedroom_ricardo
+        entity_id: switch.bedroom_ricardo_ac
 hvac_turn_on_bedroom_henrique:
   alias: hvac_turn_on_bedroom_henrique
   mode: single
@@ -62,46 +32,16 @@ hvac_turn_on_bedroom_henrique:
     - condition: numeric_state
       entity_id: sensor.temperature_bedroom_henrique
       above: 24
-    - action: climate.set_hvac_mode
-      metadata: {}
-      data:
-        hvac_mode: cool
+    - action: switch.turn_on
       target:
-        entity_id: climate.bedroom_henrique
-    - action: climate.set_temperature
-      metadata: {}
-      data:
-        temperature: 25
-      target:
-        entity_id: climate.bedroom_henrique
+        entity_id: switch.bedroom_henrique_ac
     else:
     - condition: numeric_state
       entity_id: sensor.temperature_bedroom_henrique
       below: 22
-    - action: climate.set_hvac_mode
-      metadata: {}
-      data:
-        hvac_mode: heat
+    - action: switch.turn_on
       target:
-        entity_id: climate.bedroom_henrique
-    - action: climate.set_temperature
-      metadata: {}
-      data:
-        temperature: 22
-      target:
-        entity_id: climate.bedroom_henrique
-  - action: climate.set_swing_mode
-    metadata: {}
-    data:
-      swing_mode: vertical
-    target:
-      entity_id: climate.bedroom_henrique
-  - action: climate.set_temperature
-    metadata: {}
-    data:
-      temperature: 22
-    target:
-      entity_id: climate.bedroom_henrique
+        entity_id: switch.bedroom_henrique_ac
 hvac_turn_on_master_bedroom:
   alias: hvac_turn_on_master_bedroom
   mode: single
@@ -114,40 +54,16 @@ hvac_turn_on_master_bedroom:
     - condition: numeric_state
       entity_id: sensor.temperature_master_bedroom
       above: 24
-    - action: climate.set_hvac_mode
-      metadata: {}
-      data:
-        hvac_mode: cool
+    - action: switch.turn_on
       target:
-        entity_id: climate.master_bedroom
-    - action: climate.set_temperature
-      metadata: {}
-      data:
-        temperature: 25
-      target:
-        entity_id: climate.master_bedroom
+        entity_id: switch.master_bedroom_ac
     else:
     - condition: numeric_state
       entity_id: sensor.temperature_master_bedroom
       below: 22
-    - action: climate.set_hvac_mode
-      metadata: {}
-      data:
-        hvac_mode: heat
+    - action: switch.turn_on
       target:
-        entity_id: climate.master_bedroom
-    - action: climate.set_temperature
-      metadata: {}
-      data:
-        temperature: 22
-      target:
-        entity_id: climate.master_bedroom
-  - action: climate.set_swing_mode
-    metadata: {}
-    data:
-      swing_mode: vertical
-    target:
-      entity_id: climate.master_bedroom
+        entity_id: switch.master_bedroom_ac
 routine_cover_rain_mode:
   alias: Routina Modo de Chuva
   mode: single
@@ -183,60 +99,80 @@ lights_arriving_home:
         - light.kitchen_door
       data: {}
       action: light.turn_on
-  - wait_for_trigger:
-    - entity_id:
-      - binary_sensor.kitchen_door
-      to: 'on'
-      trigger: state
-    timeout:
-      minutes: 10
-  - if:
-    - condition: state
-      entity_id: binary_sensor.night
-      state: 'on'
-    then:
-    - data: {}
-      target:
-        entity_id: light.kitchen_led
-      action: light.turn_on
-    - action: light.turn_on
-      metadata: {}
-      target:
-        entity_id: light.hallway
-      data: {}
-    - if:
-      - condition: not
-        conditions:
-        - condition: state
-          entity_id: sensor.house_mode
-          state:
-          - Night
-      then:
-      - action: light.turn_on
-        metadata: {}
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.script_step_message
+    data:
+      value: Aguardar a Porta Abrir
+  - parallel:
+    - sequence:
+      - wait_for_trigger:
+        - entity_id:
+          - binary_sensor.kitchen_door
+          to: 'on'
+          trigger: state
+        timeout:
+          minutes: 2
+      - action: input_text.set_value
         target:
-          entity_id: light.living_room
+          entity_id: input_text.script_step_message
+        data:
+          value: Aguardar a Porta Fechar
+      - wait_for_trigger:
+        - entity_id:
+          - binary_sensor.kitchen_door
+          to: 'off'
+          for:
+            minutes: 5
+          trigger: state
+        - entity_id:
+          - light.kitchen_door
+          to: 'off'
+          trigger: state
+        timeout:
+          minutes: 2
+      - target:
+          entity_id:
+          - light.exterior_wall_side
+          - light.exterior_wall_back
+          - light.kitchen_door
         data: {}
-  - wait_for_trigger:
-    - entity_id:
-      - binary_sensor.kitchen_door
-      to: 'off'
-      for:
-        minutes: 5
-      trigger: state
-    - entity_id:
-      - light.kitchen_door
-      to: 'off'
-      trigger: state
-    timeout:
-      minutes: 10
-  - target:
-      entity_id:
-      - light.exterior_wall_side
-      - light.exterior_wall_back
-      - light.kitchen_door
-    data: {}
-    action: light.turn_off
+        action: light.turn_off
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.script_step_message
+        data:
+          value: ''
+    - sequence:
+      - wait_for_trigger:
+        - entity_id:
+          - binary_sensor.kitchen_door
+          to: 'on'
+          trigger: state
+        timeout:
+          minutes: 2
+        continue_on_timeout: false
+      - if:
+        - condition: state
+          entity_id: binary_sensor.night
+          state: 'on'
+        then:
+        - action: light.turn_on
+          target:
+            entity_id:
+            - light.kitchen_led
+            - light.hallway
+          data: {}
+        - if:
+          - condition: state
+            entity_id: binary_sensor.night_mode
+            state: 'off'
+          then:
+          - action: light.turn_on
+            metadata: {}
+            target:
+              entity_id: light.living_room
+            data: {}
 lights_control_gate_front_lights:
   alias: Controlar Luzes do Portão
   sequence:
@@ -493,6 +429,12 @@ house_turn_all_off:
       target:
         entity_id:
         - media_player.assistant_speakers
+      action: homeassistant.turn_off
+    - data: {}
+      target:
+        entity_id:
+        - media_player.living_room_tv
+        - media_player.lg_tv
       action: media_player.turn_off
     - target:
         entity_id: climate.portable_heater
@@ -541,6 +483,12 @@ routine_good_night:
       target:
         entity_id:
         - media_player.assistant_speakers
+      action: homeassistant.turn_off
+    - data: {}
+      target:
+        entity_id:
+        - media_player.living_room_tv
+        - media_player.lg_tv
       action: media_player.turn_off
     - target:
         entity_id: light.xmas_tree
@@ -632,7 +580,7 @@ routine_exit_house_all_off:
       target:
         entity_id:
         - media_player.assistant_speakers
-      action: media_player.turn_off
+      action: homeassistant.turn_off
     - target:
         entity_id: light.xmas_tree
       data: {}
@@ -679,9 +627,13 @@ routine_exit_house_all_off:
       to: 'off'
       trigger: state
     timeout: 00:20:00
-  - data:
-      entity_id: all
+  - data: {}
     action: light.turn_off
+    target:
+      floor_id:
+      - living_floor
+      - bedrooms
+      area_id: outside
 gps_update_bianca:
   alias: Atualizar Localização Bianca
   sequence:

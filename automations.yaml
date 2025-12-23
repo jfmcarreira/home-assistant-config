@@ -235,8 +235,8 @@
       room_name: Stairs
       disable_in_sleep: true
       presence_sensor: none
-- alias: Activar Rotina de Chegar a Casa
-  id: '1657981029516'
+- id: '1657981029516'
+  alias: Activar Rotina de Chegar a Casa
   description: ''
   triggers:
   - id: joao_trigger
@@ -253,8 +253,10 @@
     trigger: state
   - id: car_trigger
     entity_id:
-    - binary_sensor.front_camera_vehicle
-    - binary_sensor.backyard_camera_vehicle
+    - binary_sensor.front_camera_car
+    - binary_sensor.backyard_camera_car
+    - binary_sensor.front_camera_reolink_vehicle
+    - binary_sensor.backyard_camera_reolink_vehicle
     from: 'off'
     trigger: state
   conditions:
@@ -735,8 +737,8 @@
     entity_id: light.xmas_tree
     action: light.turn_off
   mode: restart
-- alias: Luzes por Mov. na Cozinha
-  id: '1669853123196'
+- id: '1669853123196'
+  alias: Luzes por Mov. na Cozinha
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -753,7 +755,7 @@
       blocker_on_entity: light.kitchen
       disable_in_sleep: true
       presence_sensor: none
-      no_motion_wait: 10
+      no_motion_wait: 30
 - alias: Termoventilador - Desligar Automáticamente
   id: '1669853572469'
   description: ''
@@ -846,9 +848,8 @@
   triggers:
   - trigger: sun
     event: sunset
-    offset: '1:00:00'
   - trigger: time
-    at: '17:00:00'
+    at: '16:01:00'
   - trigger: time
     at: 03:01:00
   conditions: []
@@ -858,21 +859,21 @@
       - condition: and
         conditions:
         - condition: time
-          after: 03:00:00
-          before: '16:00:00'
+          after: '16:00:00'
+          before: 03:00:00
         - condition: sun
           after: sunset
       sequence:
-      - action: light.turn_off
+      - action: light.turn_on
         metadata: {}
         target:
-          entity_id: light.xmas_fence
+          entity_id: light.xmas_outside
         data: {}
     default:
-    - action: light.turn_on
+    - action: light.turn_off
       metadata: {}
       target:
-        entity_id: light.xmas_fence
+        entity_id: light.xmas_outside
       data: {}
   mode: restart
 - alias: Desligar Luzes das Escadas com a Luminosidade
@@ -1399,13 +1400,13 @@
         channel: Home
       action: notify.mobile_app_joaocarreira_macbook_pro
   mode: single
-- alias: AC Sala - Desligar Manhã
-  id: '1705326979364'
+- id: '1705326979364'
+  alias: AC Sala - Desligar Manhã
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
-      schedule: 08:40:00
+      schedule: 08:30:00
       hvac_unit: climate.living_room
       run_on_weekends: false
       weekend_tomorrow: false
@@ -1949,14 +1950,18 @@
     target:
       entity_id: climate.water_heater
   mode: single
-- alias: Atualizar Localização
-  id: '1701641659897'
+- id: '1701641659897'
+  alias: Atualizar Localização
   triggers:
   - entity_id:
     - binary_sensor.backyard_camera_person
-    - binary_sensor.backyard_camera_vehicle
-    - binary_sensor.front_camera_vehicle
+    - binary_sensor.backyard_camera_car
+    - binary_sensor.front_camera_car
     - binary_sensor.front_camera_person
+    - binary_sensor.backyard_camera_reolink_person
+    - binary_sensor.backyard_camera_reolink_vehicle
+    - binary_sensor.front_camera_reolink_vehicle
+    - binary_sensor.front_camera_reolink_person
     from: 'off'
     to: 'on'
     trigger: state
@@ -3023,8 +3028,8 @@
       mobile_device: 086fd6ff05201d28b4bc0fbdbd707c86
       wifi_location: device_tracker.calcium_wifi
       mobile_location: device_tracker.calcium
-- alias: Luzes por Mov. Casa de Banho de Serviço
-  id: '1729990082630'
+- id: '1729990082630'
+  alias: Luzes por Mov. Casa de Banho de Serviço
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -3040,7 +3045,7 @@
       blocker_on_entity: light.bathroom_rc
       disable_in_sleep: true
       presence_sensor: none
-      no_motion_wait: 0
+      no_motion_wait: 10
       illuminance_cutoff: 75
       illuminance_sensor: none
 - alias: Trigger Abrir Cancela
@@ -4142,7 +4147,7 @@
   use_blueprint:
     path: hvac/hvac_time_turn_on_heat.yaml
     input:
-      schedule_start: 06:30:00
+      schedule_start: 06:00:00
       schedule_end: 08:00:00
       hvac_unit:
       - climate.hall
@@ -4172,8 +4177,8 @@
       schedule_start: 07:15:00
       schedule_end: 08:00:00
       hvac_unit: climate.master_bedroom
-      hvac_temperature: 21
-      room_temperature: 19
+      hvac_temperature: 22
+      room_temperature: 21
       temperature_sensor: sensor.temperature_master_bedroom
       window_sensor: binary_sensor.window_master_bedroom
       weekday:
@@ -4196,7 +4201,7 @@
       schedule_end: '18:00:00'
       hvac_unit:
       - climate.living_room
-      hvac_temperature: 22
+      hvac_temperature: 21
       room_temperature: 21
       temperature_sensor: sensor.temperature_living_room
       weekday:
@@ -4397,7 +4402,7 @@
       illuminance_cutoff: 75
       illuminance_sensor: none
 - id: '1763600787785'
-  alias: lights_auto_off_hallway_presence
+  alias: Desligar Luz de Presença do Corredor Com as Outras Luzes
   description: ''
   triggers:
   - trigger: state
@@ -4425,4 +4430,251 @@
     data: {}
     target:
       entity_id: light.hallway_presence
+  mode: single
+- id: '1765128555699'
+  alias: Desligar Luz da Casa de Banho de Serviço Sem Movimento
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.motion_sensor_bathroom_rc
+    from:
+    - 'on'
+    to:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      area_id: bathroom_rc
+  mode: single
+- id: '1765413716782'
+  alias: Controlar Estado da Tomada da TV
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    from:
+    - 'on'
+    to:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    from: 'off'
+    to: 'on'
+  - trigger: time
+    at: 07:10:00
+  - trigger: time
+    at: 02:10:00
+  - trigger: state
+    entity_id:
+    - media_player.living_room_tv
+    from:
+    to:
+  conditions:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: switch.living_room_tv
+      state:
+      - 'off'
+      for:
+        hours: 0
+        minutes: 10
+        seconds: 0
+    - condition: state
+      entity_id: switch.living_room_tv
+      state:
+      - 'on'
+      for:
+        hours: 0
+        minutes: 10
+        seconds: 0
+  actions:
+  - if:
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.notify_home
+        state:
+        - 'off'
+    - condition: time
+      after: 07:00:00
+      before: 02:00:00
+    then:
+    - type: turn_on
+      device_id: 98bef11fa0359ad373d180b69ae45f84
+      entity_id: 3cab31122eb9522a5be417ab8998f71e
+      domain: switch
+    else:
+    - type: turn_off
+      device_id: 98bef11fa0359ad373d180b69ae45f84
+      entity_id: 3cab31122eb9522a5be417ab8998f71e
+      domain: switch
+  mode: single
+- id: '1765502075668'
+  alias: baby_monitor_alert_joao_ricardo_moving
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.baby_monitor_ricardo_crying_sound
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
+      | int(0)) > 60 * 30 }}'
+  - condition: state
+    entity_id: binary_sensor.joao_home
+    state: 'on'
+  - condition: time
+    after: '21:30:00'
+    before: 04:00:00
+  - condition: state
+    entity_id: cover.bedroom_ricardo
+    state:
+    - closed
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  - condition: state
+    entity_id: light.bedroom_ricardo
+    state:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  actions:
+  - action: notify.mobile_app_joao
+    metadata: {}
+    data:
+      title: Baby Monitor
+      message: O Ricardo está de  pé
+  mode: single
+- id: '1765502279075'
+  alias: lights_motion_backyard
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights_v3.yaml
+    input:
+      motion_sensor: binary_sensor.backyard_camera_person
+      target_entity: light.kitchen_door
+      no_motion_wait: 60
+      illuminance_cutoff: 50
+      only_after_sunset: false
+      disable_in_guest: true
+      blocker_on_entity: light.kitchen_door
+      required_house_mode: Todos
+      room_name: Exterior
+      disable_in_sleep: false
+      presence_sensor: none
+      required_conditions:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: light.exterior_wall_back
+          state:
+          - 'off'
+- id: '1765845791576'
+  alias: Desligar Luz da Sala Sem Movimento
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.motion_sensor_living_room_group
+    from:
+    - 'on'
+    to:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 60
+      seconds: 0
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.living_room
+      - light.doorway
+      - light.living_room_window
+  mode: single
+- id: '1765846031339'
+  alias: Desligar Luz da Cozinha Sem Movimento
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.motion_sensor_kitchen
+    from:
+    - 'on'
+    to:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 60
+      seconds: 0
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      area_id: kitchen
+  mode: single
+- id: '1765846195706'
+  alias: Desligar Luz do Escritório Sem Movimento
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.motion_sensor_living_room_group
+    from:
+    - 'on'
+    to:
+    - 'off'
+    for:
+      hours: 0
+      minutes: 60
+      seconds: 0
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      area_id: office
+  mode: single
+- id: '1766190630106'
+  alias: Test Shelly Buttons
+  description: ''
+  triggers:
+  - device_id: 6a6e337567ed440bc250b4b9fe39ca3c
+    domain: bthome
+    type: button_1
+    subtype: press
+    trigger: device
+  conditions: []
+  actions:
+  - action: light.toggle
+    metadata: {}
+    target:
+      entity_id: light.office
+    data: {}
   mode: single
