@@ -6,10 +6,10 @@ climate:
     target_sensor: sensor.portable_heater_temperature
     min_temp: 18
     max_temp: 25
-    cold_tolerance: 0
-    hot_tolerance: 0.5
+    cold_tolerance: 0.1
+    hot_tolerance: 0.1
     keep_alive: false
-    precision: 0.5
+    precision: 0.25
 
 input_select:
   portable_heater_location:
