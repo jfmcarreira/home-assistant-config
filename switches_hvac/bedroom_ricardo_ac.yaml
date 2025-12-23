@@ -1,57 +1,50 @@
-name: bedroom_ricardo_ac
+name: Ar Condicionado do Quarto do Ricardo
 unique_id: bedroom_ricardo_ac
+icon: mdi:air-conditioner
 state: >-
   {{
     not is_state('climate.bedroom_ricardo', 'off')
   }}
 turn_on:
-  - choose:
-      - conditions:
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: sensor.season
-                state: spring
-              - condition: state
-                entity_id: sensor.season
-                state: summer
-        sequence:
-          - action: climate.set_hvac_mode
-            metadata: {}
-            data:
-              hvac_mode: cool
-            target:
-              entity_id: climate.bedroom_ricardo
-      - conditions:
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: sensor.season
-                state: winter
-              - condition: state
-                entity_id: sensor.season
-                state: autumn
-        sequence:
-          - action: climate.set_hvac_mode
-            metadata: {}
-            data:
-              hvac_mode: heat
-            target:
-              entity_id: climate.bedroom_ricardo
-    default:
-      - action: climate.turn_on
+  - if:
+      - condition: state
+        entity_id: binary_sensor.hot_months
+        state: "true"
+    then:
+      - action: climate.set_hvac_mode
         metadata: {}
-        data: {}
+        data:
+          hvac_mode: cool
         target:
           entity_id: climate.bedroom_ricardo
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: 25
+        target:
+          entity_id: climate.bedroom_ricardo
+    else:
+      - action: climate.set_hvac_mode
+        metadata: {}
+        data:
+          hvac_mode: heat
+        target:
+          entity_id: climate.bedroom_ricardo
+      - action: climate.set_temperature
+        metadata: {}
+        data:
+          temperature: 22
+        target:
+          entity_id: climate.bedroom_ricardo
+  - action: climate.set_swing_mode
+    metadata: {}
+    data:
+      swing_mode: vertical
+    target:
+      entity_id: climate.bedroom_ricardo
   - action: climate.set_fan_mode
     data:
       fan_mode: auto
-    target:
-      entity_id: climate.bedroom_ricardo
-  - action: climate.set_swing_mode
-    data:
-      swing_mode: swing
     target:
       entity_id: climate.bedroom_ricardo
 turn_off:

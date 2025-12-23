@@ -1,5 +1,6 @@
-name: office_ac
+name: Ar Condicionado do Escritório
 unique_id: office_ac
+icon: mdi:air-conditioner
 state: >-
   {{
     not is_state('climate.office', 'off')
@@ -7,14 +8,9 @@ state: >-
 turn_on:
   - choose:
       - conditions:
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: sensor.season
-                state: spring
-              - condition: state
-                entity_id: sensor.season
-                state: summer
+          - condition: state
+            entity_id: binary_sensor.hot_months
+            state: "true"
         sequence:
           - action: climate.set_hvac_mode
             metadata: {}

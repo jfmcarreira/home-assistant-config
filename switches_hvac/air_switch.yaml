@@ -1,5 +1,6 @@
-name: air_conditioner
+name: Todos os Ar Condicionados
 unique_id: air_conditioner
+icon: mdi:air-conditioner
 state: >-
   {{
     is_state('switch.living_room_ac', 'on') or
