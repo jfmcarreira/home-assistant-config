@@ -11,6 +11,12 @@ blueprint:
           domain: climate
           multiple: true
 
+    hvac_mode_heat:
+      name: Mode Calor
+      default: true
+      selector:
+        boolean:
+
     schedule_start:
       name: Horário de ínicio de controlo
       description: Horário da acção
@@ -118,6 +124,7 @@ max_exceeded: silent
 
 variables:
   hvac_temperature: !input hvac_temperature
+  hvac_mode_heat: !input hvac_mode_heat
   hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
 
 trigger:
@@ -134,6 +141,12 @@ trigger:
   - trigger: numeric_state
     entity_id: sensor.temperature_outside
     below: !input room_temperature
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: sensor.temperature_outside
+    above: !input room_temperature
     for:
       minutes: 10
 
@@ -158,14 +171,6 @@ condition:
   - condition: time
     weekday: !input "weekday"
 
-  - condition: numeric_state
-    entity_id: !input temperature_sensor
-    below: !input room_temperature
-
-  - condition: numeric_state
-    entity_id: sensor.temperature_outside
-    below: !input room_temperature
-
   - alias: "Window Closed"
     condition: state
     entity_id: !input window_sensor
@@ -184,6 +189,24 @@ condition:
       {% set last = state_attr(this.entity_id, 'last_triggered') %}
       {{ last is not none and (now() - last).total_seconds() > hours * 3600 }}
 
+  - condition: or
+    conditions:
+      - condition: and
+        conditions:
+          - "{{ hvac_mode_heat == true }}"
+          - condition: numeric_state
+            entity_id: !input temperature_sensor
+            below: !input room_temperature
+          - condition: numeric_state
+            entity_id: sensor.temperature_outside
+            below: !input room_temperature
+      - condition: and
+        conditions:
+          - "{{ hvac_mode_heat == false }}"
+          - condition: numeric_state
+            entity_id: !input temperature_sensor
+            above: !input room_temperature
+
 action:
   - action: switch.turn_on
     data: {}
@@ -195,11 +218,20 @@ action:
         - switch.master_bedroom_ac_echo
         - switch.bedroom_ricardo_ac_echo
 
-  - action: climate.set_hvac_mode
-    target:
-      entity_id: !input hvac_unit
-    data:
-      hvac_mode: heat
+  - if:
+      - "{{ hvac_mode_heat == true }}"
+    then:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: !input hvac_unit
+        data:
+          hvac_mode: heat
+    else:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: !input hvac_unit
+        data:
+          hvac_mode: cool
 
   - action: climate.set_temperature
     target:

@@ -2132,51 +2132,47 @@
       notification_action: Registar Limpeza
       android_task_id: 32
       notification_action_id: cat_litter_clean
-- alias: Alertar Portão Aberto com a Casa Vazia
-  id: '1709743628443'
+- id: '1709743628443'
+  alias: Alertar Portão Aberto com a Casa Vazia
   description: ''
-  trigger:
-  - platform: state
-    id: trigger_gate_open
+  triggers:
+  - id: trigger_gate_open
     entity_id:
     - cover.gate
-    to: open
+    to:
+    - open
     for:
       hours: 0
-      minutes: 1
+      minutes: 5
       seconds: 0
-  - platform: state
-    id: trigger_gate_close
+    trigger: state
+  - id: trigger_gate_close
     entity_id:
     - cover.gate
     to: close
-  - platform: state
-    id: trigger_house_empty
+    trigger: state
+  - id: trigger_house_empty
     entity_id:
     - binary_sensor.notify_home
-    to: 'off'
+    to:
+    - 'off'
     for:
       hours: 0
-      minutes: 1
+      minutes: 5
       seconds: 0
+    trigger: state
   - id: trigger_notification_gate_notification_action_close
-    platform: event
     event_type: mobile_app_notification_action
     event_data:
       action: gate_notification_action_close
+    trigger: event
   - id: trigger_notification_gate_notification_action_keep_open
-    platform: event
     event_type: mobile_app_notification_action
     event_data:
       action: gate_notification_action_keep_open
-  condition: []
-  action:
-  - service: notify.mobile_app_all
-    data:
-      message: clear_notification
-      data:
-        tag: 300
-        dismiss: true
+    trigger: event
+  conditions: []
+  actions:
   - alias: Se Acção é Fechar Portão
     if:
     - condition: trigger
@@ -2186,10 +2182,10 @@
     - condition: state
       entity_id: cover.gate
       state: open
-    - service: cover.close_cover
-      data: {}
+    - data: {}
       target:
         entity_id: cover.gate
+      action: cover.close_cover
     - stop: Portão fechado
   - if:
     - condition: trigger
@@ -2208,8 +2204,7 @@
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'off'
-  - service: notify.mobile_app_radium
-    data:
+  - data:
       title: Exterior
       message: O Portão da Rua está Aberto
       data:
@@ -2224,6 +2219,7 @@
           title: Deixar Aberto
         - action: gate_notification_action_close
           title: Fechar o Portao
+    action: notify.mobile_app_radium
   mode: restart
 - alias: Alertar Alarme Joao Dias de Trabalho
   id: '1711849617966'
@@ -3981,8 +3977,9 @@
   id: '1751200610784'
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: false
       schedule_start: '17:00:00'
       schedule_end: '20:30:00'
       hvac_unit:
@@ -4006,8 +4003,9 @@
   id: '1751200671929'
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: false
       schedule_start: '14:00:00'
       schedule_end: '20:30:00'
       hvac_unit:
@@ -4026,8 +4024,9 @@
   id: '1749604497079'
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: false
       schedule_start: '16:00:00'
       schedule_end: '20:30:00'
       hvac_unit:
@@ -4049,8 +4048,9 @@
   alias: AC Quarto do Ricardo - Ligar de Tarde no Verão
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: false
       schedule_start: '16:00:00'
       schedule_end: '20:30:00'
       hvac_unit:
@@ -4072,8 +4072,9 @@
   alias: AC Quarto do Henrique - Ligar de Tarde no Verão
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: false
       schedule_start: '16:00:00'
       schedule_end: '20:30:00'
       hvac_unit:
@@ -4095,8 +4096,9 @@
   id: '1749604597079'
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_cool.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: false
       schedule_start: '16:00:00'
       schedule_end: '20:30:00'
       hvac_unit:
@@ -4118,8 +4120,9 @@
   alias: AC Sala - Ligar de Manhã no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: 06:30:00
       schedule_end: 08:00:00
       hvac_unit:
@@ -4145,8 +4148,9 @@
   alias: AC Hall - Ligar de Manhã no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: 06:00:00
       schedule_end: 08:00:00
       hvac_unit:
@@ -4168,12 +4172,19 @@
       - spring
       hvac_delayed_temperature_offset: 0
       window_sensor: binary_sensor.window_bedroom_floor
+      extra_hvac_actions:
+      - action: switch.turn_off
+        metadata: {}
+        target:
+          entity_id: switch.hall_ac_display
+        data: {}
 - id: '1705368338092'
   alias: AC Suite - Ligar de Manhã no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: 07:15:00
       schedule_end: 08:00:00
       hvac_unit: climate.master_bedroom
@@ -4195,8 +4206,9 @@
   alias: AC Sala - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: '16:30:00'
       schedule_end: '18:00:00'
       hvac_unit:
@@ -4219,8 +4231,9 @@
   id: '1737772761289'
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: '16:30:00'
       schedule_end: '20:00:00'
       hvac_unit: climate.office
@@ -4246,8 +4259,9 @@
   id: '1737850856162'
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: '16:30:00'
       schedule_end: '20:00:00'
       hvac_unit:
@@ -4276,8 +4290,9 @@
   alias: AC Hall - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: '16:45:00'
       schedule_end: '20:00:00'
       hvac_unit:
@@ -4303,8 +4318,9 @@
   alias: AC Suite - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: '17:00:00'
       schedule_end: '20:00:00'
       hvac_unit:
@@ -4331,8 +4347,9 @@
   alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: '17:00:00'
       schedule_end: '20:00:00'
       hvac_unit:
@@ -4359,8 +4376,9 @@
   alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
   description: ''
   use_blueprint:
-    path: hvac/hvac_time_turn_on_heat.yaml
+    path: hvac/hvac_time_turn_on.yaml
     input:
+      hvac_mode_heat: true
       schedule_start: '17:00:00'
       schedule_end: '20:00:00'
       hvac_unit:
