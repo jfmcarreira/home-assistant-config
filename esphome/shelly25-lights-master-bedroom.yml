@@ -110,6 +110,3 @@ binary_sensor:
   - platform: homeassistant
     id: master_bedroom_closet_state
     entity_id: light.master_bedroom_closet
-
-logger:
-  level: DEBUG

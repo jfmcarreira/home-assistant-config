@@ -20,6 +20,14 @@ output:
     platform: gpio
     pin: GPIO04
 
+binary_sensor:
+  - id: sw1
+    platform: gpio
+    pin: GPIO05
+  - id: sw2
+    platform: gpio
+    pin: GPIO13
+
 sensor:
   - platform: ntc
     sensor: temp_resistance_reading

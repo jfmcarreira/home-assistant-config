@@ -26,9 +26,7 @@ binary_sensor:
     id: hall_presence_state
     entity_id: light.hall_presence
 
-  - id: sw_1
-    platform: gpio
-    pin: GPIO5
+  - id: !extend sw_1
     on_multi_click:
       - timing:
           - ON for at most 1000ms
@@ -70,9 +68,7 @@ binary_sensor:
                     data:
                       floor_id: bedrooms
 
-  - id: sw_2
-    platform: gpio
-    pin: GPIO18
+  - id: !extend sw_2
     on_multi_click:
       - timing:
           - ON for at most 1000ms

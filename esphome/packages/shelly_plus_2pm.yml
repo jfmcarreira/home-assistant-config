@@ -28,6 +28,18 @@ button:
     id: restart_device
 
 binary_sensor:
+  - id: sw_1
+    platform: gpio
+    pin: GPIO5
+    filters:
+      - delayed_on_off: 50ms
+
+  - id: sw_2
+    platform: gpio
+    pin: GPIO18
+    filters:
+      - delayed_on_off: 50ms
+
   - platform: gpio
     id: reset_button
     pin:

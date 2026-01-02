@@ -48,6 +48,9 @@ binary_sensor:
       if (!light_1_on && !light_2_on) return false;
       return id(should_turn_off_both_lights_flag);
 
+  - id: !remove sw_1
+  - id: !remove sw_2
+
   - id: sw_1
     platform: gpio
     pin: GPIO13

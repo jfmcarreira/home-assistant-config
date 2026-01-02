@@ -25,6 +25,8 @@ script:
       - script.execute: smart_light_state
 
 binary_sensor:
+  - id: !remove sw_1
+  - id: !remove sw_2
   - id: sw_1
     platform: gpio
     pin: ${InputPin}
