@@ -13,13 +13,18 @@ light:
 
 sensor:
   - platform: ade7953_i2c
-    update_interval: 5s
-    irq_pin: GPIO27 # Prevent overheating by setting this
+    update_interval: 2s
+    irq_pin: GPIO1 # Prevent overheating by setting this
     voltage:
       id: shelly_voltage
       unit_of_measurement: V
       accuracy_decimals: 1
       device_class: voltage
+    frequency:
+      id: shelly_frequency
+      accuracy_decimals: 2
+      icon: mdi:cosine-wave
+      device_class: frequency
     current_a:
       id: shelly_current_a
       unit_of_measurement: A

@@ -1,0 +1,64 @@
+substitutions:
+  devicename: shelly-2pm-gen3-lights-stairs
+
+packages:
+  esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+  home_state: !include packages/home_state.yml
+
+  device_base: !include
+    file: packages/shelly_2pm_gen3.yml
+    vars:
+      name: Shelly 2PM Gen3 Stairs
+      out1:
+
+  lights_base: !include
+    file: packages/shelly_2pm_gen3_lights.yml
+    vars:
+      Light_1_Name: Stairs Lamp
+      Light_2_Name: Stairs Wall
+
+
+binary_sensor:
+  - platform: homeassistant
+    id: stairs_down_state
+    entity_id: light.stairs_down
+
+  - id: !extend sw1
+    on_multi_click:
+      - timing:
+          - ON for at most 1000ms
+          - OFF for at least 100ms
+        invalid_cooldown: 100ms
+        then:
+          - if:
+              condition:
+                - api.connected:
+              then:
+                - if:
+                    condition:
+                      or:
+                        - binary_sensor.is_on: stairs_down_state
+                        - light.is_on: light_1
+                    then:
+                      - light.turn_off: light_1
+                      - homeassistant.service:
+                          service: light.toggle
+                          data:
+                            entity_id: light.stairs_down
+                    else:
+                      - homeassistant.service:
+                          service: light.turn_on
+                          data:
+                            entity_id: light.stairs_down
+              else:
+                - light.toggle: light_1
+      - timing:
+          - ON for at least 1000ms
+        invalid_cooldown: 10ms
+        then:
+          - light.toggle: light_1
+
+  - id: !extend sw2
+    on_press:
+      - light.toggle: light_2

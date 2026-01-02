@@ -1,6 +1,7 @@
 button:
   - platform: template
-    name: auto_on
+    id: auto_on
+    name: Trigger Automatic On
     entity_category: config
     on_press:
       - script.execute: light_turn_on_action

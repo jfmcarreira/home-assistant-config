@@ -1,27 +1,35 @@
 # For PCB v0.1.9 with dual core ESP32
 esphome:
   name: "${devicename}"
+  name_add_mac_suffix: false
 
 esp32:
-  board: esp32doit-devkit-v1
+  variant: esp32c3
+  flash_size: 8MB
   framework:
-    #type: arduino
     type: esp-idf
-
-i2c:
-  sda: GPIO26
-  scl: GPIO25
+    version: recommended
+    sdkconfig_options:
+      COMPILER_OPTIMIZATION_SIZE: y
 
 bluetooth_proxy:
+
+
+i2c:
+  sda: GPIO6
+  scl: GPIO7
 
 output:
   - platform: gpio
     id: relay_1
-    pin: GPIO13
+    pin:
+      number: 5
 
   - platform: gpio
     id: relay_2
-    pin: GPIO12
+    pin:
+      number: 3
+
 
 button:
   - platform: restart
@@ -29,9 +37,23 @@ button:
 
 binary_sensor:
   - platform: gpio
+    pin:
+      number: GPIO18
+    id: sw1
+    filters:
+      - delayed_on_off: 50ms
+
+  - platform: gpio
+    pin:
+      number: GPIO10
+    id: sw2
+    filters:
+      - delayed_on_off: 50ms
+
+  - platform: gpio
     id: reset_button
     pin:
-      number: GPIO4
+      number: 19
       inverted: yes
       mode:
         input: true
@@ -50,7 +72,7 @@ sensor:
     unit_of_measurement: "°C"
     calibration:
       b_constant: 3350
-      reference_resistance: 4.7kOhm
+      reference_resistance: 10kOhm
       reference_temperature: 298.15K
     on_value_range:
       - above: 85
@@ -68,15 +90,14 @@ sensor:
     id: temp_resistance_reading
     sensor: temp_analog_reading
     configuration: DOWNSTREAM
-    resistor: 5.6kOhm
+    resistor: 32kOhm
 
   - platform: adc
     id: temp_analog_reading
-    pin: GPIO35
-    attenuation: 12db
-    update_interval: 10s
+    pin: 4
 
 status_led:
   pin:
-    number: GPIO0
+    number: 2
     inverted: true
+    ignore_strapping_warning: true

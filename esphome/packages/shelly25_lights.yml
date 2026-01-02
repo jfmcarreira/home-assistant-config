@@ -24,6 +24,7 @@ sensor:
       id: shelly_current_A
     active_power_a:
       name: Light Power ${Light_1_Name}
+      device_class: power
       id: power_usage_light_a
       # active_power_a is normal, so don't multiply by -1
       filters:
@@ -43,6 +44,7 @@ sensor:
                   message: Switch turned off because max power was exceeded
     active_power_b:
       name: Light Power ${Light_2_Name}
+      device_class: power
       id: power_usage_light_b
       # active_power_b is inverted, so take the absolute value
       filters:
