@@ -1,5 +1,5 @@
 blueprint:
-  name: "[HVAC] Controlo Horário - Ligar Ar Condicionado (Quente)"
+  name: "[HVAC] Controlo Horário - Ligar Ar Condicionado"
   description: Ligar Modo Aquecimento do Ar condicionado a uma determinada hora
 
   domain: automation
