@@ -36,14 +36,14 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO18
-    id: sw1
+    id: sw_1
     filters:
       - delayed_on_off: 50ms
 
   - platform: gpio
     pin:
       number: GPIO10
-    id: sw2
+    id: sw_2
     filters:
       - delayed_on_off: 50ms
 

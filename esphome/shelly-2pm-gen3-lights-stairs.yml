@@ -23,7 +23,7 @@ binary_sensor:
     id: stairs_down_state
     entity_id: light.stairs_down
 
-  - id: !extend sw1
+  - id: !extend sw_1
     on_multi_click:
       - timing:
           - ON for at most 1000ms
@@ -58,6 +58,6 @@ binary_sensor:
         then:
           - light.toggle: light_1
 
-  - id: !extend sw2
+  - id: !extend sw_2
     on_press:
       - light.toggle: light_2
