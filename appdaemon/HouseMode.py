@@ -34,14 +34,18 @@ class HouseMode(hass.Hass):
             "light.hall_group",
             "light.bathroom_rc",
             "light.main_bathroom",
+            "light.master_bedroom_bathroom",
         ]
 
         self.trackLights = [
-            "light.kitchen",
             "light.hallway",
             "light.living_room_group",
-            "light.all_bedrooms",
-            "light.all_bathrooms",
+            "light.master_bedroom",
+            "light.bedroom_ricardo",
+            "light.bedroom_henrique",
+            "light.bathroom_rc",
+            "light.main_bathroom",
+            "light.master_bedroom_bathroom",
         ]
 
         self.trackMotion = [
@@ -126,6 +130,9 @@ class HouseMode(hass.Hass):
             return 36 * 60
 
     def is_device_on(self):
+        for l in self.trackWorkingLights:
+            if self.get_state(l) == "on":
+                return True
         for l in self.trackLights:
             if self.get_state(l) == "on":
                 return True
@@ -146,7 +153,7 @@ class HouseMode(hass.Hass):
             newMode = "Evening"
         elif self.now_is_between("19:30:00", "21:30:00"):
             newMode = "Evening"
-        elif self.now_is_between("21:30:00", "08:00:00"):
+        elif self.now_is_between("21:30:00", "06:30:00"):
             guest_mode = self.get_state('binary_sensor.house_guest') == "on"
             if guest_mode:
                 newMode = "Evening"
@@ -172,7 +179,7 @@ class HouseMode(hass.Hass):
     def new_house_mode_from_evening(self, trigger):
         newMode = "Evening"
         preffered_mode = self.preffered_house_mode()
-        if trigger == Event.WORKING_LIGHT_OFF:
+        if trigger == Event.WORKING_LIGHT_OFF or trigger == Event.COVERS:
             newMode = preffered_mode
         elif trigger == Event.NO_MOTION:
             newMode = preffered_mode
@@ -182,7 +189,7 @@ class HouseMode(hass.Hass):
             if preffered_mode == "On":
                 newMode = "On"
         elif trigger == Event.STATE_TRANSISTION_DELAY:
-            if self.now_is_between("06:00:00", "019:00:00"):
+            if self.now_is_between("06:00:00", "19:00:00"):
                 newMode = "On"
         return newMode
 
@@ -248,6 +255,7 @@ class HouseMode(hass.Hass):
         isLightsOn = False
         for l in self.trackLights:
             isLightsOn = isLightsOn or self.get_state(l) == "on"
+        self.log(f"Light Tracking: {isLightsOn}", level="INFO")
         self.cancel_tracking_timer()
         if not isLightsOn:
             self.lights_motion_timer = self.run_in(self.timeout_callback_no_motion, self.timer_delay())
@@ -257,6 +265,7 @@ class HouseMode(hass.Hass):
         for l in self.trackWorkingLights:
             isLightsOn = isLightsOn or self.get_state(l) == "on"
         self.cancel_tracking_timer()
+        self.log(f"Working Light Tracking: {isLightsOn}", level="INFO")
         if not isLightsOn:
             self.set_new_house_mode_from_trigger(Event.WORKING_LIGHT_OFF)
             self.lights_motion_timer = self.run_in(self.timeout_callback_working_lights_off, self.timer_delay())
