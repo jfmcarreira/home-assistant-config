@@ -2290,8 +2290,8 @@
   - data: {}
     action: script.lights_control_gate_front_lights
   mode: single
-- alias: Campainha - Accionar campainha portão
-  id: '1716575201372'
+- id: '1716575201372'
+  alias: Campainha - Accionar campainha portão
   description: ''
   triggers:
   - entity_id:
@@ -2323,14 +2323,12 @@
         target:
           entity_id:
           - media_player.ghm_living_room
-          - media_player.ghm_hall
           - media_player.ghm_kitchen
         data:
           volume_level: 0.005
       - repeat:
           for_each:
           - media_player.ghm_living_room
-          - media_player.ghm_hall
           - media_player.ghm_kitchen
           sequence:
           - action: tts.cloud_say
@@ -2342,7 +2340,6 @@
         target:
           entity_id:
           - media_player.ghm_living_room
-          - media_player.ghm_hall
           - media_player.ghm_kitchen
         data:
           volume_level: 0.7
@@ -2350,7 +2347,6 @@
           entity_id:
           - media_player.home_assistant_voice_office
           - media_player.ghm_living_room
-          - media_player.ghm_hall
           - media_player.ghm_kitchen
         data:
           media:
@@ -2370,6 +2366,10 @@
         - condition: time
           after: 09:00:00
           before: '21:00:00'
+        - condition: numeric_state
+          entity_id: cover.bedroom_henrique
+          attribute: current_position
+          above: 0
         then:
         - action: media_player.volume_set
           target:
@@ -2633,26 +2633,6 @@
       position: 15
     target:
       entity_id: cover.laundry
-  mode: single
-- alias: Temporizador Bomba da Piscina
-  id: '1723712743167'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - switch.pool_pump
-    to: 'on'
-    for:
-      hours: 2
-      minutes: 0
-      seconds: 0
-  condition: []
-  action:
-  - action: switch.turn_off
-    metadata: {}
-    data: {}
-    target:
-      entity_id: switch.pool_pump
   mode: single
 - alias: Ar Condicionado - Notificar Janelas Abertas Quartos
   id: '1723936636115'
@@ -3032,7 +3012,7 @@
     input:
       motion_sensor: binary_sensor.motion_sensor_bathroom_rc
       target_entity: light.bathroom_rc_led
-      disable_switch_button: button.shelly25_bathroom_rc_auto_on
+      disable_switch_button: button.shelly_2pm_gen3_bathroom_rc_trigger_automatic_on
       min_repetition_interval_sec: 10
       only_after_sunset: false
       disable_in_guest: false
@@ -4501,6 +4481,10 @@
     - media_player.living_room_tv
     from:
     to:
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
   conditions:
   - condition: or
     conditions:
@@ -4520,6 +4504,12 @@
         hours: 0
         minutes: 10
         seconds: 0
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: media_player.living_room_tv
+      state:
+      - 'on'
   actions:
   - if:
     - condition: not
@@ -4532,15 +4522,27 @@
       after: 07:00:00
       before: 02:00:00
     then:
-    - type: turn_on
-      device_id: 98bef11fa0359ad373d180b69ae45f84
-      entity_id: 3cab31122eb9522a5be417ab8998f71e
-      domain: switch
+    - action: switch.turn_on
+      metadata: {}
+      target:
+        entity_id: switch.living_room_tv
+      data: {}
     else:
-    - type: turn_off
-      device_id: 98bef11fa0359ad373d180b69ae45f84
-      entity_id: 3cab31122eb9522a5be417ab8998f71e
-      domain: switch
+    - action: media_player.turn_off
+      metadata: {}
+      target:
+        entity_id: media_player.living_room_tv
+      data: {}
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 30
+        milliseconds: 0
+    - action: switch.turn_off
+      metadata: {}
+      target:
+        entity_id: switch.living_room_tv
+      data: {}
   mode: single
 - id: '1765502075668'
   alias: baby_monitor_alert_joao_ricardo_moving
@@ -4662,9 +4664,7 @@
   triggers:
   - trigger: state
     entity_id:
-    - binary_sensor.motion_sensor_living_room_group
-    from:
-    - 'on'
+    - binary_sensor.motion_sensor_office
     to:
     - 'off'
     for:
