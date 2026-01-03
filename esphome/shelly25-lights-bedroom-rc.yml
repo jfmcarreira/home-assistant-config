@@ -9,18 +9,18 @@ packages:
   device_base: !include
     file: packages/shelly25.yml
     vars:
-      name: Shelly25 Office
+      name: Shelly 25 Bedroom RC
 
   lights_base: !include
     file: packages/shelly25_lights.yml
     vars:
-      Light_1_Name: Office Main
-      Light_2_Name: Office Extra
+      Light_1_Name: Bedroom RC Wall
+      Light_2_Name: Bedroom RC Closet
 
   room_controls: !include
     file: packages/room_lights.yml
     vars:
-      light_state_count: 3
+      light_state_count: 2
 
   motion_light: !include packages/motion_light.yml
 
@@ -37,14 +37,8 @@ script:
           condition:
             lambda: "return id(lights_state) == 1;"
           then:
-            - light.turn_on: light_2
             - light.turn_off: light_1
-      - if:
-          condition:
-            lambda: "return id(lights_state) == 2;"
-          then:
-            - light.turn_on: light_1
-            - light.turn_off: light_2
+            - light.turn_on: light_2
 
   - id: standard_light_sw_action
     then:
