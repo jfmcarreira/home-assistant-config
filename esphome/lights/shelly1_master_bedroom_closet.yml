@@ -1,0 +1,27 @@
+substitutions:
+  devicename: shelly1_master_bedroom_closet
+
+esphome:
+  friendly_name: Shelly 1 Master Bedroom Closet Light
+
+packages:
+  esphome_base: !include ../packages/common.yml
+  esphome_web: !include ../packages/webserver.yml
+
+  device_base: !include
+    file: ../packages/shelly1.yml
+
+binary_sensor:
+  - id: sw_1
+    platform: gpio
+    pin:
+      number: GPIO5
+    on_press:
+      then:
+        - light.toggle: light_1
+light:
+  - id: light_1
+    name: Master Bedroom Closet
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF

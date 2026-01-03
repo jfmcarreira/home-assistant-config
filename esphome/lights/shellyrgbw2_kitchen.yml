@@ -1,0 +1,40 @@
+substitutions:
+  devicename: shellyrgbw2_kitchen
+
+packages:
+  esphome_base: !include ../packages/common.yml
+  esphome_web: !include ../packages/webserver.yml
+
+esphome:
+  name: ${devicename}
+
+esp8266:
+  board: esp01_1m
+
+# Unused pins
+# Status LED: GPIO02
+# Button: GPIO13
+
+light:
+  - platform: monochromatic
+    name: Kitchen LED
+    output: output_r
+    restore_mode: RESTORE_DEFAULT_OFF
+
+output:
+  - platform: esp8266_pwm
+    id: output_r
+    pin: GPIO12
+    frequency: 1000 Hz
+  - platform: esp8266_pwm
+    id: output_g
+    frequency: 1000 Hz
+    pin: GPIO15
+  - platform: esp8266_pwm
+    id: output_b
+    frequency: 1000 Hz
+    pin: GPIO14
+  - platform: esp8266_pwm
+    id: output_w
+    frequency: 1000 Hz
+    pin: GPIO4

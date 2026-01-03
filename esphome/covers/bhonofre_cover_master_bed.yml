@@ -1,0 +1,19 @@
+substitutions:
+  devicename: bhonofre_cover_master_bed
+  CoverName: master_bedroom
+  Open: "12"
+  Close: "13"
+  ExtraTop: "14"
+  ExtraBottom: "2"
+  CoverTime: "12s"
+  SmallOpenPosition: 15%
+  RelayPower: GPIO4
+  RelayDirection: GPIO5
+  InvertRelayDirection: "false"
+  SunOrientation: "3"
+  Floor: "1"
+
+packages:
+  esphome_base: !include ../packages/common.yml
+  esphome_web: !include ../packages/webserver.yml
+  cover: !include packages/bhonofre_cover.yml

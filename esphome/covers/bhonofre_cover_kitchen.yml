@@ -1,0 +1,19 @@
+substitutions:
+  devicename: bhonofre_cover_kitchen
+  CoverName: kitchen
+  Open: "12"
+  Close: "13"
+  ExtraTop: "2"
+  ExtraBottom: "14"
+  CoverTime: "14s"
+  SmallOpenPosition: 17%
+  RelayPower: GPIO4
+  RelayDirection: GPIO5
+  InvertRelayDirection: "false"
+  SunOrientation: "3"
+  Floor: "0"
+
+packages:
+  esphome_base: !include ../packages/common.yml
+  esphome_web: !include ../packages/webserver.yml
+  cover: !include packages/bhonofre_cover.yml

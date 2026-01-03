@@ -1,0 +1,19 @@
+substitutions:
+  devicename: bhonofre_cover_laundry
+  CoverName: laundry
+  Open: "2"
+  Close: "14"
+  ExtraTop: "12"
+  ExtraBottom: "13"
+  CoverTime: "14s"
+  SmallOpenPosition: 17%
+  RelayPower: GPIO4
+  RelayDirection: GPIO5
+  InvertRelayDirection: "false"
+  SunOrientation: "2"
+  Floor: "0"
+
+packages:
+  esphome_base: !include ../packages/common.yml
+  esphome_web: !include ../packages/webserver.yml
+  cover: !include packages/bhonofre_cover.yml

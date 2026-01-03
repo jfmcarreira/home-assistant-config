@@ -20,6 +20,7 @@ climate:
     uart_id: haier_uart
     wifi_signal: true
     answer_timeout: 1000ms
+    beeper: true
     display: true
     visual:
       min_temperature: 16 °C

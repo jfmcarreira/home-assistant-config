@@ -1,0 +1,19 @@
+substitutions:
+  devicename: bhonofre_cover_bedroom_henrique
+  CoverName: bedroom_henrique
+  Open: "13"
+  Close: "12"
+  ExtraTop: "2"
+  ExtraBottom: "14"
+  CoverTime: "12s"
+  SmallOpenPosition: 15%
+  RelayPower: GPIO4
+  RelayDirection: GPIO5
+  InvertRelayDirection: "false"
+  SunOrientation: "1"
+  Floor: "1"
+
+packages:
+  esphome_base: !include ../packages/common.yml
+  esphome_web: !include ../packages/webserver.yml
+  cover: !include packages/bhonofre_cover.yml
