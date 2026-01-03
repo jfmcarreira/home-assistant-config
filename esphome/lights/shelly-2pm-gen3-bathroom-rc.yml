@@ -10,16 +10,68 @@ packages:
     vars:
       name: Shelly 2PM Gen3 Bathroom RC
 
-  lights_base: !include
-    file: ../packages/shelly_2pm_gen3_lights.yml
-    vars:
-      Light_1_Name: Bathroom RC Ceiling
-      Light_2_Name: Bathroom RC LED
-
   bathroom_controls: !include
-      file: ../packages/bathroom_controls.yml
-      vars:
-        devicename: ${devicename}
-        input_a_light: light_1
-        input_b_light: light_2
-        fan: fan.bathroom_rc
+    file: ../packages/bathroom_controls.yml
+    vars:
+      devicename: ${devicename}
+      input_a_light: light_1
+      input_b_light: light_2
+      fan: fan.bathroom_rc
+
+light:
+  - id: light_1
+    name: Bathroom RC LED
+    platform: binary
+    output: led_light
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - id: light_2
+    name: Bathroom RC Ceiling
+    platform: binary
+    output: relay_2
+    restore_mode: RESTORE_DEFAULT_OFF
+
+sensor:
+  - platform: total_daily_energy
+    name: Light Daily Energy Bathroom RC LED
+    power_id: power_relay_1
+    unit_of_measurement: Wh
+    state_class: total_increasing
+    device_class: energy
+    icon: "mdi:meter-electric"
+
+  - platform: total_daily_energy
+    name: Light Daily Energy Bathroom RC Ceiling
+    power_id: power_relay_2
+    unit_of_measurement: Wh
+    restore: false
+    state_class: total_increasing
+    device_class: energy
+    icon: "mdi:meter-electric"
+
+
+switch:
+  - platform: output
+    id: led_light_sw
+    name: Bathroom RC LED SW
+    output: relay_1
+    restore_mode: ALWAYS_ON
+
+output:
+  - platform: template
+    id: led_light
+    type: binary
+    write_action:
+      - if:
+          condition:
+            lambda: return state;
+          then:
+            - homeassistant.service:
+                service: light.turn_on
+                data:
+                  entity_id: light.bathroom_rc_led
+          else:
+            - homeassistant.service:
+                service: light.turn_off
+                data:
+                  entity_id: light.bathroom_rc_led
