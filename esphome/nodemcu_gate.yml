@@ -99,6 +99,8 @@ cover:
     close_endstop: gate_close_sensor
     open_duration: 17s
     close_duration: 20s
+    setup_delay: 2s
+
 
   # - platform: template
   #   name: "Gate"
