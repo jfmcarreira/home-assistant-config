@@ -10,8 +10,6 @@ packages:
 
   device_base: !include
     file: packages/shelly1.yml
-    vars:
-      Light_Name: Living Room Table
 
 binary_sensor:
   - id: sw_1
@@ -21,3 +19,10 @@ binary_sensor:
     on_state:
       then:
         - light.toggle: light_1
+
+light:
+  - id: light_1
+    name: Living Room Table
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF

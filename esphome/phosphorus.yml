@@ -1,9 +1,8 @@
 substitutions:
   devicename: phosphorus
-  FriendlyName: Phosphorus (Water Heater)
 
 esphome:
-  name: phosphorus
+  friendly_name: Phosphorus (Water Heater)
 
 esp32:
   board: nodemcu-32s

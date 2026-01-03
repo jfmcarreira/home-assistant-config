@@ -2,9 +2,6 @@ substitutions:
   devicename: nitrogen
   FriendlyName: Nitrogen
 
-esphome:
-  name: nitrogen
-
 esp32:
   board: nodemcu-32s
   framework:

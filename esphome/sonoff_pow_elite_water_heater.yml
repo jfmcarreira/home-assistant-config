@@ -12,7 +12,7 @@ esphome:
       - wait_until:
           condition:
             api.connected:
-          timeout: 30s
+          timeout: 120s
       - if:
           condition:
             not:
@@ -27,6 +27,7 @@ esp32:
 
 packages:
   esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
 
 esp32_ble_tracker:
   scan_parameters:

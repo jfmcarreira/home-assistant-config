@@ -1,7 +1,4 @@
 # For PCB v0.1.9 with dual core ESP32
-esphome:
-  name: "${devicename}"
-
 esp32:
   board: esp32doit-devkit-v1
   framework:

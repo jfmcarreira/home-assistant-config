@@ -32,9 +32,7 @@ binary_sensor:
     id: kitchen_led_state
     entity_id: light.kitchen_led
 
-  - id: sw_1
-    platform: gpio
-    pin: GPIO05
+  - id: !extend sw_2
     on_multi_click:
       - timing:
           - ON for at most 1000ms
@@ -98,9 +96,7 @@ binary_sensor:
                     data:
                       entity_id: scene.lights_kitchen_day
 
-  - id: sw_2
-    platform: gpio
-    pin: GPIO13
+  - id: !extend sw_1
     on_multi_click:
       - timing:
           - ON for at most 1000ms

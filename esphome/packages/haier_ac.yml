@@ -140,7 +140,3 @@ switch:
     quiet_mode:
       name: ${AcName} AC Quiet Mode
 
-button:
-  - platform: restart
-    id: restart_button
-    name: Restart

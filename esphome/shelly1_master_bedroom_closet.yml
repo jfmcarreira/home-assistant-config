@@ -10,8 +10,6 @@ packages:
 
   device_base: !include
     file: packages/shelly1.yml
-    vars:
-      Light_Name: Master Bedroom Closet
 
 binary_sensor:
   - id: sw_1
@@ -21,3 +19,9 @@ binary_sensor:
     on_press:
       then:
         - light.toggle: light_1
+light:
+  - id: light_1
+    name: Master Bedroom Closet
+    platform: binary
+    output: relay_1
+    restore_mode: RESTORE_AND_OFF

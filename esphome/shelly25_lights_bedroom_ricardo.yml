@@ -1,6 +1,5 @@
 substitutions:
   devicename: shelly25_lights_bedroom_ricardo
-  InputPin: GPIO5
 
 packages:
   esphome_base: !include packages/common.yml
@@ -22,6 +21,14 @@ packages:
     file: packages/room_lights.yml
     vars:
       light_state_count: 2
+
+binary_sensor:
+  - id: !extend sw_1
+    pin: GPIO5
+
+  - platform: homeassistant
+    id: bedroom_ricardo_lamp_state
+    entity_id: light.bedroom_ricardo_lamp
 
 script:
   - id: smart_light_state
@@ -87,8 +94,3 @@ script:
                   - globals.set:
                       id: lights_state
                       value: "0"
-
-binary_sensor:
-  - platform: homeassistant
-    id: bedroom_ricardo_lamp_state
-    entity_id: light.bedroom_ricardo_lamp

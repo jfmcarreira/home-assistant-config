@@ -1,6 +1,5 @@
 substitutions:
   devicename: shelly25-lights-master-bedroom
-  InputPin: GPIO13
 
 packages:
   esphome_base: !include packages/common.yml

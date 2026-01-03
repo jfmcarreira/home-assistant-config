@@ -1,5 +1,5 @@
 substitutions:
-  devicename: shelly25_lights_office
+  devicename: shelly25-lights-bedroom-rc
 
 packages:
   esphome_base: !include packages/common.yml
@@ -82,3 +82,6 @@ script:
                             id: lights_state
                             value: "0"
                         - script.execute: smart_light_state
+
+
+

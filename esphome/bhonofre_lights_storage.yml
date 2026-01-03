@@ -2,9 +2,6 @@ substitutions:
   devicename: bhonofre_lights_storage
   FriendlyName: BHOnofre Lights Storage
 
-esphome:
-  name: ${devicename}
-
 esp8266:
   board: nodemcu
   restore_from_flash: true

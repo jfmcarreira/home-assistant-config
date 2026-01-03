@@ -1,8 +1,11 @@
 esphome:
   friendly_name: D1 Mini Haier Bedroom Ricardo
   name: d1-mini-haier-bedroom-ricardo
-  platform: ESP8266
+
+esp8266:
   board: d1_mini
+  framework:
+    version: recommended
 
 packages:
   esphome_base: !include packages/common.yml

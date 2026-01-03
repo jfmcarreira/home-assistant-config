@@ -2,7 +2,6 @@ substitutions:
   devicename: nodemcu_gate
 
 esphome:
-  name: ${devicename}
   friendly_name: NodeMCU do Portão
 
 esp8266:

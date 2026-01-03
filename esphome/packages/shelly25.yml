@@ -1,6 +1,5 @@
 esphome:
   name: ${devicename}
-  friendly_name: ${name}
 
 esp8266:
   board: esp01_1m
@@ -21,12 +20,12 @@ output:
     pin: GPIO04
 
 binary_sensor:
-  - id: sw1
-    platform: gpio
-    pin: GPIO05
-  - id: sw2
+  - id: sw_1
     platform: gpio
     pin: GPIO13
+  - id: sw_2
+    platform: gpio
+    pin: GPIO05
 
 sensor:
   - platform: ntc

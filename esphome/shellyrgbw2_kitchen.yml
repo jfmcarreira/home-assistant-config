@@ -1,6 +1,5 @@
 substitutions:
   devicename: shellyrgbw2_kitchen
-  upper_devicename: Kitchen LED
 
 packages:
   esphome_base: !include packages/common.yml
@@ -18,7 +17,7 @@ esp8266:
 
 light:
   - platform: monochromatic
-    name: ${upper_devicename}
+    name: Kitchen LED
     output: output_r
     restore_mode: RESTORE_DEFAULT_OFF
 

@@ -10,7 +10,6 @@ packages:
     file: packages/shelly_2pm_gen3.yml
     vars:
       name: Shelly 2PM Gen3 Stairs
-      out1:
 
   lights_base: !include
     file: packages/shelly_2pm_gen3_lights.yml

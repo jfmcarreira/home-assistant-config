@@ -48,12 +48,7 @@ binary_sensor:
       if (!light_1_on && !light_2_on) return false;
       return id(should_turn_off_both_lights_flag);
 
-  - id: !remove sw_1
-  - id: !remove sw_2
-
-  - id: sw_1
-    platform: gpio
-    pin: GPIO13
+  - id: !extend sw_1
     on_multi_click:
       - timing:
           - ON for at most 1000ms
@@ -96,9 +91,7 @@ binary_sensor:
               data:
                 entity_id: ${fan}
 
-  - id: sw_2
-    platform: gpio
-    pin: GPIO5
+  - id: !extend sw_2
     on_multi_click:
       - timing:
           - ON for at most 1000ms
