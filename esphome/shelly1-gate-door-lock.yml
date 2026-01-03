@@ -1,0 +1,28 @@
+substitutions:
+  devicename: shelly1-gate-door-lock
+
+esphome:
+  friendly_name: Shelly 1 Cancela
+
+packages:
+  esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+
+  device_base: !include
+    file: packages/shelly1.yml
+
+button:
+  - platform: output
+    id: gate_door_open
+    output: relay_1
+    duration: 2000ms
+
+
+lock:
+  - platform: template
+    name: gate_door
+    lambda: |-
+      return LOCK_STATE_LOCKED;
+    optimistic: true
+    unlock_action:
+      - button.press: gate_door_open
