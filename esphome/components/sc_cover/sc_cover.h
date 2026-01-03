@@ -1,7 +1,5 @@
 #pragma once
 
-// Taken from https://github.com/juaigl/esphome-garage-cover-single-control
-
 #include "esphome/components/binary_sensor/binary_sensor.h"
 #include "esphome/components/button/button.h"
 #include "esphome/components/cover/cover.h"
@@ -33,11 +31,14 @@ public:
   void dump_config() override;
   float get_setup_priority() const override;
 
-  void set_activation_button(button::Button *button) {
-    this->activation_button_ = button;
+  void set_door_activate_button(button::Button *door_activate_button) {
+    this->door_activate_button_ = door_activate_button;
   }
-  void set_switch_interval(uint32_t switch_interval) {
-    this->switch_interval_ = switch_interval;
+  void set_button_press_interval(uint32_t button_press_interval) {
+    this->button_press_interval_ = button_press_interval;
+  }
+  void set_setup_delay(uint32_t setup_delay) {
+    this->setup_delay_ = setup_delay;
   }
   void set_open_endstop(binary_sensor::BinarySensor *open_endstop) {
     this->open_endstop_ = open_endstop;
@@ -55,6 +56,7 @@ public:
   cover::CoverTraits get_traits() override;
 
 protected:
+  void do_setup_();
   void control(const cover::CoverCall &call) override;
   bool is_open_() const { return this->open_endstop_->state; }
   bool is_closed_() const { return this->close_endstop_->state; }
@@ -63,18 +65,19 @@ protected:
 
   void recompute_position_(const uint32_t now);
 
-  bool activate_switch_();
+  bool activate_door_();
 
   void open_endstop_callback_(bool state);
   void close_endstop_callback_(bool state);
 
-  button::Button *activation_button_;
+  button::Button *door_activate_button_;
   binary_sensor::BinarySensor *open_endstop_;
   binary_sensor::BinarySensor *close_endstop_;
   bool toggle_{false};
-  uint32_t switch_interval_;
+  uint32_t button_press_interval_;
   uint32_t open_duration_;
   uint32_t close_duration_;
+  uint32_t setup_delay_{0};
 
   uint32_t last_activation_time_{0};
   uint32_t last_recompute_time_{0};

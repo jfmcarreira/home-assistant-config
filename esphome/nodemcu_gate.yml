@@ -93,8 +93,8 @@ cover:
     name: "Gate"
     id: gate
     device_class: gate
-    activation_button: gate_open
-    switch_interval: 1500ms
+    door_activate_button: gate_open
+    button_press_interval: 1500ms
     open_endstop: gate_open_sensor
     close_endstop: gate_close_sensor
     open_duration: 17s
