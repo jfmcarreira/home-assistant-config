@@ -9,7 +9,7 @@ climate:
     cold_tolerance: 0.1
     hot_tolerance: 0.1
     keep_alive: false
-    precision: 0.25
+    precision: 0.5
 
 input_select:
   portable_heater_location:
