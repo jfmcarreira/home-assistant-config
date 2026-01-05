@@ -8,13 +8,13 @@ mqtt:
     #   state_topic: "tele/tasmota_sonoff_rf_bridge/RESULT"
     #   value_template: "{{ value_json.RfReceived.Data }}"
 
-    - name: "Washing Machine Door"
-      unique_id: mqtt_washing_machine_door
-      device_class: door
-      payload_on: "57E10A"
-      payload_off: "57E10E"
-      state_topic: "tele/tasmota_sonoff_rf_bridge/RESULT"
-      value_template: "{{ value_json.RfReceived.Data }}"
+    # - name: "Washing Machine Door"
+    #   unique_id: mqtt_washing_machine_door
+    #   device_class: door
+    #   payload_on: "57E10A"
+    #   payload_off: "57E10E"
+    #   state_topic: "tele/tasmota_sonoff_rf_bridge/RESULT"
+    #   value_template: "{{ value_json.RfReceived.Data }}"
 
     - name: "Kitchen Extractor Fan Slider"
       unique_id: kitchen_fan_slider
