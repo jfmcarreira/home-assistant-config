@@ -1,0 +1,12 @@
+template:
+  - sensor:
+      - unique_id: grocy_stock_cat_litter_sand
+        name: grocy_stock_cat_litter_sand
+        state: >
+          {% set products = state_attr('sensor.grocy_stock', 'products') %}
+          {% if products %}
+            {% set product = products | selectattr('id', 'eq', 4) | list | first %}
+            {{ product.available_amount if product is not none else 0 }}
+          {% else %}
+            0
+          {% endif %}
