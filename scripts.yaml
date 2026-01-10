@@ -394,7 +394,43 @@ routine_leaving_and_coming_back:
       entity_id: input_text.script_step_message
     data:
       value: Abrir o portão
-  - service: script.sequence_open_close_gate
+  - delay:
+      seconds: 10
+  - condition:
+    - or:
+      - condition: state
+        entity_id: binary_sensor.joao_home
+        state: 'on'
+      - condition: state
+        entity_id: binary_sensor.bianca_home
+        state: 'on'
+  - service: cover.open_cover
+    data: {}
+    target:
+      entity_id: cover.gate
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.script_step_message
+    data:
+      value: Aguardar alguém sair de casa
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.bianca_home
+      - binary_sensor.joao_home
+      from: 'on'
+      to: 'off'
+    timeout: 00:10:00
+    continue_on_timeout: false
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.script_step_message
+    data:
+      value: Fechar o portão
+  - service: cover.close_cover
+    data: {}
+    target:
+      entity_id: cover.gate
   - action: input_text.set_value
     target:
       entity_id: input_text.script_step_message
@@ -590,28 +626,67 @@ routine_exit_house_all_off:
       data: {}
       action: climate.turn_off
   - continue_on_error: true
-    target:
-      entity_id: script.sequence_notify_tasks
-    action: script.turn_on
-    data: {}
-  - continue_on_error: true
     data: {}
     target:
       entity_id: script.sequence_leaving_home_lights
     action: script.turn_on
+  - continue_on_error: true
+    target:
+      entity_id: script.sequence_notify_tasks
+    action: script.turn_on
+    data: {}
+  - if:
+    - condition: numeric_state
+      entity_id: sensor.device_power_kitchen_oven
+      above: 20
+    then:
+    - action: media_player.volume_set
+      target:
+        entity_id:
+        - media_player.ghm_kitchen
+      data:
+        volume_level: 0.7
+    - action: tts.speak
+      data:
+        media_player_entity_id: media_player.ghm_kitchen
+        message: Atenção! A placa ou o forno estão ligados!
+      target:
+        entity_id: tts.home_assistant_cloud
   - action: script.sequence_door_open
     data: {}
-  - continue_on_error: true
-    data: {}
-    target:
-      entity_id: script.sequence_open_close_gate
-    action: script.turn_on
   - data: {}
     target:
       area_id:
       - kitchen
       - living_room
     action: light.turn_off
+  - delay:
+      seconds: 10
+  - data: {}
+    target:
+      entity_id: cover.gate
+    action: cover.open_cover
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.script_step_message
+    data:
+      value: Aguardar alguém sair de casa
+  - wait_for_trigger:
+    - entity_id:
+      - binary_sensor.notify_home
+      to: 'off'
+      trigger: state
+    timeout: 00:20:00
+    continue_on_timeout: false
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.script_step_message
+    data:
+      value: Fechar o portão
+  - data: {}
+    target:
+      entity_id: cover.gate
+    action: cover.close_cover
   - data:
       option: 'Off'
     target:
@@ -621,12 +696,6 @@ routine_exit_house_all_off:
     device_id: 2ae8ef1981d03f83e4144debe519a697
     entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
     domain: switch
-  - wait_for_trigger:
-    - entity_id:
-      - binary_sensor.notify_home
-      to: 'off'
-      trigger: state
-    timeout: 00:20:00
   - data: {}
     action: light.turn_off
     target:

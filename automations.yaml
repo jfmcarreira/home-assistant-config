@@ -145,8 +145,8 @@
       notification_action: Roupa Retirada
       android_task_id: 20
       notification_action_id: washing_machine_clothes_off
-- alias: Tarefa do Filtro da Água
-  id: '1655462775855'
+- id: '1655462775855'
+  alias: Tarefa do Filtro da Água
   description: ''
   use_blueprint:
     path: tasks/tracked_tasks.yaml
@@ -158,8 +158,12 @@
       notification_max_time: '21:00:00'
       notification_message: O Filtro da Água Necessita de Substuição
       notification_action: Filtro Substituido
-      android_task_id: 30
-      notification_action_id: water_filter_replaced
+      task_extra_actions:
+      - action: grocy.consume_product_from_stock
+        data:
+          product_id: '99'
+          amount: 1
+          transaction_type: CONSUME
 - alias: Tarefa da Máquina de Secar
   id: '1655496730769'
   description: ''
@@ -322,8 +326,8 @@
         entity_id: scene.lights_kitchen_day
       metadata: {}
   mode: single
-- alias: Tarefa da Máquina de Lavar a Loiça
-  id: '1658177571375'
+- id: '1658177571375'
+  alias: Tarefa da Máquina de Lavar a Loiça
   description: ''
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
@@ -340,6 +344,12 @@
       notification_action: Loiça Retirada
       notification_action_id: task_dish_wash_empty
       task_done_door_time: 2
+      task_extra_actions:
+      - action: grocy.consume_product_from_stock
+        data:
+          product_id: '98'
+          amount: 1
+          transaction_type: CONSUME
 - alias: cctv control push notifications
   id: '1658672750916'
   description: ''
@@ -912,17 +922,17 @@
       - light.stairs_group
     action: light.turn_off
   mode: single
-- alias: cctv_control_recording
-  id: '1673206351942'
+- id: '1673206351942'
+  alias: cctv_control_recording
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - binary_sensor.notify_home
     - binary_sensor.house_guest
     - sensor.house_mode
-  condition: []
-  action:
+    trigger: state
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: or
@@ -939,19 +949,19 @@
           entity_id: binary_sensor.house_guest
           state: 'on'
       sequence:
-      - service: switch.turn_off
-        data: {}
+      - data: {}
         target:
           entity_id:
-          - switch.front_camera_record
-          - switch.backyard_camera_record
+          - switch.reolink_front_camera_record
+          - switch.reolink_backyard_camera_record
+        action: switch.turn_off
     default:
-    - service: switch.turn_on
-      data: {}
+    - data: {}
       target:
         entity_id:
-        - switch.front_camera_record
-        - switch.backyard_camera_record
+        - switch.reolink_front_camera_record
+        - switch.reolink_backyard_camera_record
+      action: switch.turn_on
   mode: single
 - alias: Deshumidificador - Desligar Automáticamente
   id: '1675112824745'
@@ -1724,6 +1734,8 @@
       entity_id: climate.living_room
       state: heat
   actions:
+  - variables:
+      current_fan_mode: '{{ state_attr(''climate.living_room'',''fan_mode'') }}'
   - target:
       entity_id: climate.living_room
     data:
@@ -1747,7 +1759,7 @@
   - target:
       entity_id: climate.living_room
     data:
-      fan_mode: auto
+      fan_mode: '{{ current_fan_mode }}'
     action: climate.set_fan_mode
   mode: single
 - alias: Água Quente - Ligar Manhã
@@ -2102,8 +2114,8 @@
   trace:
     stored_traces: 40
   mode: single
-- alias: Tarefa de Substituição da Areia das Gatas
-  id: '1709598685655'
+- id: '1709598685655'
+  alias: Tarefa de Substituição da Areia das Gatas
   description: ''
   use_blueprint:
     path: tasks/tracked_tasks.yaml
@@ -2115,8 +2127,12 @@
       notification_max_time: '19:00:00'
       notification_message: A Areia das Gatas Necessita de Substituição
       notification_action: Registar Substituição
-      android_task_id: 31
-      notification_action_id: cat_litter_change
+      task_extra_actions:
+      - action: grocy.consume_product_from_stock
+        data:
+          product_id: '4'
+          amount: 1
+          transaction_type: CONSUME
 - alias: Tarefa de Limpeza da Areia das Gatas
   id: '1709598896541'
   description: ''
@@ -2130,8 +2146,6 @@
       notification_max_time: 00:00:00
       notification_message: A Areia das Gatas Necessita de Limpeza
       notification_action: Registar Limpeza
-      android_task_id: 32
-      notification_action_id: cat_litter_clean
 - id: '1709743628443'
   alias: Alertar Portão Aberto com a Casa Vazia
   description: ''
@@ -2319,23 +2333,6 @@
         entity_id: input_boolean.door_bell_sound
         state: 'on'
       then:
-      - action: media_player.volume_set
-        target:
-          entity_id:
-          - media_player.ghm_living_room
-          - media_player.ghm_kitchen
-        data:
-          volume_level: 0.005
-      - repeat:
-          for_each:
-          - media_player.ghm_living_room
-          - media_player.ghm_kitchen
-          sequence:
-          - action: tts.cloud_say
-            data:
-              cache: true
-              entity_id: '{{ repeat.item }}'
-              message: This is a broadcast message
       - action: media_player.volume_set
         target:
           entity_id:
@@ -3058,37 +3055,49 @@
           - light.kitchen_door
           - light.exterior_wall_side
           - light.exterior_wall_back
-- alias: Trigger Botões dos Estores da Casa de Banho do R/C
-  id: '1735221054299'
+- id: '1735221054299'
+  alias: Trigger Botões dos Estores da Casa de Banho do R/C
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
     input:
-      device: bhonofre_cover_bathroom_rc
+      device: bhonofre_cover_bathroom
       single_top_action:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bathroom_rc_led
+      - if:
+        - condition: light.is_on
+          target:
+            entity_id: light.bathroom_rc_led
+          options:
+            behavior: any
+        then:
+        - device_id: dc4dddf5972168d5c5954e59f1891db9
+          domain: light
+          entity_id: 49e8b948c784dfa6d04e06d9001f2746
+          type: brightness_increase
+        else:
+        - type: turn_on
+          device_id: dc4dddf5972168d5c5954e59f1891db9
+          entity_id: 49e8b948c784dfa6d04e06d9001f2746
+          domain: light
+          brightness_pct: 100
       single_bottom_action:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bathroom_rc_led
-      triple_top_action:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bathroom_rc_ceiling
-      triple_bottom_action:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bathroom_rc_ceiling
+      - if:
+        - condition: light.is_on
+          target:
+            entity_id: light.bathroom_rc_led
+          options:
+            behavior: any
+        then:
+        - device_id: dc4dddf5972168d5c5954e59f1891db9
+          domain: light
+          entity_id: 49e8b948c784dfa6d04e06d9001f2746
+          type: brightness_decrease
+        else:
+        - type: turn_on
+          device_id: dc4dddf5972168d5c5954e59f1891db9
+          entity_id: 49e8b948c784dfa6d04e06d9001f2746
+          domain: light
+          brightness_pct: 50
 - alias: task_trigger_change_cat_litter
   id: '1735385296449'
   description: ''
@@ -3757,54 +3766,25 @@
       entity_id:
       - cover.living_room
   mode: single
-- alias: security_alert_door_open
-  id: '1756997660207'
+- id: '1756997660207'
+  alias: Alertar Disparar do Alarme
   description: ''
   triggers:
-  - entity_id:
-    - binary_sensor.kitchen_door
-    - binary_sensor.front_door
-    to: open
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 30
-    trigger: state
-  - id: trigger_house_empty
-    entity_id:
-    - binary_sensor.notify_home
-    to: 'off'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 15
-    trigger: state
-  conditions:
-  - condition: or
-    conditions:
-    - condition: state
-      entity_id: binary_sensor.kitchen_door
-      state: 'on'
-    - condition: state
-      entity_id: binary_sensor.front_door
-      state: 'on'
-    alias: Se alguma das portas está aberta
+  - trigger: alarm_control_panel.triggered
+    target:
+      entity_id: alarm_control_panel.alarmo
+    options:
+      behavior: any
   actions:
   - data:
-      title: Exterior
-      message: O Portão da Rua está Aberto
+      title: Segurança - Alarme
+      message: Alarme Disparou!
       data:
-        tag: 301
+        tag: alarm_trigger
         priority: high
         persistent: true
         sticky: true
         channel: Segurança
-        clickAction: /lovelace-subviews/dashboard-exterior
-        actions:
-        - action: gate_notification_action_keep_open
-          title: Deixar Aberto
-        - action: gate_notification_action_close
-          title: Fechar o Portao
     action: notify.mobile_app_all
   mode: restart
 - alias: rain_set_last_event
@@ -4586,7 +4566,7 @@
       message: O Ricardo está de  pé
   mode: single
 - id: '1765502279075'
-  alias: lights_motion_backyard
+  alias: Luzes Por Mov. Traseiras
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -4594,8 +4574,8 @@
       motion_sensor: binary_sensor.backyard_camera_person
       target_entity: light.kitchen_door
       no_motion_wait: 60
-      illuminance_cutoff: 50
-      only_after_sunset: false
+      illuminance_cutoff: 0
+      only_after_sunset: true
       disable_in_guest: true
       blocker_on_entity: light.kitchen_door
       required_house_mode: Todos
@@ -4608,7 +4588,7 @@
         - condition: state
           entity_id: light.exterior_wall_back
           state:
-          - 'off'
+          - 'on'
 - id: '1765845791576'
   alias: Desligar Luz da Sala Sem Movimento
   description: ''
