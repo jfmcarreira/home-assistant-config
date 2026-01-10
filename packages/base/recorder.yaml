@@ -34,3 +34,5 @@ recorder:
       # Sensor Groups
       - binary_sensor.motion_sensor_stairs_hallway
       - binary_sensor.motion_sensor_stairs
+      # Unecessary Sensors
+      - sensor.grocy_stock
