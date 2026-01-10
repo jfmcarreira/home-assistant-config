@@ -22,6 +22,12 @@ blueprint:
         entity:
           integration: sql
           domain: sensor
+    task_extra_actions:
+      name: Acções
+      description: Acções extra a executar quando a tarefa é realizada
+      default: []
+      selector:
+        action:
     send_notification:
       name: Notificação
       description: Controlo para enviar notificações
@@ -46,16 +52,6 @@ blueprint:
         Texto da acção que aparece na notificação (Registar roupa retirada da máquina)
       selector:
         text:
-    android_task_id:
-      name: ID da notificação Android
-      selector:
-        number:
-          min: 0
-          max: 100
-    notification_action_id:
-      name: ID da acção
-      description: >
-        ID unico para registar acção concluida (dryer_remove_clothes)
 
 mode: restart
 max_exceeded: silent
@@ -82,7 +78,7 @@ trigger:
     platform: event
     event_type: mobile_app_notification_action
     event_data:
-      action: !input notification_action_id
+      action: !input task_done_code_name
 
 condition:
   - condition: or
@@ -144,25 +140,25 @@ action:
                         title: Tarefa Doméstica
                         message: !input notification_message
                         data:
-                          tag: !input android_task_id
+                          tag: !input task_done_code_name
                           priority: high
                           persistent: false
                           channel: Tasks
                           sticky: true
                           clickAction: "/lovelace/shores"
                           actions:
-                            - action: !input notification_action_id
+                            - action: !input task_done_code_name
                               title: !input notification_action
     default:
       - service: notify.mobile_app_all
         data:
           message: clear_notification
           data:
-            tag: !input android_task_id
+            tag: !input task_done_code_name
             dismiss: true
       - service: persistent_notification.dismiss
         data:
-          notification_id: !input notification_action_id
+          notification_id: !input task_done_code_name
 
       - service: shell_command.external_my_sql_insert
         data:
@@ -174,6 +170,8 @@ action:
             "{{ record_timestamp}}"
           save_string: "true"
           save_date_time: "true"
+
+      - sequence: !input task_extra_actions
 
       - delay: 00:00:01
 

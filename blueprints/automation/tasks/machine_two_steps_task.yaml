@@ -33,6 +33,18 @@ blueprint:
       selector:
         entity:
           domain: binary_sensor
+    task_extra_actions:
+      name: Acções - Máquina
+      description: Acções extra a executar quando a máquina termina
+      default: []
+      selector:
+        action:
+    task_manual_extra_actions:
+      name: Acções - Manual
+      description: Acções extra a executar quando a tarefa é realizada
+      default: []
+      selector:
+        action:
     task_done_door_time:
       name: Tempo para Realizar a Tarefa
       description: Tempo em que a porta da máquina deve estar aberta para considerar a tarefa realizada
@@ -168,6 +180,7 @@ action:
               date_stamp: >
                 "{{ record_timestamp }}"
               save_date_time: "true"
+          - sequence: !input task_extra_actions
 
   - choose:
       - conditions: "{{ trigger.id == 'trigger_machine_finished' or trigger.id == 'trigger_send_notification' }}"
@@ -209,8 +222,6 @@ action:
                               title: !input notification_action
 
     default:
-      #- conditions: "{{ trigger.id == 'trigger_restart_machine' or trigger.id == 'trigger_notification_action' or trigger.id == 'trigger_notification_action' }}"
-      #sequence:
       - service: notify.mobile_app_all
         data:
           message: clear_notification
@@ -235,3 +246,11 @@ action:
             "{{ record_timestamp}}"
           save_string: "true"
           save_date_time: "true"
+
+      - sequence: !input task_manual_extra_actions
+
+      - delay: 00:00:01
+
+      - action: homeassistant.update_entity
+        data:
+          entity_id: !input task_needs_attention
