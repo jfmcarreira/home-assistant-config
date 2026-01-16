@@ -7,30 +7,30 @@ template:
           {% set position_sum = 0 %}
           {% set position_count = 0 %}
           {% if is_state('input_boolean.cover_control_group_living_room', 'on') %}
-            {% set position_sum = position_sum + (state_attr('cover.living_room','current_position') | round(precision = 2.0, default = 0)) %}
+            {% set position_sum = position_sum + (state_attr('cover.living_room','current_position') | round(0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
           {% if is_state('input_boolean.cover_control_group_kitchen', 'on') %}
-            {% set position_sum = position_sum + (state_attr('cover.kitchen','current_position') | round(precision = 2.0, default = 0)) %}
+            {% set position_sum = position_sum + (state_attr('cover.kitchen','current_position') | round(0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
           {% if is_state('input_boolean.cover_control_group_laundry', 'on') %}
-            {% set position_sum = position_sum + (state_attr('cover.laundry','current_position') | round(precision = 2.0, default = 0)) %}
+            {% set position_sum = position_sum + (state_attr('cover.laundry','current_position') | round(0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
           {% if is_state('input_boolean.cover_control_group_bathroom', 'on') %}
-            {% set position_sum = position_sum + (state_attr('cover.bathroom','current_position') | round(precision = 2.0, default = 0)) %}
+            {% set position_sum = position_sum + (state_attr('cover.bathroom','current_position') | round(0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
           {% if is_state('input_boolean.cover_control_group_bedroom_rc', 'on') %}
-            {% set position_sum = position_sum + (state_attr('cover.bedroom_rc','current_position') | round(precision = 2.0, default = 0)) %}
+            {% set position_sum = position_sum + (state_attr('cover.bedroom_rc','current_position') | round(0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
           {% if is_state('input_boolean.cover_control_group_office', 'on') %}
-            {% set position_sum = position_sum + (state_attr('cover.office','current_position') | round(precision = 2.0, default = 0)) %}
+            {% set position_sum = position_sum + (state_attr('cover.office','current_position') | round(0)) %}
             {% set position_count = position_count + 1 %}
           {% endif %}
-          {{ (position_sum / position_count) | round(0, default = 0) }}
+          {{ (position_sum / position_count) | round(0) }}
         open_cover:
           service: cover.open_cover
           data:
