@@ -12,9 +12,69 @@ light:
     restore_mode: RESTORE_DEFAULT_OFF
 
 sensor:
+  - platform: ade7953_i2c
+    update_interval: 5s
+    irq_pin: GPIO1 # Prevent overheating by setting this
+    voltage:
+      id: shelly_voltage
+      unit_of_measurement: V
+      accuracy_decimals: 1
+      device_class: voltage
+    current_a:
+      id: shelly_current_a
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      device_class: current
+    active_power_a:
+      name: Light Power ${Light_1_Name}
+      device_class: power
+      id: power_channel_a
+      filters:
+        - multiply: -1
+        - lambda: >
+            if (x < 0.0) return 0.0;
+            return x;
+      on_value_range:
+        - above: 20000
+          then:
+            - output.turn_off: relay_1
+            - output.turn_off: relay_2
+            - homeassistant.service:
+                service: persistent_notification.create
+                data:
+                  title: Message from Shelly 2.5 with ${Light_1_Name} and ${Light_2_Name} lights
+                data_template:
+                  message: Switch turned off because max power was exceeded
+    current_b:
+      id: shelly_current_b
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      device_class: current
+    active_power_b:
+      name: Light Power ${Light_2_Name}
+      device_class: power
+      id: power_channel_b
+      # active_power_b is inverted, so multiply by -1
+      filters:
+        - multiply: -1
+        - lambda: >
+            if (x < 0.0) return 0.0;
+            return x;
+      on_value_range:
+        - above: 20000
+          then:
+            - output.turn_off: relay_1
+            - output.turn_off: relay_2
+            - homeassistant.service:
+                service: persistent_notification.create
+                data:
+                  title: Message from Shelly 2.5 with ${Light_1_Name} and ${Light_2_Name} lights
+                data_template:
+                  message: Switch turned off because max power was exceeded
+
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_1_Name}
-    power_id: power_relay_1
+    power_id: power_channel_a
     unit_of_measurement: Wh
     state_class: total_increasing
     device_class: energy
@@ -22,7 +82,7 @@ sensor:
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_2_Name}
-    power_id: power_relay_2
+    power_id: power_channel_b
     unit_of_measurement: Wh
     restore: false
     state_class: total_increasing
