@@ -3,7 +3,8 @@ unique_id: hall_ac
 icon: mdi:air-conditioner
 state: >-
   {{
-    not is_state('climate.hall', 'off')
+    not is_state('climate.hall', 'off') and
+    not is_state('climate.hall', 'unavailable')
   }}
 turn_on:
   - if:

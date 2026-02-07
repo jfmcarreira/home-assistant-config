@@ -3,7 +3,8 @@ unique_id: bedroom_henrique_ac
 icon: mdi:air-conditioner
 state: >-
   {{
-    not is_state('climate.bedroom_henrique', 'off')
+    not is_state('climate.bedroom_henrique', 'off') and
+    not is_state('climate.bedroom_henrique', 'unavailable')
   }}
 turn_on:
   - if:

@@ -3,7 +3,8 @@ unique_id: master_bedroom_ac
 icon: mdi:air-conditioner
 state: >-
   {{
-    not is_state('climate.master_bedroom', 'off')
+    not is_state('climate.master_bedroom', 'off') and
+    not is_state('climate.master_bedroom', 'unavailable')
   }}
 turn_on:
   - if:

@@ -3,7 +3,8 @@ unique_id: office_ac
 icon: mdi:air-conditioner
 state: >-
   {{
-    not is_state('climate.office', 'off')
+    not is_state('climate.office', 'off') and
+    not is_state('climate.office', 'unavailable')
   }}
 turn_on:
   - choose:

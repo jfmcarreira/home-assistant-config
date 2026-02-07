@@ -1,7 +1,11 @@
 name: Ar Condicionado da Sala
 unique_id: living_room_ac
 icon: mdi:air-conditioner
-state: "{{ not (is_state('climate.living_room', 'unavailable') or is_state('climate.living_room', 'off')) }}"
+state: >-
+  {{
+    not is_state('climate.living_room', 'off') and
+    not is_state('climate.living_room', 'unavailable')
+  }}
 turn_on:
   - choose:
       - conditions:
