@@ -6,7 +6,7 @@ substitutions:
   ExtraTop: "14"
   ExtraBottom: "2"
   CoverTime: "12s"
-  SmallOpenPosition: 15%
+  SmallOpenPosition: 15
   RelayPower: GPIO4
   RelayDirection: GPIO5
   InvertRelayDirection: "false"

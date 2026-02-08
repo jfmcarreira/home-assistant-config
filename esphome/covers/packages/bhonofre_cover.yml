@@ -25,13 +25,25 @@ globals:
     restore_value: no
     initial_value: "true"
 
-sensor:
-  - platform: homeassistant
+number:
+  - platform: template
     id: cover_lower_position
-    entity_id: input_number.cover_lower_position_${CoverName}
-  - platform: homeassistant
+    name: Cover Lower Position ${CoverName}
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    initial_value: ${SmallOpenPosition}
+    step: 1
+  - platform: template
     id: cover_higher_position
-    entity_id: input_number.cover_higher_position_${CoverName}
+    name: Cover Higher Position ${CoverName}
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    initial_value: 60
+    step: 1
 
 event:
   - platform: template
@@ -77,8 +89,14 @@ binary_sensor:
     entity_id: binary_sensor.notify_home
 
   - platform: homeassistant
-    id: cover_controls_enabled
+    id: cover_controls_enabled_home_assistant
     entity_id: binary_sensor.cover_controls_enabled
+
+  - platform: template
+    id: cover_controls_enabled
+    lambda: |-
+      return !api::global_api_server->is_connected() ||
+               id(cover_controls_enabled_home_assistant).state;
 
   - platform: gpio
     id: sw_open
@@ -100,10 +118,7 @@ binary_sensor:
           - script.execute: cancel_extra_events
           - if:
               condition:
-                or:
-                  - not:
-                      - api.connected:
-                  - binary_sensor.is_on: cover_controls_enabled
+                - binary_sensor.is_on: cover_controls_enabled
               then:
                 - logger.log: "Cover going to Middle"
                 - cover.control:
@@ -132,10 +147,7 @@ binary_sensor:
               else:
                 - if:
                     condition:
-                      or:
-                        - not:
-                            - api.connected:
-                        - binary_sensor.is_on: cover_controls_enabled
+                      - binary_sensor.is_on: cover_controls_enabled
                     then:
                       - select.set_index:
                           id: last_action
@@ -206,10 +218,7 @@ binary_sensor:
         then:
           - if:
               condition:
-                or:
-                  - not:
-                      - api.connected:
-                  - binary_sensor.is_on: cover_controls_enabled
+                - binary_sensor.is_on: cover_controls_enabled
               then:
                 - script.execute: cover_small_open
       - timing:
@@ -234,10 +243,7 @@ binary_sensor:
               else:
                 - if:
                     condition:
-                      or:
-                        - not:
-                            - api.connected:
-                        - binary_sensor.is_on: cover_controls_enabled
+                      - binary_sensor.is_on: cover_controls_enabled
                     then:
                       - select.set_index:
                           id: last_action
@@ -574,6 +580,7 @@ mqtt:
   username: !secret mqtt_username
   password: !secret mqtt_password
   discovery: false
+  discover_ip: false
   discovery_retain: false
   on_json_message:
     topic: esphome/cover/control_control
@@ -620,7 +627,7 @@ cover:
     id: cover_1
     name: "${CoverName}"
     device_class: shutter
-    assumed_state: false
+    assumed_state: true
     has_built_in_endstop: true
     open_action:
       - switch.turn_off: relay_power
@@ -638,6 +645,8 @@ cover:
       - delay: 500ms
     stop_action:
       - switch.turn_off: relay_power
+      - delay: 500ms
+      - switch.turn_off: relay_direction
       - delay: 500ms
     close_duration: ${CoverTime}
     open_duration: ${CoverTime}
