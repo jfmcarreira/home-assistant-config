@@ -62,9 +62,4 @@ binary_sensor:
           - ON for at least 1000ms
         invalid_cooldown: 100ms
         then:
-          - if:
-              condition:
-                and:
-                  - api.connected:
-              then:
-                - script.execute: smart_light_sw_action
+            - script.execute: smart_light_sw_action

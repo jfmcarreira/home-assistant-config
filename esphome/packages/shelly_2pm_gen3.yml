@@ -13,6 +13,10 @@ esp32:
 
 bluetooth_proxy:
 
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
 i2c:
   sda: GPIO6
   scl: GPIO7

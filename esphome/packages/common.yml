@@ -1,15 +1,28 @@
 esphome:
   name: "${devicename}"
-
+  on_boot:
+    - priority: -100
+      then:
+        - wait_until:
+            condition:
+              api.connected:
+            timeout: 60s
+        - if:
+            condition:
+              not:
+                api.connected:
+            then:
+              - wifi.disable:
 wifi:
   domain: .home
   ssid: !secret esp_ssid
   password: !secret esp_password
+  reboot_timeout: 0s
+  fast_connect: true
+  min_auth_mode: WPA2
   #power_save_mode: Low
-  reboot_timeout: 20min
 
 api:
-  #reboot_timeout: 20min
   reboot_timeout: 0s
 
 logger:
@@ -22,9 +35,6 @@ logger:
 ota:
   - platform: esphome
 
-time:
-  - platform: homeassistant
-    id: homeassistant_time
 
 sensor:
   - platform: wifi_signal

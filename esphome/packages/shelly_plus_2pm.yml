@@ -9,6 +9,10 @@ i2c:
   sda: GPIO26
   scl: GPIO25
 
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
 bluetooth_proxy:
 
 output:

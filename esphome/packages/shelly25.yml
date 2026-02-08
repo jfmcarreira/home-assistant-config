@@ -7,6 +7,14 @@ esp8266:
 wifi:
   power_save_mode: HIGH
 
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+  # - platform: sntp
+  #   id: sntp_time
+  #   timezone: Europe/Lisbon
+
 i2c:
   sda: GPIO12
   scl: GPIO14

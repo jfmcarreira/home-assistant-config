@@ -13,4 +13,4 @@ script:
       - logger.log:
           format: "Temporary Disabling switch"
           level: INFO
-      - delay: 2s
+      - delay: 1s
