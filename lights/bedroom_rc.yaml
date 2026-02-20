@@ -3,7 +3,7 @@ name: Luzes do Quarto de Arrumos
 state: >-
   {{
       is_state('light.bedroom_rc_closet', 'on') or
-      is_state('light.bedroom_rc_iron', 'on')
+      is_state('light.bedroom_rc_wall', 'on')
   }}
 turn_on:
   - choose:
@@ -18,7 +18,7 @@ turn_on:
         target:
           entity_id:
             - light.bedroom_rc_closet
-            - light.bedroom_rc_iron
+            - light.bedroom_rc_wall
 turn_off:
   - service: light.turn_off
     target:

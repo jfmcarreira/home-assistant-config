@@ -4,7 +4,6 @@ state: >-
   {{
       is_state('light.bedroom_henrique_ceiling', 'on') or
       is_state('light.bedroom_henrique_closet', 'on')or
-      is_state('light.bedroom_henrique_lamp', 'on')
   }}
 turn_on:
   - choose:
