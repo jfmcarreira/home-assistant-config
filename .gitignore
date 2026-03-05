@@ -25,4 +25,4 @@ logs/**
 zigbee2mqtt/**
 .ha_run.lock
 **/__pycache__/
-
+.cache/**

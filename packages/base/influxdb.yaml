@@ -2,9 +2,6 @@
 ## Influx DB
 ################################################################
 influxdb:
-  username: !secret influxdb_user
-  password: !secret influxdb_pass
-  host: !secret influxdb_host
   max_retries: 3
   default_measurement: state
   tags:
