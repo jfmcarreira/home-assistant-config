@@ -1,0 +1,369 @@
+- type: custom:button-card
+  show_state: true
+  state_display: |
+    [[[
+      return states['sensor.date_time_frontend'].state;
+    ]]]
+  tap_action:
+    action: javascript
+    javascript: |
+      [[[
+        this.dispatchEvent(new Event('hass-toggle-menu', { bubbles: true, composed: true }));
+      ]]]
+  styles:
+    card:
+      - height: 75px
+    state:
+      - font-size: 50px
+      - font-weight: 400
+
+- type: grid
+  columns: 1
+  square: false
+  cards:
+    - show_current: true
+      show_forecast: false
+      type: weather-forecast
+      entity: weather.home
+      forecast_type: daily
+    - type: tile
+      entity: media_player.ghm_hall
+      vertical: false
+      features:
+        - type: media-player-playback
+      features_position: bottom
+  visibility:
+    - condition: state
+      entity: media_player.hall
+      state: 'on'
+- show_current: true
+  show_forecast: true
+  type: weather-forecast
+  entity: weather.home
+  forecast_type: daily
+  visibility:
+    - condition: state
+      entity: media_player.hall
+      state: 'off'
+- square: false
+  columns: 3
+  type: grid
+  cards:
+    - type: custom:button-card
+      aspect_ratio: 9/7
+      size: 100%
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      show_state: false
+      icon: mdi:lightbulb-group
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-lights
+      hold_action:
+        action: navigate
+        navigation_path: /dashboard-configuration/config-lights
+    - type: custom:button-card
+      aspect_ratio: 9/7
+      size: 100%
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      show_state: false
+      icon: mdi:window-shutter
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-covers
+    - type: custom:button-card
+      size: 100%
+      aspect_ratio: 9/7
+      entity: vacuum.roborock
+      show_name: false
+      color_type: icon
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-roborock
+      icon: mdi:robot-vacuum
+      style:
+        icon:
+          - color: var(--state-icon-color)
+- square: false
+  columns: 4
+  type: grid
+  cards:
+    - type: custom:button-card
+      aspect_ratio: 10/9
+      size: 100%
+      color_type: icon
+      show_state: false
+      icon: mdi:grass
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-exterior
+      custom_fields:
+        lights_on: |
+          [[[
+            if (states['light.outside_group'].state == "on")
+              return `<ha-icon icon="mdi:lightbulb-group"      style="width: 18px; height: 18px;"> </ha-icon>`
+          ]]]
+        gate_open: |
+          [[[
+            if (states['cover.gate'].state != "closed")
+              return `<ha-icon icon="mdi:gate-open"      style="width: 18px; height: 18px;"> </ha-icon>`
+          ]]]
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+        custom_fields:
+          gate_open:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - left: 10%
+            - top: 0%
+          lights_on:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - right: 10%
+            - top: 0%
+        grid:
+          - position: relative
+    - type: custom:button-card
+      size: 100%
+      aspect_ratio: 10/9
+      color_type: icon
+      show_state: false
+      show_name: false
+      entity: climate.water_heater
+      icon: mdi:water-boiler
+      triggers_update:
+        - sensor.temperature_water_heater_top
+        - sensor.temperature_water_heater_bottom
+        - sensor.device_power_water_heater
+        - switch.water_heater
+      state:
+        - value: 'off'
+          styles:
+            icon:
+              - color: var(--state-icon-color)
+        - operator: template
+          value: |
+            [[[ return states['switch.water_heater'].state === 'on' ]]]
+          icon: mdi:water-boiler
+          color: var(--state-active-color)
+        - operator: template
+          value: |
+            [[[ return states['climate.water_heater'].state === 'off' ]]]
+          icon: mdi:water-boiler-off
+        - operator: template
+          value: |
+            [[[ return states['climate.water_heater'].state === 'heat' ]]]
+          icon: mdi:water-boiler
+          color: var(--state-icon-color)
+      custom_fields:
+        temp: |
+          [[[
+            const temp = parseFloat(states['sensor.temperature_water_heater_top']?.state);
+            return (!isNaN(temp)) ? `${Math.round(temp)}°` : '—';
+          ]]]
+        temp_bottom: |
+          [[[
+            const tempB = parseFloat(states['sensor.temperature_water_heater_bottom']?.state);
+            return (!isNaN(tempB)) ? `${Math.round(tempB)}°` : '—';
+          ]]]
+        power: |
+          [[[
+            const power = parseFloat(states['sensor.device_power_water_heater']?.state);
+            return (!isNaN(power)) ? `${Math.round(power)}W` : '—';
+          ]]]
+        target: |
+          [[[
+            const target = parseFloat(states['climate.water_heater']?.attributes?.temperature);
+            return (!isNaN(target)) ? `${Math.round(target)}°` : '—';
+          ]]]
+        heating: |
+          [[[
+            if (states['switch.water_heater'].state == "on")
+              return `<ha-icon icon="mdi:thermometer-plus"      style="width: 18px; height: 18px;"> </ha-icon>`
+          ]]]
+      styles:
+        icon:
+          - margin-left: '-10%'
+          - width: 60%
+        custom_fields:
+          heating:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - left: 8%
+            - bottom: 10%
+          temp:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - right: 5%
+            - top: 10%
+            - font-size: 10px
+          temp_bottom:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - right: 5%
+            - top: 40%
+            - font-size: 10px
+          target:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - top: 10%
+            - left: 8%
+            - font-size: 10px
+          power:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - bottom: 10%
+            - right: 5%
+            - font-size: 10px
+        grid:
+          - position: relative
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-water-heater
+      hold_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-water-heater-graph
+    - type: custom:button-card
+      size: 100%
+      aspect_ratio: 10/9
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-ac
+      show_name: false
+      icon: mdi:radiator
+      entity: switch.air_conditioner
+      style:
+        icon:
+          - color: var(--state-icon-color)
+      hold_action:
+        action: call-service
+        service: switch.turn_off
+        target:
+          entity_id: switch.air_conditioner
+    - type: custom:button-card
+      size: 100%
+      aspect_ratio: 10/9
+      state_display: 'no'
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      icon: mdi:shower-head
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-wc
+
+
+- square: false
+  columns: 5
+  type: grid
+  cards:
+    - type: custom:button-card
+      size: 70%
+      aspect_ratio: 5/4
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      color: auto
+      icon: mdi:cctv
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-cctv
+    - type: custom:button-card
+      size: 70%
+      aspect_ratio: 5/4
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      color: auto
+      icon: mdi:multimedia
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/multimedia-hall
+    - type: custom:button-card
+      size: 70%
+      aspect_ratio: 5/4
+      show_state: false
+      show_name: false
+      color_type: icon
+      entity: binary_sensor.tasks
+      icon: mdi:calendar-outline
+      custom_fields:
+        wet_clothes: |
+          [[[
+            if (states['binary_sensor.wash_machine_wet_clothes'].state == "on")
+              return `<ha-icon icon="mdi:hanger"      style="width: 18px; height: 18px;"> </ha-icon>`
+          ]]]
+        dry_clothes: |
+          [[[
+            if (states['binary_sensor.dryer_machine_need_emtpy'].state == "on")
+              return `<ha-icon icon="mdi:tshirt-crew"      style="width: 18px; height: 18px;"> </ha-icon>`
+          ]]]
+        clean_dishes: |
+          [[[
+            if (states['binary_sensor.dish_wash_machine_clean'].state == "on")
+              return `<ha-icon icon="mdi:silverware-clean"      style="width: 18px; height: 18px;"> </ha-icon>`
+          ]]]
+        cat_litter: |
+          [[[
+            if (states['binary_sensor.cat_litter_box_need_change'].state == "on")
+              return `<ha-icon icon="mdi:cat"      style="width: 18px; height: 18px;"> </ha-icon>`
+          ]]]
+      styles:
+        custom_fields:
+          wet_clothes:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - left: 10%
+            - top: 0%
+          dry_clothes:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - left: 10%
+            - bottom: 10%
+          clean_dishes:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - right: 10%
+            - top: 0%
+          cat_litter:
+            - color: var(--state-icon-color)
+            - position: absolute
+            - right: 10%
+            - bottom: 10%
+        grid:
+          - position: relative
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-shores
+    - type: custom:button-card
+      size: 70%
+      aspect_ratio: 5/4
+      state_display: 'no'
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      icon: mdi:calendar-sync
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/routines
+    - type: custom:button-card
+      size: 70%
+      aspect_ratio: 5/4
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      show_name: false
+      entity: sensor.house_mode
+      show_state: false
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-house
+      hold_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-automations
+  view_layout:
+    column: 1

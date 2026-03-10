@@ -2,7 +2,7 @@
   type: grid
   cards:
     - type: custom:button-card
-      size: 70%
+      size: 56%
       state_display: 'no'
       styles:
         icon:
@@ -12,7 +12,7 @@
         action: navigate
         navigation_path: '#states-graphs'
     - type: custom:button-card
-      size: 70%
+      size: 56%
       state_display: 'no'
       styles:
         icon:
@@ -21,18 +21,8 @@
       tap_action:
         action: navigate
         navigation_path: '#states-toggles'
-    # - type: custom:button-card
-    #   size: 70%
-    #   state_display: 'no'
-    #   styles:
-    #     icon:
-    #       - color: var(--state-icon-color)
-    #   icon: mdi:air-conditioner
-    #   tap_action:
-    #     action: navigate
-    #     navigation_path: '#ac'
     - type: custom:button-card
-      size: 70%
+      size: 56%
       state_display: 'no'
       styles:
         icon:
@@ -186,7 +176,7 @@
       entity: binary_sensor.tod_morning_before_work
       state: 'on'
   card:
-    - square: false
+      square: false
       type: grid
       columns: 2
       cards:
