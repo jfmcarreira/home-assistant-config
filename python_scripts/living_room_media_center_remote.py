@@ -8,14 +8,49 @@ button = data.get("button").upper()
 if button == "OK" or button == "OKAY":
     button = "ENTER"
 
-tv_source = "TV"
+tv_source = "Android"
 # Always send volume to TV
-if button == "VOLUME UP" or button == "VOLUME DOWN":
-    tv_source = "TV"
-else:
-    tv_source = hass.states.get('sensor.living_room_tv_source').state
+# if button == "VOLUME UP" or button == "VOLUME DOWN":
+#     tv_source = "TV"
+# else:
+#     tv_source = hass.states.get('sensor.living_room_tv_source').state
 
-if tv_source == "MEO":
+
+if tv_source == "Android":
+
+    if button == "UP":
+        button = "DPAD_UP"
+    elif button == "DOWN":
+        button = "DPAD_DOWN"
+    elif button == "LEFT":
+        button = "DPAD_LEFT"
+    elif button == "RIGHT":
+        button = "DPAD_RIGHT"
+    elif button == "ENTER":
+        button = "DPAD_CENTER"
+    elif button == "EXIT":
+        button = "Exit"
+    elif button == "INFO":
+        button = "INFO"
+    elif button == "PLAY":
+        button = "MEDIA_PLAY_PAUSE"
+    elif button == "PAUSE":
+        button = "MEDIA_PLAY_PAUSE"
+    elif button == "SKIP-BACKWARD":
+        button = "Rewind"
+    elif button == "SKIP-FOWARD":
+        button = "Forward"
+    elif button == "PREV":
+        button = "Prev"
+    elif button == "NEXT":
+        button = "Next"
+    elif button == "BACK":
+        button = "BACK"
+
+    service_data = { "entity_id": "remote.living_room_tv", "command": button }
+    hass.services.call('remote','send_command', service_data, False)
+
+elif tv_source == "MEO":
 
     if button == "UP":
         button = "DPAD_UP"
