@@ -1,0 +1,111 @@
+template-room-light:
+  variables:
+    room_light: light.living_room
+    card_height: 71px
+    icon_size: '50'
+  show_icon: false
+  styles:
+    card:
+      - height: |
+          [[[ return variables.card_height ]]]
+    custom_fields:
+      icon_button:
+        - position: absolute
+        - left: 10px
+        - width: |
+            [[[ return variables.icon_size + 'px' ]]]
+        - height: |
+            [[[ return variables.icon_size + 'px' ]]]
+        - border-radius: 50%
+        - background: rgba(255, 255, 255, 0.1)
+    name:
+      - position: absolute
+      - font-weight: 500
+      - font-size: 16px
+      - left: |
+          [[[ return (parseInt(variables.icon_size) + 25) + 'px' ]]]
+      - justify-self: left
+  custom_fields:
+    icon_button:
+      card:
+        type: custom:button-card
+        entity: |
+          [[[ return variables.room_light ]]]
+        show_name: false
+        state:
+          - operator: default
+            color: var(--disabled-text-color)
+          - operator: '=='
+            value: 'on'
+            color: var(--state-active-color)
+        styles:
+          card:
+            - width: |
+                [[[ return variables.icon_size + 'px' ]]]
+            - height: |
+                [[[ return variables.icon_size + 'px' ]]]
+            - border-radius: 50%
+          icon:
+            - width: 25px
+        tap_action:
+          action: call-service
+          service: light.toggle
+          target:
+            entity_id: |
+              [[[ return variables.room_light ]]]
+template-room-light-automatic:
+  variables:
+    automation: light.living_room
+  styles:
+    custom_fields:
+      custom_icon:
+        - position: absolute
+        - top: 5%
+        - right: 2%
+        - width: 15px
+  custom_fields:
+    custom_icon: |
+      [[[
+        const automationState = states[variables.automation]?.attributes?.current;
+        if (automationState === 1) {
+          return `<ha-icon icon="mdi:lightbulb-auto-outline"></ha-icon>`;
+        }
+        return '';
+      ]]]
+template-room-light-popup:
+  variables:
+    lights_popup_title: Luzes da Sala
+    lights_popup_room: living_room
+    lights_popup_pattern: light.living_room*
+  tap_action:
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        auto_close: false
+        allow_nested_more_info: false
+        content:
+          type: custom:auto-entities
+          card:
+            type: vertical-stack
+            title: |
+              [[[ return variables.lights_popup_title ]]]
+          card_param: cards
+          show_empty: true
+          filter:
+            exclude:
+              - entity_id: light.*group*
+            include:
+              - area: |
+                  [[[ return variables.lights_popup_room ]]]
+                entity_id: |
+                  [[[ return variables.lights_popup_pattern ]]]
+                domain: light
+                options:
+                  type: custom:mushroom-light-card
+                  layout: vertical
+                  secondary_info: none
+                  show_brightness_control: true
+                  show_color_temp_control: true
+                  use_light_color: true
+                  collapsible_controls: false

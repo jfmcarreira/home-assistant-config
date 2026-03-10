@@ -1,0 +1,60 @@
+kiosk_mode:
+  hide_header: true
+button_card_templates: !include button-card-templates.yaml
+decluttering_templates: !include declutering.yaml
+views:
+  - theme: Backend-selected
+    title: Dashboard Downstairs
+    path: main
+    icon: mdi:sofa
+    type: custom:horizontal-layout
+    layout:
+      max_cols: 2
+      column_widths: 30% 70%
+      max_width: 300px
+      reflow: true
+    badges: []
+    cards:
+      - type: vertical-stack
+        layout_type: custom:horizontal-layout
+        view_layout:
+          column: 1
+        cards: !include control-panel.yaml
+
+      - type: custom:state-switch
+        entity: hash
+        default: panel-main
+        view_layout:
+          column: 2
+        states:
+          panel-main:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              reflow: true
+              max_cols: 2
+              column_widths: 54% 46%
+              max_width: 200px
+              height: 700px
+            cards: !include panel-main.yaml
+
+          panel-ac:
+            type: custom:layout-card
+            layout_type: custom:masonry-layout
+            layout:
+              max_cols: 2
+            cards: !include panel-ac.yaml
+
+          panel-covers:
+            type: custom:layout-card
+            layout_type: custom:masonry-layout
+            layout:
+              max_cols: 2
+            cards: !include panel-covers.yaml
+
+          panel-lights:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_cols: 2
+            cards: !include panel-lights.yaml

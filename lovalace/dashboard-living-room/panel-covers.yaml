@@ -1,0 +1,166 @@
+
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Sala
+    - room_icon: mdi:sofa
+    - room_code_name: living_room
+    - details_title: Estore da Sala
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Escritório
+    - room_icon: mdi:desk
+    - room_code_name: office
+    - details_title: Estore do Escritório
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Cozinha
+    - room_icon: mdi:stove
+    - room_code_name: kitchen
+    - details_title: Estore da Cozinha
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Lavandaria
+    - room_icon: mdi:washing-machine
+    - room_code_name: laundry
+    - details_title: Estore da Lavandaria
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Quarto de Arrumos
+    - room_icon: mdi:wardrobe
+    - room_code_name: bedroom_rc
+    - details_title: Estore do Quarto de Arrumos
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Casa de Banho
+    - room_icon: mdi:toilet
+    - room_code_name: bathroom
+    - details_title: Estore da Casa de Banho
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Suite
+    - room_icon: mdi:bed-double
+    - room_code_name: master_bedroom
+    - details_title: Estore da Suite
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Quarto do Ricardo
+    - room_icon: mdi:human-child
+    - room_code_name: bedroom_ricardo
+    - details_title: Estore do Quarto do Ricardo
+- type: custom:decluttering-card
+  template: decluttering_cover
+  variables:
+    - room_name: Quarto do Henrique
+    - room_icon: mdi:baby
+    - room_code_name: bedroom_henrique
+    - details_title: Estore do Quarto do Henrique
+- features:
+    - type: cover-open-close
+  type: tile
+  icon_tap_action:
+    action: more-info
+  name: Escadas
+  entity: cover.stairs
+  icon: mdi:stairs
+  features_position: bottom
+  vertical: false
+  tap_action:
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        auto_close: false
+        large: false
+        allow_nested_more_info: false
+        content:
+          type: vertical-stack
+          title: Estore das Escadas
+          cards:
+            - type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                max_cols: 2
+              cards:
+                - type: grid
+                  view_layout:
+                    column: 1
+                  square: false
+                  columns: 2
+                  cards:
+                    - type: custom:button-card
+                      name: Parcialmente Aberto
+                      icon: mdi:window-shutter
+                      styles:
+                        icon:
+                          - color: var(--state-icon-color)
+                      icon_height: 40px
+                      tap_action:
+                        action: call-service
+                        service: >-
+                          esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
+                    - type: custom:button-card
+                      name: A Meio
+                      icon: mdi:window-shutter-open
+                      icon_height: 40px
+                      styles:
+                        icon:
+                          - color: var(--state-icon-color)
+                      tap_action:
+                        action: call-service
+                        service: >-
+                          esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
+                - features:
+                    - type: cover-open-close
+                    - type: cover-position
+                  type: tile
+                  icon_tap_action:
+                    action: more-info
+                  name: Escadas
+                  entity: cover.stairs
+                  icon: mdi:stairs
+                  features_position: bottom
+                  vertical: false
+                  view_layout:
+                    column: 1
+                - type: entities
+                  entities:
+                    - entity: sensor.device_battery_cover_stairs
+                      name: Bateria
+                      secondary_info: last-updated
+                - type: custom:auto-entities
+                  card:
+                    type: entities
+                  filter:
+                    include:
+                      - entity_id: input_boolean.cover_control_*_stairs
+                      - entity_id: input_number.*_position_stairs
+                  view_layout:
+                    column: 2
+- show_name: true
+  show_icon: true
+  type: button
+  icon_height: 42px
+  name: Abrir Todos
+  icon: mdi:window-shutter-open
+  tap_action:
+    action: call-service
+    service: cover.open_cover
+    data:
+      entity_id: cover.all_house
+- type: button
+  icon_height: 42px
+  name: Fechar Todos
+  icon: mdi:window-shutter
+  tap_action:
+    action: call-service
+    service: cover.close_cover
+    data:
+      entity_id: cover.all_house

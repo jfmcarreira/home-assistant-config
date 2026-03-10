@@ -1,0 +1,128 @@
+
+decluttering_cover:
+  card:
+    type: tile
+    features:
+      - type: cover-open-close
+    icon_tap_action:
+      action: more-info
+    name: '[[room_name]]'
+    entity: cover.[[room_code_name]]
+    icon: '[[room_icon]]'
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          auto_close: false
+          large: false
+          allow_nested_more_info: false
+          size: normal
+          style: |
+            --popup-min-width: 450px;
+          content:
+            type: vertical-stack
+            title: '[[details_title]]'
+            cards:
+              - type: grid
+                view_layout:
+                  column: 1
+                square: false
+                columns: 2
+                cards:
+                  - type: custom:button-card
+                    name: Parcialmente Aberto
+                    icon: mdi:window-shutter
+                    styles:
+                      icon:
+                        - color: var(--state-icon-color)
+                    icon_height: 40px
+                    tap_action:
+                      action: call-service
+                      service: >-
+                        esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
+                  - type: custom:button-card
+                    name: A Meio
+                    icon: mdi:window-shutter-open
+                    icon_height: 40px
+                    styles:
+                      icon:
+                        - color: var(--state-icon-color)
+                    tap_action:
+                      action: call-service
+                      service: >-
+                        esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
+              - features:
+                  - type: cover-open-close
+                  - type: cover-position
+                type: tile
+                icon_tap_action:
+                  action: more-info
+                name: '[[room_name]]'
+                entity: cover.[[room_code_name]]
+                icon: mdi:stairs
+                features_position: bottom
+                vertical: false
+                view_layout:
+                  column: 1
+              - type: custom:auto-entities
+                card:
+                  type: entities
+                filter:
+                  include:
+                    - entity_id: input_boolean.cover_control_*_[[room_code_name]]
+                    - entity_id: number.*_position_[[room_code_name]]
+                    - entity_id: input_number.*_position_[[room_code_name]]
+                    - entity_id: select.cover_[[room_code_name]]_last_action
+                view_layout:
+                  column: 2
+decluttering_haier_ac:
+  card:
+    type: tile
+    features:
+      - style: icons
+        type: climate-hvac-modes
+        hvac_modes:
+          - heat
+          - cool
+          - dry
+          - fan_only
+          - 'off'
+      - type: target-temperature
+      - style: icons
+        type: climate-fan-modes
+    entity: climate.[[room_code_name]]
+    state_content:
+      - current_temperature
+      - swing_mode
+      - preset_mode
+    name: '[[room_name]]'
+    features_position: bottom
+    vertical: false
+    hold_action:
+      action: more-info
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          auto_close: false
+          large: false
+          allow_nested_more_info: false
+          size: normal
+          style: |
+            --popup-min-width: 450px;
+          content:
+            type: custom:vertical-stack-in-card
+            cards:
+              - type: custom:more-info-card
+                entity: climate.[[room_code_name]]
+                tap_action:
+                  action: more-info
+              - type: entities
+                entities:
+                  - entity: switch.[[room_code_name]]_ac_display
+                    name: Ecrã
+                  - entity: sensor.coiler_temperature_[[room_code_name]]
+                    name: Temperatura do Radiador Interior
+                    secondary_info: last-updated
