@@ -34,40 +34,48 @@
   columns: 3
   view_layout:
     column: 1
-
-- type: custom:button-card
-  name: '[[[ return helpers.localize(states[''sensor.weather_alert'']); ]]]'
-  label: Alerta Metereológico
-  show_label: true
-  tap_action:
-    action: none
-  styles:
-    card:
-      - height: 80px
-      - display: flex
-      - flex-direction: column
-      - justify-content: center
-      - align-items: center
-    name:
-      - font-size: 40px
-      - font-weight: 500
-      - line-height: 1.2
-      - margin: '-13px'
-      - padding: 5px
-    label:
-      - font-size: 20px
-      - font-weight: 400
-      - color: gray
-      - margin: 8px
-      - padding: '-10px'
-      - line-height: 1.2
-  visibility:
+- type: conditional
+  conditions:
     - condition: state
       entity: sensor.weather_alert
       state_not: green
     - condition: state
       entity: sensor.weather_alert
       state_not: yellow
+  card:
+    type: custom:button-card
+    name: '[[[ return helpers.localize(states[''sensor.weather_alert'']); ]]]'
+    label: Alerta Metereológico
+    show_label: true
+    tap_action:
+      action: none
+    styles:
+      card:
+        - height: 80px
+        - display: flex
+        - flex-direction: column
+        - justify-content: center
+        - align-items: center
+      name:
+        - font-size: 40px
+        - font-weight: 500
+        - line-height: 1.2
+        - margin: '-13px'
+        - padding: 5px
+      label:
+        - font-size: 20px
+        - font-weight: 400
+        - color: gray
+        - margin: 8px
+        - padding: '-10px'
+        - line-height: 1.2
+    visibility:
+      - condition: state
+        entity: sensor.weather_alert
+        state_not: green
+      - condition: state
+        entity: sensor.weather_alert
+        state_not: yellow
   view_layout:
     column: 1
 
