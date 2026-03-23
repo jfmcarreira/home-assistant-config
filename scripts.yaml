@@ -370,9 +370,6 @@ routine_exit_house_to_work_joao:
       minutes: 20
       seconds: 0
       milliseconds: 0
-  - condition: state
-    entity_id: binary_sensor.joao_home
-    state: 'off'
   - data: {}
     target:
       entity_id: cover.gate
@@ -561,9 +558,17 @@ routine_good_night:
     target:
       floor_id:
       - living_floor
-      - bedrooms
       area_id:
       - outside
+      - master_bedroom
+      - bedroom_ricardo
+      - bedroom_henrique
+      - bathroom_main
+      - master_bedroom_bathroom
+      entity_id:
+      - light.hall
+      - light.hall_side
+      - light.stairs_group
     data: {}
   - delay:
       hours: 0
@@ -799,42 +804,6 @@ routine_night_mode:
   alias: Routina Modo Noite
   description: ''
   fields: {}
-assistant_light_toggle:
-  sequence:
-  - action: assist_satellite.ask_question
-    metadata: {}
-    data:
-      question: Queres ligar a luz?
-      preannounce: true
-      entity_id: assist_satellite.home_assistant_voice_097232_satelite_do_assist
-      answers:
-      - id: sim
-        sentences:
-        - Sim
-      - id: nao
-        sentences:
-        - Não
-    response_variable: response
-  - if:
-    - condition: template
-      value_template: '{{ response.id == "sim" }}'
-    then:
-    - action: light.turn_on
-      metadata: {}
-      data: {}
-      target:
-        entity_id: light.office
-  - if:
-    - condition: template
-      value_template: '{{ response.id == "nao" }}'
-    then:
-    - action: light.turn_off
-      metadata: {}
-      data: {}
-      target:
-        entity_id: light.office
-  alias: assistant_light_toggle
-  description: ''
 device_control_magnesium:
   sequence:
   - choose:
@@ -876,4 +845,69 @@ device_control_magnesium:
       selector:
         text: {}
   alias: device_control_magnesium
+  description: ''
+routine_gate_open_auto_close:
+  sequence:
+  - if:
+    - condition: state
+      entity_id: cover.gate
+      state:
+      - closed
+    then:
+    - action: cover.open_cover
+      metadata: {}
+      target:
+        entity_id: cover.gate
+      data: {}
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - sensor.driveway_car_active_count
+      - sensor.backyard_camera_car_active_count
+      - sensor.front_camera_car_active_count
+      - binary_sensor.driveway_camera_reolink_vehicle
+      to:
+      from:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.kitchen_door
+      state:
+      - 'off'
+    then:
+    - wait_for_trigger:
+      - trigger: state
+        entity_id:
+        - binary_sensor.kitchen_door
+        from:
+        - 'off'
+        to:
+        - 'on'
+      timeout:
+        hours: 0
+        minutes: 10
+        seconds: 0
+        milliseconds: 0
+      continue_on_timeout: false
+    alias: Verificar se a porta está fechada para esperar que ela se abra
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.kitchen_door
+      from:
+      - 'on'
+      to:
+      - 'off'
+    timeout:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: false
+    alias: Esperar pela porta fechar
+  - action: cover.close_cover
+    metadata: {}
+    target:
+      entity_id: cover.gate
+    data: {}
+  alias: Routina de Abrir e Fechar o Portão
   description: ''

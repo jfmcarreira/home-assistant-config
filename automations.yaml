@@ -257,11 +257,12 @@
     trigger: state
   - id: car_trigger
     entity_id:
-    - binary_sensor.front_camera_car
-    - binary_sensor.backyard_camera_car
     - binary_sensor.front_camera_reolink_vehicle
-    - binary_sensor.backyard_camera_reolink_vehicle
-    from: 'off'
+    - binary_sensor.driveway_camera_reolink_vehicle
+    - binary_sensor.front_gate_car_occupancy
+    - binary_sensor.driveway_gate_car_occupancy
+    from:
+    - 'off'
     trigger: state
   conditions:
   - condition: state
@@ -345,75 +346,12 @@
       notification_action_id: task_dish_wash_empty
       task_done_door_time: 2
       task_extra_actions:
-      - action: grocy.consume_product_from_stock
+      - continue_on_error: true
+        action: grocy.consume_product_from_stock
         data:
           product_id: '98'
           amount: 1
           transaction_type: CONSUME
-- alias: cctv control push notifications
-  id: '1658672750916'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - binary_sensor.notify_home
-    - binary_sensor.house_guest
-    - sensor.house_mode
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: binary_sensor.notify_home
-          state: 'on'
-        - condition: state
-          entity_id: binary_sensor.house_guest
-          state: 'on'
-      sequence:
-      - service: switch.turn_off
-        data: {}
-        target:
-          entity_id:
-          - switch.backyard_camera_push_notifications
-          - switch.front_camera_push_notifications
-    default:
-    - service: switch.turn_on
-      data: {}
-      target:
-        entity_id:
-        - switch.backyard_camera_push_notifications
-        - switch.front_camera_push_notifications
-  mode: single
-- id: '1658675704141'
-  alias: Notificar Deteção Câmara da Frente
-  description: ''
-  use_blueprint:
-    path: cameras/send-camera-snapshot-notification-on-motion.yaml
-    input:
-      notification_title: Segurança - Câmara da Frente
-      notification_message: Pessoas ou Carros Detectados na Câmara da Frente
-      notify_joao: true
-      camera: camera.front
-      motion_sensor:
-      - binary_sensor.front_camera_smart_detection
-      notify_bianca: false
-      notification_tag: cctv_front_snapshot
-- id: '1658676096110'
-  alias: Notificar Deteção Câmara das Traseiras
-  description: ''
-  use_blueprint:
-    path: cameras/send-camera-snapshot-notification-on-motion.yaml
-    input:
-      notification_title: Segurança - Câmara das Traseiras
-      notification_message: Pessoas ou Carros Detectados na Câmara das Traseiras
-      notify_joao: true
-      camera: camera.backyard
-      motion_sensor:
-      - binary_sensor.backyard_camera_smart_detection
-      notify_bianca: false
-      notification_tag: cctv_backyard_snapshot
 - alias: 'Desligar Luzes da Despensa com Temporizador '
   id: '1659187275200'
   description: ''
@@ -1126,15 +1064,15 @@
       title: Equipamentos
       message: O frigorifico está desligado à mais de 1 hora!
       data:
-        tag: '1000'
+        tag: fridge_power_alert
         priority: high
-        persistent: false
-        channel: Home
+        persistent: true
         sticky: false
+        channel: Home
         clickAction: /lovelace-subviews/dashboard-power
   mode: single
-- alias: lights_trigger_hallway_presence
-  id: '1696606664632'
+- id: '1696606664632'
+  alias: Trigger Botão da Luz de Presença do Corredor
   description: ''
   triggers:
   - device_id: 65801262e841d379b0b0b71f3ff22624
@@ -1463,8 +1401,8 @@
       entity_id: cover.master_bedroom
     action: cover.open_cover
   mode: single
-- alias: Tablet Control Motion Detection Living Room
-  id: '1658360353381'
+- id: '1658360353381'
+  alias: Tablet Control Motion Detection Living Room
   description: ''
   triggers:
   - entity_id:
@@ -1482,7 +1420,7 @@
           state: 'Off'
         - condition: state
           entity_id: sensor.house_mode
-          state: Sleep
+          state: Dormir
         - condition: state
           entity_id: binary_sensor.notify_home
           state: 'off'
@@ -2222,7 +2160,7 @@
       title: Exterior
       message: O Portão da Rua está Aberto
       data:
-        tag: '300'
+        tag: notify_gate_open
         priority: high
         persistent: true
         sticky: true
@@ -3055,49 +2993,6 @@
           - light.kitchen_door
           - light.exterior_wall_side
           - light.exterior_wall_back
-- id: '1735221054299'
-  alias: Trigger Botões dos Estores da Casa de Banho do R/C
-  description: ''
-  use_blueprint:
-    path: devices/bhonofre_cover_buttons.yaml
-    input:
-      device: bhonofre_cover_bathroom
-      single_top_action:
-      - if:
-        - condition: light.is_on
-          target:
-            entity_id: light.bathroom_rc_led
-          options:
-            behavior: any
-        then:
-        - device_id: dc4dddf5972168d5c5954e59f1891db9
-          domain: light
-          entity_id: 49e8b948c784dfa6d04e06d9001f2746
-          type: brightness_increase
-        else:
-        - type: turn_on
-          device_id: dc4dddf5972168d5c5954e59f1891db9
-          entity_id: 49e8b948c784dfa6d04e06d9001f2746
-          domain: light
-          brightness_pct: 100
-      single_bottom_action:
-      - if:
-        - condition: light.is_on
-          target:
-            entity_id: light.bathroom_rc_led
-          options:
-            behavior: any
-        then:
-        - device_id: dc4dddf5972168d5c5954e59f1891db9
-          domain: light
-          entity_id: 49e8b948c784dfa6d04e06d9001f2746
-          type: brightness_decrease
-        else:
-        - type: turn_on
-          device_id: dc4dddf5972168d5c5954e59f1891db9
-          entity_id: 49e8b948c784dfa6d04e06d9001f2746
-          domain: light
-          brightness_pct: 50
 - alias: task_trigger_change_cat_litter
   id: '1735385296449'
   description: ''
@@ -3410,8 +3305,8 @@
           entity_id: climate.bedroom_henrique
       long_top_action: []
       long_bottom_action: []
-- alias: AC Hall - Ligar Modo Noturno
-  id: '1738114770861'
+- id: '1738114770861'
+  alias: AC Hall - Ligar Modo Noturno
   description: ''
   triggers:
   - trigger: time
@@ -3787,8 +3682,8 @@
         channel: Segurança
     action: notify.mobile_app_all
   mode: restart
-- alias: rain_set_last_event
-  id: '1759091348299'
+- id: '1759091348299'
+  alias: Registar Última Chuva
   description: ''
   triggers:
   - trigger: state
@@ -3841,7 +3736,7 @@
   - data:
       message: clear_notification
       data:
-        tag: 302
+        tag: notify_gate_open_5min
         dismiss: true
     action: notify.mobile_app_all
   - action: notify.mobile_app_joao
@@ -3849,10 +3744,10 @@
       title: Exterior
       message: O Portão da Rua está em Movimento à mais de 5 min
       data:
-        tag: 302
-        priority: high
-        persistent: true
-        sticky: true
+        tag: notify_gate_open_5min
+        priority: default
+        persistent: false
+        sticky: false
         channel: Segurança
         clickAction: /lovelace-subviews/dashboard-exterior
   mode: restart
@@ -3888,12 +3783,35 @@
       hours: 0
       minutes: 10
       seconds: 0
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.house_mode
+      state:
+      - Sleep
   actions:
   - action: notify.mobile_app_joao
     metadata: {}
     data:
       title: Baby Monitor
       message: O Henrique está a chorar
+      data:
+        tag: baby_monitor_henrique_crying
+        priority: high
+        persistent: false
+        sticky: false
+        channel: Baby Monitor
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - data:
+      message: clear_notification
+      data:
+        tag: baby_monitor_henrique_crying
+        dismiss: true
+    action: notify.mobile_app_all
   mode: single
 - id: '1760144554168'
   alias: Alertar o Joao Ricardo a Chorar
@@ -3926,12 +3844,35 @@
       hours: 0
       minutes: 10
       seconds: 0
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.house_mode
+      state:
+      - Sleep
   actions:
   - action: notify.mobile_app_joao
     metadata: {}
     data:
       title: Baby Monitor
       message: O Ricardo está a chorar
+      data:
+        tag: baby_monitor_ricardo_crying
+        priority: high
+        persistent: false
+        sticky: false
+        channel: Baby Monitor
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - data:
+      message: clear_notification
+      data:
+        tag: baby_monitor_ricardo_crying
+        dismiss: true
+    action: notify.mobile_app_all
   mode: single
 - alias: AC da Sala - Ligar de Tarde no Verão
   id: '1751200610784'
@@ -4115,8 +4056,8 @@
       schedule_end: 08:00:00
       hvac_unit:
       - climate.hall
-      hvac_temperature: 22
-      room_temperature: 21
+      hvac_temperature: 20
+      room_temperature: 19
       temperature_sensor: sensor.temperature_hall
       weekday:
       - mon
@@ -4187,6 +4128,7 @@
       - winter
       - spring
       window_sensor: binary_sensor.window_ground_floor
+      hvac_delayed_temperature_offset: -1
 - alias: AC Escritório - Ligar de Tarde no Inverno
   id: '1737772761289'
   description: ''
@@ -4257,7 +4199,7 @@
       schedule_end: '20:00:00'
       hvac_unit:
       - climate.hall
-      hvac_temperature: 22
+      hvac_temperature: 21
       room_temperature: 21.5
       temperature_sensor: sensor.temperature_hall
       weekday:
@@ -4274,6 +4216,7 @@
       - spring
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
+      hvac_delayed_temperature_offset: -1
 - id: '1705596272069'
   alias: AC Suite - Ligar de Tarde no Inverno
   description: ''
@@ -4285,7 +4228,7 @@
       schedule_end: '20:00:00'
       hvac_unit:
       - climate.master_bedroom
-      hvac_temperature: 22
+      hvac_temperature: 21
       room_temperature: 21
       temperature_sensor: sensor.temperature_master_bedroom
       weekday:
@@ -4300,7 +4243,7 @@
       - autumn
       - winter
       - spring
-      hvac_delayed_temperature_offset: 0
+      hvac_delayed_temperature_offset: -1
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1705596348371'
@@ -4314,7 +4257,7 @@
       schedule_end: '20:00:00'
       hvac_unit:
       - climate.bedroom_ricardo
-      hvac_temperature: 22
+      hvac_temperature: 21
       room_temperature: 21
       temperature_sensor: sensor.temperature_bedroom_ricardo
       weekday:
@@ -4329,7 +4272,7 @@
       - autumn
       - winter
       - spring
-      hvac_delayed_temperature_offset: 0
+      hvac_delayed_temperature_offset: -1
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1737770376538'
@@ -4360,6 +4303,7 @@
       - spring
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
+      hvac_delayed_temperature_offset: -1
 - id: '1762307515538'
   alias: Luzes por Mov. no Quarto de Arrumos
   description: ''
@@ -4571,24 +4515,18 @@
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
-      motion_sensor: binary_sensor.backyard_camera_person
-      target_entity: light.kitchen_door
+      motion_sensor: binary_sensor.backyard_camera_person_group
+      target_entity: light.exterior_wall_back
       no_motion_wait: 60
       illuminance_cutoff: 0
       only_after_sunset: true
-      disable_in_guest: true
+      disable_in_guest: false
       blocker_on_entity: light.kitchen_door
       required_house_mode: Todos
       room_name: Exterior
       disable_in_sleep: false
       presence_sensor: none
-      required_conditions:
-      - condition: not
-        conditions:
-        - condition: state
-          entity_id: light.exterior_wall_back
-          state:
-          - 'on'
+      required_conditions: []
 - id: '1765845791576'
   alias: Desligar Luz da Sala Sem Movimento
   description: ''
@@ -4675,4 +4613,246 @@
     target:
       entity_id: light.office
     data: {}
+  mode: single
+- id: '1771197979489'
+  alias: Notificar Radium Cameras da Rua
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      notify_device: 2a682060bb472236a68fdd3ff33a221a
+      camera:
+      - camera.backyard
+      - camera.driveway
+      - camera.front
+      base_url: https://2gujf5czt1uwl7w8sy3xl61tax03t5ct.ui.nabu.casa
+      alert_once: true
+      android_auto: true
+      channel: Segurança
+      presence_filter:
+      - person.bianca_pires
+      - person.joao_carreira
+      cooldown: 30
+      labels:
+      - person
+      state_filter: false
+      final_update: true
+- id: '1771200825381'
+  alias: cctv_notify_living_room_tv
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      notify_device: 2a682060bb472236a68fdd3ff33a221a
+      camera:
+      - camera.backyard
+      - camera.driveway
+      - camera.front
+      critical: 'true'
+      alert_once: true
+      android_auto: false
+      channel: Segurança
+      presence_filter: []
+      cooldown: 120
+      labels:
+      - person
+      notify_group: living_room_android_tv
+      tv: true
+      tv_transparency: 25%
+      tv_position: top-right
+      tv_size: medium
+      mqtt_topic: frigate/reviews
+      icon: mdi:cctv
+      base_url: http://nest-assistant.home/
+      master_condition:
+      - condition: state
+        entity_id: sun.sun
+        state:
+        - below_horizon
+- id: '1771360597612'
+  alias: cctv_notify_living_room_tv_front
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      notify_device: 2a682060bb472236a68fdd3ff33a221a
+      camera:
+      - camera.front
+      critical: 'true'
+      alert_once: true
+      android_auto: false
+      channel: Segurança
+      presence_filter: []
+      cooldown: 120
+      labels:
+      - person
+      notify_group: living_room_android_tv
+      tv: true
+      tv_transparency: 25%
+      tv_position: top-right
+      tv_size: medium
+      mqtt_topic: frigate/reviews
+      icon: mdi:cctv
+      base_url: http://nest-assistant.home/
+      master_condition:
+      - condition: state
+        entity_id: sun.sun
+        state:
+        - below_horizon
+      zones:
+      - front_garden
+      zone_filter: true
+- id: '1771360990396'
+  alias: Luzes Por Mov. Entrada
+  description: ''
+  use_blueprint:
+    path: lights/motion_based_lights_v3.yaml
+    input:
+      motion_sensor: binary_sensor.driveway_camera_person_group
+      target_entity: light.exterior_wall_side
+      no_motion_wait: 60
+      illuminance_cutoff: 0
+      only_after_sunset: true
+      disable_in_guest: false
+      blocker_on_entity: light.kitchen_door
+      required_house_mode: Todos
+      room_name: Exterior
+      disable_in_sleep: false
+      presence_sensor: none
+      required_conditions: []
+- id: '1771630873804'
+  alias: lights_control_kitchen_lights_all_on
+  description: ''
+  triggers:
+  - trigger: light.turned_on
+    target:
+      entity_id: light.kitchen_pantry
+    options:
+      behavior: any
+  conditions:
+  - condition: light.is_on
+    target:
+      entity_id:
+      - light.kitchen_led
+      - light.kitchen_window
+    options:
+      behavior: any
+  - condition: or
+    conditions:
+    - condition: and
+      conditions:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: light.kitchen_led
+          state:
+          - 'on'
+          for:
+            hours: 0
+            minutes: 0
+            seconds: 1
+      - condition: state
+        entity_id: light.kitchen_led
+        state: 'on'
+    - condition: and
+      conditions:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: light.kitchen_window
+          state:
+          - 'on'
+          for:
+            hours: 0
+            minutes: 0
+            seconds: 1
+      - condition: state
+        entity_id: light.kitchen_window
+        state: 'on'
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    target:
+      entity_id: light.kitchen_pantry
+    data: {}
+  mode: single
+- id: '1771632199476'
+  alias: Controlar Comando Ligar Luz no Escritório
+  description: Substitui o comportamento padrão de ligar tudo no escritório
+  triggers:
+  - command:
+    - liga a luz
+    - ligar a luz
+    - acende a luz
+    - acender a luz
+    trigger: conversation
+  conditions:
+  - condition: template
+    value_template: '{{ trigger.satellite_id == ''assist_satellite.office'' }}'
+  actions:
+  - action: light.turn_on
+    data: {}
+    target:
+      entity_id: light.office
+  mode: single
+- id: '1773602786390'
+  alias: cat_litter_buttons
+  description: ''
+  triggers:
+  - alias: short_up
+    domain: mqtt
+    device_id: 3e83c221d7382802e779e8ff72fa1cf5
+    type: action
+    subtype: 'on'
+    metadata: {}
+    trigger: device
+    id: short_up
+  - alias: short_down
+    domain: mqtt
+    device_id: 3e83c221d7382802e779e8ff72fa1cf5
+    type: action
+    subtype: 'off'
+    trigger: device
+    id: short_down
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - short_up
+      sequence:
+      - data: {}
+        target:
+          entity_id: automation.task_cat_litter_clean
+        action: automation.trigger
+    - conditions:
+      - condition: trigger
+        id:
+        - long_up
+      sequence:
+      - data:
+          skip_condition: true
+        target:
+          entity_id: automation.task_cat_litter_clean
+        action: automation.trigger
+    - conditions:
+      - condition: trigger
+        id:
+        - short_down
+      sequence:
+      - data: {}
+        target:
+          entity_id: automation.task_cat_litter_change
+        action: automation.trigger
+    - conditions:
+      - condition: trigger
+        id:
+        - long_down
+      sequence:
+      - data:
+          skip_condition: true
+        target:
+          entity_id: automation.task_cat_litter_change
+        action: automation.trigger
   mode: single
