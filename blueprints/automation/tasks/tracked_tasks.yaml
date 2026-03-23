@@ -141,7 +141,8 @@ action:
                         message: !input notification_message
                         data:
                           tag: !input task_done_code_name
-                          priority: high
+                          priority: default
+                          importance: default
                           persistent: false
                           channel: Tasks
                           sticky: true

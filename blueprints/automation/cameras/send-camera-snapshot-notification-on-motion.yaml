@@ -12,8 +12,7 @@ blueprint:
       selector:
         entity:
           domain: binary_sensor
-          device_class: motion
-          multiple: false
+          multiple: true
     camera:
       name: Camera
       description: The camera which creates the snapshot
@@ -33,6 +32,8 @@ blueprint:
       selector:
         boolean: {}
       default: false
+    notification_tag:
+      name: Notification tag
     notification_title:
       name: Notification title (Optional)
       description: 'Default: "Movimento Detectado!"'
@@ -52,7 +53,7 @@ variables:
   notify_joao: !input notify_joao
   notify_bianca: !input notify_bianca
   motion_sensor: !input motion_sensor
-  motion_sensor_name: "{{ states[motion_sensor].name }}"
+  motion_sensor_name: "{{ state_attr('binary_sensor.backyard_camera_smart_detection', 'friendly_name') or motion_sensor }}"
   camera: !input camera
   notification_title: !input notification_title
   notification_message: !input notification_message
@@ -77,8 +78,15 @@ action:
               title: "{{ notification_title }}"
               message: "{{ notification_message }}"
               data:
+                channel: Segurança
                 image: "{{ snapshot_access_file_path }}"
-                clickAction: "/lovelace/dashboard-cctv"
+                clickAction: "/lovelace-subviews/dashboard-cctv"
+                priority: high
+                persistent: false
+                ttl: 0
+                sticky: false
+                tag: !input notification_tag
+                group: "Segurança - Cameras"
 
       - conditions: "{{ notify_bianca }}"
         sequence:
@@ -87,5 +95,12 @@ action:
               title: "{{ notification_title }}"
               message: "{{ notification_message }}"
               data:
+                channel: Segurança
                 image: "{{ snapshot_access_file_path }}"
-                clickAction: "/lovelace/dashboard-cctv"
+                clickAction: "/lovelace-subviews/dashboard-cctv"
+                priority: high
+                persistent: false
+                ttl: 0
+                sticky: false
+                tag: !input notification_tag
+                group: "Segurança - Cameras"
