@@ -83,7 +83,7 @@ blueprint:
     illuminance_cutoff:
       name: Luminusidade
       description: Executar a automação se a luminusidade for abaixo deste valor.
-      default:
+      default: 0
       selector:
         number:
           min: 0
@@ -215,34 +215,46 @@ condition:
     state: "on"
 
   # Do not run in guest mode if set
-  - condition: or
+  - alias: "Desabilitar no modo de convidados"
+    condition: or
     conditions:
       - "{{ disable_in_guest == false }}"
       - condition: state
         entity_id: binary_sensor.house_guest
         state: "off"
 
-  - condition: not
+  - alias: "Desabilitar no modo Dormir"
+    condition: or
     conditions:
       - "{{ disable_in_sleep == false }}"
-      - condition: state
-        entity_id: input_select.house_mode
-        state: "Sleep"
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.house_mode
+            state: "Sleep"
 
   # Only run in specific house mode
-  - condition: or
+  - alias: "Verificar o Modo de Funcionamento"
+    condition: or
     conditions:
       - "{{ automation_is_running }}"
       - "{{ house_mode_requirement }}"
 
   # Do not run if this blocker is ON
-  - condition: or
+  - alias: "Verificar entidade bloqueadora ON"
+    condition: or
     conditions:
       - "{{ automation_is_running }}"
+      - condition: state
+        entity_id: !input target_entity
+        state: "off"
+        for:
+          seconds: 10
       - "{{ (blocker_on_entity == 'none') or (not states[blocker_on_entity].state == 'on') }}"
 
   # Do not run if the blocker is OFF
-  - condition: or
+  - alias: "Verificar entidade bloqueadora OFF e as condições"
+    condition: or
     conditions:
       - "{{ automation_is_running }}"
       - condition: and
@@ -253,7 +265,8 @@ condition:
   # These are the conditions to enter in automatic mode
   # This conditions matter if the light is not in automatic mode
 
-  - condition: or
+  - alias: "Verificar se a luz está desligada"
+    condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
       - "{{ automation_is_running }}"
@@ -264,7 +277,8 @@ condition:
         for:
           seconds: 5
 
-  - condition: or
+  - alias: "Verificar se é depois do pôr do sol"
+    condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
       - "{{ automation_is_running }}"
@@ -274,14 +288,12 @@ condition:
         attribute: elevation
         below: 10
 
-  - condition: or
+  - alias: "Verificar se a iluminância está abaixo do limite"
+    condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
       - "{{ automation_is_running }}"
-      - "{{ illuminance_entity == '' }}"
-      - "{{ illuminance_entity == 'none' }}"
-      - "{{ illuminance_cutoff == '0' }}"
-      - "{{ states[illuminance_entity].state | float < illuminance_cutoff }}"
+      - "{{ illuminance_cutoff | float(0) == 0 or illuminance_entity == '' or illuminance_entity == 'none' or states[illuminance_entity].state | float(0) <= illuminance_cutoff | float(0) }}"
       - condition: not
         conditions:
           - condition: state
