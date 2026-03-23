@@ -37,7 +37,6 @@ views:
               max_width: 200px
               height: 700px
             cards: !include panel-main.yaml
-
           panel-ac:
             type: custom:layout-card
             layout_type: custom:masonry-layout
@@ -58,3 +57,4 @@ views:
             layout:
               max_cols: 2
             cards: !include panel-lights.yaml
+

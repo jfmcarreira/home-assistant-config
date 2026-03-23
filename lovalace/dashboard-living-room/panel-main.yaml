@@ -7,20 +7,20 @@
       styles:
         icon:
           - color: var(--state-icon-color)
-      icon: mdi:chart-line
+      icon: mdi:toggle-switch
       tap_action:
         action: navigate
-        navigation_path: '#states-graphs'
+        navigation_path: '#states-toggles'
     - type: custom:button-card
       size: 56%
       state_display: 'no'
       styles:
         icon:
           - color: var(--state-icon-color)
-      icon: mdi:toggle-switch
+      icon: mdi:chart-line
       tap_action:
         action: navigate
-        navigation_path: '#states-toggles'
+        navigation_path: '#states-graphs'
     - type: custom:button-card
       size: 56%
       state_display: 'no'
@@ -34,6 +34,7 @@
   columns: 3
   view_layout:
     column: 1
+
 - type: conditional
   conditions:
     - condition: state
@@ -46,7 +47,7 @@
     type: custom:button-card
     name: '[[[ return helpers.localize(states[''sensor.weather_alert'']); ]]]'
     label: Alerta Metereológico
-    show_label: true
+    show_label: true1
     tap_action:
       action: none
     styles:
@@ -131,6 +132,7 @@
       action: none
   view_layout:
     column: 1
+
 - type: conditional
   conditions:
     - entity: input_boolean.extended_away_mode
@@ -191,7 +193,7 @@
         - type: custom:mushroom-entity-card
           entity: script.routine_exit_house_to_work_joao
           secondary_info: none
-          layout: vertical
+          layout: horizontal
           tap_action:
             action: call-service
             service: script.turn_off
@@ -208,7 +210,7 @@
         - type: custom:mushroom-entity-card
           entity: script.routine_exit_house_to_work_bianca
           secondary_info: none
-          layout: vertical
+          layout: horizontal
           tap_action:
             action: call-service
             service: script.turn_off
@@ -223,28 +225,32 @@
                 - script.routine_exit_house_to_work_bianca
           name: Ir Trabalhar - Bianca
 
-- type: custom:mushroom-entity-card
-  entity: script.routine_good_night
-  secondary_info: none
-  layout: vertical
-  tap_action:
-    action: call-service
-    service: script.turn_off
-    target:
-      entity_id:
-        - script.routine_good_night
-  hold_action:
-    action: call-service
-    service: script.turn_on
-    target:
-      entity_id:
-        - script.routine_good_night
+- type: conditional
   view_layout:
     column: 1
-  visibility:
+  conditions:
     - condition: state
       entity: binary_sensor.tod_night_before_bed
       state: 'on'
+  card:
+      type: custom:mushroom-entity-card
+      entity: script.routine_good_night
+      secondary_info: none
+      layout: vertical
+      tap_action:
+        action: call-service
+        service: script.turn_off
+        target:
+          entity_id:
+            - script.routine_good_night
+      hold_action:
+        action: call-service
+        service: script.turn_on
+        target:
+          entity_id:
+            - script.routine_good_night
+
+
 - type: conditional
   conditions:
     - condition: state
@@ -258,28 +264,35 @@
     entity: alarm_control_panel.alarmo
   view_layout:
     column: 1
-- type: tile
-  visibility:
+- type: conditional
+  view_layout:
+    column: 1
+  conditions:
     - condition: numeric_state
       entity: sensor.temperature_water_heater_top
       below: 50
-  entity: climate.water_heater
-  vertical: false
-  icon_tap_action:
-    action: toggle
-  features:
-    - type: target-temperature
-    - style: icons
-      type: climate-preset-modes
-      preset_modes:
-        - none
-        - comfort
-        - eco
-  features_position: bottom
+  card:
+      type: tile
+      entity: climate.water_heater
+      vertical: false
+      icon_tap_action:
+        action: toggle
+      features:
+        - type: target-temperature
+        - style: icons
+          type: climate-preset-modes
+          preset_modes:
+            - none
+            - comfort
+            - eco
+      features_position: bottom
   view_layout:
     column: 1
-- type: tile
-  visibility:
+
+- type: conditional
+  view_layout:
+    column: 1
+  conditions:
     - condition: state
       entity: climate.living_room
       state_not: unavailable
@@ -294,44 +307,104 @@
         - condition: numeric_state
           entity: sensor.temperature_living_room
           below: 18
-  entity: climate.living_room
-  state_content:
-    - current_temperature
-    - fan_mode
-    - swing_mode
-    - preset_mode
-  vertical: false
-  features:
-    - style: icons
-      type: climate-hvac-modes
-      hvac_modes:
-        - heat
-        - cool
-        - dry
-        - fan_only
-        - 'off'
-    - style: icons
-      type: climate-fan-modes
-    - type: target-temperature
-  features_position: bottom
+  card:
+      type: tile
+      entity: climate.living_room
+      state_content:
+        - current_temperature
+        - fan_mode
+        - swing_mode
+        - preset_mode
+      vertical: false
+      features:
+        - style: icons
+          type: climate-hvac-modes
+          hvac_modes:
+            - heat
+            - cool
+            - dry
+            - fan_only
+            - 'off'
+        - style: icons
+          type: climate-fan-modes
+        - type: target-temperature
+      features_position: bottom
+
+
+- type: conditional
   view_layout:
     column: 1
-- type: logbook
-  title: Atividade
-  hours_to_show: 1
-  target:
-    entity_id:
-      - binary_sensor.motion_sensor_office
-    area_id: outside
-    label_id:
-      - movimento
-      - seguranca
+  conditions:
+    - condition: numeric_state
+      entity: sensor.device_battery_cover_stairs
+      below: 20
+  card:
+    type: tile
+    entity: sensor.device_battery_cover_stairs
+    name: Bateria do Motor do Cortinado das Escadas
+    state_content:
+      - state
+      - last_updated
+    vertical: false
+    features:
+      - type: trend-graph
+    features_position: bottom
+
+- type: vertical-stack
   view_layout:
     column: 1
+  cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mini-graph-card
+        name: Temperatura
+        entities:
+          - entity: sensor.average_temperature
+        line_color: '#e74c3c'
+        line_width: 6
+        font_size: 75
+        height: 80
+        align_icon: left
+        align_state: center
+        hours_to_show: 24
+        points_per_hour: 1
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-climate
+      - type: custom:mini-graph-card
+        name: Humidade
+        entities:
+          - entity: sensor.average_humidity
+        line_width: 6
+        font_size: 75
+        height: 80
+        align_icon: left
+        align_state: center
+        hours_to_show: 24
+        points_per_hour: 1
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-climate
+    - type: custom:mini-graph-card
+      name: Potência
+      entities:
+        - entity: sensor.bhpzem_main_power
+      line_width: 6
+      line_color: '#326da8'
+      font_size: 75
+      height: 80
+      align_icon: left
+      align_state: center
+      hours_to_show: 24
+      points_per_hour: 1
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-power
+
 
 - type: custom:state-switch
   entity: hash
-  default: states-graphs
+  default: states-toggles
   view_layout:
     column: 2
   states:
@@ -604,7 +677,7 @@
               card:
                 type: custom:mushroom-light-card
                 show_brightness_control: true
-                layout: vertical
+                layout: horizontal
                 primary_info: name
                 secondary_info: none
                 entity: light.living_room_window
@@ -617,7 +690,7 @@
               card:
                 type: custom:mushroom-light-card
                 show_brightness_control: true
-                layout: vertical
+                layout: horizontal
                 primary_info: name
                 secondary_info: none
                 entity: light.hall_presence
@@ -630,7 +703,7 @@
               card:
                 type: custom:mushroom-light-card
                 show_brightness_control: true
-                layout: vertical
+                layout: horizontal
                 primary_info: name
                 secondary_info: none
                 name: Presença Corredor
@@ -643,7 +716,7 @@
               card:
                 type: custom:mushroom-light-card
                 show_brightness_control: true
-                layout: vertical
+                layout: horizontal
                 primary_info: name
                 secondary_info: none
                 entity: light.stairs_down
@@ -732,13 +805,9 @@
               - options: {}
                 entity_id: light.stairs_group*
               - options: {}
-                entity_id: light.all_bathrooms
-              - options: {}
                 entity_id: light.bathrom_rc_*
               - options: {}
                 entity_id: light.bathroom_rc_*
-              - options: {}
-                area: IT
               - options: {}
                 area: outside
               - options: {}
@@ -770,8 +839,6 @@
                 attributes:
                   supported_features: 40
               - options: {}
-                entity_id: light.presence_group
-              - options: {}
                 entity_id: light.*_presence
               - options: {}
                 entity_id: light.hall
@@ -797,8 +864,6 @@
                 entity_id: light.master_bedroom_bathroom_*
               - options: {}
                 entity_id: light.master_bedroom_bathroom_*
-              - options: {}
-                entity_id: light.all_bathrooms
               - options: {}
                 entity_id: light.main_bathroom_*
               - options: {}
@@ -877,5 +942,15 @@
             title: Ventoinhas da Casa do Banho
             show_header_toggle: true
           show_empty: false
+        - type: logbook
+          title: Atividade
+          hours_to_show: 1
+          target:
+            entity_id:
+              - binary_sensor.motion_sensor_office
+            area_id: outside
+            label_id:
+              - movimento
+              - seguranca
 
 

@@ -80,9 +80,15 @@ frontend:
 
 lovelace:
   dashboards:
-    dashboard-ground-floor:
+    dashboard-living-room:
       mode: yaml
       filename: lovalace/dashboard-living-room/dashboard-living-room.yaml
       title: Dashboard Sala
       icon: mdi:sofa
+      show_in_sidebar: true
+    dashboard-hall:
+      mode: yaml
+      filename: lovalace/dashboard-hall/dashboard-hall.yaml
+      title: Dashboard Hall
+      icon: mdi:home-roof
       show_in_sidebar: true

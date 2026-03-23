@@ -9,7 +9,8 @@ views:
     layout:
       max_cols: 2
       column_widths: 45% 55%
-      max_width: 800px
+      max_width: 100%
+      margin: 0
       reflow: true
     badges: []
     cards:
@@ -18,16 +19,16 @@ views:
           column: 1
         cards: !include control-panel.yaml
       - type: custom:layout-card
+        view_layout:
+          column: 2
         layout_type: custom:horizontal-layout
         layout:
           reflow: true
           max_cols: 1
           column_widths: 100%
-          max_width: 200px
+          max_width: 100%
+          margin: 0
           height: 550px
-      # - type: vertical-stack
-      #   view_layout:
-      #     column: 2
         cards:
           - type: conditional
             conditions:
@@ -340,8 +341,6 @@ views:
                 - options: {}
                   entity_id: light.stairs_group*
                 - options: {}
-                  entity_id: light.all_bathrooms
-                - options: {}
                   entity_id: light.bathrom_rc_*
                 - options: {}
                   entity_id: light.main_bathroom_*
@@ -349,8 +348,6 @@ views:
                   entity_id: light.bathroom_rc_*
                 - options: {}
                   entity_id: light.master_bedroom_bathroom_*
-                - options: {}
-                  area: IT
                 - options: {}
                   entity_id: light.kitchen_door
                 - options: {}
