@@ -164,9 +164,16 @@ class HouseMode(hass.Hass):
     def is_sleep_time(self):
         return self.now_is_between("00:00:00", "07:00:00")
 
+    def is_someone_home(self):
+        if self.get_state("person.joao_carreira") == "home":
+            return True
+        if self.get_state("person.bianca_pires") == "home":
+            return True
+        return False
+
     def new_house_mode_from_off(self, trigger):
         newMode = "Off"
-        if self.anyone_home(person=True):
+        if self.is_someone_home():
             newMode = self.preffered_house_mode()
         return newMode
 
@@ -214,7 +221,7 @@ class HouseMode(hass.Hass):
     def set_new_house_mode_from_trigger(self, trigger):
         oldMode = self.house_mode
         newMode = self.house_mode
-        if self.noone_home(person=True):
+        if not self.is_someone_home():
             newMode = "Off"
         else:
             if self.house_mode == "Off":
