@@ -17,13 +17,13 @@ wifi:
   domain: .home
   ssid: !secret esp_ssid
   password: !secret esp_password
-  reboot_timeout: 0s
+  reboot_timeout: 2h
   fast_connect: true
   min_auth_mode: WPA2
   #power_save_mode: Low
 
 api:
-  reboot_timeout: 0s
+  reboot_timeout: 2h
 
 logger:
   level: ERROR
