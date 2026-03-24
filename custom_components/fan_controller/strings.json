@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add Fan",
+        "data": {
+          "name": "Name",
+          "fan_entity": "Fan Entity",
+          "light_entity": "Light Entity",
+          "humidity_sensor": "Humidity Sensor",
+          "average_humidity_sensor": "Average Humidity Sensor"
+        },
+        "data_description": {
+          "name": "A friendly name for this room (e.g. Master Bathroom)",
+          "fan_entity": "The fan entity to control",
+          "light_entity": "The light entity to monitor",
+          "humidity_sensor": "The humidity sensor in this room",
+          "average_humidity_sensor": "Sensor providing average baseline humidity"
+        }
+      }
+    },
+    "error": {
+      "already_configured": "This fan is already configured",
+      "entity_not_found": "Entity not found"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Fan Options",
+        "data": {
+          "fan_timeout": "Fan Timeout",
+          "max_timeout": "Maximum Fan Timeout",
+          "humidity_threshold": "Humidity Threshold"
+        },
+        "data_description": {
+          "fan_timeout": "How long the fan runs after the light turns off (seconds)",
+          "max_timeout": "Maximum time the fan runs when turned on manually (minutes)",
+          "humidity_threshold": "Humidity percentage above baseline to trigger fan (percent)"
+        }
+      }
+    }
+  }
+}

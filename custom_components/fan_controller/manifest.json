@@ -1,0 +1,11 @@
+{
+  "domain": "fan_controller",
+  "name": "Fan Controller",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "requirements": ["python-statemachine==2.3.6"],
+  "version": "1.0.0"
+}
