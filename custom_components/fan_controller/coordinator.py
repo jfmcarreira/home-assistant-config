@@ -47,7 +47,8 @@ class FanController(Protocol):
     def cancel_timer(self) -> None: ...
     def get_fan_timeout_seconds(self) -> float: ...
     def get_max_timeout_seconds(self) -> float: ...
-    def record_humidity_on_light(self) -> None: ...
+    def record_humidity_light_on(self) -> None: ...
+    def record_humidity_fan_on(self) -> None: ...
 
 
 class FanStateMachine(StateMachine):
@@ -135,7 +136,7 @@ class FanStateMachine(StateMachine):
 
     def on_enter_light_on(self, source) -> None:
         if source is None or source.id == "off":
-            self.model.record_humidity_on_light()
+            self.model.record_humidity_light_on()
 
     def on_enter_fan_manual_on(self) -> None:
         self.model.set_timer(self.model.get_max_timeout_seconds())
@@ -168,6 +169,7 @@ class FanCoordinator:
 
         self._auto_mode: bool = True
         self._humidity_light_on: float | None = None
+        self._humidity_fan_on: float | None = None
         self._current_humidity: float | None = None
         self._timer_unsub = None
         self._timer_remaining: float | None = None
@@ -250,8 +252,8 @@ class FanCoordinator:
         return self._humidity_light_on
 
     @property
-    def current_humidity(self) -> float | None:
-        return self._current_humidity
+    def humidity_fan_on(self) -> float | None:
+        return self._humidity_fan_on
 
     @property
     def average_humidity(self) -> float | None:
@@ -301,6 +303,7 @@ class FanCoordinator:
         return now < _QUIET_END or now >= _QUIET_START
 
     def turn_on_fan(self) -> None:
+        self.record_humidity_fan_on()
         self.hass.async_create_task(
             self.hass.services.async_call(
                 "fan", "turn_on", {"entity_id": self._fan_entity}
@@ -358,10 +361,18 @@ class FanCoordinator:
             self.entry.options.get(CONF_HUMIDITY_THRESHOLD, DEFAULT_HUMIDITY_THRESHOLD)
         )
 
-    def record_humidity_on_light(self) -> None:
+    def record_humidity_light_on(self) -> None:
         state = self.hass.states.get(self._humidity_sensor)
         if state is not None and state.state not in ("unavailable", "unknown", ""):
             try:
                 self._humidity_light_on = float(state.state)
+            except (ValueError, TypeError):
+                pass
+
+    def record_humidity_fan_on(self) -> None:
+        state = self.hass.states.get(self._humidity_sensor)
+        if state is not None and state.state not in ("unavailable", "unknown", ""):
+            try:
+                self._humidity_fan_on = float(state.state)
             except (ValueError, TypeError):
                 pass

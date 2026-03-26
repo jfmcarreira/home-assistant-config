@@ -63,9 +63,9 @@ class FanAutoModeSwitch(SwitchEntity):
     @property
     def extra_state_attributes(self) -> dict:
         return {
-            "humidity_light_on": self._coordinator.humidity_light_on,
-            "current_humidity": self._coordinator.current_humidity,
-            "average_humidity": self._coordinator.average_humidity,
-            "timer_remaining": self._coordinator.timer_remaining,
-            "state": self._coordinator.current_state_name,
+            "Humidity When Light Turned ON": self._coordinator.humidity_light_on,
+            "Humidity When Fan Turned ON": self._coordinator.humidity_fan_on,
+            "Average Humidity": self._coordinator.average_humidity,
+            "Timer Remaining": self._coordinator.timer_remaining,
+            "State": self._coordinator.current_state_name,
         }
