@@ -1,15 +1,24 @@
+esphome:
+  devices:
+    - id: device_light_1
+      name: ${Light_1_Name}
+    - id: device_light_2
+      name: ${Light_2_Name}
+
 light:
   - id: light_1
     name: ${Light_1_Name}
     platform: binary
     output: relay_1
     restore_mode: RESTORE_DEFAULT_OFF
+    device_id: device_light_1
 
   - id: light_2
     name: ${Light_2_Name}
     platform: binary
     output: relay_2
     restore_mode: RESTORE_DEFAULT_OFF
+    device_id: device_light_2
 
 sensor:
   - platform: ade7953_i2c
@@ -20,10 +29,13 @@ sensor:
       id: shelly_voltage
     current_a:
       id: shelly_current_B
+      device_id: device_light_2
     current_b:
       id: shelly_current_A
+      device_id: device_light_1
     active_power_a:
       name: Light Power ${Light_1_Name}
+      device_id: device_light_1
       device_class: power
       id: power_usage_light_a
       # active_power_a is normal, so don't multiply by -1
@@ -44,6 +56,7 @@ sensor:
                   message: Switch turned off because max power was exceeded
     active_power_b:
       name: Light Power ${Light_2_Name}
+      device_id: device_light_2
       device_class: power
       id: power_usage_light_b
       # active_power_b is inverted, so take the absolute value
@@ -65,6 +78,7 @@ sensor:
                   message: Switch turned off because power exceeded max power
 
   - platform: total_daily_energy
+    device_id: device_light_1
     name: Light Daily Energy ${Light_1_Name}
     power_id: power_usage_light_a
     unit_of_measurement: Wh
@@ -74,6 +88,7 @@ sensor:
     #method: trapezoid
 
   - platform: total_daily_energy
+    device_id: device_light_2
     name: Light Daily Energy ${Light_2_Name}
     power_id: power_usage_light_b
     unit_of_measurement: Wh

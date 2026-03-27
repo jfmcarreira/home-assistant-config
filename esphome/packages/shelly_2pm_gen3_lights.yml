@@ -1,15 +1,24 @@
+esphome:
+  devices:
+    - id: device_light_1
+      name: ${Light_1_Name}
+    - id: device_light_2
+      name: ${Light_2_Name}
+
 light:
   - id: light_1
     name: ${Light_1_Name}
     platform: binary
     output: relay_1
     restore_mode: RESTORE_DEFAULT_OFF
+    device_id: device_light_1
 
   - id: light_2
     name: ${Light_2_Name}
     platform: binary
     output: relay_2
     restore_mode: RESTORE_DEFAULT_OFF
+    device_id: device_light_2
 
 sensor:
   - platform: ade7953_i2c
@@ -29,6 +38,7 @@ sensor:
       name: Light Power ${Light_1_Name}
       device_class: power
       id: power_channel_a
+      device_id: device_light_1
       filters:
         - multiply: -1
         - lambda: >
@@ -54,6 +64,7 @@ sensor:
       name: Light Power ${Light_2_Name}
       device_class: power
       id: power_channel_b
+      device_id: device_light_2
       # active_power_b is inverted, so multiply by -1
       filters:
         - multiply: -1
@@ -79,6 +90,7 @@ sensor:
     state_class: total_increasing
     device_class: energy
     icon: "mdi:meter-electric"
+    device_id: device_light_1
 
   - platform: total_daily_energy
     name: Light Daily Energy ${Light_2_Name}
@@ -88,3 +100,4 @@ sensor:
     state_class: total_increasing
     device_class: energy
     icon: "mdi:meter-electric"
+    device_id: device_light_2
