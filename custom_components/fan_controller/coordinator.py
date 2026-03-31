@@ -24,6 +24,7 @@ from .const import (
     DEFAULT_FAN_TIMEOUT,
     DEFAULT_HUMIDITY_THRESHOLD,
     DEFAULT_MAX_TIMEOUT,
+    DOMAIN,
     QUIET_HOURS_END,
     QUIET_HOURS_START,
 )
@@ -41,7 +42,7 @@ class FanController(Protocol):
     def is_high_humidity(self) -> bool: ...
     def is_auto_on_disabled(self) -> bool: ...
     def is_quiet_time(self) -> bool: ...
-    def turn_on_fan(self) -> None: ...
+    def turn_on_fan(self, reason: str = "automatico") -> None: ...
     def turn_off_fan(self) -> None: ...
     def set_timer(self, seconds: float) -> None: ...
     def cancel_timer(self) -> None: ...
@@ -141,18 +142,27 @@ class FanStateMachine(StateMachine):
     def on_enter_fan_manual_on(self) -> None:
         self.model.set_timer(self.model.get_max_timeout_seconds())
 
-    def on_enter_light_on_fan_on(self) -> None:
-        self.model.turn_on_fan()
+    def on_enter_light_on_fan_on(self, source=None) -> None:
+        source_id = getattr(source, "id", None)
+        if (
+            source_id == "light_on"
+            and not self.model.is_fan_on()
+            and self.model.is_high_humidity()
+            and not self.model.is_auto_on_disabled()
+        ):
+            self.model.turn_on_fan(reason="humidade_alta")
+            return
+        self.model.turn_on_fan(reason="automatico")
 
     def on_enter_light_on_fan_off(self) -> None:
         pass
 
     def on_enter_fan_on_timeout(self) -> None:
-        self.model.turn_on_fan()
+        self.model.turn_on_fan(reason="automatico")
         self.model.set_timer(self.model.get_fan_timeout_seconds())
 
     def on_enter_fan_on_high_humidity(self) -> None:
-        self.model.turn_on_fan()
+        self.model.turn_on_fan(reason="humidade_alta")
         self.model.set_timer(self.model.get_max_timeout_seconds())
 
 
@@ -266,6 +276,16 @@ class FanCoordinator:
             return None
 
     @property
+    def humidity_reference(self) -> float | None:
+        humidity_light_on = self._humidity_light_on
+        if humidity_light_on is None:
+            humidity_light_on = 100.0
+        avg = self.average_humidity
+        if avg is None:
+            avg = 100.0
+        return min(avg, humidity_light_on)
+
+    @property
     def timer_remaining(self) -> float | None:
         if self._timer_unsub is None or self._timer_started_at is None:
             return None
@@ -284,13 +304,9 @@ class FanCoordinator:
     def is_high_humidity(self) -> bool:
         if self._humidity_light_on is None or self._current_humidity is None:
             return False
-        avg = self.average_humidity
-        if avg is None:
-            return False
         threshold_ratio = self.get_humidity_threshold_ratio()
-        baseline = min(avg, self._humidity_light_on)
-        humidity_threshold = max(100 - baseline, 0.0) * threshold_ratio / 100.0
-        humidity_difference = self._current_humidity - baseline
+        humidity_threshold = max(100 - self.humidity_reference, 0.0) * threshold_ratio / 100.0
+        humidity_difference = self._current_humidity - self.humidity_reference
         return humidity_difference > humidity_threshold
 
     def is_auto_on_disabled(self) -> bool:
@@ -302,11 +318,32 @@ class FanCoordinator:
             return now >= _QUIET_START or now < _QUIET_END
         return now < _QUIET_END or now >= _QUIET_START
 
-    def turn_on_fan(self) -> None:
+    def turn_on_fan(self, reason: str = "automatico") -> None:
+        if self.is_fan_on():
+            return
         self.record_humidity_fan_on()
         self.hass.async_create_task(
             self.hass.services.async_call(
                 "fan", "turn_on", {"entity_id": self._fan_entity}
+            )
+        )
+        self._log_fan_turn_on(reason)
+
+    def _log_fan_turn_on(self, reason: str) -> None:
+        if reason != "humidade_alta":
+            return
+        if not self.hass.services.has_service("logbook", "log"):
+            return
+        self.hass.async_create_task(
+            self.hass.services.async_call(
+                "logbook",
+                "log",
+                {
+                    "name": "Controlador da Ventoinha",
+                    "message": "Ventoinha ligada por humidade alta.",
+                    "entity_id": self._fan_entity,
+                    "domain": DOMAIN,
+                },
             )
         )
 

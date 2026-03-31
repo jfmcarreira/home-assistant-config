@@ -66,6 +66,7 @@ class FanAutoModeSwitch(SwitchEntity):
             "Humidity When Light Turned ON": self._coordinator.humidity_light_on,
             "Humidity When Fan Turned ON": self._coordinator.humidity_fan_on,
             "Average Humidity": self._coordinator.average_humidity,
+            "Humidity Reference": self._coordinator.humidity_reference,
             "Timer Remaining": self._coordinator.timer_remaining,
             "State": self._coordinator.current_state_name,
         }
