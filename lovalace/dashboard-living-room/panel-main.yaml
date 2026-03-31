@@ -1,5 +1,6 @@
-- square: false
-  type: grid
+- type: grid
+  columns: 3
+  square: false
   cards:
     - type: custom:button-card
       size: 56%
@@ -31,9 +32,9 @@
       tap_action:
         action: navigate
         navigation_path: '#states-routines'
-  columns: 3
   view_layout:
     column: 1
+
 
 - type: conditional
   conditions:
@@ -80,6 +81,8 @@
   view_layout:
     column: 1
 
+
+
 - type: conditional
   conditions:
     - condition: state
@@ -94,6 +97,8 @@
     features_position: bottom
   view_layout:
     column: 1
+
+
 
 - type: conditional
   conditions:
@@ -264,6 +269,8 @@
     entity: alarm_control_panel.alarmo
   view_layout:
     column: 1
+
+
 - type: conditional
   view_layout:
     column: 1
@@ -286,8 +293,6 @@
             - comfort
             - eco
       features_position: bottom
-  view_layout:
-    column: 1
 
 - type: conditional
   view_layout:
