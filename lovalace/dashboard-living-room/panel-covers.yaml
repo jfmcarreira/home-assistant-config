@@ -1,4 +1,3 @@
-
 - type: custom:decluttering-card
   template: decluttering_cover
   variables:
@@ -89,34 +88,6 @@
               layout:
                 max_cols: 2
               cards:
-                - type: grid
-                  view_layout:
-                    column: 1
-                  square: false
-                  columns: 2
-                  cards:
-                    - type: custom:button-card
-                      name: Parcialmente Aberto
-                      icon: mdi:window-shutter
-                      styles:
-                        icon:
-                          - color: var(--state-icon-color)
-                      icon_height: 40px
-                      tap_action:
-                        action: call-service
-                        service: >-
-                          esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
-                    - type: custom:button-card
-                      name: A Meio
-                      icon: mdi:window-shutter-open
-                      icon_height: 40px
-                      styles:
-                        icon:
-                          - color: var(--state-icon-color)
-                      tap_action:
-                        action: call-service
-                        service: >-
-                          esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
                 - features:
                     - type: cover-open-close
                     - type: cover-position

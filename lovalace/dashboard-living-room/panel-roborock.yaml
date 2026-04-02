@@ -1,0 +1,69 @@
+- view_layout:
+    column: 1
+  square: false
+  columns: 2
+  type: grid
+  cards:
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_hall
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_mainbathroom
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_masterbedroom
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_masterbedroombath
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_bedroomricardo
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_bedroomhenrique
+- show_name: true
+  show_icon: true
+  type: button
+  tap_action:
+    action: perform-action
+    perform_action: script.roborock_vacuum_selected_rooms
+    target: {}
+  icon: mdi:vacuum
+  show_state: true
+  icon_height: 60px
+  view_layout:
+    column: 1
+- type: custom:valetudo-map-card
+  vacuum: roborock
+  title: Roborock
+  map_scale: 1.4
+  crop:
+    top: 80
+    bottom: 40
+    left: 0
+    right: 40

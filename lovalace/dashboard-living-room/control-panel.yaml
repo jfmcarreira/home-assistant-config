@@ -1,10 +1,10 @@
 - type: custom:button-card
-  name: '[[[ return states[''sensor.date_frontend''].state; ]]]'
-  label: '[[[ return states[''sensor.time''].state; ]]]'
+  name: "[[[ return states['sensor.date_frontend'].state; ]]]"
+  label: "[[[ return states['sensor.time'].state; ]]]"
   show_label: true
   tap_action:
     action: navigate
-    navigation_path: '#panel-main'
+    navigation_path: "#panel-main"
   double_tap_action:
     action: javascript
     javascript: |
@@ -68,12 +68,12 @@
   type: grid
   cards:
     - type: custom:button-card
-      size: 58%
+      size: 62%
       show_name: false
       icon: mdi:radiator
       entity: switch.air_conditioner
       state:
-        - value: 'off'
+        - value: "off"
           styles:
             icon:
               - color: var(--state-icon-color)
@@ -89,11 +89,14 @@
         target:
           entity_id: switch.air_conditioner
     - type: custom:button-card
-      size: 58%
+      size: 62%
       entity: vacuum.roborock
       show_name: false
       color_type: icon
       tap_action:
+        action: navigate
+        navigation_path: "#panel-roborock"
+      hold_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-roborock
       icon: mdi:robot-vacuum
@@ -103,7 +106,7 @@
             icon:
               - color: var(--state-icon-color)
     - type: custom:button-card
-      size: 58%
+      size: 62%
       color_type: icon
       show_state: false
       icon: mdi:grass
@@ -138,7 +141,7 @@
         grid:
           - position: relative
     - type: custom:button-card
-      size: 58%
+      size: 62%
       color_type: icon
       show_state: false
       show_name: false
@@ -150,7 +153,7 @@
         - sensor.device_power_water_heater
         - switch.water_heater
       state:
-        - value: 'off'
+        - value: "off"
           styles:
             icon:
               - color: var(--state-icon-color)
@@ -235,18 +238,39 @@
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-water-heater-graph
     - type: custom:button-card
-      size: 58%
-      state_display: 'no'
+      size: 62%
+      state_display: "no"
       styles:
         icon:
           - color: var(--state-icon-color)
       icon: mdi:multimedia
       tap_action:
         action: navigate
+        navigation_path: "#panel-media"
+      hold_action:
+        action: navigate
         navigation_path: /lovelace-subviews/multimedia
     - type: custom:button-card
+      size: 62%
+      state_display: "no"
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      icon: mdi:calendar-sync
+      tap_action:
+        action: navigate
+        navigation_path: "#panel-routines"
+      hold_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/routines
+
+- square: false
+  columns: 4
+  type: grid
+  cards:
+    - type: custom:button-card
       size: 58%
-      state_display: 'no'
+      state_display: "no"
       styles:
         icon:
           - color: var(--state-icon-color)
@@ -322,7 +346,7 @@
         navigation_path: /lovelace-subviews/dashboard-shores
     - type: custom:button-card
       size: 58%
-      state_display: 'no'
+      state_display: "no"
       styles:
         icon:
           - color: var(--state-icon-color)

@@ -1,0 +1,143 @@
+- type: vertical-stack
+  cards:
+    - square: false
+      type: grid
+      columns: 3
+      cards:
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_good_night
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_good_night
+          entity: script.routine_good_night
+          icon: mdi:sleep
+          name: Desligar e Dormir
+          icon_height: 52px
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_exit_house_all_off
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_exit_house_all_off
+          entity: script.routine_exit_house_all_off
+          icon: mdi:exit-run
+          name: Sair de Casa
+          icon_height: 52px
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_leaving_and_coming_back
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_leaving_and_coming_back
+          icon: mdi:car
+          entity: script.routine_leaving_and_coming_back
+          icon_height: 52px
+    - square: false
+      type: grid
+      columns: 3
+      cards:
+        - show_name: true
+          show_icon: true
+          type: button
+          icon_height: 30px
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_night_mode
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_night_mode
+          entity: script.routine_night_mode
+          icon: ""
+          name: Modo Noite
+        - show_name: true
+          show_icon: true
+          type: button
+          icon_height: 30px
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_dinner_time
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_dinner_time
+          entity: script.routine_dinner_time
+          icon: ""
+          name: Routina de Refeição
+        - show_name: true
+          show_icon: true
+          type: button
+          icon_height: 30px
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_cover_rain_mode
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_cover_rain_mode
+          entity: script.routine_cover_rain_mode
+          icon: ""
+          name: Modo Chuva
+    - square: false
+      type: grid
+      columns: 2
+      cards:
+        - type: vertical-stack
+          cards:
+            - show_name: true
+              show_icon: true
+              icon_height: 40px
+              type: button
+              tap_action:
+                action: call-service
+                service: script.routine_exit_house_to_work_joao
+                data: {}
+                target: {}
+              entity: script.routine_exit_house_to_work_joao
+              name: Ir Trabalhar - João
+              icon: mdi:human-male
+        - type: vertical-stack
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              name: Ir Trabalhar - Bianca
+              tap_action:
+                action: call-service
+                service: script.routine_exit_house_to_work_bianca
+                data: {}
+                target: {}
+              entity: script.routine_exit_house_to_work_bianca
+              icon: mdi:human-female
+              icon_height: 40px

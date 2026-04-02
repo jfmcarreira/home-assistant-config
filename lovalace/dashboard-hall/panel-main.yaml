@@ -1,0 +1,514 @@
+- type: conditional
+  conditions:
+    - entity: sensor.salicru_rack_ups_status
+      state: On Battery
+  card:
+    type: gauge
+    entity: sensor.salicru_rack_ups_battery_charge
+    name: Bateria da UPS
+    unit: "%"
+    min: 0
+    max: 100
+    needle: false
+    severity:
+      green: 60
+      yellow: 20
+      red: 2
+
+- type: conditional
+  conditions:
+    - condition: state
+      entity: sensor.weather_alert
+      state_not: green
+    - condition: state
+      entity: sensor.weather_alert
+      state_not: yellow
+  card:
+    type: custom:mushroom-entity-card
+    entity: sensor.weather_alert
+    name: Alerta Metereológico
+    primary_info: state
+    secondary_info: name
+    icon_type: none
+    fill_container: false
+    layout: vertical
+    card_mod:
+      style: |
+        ha-card {
+          --card-primary-font-size: 28px;
+          --card-secondary-font-size: 14px;
+        }
+- type: conditional
+  conditions:
+    - entity: input_boolean.extended_away_mode
+      state: "on"
+  card:
+    type: tile
+    entity: input_boolean.extended_away_mode
+    name: Modo de Férias
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_off
+      data: {}
+      target:
+        entity_id: input_boolean.extended_away_mode
+    icon_tap_action:
+      action: none
+
+- type: conditional
+  conditions:
+    - entity: input_boolean.automation_sw_all_motion_lights
+      state: "off"
+  card:
+    type: tile
+    entity: input_boolean.automation_sw_all_motion_lights
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_on
+      data: {}
+      target:
+        entity_id: input_boolean.automation_sw_all_motion_lights
+    icon_tap_action:
+      action: none
+
+- type: conditional
+  conditions:
+    - entity: input_boolean.cover_controls_bypass
+      state: "on"
+  card:
+    type: tile
+    entity: input_boolean.cover_controls_bypass
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_off
+      data: {}
+      target:
+        entity_id:
+          - input_boolean.cover_controls_bypass
+    name: Controlo dos Estores OFF
+    icon_tap_action:
+      action: none
+
+- type: conditional
+  conditions:
+    - condition: state
+      entity: cover.gate
+      state_not: closed
+    - condition: state
+      entity: cover.gate
+      state_not: unavailable
+  card:
+    type: tile
+    entity: cover.gate
+    vertical: true
+    show_entity_picture: false
+    hide_state: false
+    state_content:
+      - state
+      - last-changed
+    tap_action:
+      action: perform-action
+      perform_action: cover.close_cover
+      target:
+        entity_id: cover.gate
+    icon_tap_action:
+      action: perform-action
+      perform_action: cover.close_cover
+      target:
+        entity_id: cover.gate
+
+- type: grid
+  columns: 1
+  square: false
+  cards:
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: light.hall_presence
+          state: "on"
+      card:
+        type: custom:mushroom-light-card
+        show_brightness_control: true
+        layout: horizontal
+        primary_info: name
+        secondary_info: none
+        entity: light.hall_presence
+        name: Presença Sótão
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: light.hallway_presence
+          state: "on"
+      card:
+        type: custom:mushroom-light-card
+        show_brightness_control: true
+        layout: horizontal
+        primary_info: name
+        secondary_info: none
+        name: Presença Corredor
+        entity: light.hallway_presence
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: light.stairs_down
+          state: "on"
+      card:
+        type: custom:mushroom-light-card
+        show_brightness_control: true
+        layout: horizontal
+        primary_info: name
+        secondary_info: none
+        entity: light.stairs_down
+        name: Hall das Escadas
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: light.master_bedroom_lamp
+          state: "on"
+      card:
+        type: custom:mushroom-light-card
+        show_brightness_control: true
+        layout: horizontal
+        primary_info: name
+        secondary_info: none
+        entity: light.master_bedroom_lamp
+        name: Candeeiro da Suite
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: light.bedroom_ricardo_lamp
+          state: "on"
+      card:
+        type: custom:mushroom-light-card
+        show_brightness_control: true
+        layout: horizontal
+        primary_info: name
+        secondary_info: none
+        entity: light.bedroom_ricardo_lamp
+        name: Candeeiro do Ricardo
+  visibility:
+    - condition: or
+      conditions:
+        - condition: state
+          entity: light.hall_presence
+          state: "on"
+        - condition: state
+          entity: light.hallway_presence
+          state: "on"
+        - condition: state
+          entity: light.stairs_down
+          state: "on"
+        - condition: state
+          entity: light.master_bedroom_lamp
+          state: "on"
+        - condition: state
+          entity: light.bedroom_ricardo_lamp
+          state: "on"
+
+- type: custom:auto-entities
+  card:
+    type: entities
+  filter:
+    include:
+      - options: {}
+        entity_id: light.*
+        state: "on"
+    exclude:
+      - options: {}
+        floor: living_floor
+      - options: {}
+        area: outside
+      - options: {}
+        entity_id: light.*presence
+      - options: {}
+        entity_id: light.hall
+      - options: {}
+        entity_id: light.xmas*
+      - options: {}
+        entity_id: light.hall_side
+      - options: {}
+        entity_id: light.bedroom_*_ceiling
+      - options: {}
+        entity_id: light.bedroom_*_closet
+      - options: {}
+        entity_id: light.bedroom_*_lamp
+      - options: {}
+        entity_id: light.all_*
+      - options: {}
+        entity_id: light.master_bedroom_ceiling
+      - options: {}
+        entity_id: light.master_bedroom_entry
+      - options: {}
+        entity_id: light.master_bedroom_closet
+      - options: {}
+        entity_id: light.master_bedroom_bed*
+      - options: {}
+        entity_id: light.master_bedroom_bathroom_*
+      - options: {}
+        entity_id: light.master_bedroom_bathroom_*
+      - options: {}
+        entity_id: light.stairs_group*
+      - options: {}
+        entity_id: light.main_bathroom_*
+      - options: {}
+        entity_id: light.master_bedroom_bathroom_*
+      - options: {}
+        area: IT
+  sort:
+    method: area
+    numeric: false
+    reverse: false
+  show_empty: false
+
+- type: custom:auto-entities
+  card:
+    type: entities
+  filter:
+    include:
+      - options: {}
+        entity_id: light.*
+        state: "on"
+    exclude:
+      - options: {}
+        floor: bedrooms
+      - options: {}
+        attributes:
+          supported_features: 40
+      - options: {}
+        entity_id: light.kitchen_*
+      - options: {}
+        entity_id: light.stairs_down
+      - options: {}
+        entity_id: light.*presence
+      - options: {}
+        entity_id: light.laundry_*
+      - options: {}
+        entity_id: light.office_*
+      - options: {}
+        entity_id: light.bedroom_rc_*
+      - options: {}
+        entity_id: light.hall
+      - options: {}
+        entity_id: light.xmas*
+      - options: {}
+        entity_id: light.hall_side
+      - options: {}
+        entity_id: light.living_room_window
+      - options: {}
+        entity_id: light.kitchen_led
+      - options: {}
+        entity_id: light.kitchen_window
+      - options: {}
+        entity_id: light.living_room
+      - options: {}
+        entity_id: light.living_room_window
+      - options: {}
+        entity_id: light.living_room_table
+      - options: {}
+        entity_id: light.all_*
+      - options: {}
+        entity_id: light.stairs_group*
+      - options: {}
+        entity_id: light.bathrom_rc_*
+      - options: {}
+        entity_id: light.main_bathroom_*
+      - options: {}
+        entity_id: light.bathroom_rc_*
+      - options: {}
+        entity_id: light.master_bedroom_bathroom_*
+      - options: {}
+        entity_id: light.kitchen_door
+      - options: {}
+        entity_id: light.exterior_wall_*
+      - options: {}
+        entity_id: light.storage_*
+  sort:
+    method: area
+    numeric: false
+    reverse: false
+  show_empty: false
+
+- type: custom:auto-entities
+  card:
+    type: vertical-stack
+  card_param: cards
+  filter:
+    exclude:
+      - entity_id: script.routine_dinner_time
+      - entity_id: script.routine_cover_rain_mode
+    include:
+      - entity_id: script.routine*
+        state: "on"
+        options:
+          type: tile
+          features_position: bottom
+          vertical: false
+          tap_action:
+            action: toggle
+          icon_tap_action:
+            action: more-info
+          hide_state: true
+  show_empty: false
+
+- type: conditional
+  conditions:
+    - condition: state
+      entity: alarm_control_panel.alarmo
+      state_not: disarmed
+  card:
+    states:
+      - arm_home
+      - arm_away
+    type: alarm-panel
+    entity: alarm_control_panel.alarmo
+
+- type: custom:auto-entities
+  card:
+    type: vertical-stack
+  card_param: cards
+  filter:
+    exclude:
+      - entity_id: climate.office
+      - entity_id: climate.*_vtherm
+      - entity_id: climate.living_room
+      - state: "off"
+      - state: unavailable
+    include:
+      - options:
+          features:
+            - type: target-temperature
+          type: tile
+          features_position: inline
+          state_content:
+            - current_temperature
+            - fan_mode
+            - swing_mode
+            - preset_mode
+          vertical: false
+          icon_tap_action:
+            action: toggle
+        entity_id: climate.*
+  show_empty: false
+
+- type: entity-filter
+  entities:
+    - entity: fan.main_bathroom
+      name: Principal
+    - entity: fan.bathroom_master_bedroom
+      name: Suite
+    - entity: fan.bathroom_rc
+      name: Serviço
+  state_filter:
+    - "on"
+  card:
+    type: entities
+    title: Ventoinhas da Casa do Banho
+    show_header_toggle: true
+  show_empty: false
+
+- type: conditional
+  conditions:
+    - entity: binary_sensor.roborock_state
+      state: "on"
+  card:
+    type: tile
+    entity: vacuum.roborock
+    features:
+      - type: vacuum-commands
+        commands:
+          - start_pause
+          - stop
+          - clean_spot
+
+- type: conditional
+  conditions:
+    - entity: humidifier.portable_dehumidifier
+      state_not: "off"
+  card:
+    type: tile
+    entity: humidifier.portable_dehumidifier
+
+- type: conditional
+  conditions:
+    - entity: climate.portable_heater
+      state_not: "off"
+  card:
+    type: tile
+    entity: climate.portable_heater
+
+- type: conditional
+  conditions:
+    - entity: input_boolean.house_guest
+      state: "on"
+  card:
+    type: tile
+    entity: input_boolean.house_guest
+    name: Modo de Convidados
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_off
+      data: {}
+      target:
+        entity_id: input_boolean.house_guest
+    icon_tap_action:
+      action: none
+
+- type: horizontal-stack
+  cards:
+    - type: custom:mini-graph-card
+      name: Temperatura Quartos
+      entities:
+        - entity: sensor.average_temperature_bedrooms
+      line_color: "#e74c3c"
+      line_width: 8
+      font_size: 75
+      align_icon: left
+      align_state: center
+      hours_to_show: 24
+      points_per_hour: 1
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-climate
+    - type: custom:mini-graph-card
+      name: Humidade Quartos
+      entities:
+        - entity: sensor.average_humidity_bedrooms
+      line_width: 8
+      font_size: 75
+      align_icon: left
+      align_state: center
+      hours_to_show: 24
+      points_per_hour: 1
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-climate
+
+- square: false
+  columns: 3
+  type: grid
+  cards:
+    - type: tile
+      entity: sensor.bhpzem_main_power
+      name: Potência
+      tap_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-power
+      primary_info: state
+      secondary_info: name
+    - type: tile
+      entity: sensor.temperature_outside
+      name: Temp. Rua
+      primary_info: state
+      secondary_info: name
+    - type: tile
+      entity: sensor.humidity_outside
+      name: Hum. Rua
+      primary_info: state
+      secondary_info: name
+
+- type: tile
+  entity: media_player.hall
+  vertical: false
+  features:
+    - type: media-player-playback
+  features_position: bottom

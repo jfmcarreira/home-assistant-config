@@ -71,110 +71,123 @@
     lights_popup_title: Luzes da Sala
     lights_popup_room: living_room
     lights_popup_pattern: light.living_room*
-- type: grid
+- type: custom:button-card
   view_layout:
     column: 1
-  square: false
-  columns: 2
-  cards:
-    - type: custom:button-card
-      name: Entrada
-      show_icon: false
-      styles:
-        card:
-          - height: 70px
-        custom_fields:
-          icon_button:
-            - position: absolute
-            - left: 8px
-            - top: 16.5
-            - width: 30px
-            - height: 30px
-            - border-radius: 50%
-            - background: rgba(255, 255, 255, 0.1)
-        name:
-          - position: absolute
-          - font-weight: 500
-          - font-size: 15px
-          - left: 55px
-      custom_fields:
-        icon_button:
-          card:
-            type: custom:button-card
-            entity: light.doorway
-            show_name: false
-            state:
-              - operator: default
-                color: var(--disabled-text-color)
-              - operator: '=='
-                value: 'on'
-                color: var(--state-active-color)
-            styles:
-              card:
-                - width: 30px
-                - height: 30px
-                - border-radius: 50%
-              icon:
-                - width: 20px
-            tap_action:
-              action: call-service
-              service: light.toggle
-              target:
-                entity_id: light.doorway
-      tap_action:
-        action: call-service
-        service: light.toggle
-        target:
-          entity_id: light.doorway
-    - type: custom:button-card
-      name: Corredor
-      show_icon: false
-      styles:
-        card:
-          - height: 70px
-        custom_fields:
-          icon_button:
-            - position: absolute
-            - left: 8px
-            - top: 16.5
-            - width: 30px
-            - height: 30px
-            - border-radius: 50%
-            - background: rgba(255, 255, 255, 0.1)
-        name:
-          - position: absolute
-          - font-weight: 500
-          - font-size: 15px
-          - left: 55px
-      custom_fields:
-        icon_button:
-          card:
-            type: custom:button-card
-            entity: light.hallway
-            show_name: false
-            state:
-              - operator: default
-                color: var(--disabled-text-color)
-              - operator: '=='
-                value: 'on'
-                color: var(--state-active-color)
-            styles:
-              card:
-                - width: 30px
-                - height: 30px
-                - border-radius: 50%
-              icon:
-                - width: 20px
-            tap_action:
-              action: call-service
-              service: light.toggle
-              target:
-                entity_id: light.hallway
-      tap_action:
-        action: call-service
-        service: light.toggle
-        target:
-          entity_id: light.hallway
+  template:
+    - template-room-light
+    - template-room-light-popup
+  name: Corredor
+  variables:
+    room_light: light.hallway_group
+    lights_popup_title: Luzes do Corredor
+    lights_popup_room: living_room
+    lights_popup_pattern: light.*way
+
+# - type: grid
+#   view_layout:
+#     column: 1
+#   square: false
+#   columns: 2
+#   cards:
+#     - type: custom:button-card
+#       name: Entrada
+#       show_icon: false
+#       styles:
+#         card:
+#           - height: 70px
+#         custom_fields:
+#           icon_button:
+#             - position: absolute
+#             - left: 8px
+#             - top: 16.5
+#             - width: 30px
+#             - height: 30px
+#             - border-radius: 50%
+#             - background: rgba(255, 255, 255, 0.1)
+#         name:
+#           - position: absolute
+#           - font-weight: 500
+#           - font-size: 15px
+#           - left: 55px
+#       custom_fields:
+#         icon_button:
+#           card:
+#             type: custom:button-card
+#             entity: light.doorway
+#             show_name: false
+#             state:
+#               - operator: default
+#                 color: var(--disabled-text-color)
+#               - operator: "=="
+#                 value: "on"
+#                 color: var(--state-active-color)
+#             styles:
+#               card:
+#                 - width: 30px
+#                 - height: 30px
+#                 - border-radius: 50%
+#               icon:
+#                 - width: 20px
+#             tap_action:
+#               action: call-service
+#               service: light.toggle
+#               target:
+#                 entity_id: light.doorway
+#       tap_action:
+#         action: call-service
+#         service: light.toggle
+#         target:
+#           entity_id: light.doorway
+#     - type: custom:button-card
+#       name: Corredor
+#       show_icon: false
+#       styles:
+#         card:
+#           - height: 70px
+#         custom_fields:
+#           icon_button:
+#             - position: absolute
+#             - left: 8px
+#             - top: 16.5
+#             - width: 30px
+#             - height: 30px
+#             - border-radius: 50%
+#             - background: rgba(255, 255, 255, 0.1)
+#         name:
+#           - position: absolute
+#           - font-weight: 500
+#           - font-size: 15px
+#           - left: 55px
+#       custom_fields:
+#         icon_button:
+#           card:
+#             type: custom:button-card
+#             entity: light.hallway
+#             show_name: false
+#             state:
+#               - operator: default
+#                 color: var(--disabled-text-color)
+#               - operator: "=="
+#                 value: "on"
+#                 color: var(--state-active-color)
+#             styles:
+#               card:
+#                 - width: 30px
+#                 - height: 30px
+#                 - border-radius: 50%
+#               icon:
+#                 - width: 20px
+#             tap_action:
+#               action: call-service
+#               service: light.toggle
+#               target:
+#                 entity_id: light.hallway
+#       tap_action:
+#         action: call-service
+#         service: light.toggle
+#         target:
+#           entity_id: light.hallway
 
 - type: custom:button-card
   view_layout:
@@ -260,7 +273,7 @@
   name: Suite
   variables:
     card_height: 65px
-    icon_size: '40'
+    icon_size: "40"
     room_light: light.master_bedroom
     lights_popup_title: Luzes da Suite
     lights_popup_room: master_bedroom
@@ -273,7 +286,7 @@
     - template-room-light-popup
   variables:
     card_height: 65px
-    icon_size: '40'
+    icon_size: "40"
     room_light: light.bedroom_ricardo
     lights_popup_title: Luzes do Quarto do Ricardo
     lights_popup_room: bedroom_ricardo
@@ -287,7 +300,7 @@
     - template-room-light-popup
   variables:
     card_height: 65px
-    icon_size: '40'
+    icon_size: "40"
     room_light: light.bedroom_henrique
     lights_popup_title: Luzes do Quarto do Henrique
     lights_popup_room: bedroom_henrique
@@ -302,7 +315,7 @@
   name: Casa de Banho Principal
   variables:
     card_height: 65px
-    icon_size: '40'
+    icon_size: "40"
     room_light: light.main_bathroom
     lights_popup_title: Luzes da Casa de Banho Principal
     lights_popup_room: bathroom_main
@@ -316,7 +329,7 @@
   name: Casa de Banho da Suite
   variables:
     card_height: 65px
-    icon_size: '40'
+    icon_size: "40"
     room_light: light.master_bedroom_bathroom
     lights_popup_title: Luzes da Casa de Banho da Suite
     lights_popup_room: master_bedroom_bathroom
@@ -331,7 +344,7 @@
   name: Casa de Banho R/C
   variables:
     card_height: 65px
-    icon_size: '40'
+    icon_size: "40"
     room_light: light.bathroom_rc
     lights_popup_title: Luzes da Casa de Banho R/C
     lights_popup_room: bathroom_rc
@@ -339,8 +352,6 @@
     automation: automation.lights_motion_bathroom_rc
   triggers_update:
     - automation.lights_motion_bathroom_rc
-
-
 
 - type: custom:mushroom-light-card
   view_layout:

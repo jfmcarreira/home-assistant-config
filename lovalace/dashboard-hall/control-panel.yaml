@@ -5,6 +5,9 @@
       return states['sensor.date_time_frontend'].state;
     ]]]
   tap_action:
+    action: navigate
+    navigation_path: "#panel-main"
+  double_tap_action:
     action: javascript
     javascript: |
       [[[
@@ -35,7 +38,7 @@
   visibility:
     - condition: state
       entity: media_player.hall
-      state: 'on'
+      state: "on"
 - show_current: true
   show_forecast: true
   type: weather-forecast
@@ -44,7 +47,7 @@
   visibility:
     - condition: state
       entity: media_player.hall
-      state: 'off'
+      state: "off"
 - square: false
   columns: 3
   type: grid
@@ -81,6 +84,9 @@
       show_name: false
       color_type: icon
       tap_action:
+        action: navigate
+        navigation_path: "#panel-roborock"
+      hold_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-roborock
       icon: mdi:robot-vacuum
@@ -141,7 +147,7 @@
         - sensor.device_power_water_heater
         - switch.water_heater
       state:
-        - value: 'off'
+        - value: "off"
           styles:
             icon:
               - color: var(--state-icon-color)
@@ -187,7 +193,7 @@
           ]]]
       styles:
         icon:
-          - margin-left: '-10%'
+          - margin-left: "-10%"
           - width: 60%
         custom_fields:
           heating:
@@ -247,7 +253,7 @@
     - type: custom:button-card
       size: 100%
       aspect_ratio: 10/9
-      state_display: 'no'
+      state_display: "no"
       styles:
         icon:
           - color: var(--state-icon-color)
@@ -255,7 +261,6 @@
       tap_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-wc
-
 
 - square: false
   columns: 5
@@ -281,6 +286,9 @@
       color: auto
       icon: mdi:multimedia
       tap_action:
+        action: navigate
+        navigation_path: "#panel-media"
+      hold_action:
         action: navigate
         navigation_path: /lovelace-subviews/multimedia-hall
     - type: custom:button-card
@@ -342,7 +350,7 @@
     - type: custom:button-card
       size: 70%
       aspect_ratio: 5/4
-      state_display: 'no'
+      state_display: "no"
       styles:
         icon:
           - color: var(--state-icon-color)

@@ -6,6 +6,7 @@ views:
   - theme: Backend-selected
     title: Dashboard Downstairs
     path: main
+
     icon: mdi:sofa
     type: custom:horizontal-layout
     layout:
@@ -13,6 +14,7 @@ views:
       column_widths: 30% 70%
       max_width: 300px
       reflow: true
+      margin: 0 0 0 0
     badges: []
     cards:
       - type: vertical-stack
@@ -31,10 +33,11 @@ views:
             type: custom:layout-card
             layout_type: custom:horizontal-layout
             layout:
+              margin: 0 0 0 0
               reflow: true
               max_cols: 2
-              column_widths: 54% 46%
-              max_width: 200px
+              #column_widths: 54% 46%
+              #max_width: 200px
               height: 700px
             cards: !include panel-main.yaml
           panel-ac:
@@ -58,3 +61,26 @@ views:
               max_cols: 2
             cards: !include panel-lights.yaml
 
+          panel-media:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_cols: 2
+              column_widths: 40% 60%
+              max_width: 2000px
+            cards: !include panel-media.yaml
+
+          panel-roborock:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_cols: 2
+            cards: !include panel-roborock.yaml
+
+          panel-routines:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_width: 2000px
+              max_cols: 1
+            cards: !include panel-routines.yaml

@@ -1,0 +1,114 @@
+- type: custom:mass-player-card
+  entities:
+    - media_player.ghm_living_room
+    - media_player.ghm_kitchen
+    - media_player.home_assistant_voice_office_ma
+    - media_player.ghm_hall
+    - media_player.ghm_master_bedroom
+    - media_player.ghm_main_bathroom
+  player:
+    enabled: true
+    layout:
+      artwork_size: small
+    hide:
+      favorite: false
+      group_volume: false
+      volume: false
+      shuffle: false
+      power: false
+      mute: true
+  media_browser:
+    enabled: true
+    favorites:
+      albums:
+        enabled: true
+        limit: 25
+        favorites_only: true
+      artists:
+        enabled: true
+        limit: 25
+        favorites_only: true
+      audiobooks:
+        enabled: false
+        limit: 25
+        favorites_only: true
+      playlists:
+        enabled: true
+        limit: 25
+        favorites_only: true
+      podcasts:
+        enabled: true
+        limit: 25
+        favorites_only: false
+      radios:
+        enabled: true
+        limit: 10
+        favorites_only: true
+      tracks:
+        enabled: true
+        limit: 25
+        favorites_only: true
+    columns: 3
+    recents:
+      enabled: true
+      album:
+        limit: 10
+      audiobooks:
+        enabled: false
+  queue:
+    enabled: true
+    limit_before: 10
+    limit_after: 20
+    show_album_covers: true
+    show_artist_names: true
+  players:
+    hide:
+      join_button: false
+  expressive: true
+
+- type: grid
+  cards:
+    - icon: mdi:human-male
+      tap_action:
+        action: call-service
+        service: music_assistant.play_media
+        service_data:
+          entity_id: media_player.ghm_hall
+          media_id: Joao
+      type: custom:button-card
+      show_name: false
+      aspect_ratio: 1.5
+    - icon: mdi:human-female
+      tap_action:
+        action: call-service
+        service: music_assistant.play_media
+        service_data:
+          entity_id: media_player.ghm_hall
+          media_id: Bianca
+      type: custom:button-card
+      show_state: false
+      show_name: false
+      aspect_ratio: 1.5
+    - icon: mdi:human-child
+      tap_action:
+        action: call-service
+        service: music_assistant.play_media
+        service_data:
+          entity_id: media_player.ghm_hall
+          media_id: Ricardo
+      type: custom:button-card
+      show_name: false
+      aspect_ratio: 1.5
+    - icon: mdi:baby
+      tap_action:
+        action: call-service
+        service: music_assistant.play_media
+        service_data:
+          entity_id: media_player.ghm_hall
+          media_id: Henrique
+      type: custom:button-card
+      show_name: false
+      aspect_ratio: 1.5
+      state_display: false
+  columns: 4
+  square: false
