@@ -1,0 +1,17 @@
+unique_id: lights_hallway_group
+name: Luzes do Corredor
+state: >-
+  {{
+      is_state('light.hallway', 'on') or
+      is_state('light.doorway', 'on')
+  }}
+turn_on:
+  - service: light.turn_on
+    entity_id: light.hallway
+  - service: light.turn_on
+    entity_id: light.doorway
+turn_off:
+  - service: light.turn_off
+    entity_id: light.hallway
+  - service: light.turn_off
+    entity_id: light.doorway
