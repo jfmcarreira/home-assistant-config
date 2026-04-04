@@ -6,7 +6,6 @@ views:
   - theme: Backend-selected
     title: Dashboard Downstairs
     path: main
-
     icon: mdi:sofa
     type: custom:horizontal-layout
     layout:

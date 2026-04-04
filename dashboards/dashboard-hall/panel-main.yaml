@@ -117,93 +117,71 @@
       target:
         entity_id: cover.gate
 
-- type: grid
-  columns: 1
-  square: false
-  cards:
-    - type: conditional
-      conditions:
-        - condition: state
-          entity: light.hall_presence
-          state: "on"
-      card:
-        type: custom:mushroom-light-card
-        show_brightness_control: true
-        layout: horizontal
-        primary_info: name
-        secondary_info: none
-        entity: light.hall_presence
-        name: Presença Sótão
-    - type: conditional
-      conditions:
-        - condition: state
-          entity: light.hallway_presence
-          state: "on"
-      card:
-        type: custom:mushroom-light-card
-        show_brightness_control: true
-        layout: horizontal
-        primary_info: name
-        secondary_info: none
-        name: Presença Corredor
-        entity: light.hallway_presence
-    - type: conditional
-      conditions:
-        - condition: state
-          entity: light.stairs_down
-          state: "on"
-      card:
-        type: custom:mushroom-light-card
-        show_brightness_control: true
-        layout: horizontal
-        primary_info: name
-        secondary_info: none
-        entity: light.stairs_down
-        name: Hall das Escadas
-    - type: conditional
-      conditions:
-        - condition: state
-          entity: light.master_bedroom_lamp
-          state: "on"
-      card:
-        type: custom:mushroom-light-card
-        show_brightness_control: true
-        layout: horizontal
-        primary_info: name
-        secondary_info: none
-        entity: light.master_bedroom_lamp
-        name: Candeeiro da Suite
-    - type: conditional
-      conditions:
-        - condition: state
-          entity: light.bedroom_ricardo_lamp
-          state: "on"
-      card:
-        type: custom:mushroom-light-card
-        show_brightness_control: true
-        layout: horizontal
-        primary_info: name
-        secondary_info: none
-        entity: light.bedroom_ricardo_lamp
-        name: Candeeiro do Ricardo
-  visibility:
-    - condition: or
-      conditions:
-        - condition: state
-          entity: light.hall_presence
-          state: "on"
-        - condition: state
-          entity: light.hallway_presence
-          state: "on"
-        - condition: state
-          entity: light.stairs_down
-          state: "on"
-        - condition: state
-          entity: light.master_bedroom_lamp
-          state: "on"
-        - condition: state
-          entity: light.bedroom_ricardo_lamp
-          state: "on"
+- type: conditional
+  conditions:
+    - condition: state
+      entity: light.hall_presence
+      state: "on"
+  card:
+    type: custom:mushroom-light-card
+    show_brightness_control: true
+    layout: horizontal
+    primary_info: name
+    secondary_info: none
+    entity: light.hall_presence
+    name: Presença Sótão
+- type: conditional
+  conditions:
+    - condition: state
+      entity: light.hallway_presence
+      state: "on"
+  card:
+    type: custom:mushroom-light-card
+    show_brightness_control: true
+    layout: horizontal
+    primary_info: name
+    secondary_info: none
+    name: Presença Corredor
+    entity: light.hallway_presence
+- type: conditional
+  conditions:
+    - condition: state
+      entity: light.stairs_down
+      state: "on"
+  card:
+    type: custom:mushroom-light-card
+    show_brightness_control: true
+    layout: horizontal
+    primary_info: name
+    secondary_info: none
+    entity: light.stairs_down
+    name: Hall das Escadas
+- type: conditional
+  conditions:
+    - condition: state
+      entity: light.master_bedroom_lamp
+      state: "on"
+  card:
+    type: custom:mushroom-light-card
+    show_brightness_control: true
+    layout: horizontal
+    primary_info: name
+    secondary_info: none
+    entity: light.master_bedroom_lamp
+    name: Candeeiro da Suite
+- type: conditional
+  conditions:
+    - condition: state
+      entity: light.bedroom_ricardo_lamp
+      state: "on"
+  card:
+    type: custom:mushroom-light-card
+    show_brightness_control: true
+    layout: horizontal
+    primary_info: name
+    secondary_info: none
+    entity: light.bedroom_ricardo_lamp
+    name: Candeeiro do Ricardo
 
 - type: custom:auto-entities
   card:
@@ -453,58 +431,70 @@
     icon_tap_action:
       action: none
 
-- type: horizontal-stack
-  cards:
-    - type: custom:mini-graph-card
-      name: Temperatura Quartos
-      entities:
-        - entity: sensor.average_temperature_bedrooms
-      line_color: "#e74c3c"
-      line_width: 8
-      font_size: 75
-      align_icon: left
-      align_state: center
-      hours_to_show: 24
-      points_per_hour: 1
-      tap_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-climate
-    - type: custom:mini-graph-card
-      name: Humidade Quartos
-      entities:
-        - entity: sensor.average_humidity_bedrooms
-      line_width: 8
-      font_size: 75
-      align_icon: left
-      align_state: center
-      hours_to_show: 24
-      points_per_hour: 1
-      tap_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-climate
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host { 
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: custom:mini-graph-card
+        name: Temperatura Quartos
+        entities:
+          - entity: sensor.average_temperature_bedrooms
+        line_color: "#e74c3c"
+        line_width: 8
+        font_size: 75
+        align_icon: left
+        align_state: center
+        hours_to_show: 24
+        points_per_hour: 1
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-climate
+      - type: custom:mini-graph-card
+        name: Humidade Quartos
+        entities:
+          - entity: sensor.average_humidity_bedrooms
+        line_width: 8
+        font_size: 75
+        align_icon: left
+        align_state: center
+        hours_to_show: 24
+        points_per_hour: 1
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-climate
 
-- square: false
-  columns: 3
-  type: grid
-  cards:
-    - type: tile
-      entity: sensor.bhpzem_main_power
-      name: Potência
-      tap_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-power
-      primary_info: state
-      secondary_info: name
-    - type: tile
-      entity: sensor.temperature_outside
-      name: Temp. Rua
-      primary_info: state
-      secondary_info: name
-    - type: tile
-      entity: sensor.humidity_outside
-      name: Hum. Rua
-      primary_info: state
-      secondary_info: name
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host { 
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: tile
+        entity: sensor.bhpzem_main_power
+        name: Potência
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-power
+        primary_info: state
+        secondary_info: name
+      - type: tile
+        entity: sensor.temperature_outside
+        name: Temp. Rua
+        primary_info: state
+        secondary_info: name
+      - type: tile
+        entity: sensor.humidity_outside
+        name: Hum. Rua
+        primary_info: state
+        secondary_info: name
 
 - type: tile
   entity: media_player.hall

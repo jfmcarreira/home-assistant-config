@@ -59,6 +59,8 @@
   view_layout:
     column: 1
 - type: custom:valetudo-map-card
+  view_layout:
+    column: 2
   vacuum: roborock
   title: Roborock
   map_scale: 1.4
