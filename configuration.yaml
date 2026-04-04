@@ -61,7 +61,6 @@ logger:
 #  - platform: bluetooth_le_tracker
 #    track_new_devices: false
 
-
 ################################################################################
 ## Includes
 ################################################################################
@@ -77,18 +76,17 @@ python_script:
 frontend:
   themes: !include_dir_merge_named themes
 
-
 lovelace:
   dashboards:
     dashboard-living-room:
       mode: yaml
-      filename: lovalace/dashboard-living-room/dashboard-living-room.yaml
+      filename: dashboards/dashboard-living-room/dashboard-living-room.yaml
       title: Dashboard Sala
       icon: mdi:sofa
       show_in_sidebar: true
     dashboard-hall:
       mode: yaml
-      filename: lovalace/dashboard-hall/dashboard-hall.yaml
+      filename: dashboards/dashboard-hall/dashboard-hall.yaml
       title: Dashboard Hall
       icon: mdi:home-roof
       show_in_sidebar: true
