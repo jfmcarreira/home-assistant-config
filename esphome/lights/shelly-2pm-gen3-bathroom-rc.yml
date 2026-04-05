@@ -23,7 +23,3 @@ packages:
       input_a_light: light_1
       input_b_light: light_2
       fan: fan.bathroom_rc
-
-
-wifi:
-  use_address: 10.20.107.213
