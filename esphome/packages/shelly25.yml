@@ -20,9 +20,11 @@ i2c:
   scl: GPIO14
 
 output:
+  # Output O2
   - id: relay_1
     platform: gpio
     pin: GPIO15
+  # Output O1
   - id: relay_2
     platform: gpio
     pin: GPIO04
