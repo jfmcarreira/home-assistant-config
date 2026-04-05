@@ -1,0 +1,33 @@
+substitutions:
+  devicename: shelly25-exterior-switches
+
+packages:
+  esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+  home_state: !include packages/home_state.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
+    vars:
+      name: Shelly25 Exterior Switches
+
+esphome:
+  devices:
+    - id: device_switch_1
+      name: gate_door
+
+button:
+  - platform: output
+    id: gate_door_open
+    output: relay_1
+    duration: 2000ms
+
+lock:
+  - platform: template
+    name: gate_door
+    device_id: device_switch_1
+    lambda: |-
+      return LOCK_STATE_LOCKED;
+    optimistic: true
+    unlock_action:
+      - button.press: gate_door_open
