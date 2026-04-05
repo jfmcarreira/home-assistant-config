@@ -62,6 +62,7 @@ void SingleControlCover::do_setup_() {
     // assume door its ad middle position
     this->position = 0.5f;
   }
+  this->is_half_open_ = false;
   this->target_position_ = this->position;
   // publish states
   this->publish_state(false);
@@ -160,8 +161,34 @@ void SingleControlCover::loop() {
   }
 }
 
+void SingleControlCover::trigger_half_open() {
+
+  const uint32_t now = millis();
+
+  if ((now - this->last_activation_time_) > this->button_press_interval_) {
+
+    if(this->current_operation != COVER_OPERATION_IDLE) {
+      return;
+    }
+
+    this->current_operation = COVER_OPERATION_OPENING;
+    this->last_operation_ = COVER_OPERATION_OPENING;
+    this->target_operation_ = TARGET_OPERATION_IDLE;
+    this->target_operation_ = TARGET_OPERATION_NONE;
+    this->target_position_ = COVER_OPEN;
+
+    // activate switch
+    ESP_LOGD(TAG, "Switch activated to open half gate");
+    this->half_activate_button_->press();
+    this->is_half_open_ = true;
+    this->last_publish_time_ = now;
+    this->last_recompute_time_ = now;
+    this->last_activation_time_ = now;
+  }
+}
+
 bool SingleControlCover::is_at_target_() const {
-  return ((this->current_operation == COVER_OPERATION_OPENING &&
+  return !this->is_half_open_ && ((this->current_operation == COVER_OPERATION_OPENING &&
            this->position >= this->target_position_) ||
           (this->current_operation == COVER_OPERATION_CLOSING &&
            this->position <= this->target_position_));
@@ -191,7 +218,16 @@ void SingleControlCover::recompute_position_(const uint32_t now) {
 
     // calculate position
     float change = (dir * (now - this->last_recompute_time_)) / action_dur;
-    this->position = clamp(this->position + change, 0.0f, 1.0f);
+    float position = this->position + change;
+    if(this->is_half_open_ && position >= 1.0){
+      this->last_activation_time_ = millis();
+      this->last_recompute_time_ = this->last_activation_time_;
+      this->current_operation = COVER_OPERATION_IDLE;
+      this->last_operation_ = COVER_OPERATION_OPENING;
+      this->position = COVER_OPEN;
+      this->publish_state(false);
+    }
+    this->position = clamp(position, 0.0f, 1.0f) ;
   }
 
   // store time
@@ -222,8 +258,13 @@ bool SingleControlCover::activate_door_() {
     }
 
     // activate switch
-    ESP_LOGD(TAG, "Switch activated");
-    this->door_activate_button_->press();
+    if(this->is_half_open_){
+      ESP_LOGD(TAG, "Switch activated to close half gate");
+      this->half_activate_button_->press();
+    } else {
+      ESP_LOGD(TAG, "Switch activated");
+      this->door_activate_button_->press();
+    }
 
     // send current state
     this->publish_state(false);
@@ -246,6 +287,7 @@ void SingleControlCover::open_endstop_callback_(bool state) {
     this->last_recompute_time_ = this->last_activation_time_;
     this->current_operation = COVER_OPERATION_IDLE;
     this->last_operation_ = COVER_OPERATION_OPENING;
+    this->is_half_open_ = false;
     this->position = COVER_OPEN;
     this->publish_state(false);
   } else {
@@ -268,6 +310,7 @@ void SingleControlCover::close_endstop_callback_(bool state) {
     this->last_recompute_time_ = this->last_activation_time_;
     this->current_operation = COVER_OPERATION_IDLE;
     this->last_operation_ = COVER_OPERATION_CLOSING;
+    this->is_half_open_ = false;
     this->position = COVER_CLOSED;
     this->publish_state(false);
   } else {
@@ -282,6 +325,8 @@ void SingleControlCover::close_endstop_callback_(bool state) {
     }
   }
 }
+
+
 
 } // namespace sc_cover
 } // namespace esphome

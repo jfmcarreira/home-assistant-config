@@ -28,11 +28,15 @@ class SingleControlCover : public cover::Cover, public Component {
 public:
   void setup() override;
   void loop() override;
+  void trigger_half_open();
   void dump_config() override;
   float get_setup_priority() const override;
 
-  void set_door_activate_button(button::Button *door_activate_button) {
-    this->door_activate_button_ = door_activate_button;
+  void set_door_activate_button(button::Button *button) {
+    this->door_activate_button_ = button;
+  }
+  void set_half_activate_button(button::Button *button) {
+    this->half_activate_button_ = button;
   }
   void set_button_press_interval(uint32_t button_press_interval) {
     this->button_press_interval_ = button_press_interval;
@@ -71,6 +75,7 @@ protected:
   void close_endstop_callback_(bool state);
 
   button::Button *door_activate_button_;
+  button::Button *half_activate_button_;
   binary_sensor::BinarySensor *open_endstop_;
   binary_sensor::BinarySensor *close_endstop_;
   bool toggle_{false};
@@ -83,6 +88,7 @@ protected:
   uint32_t last_recompute_time_{0};
   uint32_t last_publish_time_{0};
   float target_position_{0};
+  bool is_half_open_{false};
   cover::CoverOperation last_operation_{cover::COVER_OPERATION_OPENING};
   CoverTargetOperation target_operation_{TARGET_OPERATION_NONE};
 };

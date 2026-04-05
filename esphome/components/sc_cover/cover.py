@@ -10,6 +10,7 @@ from esphome.const import (
 )
 
 CONF_DOOR_ACTIVATE_BUTTON = "door_activate_button"
+CONF_HALF_ACTIVATE_BUTTON= "half_activate_button"
 CONF_BUTTON_PRESS_INTERVAL = "button_press_interval"
 CONF_SETUP_DELAY = "setup_delay"
 
@@ -21,6 +22,7 @@ CONFIG_SCHEMA = (
     .extend(
         {
             cv.Required(CONF_DOOR_ACTIVATE_BUTTON): cv.use_id(button.Button),
+            cv.Required(CONF_HALF_ACTIVATE_BUTTON): cv.use_id(button.Button),
             cv.Required(
                 CONF_BUTTON_PRESS_INTERVAL
             ): cv.positive_time_period_milliseconds,
@@ -46,6 +48,10 @@ async def to_code(config):
 
     bin = await cg.get_variable(config[CONF_DOOR_ACTIVATE_BUTTON])
     cg.add(var.set_door_activate_button(bin))
+
+    half_bin = await cg.get_variable(config[CONF_HALF_ACTIVATE_BUTTON])
+    cg.add(var.set_half_activate_button(half_bin))
+
     cg.add(var.set_button_press_interval(config[CONF_BUTTON_PRESS_INTERVAL]))
 
     bin = await cg.get_variable(config[CONF_OPEN_ENDSTOP])

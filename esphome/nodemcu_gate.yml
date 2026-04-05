@@ -56,15 +56,22 @@ binary_sensor:
       - delayed_on: 250ms
 
 button:
+  - platform: template
+    id: gate_open_single_ha
+    name: Gate Open Single (HA)
+    on_press:
+      then:
+        - lambda: "id(gate)->trigger_half_open();"
+
   - platform: output
     id: gate_open_single
-    name: gate_open_single
+    name: Gate Open Single (Relay)
     output: relay_2
     duration: 750ms
 
   - platform: output
     id: gate_open
-    name: gate_open
+    name: Gate Open (Relay)
     output: relay_1
     duration: 750ms
 
@@ -74,6 +81,7 @@ cover:
     id: gate
     device_class: gate
     door_activate_button: gate_open
+    half_activate_button: gate_open_single
     button_press_interval: 1500ms
     open_endstop: gate_open_sensor
     close_endstop: gate_close_sensor
@@ -81,3 +89,6 @@ cover:
     close_duration: 20s
     setup_delay: 2s
 
+
+logger:
+  level: DEBUG
