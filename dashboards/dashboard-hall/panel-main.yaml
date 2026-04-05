@@ -255,6 +255,8 @@
       - options: {}
         entity_id: light.kitchen_*
       - options: {}
+        entity_id: light.hallway_group
+      - options: {}
         entity_id: light.stairs_down
       - options: {}
         entity_id: light.*presence
@@ -434,7 +436,7 @@
 - type: custom:mod-card
   style:
     hui-horizontal-stack-card$: |
-      :host { 
+      :host {
         height: auto;
       }
   card:
@@ -471,7 +473,7 @@
 - type: custom:mod-card
   style:
     hui-horizontal-stack-card$: |
-      :host { 
+      :host {
         height: auto;
       }
   card:

@@ -1,0 +1,269 @@
+- type: entities
+  entities:
+    - input_select.house_mode
+- type: custom:state-switch
+  default: remaining
+  entity: template
+  template: |-
+    {% if now().time().hour >= 5 and now().time().hour < 21 %}
+      daytime
+    {% elif now().time().hour >= 0 and now().time().hour < 5 %}
+      sleeptime
+    {% else %}
+      nighttime
+    {% endif %}
+  states:
+    nighttime:
+      square: false
+      columns: 2
+      type: grid
+      cards:
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: input_select.select_option
+            data:
+              option: Evening
+              entity_id: input_select.house_mode
+          entity: input_select.house_mode
+          icon: mdi:weather-sunset
+          name: Ativar Modo Anoitecer
+          icon_height: 100px
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: input_select.select_option
+            data:
+              option: Night
+              entity_id: input_select.house_mode
+          entity: input_select.house_mode
+          icon: mdi:weather-night
+          name: Ativar Modo Noite
+          icon_height: 100px
+    sleeptime:
+      square: false
+      columns: 2
+      type: grid
+      cards:
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: input_select.select_option
+            data:
+              option: Night
+              entity_id: input_select.house_mode
+          entity: input_select.house_mode
+          icon: mdi:weather-night
+          name: Ativar Modo Noite
+          icon_height: 100px
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: input_select.select_option
+            data:
+              option: Sleep
+              entity_id: input_select.house_mode
+          entity: input_select.house_mode
+          icon: mdi:sleep
+          name: Ativar Modo Dormir
+          icon_height: 100px
+    daytime:
+      square: false
+      columns: 2
+      type: grid
+      cards:
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: input_select.select_option
+            data:
+              option: Evening
+              entity_id: input_select.house_mode
+          entity: input_select.house_mode
+          icon: mdi:weather-sunset
+          name: Ativar Modo Amanhecer
+          icon_height: 100px
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: input_select.select_option
+            data:
+              option: "On"
+              entity_id: input_select.house_mode
+          entity: input_select.house_mode
+          icon: mdi:weather-sunny
+          name: Ativar Modo Dia
+          icon_height: 100px
+
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: tile
+        entity: binary_sensor.house_guest
+        vertical: true
+        hide_state: false
+        features_position: bottom
+        icon_tap_action:
+          action: perform-action
+          perform_action: input_boolean.toggle
+          target:
+            entity_id: input_boolean.house_guest
+      - type: tile
+        entity: input_boolean.notification_active_non_disturb
+        vertical: true
+        hide_state: true
+
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: tile
+        features_position: bottom
+        vertical: true
+        entity: switch.fire_tablet_screen
+      - type: tile
+        entity: switch.fire_tablet_motion_detection
+        vertical: true
+        features_position: bottom
+
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: tile
+        entity: switch.lenovo_tablet_screen
+        features_position: bottom
+      - type: tile
+        entity: switch.lenovo_tablet_motion_detection
+        features_position: bottom
+
+
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: tile
+        entity: input_boolean.walking_routine
+        name: Caminhada
+        vertical: false
+        features_position: bottom
+      - type: tile
+        entity: input_boolean.door_bell_sound
+        vertical: false
+        hide_state: true
+
+
+- type: grid
+  square: false
+  title: Janelas / Portas / Movimento
+  cards:
+  - type: tile
+    entity: binary_sensor.kitchen_door
+    name: Cozinha
+    features_position: bottom
+    state_content:
+      - state
+      - last_changed
+  - type: tile
+    entity: binary_sensor.front_door
+    state_content:
+      - state
+      - last_changed
+    name: Frente
+  - type: tile
+    entity: binary_sensor.kitchen_pantry_door
+    name: Despensa
+    state_content:
+      - state
+      - last_changed
+  - type: tile
+    entity: binary_sensor.window_living_room
+    state_content:
+      - state
+      - last_changed
+    name: Sala
+    features_position: bottom
+    vertical: false
+  - type: tile
+    entity: binary_sensor.window_laundry
+    state_content:
+      - state
+      - last_changed
+    name: Lavandaria
+    features_position: bottom
+    vertical: false
+  - type: tile
+    entity: binary_sensor.window_office
+    state_content:
+      - state
+      - last_changed
+    name: Escritório
+  - type: tile
+    entity: binary_sensor.window_bedroom_rc
+    state_content:
+      - state
+      - last_changed
+    name: Quarto de Arrumos
+  - type: tile
+    entity: binary_sensor.window_bathroom_rc
+    state_content:
+      - state
+      - last_changed
+    name: Casa de Banho de Serviço
+  - type: tile
+    entity: binary_sensor.window_master_bedroom
+    state_content:
+      - state
+      - last_changed
+    name: Suite
+  - type: tile
+    entity: binary_sensor.window_bedroom_ricardo
+    state_content:
+      - state
+      - last_changed
+    name: Quarto do Ricardo
+  - type: tile
+    entity: binary_sensor.window_bedroom_henrique
+    state_content:
+      - state
+      - last_changed
+    name: Quarto Henrique
+  - type: tile
+    entity: binary_sensor.window_main_bathroom
+    state_content:
+      - state
+      - last_changed
+    name: Casa de Banho Principal

@@ -66,3 +66,11 @@ views:
               column_widths: 100%
               max_cols: 1
             cards: !include panel-routines.yaml
+          panel-house:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_width: 2000px
+              column_widths: 100%
+              max_cols: 1
+            cards: !include panel-house.yaml

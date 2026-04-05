@@ -372,9 +372,9 @@
       show_state: false
       tap_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-house
+        navigation_path: "#panel-house"
       hold_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-automations
+        navigation_path: /lovelace-subviews/dashboard-house
   view_layout:
     column: 1
