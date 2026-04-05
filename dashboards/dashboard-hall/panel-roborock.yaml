@@ -44,6 +44,7 @@
       tap_action:
         action: toggle
       entity: input_boolean.vacuum_bedroomhenrique
+
 - show_name: true
   show_icon: true
   type: button

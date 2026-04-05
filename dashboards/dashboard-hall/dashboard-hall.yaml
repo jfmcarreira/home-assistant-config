@@ -58,3 +58,11 @@ views:
               margin: 0
               height: 550px
             cards: !include panel-media.yaml
+          panel-routines:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_width: 2000px
+              column_widths: 100%
+              max_cols: 1
+            cards: !include panel-routines.yaml

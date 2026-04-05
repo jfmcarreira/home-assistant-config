@@ -357,6 +357,9 @@
       icon: mdi:calendar-sync
       tap_action:
         action: navigate
+        navigation_path: "#panel-routines"
+      hold_action:
+        action: navigate
         navigation_path: /lovelace-subviews/routines
     - type: custom:button-card
       size: 70%
