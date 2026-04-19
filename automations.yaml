@@ -73,7 +73,7 @@
     entity_id: light.exterior_wall_back
     state: 'off'
   - condition: state
-    entity_id: binary_sensor.sun_bellow_horizont
+    entity_id: binary_sensor.night
     state: 'on'
   action:
   - service: light.turn_on
@@ -266,7 +266,7 @@
     trigger: state
   conditions:
   - condition: state
-    entity_id: binary_sensor.sun_bellow_horizont
+    entity_id: binary_sensor.night
     state: 'on'
   - condition: or
     conditions:
@@ -635,8 +635,8 @@
         action: light.toggle
       alias: Right Short
   mode: single
-- alias: Desligar Coluna do Hall com as Luzes
-  id: '1668971106955'
+- id: '1668971106955'
+  alias: Desligar Coluna do Hall com as Luzes
   description: ''
   triggers:
   - entity_id:
@@ -646,10 +646,11 @@
     trigger: state
   conditions: []
   actions:
-  - data: {}
+  - action: media_player.media_stop
+    metadata: {}
     target:
       entity_id: media_player.ghm_hall
-    action: media_player.turn_off
+    data: {}
   mode: single
 - id: Lights Xmas Auto On
   alias: Ligar Luzes da Arvore de Natal Tarde
@@ -694,7 +695,7 @@
       motion_sensor: binary_sensor.motion_sensor_kitchen
       target_entity: light.kitchen
       min_repetition_interval_sec: 10
-      illuminance_sensor: sensor.light_living_room
+      illuminance_sensor: sensor.light_kitchen
       illuminance_cutoff: 50
       only_after_sunset: 'off'
       disable_in_guest: true
@@ -824,11 +825,11 @@
         entity_id: light.xmas_outside
       data: {}
   mode: restart
-- alias: Desligar Luzes das Escadas com a Luminosidade
-  id: '1670674527026'
+- id: '1670674527026'
+  alias: Desligar Luzes das Escadas com a Luminosidade
   description: ''
   triggers:
-  - entity_id: sensor.light_stairs
+  - entity_id: sensor.light_stairs_top
     for:
       hours: 0
       minutes: 5
@@ -845,7 +846,7 @@
     trigger: state
   conditions:
   - condition: numeric_state
-    entity_id: sensor.light_stairs
+    entity_id: sensor.light_stairs_top
     above: 50
   - condition: state
     entity_id: light.stairs_group
@@ -1016,7 +1017,7 @@
   condition: []
   action:
   - condition: state
-    entity_id: binary_sensor.sun_bellow_horizont
+    entity_id: binary_sensor.night
     state: 'on'
   - service: light.turn_on
     data: {}
@@ -1140,25 +1141,25 @@
       target:
         entity_id: switch.dehumidifier
   mode: single
-- alias: hvac_adjust_dehumidifier_target
-  id: '1696854410563'
+- id: '1696854410563'
+  alias: Desumidificador - Ajustar valor
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - sensor.humidity_outside_average
     to:
-  condition:
+    trigger: state
+  conditions:
   - condition: template
     value_template: '{% set difference = states(''sensor.humidity_outside_average'')
       | float - state_attr(''humidifier.portable_dehumidifier'', ''humidity'') %}
       {{ is_number(difference) and difference | float > 5 }}'
-  action:
-  - service: humidifier.set_humidity
-    data:
+  actions:
+  - data:
       humidity: '{{ states(''sensor.humidity_outside_average'') }}'
     target:
       entity_id: humidifier.portable_dehumidifier
+    action: humidifier.set_humidity
   mode: single
 - alias: Água Quente - Desligar Noite
   id: '1699195635629'
@@ -1700,23 +1701,15 @@
       fan_mode: '{{ current_fan_mode }}'
     action: climate.set_fan_mode
   mode: single
-- alias: Água Quente - Ligar Manhã
-  id: '1665435183140'
+- id: '1665435183140'
+  alias: Água Quente - Ligar Manhã (Antes do Nascer do Sol)
   description: ''
   triggers:
   - at: 06:01:00
     trigger: time
   - entity_id:
-    - binary_sensor.water_heater_panel_heating
-    to: 'off'
-    for:
-      hours: 0
-      minutes: 15
-      seconds: 0
-    trigger: state
-  - entity_id:
     - sensor.temperature_water_heater_top
-    below: 50
+    below: 40
     trigger: numeric_state
   conditions:
   - condition: state
@@ -1724,7 +1717,7 @@
     state: 'off'
   - condition: time
     after: 06:00:00
-    before: '12:00:00'
+    before: 08:30:00
   actions:
   - condition: state
     entity_id: binary_sensor.water_heater_panel_heating
@@ -1732,16 +1725,18 @@
   - condition: numeric_state
     entity_id:
     - sensor.temperature_water_heater_top
-    below: 50
+    below: 42
   - data: {}
     target:
       entity_id: climate.water_heater
     action: climate.turn_on
   mode: single
-- alias: Água Quente - Desligar Manhã
-  id: '1665435233424'
+- id: '1665435233424'
+  alias: Água Quente - Desligar Manhã
   description: ''
   triggers:
+  - at: 08:00:00
+    trigger: time
   - at: 08:30:00
     trigger: time
   - at: 09:30:00
@@ -2809,7 +2804,7 @@
   conditions: []
   actions:
   - condition: state
-    entity_id: binary_sensor.sun_bellow_horizont
+    entity_id: binary_sensor.night
     state: 'on'
   - action: light.turn_on
     metadata: {}
@@ -2957,8 +2952,8 @@
       disable_in_sleep: true
       presence_sensor: none
       no_motion_wait: 10
-      illuminance_cutoff: 75
-      illuminance_sensor: none
+      illuminance_cutoff: 110
+      illuminance_sensor: sensor.light_bathroom_rc
 - alias: Trigger Abrir Cancela
   id: '1731973582356'
   description: ''
@@ -3010,8 +3005,8 @@
     target:
       entity_id: automation.task_cat_litter_change
   mode: single
-- alias: Desligar Coluna da Casa de Banho Principal com as Luzes
-  id: '1735500742595'
+- id: '1735500742595'
+  alias: Desligar Coluna da Casa de Banho Principal com as Luzes
   description: ''
   triggers:
   - entity_id:
@@ -3022,7 +3017,7 @@
   conditions: []
   actions:
   - data: {}
-    action: media_player.turn_off
+    action: media_player.media_stop
     target:
       entity_id: media_player.ghm_main_bathroom
   mode: single
@@ -3695,7 +3690,22 @@
       hours: 0
       minutes: 15
       seconds: 0
-  conditions: []
+  - trigger: sun
+    event: sunrise
+    offset: 01:00:00
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state:
+    - above_horizon
+  - condition: state
+    entity_id: binary_sensor.rain
+    state:
+    - 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
   actions:
   - action: input_datetime.set_datetime
     metadata: {}
@@ -4200,7 +4210,7 @@
       hvac_unit:
       - climate.hall
       hvac_temperature: 21
-      room_temperature: 21.5
+      room_temperature: 21
       temperature_sensor: sensor.temperature_hall
       weekday:
       - mon
@@ -4322,7 +4332,7 @@
       presence_sensor: none
       no_motion_wait: 60
       illuminance_cutoff: 75
-      illuminance_sensor: none
+      illuminance_sensor: sensor.light_bedroom_rc
 - id: '1763600787785'
   alias: Desligar Luz de Presença do Corredor Com as Outras Luzes
   description: ''
@@ -4518,7 +4528,7 @@
       motion_sensor: binary_sensor.backyard_camera_person_group
       target_entity: light.exterior_wall_back
       no_motion_wait: 60
-      illuminance_cutoff: 0
+      illuminance_cutoff: 50
       only_after_sunset: true
       disable_in_guest: false
       blocker_on_entity: light.kitchen_door
@@ -4527,6 +4537,7 @@
       disable_in_sleep: false
       presence_sensor: none
       required_conditions: []
+      illuminance_sensor: sensor.light_outside
 - id: '1765845791576'
   alias: Desligar Luz da Sala Sem Movimento
   description: ''
@@ -4711,7 +4722,7 @@
       motion_sensor: binary_sensor.driveway_camera_person_group
       target_entity: light.exterior_wall_side
       no_motion_wait: 60
-      illuminance_cutoff: 0
+      illuminance_cutoff: 50
       only_after_sunset: true
       disable_in_guest: false
       blocker_on_entity: light.kitchen_door
@@ -4720,6 +4731,7 @@
       disable_in_sleep: false
       presence_sensor: none
       required_conditions: []
+      illuminance_sensor: sensor.light_outside
 - id: '1771630873804'
   alias: lights_control_kitchen_lights_all_on
   description: ''
@@ -4855,4 +4867,83 @@
         target:
           entity_id: automation.task_cat_litter_change
         action: automation.trigger
+  mode: single
+- id: '1776213882859'
+  alias: Água Quente - Ligar Manhã Pessoas em Casa
+  description: ''
+  triggers:
+  - at: 09:31:00
+    trigger: time
+  - entity_id:
+    - binary_sensor.water_heater_panel_heating
+    to:
+    - 'off'
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+    trigger: state
+  - entity_id:
+    - sensor.temperature_water_heater_top
+    below: 50
+    trigger: numeric_state
+  - trigger: occupancy.detected
+    target:
+      entity_id: binary_sensor.notify_home
+    options: {}
+  conditions:
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
+  - condition: time
+    after: 09:30:00
+    before: '12:00:00'
+  - condition: occupancy.is_detected
+    target:
+      entity_id: binary_sensor.notify_home
+    options: {}
+  - alias: Run once a day (wait at least 12 hours)
+    condition: template
+    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
+      > hours * 3600 }}
+
+      '
+  actions:
+  - condition: state
+    entity_id: binary_sensor.water_heater_panel_heating
+    state: 'off'
+  - condition: numeric_state
+    entity_id:
+    - sensor.temperature_water_heater_top
+    below: 50
+  - data: {}
+    target:
+      entity_id: climate.water_heater
+    action: climate.turn_on
+  mode: single
+- id: '1776266173921'
+  alias: Desumidificador - Ajustar valor à noite
+  description: ''
+  triggers:
+  - entity_id:
+    - sensor.humidity_outside_average
+    to:
+    trigger: state
+  - trigger: time
+    at: '20:00:00'
+  conditions:
+  - condition: time
+    after: '20:00:00'
+    before: 09:00:00
+  - condition: template
+    value_template: '{% set difference = states(''sensor.humidity_outside_average'')
+      | float - state_attr(''humidifier.portable_dehumidifier'', ''humidity'') %}
+      {{ is_number(difference) and difference | float > 5 }}'
+  actions:
+  - data:
+      humidity: '{{ states(''sensor.humidity_outside_average'') }}'
+    target:
+      entity_id: humidifier.portable_dehumidifier
+    action: humidifier.set_humidity
   mode: single

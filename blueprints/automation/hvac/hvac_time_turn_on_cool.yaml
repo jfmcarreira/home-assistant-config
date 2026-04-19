@@ -181,16 +181,6 @@ condition:
       {{ last is not none and (now() - last).total_seconds() > hours * 3600 }}
 
 action:
-  - action: switch.turn_on
-    data: {}
-    target:
-      entity_id:
-        - switch.hall_ac_echo
-        - switch.office_ac_echo
-        - switch.bedroom_henrique_ac_echo
-        - switch.master_bedroom_ac_echo
-        - switch.bedroom_ricardo_ac_echo
-
   - action: climate.set_hvac_mode
     target:
       entity_id: !input hvac_unit

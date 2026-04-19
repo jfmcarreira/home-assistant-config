@@ -177,7 +177,7 @@ lights_control_gate_front_lights:
   alias: Controlar Luzes do Portão
   sequence:
   - condition: state
-    entity_id: binary_sensor.sun_bellow_horizont
+    entity_id: binary_sensor.night
     state: 'on'
   - target:
       entity_id: light.gate_lights
@@ -458,17 +458,19 @@ house_turn_all_off:
         - living_room
         - master_bedroom
       action: light.turn_off
-    - data: {}
+    - action: media_player.media_stop
       target:
-        entity_id:
-        - media_player.assistant_speakers
-      action: homeassistant.turn_off
-    - data: {}
+        floor_id:
+        - living_floor
+        - bedrooms
+      data: {}
+    - action: media_player.turn_off
+      metadata: {}
       target:
-        entity_id:
-        - media_player.living_room_tv
-        - media_player.lg_tv
-      action: media_player.turn_off
+        floor_id:
+        - living_floor
+        - bedrooms
+      data: {}
     - target:
         entity_id: climate.portable_heater
       data: {}
@@ -478,10 +480,6 @@ routine_good_night:
   mode: single
   icon: mdi:sleep
   sequence:
-  - data: {}
-    target:
-      entity_id: light.stairs_wall
-    action: light.turn_on
   - parallel:
     - delay:
         hours: 0
@@ -512,11 +510,13 @@ routine_good_night:
         - master_bedroom
       data: {}
       action: fan.turn_off
-    - data: {}
+    - action: media_player.media_stop
+      metadata: {}
       target:
-        entity_id:
-        - media_player.assistant_speakers
-      action: homeassistant.turn_off
+        floor_id:
+        - living_floor
+        - bedrooms
+      data: {}
     - data: {}
       target:
         entity_id:
@@ -589,10 +589,9 @@ routine_exit_house_all_off:
   icon: mdi:exit-run
   sequence:
   - if:
-    - condition: numeric_state
-      entity_id: sun.sun
-      attribute: elevation
-      below: '20'
+    - condition: state
+      entity_id: binary_sensor.night
+      state: 'on'
     then:
     - data: {}
       target:
@@ -617,11 +616,13 @@ routine_exit_house_all_off:
       data:
         operation: screen_off
       continue_on_error: true
-    - data: {}
+    - action: media_player.media_stop
+      metadata: {}
+      data: {}
       target:
-        entity_id:
-        - media_player.assistant_speakers
-      action: homeassistant.turn_off
+        floor_id:
+        - living_floor
+        - bedrooms
     - target:
         entity_id: light.xmas_tree
       data: {}
@@ -910,4 +911,140 @@ routine_gate_open_auto_close:
       entity_id: cover.gate
     data: {}
   alias: Routina de Abrir e Fechar o Portão
+  description: ''
+gate_passagem_pedonal:
+  alias: Passagem Pedonal
+  sequence:
+  - action: button.press
+    metadata: {}
+    target:
+      entity_id: button.gate_open_single
+    data: {}
+  mode: single
+hvac_run_dehumidifier_heat:
+  sequence:
+  - action: climate.set_hvac_mode
+    data:
+      hvac_mode: dry
+    target:
+      entity_id:
+      - climate.living_room
+      - climate.master_bedroom
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+      - climate.bedroom_ricardo
+  - action: climate.set_temperature
+    data:
+      temperature: 18
+    target:
+      entity_id:
+      - climate.master_bedroom
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+      - climate.bedroom_ricardo
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - action: climate.set_hvac_mode
+    data:
+      hvac_mode: heat
+    target:
+      entity_id:
+      - climate.living_room
+      - climate.master_bedroom
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+      - climate.bedroom_ricardo
+  - action: climate.set_temperature
+    data:
+      temperature: 20
+    target:
+      entity_id:
+      - climate.master_bedroom
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+      - climate.bedroom_ricardo
+  - delay:
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - action: climate.turn_off
+    target:
+      entity_id:
+      - climate.living_room
+      - climate.master_bedroom
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+      - climate.bedroom_ricardo
+    data: {}
+  - action: climate.set_hvac_mode
+    metadata: {}
+    data:
+      hvac_mode: 'off'
+    target:
+      entity_id:
+      - climate.living_room
+      - climate.master_bedroom
+      - climate.office
+      - climate.bedroom_henrique
+      - climate.hall
+      - climate.bedroom_ricardo
+  alias: Routina de Desumidificação (Com Aquecimento)
+  description: ''
+routine_good_night_with_lights:
+  sequence:
+  - data: {}
+    target:
+      entity_id: light.stairs_wall
+    action: light.turn_on
+  - action: script.routine_good_night
+    metadata: {}
+    data: {}
+  alias: Routina de Boa Noite (Com Luz)
+  mode: single
+  icon: mdi:sleep
+  description: ''
+hvac_dehumidifier_routine_office:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: office
+  alias: Routina de Desumidificação Escritório
+hvac_dehumidifier_routine_living_room:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: living_room
+  alias: Routina de Desumidificação Sala
+hvac_dehumidifier_routine_hall:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: hall
+  alias: Routina de Desumidificação Sótão
+hvac_dehumidifier_routine_master_bedroom:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: master_bedroom
+  alias: Routina de Desumidificação Suite
+hvac_dehumidifier_routine_bedroom_ricardo:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: bedroom_ricardo
+  alias: Routina de Desumidificação Quarto do Ricardo
+hvac_dehumidifier_routine_bedroom_henrique:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: bedroom_henrique
+  alias: Routina de Desumidificação Quarto do Henrique
   description: ''

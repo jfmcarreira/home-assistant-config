@@ -208,15 +208,15 @@ condition:
             above: !input room_temperature
 
 action:
-  - action: switch.turn_on
-    data: {}
-    target:
-      entity_id:
-        - switch.hall_ac_echo
-        - switch.office_ac_echo
-        - switch.bedroom_henrique_ac_echo
-        - switch.master_bedroom_ac_echo
-        - switch.bedroom_ricardo_ac_echo
+  # - action: switch.turn_on
+  #   data: {}
+  #   target:
+  #     entity_id:
+  #       - switch.hall_ac_echo
+  #       - switch.office_ac_echo
+  #       - switch.bedroom_henrique_ac_echo
+  #       - switch.master_bedroom_ac_echo
+  #       - switch.bedroom_ricardo_ac_echo
 
   - if:
       - "{{ hvac_mode_heat == true }}"

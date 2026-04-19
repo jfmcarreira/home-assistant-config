@@ -1,0 +1,129 @@
+blueprint:
+  domain: script
+  name: "[HVAC] Dehumidifier Routine"
+
+  input:
+    room_area_id:
+      name: Divisão
+      selector:
+        area:
+          entity:
+            domain:
+              - climate
+
+mode: restart
+
+sequence:
+  - action: climate.set_hvac_mode
+    data:
+      hvac_mode: dry
+    target:
+      area_id: !input room_area_id
+  - action: climate.set_temperature
+    data:
+      temperature: 18
+    target:
+      area_id: !input room_area_id
+
+  - wait_for_trigger:
+      - trigger: climate.hvac_mode_changed
+        target:
+          area_id: !input room_area_id
+        options:
+          behavior: any
+          hvac_mode:
+            - heat
+            - heat_cool
+            - cool
+            - "off"
+            - fan_only
+    timeout:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: true
+
+  - condition: not
+    conditions:
+      - condition: climate.is_off
+        options:
+          behavior: any
+        target:
+          area_id: !input room_area_id
+
+  - action: climate.set_temperature
+    data:
+      temperature: 20
+    target:
+      area_id: !input room_area_id
+
+  - if:
+      - condition: temperature.is_value
+        target:
+          area_id: !input room_area_id
+        options:
+          threshold:
+            type: above
+            value:
+              active_choice: number
+              number: 20
+              unit_of_measurement: °C
+          behavior: any
+    then:
+      - action: climate.turn_off
+        target:
+          area_id: !input room_area_id
+        data: {}
+      - action: climate.set_hvac_mode
+        metadata: {}
+        data:
+          hvac_mode: "off"
+        target:
+          area_id: !input room_area_id
+      - stop: ""
+
+  - action: climate.set_hvac_mode
+    data:
+      hvac_mode: heat
+    target:
+      area_id: !input room_area_id
+
+  - wait_for_trigger:
+      - trigger: climate.hvac_mode_changed
+        target:
+          area_id: !input room_area_id
+        options:
+          behavior: any
+          hvac_mode:
+            - heat
+            - heat_cool
+            - cool
+            - "off"
+            - fan_only
+      - trigger: temperature.crossed_threshold
+        target:
+          area_id: !input room_area_id
+        options:
+          threshold:
+            type: above
+            value:
+              active_choice: number
+              number: 20.3
+              unit_of_measurement: °C
+          behavior: any
+    timeout:
+      minutes: 30
+    continue_on_timeout: true
+
+  - action: climate.turn_off
+    target:
+      area_id: !input room_area_id
+    data: {}
+
+  - action: climate.set_hvac_mode
+    metadata: {}
+    data:
+      hvac_mode: "off"
+    target:
+      area_id: !input room_area_id
