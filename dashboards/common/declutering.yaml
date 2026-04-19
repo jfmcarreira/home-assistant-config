@@ -1,4 +1,3 @@
-
 decluttering_cover:
   card:
     type: tile
@@ -126,3 +125,28 @@ decluttering_haier_ac:
                   - entity: sensor.coiler_temperature_[[room_code_name]]
                     name: Temperatura do Radiador Interior
                     secondary_info: last-updated
+              - type: grid
+                square: false
+                columns: 2
+                cards:
+                  - type: custom:button-card
+                    name: Desumidificação
+                    icon: mdi:air-humidifier
+                    styles:
+                      icon:
+                        - color: var(--state-icon-color)
+                    icon_height: 40px
+                    tap_action:
+                      action: call-service
+                      service: script.hvac_routine_dehumidifier_[[room_code_name]]
+                  - type: custom:button-card
+                    name: Desumidificação (Com Aquecimento)
+                    icon: mdi:air-humidifier
+                    styles:
+                      icon:
+                        - color: var(--state-icon-color)
+                    icon_height: 40px
+                    tap_action:
+                      action: call-service
+                      service: >-
+                        script.hvac_routine_dehumidifier_heat_[[room_code_name]]

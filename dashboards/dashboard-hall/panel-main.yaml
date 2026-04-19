@@ -201,6 +201,8 @@
       - options: {}
         entity_id: light.hall
       - options: {}
+        entity_id: light.hallway_group
+      - options: {}
         entity_id: light.xmas*
       - options: {}
         entity_id: light.hall_side
@@ -480,14 +482,6 @@
     type: horizontal-stack
     cards:
       - type: tile
-        entity: sensor.bhpzem_main_power
-        name: Potência
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace-subviews/dashboard-power
-        primary_info: state
-        secondary_info: name
-      - type: tile
         entity: sensor.temperature_outside
         name: Temp. Rua
         primary_info: state
@@ -497,6 +491,45 @@
         name: Hum. Rua
         primary_info: state
         secondary_info: name
+      - type: tile
+        entity: sensor.deye_inverter_battery
+        name: Carga da Bateria
+        primary_info: state
+        secondary_info: name
+
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: tile
+        entity: sensor.bhpzem_main_power
+        name: Rede
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-power
+        primary_info: state
+        secondary_info: name
+      - type: tile
+        entity: sensor.deye_inverter_pv_power
+        name: Solar
+        primary_info: state
+        secondary_info: name
+      - type: tile
+        entity: sensor.deye_inverter_battery_power
+        name: Bateria
+        primary_info: state
+        secondary_info: name
+      - type: tile
+        entity: sensor.deye_inverter_load_power
+        name: Casa
+        primary_info: state
+        secondary_info: name
+
 
 - type: tile
   entity: media_player.hall

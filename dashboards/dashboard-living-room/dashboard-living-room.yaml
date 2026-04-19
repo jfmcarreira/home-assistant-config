@@ -1,7 +1,7 @@
 kiosk_mode:
   hide_header: true
-button_card_templates: !include button-card-templates.yaml
-decluttering_templates: !include declutering.yaml
+button_card_templates: !include ../common/button-card-templates.yaml
+decluttering_templates: !include ../common/declutering.yaml
 views:
   - theme: Backend-selected
     title: Dashboard Downstairs

@@ -35,7 +35,6 @@ views:
               margin: 0
               height: 550px
             cards: !include panel-main.yaml
-
           panel-roborock:
             type: custom:layout-card
             layout_type: custom:horizontal-layout

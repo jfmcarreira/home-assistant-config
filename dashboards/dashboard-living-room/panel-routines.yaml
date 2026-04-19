@@ -2,7 +2,7 @@
   cards:
     - square: false
       type: grid
-      columns: 3
+      columns: 2
       cards:
         - show_name: true
           show_icon: true
@@ -21,6 +21,27 @@
           icon: mdi:sleep
           name: Desligar e Dormir
           icon_height: 52px
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_good_night
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_good_night
+          entity: script.routine_good_night
+          icon: mdi:lightbulb-night
+          name: Desligar e Dormir (Iluminação)
+          icon_height: 52px
+    - square: false
+      type: grid
+      columns: 2
+      cards:
         - show_name: true
           show_icon: true
           type: button

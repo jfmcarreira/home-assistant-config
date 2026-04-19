@@ -1,7 +1,7 @@
 template-room-light:
   variables:
     room_light: light.living_room
-    card_height: 71px
+    card_height: 69px
     icon_size: '50'
   show_icon: false
   styles:
@@ -72,6 +72,7 @@ template-room-light-automatic:
         }
         return '';
       ]]]
+
 template-room-light-popup:
   variables:
     lights_popup_title: Luzes da Sala
