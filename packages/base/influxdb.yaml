@@ -14,6 +14,7 @@ influxdb:
     entity_globs:
       # Power
       - sensor.bhpzem*
+      - sensor.deye_inverter_*
       - sensor.device_power_*
       - sensor.device_energy_*
       # Temperature / Humidity
