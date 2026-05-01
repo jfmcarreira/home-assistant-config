@@ -13,4 +13,4 @@ template:
             {% endif %}
           {% endfor %}
           {% set total_tracked = [(ns.states | sum | round(5)), 0] | max | round(5) %}
-          {{ (states.sensor.bhpzem_main_power.state | float(0) - total_tracked - states.sensor.light_power_total.state | float(0)) | round(3) }}
+          {{ (states.sensor.house_power_consumption.state | float(0) - total_tracked - states.sensor.light_power_total.state | float(0)) | round(3) }}

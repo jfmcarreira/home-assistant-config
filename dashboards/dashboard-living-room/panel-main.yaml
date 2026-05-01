@@ -365,7 +365,7 @@
 #       - type: custom:mini-graph-card
 #         name: Potência
 #         entities:
-#           - entity: sensor.deye_inverter_load_power
+#           - entity: sensor.house_power_consumption
 #         line_width: 6
 #         font_size: 60
 #         align_icon: left

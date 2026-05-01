@@ -1,0 +1,37 @@
+template:
+  - sensor:
+      - name: battery_time_left_to_charge
+        unique_id: battery_time_left_to_charge
+        state: >-
+          {% if states('sensor.deye_inverter_battery_power') | float < 0 %}
+            {% set current_charge_level_kwh = (11800.0  * (states('sensor.deye_inverter_battery') | float) / 100.0) %}
+            {% set left_to_charge_kwh = ((11800.0 - current_charge_level_kwh)  | float) | round(2) %}
+            {% set charging_time_seconds = left_to_charge_kwh / (states('sensor.deye_inverter_battery_power') | float) * -3600.0 %}
+
+            {% set future = (now() + timedelta(seconds=charging_time_seconds)) | as_datetime %}
+              {% set diff = future - now() %}
+              {% set days = diff.days %}
+              {% set hours = (diff.seconds // 3600) %}
+              {% set minutes = (diff.seconds % 3600) // 60 %}
+              {{ days }}d {{ hours }}h {{ minutes }}m
+            {% else %}
+              Not Charging
+            {% endif %}
+
+      - name: battery_time_left_to_discharge
+        unique_id: battery_time_left_to_discharge
+        state: >-
+          {% if states('sensor.deye_inverter_battery_power') | float > 0 %}
+            {% set current_charge_level_kwh = (11800  * (states('sensor.deye_inverter_battery') | float) / 100.0) %}
+            {% set discharging_time_seconds = (current_charge_level_kwh / (states('sensor.deye_inverter_battery_power') | float) ) * 3600 %}
+
+            {% set future = (now() + timedelta(seconds=discharging_time_seconds)) | as_datetime %}
+              {% set diff = future - now() %}
+              {% set days = diff.days %}
+              {% set hours = (diff.seconds // 3600) %}
+              {% set minutes = (diff.seconds % 3600) // 60 %}
+              {{ days }}d {{ hours }}h {{ minutes }}m
+            {% else %}
+              Charging
+            {% endif %}
+
