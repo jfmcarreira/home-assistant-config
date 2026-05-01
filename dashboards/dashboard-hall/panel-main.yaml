@@ -507,7 +507,7 @@
     type: horizontal-stack
     cards:
       - type: tile
-        entity: sensor.bhpzem_main_power
+        entity: sensor.house_power_grid
         name: Rede
         tap_action:
           action: navigate
@@ -525,7 +525,7 @@
         primary_info: state
         secondary_info: name
       - type: tile
-        entity: sensor.deye_inverter_load_power
+        entity: sensor.house_power_consumption
         name: Casa
         primary_info: state
         secondary_info: name

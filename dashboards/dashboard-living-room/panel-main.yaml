@@ -403,7 +403,7 @@
       state_of_charge: sensor.deye_inverter_battery
       state_of_charge_unit_white_space: false
     grid:
-      entity: sensor.bhpzem_main_power
+      entity: sensor.house_power_grid
     solar:
       display_zero_state: true
       entity: sensor.deye_inverter_pv_power
@@ -413,7 +413,7 @@
       use_metadata: false
       state_type: percentage
     home:
-      entity: sensor.deye_inverter_load_power
+      entity: sensor.house_power_consumption
       use_metadata: false
       override_state: false
       subtract_individual: false
@@ -428,19 +428,21 @@
       - 189
       - 189
   use_new_flow_rate_model: true
-  kw_decimals: 1
   min_flow_rate: 0.75
   max_flow_rate: 6
   max_expected_power: 6900
   min_expected_power: 0.01
-  watt_threshold: 1000
   transparency_zero_lines: 0
   sort_individual_devices: false
-  dashboard_link: /energy
-  dashboard_link_label: Painel de Energia
-  w_decimals: 0
-  disable_dots: false
+  disable_dots: true
   allow_layout_break: false
+  no_labels: false
+  dashboard_link: /energy/now
+  dashboard_link_label: Energia Atual
+  kilo_threshold: 1000
+  base_decimals: 0
+  kilo_decimals: 1
+
 
 - type: conditional
   view_layout:

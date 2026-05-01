@@ -28,13 +28,13 @@
             action: call-service
             service: script.turn_on
             target:
-              entity_id: script.routine_good_night
+              entity_id: script.routine_good_night_with_lights
           hold_action:
             action: call-service
             service: script.turn_off
             target:
-              entity_id: script.routine_good_night
-          entity: script.routine_good_night
+              entity_id: script.routine_good_night_with_lights
+          entity: script.routine_good_night_with_lights
           icon: mdi:lightbulb-night
           name: Desligar e Dormir (Iluminação)
           icon_height: 52px

@@ -11,6 +11,16 @@
 - type: tile
   view_layout:
     column: 1
+  entity: media_player.living_room_dashboard
+  vertical: false
+  features_position: inline
+  features:
+    - type: media-player-playback
+    - type: media-player-volume-slider
+
+- type: tile
+  view_layout:
+    column: 1
   entity: media_player.ghm_living_room
   vertical: false
   features_position: inline
@@ -52,7 +62,7 @@
 - type: tile
   view_layout:
     column: 1
-  entity: media_player.home_assistant_voice_office
+  entity: media_player.home_assistant_voice_office_ma
   features_position: inline
   features:
     - type: media-player-playback
@@ -61,6 +71,7 @@
     column: 2
   type: custom:mass-player-card
   entities:
+    - media_player.living_room_dashboard
     - media_player.ghm_living_room
     - media_player.ghm_kitchen
     - media_player.home_assistant_voice_office_ma

@@ -112,6 +112,9 @@
       icon: mdi:grass
       tap_action:
         action: navigate
+        navigation_path: "#panel-exterior"
+      hold_action:
+        action: navigate
         navigation_path: /lovelace-subviews/dashboard-exterior
       custom_fields:
         lights_on: |
