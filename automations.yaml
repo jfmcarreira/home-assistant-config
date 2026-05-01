@@ -3692,12 +3692,8 @@
       seconds: 0
   - trigger: sun
     event: sunrise
-    offset: 01:00:00
+    offset: 02:00:00
   conditions:
-  - condition: state
-    entity_id: sun.sun
-    state:
-    - above_horizon
   - condition: state
     entity_id: binary_sensor.rain
     state:
@@ -3706,6 +3702,10 @@
       hours: 0
       minutes: 10
       seconds: 0
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: 20
   actions:
   - action: input_datetime.set_datetime
     metadata: {}
@@ -4933,9 +4933,9 @@
   - trigger: time
     at: '20:00:00'
   conditions:
-  - condition: time
-    after: '20:00:00'
-    before: 09:00:00
+  - condition: sun
+    before: sunrise
+    after: sunset
   - condition: template
     value_template: '{% set difference = states(''sensor.humidity_outside_average'')
       | float - state_attr(''humidifier.portable_dehumidifier'', ''humidity'') %}
@@ -4946,4 +4946,161 @@
     target:
       entity_id: humidifier.portable_dehumidifier
     action: humidifier.set_humidity
+  mode: single
+- id: '1777408429775'
+  alias: Água Quente - Apoio Fotovoltaico
+  description: ''
+  triggers:
+  - trigger: battery.level_changed
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 97
+  - trigger: battery.level_changed
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 95
+  - trigger: temperature.crossed_threshold
+    target:
+      entity_id: sensor.temperature_water_heater_top
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 63
+          unit_of_measurement: °C
+  - trigger: temperature.crossed_threshold
+    target:
+      entity_id: sensor.temperature_water_heater_top
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 60
+          unit_of_measurement: °C
+  - trigger: numeric_state
+    entity_id:
+    - sun.sun
+    attribute: elevation
+    above: 30
+  - trigger: numeric_state
+    entity_id:
+    - sun.sun
+    attribute: elevation
+    below: 25
+  - trigger: time
+    at: '13:00:00'
+  - trigger: time
+    at: '17:00:00'
+  conditions:
+  - condition: template
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
+      | int(0)) > 60 * 15 }}'
+  - condition: climate.is_hvac_mode
+    target:
+      entity_id: climate.water_heater
+    options:
+      hvac_mode:
+      - 'off'
+  actions:
+  - alias: Verificar condições para  DESLIGAR
+    if:
+    - condition: or
+      conditions:
+      - condition: temperature.is_value
+        target:
+          entity_id: sensor.temperature_water_heater_top
+        options:
+          threshold:
+            type: above
+            value:
+              active_choice: number
+              number: 60
+              unit_of_measurement: °C
+      - condition: battery.is_level
+        target:
+          entity_id: sensor.deye_inverter_battery
+        options:
+          threshold:
+            type: above
+            value:
+              active_choice: number
+              number: 95
+      - condition: numeric_state
+        entity_id: sun.sun
+        attribute: elevation
+        below: 25
+    then:
+    - action: switch.turn_off
+      metadata: {}
+      target:
+        entity_id: switch.water_heater
+      data: {}
+    - stop:
+  - if:
+    - condition: temperature.is_value
+      target:
+        entity_id: sensor.temperature_water_heater_top
+      options:
+        threshold:
+          type: below
+          value:
+            active_choice: number
+            number: 60
+            unit_of_measurement: °C
+    - condition: battery.is_level
+      target:
+        entity_id: sensor.deye_inverter_battery
+      options:
+        threshold:
+          type: above
+          value:
+            active_choice: number
+            number: 97
+    - condition: time
+      after: '12:00:00'
+      before: '16:00:00'
+    - condition: numeric_state
+      entity_id: sun.sun
+      attribute: elevation
+      above: 25
+    then:
+    - action: switch.turn_on
+      metadata: {}
+      target:
+        entity_id: switch.water_heater
+      data: {}
+    alias: Verificar condições para  LIGAR
+  mode: single
+- id: '1777491935590'
+  alias: EcoFlow Ligar Saída AC
+  description: ''
+  triggers:
+  - type: turned_off
+    device_id: 028859c507f01453b65c6fe645adc8fc
+    entity_id: 650cebc857849b72e246e79c1a945bd7
+    domain: switch
+    trigger: device
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      entity_id: switch.ecoflow
+    data: {}
   mode: single

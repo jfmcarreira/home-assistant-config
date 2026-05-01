@@ -458,7 +458,7 @@ house_turn_all_off:
         - living_room
         - master_bedroom
       action: light.turn_off
-    - action: media_player.media_stop
+    - action: media_player.turn_off
       target:
         floor_id:
         - living_floor
@@ -510,7 +510,7 @@ routine_good_night:
         - master_bedroom
       data: {}
       action: fan.turn_off
-    - action: media_player.media_stop
+    - action: media_player.turn_off
       metadata: {}
       target:
         floor_id:
@@ -616,7 +616,7 @@ routine_exit_house_all_off:
       data:
         operation: screen_off
       continue_on_error: true
-    - action: media_player.media_stop
+    - action: media_player.turn_off
       metadata: {}
       data: {}
       target:
@@ -923,79 +923,17 @@ gate_passagem_pedonal:
   mode: single
 hvac_run_dehumidifier_heat:
   sequence:
-  - action: climate.set_hvac_mode
-    data:
-      hvac_mode: dry
-    target:
-      entity_id:
-      - climate.living_room
-      - climate.master_bedroom
-      - climate.office
-      - climate.bedroom_henrique
-      - climate.hall
-      - climate.bedroom_ricardo
-  - action: climate.set_temperature
-    data:
-      temperature: 18
-    target:
-      entity_id:
-      - climate.master_bedroom
-      - climate.office
-      - climate.bedroom_henrique
-      - climate.hall
-      - climate.bedroom_ricardo
-  - delay:
-      hours: 1
-      minutes: 0
-      seconds: 0
-      milliseconds: 0
-  - action: climate.set_hvac_mode
-    data:
-      hvac_mode: heat
-    target:
-      entity_id:
-      - climate.living_room
-      - climate.master_bedroom
-      - climate.office
-      - climate.bedroom_henrique
-      - climate.hall
-      - climate.bedroom_ricardo
-  - action: climate.set_temperature
-    data:
-      temperature: 20
-    target:
-      entity_id:
-      - climate.master_bedroom
-      - climate.office
-      - climate.bedroom_henrique
-      - climate.hall
-      - climate.bedroom_ricardo
-  - delay:
-      minutes: 30
-      seconds: 0
-      milliseconds: 0
-  - action: climate.turn_off
-    target:
-      entity_id:
-      - climate.living_room
-      - climate.master_bedroom
-      - climate.office
-      - climate.bedroom_henrique
-      - climate.hall
-      - climate.bedroom_ricardo
-    data: {}
-  - action: climate.set_hvac_mode
+  - action: script.turn_on
     metadata: {}
-    data:
-      hvac_mode: 'off'
     target:
       entity_id:
-      - climate.living_room
-      - climate.master_bedroom
-      - climate.office
-      - climate.bedroom_henrique
-      - climate.hall
-      - climate.bedroom_ricardo
+      - script.hvac_routine_dehumidifier_heat_living_room
+      - script.hvac_routine_dehumidifier_heat_office
+      - script.hvac_routine_dehumidifier_heat_hall
+      - script.hvac_routine_dehumidifier_heat_master_bedroom
+      - script.hvac_routine_dehumidifier_heat_bedroom_ricardo
+      - script.hvac_routine_dehumidifier_heat_bedroom_henrique
+    data: {}
   alias: Routina de Desumidificação (Com Aquecimento)
   description: ''
 routine_good_night_with_lights:
@@ -1011,40 +949,89 @@ routine_good_night_with_lights:
   mode: single
   icon: mdi:sleep
   description: ''
-hvac_dehumidifier_routine_office:
+hvac_routine_dehumidifier_office:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
       room_area_id: office
+      heat_after: false
   alias: Routina de Desumidificação Escritório
-hvac_dehumidifier_routine_living_room:
+hvac_routine_dehumidifier_living_room:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
       room_area_id: living_room
+      heat_after: false
   alias: Routina de Desumidificação Sala
-hvac_dehumidifier_routine_hall:
+hvac_routine_dehumidifier_hall:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
       room_area_id: hall
+      heat_after: false
   alias: Routina de Desumidificação Sótão
-hvac_dehumidifier_routine_master_bedroom:
+hvac_routine_dehumidifier_master_bedroom:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
       room_area_id: master_bedroom
+      heat_after: false
   alias: Routina de Desumidificação Suite
-hvac_dehumidifier_routine_bedroom_ricardo:
+hvac_routine_dehumidifier_bedroom_ricardo:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
       room_area_id: bedroom_ricardo
+      heat_after: false
   alias: Routina de Desumidificação Quarto do Ricardo
-hvac_dehumidifier_routine_bedroom_henrique:
+hvac_routine_dehumidifier_bedroom_henrique:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
       room_area_id: bedroom_henrique
+      heat_after: false
   alias: Routina de Desumidificação Quarto do Henrique
+  description: ''
+hvac_routine_dehumidifier_heat_office:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: office
+      heat_after: true
+  alias: Routina de Desumidificação Escritório (Com Aquecimento)
+hvac_routine_dehumidifier_heat_living_room:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: living_room
+      heat_after: true
+  alias: Routina de Desumidificação Sala (Com Aquecimento)
+hvac_routine_dehumidifier_heat_hall:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: hall
+      heat_after: true
+  alias: Routina de Desumidificação Sótão (Com Aquecimento)
+hvac_routine_dehumidifier_heat_master_bedroom:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: master_bedroom
+      heat_after: true
+  alias: Routina de Desumidificação Suite (Com Aquecimento)
+hvac_routine_dehumidifier_heat_bedroom_ricardo:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: bedroom_ricardo
+      heat_after: true
+  alias: Routina de Desumidificação Quarto do Ricardo (Com Aquecimento)
+hvac_routine_dehumidifier_heat_bedroom_henrique:
+  use_blueprint:
+    path: hvac/hvac_dehumidifier_routine.yaml
+    input:
+      room_area_id: bedroom_henrique
+      heat_after: true
+  alias: Routina de Desumidificação Quarto do Henrique (Com Aquecimento)
   description: ''
