@@ -1,26 +1,4 @@
 template:
-  - binary_sensor:
-      - name: battery_full
-        unique_id: battery_full
-        icon: mdi:tumble-dryer
-        device_class: plug
-        availability: >-
-          {{ is_number(states('sensor.deye_inverter_battery')) }}
-        state: >-
-          {% if is_state( 'binary_sensor.battery_full', 'on' )  %}
-              {%- if states("sensor.deye_inverter_battery") | float(0) < 95.0 %}
-                  False
-              {%- else %}
-                  True
-              {%- endif %}
-          {%- else %}
-              {%- if states("sensor.deye_inverter_battery") | float(0) > 98.0 %}
-                  True
-              {%- else %}
-                  False
-              {%- endif %}
-          {%- endif %}
-
   - sensor:
       - name: battery_time_left_to_charge
         unique_id: battery_time_left_to_charge
