@@ -61,15 +61,65 @@ views:
             type: custom:layout-card
             layout_type: custom:horizontal-layout
             layout:
-              max_width: 2000px
-              column_widths: 100%
+              reflow: true
               max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              margin: 0
+              height: 550px
             cards: !include panel-routines.yaml
           panel-house:
             type: custom:layout-card
             layout_type: custom:horizontal-layout
             layout:
-              max_width: 2000px
-              column_widths: 100%
+              reflow: true
               max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              margin: 0
+              height: 550px
             cards: !include panel-house.yaml
+          panel-water-heater:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              reflow: true
+              max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              margin: 0
+              height: 550px
+            cards: !include panel-water-heater.yaml
+          panel-wc:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              reflow: true
+              max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              margin: 0
+              height: 550px
+            cards: !include panel-wc.yaml
+          panel-ac:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              reflow: true
+              max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              margin: 0
+              height: 550px
+            cards: !include panel-ac.yaml
+          panel-exterior:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              reflow: true
+              max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              margin: 0
+              height: 550px
+            cards: !include panel-exterior.yaml

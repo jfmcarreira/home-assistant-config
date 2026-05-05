@@ -1,7 +1,12 @@
-- type: grid
-  square: false
-  columns: 2
-  cards:
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
     - show_name: true
       show_icon: true
       icon_height: 50px
@@ -16,6 +21,15 @@
       tap_action:
         action: toggle
       entity: input_boolean.vacuum_mainbathroom
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
     - show_name: true
       show_icon: true
       icon_height: 50px
@@ -30,6 +44,15 @@
       tap_action:
         action: toggle
       entity: input_boolean.vacuum_masterbedroombath
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
     - show_name: true
       show_icon: true
       icon_height: 50px

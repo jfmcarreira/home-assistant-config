@@ -1,9 +1,9 @@
 kiosk_mode:
   hide_header: true
-
 button_card_templates: !include ../common/button-card-templates.yaml
 decluttering_templates: !include ../common/declutering.yaml
 views:
+
   - theme: Backend-selected
     title: Dashboard Downstairs
     path: main
@@ -76,6 +76,13 @@ views:
             layout:
               max_cols: 2
             cards: !include panel-roborock.yaml
+
+          panel-water-heater:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_cols: 2
+            cards: !include panel-water-heater.yaml
 
           panel-routines:
             type: custom:layout-card

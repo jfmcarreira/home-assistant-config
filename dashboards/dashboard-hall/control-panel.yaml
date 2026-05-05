@@ -105,6 +105,9 @@
       icon: mdi:grass
       tap_action:
         action: navigate
+        navigation_path: "#panel-exterior"
+      hold_action:
+        action: navigate
         navigation_path: /lovelace-subviews/dashboard-exterior
       custom_fields:
         lights_on: |
@@ -229,16 +232,16 @@
           - position: relative
       tap_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-water-heater
+        navigation_path: "#panel-water-heater"
       hold_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-water-heater-graph
+        navigation_path: /lovelace-subviews/dashboard-water-heater
     - type: custom:button-card
       size: 100%
       aspect_ratio: 10/9
       tap_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-ac
+        navigation_path: "#panel-ac"
       show_name: false
       icon: mdi:radiator
       entity: switch.air_conditioner
@@ -259,6 +262,9 @@
           - color: var(--state-icon-color)
       icon: mdi:shower-head
       tap_action:
+        action: navigate
+        navigation_path: "#panel-wc"
+      hold_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-wc
 

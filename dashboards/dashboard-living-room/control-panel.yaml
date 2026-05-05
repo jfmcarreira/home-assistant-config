@@ -236,10 +236,10 @@
           - position: relative
       tap_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-water-heater
+        navigation_path: "#panel-water-heater"
       hold_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-water-heater-graph
+        navigation_path: /lovelace-subviews/dashboard-water-heater
     - type: custom:button-card
       size: 62%
       state_display: "no"

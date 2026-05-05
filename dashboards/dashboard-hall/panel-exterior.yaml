@@ -1,0 +1,172 @@
+
+- type: entity
+  entity: cover.gate
+  view_layout:
+    column: 1
+
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: grid
+    columns: 2
+    square: false
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: call-service
+          service: cover.open_cover
+          target:
+            entity_id: cover.gate
+        hold_action:
+          action: call-service
+          service: button.press
+          target:
+            entity_id: button.gate_open
+        name: Abrir Portão
+        icon_height: 80px
+        icon: mdi:gate-open
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: call-service
+          service: cover.close_cover
+          target:
+            entity_id: cover.gate
+        name: Fechar Portão
+        icon_height: 80px
+        icon: mdi:gate
+
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: button.gate_open_single
+        name: Passagem Pedonal
+        icon_height: 40px
+        tap_action:
+          action: perform-action
+          perform_action: button.press
+          target:
+            entity_id: button.gate_open_single
+
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: perform-action
+          perform_action: lock.unlock
+          target:
+            entity_id: lock.gate_door
+        name: Cancela
+        icon_height: 40px
+        icon: mdi:fence
+
+- show_name: true
+  show_icon: true
+  type: button
+  entity: light.kitchen_door
+  name: Porta da Cozinha
+  icon_height: 40px
+
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: grid
+    columns: 2
+    square: false
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: light.exterior_wall_back
+        name: Parede Sul
+        icon_height: 40px
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: light.exterior_wall_side
+        name: Parede Poente
+        icon_height: 40px
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: grid
+    columns: 3
+    square: false
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: light.front_door
+        name: Varanda
+        icon_height: 20px
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: light.gate_lights
+        name: Portão
+        icon_height: 20px
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: light.exterior_wall_east
+        name: Parede Nascente
+        icon_height: 20px
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: tile
+        entity: light.storage_workbench_led
+        name:
+          type: entity
+        vertical: false
+        features_position: bottom
+      - type: tile
+        entity: light.storage_ceiling
+        name:
+          type: entity
+        vertical: false
+        features_position: bottom
+

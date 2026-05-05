@@ -422,11 +422,7 @@
   clickable_entities: true
   display_zero_lines:
     mode: transparency
-    transparency: 40
-    grey_color:
-      - 189
-      - 189
-      - 189
+    transparency: 80
   use_new_flow_rate_model: true
   min_flow_rate: 0.75
   max_flow_rate: 6
@@ -434,7 +430,7 @@
   min_expected_power: 0.01
   transparency_zero_lines: 0
   sort_individual_devices: false
-  disable_dots: true
+  disable_dots: false
   allow_layout_break: false
   no_labels: false
   dashboard_link: /energy/now
