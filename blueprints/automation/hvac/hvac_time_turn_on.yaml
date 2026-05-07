@@ -102,6 +102,16 @@ blueprint:
           step: 0.1
           unit_of_measurement: "ºC"
 
+    room_temperature_diff:
+      name: Diferença para a Referência
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 2
+          step: 0.1
+          unit_of_measurement: "ºC"
+
     selected_season:
       name: Estação do Ano
       default: [spring, summer, autumn, winter]
@@ -126,6 +136,8 @@ variables:
   hvac_temperature: !input hvac_temperature
   hvac_mode_heat: !input hvac_mode_heat
   hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
+  room_temperature: !input room_temperature
+  room_temperature_diff: !input room_temperature_diff
 
 trigger:
   - trigger: time
@@ -200,24 +212,18 @@ condition:
           - condition: numeric_state
             entity_id: sensor.temperature_outside
             below: !input room_temperature
+          - condition: template
+            value_template: "{{ (states('input_number.house_target_low_temperature') | float - states(room_temperature) | float) >= room_temperature_diff  }}"
       - condition: and
         conditions:
           - "{{ hvac_mode_heat == false }}"
           - condition: numeric_state
             entity_id: !input temperature_sensor
             above: !input room_temperature
+          - condition: template
+            value_template: "{{ (states(room_temperature) | float - states('input_number.house_target_high_temperature') | float) >= room_temperature_diff }}"
 
 action:
-  # - action: switch.turn_on
-  #   data: {}
-  #   target:
-  #     entity_id:
-  #       - switch.hall_ac_echo
-  #       - switch.office_ac_echo
-  #       - switch.bedroom_henrique_ac_echo
-  #       - switch.master_bedroom_ac_echo
-  #       - switch.bedroom_ricardo_ac_echo
-
   - if:
       - "{{ hvac_mode_heat == true }}"
     then:

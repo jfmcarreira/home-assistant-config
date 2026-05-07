@@ -345,13 +345,7 @@
       notification_action: Loiça Retirada
       notification_action_id: task_dish_wash_empty
       task_done_door_time: 2
-      task_extra_actions:
-      - continue_on_error: true
-        action: grocy.consume_product_from_stock
-        data:
-          product_id: '98'
-          amount: 1
-          transaction_type: CONSUME
+      task_extra_actions: []
 - alias: 'Desligar Luzes da Despensa com Temporizador '
   id: '1659187275200'
   description: ''
@@ -3884,436 +3878,6 @@
         dismiss: true
     action: notify.mobile_app_all
   mode: single
-- alias: AC da Sala - Ligar de Tarde no Verão
-  id: '1751200610784'
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: false
-      schedule_start: '17:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.living_room
-      hvac_temperature: 24
-      room_temperature: 24
-      temperature_sensor: sensor.temperature_living_room
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_ground_floor
-- alias: AC Hall - Ligar de Tarde no Verão (Fim de Semana)
-  id: '1751200671929'
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: false
-      schedule_start: '14:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 24
-      room_temperature: 24
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - sat
-      - sun
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Hall - Ligar de Tarde no Verão
-  id: '1749604497079'
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: false
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 24
-      room_temperature: 24
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1749602497079'
-  alias: AC Quarto do Ricardo - Ligar de Tarde no Verão
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: false
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.bedroom_ricardo
-      hvac_temperature: 25
-      room_temperature: 27
-      temperature_sensor: sensor.temperature_bedroom_ricardo
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1739604497079'
-  alias: AC Quarto do Henrique - Ligar de Tarde no Verão
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: false
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.bedroom_henrique
-      hvac_temperature: 25
-      room_temperature: 27
-      temperature_sensor: sensor.temperature_bedroom_henrique
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- alias: AC Suite - Ligar de Tarde no Verão
-  id: '1749604597079'
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: false
-      schedule_start: '16:00:00'
-      schedule_end: '20:30:00'
-      hvac_unit:
-      - climate.master_bedroom
-      hvac_temperature: 25
-      room_temperature: 27
-      temperature_sensor: sensor.temperature_master_bedroom
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - summer
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1705368431534'
-  alias: AC Sala - Ligar de Manhã no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: 06:30:00
-      schedule_end: 08:00:00
-      hvac_unit:
-      - climate.living_room
-      hvac_temperature: 22
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_living_room
-      window_sensor: binary_sensor.window_ground_floor
-      weekday:
-      - mon
-      - wed
-      - thu
-      - fri
-      - tue
-      - sat
-      - sun
-      selected_season:
-      - winter
-      - autumn
-      - spring
-      hvac_delayed_temperature_offset: -1
-- id: '1737768400854'
-  alias: AC Hall - Ligar de Manhã no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: 06:00:00
-      schedule_end: 08:00:00
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 20
-      room_temperature: 19
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - mon
-      - wed
-      - thu
-      - fri
-      - tue
-      - sat
-      - sun
-      selected_season:
-      - winter
-      - autumn
-      - spring
-      hvac_delayed_temperature_offset: 0
-      window_sensor: binary_sensor.window_bedroom_floor
-      extra_hvac_actions:
-      - action: switch.turn_off
-        metadata: {}
-        target:
-          entity_id: switch.hall_ac_display
-        data: {}
-- id: '1705368338092'
-  alias: AC Suite - Ligar de Manhã no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: 07:15:00
-      schedule_end: 08:00:00
-      hvac_unit: climate.master_bedroom
-      hvac_temperature: 22
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_master_bedroom
-      window_sensor: binary_sensor.window_master_bedroom
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - winter
-      - spring
-      - autumn
-- id: '1705596387713'
-  alias: AC Sala - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: '16:30:00'
-      schedule_end: '18:00:00'
-      hvac_unit:
-      - climate.living_room
-      hvac_temperature: 21
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_living_room
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      window_sensor: binary_sensor.window_ground_floor
-      hvac_delayed_temperature_offset: -1
-- alias: AC Escritório - Ligar de Tarde no Inverno
-  id: '1737772761289'
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: '16:30:00'
-      schedule_end: '20:00:00'
-      hvac_unit: climate.office
-      hvac_temperature: 20
-      room_temperature: 19.5
-      temperature_sensor: sensor.temperature_office
-      window_sensor: binary_sensor.window_ground_floor
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      hvac_delayed_temperature_offset: 0
-      extra_hvac_actions: []
-- alias: AC Quartos - Ligar de Tarde no Inverno
-  id: '1737850856162'
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: '16:30:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.hall
-      - climate.bedroom_henrique
-      - climate.bedroom_ricardo
-      - climate.master_bedroom
-      hvac_temperature: 20
-      room_temperature: 19
-      temperature_sensor: sensor.temperature_bedrooms
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1737768630507'
-  alias: AC Hall - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: '16:45:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.hall
-      hvac_temperature: 21
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_hall
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - winter
-      - autumn
-      - spring
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-      hvac_delayed_temperature_offset: -1
-- id: '1705596272069'
-  alias: AC Suite - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: '17:00:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.master_bedroom
-      hvac_temperature: 21
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_master_bedroom
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      hvac_delayed_temperature_offset: -1
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1705596348371'
-  alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: '17:00:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.bedroom_ricardo
-      hvac_temperature: 21
-      room_temperature: 21
-      temperature_sensor: sensor.temperature_bedroom_ricardo
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      hvac_delayed_temperature_offset: -1
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-- id: '1737770376538'
-  alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
-  description: ''
-  use_blueprint:
-    path: hvac/hvac_time_turn_on.yaml
-    input:
-      hvac_mode_heat: true
-      schedule_start: '17:00:00'
-      schedule_end: '20:00:00'
-      hvac_unit:
-      - climate.bedroom_henrique
-      hvac_temperature: 21
-      room_temperature: 20.5
-      temperature_sensor: sensor.temperature_bedroom_henrique
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-      - sun
-      selected_season:
-      - autumn
-      - winter
-      - spring
-      extra_hvac_actions: []
-      window_sensor: binary_sensor.window_bedroom_floor
-      hvac_delayed_temperature_offset: -1
 - id: '1762307515538'
   alias: Luzes por Mov. no Quarto de Arrumos
   description: ''
@@ -4948,38 +4512,50 @@
     action: humidifier.set_humidity
   mode: single
 - id: '1777408429775'
-  alias: Água Quente - Apoio Fotovoltaico
+  alias: Água Quente - Apoio Fotovoltaico Ligar
   description: ''
   triggers:
-  - trigger: battery.level_changed
-    target:
-      entity_id: sensor.deye_inverter_battery
-    options:
-      threshold:
-        type: above
-        value:
-          active_choice: number
-          number: 97
-  - trigger: battery.level_changed
-    target:
-      entity_id: sensor.deye_inverter_battery
-    options:
-      threshold:
-        type: below
-        value:
-          active_choice: number
-          number: 95
+  - trigger: state
+    entity_id:
+    - binary_sensor.deye_inverter_battery_full
+    to:
+    - 'on'
+    from:
+    - 'off'
   - trigger: temperature.crossed_threshold
     target:
       entity_id: sensor.temperature_water_heater_top
     options:
       threshold:
-        type: above
+        type: below
         value:
           active_choice: number
-          number: 63
+          number: 57
           unit_of_measurement: °C
-  - trigger: temperature.crossed_threshold
+  - trigger: numeric_state
+    entity_id:
+    - sun.sun
+    attribute: elevation
+    above: 30
+  - trigger: time
+    at: '13:00:00'
+  conditions:
+  - condition: switch.is_off
+    target:
+      entity_id: switch.water_heater
+    options:
+      behavior: any
+      for:
+        hours: 0
+        minutes: 10
+        seconds: 0
+  - condition: climate.is_hvac_mode
+    target:
+      entity_id: climate.water_heater
+    options:
+      hvac_mode:
+      - 'off'
+  - condition: temperature.is_value
     target:
       entity_id: sensor.temperature_water_heater_top
     options:
@@ -4989,99 +4565,27 @@
           active_choice: number
           number: 60
           unit_of_measurement: °C
-  - trigger: numeric_state
-    entity_id:
-    - sun.sun
+  - condition: battery.is_level
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 97
+  - condition: numeric_state
+    entity_id: sun.sun
     attribute: elevation
     above: 30
-  - trigger: numeric_state
-    entity_id:
-    - sun.sun
-    attribute: elevation
-    below: 25
-  - trigger: time
-    at: '13:00:00'
-  - trigger: time
-    at: '17:00:00'
-  conditions:
-  - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
-      | int(0)) > 60 * 15 }}'
-  - condition: climate.is_hvac_mode
-    target:
-      entity_id: climate.water_heater
-    options:
-      hvac_mode:
-      - 'off'
+  - condition: time
+    after: '12:00:00'
   actions:
-  - alias: Verificar condições para  DESLIGAR
-    if:
-    - condition: or
-      conditions:
-      - condition: temperature.is_value
-        target:
-          entity_id: sensor.temperature_water_heater_top
-        options:
-          threshold:
-            type: above
-            value:
-              active_choice: number
-              number: 60
-              unit_of_measurement: °C
-      - condition: battery.is_level
-        target:
-          entity_id: sensor.deye_inverter_battery
-        options:
-          threshold:
-            type: above
-            value:
-              active_choice: number
-              number: 95
-      - condition: numeric_state
-        entity_id: sun.sun
-        attribute: elevation
-        below: 25
-    then:
-    - action: switch.turn_off
-      metadata: {}
-      target:
-        entity_id: switch.water_heater
-      data: {}
-    - stop:
-  - if:
-    - condition: temperature.is_value
-      target:
-        entity_id: sensor.temperature_water_heater_top
-      options:
-        threshold:
-          type: below
-          value:
-            active_choice: number
-            number: 60
-            unit_of_measurement: °C
-    - condition: battery.is_level
-      target:
-        entity_id: sensor.deye_inverter_battery
-      options:
-        threshold:
-          type: above
-          value:
-            active_choice: number
-            number: 97
-    - condition: time
-      after: '12:00:00'
-      before: '16:00:00'
-    - condition: numeric_state
-      entity_id: sun.sun
-      attribute: elevation
-      above: 25
-    then:
-    - action: switch.turn_on
-      metadata: {}
-      target:
-        entity_id: switch.water_heater
-      data: {}
-    alias: Verificar condições para  LIGAR
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      entity_id: switch.water_heater
+    data: {}
   mode: single
 - id: '1777491935590'
   alias: EcoFlow Ligar Saída AC
@@ -5104,3 +4608,548 @@
       entity_id: switch.ecoflow
     data: {}
   mode: single
+- id: '1777726085434'
+  alias: Solar - Activar venda de excedente
+  description: ''
+  triggers:
+  - trigger: battery.level_crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 96
+  conditions:
+  - condition: time
+    before: '17:00:00'
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      entity_id: switch.deye_inverter_solar_sell
+    data: {}
+  mode: single
+- id: '1777742920832'
+  alias: Água Quente - Apoio Fotovoltaico Desligar
+  description: ''
+  triggers:
+  - trigger: battery.level_changed
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 95
+  - trigger: temperature.crossed_threshold
+    target:
+      entity_id: sensor.temperature_water_heater_top
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 62
+          unit_of_measurement: °C
+  - trigger: numeric_state
+    entity_id:
+    - sun.sun
+    attribute: elevation
+    below: 25
+  conditions:
+  - condition: switch.is_on
+    target:
+      entity_id: switch.water_heater
+    options:
+      behavior: any
+      for:
+        hours: 0
+        minutes: 10
+        seconds: 0
+  - condition: climate.is_hvac_mode
+    target:
+      entity_id: climate.water_heater
+    options:
+      hvac_mode:
+      - 'off'
+  - condition: or
+    conditions:
+    - condition: temperature.is_value
+      target:
+        entity_id: sensor.temperature_water_heater_top
+      options:
+        threshold:
+          type: above
+          value:
+            active_choice: number
+            number: 60
+            unit_of_measurement: °C
+    - condition: battery.is_level
+      target:
+        entity_id: sensor.deye_inverter_battery
+      options:
+        threshold:
+          type: below
+          value:
+            active_choice: number
+            number: 95
+    - condition: numeric_state
+      entity_id: sun.sun
+      attribute: elevation
+      below: 25
+  actions:
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      entity_id: switch.water_heater
+    data: {}
+  mode: single
+- alias: AC da Sala - Ligar de Tarde no Verão
+  id: '1751200610784'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: false
+      schedule_start: '17:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.living_room
+      hvac_temperature: 24
+      room_temperature: 24
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_living_room
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_ground_floor
+- alias: AC Hall - Ligar de Tarde no Verão (Fim de Semana)
+  id: '1751200671929'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: false
+      schedule_start: '14:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 24
+      room_temperature: 24
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - sat
+      - sun
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Hall - Ligar de Tarde no Verão
+  id: '1749604497079'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: false
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 24
+      room_temperature: 24
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1749602497079'
+  alias: AC Quarto do Ricardo - Ligar de Tarde no Verão
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: false
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.bedroom_ricardo
+      hvac_temperature: 25
+      room_temperature: 27
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1739604497079'
+  alias: AC Quarto do Henrique - Ligar de Tarde no Verão
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: false
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.bedroom_henrique
+      hvac_temperature: 25
+      room_temperature: 27
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_bedroom_henrique
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- alias: AC Suite - Ligar de Tarde no Verão
+  id: '1749604597079'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: false
+      schedule_start: '16:00:00'
+      schedule_end: '20:30:00'
+      hvac_unit:
+      - climate.master_bedroom
+      hvac_temperature: 25
+      room_temperature: 27
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - summer
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1705368431534'
+  alias: AC Sala - Ligar de Manhã no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: 06:30:00
+      schedule_end: 08:00:00
+      hvac_unit:
+      - climate.living_room
+      hvac_temperature: 22
+      room_temperature: 21
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_living_room
+      window_sensor: binary_sensor.window_ground_floor
+      weekday:
+      - mon
+      - wed
+      - thu
+      - fri
+      - tue
+      - sat
+      - sun
+      selected_season:
+      - winter
+      - autumn
+      - spring
+      hvac_delayed_temperature_offset: -1
+- id: '1737768400854'
+  alias: AC Hall - Ligar de Manhã no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: 06:00:00
+      schedule_end: 08:00:00
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 20
+      room_temperature: 19
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - mon
+      - wed
+      - thu
+      - fri
+      - tue
+      - sat
+      - sun
+      selected_season:
+      - winter
+      - autumn
+      - spring
+      hvac_delayed_temperature_offset: 0
+      window_sensor: binary_sensor.window_bedroom_floor
+      extra_hvac_actions:
+      - action: switch.turn_off
+        metadata: {}
+        target:
+          entity_id: switch.hall_ac_display
+        data: {}
+- id: '1705368338092'
+  alias: AC Suite - Ligar de Manhã no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: 07:15:00
+      schedule_end: 08:00:00
+      hvac_unit: climate.master_bedroom
+      hvac_temperature: 22
+      room_temperature: 21
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_master_bedroom
+      window_sensor: binary_sensor.window_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - winter
+      - spring
+      - autumn
+- id: '1705596387713'
+  alias: AC Sala - Ligar de Tarde no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: '16:30:00'
+      schedule_end: '18:00:00'
+      hvac_unit:
+      - climate.living_room
+      hvac_temperature: 21
+      room_temperature: 21
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_living_room
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      window_sensor: binary_sensor.window_ground_floor
+      hvac_delayed_temperature_offset: -1
+- alias: AC Escritório - Ligar de Tarde no Inverno
+  id: '1737772761289'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: '16:30:00'
+      schedule_end: '20:00:00'
+      hvac_unit: climate.office
+      hvac_temperature: 20
+      room_temperature: 19.5
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_office
+      window_sensor: binary_sensor.window_ground_floor
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      hvac_delayed_temperature_offset: 0
+      extra_hvac_actions: []
+- alias: AC Quartos - Ligar de Tarde no Inverno
+  id: '1737850856162'
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: '16:30:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.hall
+      - climate.bedroom_henrique
+      - climate.bedroom_ricardo
+      - climate.master_bedroom
+      hvac_temperature: 20
+      room_temperature: 19
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_bedrooms
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1737768630507'
+  alias: AC Hall - Ligar de Tarde no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: '16:45:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.hall
+      hvac_temperature: 21
+      room_temperature: 21
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_hall
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - winter
+      - autumn
+      - spring
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+      hvac_delayed_temperature_offset: -1
+- id: '1705596272069'
+  alias: AC Suite - Ligar de Tarde no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: '17:00:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.master_bedroom
+      hvac_temperature: 21
+      room_temperature: 21
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_master_bedroom
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      hvac_delayed_temperature_offset: -1
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1705596348371'
+  alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: '17:00:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.bedroom_ricardo
+      hvac_temperature: 21
+      room_temperature: 21
+      room_temperature_diff: 0
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      hvac_delayed_temperature_offset: -1
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+- id: '1737770376538'
+  alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on.yaml
+    input:
+      hvac_mode_heat: true
+      schedule_start: '17:00:00'
+      schedule_end: '20:00:00'
+      hvac_unit:
+      - climate.bedroom_henrique
+      hvac_temperature: 21
+      room_temperature: 20
+      room_temperature_diff: 1
+      temperature_sensor: sensor.temperature_bedroom_henrique
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+      selected_season:
+      - autumn
+      - winter
+      - spring
+      extra_hvac_actions: []
+      window_sensor: binary_sensor.window_bedroom_floor
+      hvac_delayed_temperature_offset: -1

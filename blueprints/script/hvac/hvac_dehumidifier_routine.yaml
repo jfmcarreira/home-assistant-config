@@ -10,8 +10,16 @@ blueprint:
           entity:
             domain:
               - climate
+    heat_after:
+      name: Aquecer
+      default: "off"
+      selector:
+        boolean:
 
 mode: restart
+
+variables:
+  heat_after: !input heat_after
 
 sequence:
   - action: climate.set_hvac_mode
@@ -38,10 +46,8 @@ sequence:
             - "off"
             - fan_only
     timeout:
-      hours: 0
+      hours: 1
       minutes: 30
-      seconds: 0
-      milliseconds: 0
     continue_on_timeout: true
 
   - condition: not
@@ -59,17 +65,21 @@ sequence:
       area_id: !input room_area_id
 
   - if:
-      - condition: temperature.is_value
-        target:
-          area_id: !input room_area_id
-        options:
-          threshold:
-            type: above
-            value:
-              active_choice: number
-              number: 20
-              unit_of_measurement: °C
-          behavior: any
+      - condition: or
+        conditions:
+          - condition: template
+            value_template: "{{ not heat_after }}"
+          - condition: temperature.is_value
+            target:
+              area_id: !input room_area_id
+            options:
+              threshold:
+                type: above
+                value:
+                  active_choice: number
+                  number: 20
+                  unit_of_measurement: °C
+              behavior: any
     then:
       - action: climate.turn_off
         target:
