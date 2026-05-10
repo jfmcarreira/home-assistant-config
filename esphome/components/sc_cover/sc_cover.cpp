@@ -188,10 +188,15 @@ void SingleControlCover::trigger_half_open() {
 }
 
 bool SingleControlCover::is_at_target_() const {
-  return !this->is_half_open_ && ((this->current_operation == COVER_OPERATION_OPENING &&
+   return ((this->current_operation == COVER_OPERATION_OPENING &&
            this->position >= this->target_position_) ||
           (this->current_operation == COVER_OPERATION_CLOSING &&
            this->position <= this->target_position_));
+
+  // return !this->is_half_open_ && ((this->current_operation == COVER_OPERATION_OPENING &&
+  //          this->position >= this->target_position_) ||
+  //         (this->current_operation == COVER_OPERATION_CLOSING &&
+  //          this->position <= this->target_position_));
 }
 
 bool SingleControlCover::is_operation_done_() const {
@@ -214,6 +219,15 @@ void SingleControlCover::recompute_position_(const uint32_t now) {
       // door opening
       dir = 1.0f;
       action_dur = this->open_duration_;
+    }
+
+    if(now - this->last_activation_time_ > 1.2 * action_dur) {
+      if (this->is_open_()) {
+        this->open_endstop_callback_(true);
+      } else if (this->is_closed_()) {
+        this->close_endstop_callback_(true);
+      }
+      return;
     }
 
     // calculate position
