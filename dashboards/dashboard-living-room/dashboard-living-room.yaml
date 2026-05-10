@@ -3,7 +3,6 @@ kiosk_mode:
 button_card_templates: !include ../common/button-card-templates.yaml
 decluttering_templates: !include ../common/declutering.yaml
 views:
-
   - theme: Backend-selected
     title: Dashboard Downstairs
     path: main
@@ -22,7 +21,6 @@ views:
         view_layout:
           column: 1
         cards: !include control-panel.yaml
-
       - type: custom:state-switch
         entity: hash
         default: panel-main
@@ -42,18 +40,16 @@ views:
             cards: !include panel-main.yaml
           panel-ac:
             type: custom:layout-card
-            layout_type: custom:masonry-layout
+            layout_type: custom:horizontal-layout
             layout:
               max_cols: 2
             cards: !include panel-ac.yaml
-
           panel-covers:
             type: custom:layout-card
-            layout_type: custom:masonry-layout
+            layout_type: custom:horizontal-layout
             layout:
               max_cols: 2
             cards: !include panel-covers.yaml
-
           panel-lights:
             type: custom:layout-card
             layout_type: custom:horizontal-layout

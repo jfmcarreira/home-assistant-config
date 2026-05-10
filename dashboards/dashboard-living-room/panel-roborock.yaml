@@ -86,14 +86,35 @@
   icon_height: 60px
   view_layout:
     column: 1
+
+- type: tile
+  view_layout:
+    column: 2
+  entity: vacuum.roborock
+  vertical: false
+  features:
+    - type: vacuum-commands
+      commands:
+        - start_pause
+        - stop
+        - locate
+  features_position: inline
+
 - type: custom:valetudo-map-card
   view_layout:
     column: 2
+  tap_action:
+    action: more-info
   vacuum: roborock
-  title: Roborock
-  map_scale: 1.4
+  title: ""
+  map_scale: 1.8
+  show_start_button: false
+  show_pause_button: false
+  show_home_button: false
+  show_locate_button: false
+  show_status: false
   crop:
     top: 80
-    bottom: 40
+    bottom: 45
     left: 0
-    right: 40
+    right: 50

@@ -439,15 +439,6 @@
   base_decimals: 0
   kilo_decimals: 1
 
-- type: custom:button-card
-  view_layout:
-    column: 2
-  entity: light.kitchen_led
-  name: Cozinha - LED
-  icon: mdi:stove
-  size: 80%
-  show_state: true
-  aspect_ratio: 1/1
 
 - type: conditional
   view_layout:
@@ -764,3 +755,13 @@
     title: Ventoinhas da Casa do Banho
     show_header_toggle: true
   show_empty: false
+- type: logbook
+  view_layout:
+    column: 2
+  cards:
+  title: Atividade
+  hours_to_show: 1
+  target:
+    label_id:
+      - movimento
+      - seguranca

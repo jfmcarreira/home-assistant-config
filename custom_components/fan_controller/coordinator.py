@@ -277,13 +277,10 @@ class FanCoordinator:
 
     @property
     def humidity_reference(self) -> float | None:
-        humidity_light_on = self._humidity_light_on
-        if humidity_light_on is None:
-            humidity_light_on = 100.0
-        avg = self.average_humidity
-        if avg is None:
-            avg = 100.0
-        return min(avg, humidity_light_on)
+        humidity_light_on = self.humidity_light_on if self.humidity_light_on is not None else 100.0
+        humidity_fan_on = self.humidity_fan_on if self.humidity_fan_on is not None else 100.0
+        avg = self.average_humidity if self.average_humidity is not None else 100.0
+        return max(avg, min(humidity_fan_on, humidity_light_on))
 
     @property
     def timer_remaining(self) -> float | None:
