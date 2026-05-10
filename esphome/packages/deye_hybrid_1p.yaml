@@ -1072,6 +1072,7 @@ sensor:
     address: 91
     unit_of_measurement: "°C"
     device_class: temperature
+    state_class: measurement
     accuracy_decimals: 1
     value_type: S_WORD
     filters:
