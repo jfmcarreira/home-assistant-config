@@ -250,46 +250,46 @@
           - eco
     features_position: bottom
 
-- type: conditional
-  view_layout:
-    column: 1
-  conditions:
-    - condition: state
-      entity: climate.living_room
-      state_not: unavailable
-    - condition: or
-      conditions:
-        - condition: state
-          entity: climate.living_room
-          state_not: "off"
-        - condition: numeric_state
-          entity: sensor.temperature_living_room
-          above: 25
-        - condition: numeric_state
-          entity: sensor.temperature_living_room
-          below: 18
-  card:
-    type: tile
-    entity: climate.living_room
-    state_content:
-      - current_temperature
-      - fan_mode
-      - swing_mode
-      - preset_mode
-    vertical: false
-    features:
-      - style: icons
-        type: climate-hvac-modes
-        hvac_modes:
-          - heat
-          - cool
-          - dry
-          - fan_only
-          - "off"
-      - style: icons
-        type: climate-fan-modes
-      - type: target-temperature
-    features_position: bottom
+# - type: conditional
+#   view_layout:
+#     column: 1
+#   conditions:
+#     - condition: state
+#       entity: climate.living_room
+#       state_not: unavailable
+#     - condition: or
+#       conditions:
+#         - condition: state
+#           entity: climate.living_room
+#           state_not: "off"
+#         - condition: numeric_state
+#           entity: sensor.temperature_living_room
+#           above: 25
+#         - condition: numeric_state
+#           entity: sensor.temperature_living_room
+#           below: 18
+#   card:
+#     type: tile
+#     entity: climate.living_room
+#     state_content:
+#       - current_temperature
+#       - fan_mode
+#       - swing_mode
+#       - preset_mode
+#     vertical: false
+#     features:
+#       - style: icons
+#         type: climate-hvac-modes
+#         hvac_modes:
+#           - heat
+#           - cool
+#           - dry
+#           - fan_only
+#           - "off"
+#       - style: icons
+#         type: climate-fan-modes
+#       - type: target-temperature
+#     features_position: bottom
 
 - type: conditional
   view_layout:
@@ -439,15 +439,56 @@
   base_decimals: 0
   kilo_decimals: 1
 
-- type: custom:button-card
+- type: custom:mod-card
   view_layout:
     column: 2
-  entity: light.kitchen_led
-  name: Cozinha - LED
-  icon: mdi:stove
-  size: 80%
-  show_state: true
-  aspect_ratio: 1/1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        size: 60%
+        state:
+          - value: "on"
+            styles:
+              icon:
+                - color: var(--state-active-color)
+        styles:
+          icon:
+            - color: var(--state-icon-color)
+        show_state: false
+        icon: mdi:home-roof
+        entity: binary_sensor.floor_bedrooms_lights_on
+        name: Luzes Quartos
+        tap_action:
+          action: perform-action
+          perform_action: light.turn_off
+          target:
+            floor_id: bedrooms
+
+      - type: custom:button-card
+        size: 60%
+        state:
+          - value: "on"
+            styles:
+              icon:
+                - color: var(--state-active-color)
+        styles:
+          icon:
+            - color: var(--state-icon-color)
+        show_state: false
+        icon: mdi:grass
+        entity: binary_sensor.area_outside_lights_on
+        name: Luzes Exterior
+        tap_action:
+          action: perform-action
+          perform_action: light.turn_off
+          target:
+            area_id: outside
 
 - type: conditional
   view_layout:
@@ -714,15 +755,15 @@
     reverse: false
   show_empty: false
 
-- type: conditional
-  view_layout:
-    column: 2
-  conditions:
-    - entity: climate.portable_heater
-      state_not: "off"
-  card:
-    type: tile
-    entity: climate.portable_heater
+# - type: conditional
+#   view_layout:
+#     column: 2
+#   conditions:
+#     - entity: climate.portable_heater
+#       state_not: "off"
+#   card:
+#     type: tile
+#     entity: climate.portable_heater
 - type: conditional
   view_layout:
     column: 2
@@ -764,3 +805,16 @@
     title: Ventoinhas da Casa do Banho
     show_header_toggle: true
   show_empty: false
+
+- type: logbook
+  view_layout:
+    column: 2
+  title: Atividade
+  hours_to_show: 1
+  target:
+    entity_id:
+      - binary_sensor.motion_sensor_office
+    area_id: outside
+    label_id:
+      - movimento
+      - seguranca

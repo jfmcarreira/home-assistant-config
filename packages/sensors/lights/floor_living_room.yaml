@@ -1,0 +1,18 @@
+template:
+  - binary_sensor:
+      - name: Estado das Luzes do Andar da Sala
+        unique_id: floor_living_room_lights_on
+        device_class: light
+        state: >
+          {{ floor_entities('living_room')
+             | select('match', '^light\.')
+             | select('is_state', 'on')
+             | list
+             | count > 0 }}
+        attributes:
+          lights_on_count: >
+            {{ floor_entities('living_room')
+               | select('match', '^light\.')
+               | select('is_state', 'on')
+               | list
+               | count }}

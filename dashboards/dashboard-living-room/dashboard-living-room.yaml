@@ -27,17 +27,6 @@ views:
         view_layout:
           column: 2
         states:
-          panel-main:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              margin: 0 0 0 0
-              reflow: true
-              max_cols: 2
-              #column_widths: 54% 46%
-              #max_width: 200px
-              height: 700px
-            cards: !include panel-main.yaml
           panel-ac:
             type: custom:layout-card
             layout_type: custom:horizontal-layout
@@ -97,3 +86,926 @@ views:
               column_widths: 100%
               max_cols: 1
             cards: !include panel-exterior.yaml
+
+          panel-main:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              margin: 0 0 0 0
+              reflow: true
+              max_cols: 2
+              #column_widths: 54% 46%
+              #max_width: 200px
+              height: 700px
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: sensor.weather_alert
+                    state_not: green
+                  - condition: state
+                    entity: sensor.weather_alert
+                    state_not: yellow
+                card:
+                  type: custom:button-card
+                  name: "[[[ return helpers.localize(states['sensor.weather_alert']); ]]]"
+                  label: Alerta Metereológico
+                  show_label: true1
+                  tap_action:
+                    action: none
+                  styles:
+                    card:
+                      - height: 80px
+                      - display: flex
+                      - flex-direction: column
+                      - justify-content: center
+                      - align-items: center
+                    name:
+                      - font-size: 40px
+                      - font-weight: 500
+                      - line-height: 1.2
+                      - margin: "-13px"
+                      - padding: 5px
+                    label:
+                      - font-size: 20px
+                      - font-weight: 400
+                      - color: gray
+                      - margin: 8px
+                      - padding: "-10px"
+                      - line-height: 1.2
+                  visibility:
+                    - condition: state
+                      entity: sensor.weather_alert
+                      state_not: green
+                    - condition: state
+                      entity: sensor.weather_alert
+                      state_not: yellow
+                view_layout:
+                  column: 1
+
+              - type: conditional
+                conditions:
+                  - entity: sensor.salicru_rack_ups_status
+                    state: On Battery
+                card:
+                  type: gauge
+                  entity: sensor.salicru_rack_ups_battery_charge
+                  name: Bateria da UPS
+                  unit: "%"
+                  min: 0
+                  max: 100
+                  needle: false
+                  severity:
+                    green: 60
+                    yellow: 20
+                    red: 2
+                view_layout:
+                  column: 1
+
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.house_guest
+                    state: "on"
+                card:
+                  type: tile
+                  entity: input_boolean.house_guest
+                  name: Modo de Convidados
+                  tap_action:
+                    action: call-service
+                    service: input_boolean.turn_off
+                    data: {}
+                    target:
+                      entity_id: input_boolean.house_guest
+                  icon_tap_action:
+                    action: none
+                view_layout:
+                  column: 1
+
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.extended_away_mode
+                    state: "on"
+                card:
+                  type: tile
+                  entity: input_boolean.extended_away_mode
+                  name: Modo de Férias
+                  tap_action:
+                    action: call-service
+                    service: input_boolean.turn_off
+                    data: {}
+                    target:
+                      entity_id: input_boolean.extended_away_mode
+                  icon_tap_action:
+                    action: none
+                view_layout:
+                  column: 1
+
+              - type: custom:auto-entities
+                card:
+                  type: vertical-stack
+                card_param: cards
+                filter:
+                  exclude:
+                    - options: {}
+                      entity_id: script.routine_dinner_time
+                    - options: {}
+                      entity_id: script.routine_cover_rain_mode
+                  include:
+                    - options:
+                        type: tile
+                        features_position: bottom
+                        vertical: false
+                        tap_action:
+                          action: toggle
+                        icon_tap_action:
+                          action: more-info
+                        hide_state: true
+                      entity_id: script.routine*
+                      state: "on"
+                show_empty: false
+                view_layout:
+                  column: 1
+
+              # - type: conditional
+              #   view_layout:
+              #     column: 1
+              #   conditions:
+              #     - condition: state
+              #       entity: binary_sensor.tod_morning_before_work
+              #       state: "on"
+              #   card:
+              #     square: false
+              #     type: grid
+              #     columns: 2
+              #     cards:
+              #       - type: custom:mushroom-entity-card
+              #         entity: script.routine_exit_house_to_work_joao
+              #         secondary_info: none
+              #         layout: horizontal
+              #         tap_action:
+              #           action: call-service
+              #           service: script.turn_off
+              #           target:
+              #             entity_id:
+              #               - script.routine_exit_house_to_work_joao
+              #         hold_action:
+              #           action: call-service
+              #           service: script.turn_on
+              #           target:
+              #             entity_id:
+              #               - script.routine_exit_house_to_work_joao
+              #         name: Ir Trabalhar - João
+              #       - type: custom:mushroom-entity-card
+              #         entity: script.routine_exit_house_to_work_bianca
+              #         secondary_info: none
+              #         layout: horizontal
+              #         tap_action:
+              #           action: call-service
+              #           service: script.turn_off
+              #           target:
+              #             entity_id:
+              #               - script.routine_exit_house_to_work_bianca
+              #         hold_action:
+              #           action: call-service
+              #           service: script.turn_on
+              #           target:
+              #             entity_id:
+              #               - script.routine_exit_house_to_work_bianca
+              #         name: Ir Trabalhar - Bianca
+
+              # - type: conditional
+              #   view_layout:
+              #     column: 1
+              #   conditions:
+              #     - condition: state
+              #       entity: binary_sensor.tod_night_before_bed
+              #       state: "on"
+              #   card:
+              #     type: custom:mushroom-entity-card
+              #     entity: script.routine_good_night
+              #     secondary_info: none
+              #     layout: vertical
+              #     tap_action:
+              #       action: call-service
+              #       service: script.turn_off
+              #       target:
+              #         entity_id:
+              #           - script.routine_good_night
+              #     hold_action:
+              #       action: call-service
+              #       service: script.turn_on
+              #       target:
+              #         entity_id:
+              #           - script.routine_good_night
+
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: alarm_control_panel.alarmo
+                    state_not: disarmed
+                card:
+                  states:
+                    - arm_home
+                    - arm_away
+                  type: alarm-panel
+                  entity: alarm_control_panel.alarmo
+                view_layout:
+                  column: 1
+
+              - type: conditional
+                view_layout:
+                  column: 1
+                conditions:
+                  - condition: numeric_state
+                    entity: sensor.temperature_water_heater_top
+                    below: 50
+                card:
+                  type: tile
+                  entity: climate.water_heater
+                  vertical: false
+                  icon_tap_action:
+                    action: toggle
+                  features:
+                    - type: target-temperature
+                    - style: icons
+                      type: climate-preset-modes
+                      preset_modes:
+                        - none
+                        - comfort
+                        - eco
+                  features_position: bottom
+
+              # - type: conditional
+              #   view_layout:
+              #     column: 1
+              #   conditions:
+              #     - condition: state
+              #       entity: climate.living_room
+              #       state_not: unavailable
+              #     - condition: or
+              #       conditions:
+              #         - condition: state
+              #           entity: climate.living_room
+              #           state_not: "off"
+              #         - condition: numeric_state
+              #           entity: sensor.temperature_living_room
+              #           above: 25
+              #         - condition: numeric_state
+              #           entity: sensor.temperature_living_room
+              #           below: 18
+              #   card:
+              #     type: tile
+              #     entity: climate.living_room
+              #     state_content:
+              #       - current_temperature
+              #       - fan_mode
+              #       - swing_mode
+              #       - preset_mode
+              #     vertical: false
+              #     features:
+              #       - style: icons
+              #         type: climate-hvac-modes
+              #         hvac_modes:
+              #           - heat
+              #           - cool
+              #           - dry
+              #           - fan_only
+              #           - "off"
+              #       - style: icons
+              #         type: climate-fan-modes
+              #       - type: target-temperature
+              #     features_position: bottom
+
+              - type: conditional
+                view_layout:
+                  column: 1
+                conditions:
+                  - condition: numeric_state
+                    entity: sensor.device_battery_cover_stairs
+                    below: 20
+                card:
+                  type: tile
+                  entity: sensor.device_battery_cover_stairs
+                  name: Bateria do Motor do Cortinado das Escadas
+                  state_content:
+                    - state
+                    - last_updated
+                  vertical: false
+                  features:
+                    - type: trend-graph
+                  features_position: bottom
+
+              - type: custom:mod-card
+                view_layout:
+                  column: 1
+                style:
+                  hui-horizontal-stack-card$: |
+                    :host {
+                      height: auto;
+                    }
+                card:
+                  type: horizontal-stack
+                  cards:
+                    - type: custom:mini-graph-card
+                      name: Temperatura
+                      entities:
+                        - entity: sensor.average_temperature
+                      line_color: "#e74c3c"
+                      line_width: 6
+                      font_size: 75
+                      height: 80
+                      align_icon: left
+                      align_state: center
+                      hours_to_show: 24
+                      points_per_hour: 1
+                      tap_action:
+                        action: navigate
+                        navigation_path: /lovelace-subviews/dashboard-climate
+                    - type: custom:mini-graph-card
+                      name: Humidade
+                      entities:
+                        - entity: sensor.average_humidity
+                      line_width: 6
+                      font_size: 75
+                      height: 80
+                      align_icon: left
+                      align_state: center
+                      hours_to_show: 24
+                      points_per_hour: 1
+                      tap_action:
+                        action: navigate
+                        navigation_path: /lovelace-subviews/dashboard-climate
+
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.rain
+                    state: "on"
+                card:
+                  type: tile
+                  entity: binary_sensor.rain
+                  name: Chuva Detectada
+                  hide_state: true
+                  vertical: false
+                  features_position: bottom
+                view_layout:
+                  column: 1
+
+
+              # - type: custom:mod-card
+              #   view_layout:
+              #     column: 1
+              #   style:
+              #     hui-horizontal-stack-card$: |
+              #       :host {
+              #         height: auto;
+              #       }
+              #   card:
+              #     type: horizontal-stack
+              #     cards:
+              #       - type: custom:mini-graph-card
+              #         name: Potência
+              #         entities:
+              #           - entity: sensor.house_power_consumption
+              #         line_width: 6
+              #         font_size: 60
+              #         align_icon: left
+              #         align_state: center
+              #         line_color: "#326da8"
+              #         hours_to_show: 24
+              #         points_per_hour: 1
+              #         tap_action:
+              #           action: navigate
+              #           navigation_path: /lovelace-subviews/dashboard-power
+              #         hold_action:
+              #           action: more-info
+              #       - type: custom:mini-graph-card
+              #         name: Bateria
+              #         entities:
+              #           - entity: sensor.deye_inverter_battery
+              #         line_width: 6
+              #         font_size: 60
+              #         align_icon: left
+              #         align_state: center
+              #         hours_to_show: 24
+              #         points_per_hour: 1
+              #         tap_action:
+              #           action: navigate
+              #           navigation_path: /lovelace-subviews/dashboard-power
+              #         hold_action:
+              #           action: more-info
+
+              - type: custom:power-flow-card-plus
+                view_layout:
+                  column: 1
+                entities:
+                  battery:
+                    entity: sensor.deye_inverter_battery_power
+                    state_of_charge: sensor.deye_inverter_battery
+                    state_of_charge_unit_white_space: false
+                  grid:
+                    entity: sensor.house_power_grid
+                  solar:
+                    display_zero_state: true
+                    entity: sensor.deye_inverter_pv_power
+                  fossil_fuel_percentage:
+                    entity: sensor.electricity_maps_concentracao_de_co2
+                    color_value: true
+                    use_metadata: false
+                    state_type: percentage
+                  home:
+                    entity: sensor.house_power_consumption
+                    use_metadata: false
+                    override_state: false
+                    subtract_individual: false
+                    circle_animation: true
+                  individual: []
+                clickable_entities: true
+                display_zero_lines:
+                  mode: transparency
+                  transparency: 80
+                use_new_flow_rate_model: true
+                min_flow_rate: 0.75
+                max_flow_rate: 6
+                max_expected_power: 6900
+                min_expected_power: 0.01
+                transparency_zero_lines: 0
+                sort_individual_devices: false
+                disable_dots: false
+                allow_layout_break: false
+                no_labels: false
+                dashboard_link: /energy/now
+                dashboard_link_label: Energia Atual
+                kilo_threshold: 1000
+                base_decimals: 0
+                kilo_decimals: 1
+
+              - type: custom:mod-card
+                view_layout:
+                  column: 2
+                style:
+                  hui-horizontal-stack-card$: |
+                    :host {
+                      height: auto;
+                    }
+                card:
+                  type: horizontal-stack
+                  cards:
+                    - type: custom:button-card
+                      size: 30%
+                      state:
+                        - value: "on"
+                          styles:
+                            icon:
+                              - color: var(--state-active-color)
+                      styles:
+                        grid:
+                          - position: relative
+                        icon:
+                          - color: var(--state-icon-color)
+                        custom_fields:
+                          count:
+                            - position: absolute
+                            - left: 8%
+                            - top: 10%
+                            - font-size: 18px
+                            - font-weight: bold
+                            - color: var(--state-icon-color)
+
+                          hall:
+                            - position: absolute
+                            - left: 8%
+                            - top: 38%
+                            - color: |
+                                [[[
+                                  return states['light.bedroom_henrique']?.state === 'on'
+                                    ? 'var(--state-active-color)'
+                                    : 'var(--state-icon-color)';
+                                ]]]
+
+                          main_bathroom:
+                            - position: absolute
+                            - left: 8%
+                            - top: 68%
+                            - color: |
+                                [[[
+                                  return states['light.master_bedroom']?.state === 'on'
+                                    ? 'var(--state-active-color)'
+                                    : 'var(--state-icon-color)';
+                                ]]]
+
+                          ricardo:
+                            - position: absolute
+                            - right: 8%
+                            - top: 8%
+                            - color: |
+                                [[[
+                                  return states['light.bedroom_ricardo']?.state === 'on'
+                                    ? 'var(--state-active-color)'
+                                    : 'var(--state-icon-color)';
+                                ]]]
+
+                          henrique:
+                            - position: absolute
+                            - right: 8%
+                            - top: 38%
+                            - color: |
+                                [[[
+                                  return states['light.bedroom_henrique']?.state === 'on'
+                                    ? 'var(--state-active-color)'
+                                    : 'var(--state-icon-color)';
+                                ]]]
+
+                          master:
+                            - position: absolute
+                            - right: 8%
+                            - top: 68%
+                            - color: |
+                                [[[
+                                  return states['light.master_bedroom']?.state === 'on'
+                                    ? 'var(--state-active-color)'
+                                    : 'var(--state-icon-color)';
+                                ]]]
+                      custom_fields:
+                        count: |
+                          [[[
+                            const count = states['binary_sensor.floor_bedrooms_lights_on']?.attributes?.lights_on_count;
+                            return count > 0 ? count : '';
+                          ]]]
+                        hall: |
+                          [[[
+                            return `<ha-icon icon="mdi:home-roof" style="width: 20px; height: 20px;"></ha-icon>`;
+                          ]]]
+                        main_bathroom: |
+                          [[[
+                            return `<ha-icon icon="mdi:shower" style="width: 20px; height: 20px;"></ha-icon>`;
+                          ]]]
+                        ricardo: |
+                          [[[
+                            return `<ha-icon icon="mdi:human-child" style="width: 20px; height: 20px;"></ha-icon>`;
+                          ]]]
+                        henrique: |
+                          [[[
+                            return `<ha-icon icon="mdi:baby" style="width: 20px; height: 20px;"></ha-icon>`;
+                          ]]]
+                        master: |
+                          [[[
+                            return `<ha-icon icon="mdi:bed-king" style="width: 20px; height: 20px;"></ha-icon>`;
+                          ]]]
+                      show_state: false
+                      icon: mdi:home-roof
+                      entity: binary_sensor.floor_bedrooms_lights_on
+                      name: Quartos
+                      tap_action:
+                        action: perform-action
+                        perform_action: light.turn_off
+                        target:
+                          floor_id: bedrooms
+
+                    - type: custom:button-card
+                      size: 30%
+                      state:
+                        - value: "on"
+                          styles:
+                            icon:
+                              - color: var(--state-active-color)
+                      styles:
+                        icon:
+                          - color: var(--state-icon-color)
+                      show_state: false
+                      icon: mdi:grass
+                      entity: binary_sensor.area_outside_lights_on
+                      name: Exterior
+                      tap_action:
+                        action: perform-action
+                        perform_action: light.turn_off
+                        target:
+                          area_id: outside
+
+              - type: conditional
+                view_layout:
+                  column: 2
+                conditions:
+                  - condition: state
+                    entity: cover.gate
+                    state_not: closed
+                  - condition: state
+                    entity: cover.gate
+                    state_not: unavailable
+                card:
+                  type: tile
+                  entity: cover.gate
+                  vertical: true
+                  show_entity_picture: false
+                  hide_state: false
+                  state_content:
+                    - state
+                    - last-changed
+                  tap_action:
+                    action: perform-action
+                    perform_action: cover.close_cover
+                    target:
+                      entity_id: cover.gate
+                  icon_tap_action:
+                    action: perform-action
+                    perform_action: cover.close_cover
+                    target:
+                      entity_id: cover.gate
+
+              - type: conditional
+                view_layout:
+                  column: 2
+                conditions:
+                  - condition: state
+                    entity: light.living_room_window
+                    state: "on"
+                card:
+                  type: custom:mushroom-light-card
+                  show_brightness_control: true
+                  layout: horizontal
+                  primary_info: name
+                  secondary_info: none
+                  entity: light.living_room_window
+                  name: Luz da Sala
+              - type: conditional
+                view_layout:
+                  column: 2
+                conditions:
+                  - condition: state
+                    entity: light.hall_presence
+                    state: "on"
+                card:
+                  type: custom:mushroom-light-card
+                  show_brightness_control: true
+                  layout: horizontal
+                  primary_info: name
+                  secondary_info: none
+                  entity: light.hall_presence
+                  name: Presença Sótão
+              - type: conditional
+                view_layout:
+                  column: 2
+                conditions:
+                  - condition: state
+                    entity: light.hallway_presence
+                    state: "on"
+                card:
+                  type: custom:mushroom-light-card
+                  show_brightness_control: true
+                  layout: horizontal
+                  primary_info: name
+                  secondary_info: none
+                  name: Presença Corredor
+                  entity: light.hallway_presence
+              - type: conditional
+                view_layout:
+                  column: 2
+                conditions:
+                  - condition: state
+                    entity: light.stairs_down
+                    state: "on"
+                card:
+                  type: custom:mushroom-light-card
+                  show_brightness_control: true
+                  layout: horizontal
+                  primary_info: name
+                  secondary_info: none
+                  entity: light.stairs_down
+                  name: Hall das Escadas
+
+              - type: custom:auto-entities
+                view_layout:
+                  column: 2
+                card:
+                  type: entities
+                  title: Rés do Chão
+                filter:
+                  include:
+                    - entity_id: light.*
+                      state: "on"
+                      options:
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_off
+                          target:
+                            entity_id: this.entity_id
+                        hold_action:
+                          action: more-info
+                  exclude:
+                    - options: {}
+                      attributes:
+                        supported_features: 40
+                    - options: {}
+                      floor: bedrooms
+                    - options: {}
+                      entity_id: light.bedroom_rc_*
+                    - options: {}
+                      entity_id: light.stairs_down
+                    - options: {}
+                      entity_id: light.hallway_group
+                    - options: {}
+                      entity_id: light.*_presence
+                    - options: {}
+                      entity_id: light.laundry_*
+                    - options: {}
+                      entity_id: light.office_*
+                    - options: {}
+                      entity_id: light.hall
+                    - options: {}
+                      entity_id: light.hall_side
+                    - options: {}
+                      entity_id: light.living_room_window
+                    - options: {}
+                      entity_id: light.kitchen_led
+                    - options: {}
+                      entity_id: light.kitchen_window
+                    - options: {}
+                      entity_id: light.living_room_group
+                    - options: {}
+                      entity_id: light.bedroom_*_ceiling
+                    - options: {}
+                      entity_id: light.bedroom_*_closet
+                    - options: {}
+                      entity_id: light.bedroom_*_lamp
+                    - options: {}
+                      entity_id: light.all_*
+                    - options: {}
+                      entity_id: light.master_bedroom_ceiling
+                    - options: {}
+                      entity_id: light.master_bedroom_entry
+                    - options: {}
+                      entity_id: light.master_bedroom_closet
+                    - options: {}
+                      entity_id: light.master_bedroom_bed*
+                    - options: {}
+                      entity_id: light.master_bedroom_bathroom_*
+                    - options: {}
+                      entity_id: light.master_bedroom_bathroom_*
+                    - options: {}
+                      entity_id: light.stairs_group*
+                    - options: {}
+                      entity_id: light.bathrom_rc_*
+                    - options: {}
+                      entity_id: light.bathroom_rc_*
+                    - options: {}
+                      area: outside
+                    - options: {}
+                      area: xmas
+                sort:
+                  method: area
+                  numeric: false
+                  reverse: false
+                show_empty: false
+
+              - type: custom:auto-entities
+                view_layout:
+                  column: 2
+                card:
+                  type: entities
+                  title: Quartos
+                filter:
+                  include:
+                    - entity_id: light.*
+                      floor: bedrooms
+                      state: "on"
+                      options:
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_off
+                          target:
+                            entity_id: this.entity_id
+                        hold_action:
+                          action: more-info
+                  exclude:
+                    - options: {}
+                      attributes:
+                        supported_features: 40
+                    - options: {}
+                      entity_id: light.*_presence
+                    - options: {}
+                      entity_id: light.hall
+                    - options: {}
+                      entity_id: light.hall_side
+                    - options: {}
+                      entity_id: light.bedroom_*_ceiling
+                    - options: {}
+                      entity_id: light.bedroom_*_closet
+                    - options: {}
+                      entity_id: light.bedroom_*_lamp
+                    - options: {}
+                      entity_id: light.all_*
+                    - options: {}
+                      entity_id: light.master_bedroom_ceiling
+                    - options: {}
+                      entity_id: light.master_bedroom_entry
+                    - options: {}
+                      entity_id: light.master_bedroom_closet
+                    - options: {}
+                      entity_id: light.master_bedroom_bed*
+                    - options: {}
+                      entity_id: light.master_bedroom_bathroom_*
+                    - options: {}
+                      entity_id: light.master_bedroom_bathroom_*
+                    - options: {}
+                      entity_id: light.main_bathroom_*
+                    - options: {}
+                      entity_id: light.master_bedroom_bathroom_*
+                sort:
+                  method: area
+                  numeric: false
+                  reverse: false
+                show_empty: false
+
+              - type: custom:auto-entities
+                view_layout:
+                  column: 2
+                card:
+                  type: entities
+                  title: Exterior
+                filter:
+                  include:
+                    - area: outside
+                      state: "on"
+                      domain: light
+                      options:
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_off
+                          target:
+                            entity_id: this.entity_id
+                        hold_action:
+                          action: more-info
+                  exclude:
+                    - options: {}
+                      entity_id: light.storage_*
+                    - options: {}
+                      entity_id: light.*group
+                sort:
+                  method: area
+                  numeric: false
+                  reverse: false
+                show_empty: false
+
+              # - type: conditional
+              #   view_layout:
+              #     column: 2
+              #   conditions:
+              #     - entity: climate.portable_heater
+              #       state_not: "off"
+              #   card:
+              #     type: tile
+              #     entity: climate.portable_heater
+              - type: conditional
+                view_layout:
+                  column: 2
+                conditions:
+                  - entity: humidifier.portable_dehumidifier
+                    state_not: "off"
+                card:
+                  type: tile
+                  entity: humidifier.portable_dehumidifier
+              - type: conditional
+                view_layout:
+                  column: 2
+                conditions:
+                  - entity: binary_sensor.roborock_state
+                    state: "on"
+                card:
+                  type: tile
+                  entity: vacuum.roborock
+                  features:
+                    - type: vacuum-commands
+                      commands:
+                        - start_pause
+                        - stop
+                        - clean_spot
+              - type: entity-filter
+                view_layout:
+                  column: 2
+                entities:
+                  - entity: fan.main_bathroom
+                    name: Principal
+                  - entity: fan.bathroom_master_bedroom
+                    name: Suite
+                  - entity: fan.bathroom_rc
+                    name: Serviço
+                state_filter:
+                  - "on"
+                card:
+                  type: entities
+                  title: Ventoinhas da Casa do Banho
+                  show_header_toggle: true
+                show_empty: false
+
+              - type: logbook
+                view_layout:
+                  column: 2
+                title: Atividade
+                hours_to_show: 1
+                target:
+                  entity_id:
+                    - binary_sensor.motion_sensor_office
+                  area_id: outside
+                  label_id:
+                    - movimento
+                    - seguranca

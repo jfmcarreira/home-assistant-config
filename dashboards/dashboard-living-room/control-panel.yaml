@@ -37,7 +37,7 @@
   type: grid
   cards:
     - type: custom:button-card
-      size: 58%
+      size: 60%
       styles:
         icon:
           - color: var(--state-icon-color)
@@ -50,7 +50,7 @@
         action: navigate
         navigation_path: /dashboard-configuration/config-lights
     - type: custom:button-card
-      size: 58%
+      size: 60%
       styles:
         icon:
           - color: var(--state-icon-color)
@@ -68,7 +68,7 @@
   type: grid
   cards:
     - type: custom:button-card
-      size: 62%
+      size: 65%
       show_name: false
       icon: mdi:radiator
       entity: switch.air_conditioner
@@ -89,7 +89,7 @@
         target:
           entity_id: switch.air_conditioner
     - type: custom:button-card
-      size: 62%
+      size: 65%
       entity: vacuum.roborock
       show_name: false
       color_type: icon
@@ -106,7 +106,7 @@
             icon:
               - color: var(--state-icon-color)
     - type: custom:button-card
-      size: 62%
+      size: 65%
       color_type: icon
       show_state: false
       icon: mdi:grass
@@ -144,7 +144,7 @@
         grid:
           - position: relative
     - type: custom:button-card
-      size: 62%
+      size: 65%
       color_type: icon
       show_state: false
       show_name: false
@@ -155,16 +155,18 @@
         - sensor.temperature_water_heater_bottom
         - sensor.device_power_water_heater
         - switch.water_heater
+        - climate.water_heater
       state:
-        - value: "off"
-          styles:
-            icon:
-              - color: var(--state-icon-color)
         - operator: template
           value: |
             [[[ return states['switch.water_heater'].state === 'on' ]]]
           icon: mdi:water-boiler
           color: var(--state-active-color)
+        - value: "off"
+          icon: mdi:water-boiler-off
+          styles:
+            icon:
+              - color: var(--state-icon-color)
         - operator: template
           value: |
             [[[ return states['climate.water_heater'].state === 'off' ]]]
@@ -184,11 +186,6 @@
           [[[
             const tempB = parseFloat(states['sensor.temperature_water_heater_bottom']?.state);
             return (!isNaN(tempB)) ? `${Math.round(tempB)}°` : '—';
-          ]]]
-        power: |
-          [[[
-            const power = parseFloat(states['sensor.device_power_water_heater']?.state);
-            return (!isNaN(power)) ? `${Math.round(power)}W` : '—';
           ]]]
         target: |
           [[[
@@ -213,25 +210,19 @@
             - position: absolute
             - right: 5%
             - top: 10%
-            - font-size: 10px
+            - font-size: 14px
           temp_bottom:
             - color: var(--state-icon-color)
             - position: absolute
             - right: 5%
             - top: 40%
-            - font-size: 10px
+            - font-size: 14px
           target:
             - color: var(--state-icon-color)
             - position: absolute
             - top: 10%
             - left: 8%
-            - font-size: 10px
-          power:
-            - color: var(--state-icon-color)
-            - position: absolute
-            - bottom: 10%
-            - right: 5%
-            - font-size: 10px
+            - font-size: 14px
         grid:
           - position: relative
       tap_action:
@@ -241,7 +232,7 @@
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-water-heater
     - type: custom:button-card
-      size: 62%
+      size: 65%
       state_display: "no"
       styles:
         icon:
@@ -254,7 +245,7 @@
         action: navigate
         navigation_path: /lovelace-subviews/multimedia
     - type: custom:button-card
-      size: 62%
+      size: 65%
       state_display: "no"
       styles:
         icon:
@@ -272,7 +263,7 @@
   type: grid
   cards:
     - type: custom:button-card
-      size: 58%
+      size: 60%
       state_display: "no"
       styles:
         icon:
@@ -282,7 +273,7 @@
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-cctv
     - type: custom:button-card
-      size: 58%
+      size: 60%
       icon: mdi:shower-head
       styles:
         icon:
@@ -293,7 +284,7 @@
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-wc
     - type: custom:button-card
-      size: 58%
+      size: 60%
       show_state: false
       show_name: false
       color_type: icon
@@ -348,7 +339,7 @@
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-shores
     - type: custom:button-card
-      size: 58%
+      size: 60%
       state_display: "no"
       styles:
         icon:

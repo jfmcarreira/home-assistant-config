@@ -1,0 +1,18 @@
+template:
+  - binary_sensor:
+      - name: Estado das Luzes da Rua
+        unique_id: area_outside_lights_on
+        device_class: light
+        state: >
+          {{ area_entities('outside')
+             | select('match', '^light\.')
+             | select('is_state', 'on')
+             | list
+             | count > 0 }}
+        attributes:
+          lights_on_count: >
+            {{ area_entities('outside')
+               | select('match', '^light\.')
+               | select('is_state', 'on')
+               | list
+               | count }}

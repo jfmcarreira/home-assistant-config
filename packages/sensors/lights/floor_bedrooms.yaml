@@ -1,0 +1,38 @@
+template:
+  - binary_sensor:
+      - name: Estado das Luzes do Andar dos Quartos
+        device_class: light
+        unique_id: floor_bedrooms_lights_on
+        state: >
+          {% set ignored = label_entities('Grupo de Luzes de Divisões') %}
+          {{ floor_entities('bedrooms')
+             | select('match', '^light\.')
+             | reject('search', 'group')
+             | reject('in', ignored)
+             | reject('in', [
+                 'light.bedroom_ricardo',
+                 'light.bedroom_henrique',
+                 'light.master_bedroom',
+                 'light.main_bathroom',
+                 'light.hall'
+               ])
+             | select('is_state', 'on')
+             | list
+             | count > 0 }}
+        attributes:
+          lights_on_count: >
+            {% set ignored = label_entities('Grupo de Luzes de Divisões') %}
+            {{ floor_entities('bedrooms')
+              | select('match', '^light\.')
+              | reject('search', 'group')
+              | reject('in', ignored)
+              | reject('in', [
+                  'light.bedroom_ricardo',
+                  'light.bedroom_henrique',
+                  'light.master_bedroom',
+                  'light.main_bathroom',
+                  'light.hall'
+                ])
+              | select('is_state', 'on')
+              | list
+              | count }}
