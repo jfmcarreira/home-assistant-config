@@ -4,9 +4,5 @@ template:
         name: grocy_stock_cat_litter_sand
         state: >
           {% set products = state_attr('sensor.grocy_stock', 'products') %}
-          {% if products %}
-            {% set product = products | selectattr('id', 'eq', 4) | list | first %}
-            {{ product.available_amount if product is not none else 0 }}
-          {% else %}
-            0
-          {% endif %}
+          {% set matches = products | selectattr('id', 'eq', 4) | list %}
+          {{ matches[0].available_amount if matches | length > 0 else 0 }}
