@@ -4532,6 +4532,18 @@
           active_choice: number
           number: 57
           unit_of_measurement: °C
+  - trigger: temperature.crossed_threshold
+    target:
+      entity_id:
+      - sensor.temperature_water_heater_bottom
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 28
+          unit_of_measurement: °C
+      behavior: any
   - trigger: numeric_state
     entity_id:
     - sun.sun
@@ -4540,6 +4552,8 @@
   - trigger: time
     at: '13:00:00'
   conditions:
+  - condition: time
+    after: '12:00:00'
   - condition: switch.is_off
     target:
       entity_id: switch.water_heater
@@ -4555,31 +4569,43 @@
     options:
       hvac_mode:
       - 'off'
-  - condition: temperature.is_value
-    target:
-      entity_id: sensor.temperature_water_heater_top
-    options:
-      threshold:
-        type: below
-        value:
-          active_choice: number
-          number: 60
-          unit_of_measurement: °C
-  - condition: battery.is_level
-    target:
-      entity_id: sensor.deye_inverter_battery
-    options:
-      threshold:
-        type: above
-        value:
-          active_choice: number
-          number: 97
   - condition: numeric_state
     entity_id: sun.sun
     attribute: elevation
     above: 30
-  - condition: time
-    after: '12:00:00'
+  - condition: or
+    conditions:
+    - condition: and
+      conditions:
+      - condition: temperature.is_value
+        target:
+          entity_id: sensor.temperature_water_heater_top
+        options:
+          threshold:
+            type: below
+            value:
+              active_choice: number
+              number: 50
+              unit_of_measurement: °C
+      - condition: battery.is_level
+        target:
+          entity_id: sensor.deye_inverter_battery
+        options:
+          threshold:
+            type: above
+            value:
+              active_choice: number
+              number: 95
+    - condition: temperature.is_value
+      target:
+        entity_id: sensor.temperature_water_heater_top
+      options:
+        threshold:
+          type: above
+          value:
+            active_choice: number
+            number: 50
+            unit_of_measurement: °C
   actions:
   - action: switch.turn_on
     metadata: {}
@@ -4652,14 +4678,43 @@
         type: above
         value:
           active_choice: number
-          number: 62
+          number: 70
           unit_of_measurement: °C
+  - trigger: power.crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_pv_power_average
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          unit_of_measurement: W
+          number: 1000
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
   - trigger: numeric_state
     entity_id:
     - sun.sun
     attribute: elevation
     below: 25
+  - trigger: switch.turned_on
+    target:
+      entity_id: switch.water_heater
+    options:
+      behavior: any
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
   conditions:
+  - condition: climate.is_hvac_mode
+    target:
+      entity_id: climate.water_heater
+    options:
+      hvac_mode:
+      - 'off'
   - condition: switch.is_on
     target:
       entity_id: switch.water_heater
@@ -4669,33 +4724,17 @@
         hours: 0
         minutes: 10
         seconds: 0
-  - condition: climate.is_hvac_mode
-    target:
-      entity_id: climate.water_heater
-    options:
-      hvac_mode:
-      - 'off'
   - condition: or
     conditions:
-    - condition: temperature.is_value
-      target:
-        entity_id: sensor.temperature_water_heater_top
-      options:
-        threshold:
-          type: above
-          value:
-            active_choice: number
-            number: 60
-            unit_of_measurement: °C
-    - condition: battery.is_level
-      target:
-        entity_id: sensor.deye_inverter_battery
-      options:
-        threshold:
-          type: below
-          value:
-            active_choice: number
-            number: 95
+    - condition: numeric_state
+      entity_id: sensor.deye_inverter_pv_power_average
+      below: 1000
+    - condition: numeric_state
+      entity_id: sensor.temperature_water_heater_top
+      above: 70
+    - condition: numeric_state
+      entity_id: sensor.deye_inverter_battery
+      below: 95
     - condition: numeric_state
       entity_id: sun.sun
       attribute: elevation
@@ -5153,3 +5192,30 @@
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
       hvac_delayed_temperature_offset: -1
+- id: '1778484821567'
+  alias: device_turn_rack_energy_on
+  description: ''
+  triggers:
+  - type: battery_level
+    device_id: 028859c507f01453b65c6fe645adc8fc
+    entity_id: 624767f641f5eedd318f0a432958ac38
+    domain: sensor
+    trigger: device
+    below: 40
+  - trigger: battery.level_crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 30
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      entity_id: switch.shellyplugmg3_907069445004
+    data: {}
+  mode: single
