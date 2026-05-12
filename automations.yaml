@@ -531,7 +531,7 @@
     input:
       motion_sensor: binary_sensor.motion_sensor_office
       target_entity: light.office
-      min_repetition_interval_sec: 10
+      min_repetition_interval_sec: 0
       illuminance_sensor: sensor.light_office
       illuminance_cutoff: 10
       only_after_sunset: false
@@ -694,7 +694,7 @@
       only_after_sunset: 'off'
       disable_in_guest: true
       required_house_mode: Todos
-      room_name: Escritório
+      room_name: Cozinha
       blocker_on_entity: light.kitchen
       disable_in_sleep: true
       presence_sensor: none
@@ -947,7 +947,7 @@
     input:
       motion_sensor: binary_sensor.motion_sensor_stairs_hallway
       target_entity: light.hallway_presence
-      min_repetition_interval_sec: 10
+      min_repetition_interval_sec: 0
       illuminance_sensor: sensor.light_living_room
       illuminance_cutoff: 10
       only_after_sunset: false
@@ -1274,7 +1274,7 @@
     input:
       motion_sensor: binary_sensor.motion_sensor_laundry
       target_entity: light.laundry
-      min_repetition_interval_sec: 10
+      min_repetition_interval_sec: 0
       illuminance_sensor: sensor.light_laundry
       illuminance_cutoff: 70
       only_after_sunset: false
@@ -2937,7 +2937,7 @@
       motion_sensor: binary_sensor.motion_sensor_bathroom_rc
       target_entity: light.bathroom_rc_led
       disable_switch_button: button.shelly_2pm_gen3_bathroom_rc_trigger_automatic_on
-      min_repetition_interval_sec: 10
+      min_repetition_interval_sec: 0
       only_after_sunset: false
       disable_in_guest: false
       required_house_mode: Todos
@@ -3886,7 +3886,7 @@
     input:
       motion_sensor: binary_sensor.motion_sensor_bedroom_rc
       target_entity: light.bedroom_rc
-      min_repetition_interval_sec: 10
+      min_repetition_interval_sec: 0
       only_after_sunset: false
       disable_in_guest: true
       required_house_mode: Dia+Anoitecer

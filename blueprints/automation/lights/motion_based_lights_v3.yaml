@@ -189,7 +189,7 @@ variables:
   ## Automation states
   min_repetition_interval_sec: !input min_repetition_interval_sec
   automation_last_triggered: "{{ this.attributes.last_triggered }}"
-  automation_is_running: "{{ this.attributes.current == 1 }}"
+  automation_was_running: "{{ this.attributes.current == 1 }}"
   ## House Mode
   disable_in_guest: !input disable_in_guest
   disable_in_sleep: !input disable_in_sleep
@@ -237,14 +237,14 @@ condition:
   - alias: "Verificar o Modo de Funcionamento"
     condition: or
     conditions:
-      - "{{ automation_is_running }}"
+      - "{{ automation_was_running }}"
       - "{{ house_mode_requirement }}"
 
   # Do not run if this blocker is ON
   - alias: "Verificar entidade bloqueadora ON"
     condition: or
     conditions:
-      - "{{ automation_is_running }}"
+      - "{{ automation_was_running }}"
       - condition: state
         entity_id: !input target_entity
         state: "off"
@@ -256,7 +256,7 @@ condition:
   - alias: "Verificar entidade bloqueadora OFF e as condições"
     condition: or
     conditions:
-      - "{{ automation_is_running }}"
+      - "{{ automation_was_running }}"
       - condition: and
         conditions:
           - "{{ (blocker_off_entity == 'none') or (not states[blocker_off_entity].state == 'off') }}"
@@ -269,7 +269,7 @@ condition:
     condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
-      - "{{ automation_is_running }}"
+      - "{{ automation_was_running }}"
       # Do not run if light is on (manually turn on)
       - condition: state
         entity_id: !input target_entity
@@ -281,7 +281,7 @@ condition:
     condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
-      - "{{ automation_is_running }}"
+      - "{{ automation_was_running }}"
       - "{{ only_after_sunset == false }}"
       - condition: numeric_state
         entity_id: sun.sun
@@ -292,7 +292,7 @@ condition:
     condition: or
     conditions:
       # Run if the light is in automatic mode (automation is already running)
-      - "{{ automation_is_running }}"
+      - "{{ automation_was_running }}"
       - "{{ illuminance_cutoff | float(0) == 0 or illuminance_entity == '' or illuminance_entity == 'none' or states[illuminance_entity].state | float(0) <= illuminance_cutoff | float(0) }}"
       - condition: not
         conditions:
@@ -310,7 +310,7 @@ action:
         sequence:
           - choose:
               conditions:
-                - "{{ this.attributes.current == 1 }}"
+                - "{{ automation_was_running }}"
                 - condition: or
                   conditions:
                     - "{{ house_mode == 'Off' }}"
@@ -321,21 +321,29 @@ action:
                   entity_id: !input target_entity
           - stop:
 
-  - alias: "If we repeat this action twice in a short period of time keep light on"
-    if:
-      - "{{ automation_previous_state == 0 }}"
-      - "{{ now().timestamp() - automation_last_triggered - no_motion_wait | as_timestamp < min_repetition_interval_sec }}"
-    then:
-      - stop:
-
   - alias: "Check if motion is ON"
     condition: state
     entity_id: !input motion_sensor
     state: "on"
 
-  - alias: "Turning light ON"
-    service: light.turn_on
-    entity_id: !input target_entity
+  - alias: "If automation was running but light was off, it means we repeating it - keep light on"
+    if:
+      - "{{ automation_was_running == 1 }}"
+      - condition: state
+        entity_id: !input target_entity
+        state: "off"
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: !input target_entity
+            state: "off"
+            for:
+              seconds: "{{ min_repetition_interval_sec | int }}"
+    then:
+      - alias: "Turning light ON and keeping it ON"
+        service: light.turn_on
+        entity_id: !input target_entity
+      - stop:
 
   - alias: "Trigger event to prevent double toggle"
     service: button.press
@@ -374,5 +382,10 @@ action:
     service: light.turn_off
     entity_id: !input target_entity
 
+  - alias: "Wait a defined time or cancel if target is already off"
+    wait_template: "{{ states[target_entity].state == 'off' }}"
+    timeout:
+      seconds: "{{ min_repetition_interval_sec | int }}"
+
   - delay:
-      seconds: 6
+      seconds: 5
