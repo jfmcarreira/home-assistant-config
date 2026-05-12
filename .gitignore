@@ -26,3 +26,4 @@ zigbee2mqtt/**
 .ha_run.lock
 **/__pycache__/
 .cache/**
+solcast_solar/**
