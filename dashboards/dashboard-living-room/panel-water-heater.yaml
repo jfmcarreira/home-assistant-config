@@ -36,30 +36,12 @@
     - current_temperature
     - last-changed
 
-
-- type: custom:mod-card
+- type: tile
   view_layout:
     column: 1
-  style:
-    hui-horizontal-stack-card$: |
-      :host {
-        height: auto;
-      }
-  card:
-    type: horizontal-stack
-    cards:
-    - type: tile
-      features_position: bottom
-      vertical: false
-      entity: switch.water_heater_comfort_mode
-      name: Modo Conforto
-    - type: tile
-      entity: switch.water_heater
-      features_position: bottom
-      vertical: false
-      view_layout:
-        position: sidebar
-  columns: 2
+  entity: switch.water_heater
+  features_position: bottom
+  vertical: true
 
 - type: statistics-graph
   chart_type: line
