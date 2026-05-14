@@ -2,7 +2,7 @@ template-room-light:
   variables:
     room_light: light.living_room
     card_height: 69px
-    icon_size: '50'
+    icon_size: "50"
   show_icon: false
   styles:
     card:
@@ -35,8 +35,8 @@ template-room-light:
         state:
           - operator: default
             color: var(--disabled-text-color)
-          - operator: '=='
-            value: 'on'
+          - operator: "=="
+            value: "on"
             color: var(--state-active-color)
         styles:
           card:
@@ -110,3 +110,298 @@ template-room-light-popup:
                   show_color_temp_control: true
                   use_light_color: true
                   collapsible_controls: false
+
+climate_status:
+  variables:
+    icon: mdi:thermostat
+    climate_entity: climate.living_room
+    temperature_sensor: sensor.temperature_living_room
+
+  entity: |
+    [[[
+      return variables.climate_entity;
+    ]]]
+
+  icon: |
+    [[[
+      return variables.icon;
+    ]]]
+
+  show_icon: true
+  show_name: true
+  show_state: true
+
+  tap_action:
+    action: more-info
+
+  state_display: |
+    [[[
+      if (!entity) return 'Unavailable';
+      return entity.state.charAt(0).toUpperCase() + entity.state.slice(1);
+    ]]]
+
+  custom_fields:
+    setpoint: |
+      [[[
+        const temp = entity.attributes.temperature;
+        const unit = entity.attributes.temperature_unit || '°C';
+        return temp !== undefined && temp !== null
+          ? `Set point: ${temp}${unit}`
+          : 'Set point: —';
+      ]]]
+    current: |
+      [[[
+        const sensor = variables.temperature_sensor;
+        const state = states[sensor];
+
+        if (!state || state.state === 'unavailable' || state.state === 'unknown') {
+          return 'Divisão: —';
+        }
+
+        const unit = state.attributes.unit_of_measurement || '°C';
+        return `Divisão: ${state.state}${unit}`;
+      ]]]
+    modes: |
+      [[[
+        const climateEntity = variables.climate_entity;
+        const currentMode = states[climateEntity]?.state;
+
+        let lastTap = 0;
+
+        const stop = (event) => {
+          event.stopPropagation();
+          if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+        };
+
+        const runOnce = (event, callback) => {
+          stop(event);
+
+          const now = Date.now();
+          if (now - lastTap < 500) return;
+          lastTap = now;
+
+          callback();
+        };
+
+        const setMode = (event, mode) => {
+          runOnce(event, () => {
+            hass.callService('climate', 'set_hvac_mode', {
+              entity_id: climateEntity,
+              hvac_mode: mode
+            });
+          });
+        };
+
+        const button = (mode, icon) => html`
+          <button
+            type="button"
+            class="climate-mode-button ${currentMode === mode ? 'active' : ''}"
+            @pointerdown=${stop}
+            @pointerup=${(event) => setMode(event, mode)}
+            @touchstart=${stop}
+            @touchend=${(event) => setMode(event, mode)}
+            @mousedown=${stop}
+            @mouseup=${(event) => setMode(event, mode)}
+            @click=${stop}
+          >
+            <ha-icon icon="${icon}"></ha-icon>
+          </button>
+        `;
+
+        return html`
+          <div class="climate-mode-buttons">
+            ${button('heat', 'mdi:fire')}
+            ${button('cool', 'mdi:snowflake')}
+            ${button('off', 'mdi:power')}
+          </div>
+        `;
+      ]]]
+
+    setpoint_controls: |
+      [[[
+        const climateEntity = variables.climate_entity;
+        const climate = states[climateEntity];
+
+        if (!climate || climate.state === 'unavailable' || climate.state === 'unknown') {
+          return html``;
+        }
+
+        const step = Number(variables.temperature_step || climate.attributes.target_temp_step || 0.5);
+        const currentTemp = Number(climate.attributes.temperature);
+        const minTemp = Number(climate.attributes.min_temp ?? 5);
+        const maxTemp = Number(climate.attributes.max_temp ?? 35);
+
+        let lastTap = 0;
+
+        const stop = (event) => {
+          event.stopPropagation();
+          if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+        };
+
+        const runOnce = (event, callback) => {
+          stop(event);
+
+          const now = Date.now();
+          if (now - lastTap < 500) return;
+          lastTap = now;
+
+          callback();
+        };
+
+        const setTemperature = (event, delta) => {
+          runOnce(event, () => {
+            let newTemp = currentTemp + delta;
+            newTemp = Math.max(minTemp, Math.min(maxTemp, newTemp));
+            newTemp = Math.round(newTemp / step) * step;
+
+            hass.callService('climate', 'set_temperature', {
+              entity_id: climateEntity,
+              temperature: newTemp
+            });
+          });
+        };
+
+        return html`
+          <div class="setpoint-buttons">
+            <button
+              type="button"
+              class="setpoint-button"
+              @pointerdown=${stop}
+              @pointerup=${(event) => setTemperature(event, -step)}
+              @touchstart=${stop}
+              @touchend=${(event) => setTemperature(event, -step)}
+              @mousedown=${stop}
+              @mouseup=${(event) => setTemperature(event, -step)}
+              @click=${stop}
+            >
+              <ha-icon icon="mdi:minus"></ha-icon>
+            </button>
+
+            <button
+              type="button"
+              class="setpoint-button"
+              @pointerdown=${stop}
+              @pointerup=${(event) => setTemperature(event, step)}
+              @touchstart=${stop}
+              @touchend=${(event) => setTemperature(event, step)}
+              @mousedown=${stop}
+              @mouseup=${(event) => setTemperature(event, step)}
+              @click=${stop}
+            >
+              <ha-icon icon="mdi:plus"></ha-icon>
+            </button>
+          </div>
+        `;
+      ]]]
+
+  styles:
+    grid:
+      - grid-template-areas: '"i n modes" "i s modes" "i setpoint setpoint_controls" "i current setpoint_controls"'
+      - grid-template-columns: 64px 1fr 175px
+      - grid-template-rows: min-content min-content min-content min-content
+      - row-gap: 8px
+      - column-gap: 10px
+    card:
+      - padding: 12px
+    icon:
+      - width: 40px
+      - margin-right: 16px
+    name:
+      - justify-self: start
+      - font-weight: 600
+      - margin-bottom: 2px
+    state:
+      - justify-self: start
+      - opacity: 0.75
+    custom_fields:
+      setpoint:
+        - justify-self: start
+        - font-size: 13px
+        - margin-top: 6px
+
+      current:
+        - justify-self: start
+        - font-size: 13px
+        - opacity: 0.75
+        - margin-top: 2px
+
+      modes:
+        - justify-self: end
+        - align-self: end
+        - z-index: 10
+
+      setpoint_controls:
+        - justify-self: end
+        - align-self: start
+        - z-index: 10
+        - margin-top: 6px
+
+  extra_styles: |
+    .climate-mode-buttons,
+    .setpoint-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      pointer-events: auto;
+    }
+
+    .climate-mode-button,
+    .setpoint-button {
+      width: 50px;
+      height: 50px;
+      border: 0;
+      border-radius: 16px;
+      padding: 10px;
+      cursor: pointer;
+      background: rgba(var(--rgb-primary-text-color), 0.08);
+      color: var(--primary-text-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      pointer-events: auto;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      z-index: 20;
+    }
+
+    .climate-mode-button ha-icon,
+    .setpoint-button ha-icon {
+      width: 26px;
+      height: 26px;
+      pointer-events: none;
+    }
+
+    .climate-mode-button.active {
+      background: var(--accent-color);
+      color: var(--primary-background-color);
+    }
+
+    .setpoint-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .setpoint-button {
+      width: 50px;
+      height: 50px;
+      border: 0;
+      border-radius: 14px;
+      padding: 8px;
+      cursor: pointer;
+      background: rgba(var(--rgb-primary-text-color), 0.08);
+      color: var(--primary-text-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .setpoint-button ha-icon {
+      width: 26px;
+      height: 26px;
+    }

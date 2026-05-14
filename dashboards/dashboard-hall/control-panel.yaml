@@ -76,6 +76,9 @@
       icon: mdi:window-shutter
       tap_action:
         action: navigate
+        navigation_path: "#panel-covers"
+      hold_action:
+        action: navigate
         navigation_path: /lovelace-subviews/dashboard-covers
     - type: custom:button-card
       size: 100%

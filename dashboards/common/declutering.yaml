@@ -16,65 +16,78 @@ decluttering_cover:
           auto_close: false
           large: false
           allow_nested_more_info: false
+          adaptive: true
+          adaptive_allow_mode_change: false
+          adaptive_force_bottom_sheet: true
           size: normal
           style: |
-            --popup-min-width: 450px;
+            --popup-min-width: 1000px;
+
+          title: '[[details_title]]'
           content:
-            type: vertical-stack
-            title: '[[details_title]]'
-            cards:
-              - type: grid
-                view_layout:
-                  column: 1
-                square: false
-                columns: 2
-                cards:
-                  - type: custom:button-card
-                    name: Parcialmente Aberto
-                    icon: mdi:window-shutter
-                    styles:
-                      icon:
-                        - color: var(--state-icon-color)
-                    icon_height: 40px
-                    tap_action:
-                      action: call-service
-                      service: >-
-                        esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
-                  - type: custom:button-card
-                    name: A Meio
-                    icon: mdi:window-shutter-open
-                    icon_height: 40px
-                    styles:
-                      icon:
-                        - color: var(--state-icon-color)
-                    tap_action:
-                      action: call-service
-                      service: >-
-                        esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
-              - features:
-                  - type: cover-open-close
-                  - type: cover-position
-                type: tile
-                icon_tap_action:
-                  action: more-info
-                name: '[[room_name]]'
-                entity: cover.[[room_code_name]]
-                icon: mdi:stairs
-                features_position: bottom
-                vertical: false
-                view_layout:
-                  column: 1
-              - type: custom:auto-entities
-                card:
-                  type: entities
-                filter:
-                  include:
-                    - entity_id: input_boolean.cover_control_*_[[room_code_name]]
-                    - entity_id: number.*_position_[[room_code_name]]
-                    - entity_id: input_number.*_position_[[room_code_name]]
-                    - entity_id: select.cover_[[room_code_name]]_last_action
-                view_layout:
-                  column: 2
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                max_cols: 2
+                max_width: 300px
+              cards:
+                - type: custom:mod-card
+                  view_layout:
+                    column: 1
+                  style:
+                    hui-horizontal-stack-card$: |
+                      :host {
+                        height: auto;
+                      }
+                  card:
+                    type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        name: Parcialmente Aberto
+                        icon: mdi:window-shutter
+                        styles:
+                          icon:
+                            - color: var(--state-icon-color)
+                        icon_height: 40px
+                        tap_action:
+                          action: call-service
+                          service: >-
+                            esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
+                      - type: custom:button-card
+                        name: A Meio
+                        icon: mdi:window-shutter-open
+                        icon_height: 40px
+                        styles:
+                          icon:
+                            - color: var(--state-icon-color)
+                        tap_action:
+                          action: call-service
+                          service: >-
+                            esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
+                - features:
+                    - type: cover-open-close
+                    - type: cover-position
+                  type: tile
+                  icon_tap_action:
+                    action: more-info
+                  name: '[[room_name]]'
+                  entity: cover.[[room_code_name]]
+                  icon: mdi:stairs
+                  features_position: bottom
+                  vertical: false
+                  view_layout:
+                    column: 1
+                - type: custom:auto-entities
+                  card:
+                    type: entities
+                  filter:
+                    include:
+                      - entity_id: input_boolean.cover_control_*_[[room_code_name]]
+                      - entity_id: number.*_position_[[room_code_name]]
+                      - entity_id: input_number.*_position_[[room_code_name]]
+                      - entity_id: select.cover_[[room_code_name]]_last_action
+                  view_layout:
+                    column: 2
 decluttering_haier_ac:
   card:
     type: tile
