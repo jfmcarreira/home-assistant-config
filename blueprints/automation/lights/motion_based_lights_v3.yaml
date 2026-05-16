@@ -345,6 +345,10 @@ action:
         entity_id: !input target_entity
       - stop:
 
+  - alias: "Turning light ON"
+    service: light.turn_on
+    entity_id: !input target_entity
+
   - alias: "Trigger event to prevent double toggle"
     service: button.press
     entity_id: !input disable_switch_button
