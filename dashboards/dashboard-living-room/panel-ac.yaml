@@ -1,186 +1,212 @@
-- type: custom:button-card
-  template: climate_status
-  name: Sala
-  variables:
-    climate_entity: climate.living_room
-    temperature_sensor: sensor.temperature_living_room
-    icon: mdi:sofa
-    temperature_step: 0.5
-
-- type: custom:button-card
-  template: climate_status
-  name: Escritório
-  variables:
-    climate_entity: climate.office
-    temperature_sensor: sensor.temperature_office
-    icon: mdi:desk
-    temperature_step: 1.0
-
-- type: custom:button-card
-  template: climate_status
-  name: Sótão
-  variables:
-    climate_entity: climate.hall
-    temperature_sensor: sensor.temperature_hall
-    icon: mdi:home-roof
-    temperature_step: 1.0
-
-- type: custom:button-card
-  template: climate_status
-  name: Suite
-  variables:
-    climate_entity: climate.master_bedroom
-    temperature_sensor: sensor.temperature_master_bedroom
-    icon: mdi:bed-king
-    temperature_step: 1.0
-
-- type: custom:button-card
-  template: climate_status
-  name: Ricardo
-  variables:
-    climate_entity: climate.bedroom_ricardo
-    temperature_sensor: sensor.temperature_bedroom_ricardo
-    icon: mdi:human-child
-    temperature_step: 1.0
-
-- type: custom:button-card
-  template: climate_status
-  name: Henrique
-  variables:
-    climate_entity: climate.bedroom_henrique
-    temperature_sensor: sensor.temperature_bedroom_henrique
-    icon: mdi:baby
-    temperature_step: 1.0
+# - type: custom:button-card
+#   template: climate_status
+#   name: Sala
+#   variables:
+#     climate_entity: climate.living_room
+#     temperature_sensor: sensor.temperature_living_room
+#     icon: mdi:sofa
+#     temperature_step: 0.5
+# - type: custom:button-card
+#   template: climate_status
+#   name: Escritório
+#   variables:
+#     climate_entity: climate.office
+#     temperature_sensor: sensor.temperature_office
+#     icon: mdi:desk
+#     temperature_step: 1.0
+# - type: custom:button-card
+#   template: climate_status
+#   name: Sótão
+#   variables:
+#     climate_entity: climate.hall
+#     temperature_sensor: sensor.temperature_hall
+#     icon: mdi:home-roof
+#     temperature_step: 1.0
+# - type: custom:button-card
+#   template: climate_status
+#   name: Suite
+#   variables:
+#     climate_entity: climate.master_bedroom
+#     temperature_sensor: sensor.temperature_master_bedroom
+#     icon: mdi:bed-king
+#     temperature_step: 1.0
+# - type: custom:button-card
+#   template: climate_status
+#   name: Ricardo
+#   variables:
+#     climate_entity: climate.bedroom_ricardo
+#     temperature_sensor: sensor.temperature_bedroom_ricardo
+#     icon: mdi:human-child
+#     temperature_step: 1.0
+# - type: custom:button-card
+#   template: climate_status
+#   name: Henrique
+#   variables:
+#     climate_entity: climate.bedroom_henrique
+#     temperature_sensor: sensor.temperature_bedroom_henrique
+#     icon: mdi:baby
+#     temperature_step: 1.0
 
 # - type: tile
 #   entity: climate.living_room
 #   name: Sala
 #   vertical: false
 #   features_position: bottom
-#   state_content:
-#     - current_temperature
-#     - fan_mode
-#     - swing_mode
-#     - preset_mode
-#   features:
-#     - style: icons
-#       type: climate-hvac-modes
-#       hvac_modes:
-#         - heat
-#         - cool
-#         - dry
-#         - fan_only
-#         - 'off'
-#     - style: icons
-#       type: climate-fan-modes
-#     - type: target-temperature
 # - type: tile
 #   entity: climate.office
 #   name: Escritório
 #   vertical: false
 #   features_position: bottom
-#   state_content:
-#     - current_temperature
-#     - fan_mode
-#     - swing_mode
-#     - preset_mode
-#   features:
-#     - style: icons
-#       type: climate-hvac-modes
-#       hvac_modes:
-#         - heat
-#         - cool
-#         - dry
-#         - fan_only
-#         - 'off'
-#     - style: icons
-#       type: climate-fan-modes
-#     - type: target-temperature
 # - type: tile
 #   entity: climate.hall
 #   name: Sótão
 #   vertical: false
 #   features_position: bottom
-#   state_content:
-#     - current_temperature
-#     - fan_mode
-#     - swing_mode
-#     - preset_mode
-#   features:
-#     - style: icons
-#       type: climate-hvac-modes
-#       hvac_modes:
-#         - heat
-#         - cool
-#         - dry
-#         - fan_only
-#         - 'off'
-#     - style: icons
-#       type: climate-fan-modes
-#     - type: target-temperature
 # - type: tile
 #   entity: climate.master_bedroom
 #   name: Suite
 #   vertical: false
 #   features_position: bottom
-#   state_content:
-#     - current_temperature
-#     - fan_mode
-#     - swing_mode
-#     - preset_mode
-#   features:
-#     - style: icons
-#       type: climate-hvac-modes
-#       hvac_modes:
-#         - heat
-#         - cool
-#         - dry
-#         - fan_only
-#         - 'off'
-#     - style: icons
-#       type: climate-fan-modes
-#     - type: target-temperature
 # - type: tile
 #   entity: climate.bedroom_ricardo
 #   name: Quarto do Ricardo
 #   vertical: false
 #   features_position: bottom
-#   state_content:
-#     - current_temperature
-#     - fan_mode
-#     - swing_mode
-#     - preset_mode
-#   features:
-#     - style: icons
-#       type: climate-hvac-modes
-#       hvac_modes:
-#         - heat
-#         - cool
-#         - dry
-#         - fan_only
-#         - 'off'
-#     - style: icons
-#       type: climate-fan-modes
-#     - type: target-temperature
 # - type: tile
 #   entity: climate.bedroom_henrique
 #   name: Quarto do Henrique
 #   vertical: false
 #   features_position: bottom
-#   state_content:
-#     - current_temperature
-#     - fan_mode
-#     - swing_mode
-#     - preset_mode
-#   features:
-#     - style: icons
-#       type: climate-hvac-modes
-#       hvac_modes:
-#         - heat
-#         - cool
-#         - dry
-#         - fan_only
-#         - 'off'
-#     - style: icons
-#       type: climate-fan-modes
-#     - type: target-temperature
+
+- type: tile
+  entity: climate.living_room
+  name: Sala
+  vertical: false
+  features_position: bottom
+  state_content:
+    - current_temperature
+    - fan_mode
+    - swing_mode
+    - preset_mode
+  features:
+    - style: icons
+      type: climate-hvac-modes
+      hvac_modes:
+        - heat
+        - cool
+        - dry
+        - fan_only
+        - 'off'
+    - style: icons
+      type: climate-fan-modes
+    - type: target-temperature
+- type: tile
+  entity: climate.office
+  name: Escritório
+  vertical: false
+  features_position: bottom
+  state_content:
+    - current_temperature
+    - fan_mode
+    - swing_mode
+    - preset_mode
+  features:
+    - style: icons
+      type: climate-hvac-modes
+      hvac_modes:
+        - heat
+        - cool
+        - dry
+        - fan_only
+        - 'off'
+    - style: icons
+      type: climate-fan-modes
+    - type: target-temperature
+- type: tile
+  entity: climate.hall
+  name: Sótão
+  vertical: false
+  features_position: bottom
+  state_content:
+    - current_temperature
+    - fan_mode
+    - swing_mode
+    - preset_mode
+  features:
+    - style: icons
+      type: climate-hvac-modes
+      hvac_modes:
+        - heat
+        - cool
+        - dry
+        - fan_only
+        - 'off'
+    - style: icons
+      type: climate-fan-modes
+    - type: target-temperature
+- type: tile
+  entity: climate.master_bedroom
+  name: Suite
+  vertical: false
+  features_position: bottom
+  state_content:
+    - current_temperature
+    - fan_mode
+    - swing_mode
+    - preset_mode
+  features:
+    - style: icons
+      type: climate-hvac-modes
+      hvac_modes:
+        - heat
+        - cool
+        - dry
+        - fan_only
+        - 'off'
+    - style: icons
+      type: climate-fan-modes
+    - type: target-temperature
+- type: tile
+  entity: climate.bedroom_ricardo
+  name: Quarto do Ricardo
+  vertical: false
+  features_position: bottom
+  state_content:
+    - current_temperature
+    - fan_mode
+    - swing_mode
+    - preset_mode
+  features:
+    - style: icons
+      type: climate-hvac-modes
+      hvac_modes:
+        - heat
+        - cool
+        - dry
+        - fan_only
+        - 'off'
+    - style: icons
+      type: climate-fan-modes
+    - type: target-temperature
+- type: tile
+  entity: climate.bedroom_henrique
+  name: Quarto do Henrique
+  vertical: false
+  features_position: bottom
+  state_content:
+    - current_temperature
+    - fan_mode
+    - swing_mode
+    - preset_mode
+  features:
+    - style: icons
+      type: climate-hvac-modes
+      hvac_modes:
+        - heat
+        - cool
+        - dry
+        - fan_only
+        - 'off'
+    - style: icons
+      type: climate-fan-modes
+    - type: target-temperature

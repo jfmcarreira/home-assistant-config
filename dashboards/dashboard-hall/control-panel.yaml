@@ -7,7 +7,7 @@
   tap_action:
     action: navigate
     navigation_path: "#panel-main"
-  double_tap_action:
+  hold_action:
     action: javascript
     javascript: |
       [[[
@@ -53,7 +53,7 @@
   type: grid
   cards:
     - type: custom:button-card
-      aspect_ratio: 9/7
+      aspect_ratio: 10/9
       size: 100%
       styles:
         icon:
@@ -67,7 +67,7 @@
         action: navigate
         navigation_path: /dashboard-configuration/config-lights
     - type: custom:button-card
-      aspect_ratio: 9/7
+      aspect_ratio: 10/9
       size: 100%
       styles:
         icon:
@@ -82,7 +82,7 @@
         navigation_path: /lovelace-subviews/dashboard-covers
     - type: custom:button-card
       size: 100%
-      aspect_ratio: 9/7
+      aspect_ratio: 10/9
       entity: vacuum.roborock
       show_name: false
       color_type: icon
@@ -101,7 +101,7 @@
   type: grid
   cards:
     - type: custom:button-card
-      aspect_ratio: 10/9
+      aspect_ratio: 12/11
       size: 100%
       color_type: icon
       show_state: false
@@ -141,7 +141,7 @@
           - position: relative
     - type: custom:button-card
       size: 100%
-      aspect_ratio: 10/9
+      aspect_ratio: 12/11
       color_type: icon
       show_state: false
       show_name: false
@@ -153,15 +153,16 @@
         - sensor.device_power_water_heater
         - switch.water_heater
       state:
-        - value: "off"
-          styles:
-            icon:
-              - color: var(--state-icon-color)
         - operator: template
           value: |
             [[[ return states['switch.water_heater'].state === 'on' ]]]
           icon: mdi:water-boiler
           color: var(--state-active-color)
+        - value: "off"
+          icon: mdi:water-boiler-off
+          styles:
+            icon:
+              - color: var(--state-icon-color)
         - operator: template
           value: |
             [[[ return states['climate.water_heater'].state === 'off' ]]]
@@ -172,26 +173,20 @@
           icon: mdi:water-boiler
           color: var(--state-icon-color)
       custom_fields:
-        temp: |
-          [[[
-            const temp = parseFloat(states['sensor.temperature_water_heater_top']?.state);
-            return (!isNaN(temp)) ? `${Math.round(temp)}°` : '—';
-          ]]]
-        temp_bottom: |
-          [[[
-            const tempB = parseFloat(states['sensor.temperature_water_heater_bottom']?.state);
-            return (!isNaN(tempB)) ? `${Math.round(tempB)}°` : '—';
-          ]]]
-        power: |
-          [[[
-            const power = parseFloat(states['sensor.device_power_water_heater']?.state);
-            return (!isNaN(power)) ? `${Math.round(power)}W` : '—';
-          ]]]
-        target: |
-          [[[
-            const target = parseFloat(states['climate.water_heater']?.attributes?.temperature);
-            return (!isNaN(target)) ? `${Math.round(target)}°` : '—';
-          ]]]
+        readings: |
+            [[[
+              const top = parseFloat(states['sensor.temperature_water_heater_top']?.state);
+              const bottom = parseFloat(states['sensor.temperature_water_heater_bottom']?.state);
+              const target = parseFloat(states['climate.water_heater']?.attributes?.temperature);
+
+              const fmt = (v) => !isNaN(v) ? `${Math.round(v)}°` : '—';
+
+              return `
+                <div class="reading">${fmt(top)}</div>
+                <div class="reading">${fmt(bottom)}</div>
+                <div class="reading">${fmt(target)}</div>
+              `;
+            ]]]
         heating: |
           [[[
             if (states['switch.water_heater'].state == "on")
@@ -207,30 +202,17 @@
             - position: absolute
             - left: 8%
             - bottom: 10%
-          temp:
+          readings:
             - color: var(--state-icon-color)
             - position: absolute
             - right: 5%
-            - top: 10%
-            - font-size: 10px
-          temp_bottom:
-            - color: var(--state-icon-color)
-            - position: absolute
-            - right: 5%
-            - top: 40%
-            - font-size: 10px
-          target:
-            - color: var(--state-icon-color)
-            - position: absolute
-            - top: 10%
-            - left: 8%
-            - font-size: 10px
-          power:
-            - color: var(--state-icon-color)
-            - position: absolute
-            - bottom: 10%
-            - right: 5%
-            - font-size: 10px
+            - top: 20%
+            - bottom: 20%
+            - display: flex
+            - flex-direction: column
+            - justify-content: space-between
+            - align-items: flex-end
+            - font-size: 12px
         grid:
           - position: relative
       tap_action:
@@ -241,7 +223,7 @@
         navigation_path: /lovelace-subviews/dashboard-water-heater
     - type: custom:button-card
       size: 100%
-      aspect_ratio: 10/9
+      aspect_ratio: 12/11
       tap_action:
         action: navigate
         navigation_path: "#panel-ac"
@@ -258,7 +240,7 @@
           entity_id: switch.air_conditioner
     - type: custom:button-card
       size: 100%
-      aspect_ratio: 10/9
+      aspect_ratio: 12/11
       state_display: "no"
       styles:
         icon:

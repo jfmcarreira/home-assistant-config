@@ -136,8 +136,18 @@ climate_status:
 
   state_display: |
     [[[
-      if (!entity) return 'Unavailable';
-      return entity.state.charAt(0).toUpperCase() + entity.state.slice(1);
+      if (!entity) return hass.localize('state.default.unavailable') || 'Unavailable';
+
+      const domain = entity.entity_id.split('.')[0];
+      const state = entity.state;
+      const deviceClass = entity.attributes.device_class || '_';
+
+      return (
+        hass.localize(`component.${domain}.entity_component.${deviceClass}.state.${state}`) ||
+        hass.localize(`component.${domain}.entity_component._.state.${state}`) ||
+        hass.localize(`state.default.${state}`) ||
+        state.charAt(0).toUpperCase() + state.slice(1)
+      );
     ]]]
 
   custom_fields:

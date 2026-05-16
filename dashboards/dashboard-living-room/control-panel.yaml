@@ -5,7 +5,7 @@
   tap_action:
     action: navigate
     navigation_path: "#panel-main"
-  double_tap_action:
+  hold_action:
     action: javascript
     javascript: |
       [[[
@@ -37,7 +37,7 @@
   type: grid
   cards:
     - type: custom:button-card
-      size: 60%
+      size: 58%
       styles:
         icon:
           - color: var(--state-icon-color)
@@ -50,7 +50,7 @@
         action: navigate
         navigation_path: /dashboard-configuration/config-lights
     - type: custom:button-card
-      size: 60%
+      size: 58%
       styles:
         icon:
           - color: var(--state-icon-color)
@@ -81,9 +81,6 @@
         action: navigate
         navigation_path: "#panel-ac"
       hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-ac
-      double_tap_action:
         action: call-service
         service: switch.turn_off
         target:
@@ -177,20 +174,19 @@
           icon: mdi:water-boiler
           color: var(--state-icon-color)
       custom_fields:
-        temp: |
+        readings: |
           [[[
-            const temp = parseFloat(states['sensor.temperature_water_heater_top']?.state);
-            return (!isNaN(temp)) ? `${Math.round(temp)}°` : '—';
-          ]]]
-        temp_bottom: |
-          [[[
-            const tempB = parseFloat(states['sensor.temperature_water_heater_bottom']?.state);
-            return (!isNaN(tempB)) ? `${Math.round(tempB)}°` : '—';
-          ]]]
-        target: |
-          [[[
+            const top = parseFloat(states['sensor.temperature_water_heater_top']?.state);
+            const bottom = parseFloat(states['sensor.temperature_water_heater_bottom']?.state);
             const target = parseFloat(states['climate.water_heater']?.attributes?.temperature);
-            return (!isNaN(target)) ? `${Math.round(target)}°` : '—';
+
+            const fmt = (v) => !isNaN(v) ? `${Math.round(v)}°` : '—';
+
+            return `
+              <div class="reading">${fmt(top)}</div>
+              <div class="reading">${fmt(bottom)}</div>
+              <div class="reading">${fmt(target)}</div>
+            `;
           ]]]
         heating: |
           [[[
@@ -205,24 +201,17 @@
             - position: absolute
             - left: 8%
             - bottom: 10%
-          temp:
+          readings:
             - color: var(--state-icon-color)
             - position: absolute
             - right: 5%
-            - top: 10%
-            - font-size: 14px
-          temp_bottom:
-            - color: var(--state-icon-color)
-            - position: absolute
-            - right: 5%
-            - top: 40%
-            - font-size: 14px
-          target:
-            - color: var(--state-icon-color)
-            - position: absolute
-            - top: 10%
-            - left: 8%
-            - font-size: 14px
+            - top: 20%
+            - bottom: 20%
+            - display: flex
+            - flex-direction: column
+            - justify-content: space-between
+            - align-items: flex-end
+            - font-size: 12px
         grid:
           - position: relative
       tap_action:

@@ -35,7 +35,7 @@ views:
               column_widths: 100%
               max_width: 100%
               margin: 0
-              height: 550px
+              height: 572px
             cards: !include panel-main.yaml
           panel-roborock:
             type: custom:layout-card

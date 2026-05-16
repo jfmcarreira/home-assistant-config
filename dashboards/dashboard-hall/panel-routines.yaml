@@ -2,7 +2,7 @@
   cards:
     - square: false
       type: grid
-      columns: 3
+      columns: 2
       cards:
         - show_name: true
           show_icon: true
@@ -20,7 +20,28 @@
           entity: script.routine_good_night
           icon: mdi:sleep
           name: Desligar e Dormir
-          icon_height: 52px
+          icon_height: 60px
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_good_night_with_lights
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_good_night_with_lights
+          entity: script.routine_good_night_with_lights
+          icon: mdi:lightbulb-night
+          name: Desligar e Dormir (Iluminação)
+          icon_height: 60px
+    - square: false
+      type: grid
+      columns: 2
+      cards:
         - show_name: true
           show_icon: true
           type: button
@@ -37,7 +58,7 @@
           entity: script.routine_exit_house_all_off
           icon: mdi:exit-run
           name: Sair de Casa
-          icon_height: 52px
+          icon_height: 60px
         - show_name: true
           show_icon: true
           type: button
@@ -53,7 +74,7 @@
               entity_id: script.routine_leaving_and_coming_back
           icon: mdi:car
           entity: script.routine_leaving_and_coming_back
-          icon_height: 52px
+          icon_height: 60px
     - square: false
       type: grid
       columns: 3
@@ -61,7 +82,7 @@
         - show_name: true
           show_icon: true
           type: button
-          icon_height: 30px
+          icon_height: 40px
           tap_action:
             action: call-service
             service: script.turn_on
@@ -78,7 +99,7 @@
         - show_name: true
           show_icon: true
           type: button
-          icon_height: 30px
+          icon_height: 40px
           tap_action:
             action: call-service
             service: script.turn_on
@@ -95,7 +116,7 @@
         - show_name: true
           show_icon: true
           type: button
-          icon_height: 30px
+          icon_height: 40px
           tap_action:
             action: call-service
             service: script.turn_on
