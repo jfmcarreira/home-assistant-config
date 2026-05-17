@@ -210,6 +210,7 @@
         entity_id: light.bedroom_*_ceiling
       - options: {}
         entity_id: light.bedroom_*_closet
+      - entity_id: light.living_room_hallway_group
       - options: {}
         entity_id: light.bedroom_*_lamp
       - options: {}
@@ -260,6 +261,7 @@
         entity_id: light.hallway_group
       - options: {}
         entity_id: light.stairs_down
+      - entity_id: light.living_room_hallway_group
       - options: {}
         entity_id: light.*presence
       - options: {}

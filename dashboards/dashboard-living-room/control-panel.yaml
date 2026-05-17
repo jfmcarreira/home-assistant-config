@@ -260,6 +260,9 @@
       icon: mdi:cctv
       tap_action:
         action: navigate
+        navigation_path: "#panel-cctv"
+      hold_action:
+        action: navigate
         navigation_path: /lovelace-subviews/dashboard-cctv
     - type: custom:button-card
       size: 60%
@@ -327,6 +330,7 @@
       tap_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-shores
+
     - type: custom:button-card
       size: 60%
       state_display: "no"
@@ -338,3 +342,4 @@
       tap_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-house
+

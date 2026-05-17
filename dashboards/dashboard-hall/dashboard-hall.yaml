@@ -3,6 +3,7 @@ kiosk_mode:
 button_card_templates: !include ../common/button-card-templates.yaml
 decluttering_templates: !include ../common/declutering.yaml
 views:
+
   - theme: Backend-selected
     title: Dashboard Hall
     path: main
@@ -48,6 +49,15 @@ views:
               margin: 0
               height: 550px
             cards: !include panel-roborock.yaml
+          panel-cctv:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              height: 550px
+            cards: !include panel-cctv.yaml
           panel-media:
             type: custom:layout-card
             layout_type: custom:horizontal-layout
@@ -136,3 +146,16 @@ views:
               margin: 0
               height: 550px
             cards: !include panel-exterior.yaml
+          panel-lights:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              reflow: true
+              max_cols: 1
+              column_widths: 100%
+              max_width: 100%
+              margin: 0
+              height: 550px
+            cards: !include panel-lights.yaml
+
+

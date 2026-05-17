@@ -19,7 +19,6 @@
     state:
       - font-size: 50px
       - font-weight: 400
-
 - type: grid
   columns: 1
   square: false
@@ -62,10 +61,24 @@
       icon: mdi:lightbulb-group
       tap_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-lights
+        navigation_path: "#panel-lights"
       hold_action:
-        action: navigate
-        navigation_path: /dashboard-configuration/config-lights
+        action: call-service
+        service: light.turn_off
+        data: {}
+        target:
+          area_id:
+            - bathroom_rc
+            - bathroom_main
+            - kitchen
+            - office
+            - outside
+            - hall
+            - stairs
+            - laundry
+            - living_room
+            - master_bedroom
+            - bedroom_ricardo
     - type: custom:button-card
       aspect_ratio: 10/9
       size: 100%
@@ -77,9 +90,6 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-covers"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-covers
     - type: custom:button-card
       size: 100%
       aspect_ratio: 10/9
@@ -89,9 +99,6 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-roborock"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-roborock
       icon: mdi:robot-vacuum
       style:
         icon:
@@ -109,9 +116,6 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-exterior"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-exterior
       custom_fields:
         lights_on: |
           [[[
@@ -218,9 +222,6 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-water-heater"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-water-heater
     - type: custom:button-card
       size: 100%
       aspect_ratio: 12/11
@@ -249,9 +250,7 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-wc"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-wc
+
 
 - square: false
   columns: 5
@@ -267,7 +266,7 @@
       icon: mdi:cctv
       tap_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-cctv
+        navigation_path: "#panel-cctv"
     - type: custom:button-card
       size: 70%
       aspect_ratio: 5/4
@@ -279,9 +278,7 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-media"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/multimedia-hall
+
     - type: custom:button-card
       size: 70%
       aspect_ratio: 5/4
@@ -349,9 +346,6 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-routines"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/routines
     - type: custom:button-card
       size: 70%
       aspect_ratio: 5/4
@@ -364,8 +358,5 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-house"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-house
   view_layout:
     column: 1

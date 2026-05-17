@@ -1,0 +1,70 @@
+- camera_view: auto
+  fit_mode: cover
+  type: picture-glance
+  entity: camera.front
+  title: Frente
+  entities:
+    - entity: binary_sensor.front_camera_person
+    - entity: binary_sensor.front_camera_car
+    - entity: binary_sensor.front_camera_motion
+    - entity: switch.front_camera_review_alerts
+    - entity: switch.front_camera_review_detections
+    - entity: input_boolean.cctv_notify_front_camera
+  camera_image: camera.front
+  aspect_ratio: "16:9"
+- camera_view: auto
+  fit_mode: cover
+  type: picture-glance
+  entity: camera.driveway
+  entities:
+    - entity: binary_sensor.driveway_camera_person
+    - entity: binary_sensor.driveway_camera_car
+    - entity: binary_sensor.driveway_camera_motion
+    - entity: switch.driveway_camera_review_alerts
+    - entity: switch.driveway_camera_review_detections
+    - entity: input_boolean.cctv_notify_driveway_camera
+  camera_image: camera.driveway
+  title: Entrada
+  aspect_ratio: "16:9"
+- camera_view: auto
+  fit_mode: cover
+  type: picture-glance
+  entity: camera.backyard
+  title: Traseiras
+  entities:
+    - entity: binary_sensor.backyard_camera_person
+    - entity: binary_sensor.backyard_camera_car
+    - entity: binary_sensor.backyard_camera_motion
+    - entity: switch.backyard_camera_review_alerts
+    - entity: switch.backyard_camera_review_detections
+    - entity: input_boolean.cctv_notify_backyard_camera
+  camera_image: camera.backyard
+  aspect_ratio: "16:9"
+- camera_view: auto
+  fit_mode: cover
+  title: Baby Monitor Henrique
+  type: picture-glance
+  entity: camera.baby_monitor_henrique
+  camera_image: camera.baby_monitor_henrique
+  entities:
+    - entity: binary_sensor.baby_monitor_henrique_crying_sound
+    - entity: binary_sensor.baby_monitor_henrique_person
+    - entity: binary_sensor.baby_monitor_henrique_cat
+    - entity: switch.baby_monitor_henrique_review_alerts
+    - entity: switch.baby_monitor_henrique_review_detections
+    - entity: binary_sensor.baby_monitor_henrique_motion
+  aspect_ratio: "16:9"
+- camera_view: auto
+  fit_mode: cover
+  title: Baby Monitor Ricardo
+  type: picture-glance
+  entity: camera.baby_monitor_ricardo
+  camera_image: camera.baby_monitor_ricardo
+  entities:
+    - entity: binary_sensor.baby_monitor_ricardo_crying_sound
+    - entity: binary_sensor.baby_monitor_ricardo_person
+    - entity: binary_sensor.baby_monitor_ricardo_cat
+    - entity: switch.baby_monitor_ricardo_review_alerts
+    - entity: switch.baby_monitor_ricardo_review_detections
+    - entity: binary_sensor.baby_monitor_ricardo_motion
+  aspect_ratio: "16:9"

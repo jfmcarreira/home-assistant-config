@@ -1,144 +1,144 @@
-- type: custom:mod-card
-  view_layout:
-    column: 2
-  style:
-    hui-horizontal-stack-card$: |
-      :host {
-        height: auto;
-      }
-  card:
-    type: horizontal-stack
-    cards:
-      - type: custom:button-card
-        size: 30%
-        state:
-          - value: "on"
-            styles:
-              icon:
-                - color: var(--state-active-color)
-        styles:
-          grid:
-            - position: relative
-          icon:
-            - color: var(--state-icon-color)
-          custom_fields:
-            count:
-              - position: absolute
-              - left: 8%
-              - top: 10%
-              - font-size: 18px
-              - font-weight: bold
-              - color: var(--state-icon-color)
+# - type: custom:mod-card
+#   view_layout:
+#     column: 2
+#   style:
+#     hui-horizontal-stack-card$: |
+#       :host {
+#         height: auto;
+#       }
+#   card:
+#     type: horizontal-stack
+#     cards:
+#       - type: custom:button-card
+#         size: 30%
+#         state:
+#           - value: "on"
+#             styles:
+#               icon:
+#                 - color: var(--state-active-color)
+#         styles:
+#           grid:
+#             - position: relative
+#           icon:
+#             - color: var(--state-icon-color)
+#           custom_fields:
+#             count:
+#               - position: absolute
+#               - left: 8%
+#               - top: 10%
+#               - font-size: 18px
+#               - font-weight: bold
+#               - color: var(--state-icon-color)
 
-            hall:
-              - position: absolute
-              - left: 8%
-              - top: 38%
-              - color: |
-                  [[[
-                    return states['light.bedroom_henrique']?.state === 'on'
-                      ? 'var(--state-active-color)'
-                      : 'var(--state-icon-color)';
-                  ]]]
+#             hall:
+#               - position: absolute
+#               - left: 8%
+#               - top: 38%
+#               - color: |
+#                   [[[
+#                     return states['light.bedroom_henrique']?.state === 'on'
+#                       ? 'var(--state-active-color)'
+#                       : 'var(--state-icon-color)';
+#                   ]]]
 
-            main_bathroom:
-              - position: absolute
-              - left: 8%
-              - top: 68%
-              - color: |
-                  [[[
-                    return states['light.master_bedroom']?.state === 'on'
-                      ? 'var(--state-active-color)'
-                      : 'var(--state-icon-color)';
-                  ]]]
+#             main_bathroom:
+#               - position: absolute
+#               - left: 8%
+#               - top: 68%
+#               - color: |
+#                   [[[
+#                     return states['light.master_bedroom']?.state === 'on'
+#                       ? 'var(--state-active-color)'
+#                       : 'var(--state-icon-color)';
+#                   ]]]
 
-            ricardo:
-              - position: absolute
-              - right: 8%
-              - top: 8%
-              - color: |
-                  [[[
-                    return states['light.bedroom_ricardo']?.state === 'on'
-                      ? 'var(--state-active-color)'
-                      : 'var(--state-icon-color)';
-                  ]]]
+#             ricardo:
+#               - position: absolute
+#               - right: 8%
+#               - top: 8%
+#               - color: |
+#                   [[[
+#                     return states['light.bedroom_ricardo']?.state === 'on'
+#                       ? 'var(--state-active-color)'
+#                       : 'var(--state-icon-color)';
+#                   ]]]
 
-            henrique:
-              - position: absolute
-              - right: 8%
-              - top: 38%
-              - color: |
-                  [[[
-                    return states['light.bedroom_henrique']?.state === 'on'
-                      ? 'var(--state-active-color)'
-                      : 'var(--state-icon-color)';
-                  ]]]
+#             henrique:
+#               - position: absolute
+#               - right: 8%
+#               - top: 38%
+#               - color: |
+#                   [[[
+#                     return states['light.bedroom_henrique']?.state === 'on'
+#                       ? 'var(--state-active-color)'
+#                       : 'var(--state-icon-color)';
+#                   ]]]
 
-            master:
-              - position: absolute
-              - right: 8%
-              - top: 68%
-              - color: |
-                  [[[
-                    return states['light.master_bedroom']?.state === 'on'
-                      ? 'var(--state-active-color)'
-                      : 'var(--state-icon-color)';
-                  ]]]
-        custom_fields:
-          count: |
-            [[[
-              const count = states['binary_sensor.floor_bedrooms_lights_on']?.attributes?.lights_on_count;
-              return count > 0 ? count : '';
-            ]]]
-          hall: |
-            [[[
-              return `<ha-icon icon="mdi:home-roof" style="width: 20px; height: 20px;"></ha-icon>`;
-            ]]]
-          main_bathroom: |
-            [[[
-              return `<ha-icon icon="mdi:shower" style="width: 20px; height: 20px;"></ha-icon>`;
-            ]]]
-          ricardo: |
-            [[[
-              return `<ha-icon icon="mdi:human-child" style="width: 20px; height: 20px;"></ha-icon>`;
-            ]]]
-          henrique: |
-            [[[
-              return `<ha-icon icon="mdi:baby" style="width: 20px; height: 20px;"></ha-icon>`;
-            ]]]
-          master: |
-            [[[
-              return `<ha-icon icon="mdi:bed-king" style="width: 20px; height: 20px;"></ha-icon>`;
-            ]]]
-        show_state: false
-        icon: mdi:home-roof
-        entity: binary_sensor.floor_bedrooms_lights_on
-        name: Quartos
-        tap_action:
-          action: perform-action
-          perform_action: light.turn_off
-          target:
-            floor_id: bedrooms
+#             master:
+#               - position: absolute
+#               - right: 8%
+#               - top: 68%
+#               - color: |
+#                   [[[
+#                     return states['light.master_bedroom']?.state === 'on'
+#                       ? 'var(--state-active-color)'
+#                       : 'var(--state-icon-color)';
+#                   ]]]
+#         custom_fields:
+#           count: |
+#             [[[
+#               const count = states['binary_sensor.floor_bedrooms_lights_on']?.attributes?.lights_on_count;
+#               return count > 0 ? count : '';
+#             ]]]
+#           hall: |
+#             [[[
+#               return `<ha-icon icon="mdi:home-roof" style="width: 20px; height: 20px;"></ha-icon>`;
+#             ]]]
+#           main_bathroom: |
+#             [[[
+#               return `<ha-icon icon="mdi:shower" style="width: 20px; height: 20px;"></ha-icon>`;
+#             ]]]
+#           ricardo: |
+#             [[[
+#               return `<ha-icon icon="mdi:human-child" style="width: 20px; height: 20px;"></ha-icon>`;
+#             ]]]
+#           henrique: |
+#             [[[
+#               return `<ha-icon icon="mdi:baby" style="width: 20px; height: 20px;"></ha-icon>`;
+#             ]]]
+#           master: |
+#             [[[
+#               return `<ha-icon icon="mdi:bed-king" style="width: 20px; height: 20px;"></ha-icon>`;
+#             ]]]
+#         show_state: false
+#         icon: mdi:home-roof
+#         entity: binary_sensor.floor_bedrooms_lights_on
+#         name: Quartos
+#         tap_action:
+#           action: perform-action
+#           perform_action: light.turn_off
+#           target:
+#             floor_id: bedrooms
 
-      - type: custom:button-card
-        size: 30%
-        state:
-          - value: "on"
-            styles:
-              icon:
-                - color: var(--state-active-color)
-        styles:
-          icon:
-            - color: var(--state-icon-color)
-        show_state: false
-        icon: mdi:grass
-        entity: binary_sensor.area_outside_lights_on
-        name: Exterior
-        tap_action:
-          action: perform-action
-          perform_action: light.turn_off
-          target:
-            area_id: outside
+#       - type: custom:button-card
+#         size: 30%
+#         state:
+#           - value: "on"
+#             styles:
+#               icon:
+#                 - color: var(--state-active-color)
+#         styles:
+#           icon:
+#             - color: var(--state-icon-color)
+#         show_state: false
+#         icon: mdi:grass
+#         entity: binary_sensor.area_outside_lights_on
+#         name: Exterior
+#         tap_action:
+#           action: perform-action
+#           perform_action: light.turn_off
+#           target:
+#             area_id: outside
 
 - type: conditional
   view_layout:
@@ -178,13 +178,24 @@
       entity: light.living_room_window
       state: "on"
   card:
-    type: custom:mushroom-light-card
-    show_brightness_control: true
-    layout: horizontal
-    primary_info: name
-    secondary_info: none
+    type: custom:bubble-card
+    card_type: button
+    button_type: slider
+    sub_button:
+      main: []
+      bottom: []
     entity: light.living_room_window
     name: Luz da Sala
+    show_name: true
+    use_accent_color: false
+    show_icon: true
+    scrolling_effect: true
+    show_state: false
+    show_last_changed: false
+    show_last_updated: false
+    show_attribute: false
+    modules: []
+
 - type: conditional
   view_layout:
     column: 2
@@ -193,13 +204,25 @@
       entity: light.hall_presence
       state: "on"
   card:
-    type: custom:mushroom-light-card
-    show_brightness_control: true
-    layout: horizontal
-    primary_info: name
-    secondary_info: none
+    type: custom:bubble-card
+    card_type: button
+    button_type: slider
+    sub_button:
+      main: []
+      bottom: []
     entity: light.hall_presence
     name: Presença Sótão
+    show_name: true
+    use_accent_color: false
+    show_icon: true
+    scrolling_effect: true
+    show_state: false
+    show_last_changed: false
+    show_last_updated: false
+    show_attribute: false
+    modules: []
+
+
 
 - type: conditional
   view_layout:
@@ -209,13 +232,24 @@
       entity: light.hallway_presence
       state: "on"
   card:
-    type: custom:mushroom-light-card
-    show_brightness_control: true
-    layout: horizontal
-    primary_info: name
-    secondary_info: none
+    type: custom:bubble-card
+    card_type: button
+    button_type: slider
+    sub_button:
+      main: []
+      bottom: []
     name: Presença Corredor
     entity: light.hallway_presence
+    show_name: true
+    use_accent_color: false
+    show_icon: true
+    scrolling_effect: true
+    show_state: false
+    show_last_changed: false
+    show_last_updated: false
+    show_attribute: false
+    modules: []
+
 - type: conditional
   view_layout:
     column: 2
@@ -224,13 +258,23 @@
       entity: light.stairs_down
       state: "on"
   card:
-    type: custom:mushroom-light-card
-    show_brightness_control: true
-    layout: horizontal
-    primary_info: name
-    secondary_info: none
+    type: custom:bubble-card
+    card_type: button
+    button_type: slider
+    sub_button:
+      main: []
+      bottom: []
     entity: light.stairs_down
     name: Hall das Escadas
+    show_name: true
+    use_accent_color: false
+    show_icon: true
+    scrolling_effect: true
+    show_state: false
+    show_last_changed: false
+    show_last_updated: false
+    show_attribute: false
+    modules: []
 
 - type: custom:auto-entities
   view_layout:
@@ -288,6 +332,7 @@
         entity_id: light.bedroom_*_lamp
       - options: {}
         entity_id: light.all_*
+      - entity_id: light.living_room_hallway_group
       - options: {}
         entity_id: light.master_bedroom_ceiling
       - options: {}

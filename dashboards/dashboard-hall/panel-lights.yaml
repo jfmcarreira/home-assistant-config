@@ -1,0 +1,164 @@
+
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+    - template-room-light-automatic
+  name: Cozinha
+  variables:
+    room_light: light.kitchen
+    lights_popup_title: Luzes da Cozinha
+    lights_popup_room: kitchen
+    lights_popup_pattern: light.kitchen_*
+    automation: automation.lights_motion_kitchen
+  triggers_update:
+    - automation.lights_motion_kitchen
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  name: Sala
+  variables:
+    room_light: light.living_room_hallway_group
+    lights_popup_title: Luzes da Sala/Corredor
+    lights_popup_room: living_room
+    lights_popup_pattern: light.*
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  name: Escadas
+  variables:
+    room_light: light.stairs_group
+    lights_popup_title: Luzes das Escadas
+    lights_popup_room: stairs
+    lights_popup_pattern: light.stairs*
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+    - template-room-light-automatic
+  variables:
+    room_light: light.laundry
+    lights_popup_title: Luzes da Lavandaria
+    lights_popup_room: laundry
+    lights_popup_pattern: light.laundry_*
+    automation: automation.lights_motion_laundry
+  triggers_update:
+    - automation.lights_motion_laundry
+  name: Lavandaria
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+    - template-room-light-automatic
+  variables:
+    room_light: light.office
+    lights_popup_title: Luzes do Escritório
+    lights_popup_room: office
+    lights_popup_pattern: light.office_*
+    automation: automation.lights_motion_office
+  triggers_update:
+    - automation.lights_motion_office
+  name: Escritório
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+    - template-room-light-automatic
+  variables:
+    room_light: light.bedroom_rc
+    lights_popup_title: Luzes do Quarto de Arrumos
+    lights_popup_room: bedroom_rc
+    lights_popup_pattern: light.bedroom_rc_*
+    automation: automation.lights_motion_bedroom_rc
+  triggers_update:
+    - automation.lights_motion_bedroom_rc
+  name: Quarto de Arrumos
+
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  name: Sotão
+  variables:
+    room_light: light.hall_group
+    lights_popup_title: Luzes do Sotão
+    lights_popup_room: hall
+    lights_popup_pattern: light.hall*
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  name: Suite
+  variables:
+    card_height: 55px
+    icon_size: "40"
+    room_light: light.master_bedroom
+    lights_popup_title: Luzes da Suite
+    lights_popup_room: master_bedroom
+    lights_popup_pattern: light.master_bedroom_*
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  variables:
+    card_height: 55px
+    icon_size: "40"
+    room_light: light.bedroom_ricardo
+    lights_popup_title: Luzes do Quarto do Ricardo
+    lights_popup_room: bedroom_ricardo
+    lights_popup_pattern: light.bedroom_ricardo_*
+  name: Quarto do Ricardo
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  variables:
+    card_height: 55px
+    icon_size: "40"
+    room_light: light.bedroom_henrique
+    lights_popup_title: Luzes do Quarto do Henrique
+    lights_popup_room: bedroom_henrique
+    lights_popup_pattern: light.bedroom_henrique_*
+  name: Quarto do Henrique
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  name: Casa de Banho Principal
+  variables:
+    card_height: 55px
+    icon_size: "40"
+    room_light: light.main_bathroom
+    lights_popup_title: Luzes da Casa de Banho Principal
+    lights_popup_room: bathroom_main
+    lights_popup_pattern: light.main_bathroom_*
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+  name: Casa de Banho da Suite
+  variables:
+    card_height: 55px
+    icon_size: "40"
+    room_light: light.master_bedroom_bathroom
+    lights_popup_title: Luzes da Casa de Banho da Suite
+    lights_popup_room: master_bedroom_bathroom
+    lights_popup_pattern: light.master_bedroom_bathroom_*
+- type: custom:button-card
+  template:
+    - template-room-light
+    - template-room-light-popup
+    - template-room-light-automatic
+  name: Casa de Banho R/C
+  variables:
+    card_height: 55px
+    icon_size: "40"
+    room_light: light.bathroom_rc
+    lights_popup_title: Luzes da Casa de Banho R/C
+    lights_popup_room: bathroom_rc
+    lights_popup_pattern: light.bathroom_rc_*
+    automation: automation.lights_motion_bathroom_rc
+  triggers_update:
+    - automation.lights_motion_bathroom_rc

@@ -76,6 +76,13 @@ views:
               max_cols: 1
             cards: !include panel-routines.yaml
 
+          panel-cctv:
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_cols: 2
+              height: 695px
+            cards: !include panel-cctv.yaml
           panel-exterior:
             type: custom:layout-card
             layout_type: custom:horizontal-layout
@@ -109,4 +116,5 @@ views:
                   max_cols: 1
                   height: 695px
                 cards: !include panel-main-right.yaml
+
 
