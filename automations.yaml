@@ -1598,8 +1598,8 @@
       - laundry
       - kitchen
       - office
-- alias: Fechar Estores ao Por do Sol
-  id: '1651018838807'
+- id: '1651018838807'
+  alias: Fechar Estores ao Por do Sol
   description: ''
   triggers:
   - event: sunset
@@ -1628,6 +1628,10 @@
       '
   - condition: sun
     after: sunset
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state:
+    - 'off'
   actions:
   - data:
       action_to_run: cover.close_cover
@@ -2558,8 +2562,8 @@
     target:
       entity_id: cover.laundry
   mode: single
-- alias: Ar Condicionado - Notificar Janelas Abertas Quartos
-  id: '1723936636115'
+- id: '1723936636115'
+  alias: Ar Condicionado - Notificar Janelas Abertas Quartos
   description: ''
   triggers:
   - entity_id:
@@ -2627,6 +2631,9 @@
     - condition: state
       entity_id: binary_sensor.window_bedroom_ricardo
       state: 'on'
+  - condition: template
+    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
+      | int(0)) > 60 * 60 }}'
   actions:
   - data:
       title: Equipamentos
@@ -2965,14 +2972,33 @@
     target:
       entity_id: lock.gate_door
   mode: single
-- alias: Trigger Botão da Luz da Porta da Cozinha
-  id: '1732671997843'
+- id: '1732671997843'
+  alias: Trigger Botão da Luz da Porta da Cozinha
   description: ''
   use_blueprint:
     path: devices/shelly_one_button.yaml
     input:
       device: 26c8a6c331839dece04f2bf801d991d9
-      button_short: []
+      button_short:
+      - if:
+        - condition: light.is_on
+          target:
+            label_id: iluminacao_exterior_da_casa
+          options:
+            behavior: any
+            for: 00:00:00
+        then:
+        - action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            label_id: iluminacao_exterior_da_casa
+        else:
+        - action: light.turn_on
+          metadata: {}
+          target:
+            entity_id: light.kitchen_door
+          data: {}
       button_long:
       - action: light.turn_on
         metadata: {}
@@ -4551,6 +4577,18 @@
     above: 30
   - trigger: time
     at: '13:00:00'
+  - trigger: power.crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_pv_power_average
+    options:
+      behavior: any
+      for: 00:00:00
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          unit_of_measurement: W
+          number: 1500
   conditions:
   - condition: time
     after: '12:00:00'
@@ -4584,9 +4622,10 @@
           threshold:
             type: below
             value:
-              active_choice: number
-              number: 50
+              active_choice: entity
+              number: 60
               unit_of_measurement: °C
+              entity: input_number.water_heater_solar_excess_temperature
       - condition: battery.is_level
         target:
           entity_id: sensor.deye_inverter_battery
@@ -4635,7 +4674,7 @@
     data: {}
   mode: single
 - id: '1777726085434'
-  alias: Solar - Activar venda de excedente
+  alias: Activar venda de excedente
   description: ''
   triggers:
   - trigger: battery.level_crossed_threshold
@@ -4677,9 +4716,10 @@
       threshold:
         type: above
         value:
-          active_choice: number
-          number: 70
+          active_choice: entity
+          number: 60
           unit_of_measurement: °C
+          entity: input_number.water_heater_solar_excess_temperature
   - trigger: power.crossed_threshold
     target:
       entity_id: sensor.deye_inverter_pv_power_average
@@ -4693,20 +4733,6 @@
       for:
         hours: 0
         minutes: 0
-        seconds: 0
-  - trigger: numeric_state
-    entity_id:
-    - sun.sun
-    attribute: elevation
-    below: 25
-  - trigger: switch.turned_on
-    target:
-      entity_id: switch.water_heater
-    options:
-      behavior: any
-      for:
-        hours: 0
-        minutes: 15
         seconds: 0
   conditions:
   - condition: climate.is_hvac_mode
@@ -4731,14 +4757,10 @@
       below: 1000
     - condition: numeric_state
       entity_id: sensor.temperature_water_heater_top
-      above: 70
+      above: input_number.water_heater_solar_excess_temperature
     - condition: numeric_state
       entity_id: sensor.deye_inverter_battery
       below: 95
-    - condition: numeric_state
-      entity_id: sun.sun
-      attribute: elevation
-      below: 25
   actions:
   - action: switch.turn_off
     metadata: {}
@@ -5218,4 +5240,60 @@
     target:
       entity_id: switch.shellyplugmg3_907069445004
     data: {}
+  mode: single
+- id: '1778684016013'
+  alias: Desactivar venda de excedente
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sun.sun
+    attribute: elevation
+    below: 10
+  conditions: []
+  actions:
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      entity_id: switch.deye_inverter_solar_sell
+    data: {}
+  mode: single
+- id: '1779033865434'
+  alias: Fechar Estores dos Quartos ao Por do Sol
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.sun_solar_elevation
+    below: 3
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state:
+    - 'on'
+  - condition: template
+    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
+      > hours * 3600 }}
+
+      '
+  - condition: template
+    value_template: '{% set hours = 12 %} {% set last = state_attr(''automation.cover_close_all_evening'',
+      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
+      > hours * 3600 }}
+
+      '
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state:
+    - 'off'
+  actions:
+  - data:
+      action_to_run: cover.close_cover
+      control_switch: close_sunset
+      covers_list:
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+    action: script.cover_group_action
   mode: single
