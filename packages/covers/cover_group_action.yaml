@@ -52,7 +52,7 @@ script:
             options:
               - label: Sala
                 value: living_room
-              - label: office
+              - label: Escritório
                 value: office
               - label: Cozinha
                 value: kitchen
