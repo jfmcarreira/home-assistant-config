@@ -199,6 +199,20 @@ number:
     device_id: device_deye_inverter
     use_write_multiple: true
     modbus_controller_id: ${modbus_controller_id}
+    id: maximum_battery_charge_current
+    name: "Maximum Battery Charge Current"
+    address: 210
+    unit_of_measurement: A
+    device_class: current
+    entity_category: config
+    value_type: U_WORD
+    mode: box
+    icon: "mdi:battery-charging"
+
+  - platform: modbus_controller
+    device_id: device_deye_inverter
+    use_write_multiple: true
+    modbus_controller_id: ${modbus_controller_id}
     name: "Battery Grid Charging Start SOC"
     address: 229
     unit_of_measurement: "%"
