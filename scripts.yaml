@@ -953,42 +953,48 @@ hvac_routine_dehumidifier_office:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: office
+      hvac_entitiy: climate.office
+      temperature_sensor: sensor.temperature_office
       heat_after: false
   alias: Routina de Desumidificação Escritório
 hvac_routine_dehumidifier_living_room:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: living_room
+      hvac_entitiy: climate.living_room
+      temperature_sensor: sensor.temperature_living_room
       heat_after: false
   alias: Routina de Desumidificação Sala
 hvac_routine_dehumidifier_hall:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: hall
+      hvac_entitiy: climate.hall
+      temperature_sensor: sensor.temperature_hall
       heat_after: false
   alias: Routina de Desumidificação Sótão
 hvac_routine_dehumidifier_master_bedroom:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: master_bedroom
+      hvac_entitiy: climate.master_bedroom
+      temperature_sensor: sensor.temperature_master_bedroom
       heat_after: false
   alias: Routina de Desumidificação Suite
 hvac_routine_dehumidifier_bedroom_ricardo:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: bedroom_ricardo
+      hvac_entitiy: climate.bedroom_ricardo
+      temperature_sensor: sensor.temperature_bedroom_ricardo
       heat_after: false
   alias: Routina de Desumidificação Quarto do Ricardo
 hvac_routine_dehumidifier_bedroom_henrique:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: bedroom_henrique
+      hvac_entitiy: climate.bedroom_henrique
+      temperature_sensor: sensor.temperature_bedroom_henrique
       heat_after: false
   alias: Routina de Desumidificação Quarto do Henrique
   description: ''
@@ -996,42 +1002,48 @@ hvac_routine_dehumidifier_heat_office:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: office
+      hvac_entitiy: climate.office
+      temperature_sensor: sensor.temperature_office
       heat_after: true
   alias: Routina de Desumidificação Escritório (Com Aquecimento)
 hvac_routine_dehumidifier_heat_living_room:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: living_room
+      hvac_entitiy: climate.living_room
+      temperature_sensor: sensor.temperature_living_room
       heat_after: true
   alias: Routina de Desumidificação Sala (Com Aquecimento)
 hvac_routine_dehumidifier_heat_hall:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: hall
+      hvac_entitiy: climate.hall
+      temperature_sensor: sensor.temperature_hall
       heat_after: true
   alias: Routina de Desumidificação Sótão (Com Aquecimento)
 hvac_routine_dehumidifier_heat_master_bedroom:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: master_bedroom
+      hvac_entitiy: climate.master_bedroom
+      temperature_sensor: sensor.temperature_master_bedroom
       heat_after: true
   alias: Routina de Desumidificação Suite (Com Aquecimento)
 hvac_routine_dehumidifier_heat_bedroom_ricardo:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: bedroom_ricardo
+      hvac_entitiy: climate.bedroom_ricardo
+      temperature_sensor: sensor.temperature_bedroom_ricardo
       heat_after: true
   alias: Routina de Desumidificação Quarto do Ricardo (Com Aquecimento)
 hvac_routine_dehumidifier_heat_bedroom_henrique:
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
-      room_area_id: bedroom_henrique
+      hvac_entitiy: climate.bedroom_henrique
+      temperature_sensor: sensor.temperature_bedroom_henrique
       heat_after: true
   alias: Routina de Desumidificação Quarto do Henrique (Com Aquecimento)
   description: ''
