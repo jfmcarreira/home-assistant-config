@@ -47,47 +47,19 @@
 #     icon: mdi:baby
 #     temperature_step: 1.0
 
-# - type: tile
-#   entity: climate.living_room
-#   name: Sala
-#   vertical: false
-#   features_position: bottom
-# - type: tile
-#   entity: climate.office
-#   name: Escritório
-#   vertical: false
-#   features_position: bottom
-# - type: tile
-#   entity: climate.hall
-#   name: Sótão
-#   vertical: false
-#   features_position: bottom
-# - type: tile
-#   entity: climate.master_bedroom
-#   name: Suite
-#   vertical: false
-#   features_position: bottom
-# - type: tile
-#   entity: climate.bedroom_ricardo
-#   name: Quarto do Ricardo
-#   vertical: false
-#   features_position: bottom
-# - type: tile
-#   entity: climate.bedroom_henrique
-#   name: Quarto do Henrique
-#   vertical: false
-#   features_position: bottom
-
 - type: tile
   entity: climate.living_room
   name: Sala
-  vertical: false
-  features_position: bottom
   state_content:
     - current_temperature
-    - fan_mode
     - swing_mode
     - preset_mode
+  vertical: false
+  icon_tap_action:
+    action: perform-action
+    perform_action: switch.toggle
+    target:
+      entity_id: switch.living_room_ac
   features:
     - style: icons
       type: climate-hvac-modes
@@ -96,117 +68,91 @@
         - cool
         - dry
         - fan_only
-        - 'off'
+        - "off"
+    - type: target-temperature
     - style: icons
       type: climate-fan-modes
-    - type: target-temperature
-- type: tile
-  entity: climate.office
-  name: Escritório
-  vertical: false
   features_position: bottom
-  state_content:
-    - current_temperature
-    - fan_mode
-    - swing_mode
-    - preset_mode
-  features:
-    - style: icons
-      type: climate-hvac-modes
-      hvac_modes:
-        - heat
-        - cool
-        - dry
-        - fan_only
-        - 'off'
-    - style: icons
-      type: climate-fan-modes
-    - type: target-temperature
-- type: tile
-  entity: climate.hall
-  name: Sótão
-  vertical: false
-  features_position: bottom
-  state_content:
-    - current_temperature
-    - fan_mode
-    - swing_mode
-    - preset_mode
-  features:
-    - style: icons
-      type: climate-hvac-modes
-      hvac_modes:
-        - heat
-        - cool
-        - dry
-        - fan_only
-        - 'off'
-    - style: icons
-      type: climate-fan-modes
-    - type: target-temperature
-- type: tile
-  entity: climate.master_bedroom
-  name: Suite
-  vertical: false
-  features_position: bottom
-  state_content:
-    - current_temperature
-    - fan_mode
-    - swing_mode
-    - preset_mode
-  features:
-    - style: icons
-      type: climate-hvac-modes
-      hvac_modes:
-        - heat
-        - cool
-        - dry
-        - fan_only
-        - 'off'
-    - style: icons
-      type: climate-fan-modes
-    - type: target-temperature
-- type: tile
-  entity: climate.bedroom_ricardo
-  name: Quarto do Ricardo
-  vertical: false
-  features_position: bottom
-  state_content:
-    - current_temperature
-    - fan_mode
-    - swing_mode
-    - preset_mode
-  features:
-    - style: icons
-      type: climate-hvac-modes
-      hvac_modes:
-        - heat
-        - cool
-        - dry
-        - fan_only
-        - 'off'
-    - style: icons
-      type: climate-fan-modes
-    - type: target-temperature
-- type: tile
-  entity: climate.bedroom_henrique
-  name: Quarto do Henrique
-  vertical: false
-  features_position: bottom
-  state_content:
-    - current_temperature
-    - fan_mode
-    - swing_mode
-    - preset_mode
-  features:
-    - style: icons
-      type: climate-hvac-modes
-      hvac_modes:
-        - heat
-        - cool
-        - dry
-        - fan_only
-        - 'off'
-    - style: icons
-      type: climate-fan-modes
-    - type: target-temperature
+  hold_action:
+    action: more-info
+  tap_action:
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        auto_close: false
+        large: false
+        allow_nested_more_info: false
+        size: normal
+        style: |
+          --popup-min-width: 450px;
+        content:
+          type: custom:vertical-stack-in-card
+          cards:
+            - type: custom:more-info-card
+              entity: climate.living_room
+              card_mod:
+                style:
+                  more-info-content: |
+                    state-card-content {
+                      display: none;
+                    }
+            - type: entities
+              entities:
+                - entity: sensor.temperature_climate_outdoor_daikin
+                  name: Temperatura do Radiador Interior
+                  secondary_info: last-updated
+            - type: grid
+              square: false
+              columns: 1
+              cards:
+                - type: tile
+                  name: Desumidificação
+                  icon: mdi:air-humidifier
+                  entity: script.hvac_routine_dehumidifier_living_room
+                  styles:
+                    icon:
+                      - color: var(--state-icon-color)
+                  tap_action:
+                    action: call-service
+                    service: script.hvac_routine_dehumidifier_living_room
+                  hold_action:
+                    action: more-info
+                - type: tile
+                  name: Desumidificação (Com Aquecimento)
+                  entity: script.hvac_routine_dehumidifier_heat_living_room
+                  icon: mdi:air-humidifier
+                  styles:
+                    icon:
+                      - color: var(--state-icon-color)
+                  tap_action:
+                    action: call-service
+                    service: script.hvac_routine_dehumidifier_heat_living_room
+                  hold_action:
+                    action: more-info
+
+- type: custom:decluttering-card
+  template: decluttering_haier_ac
+  variables:
+    - room_name: Escritório
+    - room_code_name: office
+- type: custom:decluttering-card
+  template: decluttering_haier_ac
+  variables:
+    - room_name: Sótão
+    - room_code_name: hall
+- type: custom:decluttering-card
+  template: decluttering_haier_ac
+  variables:
+    - room_name: Suite
+    - room_code_name: master_bedroom
+- type: custom:decluttering-card
+  template: decluttering_haier_ac
+  variables:
+    - room_name: Quarto do Ricardo
+    - room_code_name: bedroom_ricardo
+- type: custom:decluttering-card
+  template: decluttering_haier_ac
+  variables:
+    - room_name: Quarto do Henrique
+    - room_code_name: bedroom_henrique

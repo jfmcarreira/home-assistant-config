@@ -5,9 +5,9 @@ decluttering_cover:
       - type: cover-open-close
     icon_tap_action:
       action: more-info
-    name: '[[room_name]]'
+    name: "[[room_name]]"
     entity: cover.[[room_code_name]]
-    icon: '[[room_icon]]'
+    icon: "[[room_icon]]"
     tap_action:
       action: fire-dom-event
       browser_mod:
@@ -23,71 +23,71 @@ decluttering_cover:
           style: |
             --popup-min-width: 1000px;
 
-          title: '[[details_title]]'
+          title: "[[details_title]]"
           content:
-              type: custom:layout-card
-              layout_type: custom:horizontal-layout
-              layout:
-                max_cols: 2
-                max_width: 300px
-              cards:
-                - type: custom:mod-card
-                  view_layout:
-                    column: 1
-                  style:
-                    hui-horizontal-stack-card$: |
-                      :host {
-                        height: auto;
-                      }
-                  card:
-                    type: horizontal-stack
-                    cards:
-                      - type: custom:button-card
-                        name: Parcialmente Aberto
-                        icon: mdi:window-shutter
-                        styles:
-                          icon:
-                            - color: var(--state-icon-color)
-                        icon_height: 40px
-                        tap_action:
-                          action: call-service
-                          service: >-
-                            esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
-                      - type: custom:button-card
-                        name: A Meio
-                        icon: mdi:window-shutter-open
-                        icon_height: 40px
-                        styles:
-                          icon:
-                            - color: var(--state-icon-color)
-                        tap_action:
-                          action: call-service
-                          service: >-
-                            esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
-                - features:
-                    - type: cover-open-close
-                    - type: cover-position
-                  type: tile
-                  icon_tap_action:
-                    action: more-info
-                  name: '[[room_name]]'
-                  entity: cover.[[room_code_name]]
-                  icon: mdi:stairs
-                  features_position: bottom
-                  vertical: false
-                  view_layout:
-                    column: 1
-                - type: custom:auto-entities
-                  card:
-                    type: entities
-                  filter:
-                    include:
-                      - entity_id: input_boolean.cover_control_*_[[room_code_name]]
-                      - entity_id: number.*_position_[[room_code_name]]
-                      - entity_id: input_number.*_position_[[room_code_name]]
-                      - entity_id: select.cover_[[room_code_name]]_last_action
-                  view_layout:
-                    column: 2
+            type: custom:layout-card
+            layout_type: custom:horizontal-layout
+            layout:
+              max_cols: 2
+              max_width: 300px
+            cards:
+              - type: custom:mod-card
+                view_layout:
+                  column: 1
+                style:
+                  hui-horizontal-stack-card$: |
+                    :host {
+                      height: auto;
+                    }
+                card:
+                  type: horizontal-stack
+                  cards:
+                    - type: custom:button-card
+                      name: Parcialmente Aberto
+                      icon: mdi:window-shutter
+                      styles:
+                        icon:
+                          - color: var(--state-icon-color)
+                      icon_height: 40px
+                      tap_action:
+                        action: call-service
+                        service: >-
+                          esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
+                    - type: custom:button-card
+                      name: A Meio
+                      icon: mdi:window-shutter-open
+                      icon_height: 40px
+                      styles:
+                        icon:
+                          - color: var(--state-icon-color)
+                      tap_action:
+                        action: call-service
+                        service: >-
+                          esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
+              - features:
+                  - type: cover-open-close
+                  - type: cover-position
+                type: tile
+                icon_tap_action:
+                  action: more-info
+                name: "[[room_name]]"
+                entity: cover.[[room_code_name]]
+                icon: mdi:stairs
+                features_position: bottom
+                vertical: false
+                view_layout:
+                  column: 1
+              - type: custom:auto-entities
+                card:
+                  type: entities
+                filter:
+                  include:
+                    - entity_id: input_boolean.cover_control_*_[[room_code_name]]
+                    - entity_id: number.*_position_[[room_code_name]]
+                    - entity_id: input_number.*_position_[[room_code_name]]
+                    - entity_id: select.cover_[[room_code_name]]_last_action
+                view_layout:
+                  column: 2
 decluttering_haier_ac:
   card:
     type: tile
@@ -99,7 +99,7 @@ decluttering_haier_ac:
           - cool
           - dry
           - fan_only
-          - 'off'
+          - "off"
       - type: target-temperature
       - style: icons
         type: climate-fan-modes
@@ -108,7 +108,7 @@ decluttering_haier_ac:
       - current_temperature
       - swing_mode
       - preset_mode
-    name: '[[room_name]]'
+    name: "[[room_name]]"
     features_position: bottom
     vertical: false
     hold_action:
@@ -129,8 +129,12 @@ decluttering_haier_ac:
             cards:
               - type: custom:more-info-card
                 entity: climate.[[room_code_name]]
-                tap_action:
-                  action: more-info
+                card_mod:
+                  style:
+                    more-info-content: |
+                      state-card-content {
+                        display: none;
+                      }
               - type: entities
                 entities:
                   - entity: switch.[[room_code_name]]_ac_display
@@ -140,26 +144,29 @@ decluttering_haier_ac:
                     secondary_info: last-updated
               - type: grid
                 square: false
-                columns: 2
+                columns: 1
                 cards:
-                  - type: custom:button-card
+                  - type: tile
                     name: Desumidificação
                     icon: mdi:air-humidifier
+                    entity: script.hvac_routine_dehumidifier_[[room_code_name]]
                     styles:
                       icon:
                         - color: var(--state-icon-color)
-                    icon_height: 40px
                     tap_action:
                       action: call-service
                       service: script.hvac_routine_dehumidifier_[[room_code_name]]
-                  - type: custom:button-card
+                    hold_action:
+                      action: more-info
+                  - type: tile
                     name: Desumidificação (Com Aquecimento)
+                    entity: script.hvac_routine_dehumidifier_heat_[[room_code_name]]
                     icon: mdi:air-humidifier
                     styles:
                       icon:
                         - color: var(--state-icon-color)
-                    icon_height: 40px
                     tap_action:
                       action: call-service
-                      service: >-
-                        script.hvac_routine_dehumidifier_heat_[[room_code_name]]
+                      service: script.hvac_routine_dehumidifier_heat_[[room_code_name]]
+                    hold_action:
+                      action: more-info
