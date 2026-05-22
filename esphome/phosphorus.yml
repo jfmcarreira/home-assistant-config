@@ -67,12 +67,15 @@ sensor:
     temperature_1:
       name: Temperature Solar Panel
       device_id: device_water_heater
+      accuracy_decimals: 2
     temperature_2:
       name: Temperature Water Heater Bottom
       device_id: device_water_heater
+      accuracy_decimals: 2
     temperature_3:
       name: Temperature Water Heater Top
       device_id: device_water_heater
+      accuracy_decimals: 2
     pump_speed:
       name: Solar Panel Pump Speed
       device_id: device_water_heater
