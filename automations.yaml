@@ -259,8 +259,8 @@
     entity_id:
     - binary_sensor.front_camera_reolink_vehicle
     - binary_sensor.driveway_camera_reolink_vehicle
-    - binary_sensor.front_gate_car_occupancy
-    - binary_sensor.driveway_gate_car_occupancy
+    - binary_sensor.frigate_zone_front_gate_car
+    - binary_sensor.frigate_zone_driveway_gate_car
     from:
     - 'off'
     trigger: state
@@ -4115,7 +4115,7 @@
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
-      motion_sensor: binary_sensor.backyard_camera_person_group
+      motion_sensor: binary_sensor.backyard_camera_reolink_person
       target_entity: light.exterior_wall_back
       no_motion_wait: 60
       illuminance_cutoff: 50
@@ -4309,7 +4309,7 @@
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
-      motion_sensor: binary_sensor.driveway_camera_person_group
+      motion_sensor: binary_sensor.driveway_camera_reolink_person
       target_entity: light.exterior_wall_side
       no_motion_wait: 60
       illuminance_cutoff: 50

@@ -1047,3 +1047,18 @@ hvac_routine_dehumidifier_heat_bedroom_henrique:
       heat_after: true
   alias: Routina de Desumidificação Quarto do Henrique (Com Aquecimento)
   description: ''
+routina_de_desumidificacao:
+  sequence:
+  - action: script.turn_on
+    metadata: {}
+    target:
+      entity_id:
+      - script.hvac_routine_dehumidifier_living_room
+      - script.hvac_routine_dehumidifier_office
+      - script.hvac_routine_dehumidifier_hall
+      - script.hvac_routine_dehumidifier_master_bedroom
+      - script.hvac_routine_dehumidifier_bedroom_ricardo
+      - script.hvac_routine_dehumidifier_bedroom_henrique
+    data: {}
+  alias: Routina de Desumidificação
+  description: ''
