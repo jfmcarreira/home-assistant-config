@@ -8,6 +8,7 @@ CONF_FAN_ENTITY: Final = "fan_entity"
 CONF_LIGHT_ENTITY: Final = "light_entity"
 CONF_HUMIDITY_SENSOR: Final = "humidity_sensor"
 CONF_AVG_HUMIDITY_SENSOR: Final = "average_humidity_sensor"
+CONF_DEHUMIDIFIER_SWITCH: Final = "dehumidifier_switch"
 
 # Options keys (set in options flow)
 CONF_FAN_TIMEOUT: Final = "fan_timeout"

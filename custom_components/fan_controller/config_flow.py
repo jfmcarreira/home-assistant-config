@@ -19,6 +19,7 @@ from homeassistant.helpers.selector import (
 
 from .const import (
     CONF_AVG_HUMIDITY_SENSOR,
+    CONF_DEHUMIDIFIER_SWITCH,
     CONF_FAN_ENTITY,
     CONF_FAN_TIMEOUT,
     CONF_HUMIDITY_SENSOR,
@@ -48,6 +49,9 @@ _CONFIG_SCHEMA = vol.Schema(
         ),
         vol.Required(CONF_AVG_HUMIDITY_SENSOR): EntitySelector(
             EntitySelectorConfig(domain="sensor", device_class="humidity")
+        ),
+        vol.Optional(CONF_DEHUMIDIFIER_SWITCH): EntitySelector(
+            EntitySelectorConfig(domain="switch")
         ),
     }
 )

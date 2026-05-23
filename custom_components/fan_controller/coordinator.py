@@ -15,6 +15,7 @@ import homeassistant.util.dt as dt_util
 
 from .const import (
     CONF_AVG_HUMIDITY_SENSOR,
+    CONF_DEHUMIDIFIER_SWITCH,
     CONF_FAN_ENTITY,
     CONF_FAN_TIMEOUT,
     CONF_HUMIDITY_SENSOR,
@@ -158,6 +159,7 @@ class FanStateMachine(StateMachine):
         pass
 
     def on_enter_fan_on_timeout(self) -> None:
+        self.model.turn_off_dehumidifier()
         self.model.turn_on_fan(reason="automatico")
         self.model.set_timer(self.model.get_fan_timeout_seconds())
 
@@ -176,6 +178,9 @@ class FanCoordinator:
         self._light_entity: str = entry.data[CONF_LIGHT_ENTITY]
         self._humidity_sensor: str = entry.data[CONF_HUMIDITY_SENSOR]
         self._avg_humidity_sensor: str = entry.data[CONF_AVG_HUMIDITY_SENSOR]
+        self._dehumidifier_switch: str | None = entry.data.get(
+            CONF_DEHUMIDIFIER_SWITCH
+        )
 
         self._auto_mode: bool = True
         self._humidity_light_on: float | None = None
@@ -258,6 +263,10 @@ class FanCoordinator:
         return self.machine.current_state.id
 
     @property
+    def dehumidifier_switch(self) -> str | None:
+        return self._dehumidifier_switch
+
+    @property
     def humidity_light_on(self) -> float | None:
         return self._humidity_light_on
 
@@ -316,6 +325,8 @@ class FanCoordinator:
         return now < _QUIET_END or now >= _QUIET_START
 
     def turn_on_fan(self, reason: str = "automatico") -> None:
+        if reason == "humidade_alta":
+            self.turn_on_dehumidifier()
         if self.is_fan_on():
             return
         self.record_humidity_fan_on()
@@ -345,9 +356,28 @@ class FanCoordinator:
         )
 
     def turn_off_fan(self) -> None:
+        self.turn_off_dehumidifier()
         self.hass.async_create_task(
             self.hass.services.async_call(
                 "fan", "turn_off", {"entity_id": self._fan_entity}
+            )
+        )
+
+    def turn_on_dehumidifier(self) -> None:
+        if self._dehumidifier_switch is None:
+            return
+        self.hass.async_create_task(
+            self.hass.services.async_call(
+                "switch", "turn_on", {"entity_id": self._dehumidifier_switch}
+            )
+        )
+
+    def turn_off_dehumidifier(self) -> None:
+        if self._dehumidifier_switch is None:
+            return
+        self.hass.async_create_task(
+            self.hass.services.async_call(
+                "switch", "turn_off", {"entity_id": self._dehumidifier_switch}
             )
         )
 

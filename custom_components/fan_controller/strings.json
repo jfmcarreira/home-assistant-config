@@ -8,14 +8,16 @@
           "fan_entity": "Fan Entity",
           "light_entity": "Light Entity",
           "humidity_sensor": "Humidity Sensor",
-          "average_humidity_sensor": "Average Humidity Sensor"
+          "average_humidity_sensor": "Average Humidity Sensor",
+          "dehumidifier_switch": "Dehumidifier Switch"
         },
         "data_description": {
           "name": "A friendly name for this room (e.g. Master Bathroom)",
           "fan_entity": "The fan entity to control",
           "light_entity": "The light entity to monitor",
           "humidity_sensor": "The humidity sensor in this room",
-          "average_humidity_sensor": "Sensor providing average baseline humidity"
+          "average_humidity_sensor": "Sensor providing average baseline humidity",
+          "dehumidifier_switch": "Optional switch to turn on while the fan is running due to high humidity"
         }
       }
     },
