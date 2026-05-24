@@ -1,6 +1,6 @@
 blueprint:
-  name: "[HVAC] Controlo Horário - Ligar Ar Condicionado"
-  description: Ligar Modo Aquecimento do Ar condicionado a uma determinada hora
+  name: "[HVAC] Controlo Excedente Solar - Ligar Ar Condicionado"
+  description: Ligar Modo Aquecimento do Ar condicionado com Excedente Solar
 
   domain: automation
   input:
@@ -12,45 +12,16 @@ blueprint:
           multiple: true
 
     hvac_mode_heat:
-      name: Mode Calor
+      name: Modo Calor
       default: true
       selector:
         boolean:
-
-    schedule_start:
-      name: Horário de ínicio de controlo
-      description: Horário da acção
-      selector:
-        time:
 
     schedule_end:
       name: Horário de fim de controlo
       description: Horário da acção
       selector:
         time:
-
-    weekday:
-      name: Dia da Semana
-      default: [mon, tue, wed, thu, fri, sat, sun]
-      selector:
-        select:
-          options:
-            - label: Segunda-feira
-              value: mon
-            - label: Terça-feira
-              value: tue
-            - label: Quarta-feira
-              value: wed
-            - label: Quinta-feira
-              value: thu
-            - label: Sexta-feira
-              value: fri
-            - label: Sábado
-              value: sat
-            - label: Domingo
-              value: sun
-          custom_value: false
-          multiple: true
 
     hvac_temperature:
       name: Temperatura do AC
@@ -60,21 +31,6 @@ blueprint:
           step: 0.5
           min: 18
           max: 26
-
-    extra_hvac_actions:
-      name: Acções Extra
-      default: []
-      selector:
-        action:
-
-    hvac_delayed_temperature_offset:
-      name: Temperatura do AC Após 1h
-      default: 0
-      selector:
-        number:
-          mode: box
-          min: -2
-          max: +2
 
     temperature_sensor:
       name: Sensor de Temperatura
@@ -135,14 +91,18 @@ max_exceeded: silent
 variables:
   hvac_temperature: !input hvac_temperature
   hvac_mode_heat: !input hvac_mode_heat
-  hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
   room_temperature: !input room_temperature
   room_temperature_diff: !input room_temperature_diff
 
 trigger:
-  - trigger: time
-    id: normal_time
-    at: !input schedule_start
+  - trigger: state
+    entity_id: binary_sensor.notify_home
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
 
   - trigger: numeric_state
     entity_id: !input temperature_sensor
@@ -162,9 +122,25 @@ trigger:
     for:
       minutes: 10
 
+  - trigger: numeric_state
+    entity_id: sensor.deye_inverter_pv_power_average
+    above: 1500
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: sensor.house_power_consumption_average
+    below: 2000
+    for:
+      minutes: 10
+
 condition:
   - condition: state
     entity_id: input_boolean.automation_bypass_hvac
+    state: "off"
+
+  - condition: state
+    entity_id: binary_sensor.notify_home
     state: "off"
 
   - condition: state
@@ -177,27 +153,25 @@ condition:
     state:
       - "off"
 
+  - condition: numeric_state
+    entity_id: sensor.deye_inverter_pv_power_average
+    above: 1500
+
+  - condition: numeric_state
+    entity_id: sensor.house_power_consumption_average
+    below: 2000
+
   - condition: state
     entity_id: sensor.season
     state: !input "selected_season"
 
   - condition: time
-    after: !input schedule_start
     before: !input schedule_end
-
-  - condition: time
-    weekday: !input "weekday"
 
   - alias: "Window Closed"
     condition: state
     entity_id: !input window_sensor
     state: "off"
-
-  - alias: "All Windows Closed"
-    condition: state
-    entity_id: binary_sensor.window_all_house
-    state:
-      - "off"
 
   - alias: "Run once a day (wait at least 12 hours)"
     condition: template
@@ -261,17 +235,3 @@ action:
       swing_mode: swing
     target:
       entity_id: !input hvac_unit
-
-  - sequence: !input extra_hvac_actions
-
-  - condition: template
-    value_template: "{{ (hvac_delayed_temperature_offset | int | abs) > 0  }}"
-
-  - delay:
-      hours: 1
-
-  - action: climate.set_temperature
-    target:
-      entity_id: !input hvac_unit
-    data:
-      temperature: "{{ hvac_temperature + hvac_delayed_temperature_offset }}"

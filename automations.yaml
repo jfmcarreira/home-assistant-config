@@ -939,8 +939,8 @@
       entity_id: humidifier.portable_dehumidifier
     action: humidifier.turn_on
   mode: single
-- alias: Luzes por Mov. na Sala
-  id: '1683763190674'
+- id: '1683763190674'
+  alias: Luzes por Mov. na Sala
   description: ''
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
@@ -972,6 +972,12 @@
       - condition: state
         entity_id: light.stairs_down
         state: 'off'
+      - condition: media_player.is_off
+        target:
+          entity_id: media_player.living_room_tv
+        options:
+          behavior: any
+          for: 00:00:00
 - alias: Abrir Parcialmente Estores Noite do Primeiro Andar
   id: '1689453293699'
   description: ''
@@ -1544,8 +1550,10 @@
     attribute: elevation
     above: '0'
   - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
-      | int(0)) > 60 * 60 *18 }}'
+    value_template: >
+      {% set hours = 18 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
   - condition: state
     entity_id: binary_sensor.workday
     state: 'on'
@@ -1621,11 +1629,10 @@
     entity_id: binary_sensor.notify_home
     state: 'off'
   - condition: template
-    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
-      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
-      > hours * 3600 }}
-
-      '
+    value_template: >
+      {% set hours = 12 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
   - condition: sun
     after: sunset
   - condition: state
@@ -1800,8 +1807,10 @@
     for:
       minutes: 10
   - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
-      | int(0)) > 60 * 60 * 12 }}'
+    value_template: >
+      {% set hours = 12 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
   - condition: numeric_state
     entity_id: sensor.temperature_water_heater_top
     below: 60
@@ -2632,8 +2641,10 @@
       entity_id: binary_sensor.window_bedroom_ricardo
       state: 'on'
   - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
-      | int(0)) > 60 * 60 }}'
+    value_template: >
+      {% set hours = 1 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
   actions:
   - data:
       title: Equipamentos
@@ -3795,8 +3806,9 @@
     state: 'on'
     entity_id: binary_sensor.joao_home
   - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
-      | int(0)) > 60 * 30 }}'
+    value_template: >
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
   - condition: state
     entity_id: light.bedroom_henrique
     state:
@@ -3856,8 +3868,9 @@
     entity_id: binary_sensor.joao_home
     state: 'on'
   - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
-      | int(0)) > 60 * 30 }}'
+    value_template: >
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
   - condition: state
     entity_id: light.bedroom_ricardo
     state:
@@ -4078,8 +4091,9 @@
     to: 'on'
   conditions:
   - condition: template
-    value_template: '{{ now().timestamp() - (this.attributes.last_triggered | as_timestamp
-      | int(0)) > 60 * 30 }}'
+    value_template: >
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
   - condition: state
     entity_id: binary_sensor.joao_home
     state: 'on'
@@ -4494,11 +4508,10 @@
     options: {}
   - alias: Run once a day (wait at least 12 hours)
     condition: template
-    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
-      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
-      > hours * 3600 }}
-
-      '
+    value_template: >
+      {% set hours = 12 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
   actions:
   - condition: state
     entity_id: binary_sensor.water_heater_panel_heating
@@ -4640,7 +4653,7 @@
         entity_id: sensor.temperature_water_heater_top
       options:
         threshold:
-          type: above
+          type: below
           value:
             active_choice: number
             number: 50
@@ -4768,8 +4781,8 @@
       entity_id: switch.water_heater
     data: {}
   mode: single
-- alias: AC da Sala - Ligar de Tarde no Verão
-  id: '1751200610784'
+- id: '1751200610784'
+  alias: AC Sala - Ligar de Tarde no Verão
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
@@ -5272,17 +5285,10 @@
     state:
     - 'on'
   - condition: template
-    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
-      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
-      > hours * 3600 }}
-
-      '
-  - condition: template
-    value_template: '{% set hours = 12 %} {% set last = state_attr(''automation.cover_close_all_evening'',
-      ''last_triggered'') %} {{ last is not none and (now() - last).total_seconds()
-      > hours * 3600 }}
-
-      '
+    value_template: >
+      {% set hours = 12 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state:
@@ -5297,3 +5303,173 @@
       - master_bedroom
     action: script.cover_group_action
   mode: single
+- id: '1779568047844'
+  alias: Abrir Estores Fechados com o Calor
+  description: ''
+  triggers:
+  - entity_id:
+    - sensor.temperature_outside
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    trigger: numeric_state
+    below: 25
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  - trigger: numeric_state
+    entity_id:
+    - sensor.sun_solar_elevation
+    below: 25
+  conditions:
+  - condition: or
+    conditions:
+    - condition: numeric_state
+      entity_id: sensor.temperature_outside
+      below: 25
+    - condition: numeric_state
+      entity_id: sensor.sun_solar_elevation
+      below: 25
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.house_guest
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
+  actions:
+  - data:
+      action_to_run: script.cover_open_if_close_with_heat
+      control_switch: close_with_heat
+      covers_list:
+      - stairs
+      - bedroom_rc
+      - laundry
+      - living_room
+      - office
+      - kitchen
+      - bathroom
+      - master_bedroom
+      - bedroom_ricardo
+      - bedroom_henrique
+    action: script.cover_group_action
+  mode: single
+- id: '1779569312624'
+  alias: AC Sala - Arrefecer com Apoio Solar
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit:
+      - climate.living_room
+      schedule_end: '17:00:00'
+      hvac_temperature: 25
+      hvac_mode_heat: false
+      temperature_sensor: sensor.temperature_living_room
+      window_sensor: binary_sensor.window_living_room
+      room_temperature: 24
+      selected_season:
+      - spring
+      - summer
+      - autumn
+- id: '1779569424753'
+  alias: AC Suite - Arrefecer com Apoio Solar
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit:
+      - climate.master_bedroom
+      schedule_end: '17:00:00'
+      hvac_temperature: 25
+      hvac_mode_heat: false
+      temperature_sensor: sensor.temperature_master_bedroom
+      window_sensor: binary_sensor.window_master_bedroom
+      room_temperature: 24
+      selected_season:
+      - spring
+      - summer
+      - autumn
+- id: '1779569459729'
+  alias: AC Quarto do Henrique - Arrefecer com Apoio Solar
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit:
+      - climate.bedroom_henrique
+      schedule_end: '17:00:00'
+      hvac_temperature: 25
+      hvac_mode_heat: false
+      temperature_sensor: sensor.temperature_bedroom_henrique
+      window_sensor: binary_sensor.window_bedroom_henrique
+      room_temperature: 24
+      selected_season:
+      - spring
+      - summer
+      - autumn
+- id: '1779569485941'
+  alias: AC Quarto do Ricardo - Arrefecer com Apoio Solar
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit:
+      - climate.bedroom_ricardo
+      schedule_end: '17:00:00'
+      hvac_temperature: 25
+      hvac_mode_heat: false
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      window_sensor: binary_sensor.window_bedroom_ricardo
+      room_temperature: 24
+      selected_season:
+      - spring
+      - summer
+      - autumn
+- id: '1779569520542'
+  alias: AC Escritório - Arrefecer com Apoio Solar
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit:
+      - climate.office
+      schedule_end: '17:00:00'
+      hvac_temperature: 25
+      hvac_mode_heat: false
+      temperature_sensor: sensor.temperature_office
+      window_sensor: binary_sensor.window_office
+      room_temperature: 24
+      selected_season:
+      - spring
+      - summer
+      - autumn
+      room_temperature_diff: 1
+- id: '1779569574241'
+  alias: AC Hall - Arrefecer com Apoio Solar
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit:
+      - climate.hall
+      schedule_end: '17:00:00'
+      hvac_temperature: 24
+      hvac_mode_heat: false
+      temperature_sensor: sensor.temperature_hall
+      window_sensor: binary_sensor.window_bedroom_floor
+      room_temperature: 24
+      selected_season:
+      - spring
+      - summer
+      - autumn
+      room_temperature_diff: 0
