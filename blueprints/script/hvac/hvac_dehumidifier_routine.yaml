@@ -38,7 +38,7 @@ sequence:
     data:
       temperature: 18
     target:
-      entity_id: !input temperature_sensor
+      entity_id: !input hvac_entitiy
 
   - wait_for_trigger:
       - trigger: climate.hvac_mode_changed
@@ -63,13 +63,13 @@ sequence:
         options:
           behavior: any
         target:
-          entity_id: !input temperature_sensor
+          entity_id: !input hvac_entitiy
 
   - action: climate.set_temperature
     data:
       temperature: 20
     target:
-      entity_id: !input temperature_sensor
+      entity_id: !input hvac_entitiy
 
   - if:
       - condition: or
