@@ -11,27 +11,6 @@ blueprint:
           domain: climate
           multiple: true
 
-    hvac_mode_heat:
-      name: Modo Calor
-      default: true
-      selector:
-        boolean:
-
-    schedule_end:
-      name: Horário de fim de controlo
-      description: Horário da acção
-      selector:
-        time:
-
-    hvac_temperature:
-      name: Temperatura do AC
-      default: 20
-      selector:
-        number:
-          step: 0.5
-          min: 18
-          max: 26
-
     temperature_sensor:
       name: Sensor de Temperatura
       default:
@@ -47,26 +26,6 @@ blueprint:
         entity:
           domain: binary_sensor
           device_class: window
-
-    room_temperature:
-      name: Temperatura da Divisão
-      default: 20
-      selector:
-        number:
-          min: 18
-          max: 25
-          step: 0.1
-          unit_of_measurement: "ºC"
-
-    room_temperature_diff:
-      name: Diferença para a Referência
-      default: 0
-      selector:
-        number:
-          min: 0
-          max: 2
-          step: 0.1
-          unit_of_measurement: "ºC"
 
     selected_season:
       name: Estação do Ano
@@ -89,10 +48,7 @@ mode: restart
 max_exceeded: silent
 
 variables:
-  hvac_temperature: !input hvac_temperature
-  hvac_mode_heat: !input hvac_mode_heat
-  room_temperature: !input room_temperature
-  room_temperature_diff: !input room_temperature_diff
+  temperature_sensor: !input temperature_sensor
 
 trigger:
   - trigger: state
@@ -106,19 +62,25 @@ trigger:
 
   - trigger: numeric_state
     entity_id: !input temperature_sensor
-    below: !input room_temperature
+    below: input_number.house_target_low_temperature
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: !input temperature_sensor
+    below: input_number.house_target_high_temperature
     for:
       minutes: 10
 
   - trigger: numeric_state
     entity_id: sensor.temperature_outside
-    below: !input room_temperature
+    below: input_number.house_target_low_temperature
     for:
       minutes: 10
 
   - trigger: numeric_state
     entity_id: sensor.temperature_outside
-    above: !input room_temperature
+    above: input_number.house_target_high_temperature
     for:
       minutes: 10
 
@@ -165,18 +127,20 @@ condition:
     entity_id: sensor.season
     state: !input "selected_season"
 
-  - condition: time
-    before: !input schedule_end
-
   - alias: "Window Closed"
     condition: state
     entity_id: !input window_sensor
     state: "off"
 
-  - alias: "Run once a day (wait at least 12 hours)"
+  - alias: "Not cleaning mode"
+    condition: state
+    entity_id: calendar.cleaning
+    state: "off"
+
+  - alias: "Run once every two hours"
     condition: template
     value_template: >
-      {% set hours = 12 %}
+      {% set hours = 2 %}
       {% set last = state_attr(this.entity_id, 'last_triggered') %}
       {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
 
@@ -184,45 +148,40 @@ condition:
     conditions:
       - condition: and
         conditions:
-          - "{{ hvac_mode_heat == true }}"
-          - condition: numeric_state
-            entity_id: !input temperature_sensor
-            below: !input room_temperature
-          - condition: numeric_state
-            entity_id: sensor.temperature_outside
-            below: !input room_temperature
           - condition: template
-            value_template: "{{ (states('input_number.house_target_low_temperature') | float - states(room_temperature) | float) >= room_temperature_diff  }}"
+            value_template: "{{ (states('input_number.house_target_low_temperature') | float - states(temperature_sensor) | float) > 0  }}"
       - condition: and
         conditions:
-          - "{{ hvac_mode_heat == false }}"
-          - condition: numeric_state
-            entity_id: !input temperature_sensor
-            above: !input room_temperature
           - condition: template
-            value_template: "{{ (states(room_temperature) | float - states('input_number.house_target_high_temperature') | float) >= room_temperature_diff }}"
+            value_template: "{{ (states(temperature_sensor) | float - states('input_number.house_target_high_temperature') | float) > 0 }}"
 
 action:
   - if:
-      - "{{ hvac_mode_heat == true }}"
+      - condition: numeric_state
+        entity_id: !input temperature_sensor
+        below: input_number.house_target_low_temperature
     then:
       - action: climate.set_hvac_mode
         target:
           entity_id: !input hvac_unit
         data:
           hvac_mode: heat
+      - action: climate.set_temperature
+        target:
+          entity_id: !input hvac_unit
+        data:
+          temperature: input_number.house_target_low_temperature
     else:
       - action: climate.set_hvac_mode
         target:
           entity_id: !input hvac_unit
         data:
           hvac_mode: cool
-
-  - action: climate.set_temperature
-    target:
-      entity_id: !input hvac_unit
-    data:
-      temperature: !input hvac_temperature
+      - action: climate.set_temperature
+        target:
+          entity_id: !input hvac_unit
+        data:
+          temperature: input_number.house_target_high_temperature
 
   - action: climate.set_fan_mode
     data:

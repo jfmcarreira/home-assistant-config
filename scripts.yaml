@@ -1,69 +1,3 @@
-hvac_turn_on_bedroom_ricardo:
-  alias: hvac_turn_on_bedroom_ricardo
-  mode: single
-  sequence:
-  - if:
-    - condition: state
-      entity_id: binary_sensor.hot_months
-      state: 'true'
-    then:
-    - condition: numeric_state
-      entity_id: sensor.temperature_bedroom_ricardo
-      above: 24
-    - action: switch.turn_on
-      target:
-        entity_id: switch.bedroom_ricardo_ac
-    else:
-    - condition: numeric_state
-      entity_id: sensor.temperature_bedroom_ricardo
-      below: 22
-    - action: switch.turn_on
-      target:
-        entity_id: switch.bedroom_ricardo_ac
-hvac_turn_on_bedroom_henrique:
-  alias: hvac_turn_on_bedroom_henrique
-  mode: single
-  sequence:
-  - if:
-    - condition: state
-      entity_id: binary_sensor.hot_months
-      state: 'true'
-    then:
-    - condition: numeric_state
-      entity_id: sensor.temperature_bedroom_henrique
-      above: 24
-    - action: switch.turn_on
-      target:
-        entity_id: switch.bedroom_henrique_ac
-    else:
-    - condition: numeric_state
-      entity_id: sensor.temperature_bedroom_henrique
-      below: 22
-    - action: switch.turn_on
-      target:
-        entity_id: switch.bedroom_henrique_ac
-hvac_turn_on_master_bedroom:
-  alias: hvac_turn_on_master_bedroom
-  mode: single
-  sequence:
-  - if:
-    - condition: state
-      entity_id: binary_sensor.hot_months
-      state: 'true'
-    then:
-    - condition: numeric_state
-      entity_id: sensor.temperature_master_bedroom
-      above: 24
-    - action: switch.turn_on
-      target:
-        entity_id: switch.master_bedroom_ac
-    else:
-    - condition: numeric_state
-      entity_id: sensor.temperature_master_bedroom
-      below: 22
-    - action: switch.turn_on
-      target:
-        entity_id: switch.master_bedroom_ac
 routine_cover_rain_mode:
   alias: Routina Modo de Chuva
   mode: single
@@ -290,10 +224,19 @@ routine_exit_house_to_work_bianca:
       entity_id: binary_sensor.joao_home
       state: 'off'
     then:
-    - target:
-        entity_id: script.routine_exit_house_all_off
+    - continue_on_error: true
       data: {}
+      target:
+        entity_id: script.routine_exit_house_all_off
       action: script.turn_on
+    - action: script.sequence_door_open
+      data: {}
+    - delay:
+        seconds: 10
+    - data: {}
+      target:
+        entity_id: cover.gate
+      action: cover.open_cover
     - stop:
   - data: {}
     target:
@@ -338,10 +281,26 @@ routine_exit_house_to_work_joao:
       entity_id: binary_sensor.bianca_home
       state: 'off'
     then:
-    - action: script.turn_on
+    - continue_on_error: true
       data: {}
       target:
         entity_id: script.routine_exit_house_all_off
+      action: script.turn_on
+    - action: script.sequence_door_open
+      data: {}
+    - wait_for_trigger:
+      - trigger: state
+        entity_id:
+        - binary_sensor.radium_is_charging
+        from:
+        - 'off'
+        to:
+        - 'on'
+      continue_on_timeout: false
+    - data: {}
+      target:
+        entity_id: cover.gate
+      action: cover.open_cover
     - stop:
   - data: {}
     target:
@@ -377,6 +336,7 @@ routine_exit_house_to_work_joao:
 routine_leaving_and_coming_back:
   alias: Vou Ali e Já Venho
   mode: single
+  icon: mdi:arrow-u-down-left
   sequence:
   - variables:
       joao_was_home: '{{ is_state(''binary_sensor.joao_home'',''on'' ) }}'
@@ -583,8 +543,26 @@ routine_good_night:
       - switch.fire_tablet_screen
       - switch.lenovo_tablet_screen
     action: switch.turn_off
+routine_car_exit:
+  alias: Routina de Sair de Casa de Carro
+  mode: single
+  icon: mdi:car
+  sequence:
+  - continue_on_error: true
+    data: {}
+    target:
+      entity_id: script.routine_exit_house_all_off
+    action: script.turn_on
+  - action: script.sequence_door_open
+    data: {}
+  - delay:
+      seconds: 10
+  - data: {}
+    target:
+      entity_id: cover.gate
+    action: cover.open_cover
 routine_exit_house_all_off:
-  alias: Routina de Sair de Casa (Desligar Tudo)
+  alias: Routina de Sair e Desligar Tudo
   mode: single
   icon: mdi:exit-run
   sequence:
@@ -666,12 +644,6 @@ routine_exit_house_all_off:
       - kitchen
       - living_room
     action: light.turn_off
-  - delay:
-      seconds: 10
-  - data: {}
-    target:
-      entity_id: cover.gate
-    action: cover.open_cover
   - action: input_text.set_value
     target:
       entity_id: input_text.script_step_message
@@ -701,6 +673,10 @@ routine_exit_house_all_off:
   - type: turn_off
     device_id: 2ae8ef1981d03f83e4144debe519a697
     entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
+    domain: switch
+  - type: turn_off
+    device_id: 070256d058f9215d8c746c4242331023
+    entity_id: b856d2fd4dd80e2b1d02e391c347fc75
     domain: switch
   - data: {}
     action: light.turn_off

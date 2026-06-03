@@ -45,7 +45,7 @@ sequence:
         target:
           entity_id: !input hvac_entitiy
         options:
-          behavior: any
+          behavior: all
           hvac_mode:
             - heat
             - heat_cool
@@ -61,7 +61,7 @@ sequence:
     conditions:
       - condition: climate.is_off
         options:
-          behavior: any
+          behavior: all
         target:
           entity_id: !input hvac_entitiy
 
@@ -86,7 +86,7 @@ sequence:
                   active_choice: number
                   number: 20
                   unit_of_measurement: °C
-              behavior: any
+              behavior: all
     then:
       - action: climate.turn_off
         target:
@@ -111,7 +111,7 @@ sequence:
         target:
           entity_id: !input hvac_entitiy
         options:
-          behavior: any
+          behavior: all
           hvac_mode:
             - heat
             - heat_cool
@@ -128,7 +128,7 @@ sequence:
               active_choice: number
               number: 20.3
               unit_of_measurement: °C
-          behavior: any
+          behavior: all
     timeout:
       minutes: 30
     continue_on_timeout: true

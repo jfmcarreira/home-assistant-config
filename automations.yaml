@@ -373,8 +373,8 @@
     entity_id: light.kitchen_pantry
     domain: light
   mode: single
-- alias: Fechar Estores Fachada Poente
-  id: '1661088354800'
+- id: '1661088354800'
+  alias: Fechar Estores Fachada Poente
   description: ''
   triggers:
   - entity_id:
@@ -437,6 +437,9 @@
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
+  - condition: numeric_state
+    entity_id: sensor.sun_solar_elevation
+    above: 20
   actions:
   - data:
       action_to_run: cover.close_cover
@@ -1550,10 +1553,11 @@
     attribute: elevation
     above: '0'
   - condition: template
-    value_template: >
-      {% set hours = 18 %}
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+    value_template: '{% set hours = 18 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
   - condition: state
     entity_id: binary_sensor.workday
     state: 'on'
@@ -1629,10 +1633,11 @@
     entity_id: binary_sensor.notify_home
     state: 'off'
   - condition: template
-    value_template: >
-      {% set hours = 12 %}
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
   - condition: sun
     after: sunset
   - condition: state
@@ -1807,10 +1812,11 @@
     for:
       minutes: 10
   - condition: template
-    value_template: >
-      {% set hours = 12 %}
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
   - condition: numeric_state
     entity_id: sensor.temperature_water_heater_top
     below: 60
@@ -2641,10 +2647,11 @@
       entity_id: binary_sensor.window_bedroom_ricardo
       state: 'on'
   - condition: template
-    value_template: >
-      {% set hours = 1 %}
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+    value_template: '{% set hours = 1 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
   actions:
   - data:
       title: Equipamentos
@@ -3071,27 +3078,13 @@
         data: {}
         target:
           entity_id: light.kitchen_pantry
-- alias: Trigger Botões dos Estores do Quarto do Ricardo
-  id: '1736719479439'
+- id: '1736719479439'
+  alias: Trigger Botões dos Estores do Quarto do Ricardo
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
     input:
       device: bhonofre_cover_bedroom_ricardo
-      main_double_top_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - action: script.hvac_turn_on_bedroom_ricardo
-      main_double_bottom_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - action: climate.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: climate.bedroom_ricardo
       single_top_action:
       - action: light.turn_on
         data: {}
@@ -3104,13 +3097,15 @@
         target:
           entity_id: light.bedroom_ricardo_lamp
       double_top_action:
-      - action: script.hvac_turn_on_bedroom_ricardo
-      double_bottom_action:
-      - action: climate.turn_off
-        metadata: {}
+      - action: switch.turn_on
         data: {}
         target:
-          entity_id: climate.bedroom_ricardo
+          entity_id: switch.bedroom_ricardo_ac
+      double_bottom_action:
+      - action: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.bedroom_ricardo_ac
       triple_top_action:
       - condition: state
         entity_id: binary_sensor.house_guest
@@ -3283,30 +3278,18 @@
     path: devices/bhonofre_cover_buttons.yaml
     input:
       device: bhonofre_cover_bedroom_henrique
-      main_double_top_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - action: script.hvac_turn_on_bedroom_henrique
-      main_double_bottom_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - action: climate.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: climate.bedroom_henrique
       single_top_action: []
       single_bottom_action: []
       double_top_action:
-      - action: script.hvac_turn_on_bedroom_henrique
-      double_bottom_action:
-      - action: climate.turn_off
-        metadata: {}
+      - action: switch.turn_on
         data: {}
         target:
-          entity_id: climate.bedroom_henrique
+          entity_id: switch.bedroom_henrique_ac
+      double_bottom_action:
+      - action: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.bedroom_henrique_ac
       triple_top_action:
       - condition: state
         entity_id: binary_sensor.house_guest
@@ -3499,8 +3482,8 @@
         entity_id:
         - switch.fire_tablet_motion_detection
   mode: restart
-- alias: Fechar Estores Com Temperatura Elevada
-  id: '1751552957136'
+- id: '1751552957136'
+  alias: Fechar Estores Com Temperatura Elevada
   description: ''
   triggers:
   - trigger: numeric_state
@@ -3521,6 +3504,9 @@
   - condition: state
     entity_id: binary_sensor.house_guest
     state: 'off'
+  - condition: numeric_state
+    entity_id: sensor.sun_solar_elevation
+    above: 25
   actions:
   - data:
       action_to_run: cover.close_cover
@@ -3622,19 +3608,16 @@
         data: {}
         target:
           entity_id: light.master_bedroom_bed_wall
-      main_double_top_action:
-      - condition: state
-        entity_id: binary_sensor.house_guest
-        state: 'off'
-      - action: script.hvac_turn_on_master_bedroom
       double_top_action:
-      - action: script.hvac_turn_on_master_bedroom
-      double_bottom_action:
-      - action: climate.turn_off
-        metadata: {}
+      - action: switch.turn_on
         data: {}
         target:
-          entity_id: climate.master_bedroom
+          entity_id: switch.master_bedroom_ac
+      double_bottom_action:
+      - action: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.master_bedroom_ac
       triple_top_action:
       - condition: state
         entity_id: binary_sensor.house_guest
@@ -3695,7 +3678,7 @@
     target:
       entity_id: alarm_control_panel.alarmo
     options:
-      behavior: any
+      behavior: each
   actions:
   - data:
       title: Segurança - Alarme
@@ -3806,9 +3789,10 @@
     state: 'on'
     entity_id: binary_sensor.joao_home
   - condition: template
-    value_template: >
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
+    value_template: '{% set last = state_attr(this.entity_id, ''last_triggered'')
+      %} {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
+
+      '
   - condition: state
     entity_id: light.bedroom_henrique
     state:
@@ -3868,9 +3852,10 @@
     entity_id: binary_sensor.joao_home
     state: 'on'
   - condition: template
-    value_template: >
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
+    value_template: '{% set last = state_attr(this.entity_id, ''last_triggered'')
+      %} {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
+
+      '
   - condition: state
     entity_id: light.bedroom_ricardo
     state:
@@ -4091,9 +4076,10 @@
     to: 'on'
   conditions:
   - condition: template
-    value_template: >
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
+    value_template: '{% set last = state_attr(this.entity_id, ''last_triggered'')
+      %} {{ last is none or (now() - last).total_seconds() > 60 * 30 }}
+
+      '
   - condition: state
     entity_id: binary_sensor.joao_home
     state: 'on'
@@ -4344,7 +4330,7 @@
     target:
       entity_id: light.kitchen_pantry
     options:
-      behavior: any
+      behavior: all
   conditions:
   - condition: light.is_on
     target:
@@ -4508,10 +4494,11 @@
     options: {}
   - alias: Run once a day (wait at least 12 hours)
     condition: template
-    value_template: >
-      {% set hours = 12 %}
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
   actions:
   - condition: state
     entity_id: binary_sensor.water_heater_panel_heating
@@ -4526,23 +4513,15 @@
     action: climate.turn_on
   mode: single
 - id: '1776266173921'
-  alias: Desumidificador - Ajustar valor à noite
+  alias: Desumidificador - Ajustar para a Média
   description: ''
   triggers:
-  - entity_id:
-    - sensor.humidity_outside_average
-    to:
-    trigger: state
   - trigger: time
     at: '20:00:00'
-  conditions:
-  - condition: sun
-    before: sunrise
-    after: sunset
-  - condition: template
-    value_template: '{% set difference = states(''sensor.humidity_outside_average'')
-      | float - state_attr(''humidifier.portable_dehumidifier'', ''humidity'') %}
-      {{ is_number(difference) and difference | float > 5 }}'
+  - trigger: sun
+    event: sunset
+    offset: 0
+  conditions: []
   actions:
   - data:
       humidity: '{{ states(''sensor.humidity_outside_average'') }}'
@@ -4582,7 +4561,7 @@
           active_choice: number
           number: 28
           unit_of_measurement: °C
-      behavior: any
+      behavior: all
   - trigger: numeric_state
     entity_id:
     - sun.sun
@@ -4594,7 +4573,7 @@
     target:
       entity_id: sensor.deye_inverter_pv_power_average
     options:
-      behavior: any
+      behavior: all
       for: 00:00:00
       threshold:
         type: above
@@ -5285,10 +5264,11 @@
     state:
     - 'on'
   - condition: template
-    value_template: >
-      {% set hours = 12 %}
-      {% set last = state_attr(this.entity_id, 'last_triggered') %}
-      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+    value_template: '{% set hours = 12 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state:
@@ -5329,6 +5309,15 @@
     - sensor.sun_solar_elevation
     below: 25
   conditions:
+  - condition: time
+    after: '16:00:00'
+    before: '20:30:00'
+  - condition: template
+    value_template: '{% set hours = 18 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
   - condition: or
     conditions:
     - condition: numeric_state
@@ -5346,6 +5335,9 @@
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
+  - condition: state
+    entity_id: sensor.time
+    state: []
   actions:
   - data:
       action_to_run: script.cover_open_if_close_with_heat
@@ -5356,120 +5348,177 @@
       - laundry
       - living_room
       - office
-      - kitchen
       - bathroom
-      - master_bedroom
       - bedroom_ricardo
       - bedroom_henrique
     action: script.cover_group_action
   mode: single
 - id: '1779569312624'
-  alias: AC Sala - Arrefecer com Apoio Solar
+  alias: AC Sala - Apoio Solar
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit:
       - climate.living_room
-      schedule_end: '17:00:00'
-      hvac_temperature: 25
-      hvac_mode_heat: false
       temperature_sensor: sensor.temperature_living_room
       window_sensor: binary_sensor.window_living_room
-      room_temperature: 24
       selected_season:
       - spring
       - summer
       - autumn
 - id: '1779569424753'
-  alias: AC Suite - Arrefecer com Apoio Solar
+  alias: AC Suite - Apoio Solar
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit:
       - climate.master_bedroom
-      schedule_end: '17:00:00'
-      hvac_temperature: 25
-      hvac_mode_heat: false
       temperature_sensor: sensor.temperature_master_bedroom
       window_sensor: binary_sensor.window_master_bedroom
-      room_temperature: 24
       selected_season:
       - spring
       - summer
       - autumn
 - id: '1779569459729'
-  alias: AC Quarto do Henrique - Arrefecer com Apoio Solar
+  alias: AC Quarto do Henrique - Apoio Solar
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit:
       - climate.bedroom_henrique
-      schedule_end: '17:00:00'
-      hvac_temperature: 25
-      hvac_mode_heat: false
       temperature_sensor: sensor.temperature_bedroom_henrique
       window_sensor: binary_sensor.window_bedroom_henrique
-      room_temperature: 24
       selected_season:
       - spring
       - summer
       - autumn
 - id: '1779569485941'
-  alias: AC Quarto do Ricardo - Arrefecer com Apoio Solar
+  alias: AC Quarto do Ricardo - Apoio Solar
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit:
       - climate.bedroom_ricardo
-      schedule_end: '17:00:00'
-      hvac_temperature: 25
-      hvac_mode_heat: false
       temperature_sensor: sensor.temperature_bedroom_ricardo
       window_sensor: binary_sensor.window_bedroom_ricardo
-      room_temperature: 24
       selected_season:
       - spring
       - summer
       - autumn
 - id: '1779569520542'
-  alias: AC Escritório - Arrefecer com Apoio Solar
+  alias: AC Escritório - Apoio Solar
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit:
       - climate.office
-      schedule_end: '17:00:00'
-      hvac_temperature: 25
-      hvac_mode_heat: false
       temperature_sensor: sensor.temperature_office
       window_sensor: binary_sensor.window_office
-      room_temperature: 24
       selected_season:
       - spring
       - summer
       - autumn
-      room_temperature_diff: 1
 - id: '1779569574241'
-  alias: AC Hall - Arrefecer com Apoio Solar
+  alias: AC Hall - Apoio Solar
   description: ''
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit:
       - climate.hall
-      schedule_end: '17:00:00'
-      hvac_temperature: 24
-      hvac_mode_heat: false
       temperature_sensor: sensor.temperature_hall
       window_sensor: binary_sensor.window_bedroom_floor
-      room_temperature: 24
       selected_season:
       - spring
       - summer
       - autumn
-      room_temperature_diff: 0
+- id: '1779786705961'
+  alias: hvac_turn_off_cleaning
+  description: ''
+  triggers:
+  - trigger: calendar.event_started
+    target:
+      entity_id: calendar.cleaning
+    options:
+      offset:
+        days: 0
+        hours: 0
+        minutes: 0
+        seconds: 0
+      offset_type: before
+  conditions: []
+  actions:
+  - action: climate.turn_off
+    metadata: {}
+    data: {}
+    target:
+      floor_id:
+      - living_floor
+      - bedrooms
+  mode: single
+- id: '1780016489060'
+  alias: Abrir Estores Poente Fechados com o Calor
+  description: ''
+  triggers:
+  - entity_id:
+    - sensor.temperature_outside
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    trigger: numeric_state
+    below: 25
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  - trigger: numeric_state
+    entity_id:
+    - sensor.sun_solar_elevation
+    below: 25
+  conditions:
+  - condition: template
+    value_template: '{% set hours = 18 %} {% set last = state_attr(this.entity_id,
+      ''last_triggered'') %} {{ last is none or (now() - last).total_seconds() > hours
+      * 3600 }}
+
+      '
+  - condition: time
+    after: '16:00:00'
+    before: '20:30:00'
+  - condition: or
+    conditions:
+    - condition: numeric_state
+      entity_id: sensor.temperature_outside
+      below: 25
+    - condition: numeric_state
+      entity_id: sensor.sun_solar_elevation
+      below: 10
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.house_guest
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: 'off'
+  actions:
+  - data:
+      action_to_run: script.cover_open_if_close_with_heat
+      control_switch: close_with_heat
+      covers_list:
+      - master_bedroom
+      - kitchen
+    action: script.cover_group_action
+  mode: single

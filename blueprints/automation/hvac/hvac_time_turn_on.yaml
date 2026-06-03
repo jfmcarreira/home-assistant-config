@@ -218,7 +218,7 @@ condition:
             entity_id: sensor.temperature_outside
             below: !input room_temperature
           - condition: template
-            value_template: "{{ (states('input_number.house_target_low_temperature') | float - states(room_temperature) | float) >= room_temperature_diff  }}"
+            value_template: "{{ (states('input_number.house_target_low_temperature') | float - states(temperature_sensor) | float) >= room_temperature_diff  }}"
       - condition: and
         conditions:
           - "{{ hvac_mode_heat == false }}"
@@ -226,7 +226,7 @@ condition:
             entity_id: !input temperature_sensor
             above: !input room_temperature
           - condition: template
-            value_template: "{{ (states(room_temperature) | float - states('input_number.house_target_high_temperature') | float) >= room_temperature_diff }}"
+            value_template: "{{ (states(temperature_sensor) | float - states('input_number.house_target_high_temperature') | float) >= room_temperature_diff }}"
 
 action:
   - if:
