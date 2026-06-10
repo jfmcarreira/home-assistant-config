@@ -11,6 +11,8 @@ esphome:
       name: Water Heater
     - id: device_deye_inverter
       name: Deye Inverter
+    - id: device_deye_cooling_fan
+      name: Deye Inverter Cooling Fan
 
 esp32:
   board: nodemcu-32s
@@ -23,12 +25,13 @@ packages:
   - !include packages/common.yml
   - !include packages/webserver.yml
   - !include packages/deye_hybrid_1p.yaml
+  - !include packages/deye_fan_controller.yaml
 
-esp32_ble_tracker:
-  scan_parameters:
-    interval: 320ms
-    window: 100ms
-    active: true
+# esp32_ble_tracker:
+#   scan_parameters:
+#     interval: 320ms
+#     window: 100ms
+#     active: true
 
 bluetooth_proxy:
 

@@ -880,6 +880,7 @@ sensor:
     device_id: device_deye_inverter
     modbus_controller_id: ${modbus_controller_id}
     name: "Battery Temperature"
+    id: deye_temperature_battery
     register_type: holding
     address: 182
     unit_of_measurement: "°C"
@@ -1065,6 +1066,7 @@ sensor:
     device_id: device_deye_inverter
     modbus_controller_id: ${modbus_controller_id}
     name: "DC Temperature"
+    id: deye_temperature_dc
     register_type: holding
     address: 90
     unit_of_measurement: "°C"
@@ -1082,6 +1084,7 @@ sensor:
     device_id: device_deye_inverter
     modbus_controller_id: ${modbus_controller_id}
     name: "AC Temperature"
+    id: deye_temperature_ac
     register_type: holding
     address: 91
     unit_of_measurement: "°C"

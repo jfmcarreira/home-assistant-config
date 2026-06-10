@@ -1,0 +1,150 @@
+
+number:
+  ## OPTIONAL:
+  # RECEIVE KP, KI and KD parameters from input_text.kx helpers in
+  # Home Assistant. See the PID controller below
+  # These helper values will get saved to flash thus permanently over-riding
+  # the initial values set in the PID below.
+
+  # KP
+  - platform: template
+    device_id: device_deye_cooling_fan
+    name: kp
+    icon: mdi:chart-bell-curve
+    restore_value: true
+    initial_value: 0.3
+    min_value: 0
+    max_value: 50
+    step: 0.001
+    optimistic: true
+    set_action:
+      lambda: |-
+        id(fan_thermostat).set_kp( x );
+
+  # KI
+  - platform: template
+    device_id: device_deye_cooling_fan
+    name: ki
+    icon: mdi:chart-bell-curve
+    restore_value: true
+    initial_value: 0.0015
+    min_value: 0
+    max_value: 50
+    step: 0.0001
+    optimistic: true
+    set_action:
+      lambda: id(fan_thermostat).set_ki( x );
+
+  # KD
+  - platform: template
+    device_id: device_deye_cooling_fan
+    name: kd
+    icon: mdi:chart-bell-curve
+    restore_value: true
+    initial_value: 0.0
+    min_value: -50
+    max_value: 50
+    step: 0.001
+    optimistic: true
+    set_action:
+      lambda: id(fan_thermostat).set_kd( x );
+
+output:
+  - platform: ledc
+    pin: GPIO04
+    id: console_fan_speed
+    # 25KHz is standard PC fan frequency, minimises buzzing
+    frequency: "25000 Hz"
+
+    # my fans stop working below 13% powerful.
+    # also they're  powerful and loud, cap their max speed to 80%
+    min_power: 10%
+    max_power: 100%
+
+    # At 0, actually turn it off, otherwise the power keeps going.
+    zero_means_zero: true
+
+  - platform: template
+    id: proxy_output
+    type: float
+    write_action:
+      lambda: |-
+        float write_val = (id(manual_fan_control).state) ? id(manual_fan_control).speed / 100.0 : state * 1.0;
+        id(console_fan_speed).set_level(write_val);
+        id(fan_speed_pwm_voltage).publish_state(write_val*100.0);
+
+fan:
+  - platform: speed
+    device_id: device_deye_cooling_fan
+    id: manual_fan_control
+    output: proxy_output
+    name: "Deye Inverter Cooling Fan Manual Speed"
+
+sensor:
+  # Every time the fan speed is updated, this sensor will
+  # also be updated for displaying on the frontend.
+  # See proxy_output.
+  - platform: template
+    device_id: device_deye_cooling_fan
+    name: "Deye Inverter Cooling Fan Speed (PWM)"
+    unit_of_measurement: "%"
+    id: fan_speed_pwm_voltage
+
+# Expose a PID-controlled Thermostat
+# Manual: https://esphome.io/components/climate/pid.html
+climate:
+  - platform: pid
+    device_id: device_deye_cooling_fan
+    name: "Deye Inverter Cooling Fan"
+    id: fan_thermostat
+    sensor: deye_temperature_dc
+
+    default_target_temperature: 45°C
+    cool_output: proxy_output
+
+    # ON state change, publish the values to the x_term numbers defined
+    # above, so that they can be viewed in HA
+    # on_state:
+    #   - sensor.template.publish:
+    #       id: p_term
+    #       state: !lambda 'return -id(fan_thermostat).get_proportional_term() * 100.0;'
+    #   - sensor.template.publish:
+    #       id: i_term
+    #       state: !lambda 'return -id(fan_thermostat).get_integral_term()* 100.0;'
+    #   - sensor.template.publish:
+    #       id: d_term
+    #       state: !lambda 'return -id(fan_thermostat).get_derivative_term()* 100.0;'
+    #   - sensor.template.publish:
+    #       id: o_term
+    #       state: !lambda 'return -id(fan_thermostat).get_output_value()* 100.0;'
+    #   - sensor.template.publish:
+    #       id: in_deadband_term
+    #       state: !lambda 'return id(fan_thermostat).in_deadband();'
+    #   - sensor.template.publish:
+    #       id: e_term
+    #       state: !lambda 'return -id(fan_thermostat).get_error_value();'
+
+    # The extents of the HA Thermostat
+    visual:
+      min_temperature: 30 °C
+      max_temperature: 60 °C
+      temperature_step: 1.0
+
+    # See the README for setting up these parameters.
+    # These are over ridden by the number templates above.
+    control_parameters:
+      kp: 0.3
+      ki: 0.0015
+      kd: 0
+      max_integral: 0.0
+      output_averaging_samples: 1
+      derivative_averaging_samples: 5
+
+    # How to behave when close to the target temperature?
+    deadband_parameters:
+      threshold_high: 1.0°C
+      threshold_low: -1.0°C
+      kp_multiplier: 0.0
+      ki_multiplier: 0.00
+      kd_multiplier: 0.0
+      deadband_output_averaging_samples: 15
