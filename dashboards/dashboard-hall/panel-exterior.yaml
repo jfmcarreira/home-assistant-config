@@ -170,3 +170,15 @@
         vertical: false
         features_position: bottom
 
+
+- type: heading
+  heading: Controlos
+  heading_style: title
+- type: tile
+  entity: input_boolean.walking_routine
+  features_position: bottom
+  vertical: false
+- type: tile
+  entity: input_boolean.gate_automatic_open
+  vertical: false
+  features_position: bottom

@@ -1,5 +1,7 @@
 - type: vertical-stack
   cards:
+    - type: custom:mushroom-title-card
+      title: Noite / Dormir
     - square: false
       type: grid
       columns: 2
@@ -19,7 +21,7 @@
               entity_id: script.routine_good_night
           entity: script.routine_good_night
           icon: mdi:sleep
-          name: Desligar e Dormir
+          name: Esperar, Desligar e Dormir
           icon_height: 52px
         - show_name: true
           show_icon: true
@@ -36,12 +38,49 @@
               entity_id: script.routine_good_night_with_lights
           entity: script.routine_good_night_with_lights
           icon: mdi:lightbulb-night
-          name: Desligar e Dormir (Iluminação)
+          name: Iluminar, Desligar e Dormir
           icon_height: 52px
+    - type: custom:mushroom-title-card
+      title: Sair de Casa
     - square: false
       type: grid
-      columns: 2
+      columns: 3
       cards:
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_car_exit
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_car_exit
+          entity: script.routine_car_exit
+          icon: mdi:car
+          name: Sair de Casa de Carro
+          icon_height: 52px
+
+        - show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            target:
+              entity_id: script.routine_leaving_and_coming_back
+          hold_action:
+            action: call-service
+            service: script.turn_off
+            target:
+              entity_id: script.routine_leaving_and_coming_back
+          icon: mdi:arrow-u-down-left
+          entity: script.routine_leaving_and_coming_back
+          icon_height: 52px
+
         - show_name: true
           show_icon: true
           type: button
@@ -57,24 +96,43 @@
               entity_id: script.routine_exit_house_all_off
           entity: script.routine_exit_house_all_off
           icon: mdi:exit-run
-          name: Sair de Casa
+          name: Sair e Desligar Tudo
           icon_height: 52px
-        - show_name: true
-          show_icon: true
-          type: button
-          tap_action:
-            action: call-service
-            service: script.turn_on
-            target:
-              entity_id: script.routine_leaving_and_coming_back
-          hold_action:
-            action: call-service
-            service: script.turn_off
-            target:
-              entity_id: script.routine_leaving_and_coming_back
-          icon: mdi:car
-          entity: script.routine_leaving_and_coming_back
-          icon_height: 52px
+
+    - square: false
+      type: grid
+      columns: 2
+      cards:
+        - type: vertical-stack
+          cards:
+            - show_name: true
+              show_icon: true
+              icon_height: 40px
+              type: button
+              tap_action:
+                action: call-service
+                service: script.routine_exit_house_to_work_joao
+                data: {}
+                target: {}
+              entity: script.routine_exit_house_to_work_joao
+              name: Ir Trabalhar - João
+              icon: mdi:human-male
+        - type: vertical-stack
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              name: Ir Trabalhar - Bianca
+              tap_action:
+                action: call-service
+                service: script.routine_exit_house_to_work_bianca
+                data: {}
+                target: {}
+              entity: script.routine_exit_house_to_work_bianca
+              icon: mdi:human-female
+              icon_height: 40px
+    - type: custom:mushroom-title-card
+      title: Modos da Casa
     - square: false
       type: grid
       columns: 3
@@ -130,35 +188,3 @@
           entity: script.routine_cover_rain_mode
           icon: ""
           name: Modo Chuva
-    - square: false
-      type: grid
-      columns: 2
-      cards:
-        - type: vertical-stack
-          cards:
-            - show_name: true
-              show_icon: true
-              icon_height: 40px
-              type: button
-              tap_action:
-                action: call-service
-                service: script.routine_exit_house_to_work_joao
-                data: {}
-                target: {}
-              entity: script.routine_exit_house_to_work_joao
-              name: Ir Trabalhar - João
-              icon: mdi:human-male
-        - type: vertical-stack
-          cards:
-            - show_name: true
-              show_icon: true
-              type: button
-              name: Ir Trabalhar - Bianca
-              tap_action:
-                action: call-service
-                service: script.routine_exit_house_to_work_bianca
-                data: {}
-                target: {}
-              entity: script.routine_exit_house_to_work_bianca
-              icon: mdi:human-female
-              icon_height: 40px

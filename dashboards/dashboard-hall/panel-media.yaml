@@ -66,8 +66,15 @@
       join_button: false
   expressive: true
 
-- type: grid
-  cards:
+- type: custom:mod-card
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
     - icon: mdi:human-male
       tap_action:
         action: call-service

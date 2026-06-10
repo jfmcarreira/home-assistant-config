@@ -276,149 +276,58 @@
     show_attribute: false
     modules: []
 
-- type: custom:auto-entities
-  view_layout:
-    column: 2
+- type: entity-filter
+  show_empty: false
   card:
     type: entities
     title: Rés do Chão
-  filter:
-    include:
-      - entity_id: light.*
-        state: "on"
-        options:
-          tap_action:
-            action: perform-action
-            perform_action: light.turn_off
-            target:
-              entity_id: this.entity_id
-          hold_action:
-            action: more-info
-    exclude:
-      - options: {}
-        attributes:
-          supported_features: 40
-      - options: {}
-        floor: bedrooms
-      - options: {}
-        entity_id: light.bedroom_rc_*
-      - options: {}
-        entity_id: light.stairs_down
-      - options: {}
-        entity_id: light.hallway_group
-      - options: {}
-        entity_id: light.*_presence
-      - options: {}
-        entity_id: light.laundry_*
-      - options: {}
-        entity_id: light.office_*
-      - options: {}
-        entity_id: light.hall
-      - options: {}
-        entity_id: light.hall_side
-      - options: {}
-        entity_id: light.living_room_window
-      - options: {}
-        entity_id: light.kitchen_led
-      - options: {}
-        entity_id: light.kitchen_window
-      - options: {}
-        entity_id: light.living_room_group
-      - options: {}
-        entity_id: light.bedroom_*_ceiling
-      - options: {}
-        entity_id: light.bedroom_*_closet
-      - options: {}
-        entity_id: light.bedroom_*_lamp
-      - options: {}
-        entity_id: light.all_*
-      - entity_id: light.living_room_hallway_group
-      - options: {}
-        entity_id: light.master_bedroom_ceiling
-      - options: {}
-        entity_id: light.master_bedroom_entry
-      - options: {}
-        entity_id: light.master_bedroom_closet
-      - options: {}
-        entity_id: light.master_bedroom_bed*
-      - options: {}
-        entity_id: light.master_bedroom_bathroom_*
-      - options: {}
-        entity_id: light.master_bedroom_bathroom_*
-      - options: {}
-        entity_id: light.stairs_group*
-      - options: {}
-        entity_id: light.bathrom_rc_*
-      - options: {}
-        entity_id: light.bathroom_rc_*
-      - options: {}
-        area: outside
-      - options: {}
-        area: xmas
-  sort:
-    method: area
-    numeric: false
-    reverse: false
-  show_empty: false
+  entities:
+    - entity: light.kitchen
+      secondary_info: last-changed
+    - entity: light.laundry
+      secondary_info: last-changed
+    - entity: light.office
+      secondary_info: last-changed
+    - entity: light.bedroom_rc
+      secondary_info: last-changed
+    - entity: light.bathroom_rc
+      secondary_info: last-changed
+  state_filter:
+    - "on"
 
-- type: custom:auto-entities
-  view_layout:
-    column: 2
+- type: entity-filter
+  show_empty: false
+  entities:
+    - entity: light.hall
+      secondary_info: last-changed
+    - entity: light.main_bathroom
+      secondary_info: last-changed
+    - entity: light.master_bedroom
+      secondary_info: last-changed
+    - entity: light.master_bedroom_bathroom
+      secondary_info: last-changed
+    - entity: light.bedroom_ricardo
+      secondary_info: last-changed
+    - entity: light.bedroom_henrique
+      secondary_info: last-changed
+    - entity: light.stairs_wall
+      secondary_info: last-changed
+    - entity: light.stairs_lamp
+      secondary_info: last-changed
+  state_filter:
+    - "on"
   card:
     type: entities
     title: Quartos
-  filter:
-    include:
-      - entity_id: light.*
-        floor: bedrooms
-        state: "on"
-        options:
-          tap_action:
-            action: perform-action
-            perform_action: light.turn_off
-            target:
-              entity_id: this.entity_id
-          hold_action:
-            action: more-info
-    exclude:
-      - options: {}
-        attributes:
-          supported_features: 40
-      - options: {}
-        entity_id: light.*_presence
-      - options: {}
-        entity_id: light.hall
-      - options: {}
-        entity_id: light.hall_side
-      - options: {}
-        entity_id: light.bedroom_*_ceiling
-      - options: {}
-        entity_id: light.bedroom_*_closet
-      - options: {}
-        entity_id: light.bedroom_*_lamp
-      - options: {}
-        entity_id: light.all_*
-      - options: {}
-        entity_id: light.master_bedroom_ceiling
-      - options: {}
-        entity_id: light.master_bedroom_entry
-      - options: {}
-        entity_id: light.master_bedroom_closet
-      - options: {}
-        entity_id: light.master_bedroom_bed*
-      - options: {}
-        entity_id: light.master_bedroom_bathroom_*
-      - options: {}
-        entity_id: light.master_bedroom_bathroom_*
-      - options: {}
-        entity_id: light.main_bathroom_*
-      - options: {}
-        entity_id: light.master_bedroom_bathroom_*
-  sort:
-    method: area
-    numeric: false
-    reverse: false
-  show_empty: false
+    options:
+      tap_action:
+        action: perform-action
+        perform_action: light.turn_off
+        target:
+          entity_id: this.entity_id
+      hold_action:
+        action: more-info
+
 
 - type: custom:auto-entities
   view_layout:
@@ -504,15 +413,39 @@
     show_header_toggle: true
   show_empty: false
 
+- type: custom:auto-entities
+  card:
+    type: entities
+    title: Deteções da Rua
+  filter:
+    include:
+      - entity_id: binary_sensor.*_person
+        state: "on"
+        area: outside
+      - entity_id: binary_sensor.*_car
+        state: "on"
+        area: outside
+    exclude:
+      - entity_id: binary_sensor.driveway_camera_car
+  sort:
+    method: area
+    numeric: false
+    reverse: false
+  show_empty: false
+
 - type: logbook
-  view_layout:
-    column: 2
-  title: Atividade
-  hours_to_show: 1
+  title: Atividade da Rua
+  hours_to_show: 0.25
+  state_filter:
+    - "on"
   target:
     entity_id:
-      - binary_sensor.motion_sensor_office
-    area_id: outside
-    label_id:
-      - movimento
-      - seguranca
+      - binary_sensor.front_camera_person
+      - binary_sensor.backyard_camera_person
+      - binary_sensor.driveway_camera_person
+      - binary_sensor.frigate_zone_front_garden_person
+      - binary_sensor.frigate_zone_front_gate_person
+      - binary_sensor.frigate_zone_front_gate_car
+      - binary_sensor.frigate_zone_driveway_gate_person
+      - binary_sensor.frigate_zone_driveway_gate_car
+      - binary_sensor.frigate_zone_kitchen_door_person

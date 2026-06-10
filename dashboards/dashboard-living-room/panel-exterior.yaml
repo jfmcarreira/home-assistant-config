@@ -241,25 +241,15 @@
       heading_style: title
       view_layout:
         column: 2
-    - type: custom:mod-card
+    - type: tile
+      entity: input_boolean.walking_routine
+      features_position: bottom
+      vertical: false
       view_layout:
         column: 2
-      style:
-        hui-horizontal-stack-card$: |
-          :host {
-            height: auto;
-          }
-      card:
-        type: horizontal-stack
-        cards:
-          - type: tile
-            entity: input_boolean.walking_routine
-            features_position: bottom
-            vertical: false
-            grid_options:
-              columns: 12
-              rows: 1
-            icon_tap_action:
-              action: more-info
-            tap_action:
-              action: toggle
+    - type: tile
+      entity: input_boolean.gate_automatic_open
+      vertical: false
+      features_position: bottom
+      view_layout:
+        column: 2

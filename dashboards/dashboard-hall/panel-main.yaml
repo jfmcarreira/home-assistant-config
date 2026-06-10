@@ -390,19 +390,18 @@
     show_header_toggle: true
   show_empty: false
 
-- type: conditional
-  conditions:
-    - entity: binary_sensor.roborock_state
-      state: "on"
-  card:
-    type: tile
-    entity: vacuum.roborock
-    features:
-      - type: vacuum-commands
-        commands:
-          - start_pause
-          - stop
-          - clean_spot
+- type: tile
+  view_layout:
+    column: 2
+  entity: vacuum.roborock
+  vertical: false
+  features:
+    - type: vacuum-commands
+      commands:
+        - start_pause
+        - stop
+        - locate
+  features_position: inline
 
 - type: conditional
   conditions:
@@ -538,6 +537,9 @@
         name: Solar
         primary_info: state
         secondary_info: name
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-solar
       - type: tile
         entity: sensor.deye_inverter_battery_power
         name: Bateria
@@ -548,6 +550,9 @@
         name: Casa
         primary_info: state
         secondary_info: name
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-subviews/dashboard-power
 
 
 - type: tile

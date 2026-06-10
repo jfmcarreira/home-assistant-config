@@ -3,7 +3,6 @@ kiosk_mode:
 button_card_templates: !include ../common/button-card-templates.yaml
 decluttering_templates: !include ../common/declutering.yaml
 views:
-
   - theme: Backend-selected
     title: Dashboard Hall
     path: main
@@ -43,6 +42,7 @@ views:
             layout_type: custom:horizontal-layout
             layout:
               reflow: true
+
               max_cols: 1
               column_widths: 100%
               max_width: 100%
