@@ -1,0 +1,163 @@
+automation:
+  - alias: "cover_reset_last_action_kitchen"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.kitchen
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_kitchen_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_living_room"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.living_room
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_living_room_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_laundry"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.laundry
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_laundry_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_bedroom_rc"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.bedroom_rc
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_bedroom_rc_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_bathroom"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.bathroom
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_bathroom_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_office"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.office
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_office_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_stairs"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.stairs
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: input_select.cover_stairs_last_action
+        data:
+          option: Manualmente
+
+  - alias: "cover_reset_last_action_master_bedroom"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.master_bedroom
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_master_bedroom_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_bedroom_ricardo"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.bedroom_ricardo
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_bedroom_ricardo_last_action
+        data:
+          option: Manualmente
+  - alias: "cover_reset_last_action_bedroom_henrique"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - cover.bedroom_henrique
+        from: null
+        to: null
+    conditions: []
+    actions:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.cover_bedroom_henrique_last_action
+        data:
+          option: Manualmente
+
