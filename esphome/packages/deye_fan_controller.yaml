@@ -1,3 +1,8 @@
+esphome:
+  devices:
+    - id: device_deye_cooling_fan
+      name: Deye Inverter Cooling Fan
+
 
 number:
   ## OPTIONAL:
@@ -81,12 +86,20 @@ fan:
     name: "Deye Inverter Cooling Fan Manual Speed"
 
 sensor:
+  - platform: template
+    device_id: device_deye_cooling_fan
+    name: "Temperature"
+    unit_of_measurement: "ºC"
+    id: current_temperature
+    lambda: |-
+      return (id(deye_temperature_dc).state + id(deye_temperature_ac).state)/2;
+
   # Every time the fan speed is updated, this sensor will
   # also be updated for displaying on the frontend.
   # See proxy_output.
   - platform: template
     device_id: device_deye_cooling_fan
-    name: "Deye Inverter Cooling Fan Speed (PWM)"
+    name: "Speed (PWM)"
     unit_of_measurement: "%"
     id: fan_speed_pwm_voltage
 
@@ -97,7 +110,7 @@ climate:
     device_id: device_deye_cooling_fan
     name: "Deye Inverter Cooling Fan"
     id: fan_thermostat
-    sensor: deye_temperature_dc
+    sensor: current_temperature
 
     default_target_temperature: 45°C
     cool_output: proxy_output
@@ -128,7 +141,9 @@ climate:
     visual:
       min_temperature: 30 °C
       max_temperature: 60 °C
-      temperature_step: 1.0
+      temperature_step:
+        target_temperature: 1.0
+        current_temperature: 0.1
 
     # See the README for setting up these parameters.
     # These are over ridden by the number templates above.
@@ -143,8 +158,8 @@ climate:
     # How to behave when close to the target temperature?
     deadband_parameters:
       threshold_high: 1.0°C
-      threshold_low: -1.0°C
+      threshold_low: -0.2°C
       kp_multiplier: 0.0
-      ki_multiplier: 0.00
+      ki_multiplier: 0.0
       kd_multiplier: 0.0
       deadband_output_averaging_samples: 15

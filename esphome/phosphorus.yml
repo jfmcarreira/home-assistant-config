@@ -5,14 +5,10 @@ substitutions:
 
 esphome:
   name: ${devicename}
-  friendly_name: Phosphorus (Water Heater)
+  friendly_name: Phosphorus
   devices:
     - id: device_water_heater
       name: Water Heater
-    - id: device_deye_inverter
-      name: Deye Inverter
-    - id: device_deye_cooling_fan
-      name: Deye Inverter Cooling Fan
 
 esp32:
   board: nodemcu-32s
