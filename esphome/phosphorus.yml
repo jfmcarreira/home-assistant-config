@@ -1,14 +1,9 @@
 substitutions:
   devicename: phosphorus
-  modbus_controller_id: deye_modbus_controller
-  modbus_inverter_address: "0x01" # Default Modbus address, should be changed to match inverter settings
 
 esphome:
   name: ${devicename}
   friendly_name: Phosphorus
-  devices:
-    - id: device_water_heater
-      name: Water Heater
 
 esp32:
   board: nodemcu-32s
@@ -22,6 +17,7 @@ packages:
   - !include packages/webserver.yml
   - !include packages/deye_hybrid_1p.yaml
   - !include packages/deye_fan_controller.yaml
+  - !include packages/water_heater_solar_panel.yaml
 
 # esp32_ble_tracker:
 #   scan_parameters:
@@ -31,64 +27,7 @@ packages:
 
 bluetooth_proxy:
 
-uart:
-  - id: resol
-    tx_pin: GPIO17
-    rx_pin: GPIO16
-    baud_rate: 9600
-
-  - id: uart_modbus
-    tx_pin: GPIO12
-    rx_pin: GPIO14
-    baud_rate: 9600
-
-vbus:
-  uart_id: resol
-
-
-modbus:
-  - id: modbus_1
-    uart_id: uart_modbus
-    #flow_control_pin: GPIO4 # Uncomment and set appropriate pin if your TTL converter requires it
-
-modbus_controller:
-  - id: ${modbus_controller_id}
-    address: ${modbus_inverter_address}
-    modbus_id: modbus_1
-    setup_priority: -10
-    update_interval: 5s
-    command_throttle: 60ms
-    offline_skip_updates: 3
-
 sensor:
-  - platform: vbus
-    model: deltasol_cs2
-    temperature_1:
-      name: Temperature Solar Panel
-      device_id: device_water_heater
-      accuracy_decimals: 2
-    temperature_2:
-      name: Temperature Water Heater Bottom
-      device_id: device_water_heater
-      accuracy_decimals: 2
-    temperature_3:
-      name: Temperature Water Heater Top
-      device_id: device_water_heater
-      accuracy_decimals: 2
-    pump_speed:
-      name: Solar Panel Pump Speed
-      device_id: device_water_heater
-    operating_hours:
-      name: Solar Panel Operating Hours
-      device_id: device_water_heater
-    heat_quantity:
-      id: heat_quantity
-      device_id: device_water_heater
-      #name: Heat Quantity
-    version:
-      id: version
-      device_id: device_water_heater
-      #name: Device firmware version
 #   - platform: ble_scanner
 #     id: ble_laundry
 #     name: BLE Scanner Laundry

@@ -4,11 +4,33 @@ substitutions:
     uint8_t minutes = raw - (hours * 100);
     return ESPTime {.minute = minutes, .hour = hours};
   func_time_to_int: "return x.hour * 100 + x.minute;"
+  modbus_controller_id: deye_modbus_controller
+  modbus_inverter_address: "0x01" # Default Modbus address, should be changed to match inverter settings
 
 esphome:
   devices:
     - id: device_deye_inverter
       name: Deye Inverter
+
+uart:
+  - id: uart_modbus
+    tx_pin: GPIO12
+    rx_pin: GPIO14
+    baud_rate: 9600
+
+modbus:
+  - id: modbus_1
+    uart_id: uart_modbus
+    #flow_control_pin: GPIO4 # Uncomment and set appropriate pin if your TTL converter requires it
+
+modbus_controller:
+  - id: ${modbus_controller_id}
+    address: ${modbus_inverter_address}
+    modbus_id: modbus_1
+    setup_priority: -10
+    update_interval: 5s
+    command_throttle: 60ms
+    offline_skip_updates: 3
 
 globals:
   - id: last_total_energy_bought
@@ -19,17 +41,17 @@ globals:
     restore_value: yes
 
 switch:
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: Power Switch
-    id: switch_power
-    register_type: holding
-    address: 43
-    bitmask: 1
-    entity_category: config
-    icon: mdi:toggle-switch
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: Power Switch
+  #   id: switch_power
+  #   register_type: holding
+  #   address: 43
+  #   bitmask: 1
+  #   entity_category: config
+  #   icon: mdi:toggle-switch
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -54,25 +76,25 @@ switch:
     entity_category: config
     icon: "mdi:toggle-switch"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Microinverter Export cut-off"
-    register_type: holding
-    address: 280
-    bitmask: 0
-    icon: "mdi:transmission-tower"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Microinverter Export cut-off"
+  #   register_type: holding
+  #   address: 280
+  #   bitmask: 0
+  #   icon: "mdi:transmission-tower"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Generator Peak Shaving Enable"
-    register_type: holding
-    address: 280
-    bitmask: 4
-    icon: "mdi:transmission-tower"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Generator Peak Shaving Enable"
+  #   register_type: holding
+  #   address: 280
+  #   bitmask: 4
+  #   icon: "mdi:transmission-tower"
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -161,42 +183,42 @@ switch:
     bitmask: 1
     icon: "mdi:battery-plus"
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Time of Use All Charge Enable"
-    id: switch_time_of_use_all_charge_enable
-    icon: "mdi:battery-plus"
-    optimistic: true
-    restore_mode: DISABLED
-    disabled_by_default: true
-    lambda: |-
-      return id(switch_time_point_1_charge_enable).state;
-    turn_on_action:
-      - switch.turn_on:
-          id: switch_time_point_1_charge_enable
-      - switch.turn_on:
-          id: switch_time_point_2_charge_enable
-      - switch.turn_on:
-          id: switch_time_point_3_charge_enable
-      - switch.turn_on:
-          id: switch_time_point_4_charge_enable
-      - switch.turn_on:
-          id: switch_time_point_5_charge_enable
-      - switch.turn_on:
-          id: switch_time_point_6_charge_enable
-    turn_off_action:
-      - switch.turn_off:
-          id: switch_time_point_1_charge_enable
-      - switch.turn_off:
-          id: switch_time_point_2_charge_enable
-      - switch.turn_off:
-          id: switch_time_point_3_charge_enable
-      - switch.turn_off:
-          id: switch_time_point_4_charge_enable
-      - switch.turn_off:
-          id: switch_time_point_5_charge_enable
-      - switch.turn_off:
-          id: switch_time_point_6_charge_enable
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   name: "Time of Use All Charge Enable"
+  #   id: switch_time_of_use_all_charge_enable
+  #   icon: "mdi:battery-plus"
+  #   optimistic: true
+  #   restore_mode: DISABLED
+  #   disabled_by_default: true
+  #   lambda: |-
+  #     return id(switch_time_point_1_charge_enable).state;
+  #   turn_on_action:
+  #     - switch.turn_on:
+  #         id: switch_time_point_1_charge_enable
+  #     - switch.turn_on:
+  #         id: switch_time_point_2_charge_enable
+  #     - switch.turn_on:
+  #         id: switch_time_point_3_charge_enable
+  #     - switch.turn_on:
+  #         id: switch_time_point_4_charge_enable
+  #     - switch.turn_on:
+  #         id: switch_time_point_5_charge_enable
+  #     - switch.turn_on:
+  #         id: switch_time_point_6_charge_enable
+  #   turn_off_action:
+  #     - switch.turn_off:
+  #         id: switch_time_point_1_charge_enable
+  #     - switch.turn_off:
+  #         id: switch_time_point_2_charge_enable
+  #     - switch.turn_off:
+  #         id: switch_time_point_3_charge_enable
+  #     - switch.turn_off:
+  #         id: switch_time_point_4_charge_enable
+  #     - switch.turn_off:
+  #         id: switch_time_point_5_charge_enable
+  #     - switch.turn_off:
+  #         id: switch_time_point_6_charge_enable
 
 number:
   - platform: modbus_controller
@@ -243,21 +265,21 @@ number:
     mode: box
     icon: "mdi:battery"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Self Check Time"
-    id: self_check_time
-    register_type: holding
-    address: 61
-    unit_of_measurement: "s"
-    min_value: 0
-    max_value: 1000
-    step: 1
-    entity_category: diagnostic
-    mode: box
-    icon: "mdi:timer-check"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Self Check Time"
+  #   id: self_check_time
+  #   register_type: holding
+  #   address: 61
+  #   unit_of_measurement: "s"
+  #   min_value: 0
+  #   max_value: 1000
+  #   step: 1
+  #   entity_category: diagnostic
+  #   mode: box
+  #   icon: "mdi:timer-check"
 
 
   - platform: modbus_controller
@@ -306,21 +328,21 @@ number:
     mode: box
     icon: "mdi:transmission-tower-import"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Generator Peak shaving"
-    id: generator_peak_shaving_power
-    register_type: holding
-    address: 292
-    unit_of_measurement: "W"
-    device_class: power
-    value_type: U_WORD
-    min_value: 0
-    step: 1
-    mode: box
-    icon: "mdi:generator-stationary"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Generator Peak shaving"
+  #   id: generator_peak_shaving_power
+  #   register_type: holding
+  #   address: 292
+  #   unit_of_measurement: "W"
+  #   device_class: power
+  #   value_type: U_WORD
+  #   min_value: 0
+  #   step: 1
+  #   mode: box
+  #   icon: "mdi:generator-stationary"
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -416,191 +438,191 @@ number:
     max_value: 2359
     internal: true
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 1 Voltage"
-    id: time_of_use_1_voltage
-    register_type: holding
-    address: 262
-    unit_of_measurement: "V"
-    device_class: voltage
-    value_type: U_WORD
-    multiply: 100
-    min_value: 0
-    max_value: 63
-    step: 0.01
-    mode: box
-    icon: "mdi:sun-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 1 Voltage"
+  #   id: time_of_use_1_voltage
+  #   register_type: holding
+  #   address: 262
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   multiply: 100
+  #   min_value: 0
+  #   max_value: 63
+  #   step: 0.01
+  #   mode: box
+  #   icon: "mdi:sun-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 2 Voltage"
-    id: time_of_use_2_voltage
-    register_type: holding
-    address: 263
-    unit_of_measurement: "V"
-    device_class: voltage
-    value_type: U_WORD
-    multiply: 100
-    min_value: 0
-    max_value: 63
-    step: 0.01
-    mode: box
-    icon: "mdi:sun-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 2 Voltage"
+  #   id: time_of_use_2_voltage
+  #   register_type: holding
+  #   address: 263
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   multiply: 100
+  #   min_value: 0
+  #   max_value: 63
+  #   step: 0.01
+  #   mode: box
+  #   icon: "mdi:sun-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 3 Voltage"
-    id: time_of_use_3_voltage
-    register_type: holding
-    address: 264
-    unit_of_measurement: "V"
-    device_class: voltage
-    value_type: U_WORD
-    multiply: 100
-    min_value: 0
-    max_value: 63
-    step: 0.01
-    mode: box
-    icon: "mdi:sun-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 3 Voltage"
+  #   id: time_of_use_3_voltage
+  #   register_type: holding
+  #   address: 264
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   multiply: 100
+  #   min_value: 0
+  #   max_value: 63
+  #   step: 0.01
+  #   mode: box
+  #   icon: "mdi:sun-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 4 Voltage"
-    id: time_of_use_4_voltage
-    register_type: holding
-    address: 265
-    unit_of_measurement: "V"
-    device_class: voltage
-    value_type: U_WORD
-    multiply: 100
-    min_value: 0
-    max_value: 63
-    step: 0.01
-    mode: box
-    icon: "mdi:sun-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 4 Voltage"
+  #   id: time_of_use_4_voltage
+  #   register_type: holding
+  #   address: 265
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   multiply: 100
+  #   min_value: 0
+  #   max_value: 63
+  #   step: 0.01
+  #   mode: box
+  #   icon: "mdi:sun-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 5 Voltage"
-    id: time_of_use_5_voltage
-    register_type: holding
-    address: 266
-    unit_of_measurement: "V"
-    device_class: voltage
-    value_type: U_WORD
-    multiply: 100
-    min_value: 0
-    max_value: 63
-    step: 0.01
-    mode: box
-    icon: "mdi:sun-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 5 Voltage"
+  #   id: time_of_use_5_voltage
+  #   register_type: holding
+  #   address: 266
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   multiply: 100
+  #   min_value: 0
+  #   max_value: 63
+  #   step: 0.01
+  #   mode: box
+  #   icon: "mdi:sun-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 6 Voltage"
-    id: time_of_use_6_voltage
-    register_type: holding
-    address: 267
-    unit_of_measurement: "V"
-    device_class: voltage
-    value_type: U_WORD
-    multiply: 100
-    min_value: 0
-    max_value: 63
-    step: 0.01
-    mode: box
-    icon: "mdi:sun-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 6 Voltage"
+  #   id: time_of_use_6_voltage
+  #   register_type: holding
+  #   address: 267
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   multiply: 100
+  #   min_value: 0
+  #   max_value: 63
+  #   step: 0.01
+  #   mode: box
+  #   icon: "mdi:sun-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 1 Out Power"
-    id: time_of_use_1_out_power
-    unit_of_measurement: W
-    device_class: power
-    address: 256
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:power-plug"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 1 Out Power"
+  #   id: time_of_use_1_out_power
+  #   unit_of_measurement: W
+  #   device_class: power
+  #   address: 256
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:power-plug"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 2 Out Power"
-    id: time_of_use_2_out_power
-    unit_of_measurement: W
-    device_class: power
-    address: 257
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:power-plug"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 2 Out Power"
+  #   id: time_of_use_2_out_power
+  #   unit_of_measurement: W
+  #   device_class: power
+  #   address: 257
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:power-plug"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 3 Out Power"
-    id: time_of_use_3_out_power
-    unit_of_measurement: W
-    device_class: power
-    address: 258
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:power-plug"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 3 Out Power"
+  #   id: time_of_use_3_out_power
+  #   unit_of_measurement: W
+  #   device_class: power
+  #   address: 258
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:power-plug"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 4 Out Power"
-    id: time_of_use_4_out_power
-    unit_of_measurement: W
-    device_class: power
-    address: 259
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:power-plug"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 4 Out Power"
+  #   id: time_of_use_4_out_power
+  #   unit_of_measurement: W
+  #   device_class: power
+  #   address: 259
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:power-plug"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 5 Out Power"
-    id: time_of_use_5_out_power
-    unit_of_measurement: W
-    device_class: power
-    address: 260
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:power-plug"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 5 Out Power"
+  #   id: time_of_use_5_out_power
+  #   unit_of_measurement: W
+  #   device_class: power
+  #   address: 260
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:power-plug"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 6 Out Power"
-    id: time_of_use_6_out_power
-    unit_of_measurement: W
-    device_class: power
-    address: 261
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:power-plug"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 6 Out Power"
+  #   id: time_of_use_6_out_power
+  #   unit_of_measurement: W
+  #   device_class: power
+  #   address: 261
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:power-plug"
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -692,110 +714,110 @@ number:
     mode: box
     icon: "mdi:battery-clock"
 
-  - platform: template
-    device_id: device_deye_inverter
-    mode: box
-    name: "Time of Use All Voltage"
-    id: time_of_use_all_voltage
-    unit_of_measurement: "V"
-    device_class: voltage
-    min_value: 0
-    max_value: 63
-    step: 0.01
-    update_interval: 1s
-    icon: "mdi:sun-clock"
-    disabled_by_default: true
-    lambda: |-
-      return id(time_of_use_1_voltage).state;
-    set_action:
-      - number.set:
-          id: time_of_use_1_voltage
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_2_voltage
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_3_voltage
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_4_voltage
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_5_voltage
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_6_voltage
-          value: !lambda "return x;"
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   mode: box
+  #   name: "Time of Use All Voltage"
+  #   id: time_of_use_all_voltage
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   min_value: 0
+  #   max_value: 63
+  #   step: 0.01
+  #   update_interval: 1s
+  #   icon: "mdi:sun-clock"
+  #   disabled_by_default: true
+  #   lambda: |-
+  #     return id(time_of_use_1_voltage).state;
+  #   set_action:
+  #     - number.set:
+  #         id: time_of_use_1_voltage
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_2_voltage
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_3_voltage
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_4_voltage
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_5_voltage
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_6_voltage
+  #         value: !lambda "return x;"
 
-  - platform: template
-    device_id: device_deye_inverter
-    mode: box
-    name: "Time of Use All Out Power"
-    id: time_of_use_all_out_power
-    unit_of_measurement: W
-    device_class: power
-    min_value: 0
-    max_value: 20000
-    step: 1
-    update_interval: 1s
-    icon: "mdi:power-plug"
-    disabled_by_default: true
-    lambda: |-
-      return id(time_of_use_1_out_power).state;
-    set_action:
-      - number.set:
-          id: time_of_use_1_out_power
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_2_out_power
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_3_out_power
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_4_out_power
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_5_out_power
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_6_out_power
-          value: !lambda "return x;"
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   mode: box
+  #   name: "Time of Use All Out Power"
+  #   id: time_of_use_all_out_power
+  #   unit_of_measurement: W
+  #   device_class: power
+  #   min_value: 0
+  #   max_value: 20000
+  #   step: 1
+  #   update_interval: 1s
+  #   icon: "mdi:power-plug"
+  #   disabled_by_default: true
+  #   lambda: |-
+  #     return id(time_of_use_1_out_power).state;
+  #   set_action:
+  #     - number.set:
+  #         id: time_of_use_1_out_power
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_2_out_power
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_3_out_power
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_4_out_power
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_5_out_power
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_6_out_power
+  #         value: !lambda "return x;"
 
-  - platform: template
-    device_id: device_deye_inverter
-    mode: box
-    name: "Time of Use All SoC"
-    id: time_of_use_all_soc
-    unit_of_measurement: "%"
-    device_class: battery
-    min_value: 0
-    max_value: 100
-    step: 1
-    update_interval: 1s
-    icon: "mdi:battery-clock"
-    disabled_by_default: true
-    lambda: |-
-      return id(time_of_use_1_soc).state;
-    set_action:
-      - number.set:
-          id: time_of_use_1_soc
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_2_soc
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_3_soc
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_4_soc
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_5_soc
-          value: !lambda "return x;"
-      - number.set:
-          id: time_of_use_6_soc
-          value: !lambda "return x;"
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   mode: box
+  #   name: "Time of Use All SoC"
+  #   id: time_of_use_all_soc
+  #   unit_of_measurement: "%"
+  #   device_class: battery
+  #   min_value: 0
+  #   max_value: 100
+  #   step: 1
+  #   update_interval: 1s
+  #   icon: "mdi:battery-clock"
+  #   disabled_by_default: true
+  #   lambda: |-
+  #     return id(time_of_use_1_soc).state;
+  #   set_action:
+  #     - number.set:
+  #         id: time_of_use_1_soc
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_2_soc
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_3_soc
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_4_soc
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_5_soc
+  #         value: !lambda "return x;"
+  #     - number.set:
+  #         id: time_of_use_6_soc
+  #         value: !lambda "return x;"
 
 
 binary_sensor:
@@ -808,45 +830,45 @@ binary_sensor:
     address: 194
     device_class: running
     icon: "mdi:power"
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Load Priority"
-    lambda: return id(energy_management_priority).current_option() == "Load First";
-    icon: "mdi:priority-high"
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   name: "Load Priority"
+  #   lambda: return id(energy_management_priority).current_option() == "Load First";
+  #   icon: "mdi:priority-high"
 
 sensor:
   ## Battery
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Daily Battery Charge"
-    id: daily_battery_charge
-    register_type: holding
-    address: 70
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: "total_increasing"
-    accuracy_decimals: 1
-    filters:
-      - multiply: 0.1
-    value_type: U_WORD
-    icon: "mdi:battery-charging"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Daily Battery Charge"
+  #   id: daily_battery_charge
+  #   register_type: holding
+  #   address: 70
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: "total_increasing"
+  #   accuracy_decimals: 1
+  #   filters:
+  #     - multiply: 0.1
+  #   value_type: U_WORD
+  #   icon: "mdi:battery-charging"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Daily Battery Discharge"
-    id: daily_battery_discharge
-    register_type: holding
-    address: 71
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: "total_increasing"
-    accuracy_decimals: 1
-    filters:
-      - multiply: 0.1
-    value_type: U_WORD
-    icon: "mdi:battery-minus"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Daily Battery Discharge"
+  #   id: daily_battery_discharge
+  #   register_type: holding
+  #   address: 71
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: "total_increasing"
+  #   accuracy_decimals: 1
+  #   filters:
+  #     - multiply: 0.1
+  #   value_type: U_WORD
+  #   icon: "mdi:battery-minus"
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -969,37 +991,37 @@ sensor:
     value_type: S_WORD
     icon: "mdi:transmission-tower"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    #name: "Daily Energy Bought"
-    id: daily_energy_bought
-    register_type: holding
-    address: 76
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: "total_increasing"
-    accuracy_decimals: 1
-    value_type: U_WORD
-    filters:
-      - multiply: 0.1
-    icon: "mdi:transmission-tower-import"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   #name: "Daily Energy Bought"
+  #   id: daily_energy_bought
+  #   register_type: holding
+  #   address: 76
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: "total_increasing"
+  #   accuracy_decimals: 1
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+  #   icon: "mdi:transmission-tower-import"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    #name: "Daily Energy Sold"
-    id: daily_energy_sold
-    register_type: holding
-    address: 77
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: "total_increasing"
-    accuracy_decimals: 1
-    value_type: U_WORD
-    filters:
-      - multiply: 0.1
-    icon: "mdi:transmission-tower-export"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   #name: "Daily Energy Sold"
+  #   id: daily_energy_sold
+  #   register_type: holding
+  #   address: 77
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: "total_increasing"
+  #   accuracy_decimals: 1
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+  #   icon: "mdi:transmission-tower-export"
 
   # Axiliary sensor
   - platform: modbus_controller
@@ -1231,21 +1253,21 @@ sensor:
     icon: "mdi:solar-power-variant"
 
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Daily PV Production"
-    id: daily_pv_production
-    register_type: holding
-    address: 108
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: "total_increasing"
-    accuracy_decimals: 1
-    filters:
-      - multiply: 0.1
-    value_type: U_WORD
-    icon: "mdi:solar-power"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Daily PV Production"
+  #   id: daily_pv_production
+  #   register_type: holding
+  #   address: 108
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: "total_increasing"
+  #   accuracy_decimals: 1
+  #   filters:
+  #     - multiply: 0.1
+  #   value_type: U_WORD
+  #   icon: "mdi:solar-power"
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -1278,136 +1300,136 @@ sensor:
     value_type: S_WORD
     icon: "mdi:home-lightning-bolt"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    #name: "Daily Load Consumption"
-    id: daily_load_consumption
-    register_type: holding
-    address: 84
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: "total_increasing"
-    accuracy_decimals: 1
-    value_type: U_WORD
-    filters:
-      - multiply: 0.1
-    icon: "mdi:home-lightning-bolt"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   #name: "Daily Load Consumption"
+  #   id: daily_load_consumption
+  #   register_type: holding
+  #   address: 84
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: "total_increasing"
+  #   accuracy_decimals: 1
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+  #   icon: "mdi:home-lightning-bolt"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    #name: "Total Consumption"
-    id: total_consumption
-    register_type: holding
-    address: 85
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: "total_increasing"
-    accuracy_decimals: 1
-    value_type: U_DWORD_R
-    filters:
-      - multiply: 0.1
-    icon: "mdi:home-lightning-bolt"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   #name: "Total Consumption"
+  #   id: total_consumption
+  #   register_type: holding
+  #   address: 85
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: "total_increasing"
+  #   accuracy_decimals: 1
+  #   value_type: U_DWORD_R
+  #   filters:
+  #     - multiply: 0.1
+  #   icon: "mdi:home-lightning-bolt"
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Power Losses" # Includes consumption of the inverter device itself as well AC/DC conversion losses
-    id: power_losses
-    unit_of_measurement: "W"
-    device_class: power
-    state_class: total_increasing
-    accuracy_decimals: 1
-    lambda: |-
-      return (id(pv1_power).state + id(pv2_power).state + id(battery_power).state - id(output_power).state);
-    icon: "mdi:home-lightning-bolt"
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   name: "Power Losses" # Includes consumption of the inverter device itself as well AC/DC conversion losses
+  #   id: power_losses
+  #   unit_of_measurement: "W"
+  #   device_class: power
+  #   state_class: total_increasing
+  #   accuracy_decimals: 1
+  #   lambda: |-
+  #     return (id(pv1_power).state + id(pv2_power).state + id(battery_power).state - id(output_power).state);
+  #   icon: "mdi:home-lightning-bolt"
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Daily Losses" # Includes today's consumption of the inverter device itself as well AC/DC conversion losses
-    id: daily_losses
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: total_increasing
-    accuracy_decimals: 1
-    # lambda: |-
-    #   return (
-    #     id(daily_energy_bought).state +
-    #     id(daily_pv_production).state +
-    #     id(daily_generator_production).state +
-    #     id(daily_battery_discharge).state -
-    #     id(daily_energy_sold).state -
-    #     id(daily_battery_charge).state -
-    #     id(daily_load_consumption).state
-    #   );
-    lambda: |-
-      return (
-        id(daily_energy_bought).state +
-        id(daily_pv_production).state +
-        id(daily_battery_discharge).state -
-        id(daily_energy_sold).state -
-        id(daily_battery_charge).state -
-        id(daily_load_consumption).state
-      );
-    icon: "mdi:home-lightning-bolt"
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   name: "Daily Losses" # Includes today's consumption of the inverter device itself as well AC/DC conversion losses
+  #   id: daily_losses
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: total_increasing
+  #   accuracy_decimals: 1
+  #   # lambda: |-
+  #   #   return (
+  #   #     id(daily_energy_bought).state +
+  #   #     id(daily_pv_production).state +
+  #   #     id(daily_generator_production).state +
+  #   #     id(daily_battery_discharge).state -
+  #   #     id(daily_energy_sold).state -
+  #   #     id(daily_battery_charge).state -
+  #   #     id(daily_load_consumption).state
+  #   #   );
+  #   lambda: |-
+  #     return (
+  #       id(daily_energy_bought).state +
+  #       id(daily_pv_production).state +
+  #       id(daily_battery_discharge).state -
+  #       id(daily_energy_sold).state -
+  #       id(daily_battery_charge).state -
+  #       id(daily_load_consumption).state
+  #     );
+  #   icon: "mdi:home-lightning-bolt"
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Total Losses" # Includes total consumption of the inverter device itself as well AC/DC conversion losses
-    id: total_losses
-    unit_of_measurement: "kWh"
-    device_class: energy
-    state_class: total_increasing
-    accuracy_decimals: 1
-    # lambda: |-
-    #   return (
-    #     id(total_energy_bought).state +
-    #     id(total_pv_production).state +
-    #     id(total_generator_production).state +
-    #     id(total_battery_discharge).state -
-    #     id(total_energy_sold).state -
-    #     id(total_battery_charge).state -
-    #     id(total_consumption).state
-    #   );
-    lambda: |-
-      return (
-        id(total_energy_bought).state +
-        id(total_pv_production).state +
-        id(total_battery_discharge).state -
-        id(total_energy_sold).state -
-        id(total_battery_charge).state -
-        id(total_consumption).state
-      );
+  # - platform: template
+  #   device_id: device_deye_inverter
+  #   name: "Total Losses" # Includes total consumption of the inverter device itself as well AC/DC conversion losses
+  #   id: total_losses
+  #   unit_of_measurement: "kWh"
+  #   device_class: energy
+  #   state_class: total_increasing
+  #   accuracy_decimals: 1
+  #   # lambda: |-
+  #   #   return (
+  #   #     id(total_energy_bought).state +
+  #   #     id(total_pv_production).state +
+  #   #     id(total_generator_production).state +
+  #   #     id(total_battery_discharge).state -
+  #   #     id(total_energy_sold).state -
+  #   #     id(total_battery_charge).state -
+  #   #     id(total_consumption).state
+  #   #   );
+  #   lambda: |-
+  #     return (
+  #       id(total_energy_bought).state +
+  #       id(total_pv_production).state +
+  #       id(total_battery_discharge).state -
+  #       id(total_energy_sold).state -
+  #       id(total_battery_charge).state -
+  #       id(total_consumption).state
+  #     );
 
-    icon: "mdi:home-lightning-bolt"
+  #   icon: "mdi:home-lightning-bolt"
 
 select:
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    id: energy_management_priority
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Energy Management Priority"
-    address: 243
-    value_type: U_WORD
-    icon: "mdi:priority-high"
-    optionsmap:
-      "Battery First": 0
-      "Load First": 1
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   id: energy_management_priority
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Energy Management Priority"
+  #   address: 243
+  #   value_type: U_WORD
+  #   icon: "mdi:priority-high"
+  #   optionsmap:
+  #     "Battery First": 0
+  #     "Load First": 1
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    id: system_work_mode
-    name: "System Work Mode"
-    address: 244
-    value_type: U_WORD
-    icon: "mdi:cog"
-    optionsmap:
-      "Selling First": 0
-      "Zero Export To Load": 1
-      "Zero Export To CT": 2
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   id: system_work_mode
+  #   name: "System Work Mode"
+  #   address: 244
+  #   value_type: U_WORD
+  #   icon: "mdi:cog"
+  #   optionsmap:
+  #     "Selling First": 0
+  #     "Zero Export To Load": 1
+  #     "Zero Export To CT": 2
 
 datetime:
   - platform: template
@@ -1516,59 +1538,6 @@ text_sensor:
         default: return std::string("----");
       }
       return x;
-
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    name: Device Type
-    register_type: holding
-    address: 0
-    bitmask: 0
-    raw_encode: HEXBYTES
-    icon: mdi:chip
-    entity_category: diagnostic
-    lambda: |-
-      uint16_t value = modbus::helpers::word_from_hex_str(x, 0);
-      switch (value) {
-        case 0x0000: return std::string("Unknown");
-        case 0x0002:
-        case 0x0200: return std::string("String Inverter");
-        case 0x0003:
-        case 0x0300: return std::string("Single-Phase Hybrid Inverter");
-        case 0x0004:
-        case 0x0400: return std::string("Microinverter");
-        case 0x0005:
-        case 0x0500: return std::string("LV 3-Phase Hybrid Inverter");
-        case 0x0006: return std::string("HV 3-Phase Hybrid Inverter");
-        case 0x0007:
-        case 0x0600: return std::string("HV 3-Phase Inverter 6-15kW");
-        case 0x0008:
-        case 0x0601: return std::string("HV 3-Phase Inverter 20-50kW");
-        default: return std::string("Unknown");
-      }
-
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    modbus_controller_id: ${modbus_controller_id}
-    name: Device Serial Number
-    register_type: holding
-    address: 3
-    response_size: 10
-    bitmask: 0
-    raw_encode: NONE
-    icon: mdi:barcode
-    entity_category: diagnostic
-    lambda: |-
-      if (x.size() < 10) return std::string("N/A");
-      std::string serial;
-
-      for (int i = 0; i < 10; i += 2) {
-        char high = x[i];
-        char low = x[i + 1];
-        if (high != 0) serial += high;
-        if (low != 0) serial += low;
-      }
-      return serial.empty() ? std::string("N/A") : serial;
 
   - platform: modbus_controller
     device_id: device_deye_inverter

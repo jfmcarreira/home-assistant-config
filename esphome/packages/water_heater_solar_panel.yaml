@@ -1,0 +1,43 @@
+esphome:
+  devices:
+    - id: device_water_heater
+      name: Water Heater
+
+uart:
+  - id: resol
+    tx_pin: GPIO17
+    rx_pin: GPIO16
+    baud_rate: 9600
+
+vbus:
+  uart_id: resol
+
+sensor:
+  - platform: vbus
+    model: deltasol_cs2
+    temperature_1:
+      name: Temperature Solar Panel
+      device_id: device_water_heater
+      accuracy_decimals: 2
+    temperature_2:
+      name: Temperature Water Heater Bottom
+      device_id: device_water_heater
+      accuracy_decimals: 2
+    temperature_3:
+      name: Temperature Water Heater Top
+      device_id: device_water_heater
+      accuracy_decimals: 2
+    pump_speed:
+      name: Solar Panel Pump Speed
+      device_id: device_water_heater
+    operating_hours:
+      name: Solar Panel Operating Hours
+      device_id: device_water_heater
+    heat_quantity:
+      id: heat_quantity
+      device_id: device_water_heater
+      #name: Heat Quantity
+    version:
+      id: version
+      device_id: device_water_heater
+      #name: Device firmware version
