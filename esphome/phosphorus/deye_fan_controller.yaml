@@ -1,58 +1,9 @@
+## Based on https://github.com/patrickcollins12/esphome-fan-controller
+
 esphome:
   devices:
     - id: device_deye_cooling_fan
       name: Deye Inverter Cooling Fan
-
-
-number:
-  ## OPTIONAL:
-  # RECEIVE KP, KI and KD parameters from input_text.kx helpers in
-  # Home Assistant. See the PID controller below
-  # These helper values will get saved to flash thus permanently over-riding
-  # the initial values set in the PID below.
-
-  # KP
-  - platform: template
-    device_id: device_deye_cooling_fan
-    name: kp
-    icon: mdi:chart-bell-curve
-    restore_value: true
-    initial_value: 0.3
-    min_value: 0
-    max_value: 50
-    step: 0.001
-    optimistic: true
-    set_action:
-      lambda: |-
-        id(fan_thermostat).set_kp( x );
-
-  # KI
-  - platform: template
-    device_id: device_deye_cooling_fan
-    name: ki
-    icon: mdi:chart-bell-curve
-    restore_value: true
-    initial_value: 0.0015
-    min_value: 0
-    max_value: 50
-    step: 0.0001
-    optimistic: true
-    set_action:
-      lambda: id(fan_thermostat).set_ki( x );
-
-  # KD
-  - platform: template
-    device_id: device_deye_cooling_fan
-    name: kd
-    icon: mdi:chart-bell-curve
-    restore_value: true
-    initial_value: 0.0
-    min_value: -50
-    max_value: 50
-    step: 0.001
-    optimistic: true
-    set_action:
-      lambda: id(fan_thermostat).set_kd( x );
 
 output:
   - platform: ledc
@@ -70,19 +21,33 @@ output:
     zero_means_zero: true
 
   - platform: template
-    id: proxy_output
+    id: proxy_cool_output
     type: float
     write_action:
       lambda: |-
-        float write_val = (id(manual_fan_control).state) ? id(manual_fan_control).speed / 100.0 : state * 1.0;
+        auto night_mode = id(house_mode_night).state;
+        auto write_val = (id(manual_fan_control).state) ? id(manual_fan_control).speed / 100.0 : state * 1.0;
+        if(night_mode){
+          write_val = min(write_val, 0.35);
+        }
         id(console_fan_speed).set_level(write_val);
         id(fan_speed_pwm_voltage).publish_state(write_val*100.0);
+
+  # - platform: template
+  #   id: proxy_heat_output
+  #   type: float
+  #   write_action:
+  #     lambda: |-
+  #       if(state > 0.0) {
+  #         id(console_fan_speed).set_level(0.0);
+  #         id(fan_speed_pwm_voltage).publish_state(0.0);
+  #       }
 
 fan:
   - platform: speed
     device_id: device_deye_cooling_fan
     id: manual_fan_control
-    output: proxy_output
+    output: proxy_cool_output
     name: "Deye Inverter Cooling Fan Manual Speed"
 
 sensor:
@@ -92,11 +57,12 @@ sensor:
     unit_of_measurement: "ºC"
     id: current_temperature
     lambda: |-
-      return (id(deye_temperature_dc).state + id(deye_temperature_ac).state)/2;
+      //return (id(deye_temperature_dc).state + id(deye_temperature_ac).state)/2;
+      return max(id(deye_temperature_dc).state, id(deye_temperature_ac).state);
 
   # Every time the fan speed is updated, this sensor will
   # also be updated for displaying on the frontend.
-  # See proxy_output.
+  # See proxy_cool_output.
   - platform: template
     device_id: device_deye_cooling_fan
     name: "Speed (PWM)"
@@ -113,7 +79,8 @@ climate:
     sensor: current_temperature
 
     default_target_temperature: 45°C
-    cool_output: proxy_output
+    cool_output: proxy_cool_output
+    #heat_output: proxy_heat_output
 
     # ON state change, publish the values to the x_term numbers defined
     # above, so that they can be viewed in HA
@@ -148,9 +115,12 @@ climate:
     # See the README for setting up these parameters.
     # These are over ridden by the number templates above.
     control_parameters:
-      kp: 0.3
-      ki: 0.0015
-      kd: 0
+      # kp: 0.80415
+      # ki: 0.00305
+      # kd: 53.07421
+      kp: 0.2
+      ki: 0.001
+      kd: 40
       max_integral: 0.0
       output_averaging_samples: 1
       derivative_averaging_samples: 5
@@ -163,3 +133,14 @@ climate:
       ki_multiplier: 0.0
       kd_multiplier: 0.0
       deadband_output_averaging_samples: 15
+
+
+# # I was able to find good KP,KI,KD values manually, per the instructions,
+# # but you can try pressing the autotune button from home assistant and copying the
+# # values it produces.
+# # See more at: https://esphome.io/components/climate/pid.html#climate-pid-autotune-action
+# button:
+#   - platform: template
+#     name: "PID Climate Autotune"
+#     on_press:
+#       - climate.pid.autotune: fan_thermostat

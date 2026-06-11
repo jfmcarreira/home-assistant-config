@@ -1,7 +1,8 @@
 {
   "files.associations": {
     "*.yaml": "home-assistant",
-    "**/esphome/**/*.yml": "esphome"
+    "**/esphome/**/*.yml": "esphome",
+    "**/esphome/**/*.yaml": "esphome"
   },
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
@@ -12,5 +13,9 @@
   "yaml.customTags": [
     "!input"
   ],
-  "editor.formatOnSave": false
+  "editor.formatOnSave": false,
+  "clangd.arguments": [
+    "--query-driver=/Users/joaocarreira/.platformio/packages/toolchain-*/bin/*",
+    "-compile-commands-dir=${workspaceFolder}/esphome/.esphome/build/nodemcu_gate/"
+  ]
 }

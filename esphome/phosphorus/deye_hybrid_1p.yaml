@@ -106,82 +106,82 @@ switch:
     bitmask: 8
     icon: "mdi:transmission-tower"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use"
-    id: switch_time_of_use
-    register_type: holding
-    address: 248
-    bitmask: 1
-    icon: "mdi:toggle-switch"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use"
+  #   id: switch_time_of_use
+  #   register_type: holding
+  #   address: 248
+  #   bitmask: 1
+  #   icon: "mdi:toggle-switch"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 1 Charge Enable"
-    id: switch_time_point_1_charge_enable
-    register_type: holding
-    address: 274
-    bitmask: 1
-    icon: "mdi:battery-plus"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 1 Charge Enable"
+  #   id: switch_time_point_1_charge_enable
+  #   register_type: holding
+  #   address: 274
+  #   bitmask: 1
+  #   icon: "mdi:battery-plus"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 2 Charge Enable"
-    id: switch_time_point_2_charge_enable
-    register_type: holding
-    address: 275
-    bitmask: 1
-    icon: "mdi:battery-plus"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 2 Charge Enable"
+  #   id: switch_time_point_2_charge_enable
+  #   register_type: holding
+  #   address: 275
+  #   bitmask: 1
+  #   icon: "mdi:battery-plus"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 3 Charge Enable"
-    id: switch_time_point_3_charge_enable
-    register_type: holding
-    address: 276
-    bitmask: 1
-    icon: "mdi:battery-plus"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 3 Charge Enable"
+  #   id: switch_time_point_3_charge_enable
+  #   register_type: holding
+  #   address: 276
+  #   bitmask: 1
+  #   icon: "mdi:battery-plus"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 4 Charge Enable"
-    id: switch_time_point_4_charge_enable
-    register_type: holding
-    address: 277
-    bitmask: 1
-    icon: "mdi:battery-plus"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 4 Charge Enable"
+  #   id: switch_time_point_4_charge_enable
+  #   register_type: holding
+  #   address: 277
+  #   bitmask: 1
+  #   icon: "mdi:battery-plus"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 5 Charge Enable"
-    id: switch_time_point_5_charge_enable
-    register_type: holding
-    address: 278
-    bitmask: 1
-    icon: "mdi:battery-plus"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 5 Charge Enable"
+  #   id: switch_time_point_5_charge_enable
+  #   register_type: holding
+  #   address: 278
+  #   bitmask: 1
+  #   icon: "mdi:battery-plus"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 6 Charge Enable"
-    id: switch_time_point_6_charge_enable
-    register_type: holding
-    address: 279
-    bitmask: 1
-    icon: "mdi:battery-plus"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 6 Charge Enable"
+  #   id: switch_time_point_6_charge_enable
+  #   register_type: holding
+  #   address: 279
+  #   bitmask: 1
+  #   icon: "mdi:battery-plus"
 
   # - platform: template
   #   device_id: device_deye_inverter
@@ -312,21 +312,21 @@ number:
     mode: box
     icon: "mdi:solar-power"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Zero Export Power"
-    id: zero_export_power
-    address: 206
-    unit_of_measurement: "W"
-    device_class: power
-    value_type: U_WORD
-    min_value: 20
-    max_value: 500
-    step: 1
-    mode: box
-    icon: "mdi:transmission-tower-import"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Zero Export Power"
+  #   id: zero_export_power
+  #   address: 206
+  #   unit_of_measurement: "W"
+  #   device_class: power
+  #   value_type: U_WORD
+  #   min_value: 20
+  #   max_value: 500
+  #   step: 1
+  #   mode: box
+  #   icon: "mdi:transmission-tower-import"
 
   # - platform: modbus_controller
   #   device_id: device_deye_inverter
@@ -360,83 +360,83 @@ number:
     mode: box
     icon: "mdi:transmission-tower"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    name: "Time of Use 1 Start Raw"
-    id: time_of_use_1_start_raw
-    modbus_controller_id: ${modbus_controller_id}
-    register_type: holding
-    address: 250
-    value_type: U_WORD
-    min_value: 0
-    max_value: 2359
-    internal: true
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   name: "Time of Use 1 Start Raw"
+  #   id: time_of_use_1_start_raw
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   register_type: holding
+  #   address: 250
+  #   value_type: U_WORD
+  #   min_value: 0
+  #   max_value: 2359
+  #   internal: true
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    name: "Time of Use 2 Start Raw"
-    id: time_of_use_2_start_raw
-    modbus_controller_id: ${modbus_controller_id}
-    register_type: holding
-    address: 251
-    value_type: U_WORD
-    min_value: 0
-    max_value: 2359
-    internal: true
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   name: "Time of Use 2 Start Raw"
+  #   id: time_of_use_2_start_raw
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   register_type: holding
+  #   address: 251
+  #   value_type: U_WORD
+  #   min_value: 0
+  #   max_value: 2359
+  #   internal: true
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    name: "Time of Use 3 Start Raw"
-    id: time_of_use_3_start_raw
-    modbus_controller_id: ${modbus_controller_id}
-    register_type: holding
-    address: 252
-    value_type: U_WORD
-    min_value: 0
-    max_value: 2359
-    internal: true
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   name: "Time of Use 3 Start Raw"
+  #   id: time_of_use_3_start_raw
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   register_type: holding
+  #   address: 252
+  #   value_type: U_WORD
+  #   min_value: 0
+  #   max_value: 2359
+  #   internal: true
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    name: "Time of Use 4 Start Raw"
-    id: time_of_use_4_start_raw
-    modbus_controller_id: ${modbus_controller_id}
-    register_type: holding
-    address: 253
-    value_type: U_WORD
-    min_value: 0
-    max_value: 2359
-    internal: true
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   name: "Time of Use 4 Start Raw"
+  #   id: time_of_use_4_start_raw
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   register_type: holding
+  #   address: 253
+  #   value_type: U_WORD
+  #   min_value: 0
+  #   max_value: 2359
+  #   internal: true
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    name: "Time of Use 5 Start Raw"
-    id: time_of_use_5_start_raw
-    modbus_controller_id: ${modbus_controller_id}
-    register_type: holding
-    address: 254
-    value_type: U_WORD
-    min_value: 0
-    max_value: 2359
-    internal: true
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   name: "Time of Use 5 Start Raw"
+  #   id: time_of_use_5_start_raw
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   register_type: holding
+  #   address: 254
+  #   value_type: U_WORD
+  #   min_value: 0
+  #   max_value: 2359
+  #   internal: true
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    name: "Time of Use 6 Start Raw"
-    id: time_of_use_6_start_raw
-    modbus_controller_id: ${modbus_controller_id}
-    register_type: holding
-    address: 255
-    value_type: U_WORD
-    min_value: 0
-    max_value: 2359
-    internal: true
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   name: "Time of Use 6 Start Raw"
+  #   id: time_of_use_6_start_raw
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   register_type: holding
+  #   address: 255
+  #   value_type: U_WORD
+  #   min_value: 0
+  #   max_value: 2359
+  #   internal: true
 
   # - platform: modbus_controller
   #   device_id: device_deye_inverter
@@ -624,95 +624,95 @@ number:
   #   mode: box
   #   icon: "mdi:power-plug"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 1 SoC"
-    id: time_of_use_1_soc
-    unit_of_measurement: "%"
-    address: 268
-    min_value: 0
-    max_value: 100
-    step: 1
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:battery-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 1 SoC"
+  #   id: time_of_use_1_soc
+  #   unit_of_measurement: "%"
+  #   address: 268
+  #   min_value: 0
+  #   max_value: 100
+  #   step: 1
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:battery-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 2 SoC"
-    id: time_of_use_2_soc
-    unit_of_measurement: "%"
-    address: 269
-    min_value: 0
-    max_value: 100
-    step: 1
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:battery-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 2 SoC"
+  #   id: time_of_use_2_soc
+  #   unit_of_measurement: "%"
+  #   address: 269
+  #   min_value: 0
+  #   max_value: 100
+  #   step: 1
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:battery-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 3 SoC"
-    id: time_of_use_3_soc
-    unit_of_measurement: "%"
-    address: 270
-    min_value: 0
-    max_value: 100
-    step: 1
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:battery-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 3 SoC"
+  #   id: time_of_use_3_soc
+  #   unit_of_measurement: "%"
+  #   address: 270
+  #   min_value: 0
+  #   max_value: 100
+  #   step: 1
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:battery-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 4 SoC"
-    id: time_of_use_4_soc
-    unit_of_measurement: "%"
-    address: 271
-    min_value: 0
-    max_value: 100
-    step: 1
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:battery-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 4 SoC"
+  #   id: time_of_use_4_soc
+  #   unit_of_measurement: "%"
+  #   address: 271
+  #   min_value: 0
+  #   max_value: 100
+  #   step: 1
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:battery-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 5 SoC"
-    id: time_of_use_5_soc
-    unit_of_measurement: "%"
-    address: 272
-    min_value: 0
-    max_value: 100
-    step: 1
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:battery-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 5 SoC"
+  #   id: time_of_use_5_soc
+  #   unit_of_measurement: "%"
+  #   address: 272
+  #   min_value: 0
+  #   max_value: 100
+  #   step: 1
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:battery-clock"
 
-  - platform: modbus_controller
-    device_id: device_deye_inverter
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 6 SoC"
-    id: time_of_use_6_soc
-    unit_of_measurement: "%"
-    address: 273
-    min_value: 0
-    max_value: 100
-    step: 1
-    value_type: U_WORD
-    mode: box
-    icon: "mdi:battery-clock"
+  # - platform: modbus_controller
+  #   device_id: device_deye_inverter
+  #   use_write_multiple: true
+  #   modbus_controller_id: ${modbus_controller_id}
+  #   name: "Time of Use 6 SoC"
+  #   id: time_of_use_6_soc
+  #   unit_of_measurement: "%"
+  #   address: 273
+  #   min_value: 0
+  #   max_value: 100
+  #   step: 1
+  #   value_type: U_WORD
+  #   mode: box
+  #   icon: "mdi:battery-clock"
 
   # - platform: template
   #   device_id: device_deye_inverter
@@ -838,37 +838,37 @@ binary_sensor:
 
 sensor:
   ## Battery
-  # - platform: modbus_controller
-  #   device_id: device_deye_inverter
-  #   modbus_controller_id: ${modbus_controller_id}
-  #   name: "Daily Battery Charge"
-  #   id: daily_battery_charge
-  #   register_type: holding
-  #   address: 70
-  #   unit_of_measurement: "kWh"
-  #   device_class: energy
-  #   state_class: "total_increasing"
-  #   accuracy_decimals: 1
-  #   filters:
-  #     - multiply: 0.1
-  #   value_type: U_WORD
-  #   icon: "mdi:battery-charging"
+  - platform: modbus_controller
+    device_id: device_deye_inverter
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Daily Battery Charge"
+    id: daily_battery_charge
+    register_type: holding
+    address: 70
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: "total_increasing"
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+    value_type: U_WORD
+    icon: "mdi:battery-charging"
 
-  # - platform: modbus_controller
-  #   device_id: device_deye_inverter
-  #   modbus_controller_id: ${modbus_controller_id}
-  #   name: "Daily Battery Discharge"
-  #   id: daily_battery_discharge
-  #   register_type: holding
-  #   address: 71
-  #   unit_of_measurement: "kWh"
-  #   device_class: energy
-  #   state_class: "total_increasing"
-  #   accuracy_decimals: 1
-  #   filters:
-  #     - multiply: 0.1
-  #   value_type: U_WORD
-  #   icon: "mdi:battery-minus"
+  - platform: modbus_controller
+    device_id: device_deye_inverter
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Daily Battery Discharge"
+    id: daily_battery_discharge
+    register_type: holding
+    address: 71
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: "total_increasing"
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+    value_type: U_WORD
+    icon: "mdi:battery-minus"
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -1252,22 +1252,21 @@ sensor:
     value_type: U_WORD
     icon: "mdi:solar-power-variant"
 
-
-  # - platform: modbus_controller
-  #   device_id: device_deye_inverter
-  #   modbus_controller_id: ${modbus_controller_id}
-  #   name: "Daily PV Production"
-  #   id: daily_pv_production
-  #   register_type: holding
-  #   address: 108
-  #   unit_of_measurement: "kWh"
-  #   device_class: energy
-  #   state_class: "total_increasing"
-  #   accuracy_decimals: 1
-  #   filters:
-  #     - multiply: 0.1
-  #   value_type: U_WORD
-  #   icon: "mdi:solar-power"
+  - platform: modbus_controller
+    device_id: device_deye_inverter
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Daily PV Production"
+    id: daily_pv_production
+    register_type: holding
+    address: 108
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: "total_increasing"
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+    value_type: U_WORD
+    icon: "mdi:solar-power"
 
   - platform: modbus_controller
     device_id: device_deye_inverter
@@ -1403,7 +1402,7 @@ sensor:
 
   #   icon: "mdi:home-lightning-bolt"
 
-select:
+#select:
   # - platform: modbus_controller
   #   device_id: device_deye_inverter
   #   id: energy_management_priority
@@ -1431,90 +1430,90 @@ select:
   #     "Zero Export To Load": 1
   #     "Zero Export To CT": 2
 
-datetime:
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Time of Use 1 Start"
-    id: time_of_use_1_start
-    type: time
-    update_interval: 15s
-    lambda: |-
-      auto raw = id(time_of_use_1_start_raw).state;
-      ${func_int_to_time}
-    set_action:
-      - number.set:
-          id: time_of_use_1_start_raw
-          value: !lambda ${func_time_to_int}
+# datetime:
+#   - platform: template
+#     device_id: device_deye_inverter
+#     name: "Time of Use 1 Start"
+#     id: time_of_use_1_start
+#     type: time
+#     update_interval: 15s
+#     lambda: |-
+#       auto raw = id(time_of_use_1_start_raw).state;
+#       ${func_int_to_time}
+#     set_action:
+#       - number.set:
+#           id: time_of_use_1_start_raw
+#           value: !lambda ${func_time_to_int}
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Time of Use 2 Start"
-    id: time_of_use_2_start
-    type: time
-    update_interval: 15s
-    lambda: |-
-      auto raw = id(time_of_use_2_start_raw).state;
-      ${func_int_to_time}
-    set_action:
-      - number.set:
-          id: time_of_use_2_start_raw
-          value: !lambda ${func_time_to_int}
+#   - platform: template
+#     device_id: device_deye_inverter
+#     name: "Time of Use 2 Start"
+#     id: time_of_use_2_start
+#     type: time
+#     update_interval: 15s
+#     lambda: |-
+#       auto raw = id(time_of_use_2_start_raw).state;
+#       ${func_int_to_time}
+#     set_action:
+#       - number.set:
+#           id: time_of_use_2_start_raw
+#           value: !lambda ${func_time_to_int}
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Time of Use 3 Start"
-    id: time_of_use_3_start
-    type: time
-    update_interval: 15s
-    lambda: |-
-      auto raw = id(time_of_use_3_start_raw).state;
-      ${func_int_to_time}
-    set_action:
-      - number.set:
-          id: time_of_use_3_start_raw
-          value: !lambda ${func_time_to_int}
+#   - platform: template
+#     device_id: device_deye_inverter
+#     name: "Time of Use 3 Start"
+#     id: time_of_use_3_start
+#     type: time
+#     update_interval: 15s
+#     lambda: |-
+#       auto raw = id(time_of_use_3_start_raw).state;
+#       ${func_int_to_time}
+#     set_action:
+#       - number.set:
+#           id: time_of_use_3_start_raw
+#           value: !lambda ${func_time_to_int}
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Time of Use 4 Start"
-    id: time_of_use_4_start
-    type: time
-    update_interval: 15s
-    lambda: |-
-      auto raw = id(time_of_use_4_start_raw).state;
-      ${func_int_to_time}
-    set_action:
-      - number.set:
-          id: time_of_use_4_start_raw
-          value: !lambda ${func_time_to_int}
+#   - platform: template
+#     device_id: device_deye_inverter
+#     name: "Time of Use 4 Start"
+#     id: time_of_use_4_start
+#     type: time
+#     update_interval: 15s
+#     lambda: |-
+#       auto raw = id(time_of_use_4_start_raw).state;
+#       ${func_int_to_time}
+#     set_action:
+#       - number.set:
+#           id: time_of_use_4_start_raw
+#           value: !lambda ${func_time_to_int}
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Time of Use 5 Start"
-    id: time_of_use_5_start
-    type: time
-    update_interval: 15s
-    lambda: |-
-      auto raw = id(time_of_use_5_start_raw).state;
-      ${func_int_to_time}
-    set_action:
-      - number.set:
-          id: time_of_use_5_start_raw
-          value: !lambda ${func_time_to_int}
+#   - platform: template
+#     device_id: device_deye_inverter
+#     name: "Time of Use 5 Start"
+#     id: time_of_use_5_start
+#     type: time
+#     update_interval: 15s
+#     lambda: |-
+#       auto raw = id(time_of_use_5_start_raw).state;
+#       ${func_int_to_time}
+#     set_action:
+#       - number.set:
+#           id: time_of_use_5_start_raw
+#           value: !lambda ${func_time_to_int}
 
-  - platform: template
-    device_id: device_deye_inverter
-    name: "Time of Use 6 Start"
-    id: time_of_use_6_start
-    type: time
-    update_interval: 15s
-    lambda: |-
-      auto raw = id(time_of_use_6_start_raw).state;
-      ${func_int_to_time}
-    set_action:
-      - number.set:
-          id: time_of_use_6_start_raw
-          value: !lambda ${func_time_to_int}
+#   - platform: template
+#     device_id: device_deye_inverter
+#     name: "Time of Use 6 Start"
+#     id: time_of_use_6_start
+#     type: time
+#     update_interval: 15s
+#     lambda: |-
+#       auto raw = id(time_of_use_6_start_raw).state;
+#       ${func_int_to_time}
+#     set_action:
+#       - number.set:
+#           id: time_of_use_6_start_raw
+#           value: !lambda ${func_time_to_int}
 
 
 text_sensor:
