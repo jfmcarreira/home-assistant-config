@@ -30,7 +30,7 @@ output:
             write_val = min(write_val, 0.35);
         }
         if(id(notify_home).state){
-            write_val = max(write_val, 0.8);
+            write_val = min(write_val, 0.75);
         }
         id(console_fan_speed).set_level(write_val);
         id(fan_speed_pwm_voltage).publish_state(write_val*100.0);
