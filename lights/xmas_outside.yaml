@@ -1,0 +1,10 @@
+unique_id: xmas_outside
+name: Luzes de Natal da Rua
+icon: mdi:string-lights
+state: "{{ (states('switch.season_sw') not in ('unknown', 'unavailable')) and is_state('switch.season_sw', 'on') }}"
+turn_on:
+  - service: switch.turn_on
+    entity_id: switch.season_sw
+turn_off:
+  - service: switch.turn_off
+    entity_id: switch.season_sw

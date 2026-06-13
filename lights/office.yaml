@@ -20,3 +20,26 @@ turn_off:
   - service: light.turn_off
     target:
       area_id: office
+
+effect_list: >-
+  {% set list = [] %}
+  {% set list = list + ['Todas'] %}
+  {% set list = list + ['Algumas'] %}
+  {{ list }}
+set_effect:
+  - choose:
+      - conditions: "{{ effect == 'Algumas' and is_state('binary_sensor.night_mode', 'on') }}"
+        sequence:
+          - service: light.turn_on
+            entity_id: light.office_extra
+    default:
+      - service: light.turn_on
+        entity_id: light.office_main
+      - service: light.turn_on
+        entity_id: light.office_extra
+effect: >-
+  {% if is_state('light.office_main', 'on') and is_state('light.office_extra', 'on') %}
+    {{ "Todas" }}
+  {% else %}
+    {{ "Algumas" }}
+  {% endif %}

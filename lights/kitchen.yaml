@@ -7,9 +7,26 @@ state: >-
       is_state('light.kitchen_pantry', 'on')
   }}
 turn_on:
-  - service: light.turn_on
-    entity_id: light.kitchen_led
+  - action: light.turn_on
+    target:
+      entity_id: light.kitchen_led
 turn_off:
-  - service: light.turn_off
+  - action: light.turn_off
     target:
       area_id: kitchen
+
+effect_list: >-
+  {% set list = [] %}
+  {% set list = list + ['Todas'] %}
+  {% set list = list + ['Algumas'] %}
+  {{ list }}
+set_effect:
+  - action: light.turn_on
+    target:
+      entity_id: light.kitchen_led
+effect: >-
+  {% if is_state('light.kitchen_led', 'on') and is_state('light.kitchen_window', 'on') %}
+    {{ "Todas" }}
+  {% else %}
+    {{ "Algumas" }}
+  {% endif %}
