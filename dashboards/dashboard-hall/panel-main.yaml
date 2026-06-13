@@ -352,6 +352,7 @@
   card_param: cards
   filter:
     exclude:
+      - entity_id: climate.deye_inverter_cooling_fan
       - entity_id: climate.office
       - entity_id: climate.*_vtherm
       - entity_id: climate.living_room
