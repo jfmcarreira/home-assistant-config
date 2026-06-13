@@ -2,3 +2,6 @@ binary_sensor:
   - platform: homeassistant
     id: house_mode_night
     entity_id: binary_sensor.night_mode
+  - platform: homeassistant
+    id: notify_home
+    entity_id: binary_sensor.notify_home

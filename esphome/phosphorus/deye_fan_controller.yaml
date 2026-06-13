@@ -25,10 +25,12 @@ output:
     type: float
     write_action:
       lambda: |-
-        auto night_mode = id(house_mode_night).state;
         auto write_val = (id(manual_fan_control).state) ? id(manual_fan_control).speed / 100.0 : state * 1.0;
-        if(night_mode){
-          write_val = min(write_val, 0.35);
+        if(id(house_mode_night).state){
+            write_val = min(write_val, 0.35);
+        }
+        if(id(notify_home).state){
+            write_val = max(write_val, 0.8);
         }
         id(console_fan_speed).set_level(write_val);
         id(fan_speed_pwm_voltage).publish_state(write_val*100.0);

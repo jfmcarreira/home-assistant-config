@@ -99,5 +99,3 @@ light:
     platform: binary
     output: relay_1
     restore_mode: ALWAYS_OFF
-# logger:
-#   level: DEBUG
