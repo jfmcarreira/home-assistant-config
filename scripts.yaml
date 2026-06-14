@@ -32,6 +32,18 @@ lights_arriving_home:
         - light.exterior_wall_side
         - light.kitchen_door
       data: {}
+      action: light.turn_off
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 5
+        milliseconds: 0
+    - target:
+        entity_id:
+        - light.exterior_wall_back
+        - light.exterior_wall_side
+        - light.kitchen_door
+      data: {}
       action: light.turn_on
   - action: input_text.set_value
     target:
@@ -1037,4 +1049,48 @@ routina_de_desumidificacao:
       - script.hvac_routine_dehumidifier_bedroom_henrique
     data: {}
   alias: Routina de Desumidificação
+  description: ''
+cover_scene_close_with_heat:
+  sequence:
+  - if:
+    - condition: numeric_state
+      entity_id: sensor.sun_solar_azimuth
+      above: 180
+    then:
+    - action: script.cover_group_action
+      data:
+        action_to_run: cover.close_cover
+        control_switch: close_with_heat
+        covers_list:
+        - master_bedroom
+        - kitchen
+    else:
+    - action: script.cover_group_action
+      data:
+        action_to_run: cover.close_cover
+        control_switch: close_with_heat
+        covers_list:
+        - stairs
+        - bedroom_rc
+        - laundry
+  alias: Fechar Estores - Exposição Solar
+  description: ''
+fechar_todos_os_estores_sol_calor:
+  sequence:
+  - action: script.cover_group_action
+    data:
+      action_to_run: cover.close_cover
+      control_switch: close_with_heat
+      covers_list:
+        - living_room
+        - stairs
+        - bedroom_henrique
+        - bedroom_ricardo
+        - master_bedroom
+        - bathroom
+        - bedroom_rc
+        - laundry
+        - kitchen
+        - office
+  alias: Fechar Todos os Estores - Sol/Calor
   description: ''

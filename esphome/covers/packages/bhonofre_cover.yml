@@ -532,8 +532,20 @@ script:
           then:
             - logger.log: "Special control using HA to close control all"
             - homeassistant.service:
-                service: script.cover_group_action_all
+                service: script.cover_group_action
                 data:
+                  control_switch: "group"
+                  covers_list:
+                    - living_room
+                    - stairs
+                    - bedroom_henrique
+                    - bedroom_ricardo
+                    - master_bedroom
+                    - bathroom
+                    - bedroom_rc
+                    - laundry
+                    - kitchen
+                    - office
                   action_to_run: !lambda |-
                     if (id(cover_action) == 1) {
                       return "cover.open_cover";

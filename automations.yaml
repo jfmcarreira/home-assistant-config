@@ -266,6 +266,10 @@
     trigger: state
   conditions:
   - condition: state
+    entity_id: script.lights_arriving_home
+    state:
+    - 'off'
+  - condition: state
     entity_id: binary_sensor.night
     state: 'on'
   - condition: or
@@ -297,8 +301,9 @@
       - condition: template
         value_template: '{{ trigger.id == ''bianca_trigger'' }}'
   actions:
-  - data: {}
-    action: script.lights_arriving_home
+  - action: script.turn_on
+    target:
+      entity_id: script.lights_arriving_home
   mode: restart
 - alias: Controlar Luz da Cozinha Day/Night
   id: '1658004941042'
