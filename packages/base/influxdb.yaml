@@ -31,6 +31,9 @@ influxdb:
       # Electricity
       - sensor.ibelectra_price
       - sensor.omie_spot_price_pt
+      - sensor.house_power_grid
+      - sensor.house_power_consumption
+      - sensor.house_power_frequency
       # # Devices
       # - binary_sensor.dish_wash_machine_state
       # - binary_sensor.washing_machine_state
