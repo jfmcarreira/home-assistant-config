@@ -1,5 +1,5 @@
 substitutions:
-  devicename: bhonofre_cover_master_bed
+  devicename: bhonofre_cover_master_bedroom
   CoverName: master_bedroom
   Open: "12"
   Close: "13"
@@ -17,3 +17,7 @@ packages:
   esphome_base: !include ../packages/common.yml
   esphome_web: !include ../packages/webserver.yml
   cover: !include packages/bhonofre_cover.yml
+
+
+# wifi:
+#   use_address: "10.20.107.94"
