@@ -159,7 +159,6 @@ class FanStateMachine(StateMachine):
         pass
 
     def on_enter_fan_on_timeout(self) -> None:
-        self.model.turn_off_dehumidifier()
         self.model.turn_on_fan(reason="automatico")
         self.model.set_timer(self.model.get_fan_timeout_seconds())
 
