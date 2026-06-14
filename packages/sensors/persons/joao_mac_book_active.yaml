@@ -2,4 +2,4 @@ template:
 - binary_sensor:
     - name: joao_mac_book_active_home
       unique_id: joao_mac_book_active_home
-      state: "{{ is_state('binary_sensor.joao_macbook_pro_wifi', 'on') and is_state('binary_sensor.joao_macbook_pro_active', 'on')  }}"
+      state: "{{ is_state('sensor.joaocarreira_macbook_pro_ssid', 'JB') and is_state('binary_sensor.joaocarreira_macbook_pro_active', 'on')  }}"

@@ -82,6 +82,6 @@
       - binary_sensor.frigate_zone_front_garden_person
       - binary_sensor.frigate_zone_front_gate_person
       - binary_sensor.frigate_zone_front_gate_car
-      - binary_sensor.frigate_zone_front_driveway_gate_person
-      - binary_sensor.frigate_zone_front_driveway_gate_car
+      - binary_sensor.frigate_zone_driveway_gate_car
+      - binary_sensor.frigate_zone_driveway_gate_person
       - binary_sensor.frigate_zone_kitchen_door_person

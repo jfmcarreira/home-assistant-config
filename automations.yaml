@@ -230,7 +230,7 @@
       motion_sensor: binary_sensor.motion_sensor_stairs
       target_entity: light.stairs_wall
       no_motion_wait: 30
-      illuminance_sensor: sensor.light_stairs
+      illuminance_sensor: sensor.light_stairs_top
       illuminance_cutoff: 50
       only_after_sunset: false
       disable_in_guest: false
