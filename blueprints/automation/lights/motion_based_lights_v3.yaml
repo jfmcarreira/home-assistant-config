@@ -158,6 +158,10 @@ max_exceeded: silent
 
 trigger:
   - platform: state
+    entity_id:  !input target_entity
+    id: light_trigger
+
+  - platform: state
     entity_id: binary_sensor.notify_home
     to: "on"
     id: notify_home_trigger
@@ -166,9 +170,11 @@ trigger:
     entity_id: !input motion_sensor
     to: "on"
     id: motion_sensor_trigger
+
   - platform: state
     entity_id: input_select.house_mode
     id: house_mode_trigger
+
   - platform: state
     entity_id: input_boolean.automation_sw_all_motion_lights
     from: "on"
@@ -204,6 +210,16 @@ variables:
     }}
 
 condition:
+  - alias: "Only check light trigger if running"
+    condition: or
+    conditions:
+      - "{{ trigger.id != 'light_trigger'  }}"
+      - condition: state
+        entity_id: !input target_entity
+        state: "on"
+        for:
+          seconds: 3
+
   # Do not run if house is empty
   - condition: state
     entity_id: binary_sensor.notify_home
@@ -306,6 +322,10 @@ action:
   # Check if house mode, automation or sunset is met
   - alias: "Process specific triggers that can change light state"
     choose:
+      # If light changes we do not want to automatically turn it off
+      - conditions: "{{ trigger.id == 'light_trigger'  }}"
+        sequence:
+          - stop:
       - conditions: "{{ trigger.id == 'house_mode_trigger' or trigger.id == 'motion_light_sw_state_trigger' or trigger.id == 'notify_home_trigger' }}"
         sequence:
           - choose:
