@@ -170,7 +170,7 @@ action:
         target:
           entity_id: !input hvac_unit
         data:
-          temperature: input_number.house_target_low_temperature
+          temperature: "{{ states('input_number.house_target_low_temperature') | float(0) }}"
     else:
       - action: climate.set_hvac_mode
         target:
@@ -181,7 +181,7 @@ action:
         target:
           entity_id: !input hvac_unit
         data:
-          temperature: input_number.house_target_high_temperature
+          temperature: "{{ states('input_number.house_target_high_temperature') | float(0) }}"
 
   - action: climate.set_fan_mode
     data:
