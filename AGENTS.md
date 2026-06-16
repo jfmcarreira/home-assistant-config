@@ -755,3 +755,36 @@ Be especially careful with these frequently-changed areas:
 2. **Present recommendations to user**
 3. Wait for user to approve specific changes
 4. Implement only the changes the user explicitly approves
+
+
+
+## Delayed One-Off Actions
+
+For one-time delayed device actions, prefer the existing Home Assistant script `script.run_actions_later` instead of local shell sleeps, temporary automations, or editing configuration.
+
+Use it when the user asks for actions like "turn off X in 5 minutes", "turn on Y in 1 hour", or other simple delayed service calls.
+
+Example call:
+
+```yaml
+action: script.run_actions_later
+data:
+  delay:
+    minutes: 5
+  actions:
+    - action: light.turn_off
+      entity_id: light.laundry
+```
+
+Supported action item fields:
+
+- `action`: required Home Assistant service/action name, for example `light.turn_off`, `switch.turn_on`, or `climate.turn_off`.
+- `entity_id`: optional entity target for simple entity-targeted actions.
+- `data`: optional service data mapping.
+
+Notes:
+
+- The script runs inside Home Assistant and supports multiple parallel delayed jobs.
+- Pending delayed actions do not survive a Home Assistant restart/reload.
+- `hab action call` may time out while the script is waiting on its delay; verify with `hab entity get script.run_actions_later --json` and check `current` / `last_action`.
+- Do not use `nohup`, local `sleep`, or host-side timers for delayed Home Assistant actions unless the HA script is unavailable or the user explicitly asks for a local workaround.
