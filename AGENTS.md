@@ -1,7 +1,5 @@
 # Home Assistant OpenCode Rules
 
-You are working directly within a Home Assistant installation. Your working directory is `/homeassistant`, which is the live Home Assistant configuration directory.
-
 ## CRITICAL: User Consent and Scope Rules
 
 You MUST follow these rules strictly:
