@@ -1,0 +1,40 @@
+run_actions_later:
+  alias: Executar Ações Mais Tarde
+  description: "Executa uma lista simples de ações depois de um atraso. Não sobrevive a reinícios do Home Assistant."
+  mode: parallel
+  max: 20
+  fields:
+    delay:
+      name: "Atraso"
+      description: "Tempo a esperar antes de executar as ações."
+      required: true
+      example: "{\"hours\": 1, \"minutes\": 0, \"seconds\": 0}"
+      selector:
+        duration:
+    actions:
+      name: "Ações"
+      description: "Lista de chamadas simples com action, entity_id opcional e data opcional."
+      required: true
+      example: "[{\"action\": \"climate.turn_off\", \"entity_id\": \"climate.living_room\"}]"
+      selector:
+        object:
+  sequence:
+    - delay:
+        hours: "{{ delay.hours | default(0) }}"
+        minutes: "{{ delay.minutes | default(0) }}"
+        seconds: "{{ delay.seconds | default(0) }}"
+    - repeat:
+        for_each: "{{ actions }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ repeat.item.entity_id is defined }}"
+                sequence:
+                  - action: "{{ repeat.item.action }}"
+                    target:
+                      entity_id: "{{ repeat.item.entity_id }}"
+                    data: "{{ repeat.item.data | default({}) }}"
+            default:
+              - action: "{{ repeat.item.action }}"
+                data: "{{ repeat.item.data | default({}) }}"
