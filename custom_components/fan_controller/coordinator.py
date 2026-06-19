@@ -1,7 +1,6 @@
 """Coordinator for the Fan Controller integration."""
 from __future__ import annotations
 
-import logging
 from typing import Any, Protocol
 
 from statemachine import StateMachine, State
@@ -30,8 +29,6 @@ from .const import (
     QUIET_HOURS_START,
 )
 
-_LOGGER = logging.getLogger(__name__)
-
 _QUIET_START = time(QUIET_HOURS_START, 0)
 _QUIET_END = time(QUIET_HOURS_END, 0)
 
@@ -43,7 +40,7 @@ class FanController(Protocol):
     def is_high_humidity(self) -> bool: ...
     def is_auto_on_disabled(self) -> bool: ...
     def is_quiet_time(self) -> bool: ...
-    def turn_on_fan(self, reason: str = "automatico") -> None: ...
+    def turn_on_fan(self) -> None: ...
     def turn_off_fan(self) -> None: ...
     def set_timer(self, seconds: float) -> None: ...
     def cancel_timer(self) -> None: ...
@@ -144,26 +141,17 @@ class FanStateMachine(StateMachine):
         self.model.set_timer(self.model.get_max_timeout_seconds())
 
     def on_enter_light_on_fan_on(self, source=None) -> None:
-        source_id = getattr(source, "id", None)
-        if (
-            source_id == "light_on"
-            and not self.model.is_fan_on()
-            and self.model.is_high_humidity()
-            and not self.model.is_auto_on_disabled()
-        ):
-            self.model.turn_on_fan(reason="humidade_alta")
-            return
-        self.model.turn_on_fan(reason="automatico")
+        self.model.turn_on_fan()
 
     def on_enter_light_on_fan_off(self) -> None:
         pass
 
     def on_enter_fan_on_timeout(self) -> None:
-        self.model.turn_on_fan(reason="automatico")
+        self.model.turn_on_fan()
         self.model.set_timer(self.model.get_fan_timeout_seconds())
 
     def on_enter_fan_on_high_humidity(self) -> None:
-        self.model.turn_on_fan(reason="humidade_alta")
+        self.model.turn_on_fan()
         self.model.set_timer(self.model.get_max_timeout_seconds())
 
 
@@ -323,34 +311,14 @@ class FanCoordinator:
             return now >= _QUIET_START or now < _QUIET_END
         return now < _QUIET_END or now >= _QUIET_START
 
-    def turn_on_fan(self, reason: str = "automatico") -> None:
-        if reason == "humidade_alta":
-            self.turn_on_dehumidifier()
+    def turn_on_fan(self) -> None:
         if self.is_fan_on():
             return
+        self.turn_on_dehumidifier()
         self.record_humidity_fan_on()
         self.hass.async_create_task(
             self.hass.services.async_call(
                 "fan", "turn_on", {"entity_id": self._fan_entity}
-            )
-        )
-        self._log_fan_turn_on(reason)
-
-    def _log_fan_turn_on(self, reason: str) -> None:
-        if reason != "humidade_alta":
-            return
-        if not self.hass.services.has_service("logbook", "log"):
-            return
-        self.hass.async_create_task(
-            self.hass.services.async_call(
-                "logbook",
-                "log",
-                {
-                    "name": "Controlador da Ventoinha",
-                    "message": "Ventoinha ligada por humidade alta.",
-                    "entity_id": self._fan_entity,
-                    "domain": DOMAIN,
-                },
             )
         )
 
