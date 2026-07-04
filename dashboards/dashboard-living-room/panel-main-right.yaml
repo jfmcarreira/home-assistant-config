@@ -433,6 +433,56 @@
     reverse: false
   show_empty: false
 
+
+- type: custom:calendar-card-pro
+  card_mod:
+    style: |
+      :host {
+        height: auto !important;
+        min-height: 0 !important;
+      }
+
+      ha-card {
+        height: auto !important;
+        min-height: 0 !important;
+      }
+  days_to_show: 10
+  compact_days_to_show: 10
+  compact_events_complete_days: true
+  entities:
+    - entity: calendar.family
+      show_time: true
+      show_location: false
+      show_description: false
+  filter_duplicates: true
+  first_day_of_week: sunday
+  week_separator_width: 1px
+  today_indicator: dot
+  show_location: false
+  weather:
+    position: event
+    date:
+      show_conditions: true
+      show_high_temp: true
+      show_low_temp: false
+      show_uv_index: false
+      uv_index_threshold: 0
+      icon_size: 14px
+      font_size: 12px
+      color: var(--primary-text-color)
+    event:
+      show_conditions: true
+      show_temp: true
+      show_uv_index: false
+      uv_index_threshold: 0
+      icon_size: 14px
+      font_size: 12px
+      color: var(--primary-text-color)
+    entity: weather.home
+
+
+
+
 - type: logbook
   title: Atividade da Rua
   hours_to_show: 0.25

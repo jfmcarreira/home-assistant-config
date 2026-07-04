@@ -115,23 +115,165 @@
                       - entity_id: input_number.*_position_stairs
                   view_layout:
                     column: 2
-- show_name: true
-  show_icon: true
-  type: button
-  icon_height: 42px
-  name: Abrir Todos
-  icon: mdi:window-shutter-open
-  tap_action:
-    action: call-service
-    service: cover.open_cover
-    data:
-      entity_id: cover.all_house
-- type: button
-  icon_height: 42px
-  name: Fechar Todos
-  icon: mdi:window-shutter
-  tap_action:
-    action: call-service
-    service: cover.close_cover
-    data:
-      entity_id: cover.all_house
+
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    square: false
+    type: grid
+    columns: 2
+    cards:
+    - show_name: true
+      show_icon: true
+      type: button
+      icon_height: 42px
+      name: Abrir Todos
+      icon: mdi:window-shutter-open
+      tap_action:
+        action: call-service
+        service: cover.open_cover
+        data:
+          entity_id: cover.all_house
+    - type: button
+      icon_height: 42px
+      name: Fechar Todos
+      icon: mdi:window-shutter
+      tap_action:
+        action: call-service
+        service: cover.close_cover
+        data:
+          entity_id: cover.all_house
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    square: false
+    type: grid
+    columns: 3
+    cards:
+      - entity: input_boolean.cover_controls_bypass
+        icon_height: 46px
+        icon: mdi:window-shutter-alert
+        name: Controlos Off
+        show_icon: true
+        show_name: true
+        state:
+          - styles:
+              icon:
+                - color: var(--state-icon-color)
+            value: "off"
+        type: button
+      - entity: ""
+        icon: mdi:calendar-sync
+        name: Cenários
+        icon_height: 46px
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            data:
+              allow_nested_more_info: false
+              auto_close: false
+              content:
+                card:
+                  title: Cenários dos Estores
+                  type: entities
+                filter:
+                  include:
+                    - entity_id: scene.cover_*
+                    - entity_id: script.cover_scene_*
+                sort:
+                  method: name
+                type: custom:auto-entities
+            service: browser_mod.popup
+        type: button
+      - entity: ""
+        icon: mdi:robot
+        name: Automações
+        icon_height: 46px
+        show_icon: true
+        show_name: true
+        styles:
+          icon:
+            - color: var(--state-icon-color)
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            data:
+              allow_nested_more_info: false
+              auto_close: true
+              content:
+                entities:
+                  - card:
+                      head:
+                        label: Abrir
+                        type: section
+                      open: true
+                      type: custom:fold-entity-row
+                    filter:
+                      include:
+                        - entity_id: automation.cover_open_*
+                    sort:
+                      method: name
+                    type: custom:auto-entities
+                  - card:
+                      head:
+                        label: Fechar
+                        type: section
+                      open: true
+                      type: custom:fold-entity-row
+                    filter:
+                      exclude:
+                        - entity_id: automation.cover_close_sun_*
+                      include:
+                        - entity_id: automation.cover_close_*
+                    sort:
+                      method: name
+                    type: custom:auto-entities
+                  - card:
+                      head:
+                        label: Sol
+                        type: section
+                      open: true
+                      type: custom:fold-entity-row
+                    filter:
+                      include:
+                        - entity_id: automation.cover_close_sun_*
+                        - entity_id: automation.cover_sun_*
+                    sort:
+                      method: name
+                    type: custom:auto-entities
+                  - card:
+                      head:
+                        label: Outras
+                        type: section
+                      open: true
+                      type: custom:fold-entity-row
+                    filter:
+                      exclude:
+                        - entity_id: automation.cover_open_*
+                        - entity_id: automation.cover_close_*
+                      include:
+                        - entity_id: automation.cover_*
+                    sort:
+                      method: name
+                    type: custom:auto-entities
+                title: Automações dos Estores
+                type: entities
+              size: normal
+              style: |
+                --popup-min-width: 400px;
+            service: browser_mod.popup
+        type: button
+

@@ -1,3 +1,66 @@
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    square: false
+    type: grid
+    cards:
+      - type: tile
+        entity: sensor.temperature_living_room
+        name:
+          type: area
+        vertical: false
+        features_position: bottom
+      - type: tile
+        entity: sensor.temperature_office
+        name:
+          type: area
+        vertical: false
+        features_position: bottom
+      - type: tile
+        entity: sensor.temperature_hall
+        name:
+          type: area
+        vertical: false
+        features_position: bottom
+    columns: 3
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    square: false
+    type: grid
+    cards:
+      - type: tile
+        entity: sensor.temperature_master_bedroom
+        name:
+          type: area
+        vertical: false
+        features_position: bottom
+      - type: tile
+        entity: sensor.temperature_bedroom_ricardo
+        name: Q. Ricardo
+        vertical: false
+        features_position: bottom
+      - type: tile
+        entity: sensor.temperature_bedroom_henrique
+        name: Q. Henrique
+        vertical: false
+        features_position: bottom
+    columns: 3
+
+
 - type: tile
   entity: climate.living_room
   name: Sala

@@ -179,12 +179,12 @@
             action: call-service
             service: script.turn_on
             target:
-              entity_id: script.routine_cover_rain_mode
+              entity_id: script.cover_scene_rain_mode
           hold_action:
             action: call-service
             service: script.turn_off
             target:
-              entity_id: script.routine_cover_rain_mode
-          entity: script.routine_cover_rain_mode
+              entity_id: script.cover_scene_rain_mode
+          entity: script.cover_scene_rain_mode
           icon: ""
           name: Modo Chuva

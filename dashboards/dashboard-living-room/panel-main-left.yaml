@@ -194,7 +194,7 @@
       - options: {}
         entity_id: script.routine_dinner_time
       - options: {}
-        entity_id: script.routine_cover_rain_mode
+        entity_id: script.cover_scene_rain_mode
     include:
       - options:
           type: tile
