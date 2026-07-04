@@ -115,6 +115,7 @@ binary_sensor:
         invalid_cooldown: 100ms
         trigger_id: main_top_long
         then:
+          - logger.log: "Main Top (Long)"
           - script.execute: cancel_extra_events
           - if:
               condition:
@@ -131,6 +132,7 @@ binary_sensor:
         invalid_cooldown: 100ms
         trigger_id: main_top_single
         then:
+          - logger.log: "Main Top"
           - script.execute: cancel_extra_events
           - globals.set:
               id: cover_action
@@ -145,6 +147,7 @@ binary_sensor:
                 - logger.log: "Special control"
                 - script.execute: special_cover_controls
               else:
+                - logger.log: "Normal control: open"
                 - if:
                     condition:
                       - binary_sensor.is_on: cover_controls_enabled
@@ -216,10 +219,13 @@ binary_sensor:
         invalid_cooldown: 100ms
         trigger_id: main_bottom_long
         then:
+          - logger.log: "Main Bottom (Long)"
+          - script.execute: cancel_extra_events
           - if:
               condition:
                 - binary_sensor.is_on: cover_controls_enabled
               then:
+                - logger.log: "Cover going to just open"
                 - script.execute: cover_small_open
       - timing:
           - ON for at most 1s
@@ -227,6 +233,7 @@ binary_sensor:
         invalid_cooldown: 100ms
         trigger_id: main_bottom_single
         then:
+          - logger.log: "Main Bottom"
           - script.execute: cancel_extra_events
           - globals.set:
               id: cover_action
@@ -241,6 +248,7 @@ binary_sensor:
                 - logger.log: "Special control"
                 - script.execute: special_cover_controls
               else:
+                - logger.log: "Normal control: close"
                 - if:
                     condition:
                       - binary_sensor.is_on: cover_controls_enabled
