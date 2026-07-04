@@ -5,13 +5,7 @@ notify:
   - platform: group
     name: mobile_app_all
     services:
-      - service: mobile_app_radium
       - service: mobile_app_calcium
-      - service: mobile_app_radium_watch
-      - service: mobile_app_joaocarreira_macbook_pro
-
-  - platform: group
-    name: mobile_app_joao
-    services:
       - service: mobile_app_radium
+      - service: mobile_app_joao_watch
       - service: mobile_app_joaocarreira_macbook_pro
