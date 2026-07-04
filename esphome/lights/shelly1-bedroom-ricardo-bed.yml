@@ -1,0 +1,33 @@
+substitutions:
+  devicename: shelly1-bedroom-ricardo-bed
+
+esphome:
+  friendly_name: Shelly 1 Quarto do Ricardo Interruptor da Cama
+
+packages:
+  esphome_base: !include ../packages/common.yml
+  esphome_web: !include ../packages/webserver.yml
+  device_base: !include ../packages/shelly1.yml
+
+binary_sensor:
+  - platform: homeassistant
+    id: bedroom_ricardo_lights_state
+    entity_id: light.bedroom_ricardo
+
+  - id: !extend sw_1
+    on_click:
+      then:
+        - if:
+            condition:
+              - binary_sensor.is_on: bedroom_ricardo_lights_state
+            then:
+              - homeassistant.service:
+                  service: light.turn_off
+                  data:
+                    entity_id: light.bedroom_ricardo
+            else:
+              - homeassistant.service:
+                  service: light.toggle
+                  data:
+                    entity_id: light.bedroom_ricardo_lamp
+

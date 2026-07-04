@@ -9,3 +9,8 @@ output:
     pin: GPIO04
     id: relay_1
 
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO5
+    id: sw_1
