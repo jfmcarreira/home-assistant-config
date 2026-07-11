@@ -10,7 +10,7 @@ turn_on:
   - if:
       - condition: state
         entity_id: binary_sensor.hot_months
-        state: "true"
+        state: "on"
     then:
       - action: climate.set_hvac_mode
         metadata: {}
@@ -21,7 +21,7 @@ turn_on:
       - action: climate.set_temperature
         metadata: {}
         data:
-          temperature: 25
+          temperature: 24
         target:
           entity_id: climate.master_bedroom
     else:
@@ -37,12 +37,12 @@ turn_on:
           temperature: 22
         target:
           entity_id: climate.master_bedroom
-  - action: climate.set_swing_mode
-    metadata: {}
-    data:
-      swing_mode: vertical
-    target:
-      entity_id: climate.master_bedroom
+  # - action: climate.set_swing_mode
+  #   metadata: {}
+  #   data:
+  #     swing_mode: vertical
+  #   target:
+  #     entity_id: climate.master_bedroom
   - action: climate.set_fan_mode
     data:
       fan_mode: auto
