@@ -1,27 +1,13 @@
+- show_name: true
+  show_icon: true
+  icon_height: 50px
+  type: button
+  tap_action:
+    action: toggle
+  entity: input_boolean.vacuum_hall
 - type: custom:mod-card
-  style:
-    hui-horizontal-stack-card$: |
-      :host {
-        height: auto;
-      }
-  card:
-    type: horizontal-stack
-    cards:
-    - show_name: true
-      show_icon: true
-      icon_height: 50px
-      type: button
-      tap_action:
-        action: toggle
-      entity: input_boolean.vacuum_hall
-    - show_name: true
-      show_icon: true
-      icon_height: 50px
-      type: button
-      tap_action:
-        action: toggle
-      entity: input_boolean.vacuum_mainbathroom
-- type: custom:mod-card
+  view_layout:
+    column: 1
   style:
     hui-horizontal-stack-card$: |
       :host {
@@ -43,8 +29,10 @@
       type: button
       tap_action:
         action: toggle
-      entity: input_boolean.vacuum_masterbedroombath
+      entity: input_boolean.vacuum_masterbedroomcloset
 - type: custom:mod-card
+  view_layout:
+    column: 1
   style:
     hui-horizontal-stack-card$: |
       :host {
@@ -67,7 +55,31 @@
       tap_action:
         action: toggle
       entity: input_boolean.vacuum_bedroomhenrique
-
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: horizontal-stack
+    cards:
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_mainbathroom
+    - show_name: true
+      show_icon: true
+      icon_height: 50px
+      type: button
+      tap_action:
+        action: toggle
+      entity: input_boolean.vacuum_masterbedroombath
 - show_name: true
   show_icon: true
   type: button
@@ -78,10 +90,17 @@
   icon: mdi:vacuum
   show_state: true
   icon_height: 60px
+  view_layout:
+    column: 1
 
 - type: custom:valetudo-map-card
   vacuum: roborock
   title: Roborock
+  show_start_button: true
+  show_pause_button: true
+  show_home_button: true
+  show_locate_button: false
+  show_status: false
   map_scale: 1.4
   crop:
     top: 80

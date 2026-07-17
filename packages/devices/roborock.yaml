@@ -36,8 +36,11 @@ input_boolean:
     name: Hall
     icon: mdi:home-roof
   vacuum_masterbedroom:
-    name: Suite
+    name: Closet da Suite
     icon: mdi:bed-double
+  vacuum_masterbedroomcloset:
+    name: Suite
+    icon: mdi:wardrobe
   vacuum_bedroomricardo:
     name: Quarto do Ricardo
     icon: mdi:human-child
@@ -62,8 +65,10 @@ script:
             {% set rooms.segments = rooms.segments + ['18'] %}
           {% endif %}
           {% if is_state('input_boolean.vacuum_masterbedroom', 'on') %}
-            {% set rooms.segments = rooms.segments + ['20'] %}
             {% set rooms.segments = rooms.segments + ['22'] %}
+          {% endif %}
+          {% if is_state('input_boolean.vacuum_masterbedroomcloset', 'on') %}
+            {% set rooms.segments = rooms.segments + ['20'] %}
           {% endif %}
           {% if is_state('input_boolean.vacuum_bedroomricardo', 'on') %}
             {% set rooms.segments = rooms.segments + ['16'] %}
@@ -88,6 +93,9 @@ script:
               {% set rooms.segments = rooms.segments + ['18'] %}
             {% endif %}
             {% if is_state('input_boolean.vacuum_masterbedroom', 'on') %}
+              {% set rooms.segments = rooms.segments + ['22'] %}
+            {% endif %}
+            {% if is_state('input_boolean.vacuum_masterbedroomcloset', 'on') %}
               {% set rooms.segments = rooms.segments + ['20'] %}
             {% endif %}
             {% if is_state('input_boolean.vacuum_bedroomricardo', 'on') %}
@@ -119,6 +127,7 @@ script:
             - input_boolean.vacuum_office
             - input_boolean.vacuum_hall
             - input_boolean.vacuum_masterbedroom
+            - input_boolean.vacuum_masterbedroomcloset
             - input_boolean.vacuum_bedroomricardo
             - input_boolean.vacuum_bedroomhenrique
             - input_boolean.vacuum_mainbathroom

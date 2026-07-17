@@ -16,6 +16,7 @@ views:
       reflow: true
     badges: []
     cards:
+
       - type: vertical-stack
         view_layout:
           column: 1
