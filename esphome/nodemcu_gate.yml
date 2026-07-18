@@ -4,9 +4,16 @@ substitutions:
 esphome:
   friendly_name: NodeMCU do Portão
 
-esp8266:
-  board: nodemcuv2
-  early_pin_init: false
+# esp8266:
+#   board: nodemcuv2
+#   early_pin_init: false
+
+esp32:
+  board: nodemcu-32s
+  framework:
+    #type: arduino
+    type: esp-idf
+    version: recommended
 
 packages:
   esphome_base: !include packages/common.yml
@@ -22,17 +29,11 @@ output:
   - platform: gpio
     id: relay_1
     pin:
-      number: D1
-
+      number: GPIO25
   - platform: gpio
     id: relay_2
     pin:
-      number: D2
-
-sensor:
-  - platform: homeassistant
-    id: main_power
-    entity_id: sensor.device_power_gate
+      number: GPIO26
 
 binary_sensor:
   - platform: gpio
@@ -40,7 +41,7 @@ binary_sensor:
     name: gate_close
     pin:
       inverted: true
-      number: D6
+      number: GPIO32
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 250ms
@@ -49,32 +50,64 @@ binary_sensor:
     id: gate_open_sensor
     name: gate_open
     pin:
-      number: D5
+      number: GPIO33
       inverted: true
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 250ms
 
+  - platform: gpio
+    id: gate_ir
+    name: gate_ir
+    pin:
+      inverted: false
+      number: GPIO27
+      mode: INPUT_PULLUP
+    filters:
+      - delayed_on: 250ms
+      - delayed_off: 2s
+
+# switch:
+#   - platform: output
+#     name: relay_1
+#     output: "relay_1"
+
+#   - platform: output
+#     name: relay_2
+#     output: "relay_2"
+
+sensor:
+  - platform: homeassistant
+    id: main_power
+    entity_id: sensor.device_power_gate
+
 button:
+  # - platform: template
+  #   id: gate_open_single_ha
+  #   name: Gate Open Single (HA)
+  #   on_press:
+  #     then:
+  #       #- lambda: "id(gate)->trigger_half_open();"
+  #       - button.press: gate_open_single
+
   - platform: template
-    id: gate_open_single_ha
-    name: Gate Open Single (HA)
+    id: gate_close
+    name: Gate Close
     on_press:
       then:
-        #- lambda: "id(gate)->trigger_half_open();"
-        - button.press: gate_open_single
+        - cover.close: gate
 
   - platform: output
     id: gate_open_single
-    name: Gate Open Single (Relay)
+    name: Gate Open Single
     output: relay_2
     duration: 750ms
 
   - platform: output
     id: gate_open
-    name: Gate Open (Relay)
+    name: Gate Open
     output: relay_1
-    duration: 1000ms
+    duration: 750ms
 
 cover:
   - platform: sc_cover
@@ -91,5 +124,8 @@ cover:
     setup_delay: 2s
 
 
-logger:
-  level: DEBUG
+# logger:
+#   level: DEBUG
+
+wifi:
+  use_address: 10.20.107.75
