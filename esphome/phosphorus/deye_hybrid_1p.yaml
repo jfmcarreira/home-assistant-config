@@ -635,7 +635,7 @@ number:
   #   id: time_of_use_1_soc
   #   unit_of_measurement: "%"
   #   address: 268
-  #   min_value: 0
+  #   min_value: 15
   #   max_value: 100
   #   step: 1
   #   value_type: U_WORD
@@ -702,20 +702,20 @@ number:
   #   mode: box
   #   icon: "mdi:battery-clock"
 
-  # - platform: modbus_controller
-  #   device_id: device_deye_inverter
-  #   use_write_multiple: true
-  #   modbus_controller_id: ${modbus_controller_id}
-  #   name: "Time of Use 6 SoC"
-  #   id: time_of_use_6_soc
-  #   unit_of_measurement: "%"
-  #   address: 273
-  #   min_value: 0
-  #   max_value: 100
-  #   step: 1
-  #   value_type: U_WORD
-  #   mode: box
-  #   icon: "mdi:battery-clock"
+  - platform: modbus_controller
+    device_id: device_deye_inverter
+    use_write_multiple: true
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Time of Use 6 SoC"
+    id: time_of_use_6_soc
+    unit_of_measurement: "%"
+    address: 273
+    min_value: 10
+    max_value: 80
+    step: 1
+    value_type: U_WORD
+    mode: box
+    icon: "mdi:battery-clock"
 
   # - platform: template
   #   device_id: device_deye_inverter

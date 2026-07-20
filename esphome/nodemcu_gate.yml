@@ -25,6 +25,15 @@ external_components:
       path: components/
     components: [sc_cover]
 
+esp32_ble_tracker:
+  scan_parameters:
+    active: true
+    interval: 320ms
+    window: 100ms
+
+bluetooth_proxy:
+  active: true
+
 output:
   - platform: gpio
     id: relay_1
@@ -66,6 +75,21 @@ binary_sensor:
     filters:
       - delayed_on: 250ms
       - delayed_off: 2s
+    on_multi_click:
+      - timing:
+          - ON for 4s to 15s
+          - OFF for at least 2s
+        then:
+          - event.trigger:
+              id: gate_ir_event
+              event_type: car
+
+event:
+  - platform: template
+    id: gate_ir_event
+    name: Gate Photocell Events
+    event_types:
+      - car
 
 # switch:
 #   - platform: output
@@ -122,10 +146,3 @@ cover:
     open_duration: 17s
     close_duration: 20s
     setup_delay: 2s
-
-
-# logger:
-#   level: DEBUG
-
-wifi:
-  use_address: 10.20.107.75

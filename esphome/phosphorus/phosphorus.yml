@@ -20,7 +20,6 @@ packages:
   - !include deye_fan_controller.yaml
   - !include water_heater_solar_panel.yaml
 
-
 api:
   batch_delay: 10ms
   max_connections: 2
@@ -47,13 +46,45 @@ sensor:
     filters:
       - filter_out: NAN
 
+  # Ref https://github.com/smarthomeshop/waterflowkit/blob/main/waterflowkit-v2/base.yaml
+  # Calibration
+  # ZJ-B5: approximately 396 pulses per litre
+  # 0.002525; # 1/396
+  - platform: pulse_counter
+    pin:
+      number: GPIO2
+      mode:
+        input: true
+        pullup: true
+    unit_of_measurement: "L/min"
+    id: water_usage
+    name: "Water Flow Washing Machine"
+    icon: "mdi:water-pump"
+    update_interval: 1s
+    count_mode:
+      rising_edge: INCREMENT
+      falling_edge: DISABLE
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.002525
+    total:
+      id: sensor_pulse_meter_total
+      name: "Water Meter Washing Machine"
+      unit_of_measurement: "L"
+      state_class: total_increasing
+      device_class: water
+      icon: mdi:gauge
+      accuracy_decimals: 3
+      filters:
+        - multiply: 0.002525
+
 #sensor:
 #   - platform: ble_scanner
 #     id: ble_laundry
 #     name: BLE Scanner Laundry
 
 wifi:
-   use_address: 10.20.107.151
+  use_address: 10.20.107.151
 
 # logger:
 #   #level: INFO
