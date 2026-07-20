@@ -59,6 +59,7 @@ sensor:
     unit_of_measurement: "L/min"
     id: water_usage
     name: "Water Flow Washing Machine"
+    state_class: measurement
     icon: "mdi:water-pump"
     update_interval: 1s
     count_mode:
