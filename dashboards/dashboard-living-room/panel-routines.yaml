@@ -98,7 +98,36 @@
           icon: mdi:exit-run
           name: Sair e Desligar Tudo
           icon_height: 52px
-
+    - square: false
+      type: grid
+      columns: 2
+      cards:
+        - type: vertical-stack
+          cards:
+            - show_name: true
+              show_icon: true
+              icon_height: 40px
+              type: button
+              tap_action:
+                action: call-service
+                service: script.routine_gate_open_auto_close_kitchen_door
+                data: {}
+                target: {}
+              entity: script.routine_gate_open_auto_close_kitchen_door
+              name: Abrir/Fechar com a Porta da Cozinha
+        - type: vertical-stack
+          cards:
+            - show_name: true
+              show_icon: true
+              icon_height: 40px
+              type: button
+              tap_action:
+                action: call-service
+                service: script.routine_gate_open_auto_close_sensors
+                data: {}
+                target: {}
+              entity: script.routine_gate_open_auto_close_sensors
+              name: Abrir/Fechar com sensores
     - square: false
       type: grid
       columns: 2

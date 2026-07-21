@@ -111,9 +111,14 @@ decluttering_haier_ac:
     name: "[[room_name]]"
     features_position: bottom
     vertical: false
-    hold_action:
-      action: more-info
     tap_action:
+      action: more-info
+    icon_tap_action:
+        action: perform-action
+        perform_action: switch.toggle
+        target:
+          entity_id: switch.[[room_code_name]]_ac
+    hold_action:
       action: fire-dom-event
       browser_mod:
         service: browser_mod.popup
@@ -121,6 +126,9 @@ decluttering_haier_ac:
           auto_close: false
           large: false
           allow_nested_more_info: false
+          adaptive: true
+          adaptive_allow_mode_change: false
+          adaptive_force_bottom_sheet: true
           size: normal
           style: |
             --popup-min-width: 450px;

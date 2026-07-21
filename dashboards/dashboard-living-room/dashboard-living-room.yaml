@@ -91,6 +91,7 @@ views:
               column_widths: 100%
               max_cols: 1
             cards: !include panel-exterior.yaml
+
           panel-main:
             type: custom:layout-card
             layout_type: custom:horizontal-layout
