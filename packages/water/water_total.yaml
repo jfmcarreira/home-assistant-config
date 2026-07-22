@@ -1,0 +1,28 @@
+template:
+  - sensor:
+      - name: water_flow_total
+        unique_id: water_flow_total
+        device_class: volume_flow_rate
+        unit_of_measurement: "L/min"
+        state_class: measurement
+        state: >-
+          {% set ns = namespace(states=[]) %}
+          {% for s in states.sensor %}
+            {% if not s.object_id.startswith('water_flow_total') and s.object_id.startswith('water_flow_') %}
+              {% set ns.states = ns.states + [ s.state | float(0.0)] %}
+            {% endif %}
+          {% endfor %}
+          {{ [(ns.states | sum | round(5)), 0] | max | round(5) }}
+      - name: water_meter_total
+        unique_id: water_meter_total
+        device_class: water
+        unit_of_measurement: "L"
+        state_class: total_increasing
+        state: >-
+          {% set ns = namespace(states=[]) %}
+          {% for s in states.sensor %}
+            {% if not s.object_id.startswith('water_meter_total') and s.object_id.startswith('water_meter_') %}
+              {% set ns.states = ns.states + [ s.state | float(0.0)] %}
+            {% endif %}
+          {% endfor %}
+          {{ [(ns.states | sum | round(5)), 0] | max | round(5) }}
