@@ -120,9 +120,9 @@ climate:
       # kp: 0.80415
       # ki: 0.00305
       # kd: 53.07421
-      kp: 0.2
+      kp: 0.15
       ki: 0.001
-      kd: 40
+      kd: 60
       max_integral: 0.0
       output_averaging_samples: 1
       derivative_averaging_samples: 5
@@ -135,7 +135,6 @@ climate:
       ki_multiplier: 0.0
       kd_multiplier: 0.0
       deadband_output_averaging_samples: 15
-
 
 # # I was able to find good KP,KI,KD values manually, per the instructions,
 # # but you can try pressing the autotune button from home assistant and copying the

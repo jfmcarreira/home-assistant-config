@@ -57,6 +57,7 @@ sensor:
         input: true
         pullup: true
     unit_of_measurement: "L/min"
+    device_class: volume_flow_rate
     id: water_usage
     name: "Water Flow Washing Machine"
     state_class: measurement
