@@ -863,59 +863,10 @@
       - light.stairs_group
     action: light.turn_off
   mode: single
-- id: '1673206351942'
-  alias: cctv_control_recording
+- id: '1675112824745'
+  alias: Deshumidificador - Desligar Automáticamente
   description: ''
   triggers:
-  - entity_id:
-    - binary_sensor.notify_home
-    - binary_sensor.house_guest
-    - sensor.house_mode
-    trigger: state
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: and
-          conditions:
-          - condition: state
-            entity_id: binary_sensor.notify_home
-            state: 'on'
-          - condition: time
-            after: 09:00:00
-            before: '22:00:00'
-        - condition: state
-          entity_id: binary_sensor.house_guest
-          state: 'on'
-      sequence:
-      - data: {}
-        target:
-          entity_id:
-          - switch.reolink_front_camera_record
-          - switch.reolink_backyard_camera_record
-        action: switch.turn_off
-    default:
-    - data: {}
-      target:
-        entity_id:
-        - switch.reolink_front_camera_record
-        - switch.reolink_backyard_camera_record
-      action: switch.turn_on
-  mode: single
-- alias: Deshumidificador - Desligar Automáticamente
-  id: '1675112824745'
-  description: ''
-  triggers:
-  - entity_id:
-    - switch.dehumidifier
-    to: 'on'
-    for:
-      hours: 2
-      minutes: 0
-      seconds: 0
-    trigger: state
   - at: '23:00:00'
     trigger: time
   - at: 00:30:00
@@ -1388,8 +1339,8 @@
   alias: Abrir Estores da Suite
   description: ''
   triggers:
-  - hours: '7'
-    minutes: '45'
+  - hours: '8'
+    minutes: '30'
     trigger: time_pattern
   conditions:
   - condition: state
@@ -2144,6 +2095,12 @@
       id:
       - trigger_notification_gate_notification_action_close
     then:
+    - data:
+        message: clear_notification
+        data:
+          tag: notify_gate_open
+          dismiss: true
+      action: notify.mobile_app_all
     - condition: state
       entity_id: cover.gate
       state: open
@@ -2152,17 +2109,23 @@
         entity_id: cover.gate
       action: cover.close_cover
     - stop: Portão fechado
-  - if:
+  - alias: Se Acção é Deixar Aberto
+    if:
     - condition: trigger
       id:
       - trigger_notification_gate_notification_action_keep_open
     then:
+    - data:
+        message: clear_notification
+        data:
+          tag: notify_gate_open
+          dismiss: true
+      action: notify.mobile_app_all
     - delay:
         hours: 0
         minutes: 10
         seconds: 0
         milliseconds: 0
-    alias: Se Acção é Deixar Aberto
   - condition: state
     entity_id: cover.gate
     state: open
@@ -2940,13 +2903,13 @@
       sync_on: false
       sync_off_from_slave: false
       sync_off: true
-- alias: Localização - Sincronizar Dispositivos João
-  id: '1728490959918'
+- id: '1728490959918'
+  alias: Localização - Sincronizar Dispositivos João
   description: ''
   use_blueprint:
     path: location/sync_device_location.yaml
     input:
-      mobile_device: 2a682060bb472236a68fdd3ff33a221a
+      mobile_device: 41985ed9029605740a11629268909bad
       wifi_location: device_tracker.radium_wifi
       mobile_location: device_tracker.radium
 - alias: Localização - Sincronizar Dispositivos Bianca
@@ -3378,19 +3341,19 @@
     target:
       entity_id: media_player.ghm_master_bedroom
   mode: single
-- alias: Fechar o Portão com a Casa Vazia
-  id: '1744465759830'
+- id: '1744465759830'
+  alias: Fechar o Portão com a Casa Vazia
   description: ''
   triggers:
-  - trigger: state
-    entity_id:
-    - binary_sensor.notify_home
-    from:
-    to: 'off'
-    for:
-      hours: 0
-      minutes: 1
-      seconds: 0
+  - trigger: occupancy.cleared
+    target:
+      entity_id: binary_sensor.notify_home
+    options:
+      behavior: each
+      for:
+        hours: 0
+        minutes: 2
+        seconds: 0
   conditions:
   - condition: state
     entity_id: binary_sensor.house_guest
@@ -3594,13 +3557,13 @@
       - climate.bedroom_henrique
       - climate.hall
   mode: single
-- alias: Trigger Botões dos Estores da Suite
-  id: '1736719371438'
+- id: '1736719371438'
+  alias: Trigger Botões dos Estores da Suite
   description: ''
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
     input:
-      device: bhonofre_cover_master_bed
+      device: bhonofre_cover_master_bedroom
       single_top_action:
       - action: light.toggle
         metadata: {}
@@ -3768,7 +3731,7 @@
         tag: notify_gate_open_5min
         dismiss: true
     action: notify.mobile_app_all
-  - action: notify.mobile_app_joao
+  - action: notify.mobile_app_radium
     data:
       title: Exterior
       message: O Portão da Rua está em Movimento à mais de 5 min
@@ -3821,7 +3784,7 @@
       state:
       - Sleep
   actions:
-  - action: notify.mobile_app_joao
+  - action: notify.mobile_app_radium
     metadata: {}
     data:
       title: Baby Monitor
@@ -3884,7 +3847,7 @@
       state:
       - Sleep
   actions:
-  - action: notify.mobile_app_joao
+  - action: notify.mobile_app_radium
     metadata: {}
     data:
       title: Baby Monitor
@@ -4108,7 +4071,7 @@
       minutes: 5
       seconds: 0
   actions:
-  - action: notify.mobile_app_joao
+  - action: notify.mobile_app_radium
     metadata: {}
     data:
       title: Baby Monitor
@@ -4226,7 +4189,7 @@
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
-      notify_device: 2a682060bb472236a68fdd3ff33a221a
+      notify_device: 41985ed9029605740a11629268909bad
       camera:
       - camera.backyard
       - camera.driveway
@@ -4249,7 +4212,7 @@
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
-      notify_device: 2a682060bb472236a68fdd3ff33a221a
+      notify_device: 41985ed9029605740a11629268909bad
       camera:
       - camera.backyard
       - camera.driveway
@@ -4281,7 +4244,7 @@
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
-      notify_device: 2a682060bb472236a68fdd3ff33a221a
+      notify_device: 41985ed9029605740a11629268909bad
       camera:
       - camera.front
       critical: 'true'
@@ -5246,7 +5209,7 @@
     entity_id:
     - sun.sun
     attribute: elevation
-    below: 10
+    below: 25
   conditions: []
   actions:
   - action: switch.turn_off
@@ -5526,4 +5489,272 @@
       - master_bedroom
       - kitchen
     action: script.cover_group_action
+  mode: single
+- id: '1781480620672'
+  alias: Desligar Ar Condicionados com Bateria
+  description: ''
+  triggers:
+  - trigger: battery.level_crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      for:
+        hours: 0
+        minutes: 5
+        seconds: 0
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 50
+  conditions:
+  - condition: time
+    after: '20:00:00'
+    before: 09:00:00
+  actions:
+  - action: climate.turn_off
+    metadata: {}
+    target:
+      entity_id:
+      - climate.master_bedroom
+      - climate.bedroom_henrique
+      - climate.bedroom_ricardo
+      - climate.hall
+      - climate.portable_heater
+      - climate.living_room
+      - climate.office
+    data: {}
+  mode: single
+- id: '1782640184113'
+  alias: Carga da Bateria - Reset
+  description: ''
+  triggers:
+  - trigger: sun.sunset
+    options: {}
+  conditions: []
+  actions:
+  - action: number.set_value
+    metadata: {}
+    target:
+      entity_id: number.deye_inverter_maximum_battery_charge_current
+    data:
+      value: '60'
+  mode: single
+- id: '1782917968041'
+  alias: AC Sala - Desligar Quando Pessoas Chegam a Casa
+  description: ''
+  triggers:
+  - trigger: occupancy.detected
+    target:
+      entity_id: binary_sensor.notify_home
+    options:
+      behavior: each
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 5
+  conditions:
+  - condition: state
+    entity_id: input_boolean.automation_bypass_hvac
+    state: 'off'
+  - condition: state
+    entity_id: climate.living_room
+    state:
+    - heat
+    - cool
+  actions:
+  - target:
+      entity_id: climate.living_room
+    action: climate.turn_off
+  mode: restart
+  max_exceeded: silent
+  variables:
+    run_on_weekends: false
+    weekend_tomorrow: false
+- id: '1783807595490'
+  alias: AC Suite - Ligar Modo Noturno
+  description: ''
+  triggers:
+  - trigger: time
+    at: '22:00:00'
+  - trigger: time
+    at: '23:00:00'
+  - trigger: state
+    entity_id:
+    - climate.master_bedroom
+    from: 'off'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  - trigger: state
+    entity_id:
+    - binary_sensor.notify_home
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  conditions:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: climate.master_bedroom
+      state: 'off'
+  - condition: time
+    after: '22:00:00'
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: 'on'
+  actions:
+  - action: climate.set_preset_mode
+    metadata: {}
+    data:
+      preset_mode: sleep
+    target:
+      entity_id: climate.master_bedroom
+  mode: single
+- id: '1784409320305'
+  alias: Solar - Time Of Use Manhã
+  description: ''
+  triggers:
+  - trigger: time
+    at: 05:00:00
+  conditions:
+  - condition: numeric_state
+    entity_id: sensor.solar_forecast_today_remaining
+    above: 10
+  actions:
+  - action: number.set_value
+    metadata: {}
+    target:
+      entity_id: number.deye_inverter_time_of_use_soc
+    data:
+      value: '15'
+  mode: single
+- id: '1784409421712'
+  alias: Solar - Time Of Use Anoitecer
+  description: ''
+  triggers:
+  - trigger: sun.elevation_crossed_threshold
+    options:
+      for: 00:00:00
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 25
+  conditions: []
+  actions:
+  - action: number.set_value
+    metadata: {}
+    target:
+      entity_id: number.deye_inverter_time_of_use_soc
+    data:
+      value: '50'
+  mode: single
+- id: '1784409484271'
+  alias: Solar - Time Of Use Noite
+  description: ''
+  triggers:
+  - trigger: time
+    at: '22:00:00'
+  conditions: []
+  actions:
+  - action: number.set_value
+    metadata: {}
+    target:
+      entity_id: number.deye_inverter_time_of_use_soc
+    data:
+      value: '30'
+  mode: single
+- id: '1784409525727'
+  alias: Solar - Time Of Use Dia
+  description: ''
+  triggers:
+  - trigger: time
+    at: '11:00:00'
+  conditions: []
+  actions:
+  - action: number.set_value
+    metadata: {}
+    target:
+      entity_id: number.deye_inverter_time_of_use_soc
+    data:
+      value: '30'
+  mode: single
+- id: '1784676590159'
+  alias: Frigate - Controlar Detections
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.notify_home
+  conditions: []
+  actions:
+  - if:
+    - condition: occupancy.is_detected
+      target:
+        entity_id: binary_sensor.notify_home
+      options:
+        behavior: any
+        for: 00:00:00
+    then:
+    - action: switch.turn_off
+      metadata: {}
+      target:
+        entity_id:
+        - switch.driveway_camera_review_detections
+        - switch.front_camera_review_detections
+        - switch.backyard_camera_review_detections
+      data: {}
+    else:
+    - action: switch.turn_on
+      metadata: {}
+      target:
+        entity_id:
+        - switch.driveway_camera_review_detections
+        - switch.front_camera_review_detections
+        - switch.backyard_camera_review_detections
+      data: {}
+  mode: single
+- id: '1784676714096'
+  alias: Frigate - Controlar Alerts
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.notify_home
+  - trigger: time
+    at: 07:00:00
+  - trigger: time
+    at: '23:00:00'
+  conditions: []
+  actions:
+  - if:
+    - condition: occupancy.is_detected
+      target:
+        entity_id: binary_sensor.notify_home
+      options:
+        behavior: any
+        for: 00:00:00
+    - condition: time
+      before: '23:00:00'
+      after: 07:00:00
+    then:
+    - action: switch.turn_off
+      metadata: {}
+      target:
+        entity_id:
+        - switch.front_camera_review_alerts
+        - switch.driveway_camera_review_alerts
+        - switch.backyard_camera_review_alerts
+      data: {}
+    else:
+    - action: switch.turn_on
+      metadata: {}
+      target:
+        entity_id:
+        - switch.front_camera_review_alerts
+        - switch.driveway_camera_review_alerts
+        - switch.backyard_camera_review_alerts
+      data: {}
   mode: single

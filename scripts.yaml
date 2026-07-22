@@ -1,4 +1,4 @@
-routine_cover_rain_mode:
+cover_scene_rain_mode:
   alias: Routina Modo de Chuva
   mode: single
   sequence:
@@ -493,7 +493,6 @@ routine_good_night:
       target:
         entity_id:
         - media_player.living_room_tv
-        - media_player.lg_tv
       action: media_player.turn_off
     - target:
         entity_id: light.xmas_tree
@@ -606,6 +605,7 @@ routine_exit_house_all_off:
       data:
         operation: screen_off
       continue_on_error: true
+      enabled: false
     - action: media_player.turn_off
       metadata: {}
       data: {}
@@ -855,8 +855,6 @@ routine_gate_open_auto_close:
       - sensor.backyard_camera_car_active_count
       - sensor.front_camera_car_active_count
       - binary_sensor.driveway_camera_reolink_vehicle
-      to:
-      from:
   - if:
     - condition: state
       entity_id: binary_sensor.kitchen_door
@@ -893,12 +891,24 @@ routine_gate_open_auto_close:
       milliseconds: 0
     continue_on_timeout: false
     alias: Esperar pela porta fechar
+  - wait_for_trigger:
+    - trigger: gate.opened
+      target:
+        entity_id: cover.gate
+      options:
+        for: 00:00:00
+    timeout:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: false
   - action: cover.close_cover
     metadata: {}
     target:
       entity_id: cover.gate
     data: {}
-  alias: Routina de Abrir e Fechar o Portão
+  alias: Routina de Abrir e Fechar o Portão com Porta da Cozinha
   description: ''
 gate_passagem_pedonal:
   alias: Passagem Pedonal
@@ -1082,15 +1092,92 @@ fechar_todos_os_estores_sol_calor:
       action_to_run: cover.close_cover
       control_switch: close_with_heat
       covers_list:
-        - living_room
-        - stairs
-        - bedroom_henrique
-        - bedroom_ricardo
-        - master_bedroom
-        - bathroom
-        - bedroom_rc
-        - laundry
-        - kitchen
-        - office
+      - living_room
+      - stairs
+      - bedroom_henrique
+      - bedroom_ricardo
+      - master_bedroom
+      - bathroom
+      - bedroom_rc
+      - laundry
+      - kitchen
+      - office
   alias: Fechar Todos os Estores - Sol/Calor
+  description: ''
+cover_bedroom_middle:
+  sequence:
+  - action: esphome.bhonofre_cover_bedroom_henrique_middle_open_cover
+    metadata: {}
+    data: {}
+  - action: esphome.bhonofre_cover_bedroom_ricardo_middle_open_cover
+    metadata: {}
+    data: {}
+  - action: esphome.bhonofre_cover_master_bedroom_middle_open_cover
+    metadata: {}
+    data: {}
+  alias: Estores dos Quartos a Meio
+  description: ''
+test_tv_notification:
+  use_blueprint:
+    path: Trooped/notification.yaml
+    input:
+      message: O Henrique está a chorar
+      title: Baby Monitor
+      mdi_icon: mdi:baby
+      interrupt: true
+      action_1_id: show_baby_monitor_henrique
+      action_1_label: Mostrar Camera
+      action_1_action:
+      - action: script.test_camera_feed
+        metadata: {}
+        data: {}
+  alias: test_tv_notification
+  description: ''
+test_camera_feed:
+  use_blueprint:
+    path: Trooped/camera.yaml
+    input:
+      camera_entity: camera.baby_monitor_henrique
+      source_type: entity
+      auto_hide: 15
+  alias: test_camera_feed
+  description: ''
+routina_de_abrir_e_fechar_o_portao_com_porta_da_cozinha_duplicar:
+  sequence:
+  - if:
+    - condition: state
+      entity_id: cover.gate
+      state:
+      - closed
+    then:
+    - action: cover.open_cover
+      metadata: {}
+      target:
+        entity_id: cover.gate
+      data: {}
+  - parallel:
+    - wait_for_trigger:
+      - trigger: state
+        entity_id:
+        - sensor.driveway_car_active_count
+        - sensor.driveway_car_count
+        - binary_sensor.driveway_camera_car
+    - wait_for_trigger:
+      - trigger: event.received
+        target:
+          entity_id: event.gate_photocell_events
+        options:
+          event_type:
+          - car
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - action: cover.close_cover
+    metadata: {}
+    target:
+      entity_id: cover.gate
+    data: {}
+  alias: Routina de Abrir e Fechar o Portão com Sensores
   description: ''

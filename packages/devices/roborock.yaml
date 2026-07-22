@@ -36,10 +36,10 @@ input_boolean:
     name: Hall
     icon: mdi:home-roof
   vacuum_masterbedroom:
-    name: Closet da Suite
+    name: Suite
     icon: mdi:bed-double
   vacuum_masterbedroomcloset:
-    name: Suite
+    name: Closet da Suite
     icon: mdi:wardrobe
   vacuum_bedroomricardo:
     name: Quarto do Ricardo
