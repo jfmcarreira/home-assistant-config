@@ -1,0 +1,74 @@
+input_select:
+  portable_water_meter_destination:
+    name: Portable Water Meter Destination
+    options:
+      - Garden
+      - Cleaning
+    initial: Garden
+
+template:
+  - sensor:
+      - name: water_flow_garden
+        unique_id: water_flow_garden
+        device_class: volume_flow_rate
+        unit_of_measurement: "L/min"
+        state_class: measurement
+        state: >-
+          {% if is_number(states('sensor.water_flow_portable')) and is_state('input_select.portable_water_meter_destination', 'Garden') %}
+            {{ states('sensor.water_flow_portable') | float(0) }}
+          {% else %}
+            0.0
+          {% endif %}
+
+      - name: water_flow_cleaning
+        unique_id: water_flow_cleaning
+        device_class: volume_flow_rate
+        unit_of_measurement: "L/min"
+        state_class: measurement
+        state: >-
+          {% if is_number(states('sensor.water_flow_portable')) and is_state('input_select.portable_water_meter_destination', 'Cleaning') %}
+            {{ states('sensor.water_flow_portable') | float(0) }}
+          {% else %}
+            0.0
+          {% endif %}
+
+  - triggers:
+      - trigger: state
+        entity_id: sensor.water_meter_portable
+        not_to:
+          - unknown
+          - unavailable
+    sensor:
+      - name: water_meter_garden
+        unique_id: water_meter_garden
+        device_class: water
+        unit_of_measurement: "L"
+        state_class: total_increasing
+        availability: >-
+          {{ is_number(trigger.to_state.state) }}
+        state: >-
+          {% set new_total = trigger.to_state.state | float(0) %}
+          {% set old_total = trigger.from_state.state | float(0) if trigger.from_state is not none else 0 %}
+          {% set delta = (new_total - old_total) if new_total >= old_total else new_total %}
+          {% if is_state('input_select.portable_water_meter_destination', 'Garden') and delta > 0 %}
+            {{ (this.state | float(0)) + delta }}
+          {% else %}
+            {{ this.state | float(0) }}
+          {% endif %}
+
+      - name: water_meter_cleaning
+        unique_id: water_meter_cleaning
+        device_class: water
+        unit_of_measurement: "L"
+        state_class: total_increasing
+        availability: >-
+          {{ is_number(trigger.to_state.state) }}
+        state: >-
+          {% set new_total = trigger.to_state.state | float(0) %}
+          {% set old_total = trigger.from_state.state | float(0) if trigger.from_state is not none else 0 %}
+          {% set delta = (new_total - old_total) if new_total >= old_total else new_total %}
+          {% if is_state('input_select.portable_water_meter_destination', 'Cleaning') and delta > 0 %}
+            {{ (this.state | float(0)) + delta }}
+          {% else %}
+            {{ this.state | float(0) }}
+          {% endif %}
