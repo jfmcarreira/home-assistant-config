@@ -3461,7 +3461,7 @@
       hours: 0
       minutes: 30
       seconds: 0
-    above: 28
+    above: 30
   conditions:
   - condition: state
     entity_id: binary_sensor.notify_home
@@ -5406,7 +5406,7 @@
       - summer
       - autumn
 - id: '1779786705961'
-  alias: hvac_turn_off_cleaning
+  alias: Desligar Ar Condicionados no Modo de Limpeza
   description: ''
   triggers:
   - trigger: calendar.event_started
@@ -5758,3 +5758,57 @@
         - switch.backyard_camera_review_alerts
       data: {}
   mode: single
+- id: '1784936257030'
+  alias: AC Suite -  Arrefecimento Modo Férias
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar_overheating.yaml
+    input:
+      hvac_unit:
+      - climate.master_bedroom
+      temperature_sensor: sensor.temperature_master_bedroom
+- id: '1784936323314'
+  alias: AC Sala -  Arrefecimento Modo Férias
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar_overheating.yaml
+    input:
+      hvac_unit:
+      - climate.living_room
+      temperature_sensor: sensor.temperature_living_room
+- id: '1784936346597'
+  alias: AC Escritório -  Arrefecimento Modo Férias
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar_overheating.yaml
+    input:
+      hvac_unit:
+      - climate.office
+      temperature_sensor: sensor.temperature_office
+- id: '1784936365274'
+  alias: AC Quarto do Henrique -  Arrefecimento Modo Férias
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar_overheating.yaml
+    input:
+      hvac_unit:
+      - climate.bedroom_henrique
+      temperature_sensor: sensor.temperature_bedroom_henrique
+- id: '1784936384877'
+  alias: AC Quarto do Ricardo -  Arrefecimento Modo Férias
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar_overheating.yaml
+    input:
+      hvac_unit:
+      - climate.bedroom_ricardo
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+- id: '1784936404841'
+  alias: AC Sótão -  Arrefecimento Modo Férias
+  description: ''
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar_overheating.yaml
+    input:
+      hvac_unit:
+      - climate.hall
+      temperature_sensor: sensor.temperature_hall

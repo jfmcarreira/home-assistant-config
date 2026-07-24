@@ -1,0 +1,145 @@
+blueprint:
+  name: "[HVAC] Controlo Excedente Solar - Ligar Ar Condicionado Modo Férias"
+  description: Ligar Modo Arrefecer do Ar condicionado com Excedente Solar para prevenir sobre-aquecimento no modo férias
+
+  domain: automation
+  input:
+    hvac_unit:
+      name: Unidade a Controlar
+      selector:
+        entity:
+          domain: climate
+          multiple: true
+
+    temperature_sensor:
+      name: Sensor de Temperatura
+      default:
+      selector:
+        entity:
+          domain: sensor
+          device_class: temperature
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  temperature_sensor: !input temperature_sensor
+
+trigger:
+  - trigger: numeric_state
+    entity_id: !input temperature_sensor
+    above: 26
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: sensor.temperature_outside
+    above: 28
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: sensor.deye_inverter_pv_power_average
+    above: 1500
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: sensor.house_power_consumption_average
+    below: 2000
+    for:
+      minutes: 10
+
+condition:
+  - condition: state
+    entity_id: input_boolean.automation_bypass_hvac
+    state: "off"
+
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: "off"
+
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state: "on"
+
+  - condition: state
+    entity_id: !input hvac_unit
+    state:
+      - "off"
+
+  - condition: numeric_state
+    entity_id: sensor.deye_inverter_pv_power_average
+    above: 1500
+
+  - condition: numeric_state
+    entity_id: sensor.house_power_consumption_average
+    below: 2000
+
+  - alias: "Run once every two hours"
+    condition: template
+    value_template: >
+      {% set hours = 2 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+
+  - condition: temperature.is_value
+    target:
+      entity_id: !input temperature_sensor
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 26
+          unit_of_measurement: °C
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
+
+action:
+  - action: climate.set_hvac_mode
+    target:
+      entity_id: !input hvac_unit
+    data:
+      hvac_mode: cool
+  - action: climate.set_temperature
+    target:
+      entity_id: !input hvac_unit
+    data:
+      temperature: 25
+  - action: climate.set_fan_mode
+    data:
+      fan_mode: auto
+    target:
+      entity_id: !input hvac_unit
+  - action: climate.set_swing_mode
+    data:
+      swing_mode: swing
+    target:
+      entity_id: !input hvac_unit
+  - wait_for_trigger:
+      - trigger: temperature.crossed_threshold
+        target:
+          entity_id: !input temperature_sensor
+        options:
+          behavior: each
+          for:
+            hours: 0
+            minutes: 10
+            seconds: 0
+          threshold:
+            type: below
+            value:
+              active_choice: number
+              number: 24
+              unit_of_measurement: °C
+    timeout:
+      hours: 4
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - service: climate.turn_off
+    target:
+      entity_id: !input hvac_unit

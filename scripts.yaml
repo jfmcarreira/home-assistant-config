@@ -1156,24 +1156,26 @@ routina_de_abrir_e_fechar_o_portao_com_porta_da_cozinha_duplicar:
         entity_id: cover.gate
       data: {}
   - parallel:
-    - wait_for_trigger:
-      - trigger: state
-        entity_id:
-        - sensor.driveway_car_active_count
-        - sensor.driveway_car_count
-        - binary_sensor.driveway_camera_car
-    - wait_for_trigger:
-      - trigger: event.received
-        target:
-          entity_id: event.gate_photocell_events
-        options:
-          event_type:
-          - car
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 5
-      milliseconds: 0
+    - sequence:
+      - wait_for_trigger:
+        - trigger: state
+          entity_id:
+          - sensor.driveway_car_active_count
+          - sensor.driveway_car_count
+          - binary_sensor.driveway_camera_car
+    - sequence:
+      - wait_for_trigger:
+        - trigger: event.received
+          target:
+            entity_id: event.gate_photocell_events
+          options:
+            event_type:
+            - car
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 3
+          milliseconds: 0
   - action: cover.close_cover
     metadata: {}
     target:

@@ -68,7 +68,7 @@ trigger:
 
   - trigger: numeric_state
     entity_id: !input temperature_sensor
-    below: input_number.house_target_high_temperature
+    above: input_number.house_target_high_temperature
     for:
       minutes: 10
 
