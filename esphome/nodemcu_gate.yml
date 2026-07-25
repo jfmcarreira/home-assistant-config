@@ -74,10 +74,10 @@ binary_sensor:
       mode: INPUT_PULLUP
     filters:
       - delayed_on: 250ms
-      - delayed_off: 2s
+      - delayed_off: 750ms
     on_multi_click:
       - timing:
-          - ON for 4s to 15s
+          - ON for 5s to 20s
           - OFF for at least 2s
         then:
           - event.trigger:
