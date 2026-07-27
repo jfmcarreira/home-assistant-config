@@ -21,7 +21,7 @@ script:
         target:
           entity_id: "{{ cover_entitiy }}"
 
-  cover_partial_close:
+  cover_middle_pos:
     alias: Colocar Estores a Dois Terços
     mode: parallel
     max: 10
