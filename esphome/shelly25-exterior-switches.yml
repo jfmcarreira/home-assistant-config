@@ -15,6 +15,8 @@ esphome:
   devices:
     - id: device_switch_1
       name: gate_door
+    - id: exterior_flood_led
+      name: exterior_flood_led
 
 button:
   - platform: output
@@ -31,3 +33,11 @@ lock:
     optimistic: true
     unlock_action:
       - button.press: gate_door_open
+
+light:
+  - id: light_1
+    name: Exterior Flood Led
+    device_id: exterior_flood_led
+    platform: binary
+    output: relay_2
+    restore_mode: RESTORE_AND_OFF
