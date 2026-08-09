@@ -41,3 +41,47 @@ light:
     platform: binary
     output: relay_2
     restore_mode: RESTORE_AND_OFF
+
+sensor:
+  - platform: ade7953_i2c
+    update_interval: 5s
+    # Prevent overheating by setting this
+    irq_pin: GPIO16
+    voltage:
+      id: shelly_voltage
+    current_a:
+      id: shelly_current_a
+      device_id: exterior_flood_led
+    current_b:
+      id: shelly_current_b
+      device_id: exterior_flood_led
+    active_power_a:
+      device_class: power
+      id: power_usage_light_a
+      # active_power_a is normal, so don't multiply by -1
+      filters:
+        - lambda: >
+            if (x < 0.0) return 0.0;
+            return x;
+
+    active_power_b:
+      name: Light Power Exterior Flood Led
+      device_id: exterior_flood_led
+      device_class: power
+      id: power_usage_light_b
+      # active_power_b is inverted, so take the absolute value
+      filters:
+        - multiply: -1
+        - lambda: >
+            if (x < 0.0) return 0.0;
+            return x;
+
+  - platform: total_daily_energy
+    device_id: exterior_flood_led
+    name: Light Daily Energy Exterior Flood Led
+    power_id: power_usage_light_b
+    unit_of_measurement: Wh
+    restore: false
+    state_class: total_increasing
+    icon: "mdi:meter-electric"
+    device_class: energy
