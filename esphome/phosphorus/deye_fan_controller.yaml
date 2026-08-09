@@ -120,7 +120,7 @@ climate:
       # kp: 0.80415
       # ki: 0.00305
       # kd: 53.07421
-      kp: 0.15
+      kp: 0.05
       ki: 0.001
       kd: 60
       max_integral: 0.0
