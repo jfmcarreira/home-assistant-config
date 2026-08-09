@@ -80,12 +80,32 @@
         icon_height: 40px
         icon: mdi:fence
 
-- show_name: true
-  show_icon: true
-  type: button
-  entity: light.kitchen_door
-  name: Porta da Cozinha
-  icon_height: 40px
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: grid
+    columns: 2
+    square: false
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: light.kitchen_door
+        name: Porta da Cozinha
+        icon_height: 40px
+      - show_name: true
+        show_icon: true
+        type: button
+        view_layout:
+          column: 2
+        entity: light.exterior_flood_led
+        icon_height: 40px
 
 
 - type: custom:mod-card

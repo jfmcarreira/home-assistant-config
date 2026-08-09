@@ -110,9 +110,9 @@
               type: button
               tap_action:
                 action: call-service
-                service: script.routine_gate_open_auto_close_kitchen_door
-                data: {}
-                target: {}
+                service: script.turn_on
+                target:
+                  entity_id: script.routine_gate_open_auto_close_kitchen_door
               entity: script.routine_gate_open_auto_close_kitchen_door
               name: Abrir/Fechar com a Porta da Cozinha
         - type: vertical-stack
@@ -122,10 +122,10 @@
               icon_height: 40px
               type: button
               tap_action:
-                action: call-service
-                service: script.routine_gate_open_auto_close_sensors
-                data: {}
-                target: {}
+               action: call-service
+               service: script.turn_on
+               target:
+                entity_id: script.routine_gate_open_auto_close_sensors
               entity: script.routine_gate_open_auto_close_sensors
               name: Abrir/Fechar com sensores
     - square: false

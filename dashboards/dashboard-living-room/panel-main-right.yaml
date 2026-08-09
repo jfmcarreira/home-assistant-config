@@ -413,27 +413,6 @@
     show_header_toggle: true
   show_empty: false
 
-- type: custom:auto-entities
-  card:
-    type: entities
-    title: Deteções da Rua
-  filter:
-    include:
-      - entity_id: binary_sensor.*_person
-        state: "on"
-        area: outside
-      - entity_id: binary_sensor.*_car
-        state: "on"
-        area: outside
-    exclude:
-      - entity_id: binary_sensor.driveway_camera_car
-  sort:
-    method: area
-    numeric: false
-    reverse: false
-  show_empty: false
-
-
 - type: custom:calendar-card-pro
   card_mod:
     style: |
@@ -480,6 +459,25 @@
       color: var(--primary-text-color)
     entity: weather.home
 
+- type: custom:auto-entities
+  card:
+    type: entities
+    title: Deteções da Rua
+  filter:
+    include:
+      - entity_id: binary_sensor.*_person
+        state: "on"
+        area: outside
+      - entity_id: binary_sensor.*_car
+        state: "on"
+        area: outside
+    exclude:
+      - entity_id: binary_sensor.driveway_camera_car
+  sort:
+    method: area
+    numeric: false
+    reverse: false
+  show_empty: false
 
 
 
