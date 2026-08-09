@@ -18,6 +18,8 @@ www/**
 .omv_cookies.json
 image/**
 blueprints/**/homeassistant/**
+blueprints/script/Trooped/**
+blueprints/automation/SgtBatten/**
 auth_providers/trusted_networks.yaml
 additional_ca/**
 zha_quirks/__pycache__/**

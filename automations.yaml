@@ -439,9 +439,6 @@
   - condition: state
     entity_id: binary_sensor.house_guest
     state: 'off'
-  - condition: state
-    entity_id: input_boolean.extended_away_mode
-    state: 'off'
   - condition: numeric_state
     entity_id: sensor.sun_solar_elevation
     above: 20
@@ -937,34 +934,6 @@
         options:
           behavior: any
           for: 00:00:00
-- alias: Abrir Parcialmente Estores Noite do Primeiro Andar
-  id: '1689453293699'
-  description: ''
-  triggers:
-  - event: sunset
-    offset: 00:05:00
-    trigger: sun
-  conditions:
-  - condition: state
-    entity_id: binary_sensor.notify_home
-    state: 'off'
-  actions:
-  - data: {}
-    target:
-      entity_id:
-      - cover.bedroom_ricardo
-      - cover.master_bedroom
-      - cover.bedroom_henrique
-    action: cover.close_cover
-  - data:
-      position: 25
-    target:
-      entity_id:
-      - cover.master_bedroom
-      - cover.bedroom_ricardo
-      - cover.bedroom_henrique
-    action: cover.set_cover_position
-  mode: single
 - alias: lights turn on with gate
   id: '1692141921133'
   description: ''
@@ -1440,56 +1409,6 @@
       data:
         value: '120'
       action: number.set_value
-  mode: single
-- alias: Fechar Parcialment Estores de Manhã/Tarde
-  id: '1689293787806'
-  description: ''
-  trigger:
-  - platform: time
-    at: '11:00:00'
-  - platform: time
-    at: '18:00:00'
-  condition: []
-  action:
-  - service: script.cover_group_action
-    data:
-      action_to_run: script.cover_middle_pos
-      control_switch: open_sunrise
-      covers_list:
-      - living_room
-      - stairs
-      - bedroom_henrique
-      - bedroom_ricardo
-      - master_bedroom
-      - bathroom
-      - bedroom_rc
-      - laundry
-      - kitchen
-      - office
-  mode: single
-- alias: Abrir Parcialmente Estores à Tarde
-  id: '1689293902907'
-  description: ''
-  trigger:
-  - platform: time
-    at: '11:30:00'
-  condition: []
-  action:
-  - service: script.cover_group_action
-    data:
-      action_to_run: script.cover_partial_open
-      control_switch: open_sunrise
-      covers_list:
-      - living_room
-      - stairs
-      - bedroom_henrique
-      - bedroom_ricardo
-      - master_bedroom
-      - bathroom
-      - bedroom_rc
-      - laundry
-      - kitchen
-      - office
   mode: single
 - alias: Abrir Estores ao Nascer do Sol
   id: '1652141596083'
@@ -3355,9 +3274,21 @@
         minutes: 2
         seconds: 0
   conditions:
+  - condition: occupancy.is_not_detected
+    target:
+      entity_id: binary_sensor.notify_home
+    options:
+      behavior: any
+      for: 00:00:00
   - condition: state
     entity_id: binary_sensor.house_guest
     state: 'off'
+  - condition: switch.is_off
+    target:
+      entity_id: input_boolean.extended_away_mode
+    options:
+      behavior: any
+      for: 00:00:00
   actions:
   - action: cover.close_cover
     metadata: {}
@@ -3465,9 +3396,6 @@
   conditions:
   - condition: state
     entity_id: binary_sensor.notify_home
-    state: 'off'
-  - condition: state
-    entity_id: input_boolean.extended_away_mode
     state: 'off'
   - condition: state
     entity_id: binary_sensor.house_guest
@@ -3608,36 +3536,6 @@
             - 1 }}'
         target:
           entity_id: climate.master_bedroom
-- alias: Abrir Parcialmente Estores Noite do R/C
-  id: '1755902487203'
-  description: ''
-  triggers:
-  - event: sunset
-    offset: 00:05:00
-    trigger: sun
-  conditions:
-  - condition: state
-    entity_id: binary_sensor.notify_home
-    state: 'off'
-  actions:
-  - data: {}
-    action: cover.close_cover
-    target:
-      entity_id:
-      - cover.laundry
-      - cover.living_room
-  - data:
-      position: 30
-    action: cover.set_cover_position
-    target:
-      entity_id: cover.laundry
-  - data:
-      position: 25
-    action: cover.set_cover_position
-    target:
-      entity_id:
-      - cover.living_room
-  mode: single
 - id: '1756997660207'
   alias: Alertar Disparar do Alarme
   description: ''
@@ -5478,9 +5376,6 @@
   - condition: state
     entity_id: binary_sensor.house_guest
     state: 'off'
-  - condition: state
-    entity_id: input_boolean.extended_away_mode
-    state: 'off'
   actions:
   - data:
       action_to_run: script.cover_open_if_close_with_heat
@@ -5812,3 +5707,42 @@
       hvac_unit:
       - climate.hall
       temperature_sensor: sensor.temperature_hall
+- id: '1785049940859'
+  alias: Ativar Venda de Excedente e Reduzir Carga da Bateria
+  description: ''
+  triggers:
+  - trigger: power.crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_pv_power_average
+    options:
+      behavior: each
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          unit_of_measurement: W
+          number: 2000
+  conditions:
+  - condition: switch.is_off
+    target:
+      entity_id: switch.deye_inverter_solar_sell
+    options:
+      behavior: any
+      for: 00:00:00
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      entity_id: switch.deye_inverter_solar_sell
+    data: {}
+  - action: number.set_value
+    metadata: {}
+    target:
+      entity_id: number.deye_inverter_maximum_battery_charge_current
+    data:
+      value: '20'
+  mode: single
