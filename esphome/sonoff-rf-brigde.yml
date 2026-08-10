@@ -1,0 +1,83 @@
+substitutions:
+  devicename: sonoff-rf-brigde
+
+esphome:
+  friendly_name: Sonoff RF Bridge
+
+esp8266:
+  board: esp01_1m
+
+packages:
+  esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+
+logger:
+  # disable serial logging to free up the serial port for the 433MHz receiver
+  baud_rate: 0
+
+uart:
+  tx_pin: 1
+  rx_pin: 3
+  baud_rate: 19200
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+
+rf_bridge:
+  on_code_received:  # all firmwares, can be reported as integer, hex, or both, as desired.
+    then:
+      - homeassistant.event:
+          event: esphome.rf_code_received
+          data:
+            sync: !lambda 'char buf[5]; return format_hex_to(buf, data.sync);'
+            low: !lambda 'char buf[5]; return format_hex_to(buf, data.low);'
+            high: !lambda 'char buf[5]; return format_hex_to(buf, data.high);'
+            code: !lambda 'char buf[9]; return format_hex_to(buf, data.code);'
+
+      - if:
+          condition:
+            lambda: |-
+              return data.code == 0xC29AD8 && data.low == 0x00D2;
+          then:
+            - event.trigger:
+                id: gate_doorbell_event
+                event_type: pressed
+
+
+  on_advanced_code_received:  # only on Portisch or mightymos firmwares
+    then:
+      - homeassistant.event:
+          event: esphome.rf_advanced_code_received
+          data:
+            length: !lambda 'char buf[3]; return format_hex_to(buf, data.length);'
+            protocol: !lambda 'char buf[3]; return format_hex_to(buf, data.protocol);'
+            code: !lambda 'return data.code;'
+
+button:
+  - platform: template
+    name: Advanced sniffing start
+    on_press:
+      then:
+        - rf_bridge.start_advanced_sniffing
+
+  - platform: template
+    name: Advanced sniffing stop
+    on_press:
+      then:
+        - rf_bridge.stop_advanced_sniffing
+
+  - platform: template
+    name: Bucket sniffing start
+    on_press:
+      then:
+        - rf_bridge.start_bucket_sniffing
+
+event:
+  - platform: template
+    name: "Gate Doorbell"
+    id: gate_doorbell_event
+    device_class: doorbell
+    event_types:
+      - pressed
