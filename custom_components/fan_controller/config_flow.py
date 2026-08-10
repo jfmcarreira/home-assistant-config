@@ -6,6 +6,7 @@ from typing import Any
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.selector import (
     EntitySelector,
     EntitySelectorConfig,
@@ -96,6 +97,37 @@ class FanConfigFlow(ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
+    async def _async_validate_entities(
+        self, user_input: dict[str, Any]
+    ) -> tuple[dict[str, str], str | None]:
+        """Validate configured entities and return the stable fan registry ID."""
+        errors: dict[str, str] = {}
+        entity_registry = er.async_get(self.hass)
+        entity_domains = {
+            CONF_FAN_ENTITY: "fan",
+            CONF_LIGHT_ENTITY: "light",
+            CONF_HUMIDITY_SENSOR: "sensor",
+            CONF_AVG_HUMIDITY_SENSOR: "sensor",
+            CONF_DEHUMIDIFIER_SWITCH: "switch",
+        }
+        fan_registry_id: str | None = None
+
+        for config_key, domain in entity_domains.items():
+            entity_id = user_input.get(config_key)
+            if entity_id is None:
+                continue
+            if not entity_id.startswith(f"{domain}."):
+                errors[config_key] = "entity_not_found"
+                continue
+            registry_entry = entity_registry.async_get(entity_id)
+            if registry_entry is None:
+                errors[config_key] = "entity_not_found"
+                continue
+            if config_key == CONF_FAN_ENTITY:
+                fan_registry_id = registry_entry.id
+
+        return errors, fan_registry_id
+
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
@@ -103,19 +135,60 @@ class FanConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            existing_fan_entities = [
-                entry.data.get(CONF_FAN_ENTITY)
-                for entry in self._async_current_entries()
-            ]
-            if user_input[CONF_FAN_ENTITY] in existing_fan_entities:
-                errors[CONF_FAN_ENTITY] = "already_configured"
-            else:
-                return self.async_create_entry(
-                    title=user_input[CONF_NAME], data=user_input
-                )
+            errors, fan_registry_id = await self._async_validate_entities(user_input)
+            if not errors and fan_registry_id is not None:
+                if any(
+                    entry.data.get(CONF_FAN_ENTITY) == user_input[CONF_FAN_ENTITY]
+                    for entry in self._async_current_entries()
+                ):
+                    errors[CONF_FAN_ENTITY] = "already_configured"
+                else:
+                    await self.async_set_unique_id(fan_registry_id)
+                    self._abort_if_unique_id_configured()
+                    return self.async_create_entry(
+                        title=user_input[CONF_NAME], data=user_input
+                    )
 
         return self.async_show_form(
             step_id="user", data_schema=_CONFIG_SCHEMA, errors=errors
+        )
+
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Reconfigure the fan and source entities for an existing controller."""
+        entry = self._get_reconfigure_entry()
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            errors, fan_registry_id = await self._async_validate_entities(user_input)
+            if not errors and fan_registry_id is not None:
+                await self.async_set_unique_id(fan_registry_id)
+                for existing_entry in self._async_current_entries():
+                    if (
+                        existing_entry.entry_id != entry.entry_id
+                        and (
+                            existing_entry.unique_id == fan_registry_id
+                            or existing_entry.data.get(CONF_FAN_ENTITY)
+                            == user_input[CONF_FAN_ENTITY]
+                        )
+                    ):
+                        errors[CONF_FAN_ENTITY] = "already_configured"
+                        break
+                if not errors:
+                    return self.async_update_reload_and_abort(
+                        entry,
+                        title=user_input[CONF_NAME],
+                        data=user_input,
+                        unique_id=fan_registry_id,
+                    )
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=self.add_suggested_values_to_schema(
+                _CONFIG_SCHEMA, entry.data
+            ),
+            errors=errors,
         )
 
     @staticmethod

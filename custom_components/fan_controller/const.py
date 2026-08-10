@@ -19,16 +19,4 @@ CONF_HUMIDITY_THRESHOLD: Final = "humidity_threshold"
 DEFAULT_FAN_TIMEOUT: Final = 300  # seconds
 DEFAULT_MAX_TIMEOUT: Final = 20   # minutes
 DEFAULT_HUMIDITY_THRESHOLD: Final = 15  # percent
-
-# State machine state names
-STATE_OFF: Final = "off"
-STATE_FAN_MANUAL_ON: Final = "fan_manual_on"
-STATE_LIGHT_ON: Final = "light_on"
-STATE_LIGHT_ON_FAN_ON: Final = "light_on_fan_on"
-STATE_LIGHT_ON_FAN_OFF: Final = "light_on_fan_off"
-STATE_FAN_ON_HIGH_HUMIDITY: Final = "fan_on_high_humidity"
-STATE_FAN_ON_TIMEOUT: Final = "fan_on_timeout"
-
-# Quiet hours (hardcoded — not configurable)
-QUIET_HOURS_START: Final = 22  # 22:00
-QUIET_HOURS_END: Final = 7    # 07:00
+MAX_HUMIDITY_RISE: Final = 10.0  # percentage points

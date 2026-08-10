@@ -4,12 +4,13 @@ from __future__ import annotations
 from typing import Any, Protocol
 
 from statemachine import StateMachine, State
-from dataclasses import dataclass, field
-from datetime import datetime, time
+from datetime import datetime, timedelta
 
 from homeassistant.core import HomeAssistant, HassJob, callback
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.event import async_track_state_change_event, async_call_later
+from homeassistant.helpers import entity_registry as er
+from homeassistant.exceptions import ConfigEntryError
 import homeassistant.util.dt as dt_util
 
 from .const import (
@@ -25,12 +26,9 @@ from .const import (
     DEFAULT_HUMIDITY_THRESHOLD,
     DEFAULT_MAX_TIMEOUT,
     DOMAIN,
-    QUIET_HOURS_END,
-    QUIET_HOURS_START,
+    MAX_HUMIDITY_RISE,
 )
 
-_QUIET_START = time(QUIET_HOURS_START, 0)
-_QUIET_END = time(QUIET_HOURS_END, 0)
 
 class FanController(Protocol):
     """Protocol defining the interface the state machine uses to query/act on state."""
@@ -38,8 +36,8 @@ class FanController(Protocol):
     def is_fan_on(self) -> bool: ...
     def is_light_on(self) -> bool: ...
     def is_high_humidity(self) -> bool: ...
+    def is_humidity_recovered(self) -> bool: ...
     def is_auto_on_disabled(self) -> bool: ...
-    def is_quiet_time(self) -> bool: ...
     def turn_on_fan(self) -> None: ...
     def turn_off_fan(self) -> None: ...
     def set_timer(self, seconds: float) -> None: ...
@@ -70,12 +68,19 @@ class FanStateMachine(StateMachine):
             cond=["is_fan_on", "is_high_humidity"],
             unless=["is_light_on"],
         )
-        | light_on_fan_on.to(fan_on_timeout, cond=["is_fan_on"], unless=["is_light_on"])
+        | light_on_fan_on.to(
+            fan_on_timeout,
+            cond=["is_fan_on"],
+            unless=["is_light_on", "is_auto_on_disabled"],
+        )
         | light_on_fan_on.to(light_on_fan_off, cond=["is_light_on"], unless=["is_fan_on"])
         | light_on_fan_off.to(light_on_fan_on, cond=["is_light_on", "is_fan_on"])
         | light_on_fan_off.to(light_on, cond=["is_light_on"], unless=["is_fan_on"])
-        | light_on_fan_off.to(fan_on_high_humidity, cond=["is_high_humidity"], unless=["is_light_on"])
-        | fan_on_high_humidity.to(light_on_fan_on, cond=["is_light_on"])
+        | light_on_fan_off.to(
+            fan_on_high_humidity,
+            cond=["is_high_humidity"],
+            unless=["is_light_on", "is_auto_on_disabled"],
+        )
         | fan_on_timeout.to(light_on_fan_on, cond=["is_light_on"])
         | off.from_(light_on, unless=["is_light_on", "is_fan_on"])
         | off.from_(fan_manual_on, unless=["is_fan_on"])
@@ -100,8 +105,16 @@ class FanStateMachine(StateMachine):
             cond=["is_high_humidity"],
             unless=["is_auto_on_disabled"],
         )
-        | fan_on_high_humidity.to(fan_on_timeout, unless=["is_high_humidity"])
-        | fan_on_timeout.to(fan_on_high_humidity, cond=["is_high_humidity"])
+        | fan_on_high_humidity.to(
+            fan_on_timeout,
+            cond=["is_humidity_recovered"],
+            unless=["is_auto_on_disabled"],
+        )
+        | fan_on_timeout.to(
+            fan_on_high_humidity,
+            cond=["is_high_humidity"],
+            unless=["is_auto_on_disabled"],
+        )
         | off.to.itself()
         | fan_manual_on.to.itself()
         | light_on.to.itself()
@@ -140,8 +153,10 @@ class FanStateMachine(StateMachine):
     def on_enter_fan_manual_on(self) -> None:
         self.model.set_timer(self.model.get_max_timeout_seconds())
 
-    def on_enter_light_on_fan_on(self, source=None) -> None:
-        self.model.turn_on_fan()
+    def on_humidity_update(self, source, target) -> None:
+        """Start the fan only for the humidity-driven light-on transition."""
+        if source.id == "light_on" and target.id == "light_on_fan_on":
+            self.model.turn_on_fan()
 
     def on_enter_light_on_fan_off(self) -> None:
         pass
@@ -152,7 +167,6 @@ class FanStateMachine(StateMachine):
 
     def on_enter_fan_on_high_humidity(self) -> None:
         self.model.turn_on_fan()
-        self.model.set_timer(self.model.get_max_timeout_seconds())
 
 
 class FanCoordinator:
@@ -174,9 +188,7 @@ class FanCoordinator:
         self._humidity_fan_on: float | None = None
         self._current_humidity: float | None = None
         self._timer_unsub = None
-        self._timer_remaining: float | None = None
-        self._timer_started_at: datetime | None = None
-        self._timer_duration: float | None = None
+        self._timer_expires_at: datetime | None = None
 
         self._state_change_callbacks: list[Any] = []
 
@@ -184,6 +196,9 @@ class FanCoordinator:
 
     async def async_setup(self) -> None:
         """Set up entity listeners and reconstruct initial state."""
+        self._validate_configured_entities()
+        self._current_humidity = self._get_sensor_value(self._humidity_sensor)
+
         self.entry.async_on_unload(
             async_track_state_change_event(
                 self.hass,
@@ -194,37 +209,88 @@ class FanCoordinator:
         self.entry.async_on_unload(
             async_track_state_change_event(
                 self.hass,
-                [self._humidity_sensor],
+                [self._humidity_sensor, self._avg_humidity_sensor],
                 self._handle_humidity_state_change,
             )
         )
-        self.machine.state_update()
+        self.entry.async_on_unload(self.cancel_timer)
+
+        if self._control_entities_available():
+            self.machine.state_update()
+            self.machine.humidity_update()
+
+    def _validate_configured_entities(self) -> None:
+        """Fail setup when an entry references missing or invalid entities."""
+        entity_registry = er.async_get(self.hass)
+        entity_domains = {
+            self._fan_entity: "fan",
+            self._light_entity: "light",
+            self._humidity_sensor: "sensor",
+            self._avg_humidity_sensor: "sensor",
+        }
+        if self._dehumidifier_switch is not None:
+            entity_domains[self._dehumidifier_switch] = "switch"
+
+        for entity_id, domain in entity_domains.items():
+            if not entity_id.startswith(f"{domain}.") or entity_registry.async_get(
+                entity_id
+            ) is None:
+                raise ConfigEntryError(f"Configured entity no longer exists: {entity_id}")
+
+    def _get_sensor_value(self, entity_id: str) -> float | None:
+        """Return a numeric sensor state when it is available."""
+        state = self.hass.states.get(entity_id)
+        if state is None or state.state in ("unavailable", "unknown", ""):
+            return None
+        try:
+            return float(state.state)
+        except (ValueError, TypeError):
+            return None
 
     @callback
     def _handle_fan_light_state_change(self, event) -> None:
         self.hass.async_create_task(self._async_trigger_state_update())
 
     async def _async_trigger_state_update(self) -> None:
+        if not self._control_entities_available():
+            self._notify_state_change()
+            return
         self.machine.state_update()
         self._notify_state_change()
 
     @callback
     def _handle_humidity_state_change(self, event) -> None:
-        new_state = event.data.get("new_state")
-        if new_state is None or new_state.state in ("unavailable", "unknown", ""):
-            return
-        try:
-            self._current_humidity = float(new_state.state)
-        except (ValueError, TypeError):
-            return
+        if event.data.get("entity_id") == self._humidity_sensor:
+            new_state = event.data.get("new_state")
+            if new_state is None or new_state.state in ("unavailable", "unknown", ""):
+                return
+            try:
+                self._current_humidity = float(new_state.state)
+            except (ValueError, TypeError):
+                return
+
         self.hass.async_create_task(self._async_trigger_humidity_update())
 
     async def _async_trigger_humidity_update(self) -> None:
+        if not self._control_entities_available():
+            self._notify_state_change()
+            return
         self.machine.humidity_update()
         self._notify_state_change()
 
+    def _control_entities_available(self) -> bool:
+        """Return whether fan and light states are safe to use for control decisions."""
+        return (
+            self._entity_state_available(self._fan_entity)
+            and self._entity_state_available(self._light_entity)
+        )
+
+    def _entity_state_available(self, entity_id: str) -> bool:
+        state = self.hass.states.get(entity_id)
+        return state is not None and state.state not in ("unavailable", "unknown")
+
     def _notify_state_change(self) -> None:
-        for cb in self._state_change_callbacks:
+        for cb in tuple(self._state_change_callbacks):
             cb()
 
     def register_state_change_callback(self, cb) -> None:
@@ -232,7 +298,7 @@ class FanCoordinator:
         self._state_change_callbacks.append(cb)
 
     def unregister_state_change_callback(self, cb) -> None:
-        self._state_change_callbacks.discard(cb) if hasattr(self._state_change_callbacks, 'discard') else None
+        """Unregister a state-change callback."""
         if cb in self._state_change_callbacks:
             self._state_change_callbacks.remove(cb)
 
@@ -240,9 +306,19 @@ class FanCoordinator:
     def auto_mode(self) -> bool:
         return self._auto_mode
 
-    @auto_mode.setter
-    def auto_mode(self, value: bool) -> None:
+    async def async_set_auto_mode(self, value: bool) -> None:
+        """Set Auto Mode and immediately stop controlled equipment when disabled."""
+        if self._auto_mode == value:
+            return
+
         self._auto_mode = value
+        if not value:
+            self.cancel_timer()
+            self.turn_off_fan()
+        else:
+            await self._async_trigger_state_update()
+            await self._async_trigger_humidity_update()
+
         self._notify_state_change()
 
     @property
@@ -263,13 +339,7 @@ class FanCoordinator:
 
     @property
     def average_humidity(self) -> float | None:
-        state = self.hass.states.get(self._avg_humidity_sensor)
-        if state is None or state.state in ("unavailable", "unknown", ""):
-            return None
-        try:
-            return float(state.state)
-        except (ValueError, TypeError):
-            return None
+        return self._get_sensor_value(self._avg_humidity_sensor)
 
     @property
     def humidity_reference(self) -> float | None:
@@ -279,12 +349,8 @@ class FanCoordinator:
         return max(avg, min(humidity_fan_on, humidity_light_on))
 
     @property
-    def timer_remaining(self) -> float | None:
-        if self._timer_unsub is None or self._timer_started_at is None:
-            return None
-        elapsed = (dt_util.now() - self._timer_started_at).total_seconds()
-        remaining = (self._timer_duration or 0) - elapsed
-        return max(0.0, remaining)
+    def timer_expires_at(self) -> datetime | None:
+        return self._timer_expires_at
 
     def is_fan_on(self) -> bool:
         state = self.hass.states.get(self._fan_entity)
@@ -298,24 +364,29 @@ class FanCoordinator:
         if self._humidity_light_on is None or self._current_humidity is None:
             return False
         threshold_ratio = self.get_humidity_threshold_ratio()
-        humidity_threshold = max(100 - self.humidity_reference, 0.0) * threshold_ratio / 100.0
+        humidity_threshold = min(
+            MAX_HUMIDITY_RISE,
+            max(100 - self.humidity_reference, 0.0) * threshold_ratio / 100.0,
+        )
         humidity_difference = self._current_humidity - self.humidity_reference
         return humidity_difference > humidity_threshold
+
+    def is_humidity_recovered(self) -> bool:
+        """Return whether humidity has returned to the light-on baseline."""
+        return (
+            self._humidity_light_on is not None
+            and self._current_humidity is not None
+            and self._current_humidity <= self._humidity_light_on
+        )
 
     def is_auto_on_disabled(self) -> bool:
         return not self._auto_mode
 
-    def is_quiet_time(self) -> bool:
-        now = dt_util.now().time()
-        if _QUIET_START > _QUIET_END:
-            return now >= _QUIET_START or now < _QUIET_END
-        return now < _QUIET_END or now >= _QUIET_START
-
     def turn_on_fan(self) -> None:
-        if self.is_fan_on():
-            return
         self.turn_on_dehumidifier()
         self.record_humidity_fan_on()
+        if self.is_fan_on():
+            return
         self.hass.async_create_task(
             self.hass.services.async_call(
                 "fan", "turn_on", {"entity_id": self._fan_entity}
@@ -350,15 +421,15 @@ class FanCoordinator:
 
     def set_timer(self, seconds: float) -> None:
         self.cancel_timer()
-        self._timer_duration = seconds
-        self._timer_started_at = dt_util.now()
+        self._timer_expires_at = dt_util.utcnow() + timedelta(seconds=seconds)
+        self._schedule_timer(seconds)
 
+    def _schedule_timer(self, seconds: float) -> None:
         @callback
         def _timer_fired(_now) -> None:
             self._timer_unsub = None
-            self._timer_started_at = None
-            self._timer_duration = None
-            self.hass.async_create_task(self._async_trigger_timer())
+            self._timer_expires_at = None
+            self.hass.async_create_task(self._async_handle_timer_expiry())
 
         self._timer_unsub = async_call_later(
             self.hass,
@@ -366,7 +437,7 @@ class FanCoordinator:
             HassJob(_timer_fired, cancel_on_shutdown=True),
         )
 
-    async def _async_trigger_timer(self) -> None:
+    async def _async_handle_timer_expiry(self) -> None:
         self.machine.timer_update()
         self._notify_state_change()
 
@@ -374,8 +445,7 @@ class FanCoordinator:
         if self._timer_unsub is not None:
             self._timer_unsub()
             self._timer_unsub = None
-            self._timer_started_at = None
-            self._timer_duration = None
+        self._timer_expires_at = None
 
     def get_fan_timeout_seconds(self) -> float:
         return float(
