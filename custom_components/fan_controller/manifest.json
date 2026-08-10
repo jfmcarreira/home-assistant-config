@@ -1,9 +1,0 @@
-{
-  "domain": "fan_controller",
-  "name": "Fan Controller",
-  "config_flow": true,
-  "integration_type": "device",
-  "iot_class": "calculated",
-  "requirements": ["python-statemachine==2.3.6"],
-  "version": "1.2.0"
-}
