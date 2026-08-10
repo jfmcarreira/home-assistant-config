@@ -5,5 +5,5 @@
   "integration_type": "device",
   "iot_class": "calculated",
   "requirements": ["python-statemachine==2.3.6"],
-  "version": "1.1.0"
+  "version": "1.2.0"
 }

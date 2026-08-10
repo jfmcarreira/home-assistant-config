@@ -38,12 +38,13 @@ class FanController(Protocol):
     def is_high_humidity(self) -> bool: ...
     def is_humidity_recovered(self) -> bool: ...
     def is_auto_on_disabled(self) -> bool: ...
-    def turn_on_fan(self) -> None: ...
-    def turn_off_fan(self) -> None: ...
+    def turn_on_fan(self, reason: str) -> None: ...
+    def turn_off_fan(self, reason: str) -> None: ...
     def set_timer(self, seconds: float) -> None: ...
     def cancel_timer(self) -> None: ...
     def get_fan_timeout_seconds(self) -> float: ...
     def get_max_timeout_seconds(self) -> float: ...
+    def log_humidity_recovered(self) -> None: ...
     def record_humidity_light_on(self) -> None: ...
     def record_humidity_fan_on(self) -> None: ...
 
@@ -144,7 +145,12 @@ class FanStateMachine(StateMachine):
     def on_enter_off(self, source) -> None:
         if source is None or source.id == "off":
             return
-        self.model.turn_off_fan()
+        reason = (
+            "humidity recovery timeout elapsed"
+            if source.id == "fan_on_timeout"
+            else "manual runtime limit elapsed"
+        )
+        self.model.turn_off_fan(reason)
 
     def on_enter_light_on(self, source) -> None:
         if source is None or source.id == "off":
@@ -156,17 +162,19 @@ class FanStateMachine(StateMachine):
     def on_humidity_update(self, source, target) -> None:
         """Start the fan only for the humidity-driven light-on transition."""
         if source.id == "light_on" and target.id == "light_on_fan_on":
-            self.model.turn_on_fan()
+            self.model.turn_on_fan("humidity rose above the start threshold")
 
     def on_enter_light_on_fan_off(self) -> None:
         pass
 
-    def on_enter_fan_on_timeout(self) -> None:
-        self.model.turn_on_fan()
+    def on_enter_fan_on_timeout(self, source) -> None:
+        if source.id == "fan_on_high_humidity":
+            self.model.log_humidity_recovered()
+        self.model.turn_on_fan("the post-run timeout started")
         self.model.set_timer(self.model.get_fan_timeout_seconds())
 
     def on_enter_fan_on_high_humidity(self) -> None:
-        self.model.turn_on_fan()
+        self.model.turn_on_fan("humidity rose again during the post-run timeout")
 
 
 class FanCoordinator:
@@ -314,7 +322,7 @@ class FanCoordinator:
         self._auto_mode = value
         if not value:
             self.cancel_timer()
-            self.turn_off_fan()
+            self.turn_off_fan("Auto Mode was disabled")
         else:
             await self._async_trigger_state_update()
             await self._async_trigger_humidity_update()
@@ -352,6 +360,17 @@ class FanCoordinator:
     def timer_expires_at(self) -> datetime | None:
         return self._timer_expires_at
 
+    @property
+    def humidity_start_threshold(self) -> float | None:
+        """Return the humidity value that triggers automatic fan operation."""
+        if self.humidity_reference is None:
+            return None
+        threshold_ratio = self.get_humidity_threshold_ratio()
+        return self.humidity_reference + min(
+            MAX_HUMIDITY_RISE,
+            max(100 - self.humidity_reference, 0.0) * threshold_ratio / 100.0,
+        )
+
     def is_fan_on(self) -> bool:
         state = self.hass.states.get(self._fan_entity)
         return state is not None and state.state == "on"
@@ -363,13 +382,11 @@ class FanCoordinator:
     def is_high_humidity(self) -> bool:
         if self._humidity_light_on is None or self._current_humidity is None:
             return False
-        threshold_ratio = self.get_humidity_threshold_ratio()
-        humidity_threshold = min(
-            MAX_HUMIDITY_RISE,
-            max(100 - self.humidity_reference, 0.0) * threshold_ratio / 100.0,
+        humidity_start_threshold = self.humidity_start_threshold
+        return (
+            humidity_start_threshold is not None
+            and self._current_humidity > humidity_start_threshold
         )
-        humidity_difference = self._current_humidity - self.humidity_reference
-        return humidity_difference > humidity_threshold
 
     def is_humidity_recovered(self) -> bool:
         """Return whether humidity has returned to the light-on baseline."""
@@ -382,19 +399,23 @@ class FanCoordinator:
     def is_auto_on_disabled(self) -> bool:
         return not self._auto_mode
 
-    def turn_on_fan(self) -> None:
+    def turn_on_fan(self, reason: str) -> None:
         self.turn_on_dehumidifier()
         self.record_humidity_fan_on()
         if self.is_fan_on():
             return
+        self._log_fan_decision(f"Fan on requested: {reason}.")
         self.hass.async_create_task(
             self.hass.services.async_call(
                 "fan", "turn_on", {"entity_id": self._fan_entity}
             )
         )
 
-    def turn_off_fan(self) -> None:
+    def turn_off_fan(self, reason: str) -> None:
         self.turn_off_dehumidifier()
+        if not self.is_fan_on():
+            return
+        self._log_fan_decision(f"Fan off requested: {reason}.")
         self.hass.async_create_task(
             self.hass.services.async_call(
                 "fan", "turn_off", {"entity_id": self._fan_entity}
@@ -418,6 +439,40 @@ class FanCoordinator:
                 "switch", "turn_off", {"entity_id": self._dehumidifier_switch}
             )
         )
+
+    def log_humidity_recovered(self) -> None:
+        """Log that humidity has returned to the light-on baseline."""
+        self._log_fan_decision("Humidity recovered; post-run timeout started.")
+
+    def _log_fan_decision(self, message: str) -> None:
+        """Write a controller decision to Home Assistant's Activity log."""
+        if not self.hass.services.has_service("logbook", "log"):
+            return
+        self.hass.async_create_task(
+            self.hass.services.async_call(
+                "logbook",
+                "log",
+                {
+                    "name": self.entry.title,
+                    "message": (
+                        f"{message} Current humidity: "
+                        f"{self._format_humidity(self._current_humidity)}. "
+                        f"Light-on baseline: "
+                        f"{self._format_humidity(self._humidity_light_on)}. "
+                        f"Reference: {self._format_humidity(self.humidity_reference)}. "
+                        f"Start threshold: "
+                        f"{self._format_humidity(self.humidity_start_threshold)}."
+                    ),
+                    "entity_id": self._fan_entity,
+                    "domain": "fan",
+                },
+            )
+        )
+
+    @staticmethod
+    def _format_humidity(value: float | None) -> str:
+        """Format a humidity value for a human-readable Activity entry."""
+        return "unknown" if value is None else f"{value:.1f}%"
 
     def set_timer(self, seconds: float) -> None:
         self.cancel_timer()
