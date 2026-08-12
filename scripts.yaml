@@ -309,10 +309,11 @@ routine_exit_house_to_work_joao:
         to:
         - 'on'
       continue_on_timeout: false
-    - data: {}
+    - continue_on_error: true
+      data: {}
+      action: script.turn_on
       target:
-        entity_id: cover.gate
-      action: cover.open_cover
+        entity_id: script.routine_gate_open_auto_close_sensors
     - stop:
   - data: {}
     target:
@@ -321,10 +322,11 @@ routine_exit_house_to_work_joao:
   - condition: state
     entity_id: binary_sensor.joao_home
     state: 'on'
-  - data: {}
+  - continue_on_error: true
+    data: {}
+    action: script.turn_on
     target:
-      entity_id: cover.gate
-    action: cover.open_cover
+      entity_id: script.routine_gate_open_auto_close_sensors
   - action: input_text.set_value
     target:
       entity_id: input_text.script_step_message

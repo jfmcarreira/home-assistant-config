@@ -2141,11 +2141,12 @@
   alias: Campainha - Accionar campainha portão
   description: ''
   triggers:
-  - entity_id:
-    - binary_sensor.gate_bell_button
-    from:
-    to: 'on'
-    trigger: state
+  - trigger: event.received
+    target:
+      entity_id: event.gate_doorbell
+    options:
+      event_type:
+      - pressed
   conditions: []
   actions:
   - parallel:
@@ -2905,14 +2906,27 @@
             entity_id: light.kitchen_door
           data: {}
       button_long:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - light.kitchen_door
-          - light.exterior_wall_side
-          - light.exterior_wall_back
+      - if:
+        - condition: light.is_on
+          target:
+            entity_id: light.exterior_flood_led
+          options:
+            for: 00:00:00
+        then:
+        - action: light.turn_on
+          metadata: {}
+          target:
+            entity_id:
+            - light.kitchen_door
+            - light.exterior_wall_back
+            - light.exterior_wall_side
+          data: {}
+        else:
+        - action: light.toggle
+          metadata: {}
+          target:
+            entity_id: light.exterior_flood_led
+          data: {}
 - alias: task_trigger_change_cat_litter
   id: '1735385296449'
   description: ''
