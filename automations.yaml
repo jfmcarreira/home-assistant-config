@@ -38,7 +38,7 @@
   id: '1653347146334'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - binary_sensor.kitchen_pantry_door
   condition: []
@@ -49,12 +49,12 @@
         entity_id: binary_sensor.kitchen_pantry_door
         state: 'on'
       sequence:
-      - service: light.turn_on
+      - action: light.turn_on
         data: {}
         target:
           entity_id: light.kitchen_pantry
     default:
-    - service: light.turn_off
+    - action: light.turn_off
       data: {}
       target:
         entity_id: light.kitchen_pantry
@@ -116,7 +116,7 @@
   id: '1653947527310'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - binary_sensor.kitchen_door
     from: 'off'
@@ -127,7 +127,7 @@
     attribute: elevation
     below: '5'
   action:
-  - service: light.turn_on
+  - action: light.turn_on
     data: {}
     target:
       entity_id: light.kitchen_led
@@ -203,7 +203,7 @@
   id: '1657064426365'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - light.living_room_window
     from: 'off'
@@ -216,12 +216,12 @@
         entity_id: binary_sensor.night_mode
         state: 'on'
       sequence:
-      - service: scene.turn_on
+      - action: scene.turn_on
         target:
           entity_id: scene.lights_living_room_night
         metadata: {}
     default:
-    - service: scene.turn_on
+    - action: scene.turn_on
       target:
         entity_id: scene.lights_living_room_day
       metadata: {}
@@ -314,7 +314,7 @@
   id: '1658004941042'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - light.kitchen_led
     from: 'off'
@@ -327,12 +327,12 @@
         entity_id: binary_sensor.night_mode
         state: 'on'
       sequence:
-      - service: scene.turn_on
+      - action: scene.turn_on
         target:
           entity_id: scene.lights_kitchen_night
         metadata: {}
     default:
-    - service: scene.turn_on
+    - action: scene.turn_on
       target:
         entity_id: scene.lights_kitchen_day
       metadata: {}
@@ -460,7 +460,7 @@
   id: '1661120403152'
   description: ''
   trigger:
-  - platform: time_pattern
+  - trigger: time_pattern
     hours: '10'
     minutes: '00'
   condition:
@@ -474,7 +474,7 @@
     entity_id: input_boolean.extended_away_mode
     state: 'off'
   action:
-  - service: cover.open_cover
+  - action: cover.open_cover
     data: {}
     target:
       entity_id: cover.master_bedroom
@@ -713,19 +713,19 @@
   id: '1669853572469'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - light.main_bathroom
     from: 'on'
     to: 'off'
     id: lights_off_main
-  - platform: state
+  - trigger: state
     entity_id:
     - light.master_bedroom_bathroom
     from: 'on'
     to: 'off'
     id: lights_off_master
-  - platform: state
+  - trigger: state
     entity_id:
     - switch.portable_heater
     to: 'on'
@@ -757,11 +757,11 @@
       id:
       - timeout
   action:
-  - service: climate.turn_off
+  - action: climate.turn_off
     data: {}
     target:
       entity_id: climate.portable_heater
-  - service: switch.turn_off
+  - action: switch.turn_off
     metadata: {}
     data: {}
     target:
@@ -771,7 +771,7 @@
   id: '1669853950698'
   description: ''
   trigger:
-  - platform: event
+  - trigger: event
     event_type: esphome.button_pressed
     event_data:
       name: button_2
@@ -785,12 +785,12 @@
         entity_id: climate.portable_heater
         state: 'off'
       sequence:
-      - service: climate.turn_on
+      - action: climate.turn_on
         data: {}
         target:
           entity_id: climate.portable_heater
     default:
-    - service: climate.turn_off
+    - action: climate.turn_off
       data: {}
       target:
         entity_id: climate.portable_heater
@@ -943,7 +943,7 @@
   id: '1692141921133'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - cover.gate
     to: opening
@@ -952,7 +952,7 @@
   - condition: state
     entity_id: binary_sensor.night
     state: 'on'
-  - service: light.turn_on
+  - action: light.turn_on
     data: {}
     target:
       entity_id: light.exterior_wall_side
@@ -962,7 +962,7 @@
       seconds: 30
       milliseconds: 0
   - wait_for_trigger:
-    - platform: state
+    - trigger: state
       entity_id:
       - cover.gate
       to: closed
@@ -974,7 +974,7 @@
   - condition: state
     entity_id: script.lights_arriving_home
     state: 'off'
-  - service: light.turn_off
+  - action: light.turn_off
     data: {}
     target:
       entity_id: light.exterior_wall_side
@@ -983,7 +983,7 @@
   id: '1696123178186'
   description: ''
   trigger:
-  - platform: numeric_state
+  - trigger: numeric_state
     entity_id:
     - sensor.device_power_fridge
     below: 10
@@ -993,7 +993,7 @@
       seconds: 0
   condition: []
   action:
-  - service: notify.mobile_app_all
+  - action: notify.mobile_app_all
     data:
       title: Equipamentos
       message: O frigorifico está desligado à mais de 1 hora!
@@ -1037,7 +1037,7 @@
   id: '1696716423195'
   description: ''
   trigger:
-  - platform: event
+  - trigger: event
     event_type: esphome.button_pressed
     event_data:
       name: button_2
@@ -1051,7 +1051,7 @@
         entity_id: humidifier.portable_dehumidifier
         state: 'off'
       sequence:
-      - service: switch.turn_on
+      - action: switch.turn_on
         data: {}
         target:
           entity_id: switch.dehumidifier
@@ -1060,16 +1060,16 @@
           minutes: 0
           seconds: 10
           milliseconds: 0
-      - service: humidifier.turn_on
+      - action: humidifier.turn_on
         data: {}
         target:
           entity_id: humidifier.portable_dehumidifier
     default:
-    - service: humidifier.turn_off
+    - action: humidifier.turn_off
       data: {}
       target:
         entity_id: humidifier.portable_dehumidifier
-    - service: switch.turn_off
+    - action: switch.turn_off
       data: {}
       target:
         entity_id: switch.dehumidifier
@@ -1098,11 +1098,11 @@
   id: '1699195635629'
   description: ''
   trigger:
-  - platform: time
+  - trigger: time
     at: '23:45:00'
   condition: []
   action:
-  - service: climate.turn_off
+  - action: climate.turn_off
     data: {}
     target:
       entity_id: climate.water_heater
@@ -1134,7 +1134,7 @@
   id: '1699840344840'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - light.kitchen_door
     - light.gate_lights
@@ -1157,7 +1157,7 @@
   - condition: state
     entity_id: binary_sensor.house_guest
     state: 'off'
-  - service: light.turn_off
+  - action: light.turn_off
     data: {}
     target:
       entity_id: light.outside_group
@@ -1182,7 +1182,7 @@
   id: '1701541427434'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - light.stairs_down
     from: 'off'
@@ -1195,12 +1195,12 @@
         entity_id: binary_sensor.night_mode
         state: 'on'
       sequence:
-      - service: scene.turn_on
+      - action: scene.turn_on
         target:
           entity_id: scene.lights_stairs_night
         metadata: {}
     default:
-    - service: scene.turn_on
+    - action: scene.turn_on
       target:
         entity_id: scene.lights_stairs_day
       metadata: {}
@@ -1228,14 +1228,14 @@
   id: '1702942175908'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - binary_sensor.dish_wash_machine_state
     from: 'off'
     to: 'on'
   condition: []
   action:
-  - service: input_boolean.turn_off
+  - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.reminder_dish_washing_machine
     data: {}
@@ -1463,7 +1463,7 @@
   description: ''
   mode: single
   trigger:
-  - platform: numeric_state
+  - trigger: numeric_state
     entity_id: weather.home
     attribute: precipitation_unit
     above: 70
@@ -1475,7 +1475,7 @@
     entity_id: input_boolean.extended_away_mode
     state: 'off'
   action:
-  - service: script.cover_group_action
+  - action: script.cover_group_action
     data:
       action_to_run: script.cover_close_when_raining
       control_switch: close_in_rain
@@ -1730,9 +1730,9 @@
   id: turn_on_confort_mode_weekens
   description: ''
   trigger:
-  - platform: time
+  - trigger: time
     at: '10:30:00'
-  - platform: state
+  - trigger: state
     entity_id:
     - binary_sensor.water_heater_panel_heating
     to: 'off'
@@ -1740,7 +1740,7 @@
       hours: 0
       minutes: 15
       seconds: 0
-  - platform: numeric_state
+  - trigger: numeric_state
     entity_id:
     - sensor.temperature_water_heater_top
     below: 50
@@ -1778,11 +1778,11 @@
     entity_id:
     - sensor.temperature_water_heater_top
     below: 50
-  - service: climate.turn_on
+  - action: climate.turn_on
     data: {}
     target:
       entity_id: climate.water_heater
-  - service: climate.set_preset_mode
+  - action: climate.set_preset_mode
     data:
       preset_mode: comfort
     target:
@@ -2077,17 +2077,17 @@
   id: '1711849617966'
   description: ''
   trigger:
-  - platform: time
+  - trigger: time
     at: '23:00:00'
-  - platform: time
+  - trigger: time
     at: '23:30:00'
-  - platform: time
+  - trigger: time
     at: 00:00:00
-  - platform: time
+  - trigger: time
     at: 00:30:00
-  - platform: time
+  - trigger: time
     at: 01:00:00
-  - platform: time
+  - trigger: time
     at: 01:30:00
   condition:
   - condition: or
@@ -2121,7 +2121,7 @@
     entity_id: input_boolean.day_off_work
     state: 'off'
   action:
-  - service: notify.mobile_app_radium
+  - action: notify.mobile_app_radium
     data:
       title: Routinas
       message: Deve configurar o alarme para amanhã!
@@ -2289,7 +2289,7 @@
   id: '1717852934831'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - binary_sensor.notify_home
     from: 'off'
@@ -2307,7 +2307,7 @@
       minutes: 0
       seconds: 0
   action:
-  - service: input_boolean.turn_off
+  - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.extended_away_mode
     data: {}
@@ -2318,12 +2318,12 @@
     stored_traces: 40
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - person.bianca_pires
     to: not_home
     from: home
-  - platform: state
+  - trigger: state
     entity_id:
     - person.bianca_pires
     to: not_home
@@ -2332,22 +2332,22 @@
       hours: 0
       minutes: 0
       seconds: 5
-  - platform: state
+  - trigger: state
     entity_id:
     - person.bianca_pires
     from:
     to: home
-  - platform: state
+  - trigger: state
     entity_id:
     - person.joao_carreira
     to: not_home
     from: home
-  - platform: state
+  - trigger: state
     entity_id:
     - person.joao_carreira
     from:
     to: home
-  - platform: state
+  - trigger: state
     entity_id:
     - person.joao_carreira
     to: not_home
@@ -2420,7 +2420,7 @@
   id: '1723197292654'
   description: ''
   trigger:
-  - platform: sun
+  - trigger: sun
     event: sunrise
     offset: 00:30:00
   condition:
@@ -2431,7 +2431,7 @@
     entity_id: binary_sensor.notify_home
     state: 'off'
   action:
-  - service: cover.open_cover
+  - action: cover.open_cover
     metadata: {}
     data: {}
     target:
@@ -2441,7 +2441,7 @@
   id: '1723197551703'
   description: ''
   trigger:
-  - platform: sun
+  - trigger: sun
     event: sunset
     offset: 00:00:00
   condition:
@@ -2452,18 +2452,18 @@
     entity_id: input_boolean.extended_away_mode
     state: 'on'
   action:
-  - service: cover.close_cover
+  - action: cover.close_cover
     metadata: {}
     data: {}
     target:
       label_id: covers
-  - service: cover.set_cover_position
+  - action: cover.set_cover_position
     metadata: {}
     data:
       position: 30
     target:
       floor_id: bedrooms
-  - service: cover.set_cover_position
+  - action: cover.set_cover_position
     metadata: {}
     data:
       position: 15
@@ -2622,7 +2622,7 @@
   id: '1724277480761'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - light.kitchen_led
     to: unavailable
@@ -2655,17 +2655,17 @@
   id: '1724363986092'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - lock.gate_door
     from: locked
     to: unlocked
-  - platform: state
+  - trigger: state
     entity_id:
     - cover.gate
     from: closed
     to: opening
-  - platform: state
+  - trigger: state
     entity_id:
     - binary_sensor.kitchen_door
     from: 'off'
@@ -2688,7 +2688,7 @@
   id: '1724364138858'
   description: ''
   trigger:
-  - platform: state
+  - trigger: state
     entity_id:
     - input_boolean.walking_routine
     from: 'on'
@@ -3439,8 +3439,8 @@
       - office
     action: script.cover_group_action
   mode: single
-- alias: helper_clear_routine_message
-  id: '1754488924870'
+- id: '1754488924870'
+  alias: helper_clear_routine_message
   description: ''
   triggers:
   - trigger: state
@@ -3450,6 +3450,7 @@
     - script.routine_exit_house_to_work_bianca
     - script.routine_exit_house_to_work_joao
     - script.routine_leaving_and_coming_back
+    - script.routine_gate_open_auto_close_sensors
     from: 'on'
     to: 'off'
   conditions: []
