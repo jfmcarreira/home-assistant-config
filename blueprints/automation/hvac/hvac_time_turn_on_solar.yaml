@@ -27,24 +27,7 @@ blueprint:
           domain: binary_sensor
           device_class: window
 
-    selected_season:
-      name: Estação do Ano
-      default: [spring, summer, autumn, winter]
-      selector:
-        select:
-          options:
-            - label: Primavera
-              value: spring
-            - label: Verão
-              value: summer
-            - label: Outono
-              value: autumn
-            - label: Inverno
-              value: winter
-          custom_value: false
-          multiple: true
-
-mode: restart
+mode: single
 max_exceeded: silent
 
 variables:
@@ -123,10 +106,6 @@ condition:
     entity_id: sensor.house_power_consumption_average
     below: 2000
 
-  - condition: state
-    entity_id: sensor.season
-    state: !input "selected_season"
-
   - alias: "Window Closed"
     condition: state
     entity_id: !input window_sensor
@@ -192,5 +171,41 @@ action:
   - action: climate.set_swing_mode
     data:
       swing_mode: swing
+    target:
+      entity_id: !input hvac_unit
+
+  - alias: "Wait for a solar HVAC stop condition"
+    wait_for_trigger:
+      - trigger: template
+        value_template: >-
+          {{
+            states(temperature_sensor) | float(0)
+            >= states('input_number.house_target_low_temperature') | float(0) + 1
+          }}
+        for:
+          minutes: 10
+      - trigger: template
+        value_template: >-
+          {{
+            states(temperature_sensor) | float(0)
+            <= states('input_number.house_target_high_temperature') | float(0) - 1
+          }}
+        for:
+          minutes: 10
+      - trigger: numeric_state
+        entity_id: sensor.deye_inverter_pv_power_average
+        below: 1500
+        for:
+          minutes: 10
+      - trigger: state
+        entity_id: binary_sensor.notify_home
+        to: "on"
+        for:
+          seconds: 5
+      - trigger: state
+        entity_id: !input hvac_unit
+        to: "off"
+
+  - action: climate.turn_off
     target:
       entity_id: !input hvac_unit
