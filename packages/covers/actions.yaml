@@ -14,12 +14,12 @@ script:
             domain: cover
 
     variables:
-      cover_entitiy: cover.{{ action_cover }}
+      cover_entity: cover.{{ action_cover }}
     sequence:
-      - condition: "{{ is_state(cover_entitiy, 'closed') }}"
+      - condition: "{{ is_state(cover_entity, 'closed') }}"
       - service: cover.open_cover
         target:
-          entity_id: "{{ cover_entitiy }}"
+          entity_id: "{{ cover_entity }}"
 
   cover_middle_pos:
     alias: Colocar Estores a Dois Terços
@@ -35,13 +35,13 @@ script:
             multiple: false
             domain: cover
     variables:
-      cover_entitiy: cover.{{ action_cover }}
+      cover_entity: cover.{{ action_cover }}
     sequence:
       - service: cover.set_cover_position
         data:
           position: 66
         target:
-          entity_id: "{{ cover_entitiy }}"
+          entity_id: "{{ cover_entity }}"
 
   cover_partial_open:
     alias: Colocar Estores a Um Terço
@@ -57,13 +57,13 @@ script:
             multiple: false
             domain: cover
     variables:
-      cover_entitiy: cover.{{ action_cover }}
+      cover_entity: cover.{{ action_cover }}
     sequence:
       - service: cover.set_cover_position
         data:
           position: 30
         target:
-          entity_id: "{{ cover_entitiy }}"
+          entity_id: "{{ cover_entity }}"
 
   cover_open_if_close_with_heat:
     alias: Abrir Estores Fechados com o Calor
@@ -80,14 +80,14 @@ script:
             domain: cover
 
     variables:
-      cover_entitiy: cover.{{ action_cover }}
+      cover_entity: cover.{{ action_cover }}
       last_action_entitiy: select.cover_{{ action_cover }}_last_action
     sequence:
-      - condition: "{{ is_state(cover_entitiy, 'closed') }}"
+      - condition: "{{ is_state(cover_entity, 'closed') }}"
       - condition: "{{ is_state(last_action_entitiy, 'Sol') }}"
       - service: cover.open_cover
         target:
-          entity_id: "{{ cover_entitiy }}"
+          entity_id: "{{ cover_entity }}"
 
   cover_close_when_raining:
     alias: Fechar Estores Durante a Chuva
@@ -103,16 +103,18 @@ script:
             multiple: false
             domain: cover
     variables:
-      cover_entitiy: cover.{{ action_cover }}
+      cover_entity: cover.{{ action_cover }}
       cover_position: input_number.cover_rainy_position_{{ action_cover }}
     sequence:
-      - condition: "{{ (state_attr(cover_entitiy, 'current_position') | float(0)) > (states(cover_position) | float(100))}}"
+      - condition: "{{ (state_attr(cover_entity, 'current_position') | float(0)) > (states(cover_position) | float(100))}}"
       - service: cover.close_cover
         target:
-          entity_id: "{{ cover_entitiy }}"
-      - wait_template: "{{ is_state(cover_entitiy, 'closed') }}"
+          entity_id: "{{ cover_entity }}"
+      - wait_template: "{{ is_state(cover_entity, 'closed') }}"
+        timeout:
+          minutes: 1
       - service: cover.set_cover_position
         data:
           position: "{{ states(cover_position) }}"
         target:
-          entity_id: "{{ cover_entitiy }}"
+          entity_id: "{{ cover_entity }}"

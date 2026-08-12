@@ -1,5 +1,7 @@
 # Home Assistant OpenCode Rules
 
+You are working directly within a Home Assistant installation. Your working directory is `/homeassistant`, which is the live Home Assistant configuration directory.
+
 ## CRITICAL: User Consent and Scope Rules
 
 You MUST follow these rules strictly:
@@ -45,6 +47,41 @@ You MUST follow these rules strictly:
 - If add-on folder access is enabled, `/addons` and `/addon_configs` are available for Home Assistant add-on development. Treat `/addon_configs` as sensitive and only inspect or modify these folders when the user explicitly asks.
 - You may have access to MCP tools for interacting with Home Assistant (check with the user)
 
+## Home Context
+
+The add-on assembles context about *this specific installation* and loads it before the user's first message. You do not need to fetch any of it. Depending on the user's settings, some or all of these are present:
+
+- **Install briefing** — a generated snapshot: Home Assistant version, areas, entity counts per domain, how the configuration is split up, which custom components are installed. It is orientation, **not live state** — re-check anything current with the MCP tools or `hab`. It may be absent or partial when Home Assistant was still starting.
+- **`AGENTS.local.md`** — the user's own standing instructions, if they created that file. Follow them. This file (`AGENTS.md`) takes precedence where the two conflict, and the consent and safety rules above are never overridden.
+- **Decision notes** — decisions the user has confirmed about their setup, injected as a short digest.
+
+### Decision Notes
+
+Decision notes record *why* an installation is the way it is. That reasoning cannot be recovered by re-reading the YAML, which is exactly why it is worth storing.
+
+**When a request conflicts with a note**, say so before acting. Never silently reverse a recorded decision — tell the user which note applies and ask whether they want to change it.
+
+**The digest is a summary, not the whole record.** It states how many active notes it is showing; when that is fewer than the total, the notes it left out are still in force. `recall_decisions` is the authority. Before changing something that looks deliberate, odd, or redundant — an inverted switch, a disabled integration, a duplicate-looking entity — check there first. An empty search result means *that query* found nothing, never that nothing was decided; search again in different words, or with no query at all, before concluding a thing is safe to "fix".
+
+**To read more**, use `recall_decisions`. The injected digest carries only the decisions themselves; the rationale and the superseded history are retrieved on demand. Check it when a note looks relevant but you need the reasoning, or when the user asks what was decided before.
+
+**To record**, offer first and then wait. Say what you would store, in the words you would store it, and call `remember_decision` with `user_approved: true` only after the user agrees. A general instruction to "remember this" for the current task is not approval to write a permanent note; asking costs one sentence.
+
+Worth recording:
+- Deliberate removals and disables ("that integration was removed because it fought with X")
+- Intentional deviations from the obvious approach, and why
+- Things to leave alone
+- Constraints that will still be true in six months
+
+Not worth recording — do not write these:
+- What you did this session, or how you troubleshot something. **This is not a session log.**
+- Anything already readable from the configuration files
+- Anything the user has not explicitly approved
+
+**Pinning** (`pin: true`) keeps a note in the digest when older notes stop fitting. It is for the small number of constraints where being forgotten causes real damage — something deliberately removed, something that must be left alone. Ask for the pin as well as for the note, and use it rarely: pinning everything pins nothing.
+
+**Never** put passwords, tokens, or any value from `secrets.yaml` into a note. The tool rejects them, and a note is sent to the model in every future session.
+
 ## Home Assistant Interaction Model
 
 There are three primary, safe ways to interact with Home Assistant:
@@ -64,11 +101,23 @@ Real-time interaction with the running Home Assistant instance:
 - Control devices and call services
 - Validate configurations
 - Diagnose issues and detect anomalies
+- Report OpenCode/HA agent capability status with `get_agent_capabilities`
+
+### Native Home Assistant LLM Platform
+Home Assistant is developing a native `llm` integration where Core integrations and custom integrations can expose curated tools through `<integration>/llm.py` and registered LLM APIs. New Home Assistant builds may also expose those APIs over native MCP endpoints such as `/api/mcp/<API ID>`; the built-in Assist API uses `/api/mcp/assist`. This is complementary to OpenCode MCP, not a replacement.
+
+- If the optional `homeassistant_native` MCP server is available, prefer it for requests that fit the configured native Home Assistant LLM API because those tools are curated by Home Assistant.
+- Use OpenCode MCP for configuration editing, safe writes, validation, admin/dev workflows, screenshots, updates, ESPHome, `hab`, Zigbee tasks, add-on development, and Home Assistant documentation lookup.
+- Use `get_agent_capabilities` or `ha://agent/capabilities` to check whether the running HA instance reports the native `llm` component and native MCP endpoints.
+- Use `get_home_context` for compact area/domain/entity understanding before broad state dumps.
+- Use `get_ha_llm_development_guide` when helping develop or review a custom integration's native `<integration>/llm.py` provider.
+- Do not assume this add-on can register tools directly with HA's native `llm` platform; native tool registration is internal to HA integrations/custom integrations. The add-on can consume configured native LLM APIs through native MCP when Home Assistant exposes them.
 
 ### 3. hab CLI (Home Assistant Builder)
 A CLI tool designed for AI agents to manage Home Assistant. Run `hab` commands via the terminal:
 - **Entity management**: `hab entity list`, `hab entity get light.living_room`, `hab entity logbook sensor.power --start 2h`
 - **Service calls**: `hab action call light.turn_on --entity light.living_room --data '{"brightness": 200}'`
+- **Service calls that answer with data**: add `--return-response`, e.g. `hab action call weather.get_forecasts --entity weather.home --data '{"type":"daily"}' --return-response`. Without the flag Home Assistant refuses the call outright
 - **Automation CRUD**: `hab automation list`, `hab automation create`, `hab automation delete`
 - **Dashboard management**: `hab dashboard list`, `hab dashboard view create`
 - **Area/floor/zone/label**: `hab area list`, `hab area create "Kitchen"`
@@ -197,12 +246,12 @@ zigporter is pre-authenticated via the Supervisor token. Z2M commands (`list-z2m
 
 <!-- ZIGPORTER_LIVE_HELP_START -->
 ```
-
- Usage: zigporter [OPTIONS] COMMAND [ARGS]...
-
- Migrate Zigbee devices between ZHA and Zigbee2MQTT. Supports both ZHA → Z2M
- (default) and Z2M → ZHA (--direction z2m-to-zha).
-
+                                                                                
+ Usage: zigporter [OPTIONS] COMMAND [ARGS]...                                   
+                                                                                
+ Migrate Zigbee devices between ZHA and Zigbee2MQTT. Supports both ZHA → Z2M    
+ (default) and Z2M → ZHA (--direction z2m-to-zha).                              
+                                                                                
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --version             -v        Show version and exit.                       │
 │ --install-completion            Install completion for the current shell.    │
@@ -302,6 +351,38 @@ These are the user-facing configuration files - the primary way to define Home A
 - `__pycache__/` - Python bytecode (managed by Python)
 - `home-assistant_v2.db` - History database (use MCP `get_history`)
 - `home-assistant.log` - Logs (use MCP `get_error_log`)
+
+## Working with YAML on the Command Line (`yq`)
+
+To read, query, or convert YAML from the shell, use **`yq`** (the mikefarah/Go tool, pre-installed on `PATH`). It is the correct tool because it tolerates Home Assistant's custom tags — `!include`, `!secret`, `!env_var`, `!input`, and the `!include_dir_*` family.
+
+**Do NOT reach for `python3 -c "import yaml"` (PyYAML) or Ruby's YAML for HA config** — both crash with a constructor error on the very first `!include`/`!secret`, because those tags are Home Assistant extensions, not standard YAML. `yq` parses them with no setup.
+
+### Read / query (always safe — never errors on HA tags)
+
+```
+yq '.homeassistant.latitude' configuration.yaml      # Print a nested value
+yq '.automation | tag' configuration.yaml            # Inspect the tag itself -> !include
+yq 'keys' configuration.yaml                          # List top-level keys
+yq -o=json '.' configuration.yaml | jq '.sensor'      # Convert to JSON to pipe into jq
+```
+
+Note: output and JSON conversion strip the tag — `!secret home_latitude` prints as `home_latitude`. Use `| tag` when you need to see the tag. Never round-trip a file *through* JSON and back; that permanently loses every `!include`/`!secret`.
+
+### Writing / editing
+
+Prefer the sanctioned write path: **`write_config_safe`** (MCP — validates, backs up, and blocks accidental content loss) or read the full file and use the editor. Reserve `yq -i` for quick, low-risk edits, and only with these two caveats in mind:
+
+1. **A custom tag sticks to the value you overwrite.** `yq -i '.homeassistant.latitude = 52.37'` on a `!secret`-tagged node produces the corrupt `latitude: !secret 52.37`. When replacing a tagged value, reset the tag in the *same* expression:
+   ```
+   yq -i '(.homeassistant.latitude tag = "") | .homeassistant.latitude = 52.37' configuration.yaml
+   ```
+   To *add* a secret reference, set the tag explicitly: `yq -i '.http.api_key = "my_api_key" | .http.api_key tag = "!secret"' configuration.yaml`
+2. **`yq -i` strips blank separator lines** (and collapses inline-comment spacing) across the whole file. No data is lost, but diffs are noisier. When a clean, minimal diff matters, use the editor instead.
+
+### Validation is not a syntax check
+
+`yq` only confirms YAML *parses*. To validate a Home Assistant *configuration* (resolving `!include`/`!secret` and checking integration schemas), use `check_config_syntax` / `write_config_safe` (MCP), not `yq`.
 
 ## YAML Style Guide (MANDATORY)
 
@@ -555,6 +636,7 @@ actions:
 - Follow the YAML Style Guide above for ALL configuration changes
 - Use anchors (`&name`) and aliases (`*name`) for DRY configurations
 - Understand `!include`, `!include_dir_named`, `!include_dir_list`, `!include_dir_merge_named`, `!include_dir_merge_list`
+- To read/query these files from the shell use `yq` (tag-tolerant); PyYAML/Ruby crash on HA tags — see "Working with YAML on the Command Line"
 - Know when to use packages for organized configuration
 
 ### Automations
@@ -621,14 +703,20 @@ Read and modify YAML files to understand and change Home Assistant's defined beh
 
 ### MCP Tools (When Available)
 Query and interact with the running Home Assistant instance:
-- `get_states`, `search_entities` - Current entity states
-- `call_service` - Control devices (with confirmation)
-- `get_history`, `get_logbook` - Historical data
+- `get_states`, `search_entities`, `get_home_context` - Current entity states and compact area/domain/entity context
+- `call_service` - Control devices (with confirmation), and read from services that answer with data (`recorder.get_statistics`, `weather.get_forecasts`, `calendar.get_events`, `todo.get_items`) — the response comes back automatically
+- `get_history`, `get_logbook` - Historical data; supplied timestamps must include `Z` or a UTC offset
+- `get_calendar_events` - Calendar events; supplied start/end timestamps must include `Z` or a UTC offset
 - `get_devices`, `get_areas` - Device and area registry info
 - `write_config_safe` - **Safe config writing with automatic validation, content protection, and backup**
 - `validate_config` - Check configuration validity
 - `get_error_log` - System errors and warnings
+- `get_supervisor_health`, `get_supervisor_resolution` - Read-only Supervisor, host, connectivity, and repair evidence
+- `get_backup_posture`, `get_store_audit`, `get_supervisor_metrics` - Bounded backup, software-source, and resource evidence
+- `get_support_logs` - Bounded, credential-redacted Core, Supervisor, host, or app logs
 - `diagnose_entity` - Comprehensive entity troubleshooting
+- `get_agent_capabilities` - OpenCode MCP capabilities and native HA `llm` / MCP readiness
+- `get_ha_llm_development_guide` - Upstream references and starter template for native `<integration>/llm.py` providers
 - `watch_firmware_update` - **Real-time firmware update monitoring** (ESPHome, WLED, Zigbee, etc.)
 - `get_available_updates`, `update_component` - System update management
 - `screenshot_url` - **Visual verification** of dashboards and UI pages (requires `screenshot_enabled` option)
@@ -639,17 +727,20 @@ Query and interact with the running Home Assistant instance:
 |------|---------------------|-----------|---------|---------------|
 | Create/edit automations | Primary | **Write with `write_config_safe`** | `hab automation create` | N/A |
 | Understand automation logic | Read YAML | Check state with `get_states` | `hab automation get` | N/A |
-| Check current device state | Reference only | Primary | `hab entity get` | N/A |
+| Check current device state | Reference only | Primary (`get_home_context` for focused context) | `hab entity get` | N/A |
 | Control devices | N/A | `call_service` | `hab action call` | N/A |
+| Read from a service that answers with data | N/A | `call_service` (automatic) | `hab action call --return-response` | N/A |
 | Add new integrations | Primary | N/A | N/A | N/A |
-| Troubleshoot issues | Review configs | `diagnose_entity`, `get_error_log` | `hab system health` | N/A |
+| Troubleshoot issues | Review configs | `diagnose_entity`, `get_error_log`, `get_supervisor_health`, `get_supervisor_resolution` | `hab system health` | N/A |
+| Check agent/LLM readiness | N/A | `get_agent_capabilities` | N/A | N/A |
+| Develop native HA LLM tools | `custom_components/*/llm.py` | `get_ha_llm_development_guide` | N/A | N/A |
 | Find entities | Grep YAML files | `search_entities` | `hab entity list --domain` | N/A |
 | View history | N/A | `get_history` | N/A | N/A |
 | **Manage dashboards** | Edit YAML | N/A | **`hab dashboard` (primary)** | N/A |
 | **Verify UI changes** | N/A | **`screenshot_url`** | N/A | N/A |
 | **Manage areas/floors** | N/A | `get_areas` (read-only) | **`hab area/floor` (CRUD)** | N/A |
 | **Manage helpers** | N/A | N/A | **`hab helper` (primary)** | N/A |
-| **Backups** | N/A | N/A | **`hab backup` (primary)** | N/A |
+| **Backups** | N/A | `get_backup_posture` | **`hab backup` (primary)** | N/A |
 | **Blueprints** | N/A | N/A | **`hab blueprint` (primary)** | N/A |
 | **Update firmware** | N/A | **`watch_firmware_update`** | N/A | N/A |
 | **Check for updates** | N/A | `get_available_updates` | N/A | N/A |
@@ -755,36 +846,3 @@ Be especially careful with these frequently-changed areas:
 2. **Present recommendations to user**
 3. Wait for user to approve specific changes
 4. Implement only the changes the user explicitly approves
-
-
-
-## Delayed One-Off Actions
-
-For one-time delayed device actions, prefer the existing Home Assistant script `script.run_actions_later` instead of local shell sleeps, temporary automations, or editing configuration.
-
-Use it when the user asks for actions like "turn off X in 5 minutes", "turn on Y in 1 hour", or other simple delayed service calls.
-
-Example call:
-
-```yaml
-action: script.run_actions_later
-data:
-  delay:
-    minutes: 5
-  actions:
-    - action: light.turn_off
-      entity_id: light.laundry
-```
-
-Supported action item fields:
-
-- `action`: required Home Assistant service/action name, for example `light.turn_off`, `switch.turn_on`, or `climate.turn_off`.
-- `entity_id`: optional entity target for simple entity-targeted actions.
-- `data`: optional service data mapping.
-
-Notes:
-
-- The script runs inside Home Assistant and supports multiple parallel delayed jobs.
-- Pending delayed actions do not survive a Home Assistant restart/reload.
-- `hab action call` may time out while the script is waiting on its delay; verify with `hab entity get script.run_actions_later --json` and check `current` / `last_action`.
-- Do not use `nohup`, local `sleep`, or host-side timers for delayed Home Assistant actions unless the HA script is unavailable or the user explicitly asks for a local workaround.

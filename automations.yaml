@@ -59,53 +59,58 @@
       target:
         entity_id: light.kitchen_pantry
   mode: single
-- alias: Lights Turn On Exterior With Kitchen Door
-  id: '1653354558079'
+- id: '1653354558079'
+  alias: Lights Turn On Exterior With Kitchen Door
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - binary_sensor.kitchen_door
     from: 'off'
     to: 'on'
-  condition:
+    trigger: state
+  conditions:
   - condition: state
     entity_id: light.exterior_wall_back
     state: 'off'
   - condition: state
     entity_id: binary_sensor.night
     state: 'on'
-  action:
-  - service: light.turn_on
-    data: {}
+  actions:
+  - data: {}
     target:
       entity_id: light.exterior_wall_back
+    action: light.turn_on
   - wait_for_trigger:
-    - platform: state
-      entity_id:
+    - entity_id:
       - binary_sensor.kitchen_door
       to: 'off'
-    - platform: state
-      entity_id:
+      trigger: state
+    - entity_id:
       - light.exterior_wall_back
       to: 'off'
+      trigger: state
+    timeout:
+      hours: 2
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
   - condition: state
     entity_id: light.kitchen_door
     state: 'on'
   - wait_for_trigger:
-    - platform: state
-      entity_id:
+    - entity_id:
       - light.exterior_wall_back
       to: 'off'
+      trigger: state
     timeout: 00:01:00
   - condition: state
     entity_id: light.exterior_wall_back
     state: 'on'
-  - service: light.turn_off
-    data: {}
+  - data: {}
     target:
       entity_id:
       - light.exterior_wall_back
+    action: light.turn_off
   mode: single
 - alias: Lights Turn On Kitchen Light
   id: '1653947527310'
