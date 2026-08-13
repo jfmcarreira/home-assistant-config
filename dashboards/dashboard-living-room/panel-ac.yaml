@@ -97,9 +97,12 @@
         auto_close: false
         large: false
         allow_nested_more_info: false
+        adaptive: true
+        adaptive_allow_mode_change: false
+        adaptive_force_bottom_sheet: true
         size: normal
         style: |
-          --popup-min-width: 450px;
+          --popup-min-width: 800px;
         content:
           type: custom:vertical-stack-in-card
           cards:
@@ -116,34 +119,143 @@
                 - entity: sensor.temperature_climate_outdoor_daikin
                   name: Temperatura do Radiador Interior
                   secondary_info: last-updated
-            - type: grid
-              square: false
-              columns: 1
-              cards:
-                - type: tile
-                  name: Desumidificação
-                  icon: mdi:air-humidifier
-                  entity: script.hvac_routine_dehumidifier_living_room
+            - cards:
+                - type: custom:button-card
+                  entity: automation.hvac_living_room_solar_cooling
+                  name: Apoio Solar
+                  icon: mdi:solar-power
+                  tap_action:
+                    action: call-service
+                    service: automation.trigger
+                    data:
+                      skip_condition: true
+                    target:
+                      entity_id: automation.hvac_living_room_solar_cooling
+                  hold_action:
+                    action: more-info
                   styles:
+                    card:
+                      - height: 90px
+                      - border-radius: 16px
+                      - padding: 10px
+                      - background: >
+                          [[[
+                            return entity.attributes.current > 0
+                              ? 'var(--state-icon-active-color)'
+                              : 'var(--ha-card-background)';
+                          ]]]
                     icon:
-                      - color: var(--state-icon-color)
+                      - width: 28px
+                      - color: >
+                          [[[
+                            return entity.attributes.current > 0
+                              ? 'var(--primary-background-color)'
+                              : 'var(--state-icon-color)';
+                          ]]]
+                    name:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - white-space: normal
+                      - text-align: center
+                      - line-height: 1.15
+                      - color: >
+                          [[[
+                            return entity.attributes.current > 0
+                              ? 'var(--primary-background-color)'
+                              : 'var(--primary-text-color)';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: script.hvac_routine_dehumidifier_living_room
+                  name: Desumidificação
+                  icon: mdi:water-percent
+
                   tap_action:
                     action: call-service
                     service: script.hvac_routine_dehumidifier_living_room
+
                   hold_action:
                     action: more-info
-                - type: tile
-                  name: Desumidificação (Com Aquecimento)
-                  entity: script.hvac_routine_dehumidifier_heat_living_room
-                  icon: mdi:air-humidifier
+
                   styles:
+                    card:
+                      - height: 90px
+                      - border-radius: 16px
+                      - padding: 10px
+                      - background: >
+                          [[[
+                            return entity.state === 'on'
+                              ? 'var(--state-icon-active-color)'
+                              : 'var(--ha-card-background)';
+                          ]]]
                     icon:
-                      - color: var(--state-icon-color)
+                      - width: 28px
+                      - color: >
+                          [[[
+                            return entity.state === 'on'
+                              ? 'var(--primary-background-color)'
+                              : 'var(--state-icon-color)';
+                          ]]]
+                    name:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - white-space: normal
+                      - text-align: center
+                      - line-height: 1.15
+                      - color: >
+                          [[[
+                            return entity.state === 'on'
+                              ? 'var(--primary-background-color)'
+                              : 'var(--primary-text-color)';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: script.hvac_routine_dehumidifier_heat_living_room
+                  name: Desumidificação (Com Aquecimento)
+                  icon: mdi:water-thermometer
+
                   tap_action:
                     action: call-service
                     service: script.hvac_routine_dehumidifier_heat_living_room
+
                   hold_action:
                     action: more-info
+
+                  styles:
+                    card:
+                      - height: 90px
+                      - border-radius: 16px
+                      - padding: 10px
+                      - background: >
+                          [[[
+                            return entity.state === 'on'
+                              ? 'var(--state-icon-active-color)'
+                              : 'var(--ha-card-background)';
+                          ]]]
+                    icon:
+                      - width: 28px
+                      - color: >
+                          [[[
+                            return entity.state === 'on'
+                              ? 'var(--primary-background-color)'
+                              : 'var(--state-icon-color)';
+                          ]]]
+                    name:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - white-space: normal
+                      - text-align: center
+                      - line-height: 1.15
+                      - color: >
+                          [[[
+                            return entity.state === 'on'
+                              ? 'var(--primary-background-color)'
+                              : 'var(--primary-text-color)';
+                          ]]]
+
+              columns: 3
+              square: false
+              type: grid
 
 - type: custom:decluttering-card
   template: decluttering_haier_ac

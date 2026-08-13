@@ -14,7 +14,6 @@ views:
       max_width: 300px
     badges: []
     cards:
-
       - type: vertical-stack
         view_layout:
           column: 1
