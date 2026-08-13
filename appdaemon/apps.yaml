@@ -2,11 +2,3 @@ HouseModeApp:
   module: HouseMode
   class: HouseMode
 
-BathroomRC:
-  module: BathroomFan
-  class: BathroomFan
-  toggle: input_boolean.auto_fan_bathroom_rc
-  fan_entity: fan.bathroom_rc
-  light_entity: light.bathroom_rc
-  humidity_entity: sensor.humidity_bathroom_rc
-  average_humidity_entity: sensor.humidity_bathroom_rc_average

@@ -209,7 +209,7 @@
         entity: fan.bathroom_rc
         name: Ventoinha
       - type: custom:mushroom-entity-card
-        entity: input_boolean.auto_fan_bathroom_rc
+        entity: switch.auto_fan_bathroom_rc
         name: Controlo
         primary_info: name
         icon: mdi:fan-auto
