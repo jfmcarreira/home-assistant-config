@@ -37,7 +37,6 @@ sensor:
     filters:
       - multiply: 0.002525
     total:
-      id: sensor_pulse_meter_total
       name: "Water Meter Dish-washing Machine"
       unit_of_measurement: "L"
       state_class: total_increasing
@@ -48,17 +47,82 @@ sensor:
         - multiply: 0.002525
 
   - platform: pulse_counter
-    id: water_usage_2
-    pin:
-      number: D4
-      mode:
-        input: true
-        pullup: true
-
-  - platform: pulse_counter
-    id: water_usage_3
     pin:
       number: D6
       mode:
         input: true
         pullup: true
+    unit_of_measurement: "L/min"
+    device_class: volume_flow_rate
+    name: "Water Flow Kitchen Sink Cold"
+    id: water_flow_kitchen_cold
+    state_class: measurement
+    icon: "mdi:water-pump"
+    update_interval: 1s
+    count_mode:
+      rising_edge: INCREMENT
+      falling_edge: DISABLE
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.0015151515
+    total:
+      id: water_meter_kitchen_cold
+      name: "Water Meter Kitchen Sink Cold"
+      unit_of_measurement: "L"
+      state_class: total_increasing
+      device_class: water
+      icon: mdi:gauge
+      accuracy_decimals: 3
+      filters:
+        - multiply: 0.0015151515
+
+  - platform: pulse_counter
+    pin:
+      number: D4
+      mode:
+        input: true
+        pullup: true
+    unit_of_measurement: "L/min"
+    device_class: volume_flow_rate
+    name: "Water Flow Kitchen Sink Hot"
+    id: water_flow_kitchen_hot
+    state_class: measurement
+    icon: "mdi:water-pump"
+    update_interval: 1s
+    count_mode:
+      rising_edge: INCREMENT
+      falling_edge: DISABLE
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.0015151515
+    total:
+      id: water_meter_kitchen_hot
+      name: "Water Meter Kitchen Sink Hot"
+      unit_of_measurement: "L"
+      state_class: total_increasing
+      device_class: water
+      icon: mdi:gauge
+      accuracy_decimals: 3
+      filters:
+        - multiply: 0.0015151515
+
+  - platform: template
+    name: "Water Flow Kitchen Sink"
+    unit_of_measurement: "L/min"
+    device_class: volume_flow_rate
+    state_class: measurement
+    icon: "mdi:water-pump"
+    lambda: |-
+      return id(water_flow_kitchen_cold).state + id(water_flow_kitchen_hot).state;
+    update_interval: 1s
+
+  - platform: template
+    name: "Water Meter Kitchen Sink"
+    unit_of_measurement: "L"
+    device_class: water
+    state_class: total_increasing
+    icon: mdi:gauge
+    lambda: |-
+      return id(water_meter_kitchen_cold).state + id(water_meter_kitchen_hot).state;
+    update_interval: 1s
+
