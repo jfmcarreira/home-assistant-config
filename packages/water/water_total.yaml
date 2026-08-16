@@ -8,7 +8,7 @@ template:
         state: >-
           {% set ns = namespace(states=[]) %}
           {% for s in states.sensor %}
-            {% if not s.object_id.startswith('water_flow_total') and s.object_id.startswith('water_flow_') %}
+            {% if not s.object_id.startswith('water_flow_total') and s.object_id.startswith('water_flow_') and not s.object_id.endswith('_hot') and not s.object_id.endswith('_cold') %}
               {% set ns.states = ns.states + [ s.state | float(0.0)] %}
             {% endif %}
           {% endfor %}
@@ -21,7 +21,7 @@ template:
         state: >-
           {% set ns = namespace(states=[]) %}
           {% for s in states.sensor %}
-            {% if not s.object_id.startswith('water_meter_total') and s.object_id.startswith('water_meter_') %}
+            {% if not s.object_id.startswith('water_meter_total') and s.object_id.startswith('water_meter_') and not s.object_id.endswith('_hot') and not s.object_id.endswith('_cold') %}
               {% set ns.states = ns.states + [ s.state | float(0.0)] %}
             {% endif %}
           {% endfor %}
