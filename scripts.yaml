@@ -189,7 +189,7 @@ gate_display_front_camere_tablet:
       large: true
       ignore_popup_card: true
       browser_id:
-      - browser_mod_d95bc50a_a72ebf8b
+      - faf97a427471d1228ad59c92775a6147
     action: browser_mod.more_info
   - wait_for_trigger:
     - entity_id:
@@ -702,9 +702,6 @@ routine_exit_house_all_off:
 gps_update_bianca:
   alias: Atualizar Localização Bianca
   sequence:
-  - condition: state
-    entity_id: binary_sensor.bianca_home
-    state: 'off'
   - action: notify.mobile_app_calcium
     data:
       message: request_location_update
@@ -715,9 +712,6 @@ gps_update_bianca:
 gps_update_joao:
   alias: Atualizar Localização João
   sequence:
-  - condition: state
-    entity_id: binary_sensor.joao_home
-    state: 'off'
   - action: notify.mobile_app_radium
     data:
       message: request_location_update
@@ -1184,4 +1178,88 @@ routina_de_abrir_e_fechar_o_portao_com_porta_da_cozinha_duplicar:
       entity_id: cover.gate
     data: {}
   alias: Routina de Abrir e Fechar o Portão com Sensores
+  description: ''
+door_bell_snapshot:
+  sequence:
+  - action: camera.snapshot
+    entity_id: camera.front
+    data:
+      filename: /media/Campainha/{{now().year}}-{{"%02d" | format(now().month)}}-{{"%02d"
+        | format(now().day)}}_{{"%02d" | format(now().hour)}}h{{"%02d" | format(now().minute)}}.jpg
+  alias: Campainha - Guardar Snapshot
+  description: ''
+door_bell_sound_office:
+  sequence:
+  - action: music_assistant.play_announcement
+    target:
+      entity_id:
+      - media_player.home_assistant_voice_office_ma
+    data:
+      url: http://10.20.107.2/local/door_bell.wav
+  alias: Campainha - Notificação Sonora Escritório
+  description: ''
+door_bell_sound_google_home:
+  sequence:
+  - action: music_assistant.play_announcement
+    target:
+      entity_id:
+      - media_player.ghm_kitchen
+    data:
+      url: http://10.20.107.2/local/door_bell.wav
+  alias: Campainha - Notificação Sonora Google
+  description: ''
+door_bell_sequence:
+  sequence:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.notify_home
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.notification_non_disturb
+      state: 'off'
+    - condition: state
+      entity_id: input_boolean.door_bell_sound
+      state: 'on'
+    then:
+    - action: script.turn_on
+      target:
+        entity_id: script.door_bell_sound_office
+    - action: script.turn_on
+      target:
+        entity_id: script.door_bell_sound_google_home
+    - action: script.turn_on
+      target:
+        entity_id: script.door_bell_sound_bedrooms
+  - action: script.turn_on
+    target:
+      entity_id: script.door_bell_notify_snapshot
+  - action: script.turn_on
+    target:
+      entity_id: script.door_bell_snapshot
+  - action: script.turn_on
+    target:
+      entity_id: script.door_bell_display_front_camera_tablet
+  alias: Campainha - Sequência de Notificações
+  description: ''
+campainha_notificacao_sonora_google_duplicar:
+  sequence:
+  - if:
+    - condition: time
+      after: 09:00:00
+      before: '21:00:00'
+    - condition: numeric_state
+      entity_id: cover.bedroom_henrique
+      attribute: current_position
+      above: 0
+    - condition: numeric_state
+      entity_id: cover.bedroom_ricardo
+      attribute: current_position
+      above: 0
+    then:
+    - action: music_assistant.play_announcement
+      target:
+        entity_id: media_player.ghm_hall
+      data:
+        url: http://10.20.107.2/local/door_bell.wav
+  alias: Campainha - Notificação Sonora Quartos
   description: ''

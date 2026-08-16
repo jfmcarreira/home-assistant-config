@@ -456,24 +456,32 @@
       - kitchen
     action: script.cover_group_action
   mode: single
-- alias: Abrir Estores da Suite Fim de Semana
-  id: '1661120403152'
+- id: '1661120403152'
+  alias: Abrir Estores da Suite Fim de Semana
   description: ''
-  trigger:
+  triggers:
   - trigger: time_pattern
     hours: '10'
     minutes: '00'
-  condition:
-  - condition: state
-    entity_id: binary_sensor.workday
-    state: 'off'
+  conditions:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.workday
+      state: 'off'
+    - condition: switch.is_on
+      target:
+        entity_id: input_boolean.day_off_work
+      options:
+        behavior: any
+        for: 00:00:00
   - condition: state
     entity_id: cover.master_bedroom
     state: closed
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
-  action:
+  actions:
   - action: cover.open_cover
     data: {}
     target:
@@ -1313,8 +1321,8 @@
   alias: Abrir Estores da Suite
   description: ''
   triggers:
-  - hours: '8'
-    minutes: '30'
+  - hours: '7'
+    minutes: '45'
     trigger: time_pattern
   conditions:
   - condition: state
@@ -1892,15 +1900,16 @@
   - data: {}
     action: script.lights_arriving_home
   mode: single
-- alias: Localização - Atualizar Joao
-  id: '1701640659897'
+- id: '1701640659897'
+  alias: Localização - Atualizar Joao
   triggers:
   - trigger: time_pattern
     seconds: /5
   conditions:
   - condition: state
-    entity_id: binary_sensor.joao_home
-    state: 'off'
+    entity_id: person.joao_carreira
+    state:
+    - not_home
   - condition: state
     state: towards
     entity_id: sensor.distance_home_direction_joao
@@ -2154,98 +2163,7 @@
       - pressed
   conditions: []
   actions:
-  - parallel:
-    - action: script.turn_on
-      target:
-        entity_id: script.gate_display_front_camera_tablet
-    - action: script.turn_on
-      target:
-        entity_id: script.gate_notify_door_bell_snapshot
-    - if:
-      - condition: state
-        entity_id: binary_sensor.notify_home
-        state: 'on'
-      - condition: state
-        entity_id: binary_sensor.notification_non_disturb
-        state: 'off'
-      - condition: state
-        entity_id: input_boolean.door_bell_sound
-        state: 'on'
-      then:
-      - action: media_player.volume_set
-        target:
-          entity_id:
-          - media_player.ghm_living_room
-          - media_player.ghm_kitchen
-        data:
-          volume_level: 0.7
-      - target:
-          entity_id:
-          - media_player.home_assistant_voice_office
-          - media_player.ghm_living_room
-          - media_player.ghm_kitchen
-        data:
-          media:
-            media_content_id: media-source://media_source/local/door_bell.wav
-            media_content_type: audio/x-wav
-            metadata:
-              title: Door Bell
-              thumbnail:
-              media_class: music
-              children_media_class:
-              navigateIds:
-              - {}
-              - media_content_type: app
-                media_content_id: media-source://media_source
-        action: media_player.play_media
-      - if:
-        - condition: time
-          after: 09:00:00
-          before: '21:00:00'
-        - condition: numeric_state
-          entity_id: cover.bedroom_henrique
-          attribute: current_position
-          above: 0
-        then:
-        - action: media_player.volume_set
-          target:
-            entity_id:
-            - media_player.ghm_hall
-          data:
-            volume_level: 0.005
-        - action: tts.cloud_say
-          data:
-            cache: true
-            entity_id: media_player.ghm_hall
-            message: This is a broadcast message
-        - action: media_player.volume_set
-          target:
-            entity_id:
-            - media_player.ghm_hall
-          data:
-            volume_level: 0.7
-        - target:
-            entity_id:
-            - media_player.ghm_hall
-          data:
-            media:
-              media_content_id: media-source://media_source/local/door_bell.wav
-              media_content_type: audio/x-wav
-              metadata:
-                title: Door Bell
-                thumbnail:
-                media_class: music
-                children_media_class:
-                navigateIds:
-                - {}
-                - media_content_type: app
-                  media_content_id: media-source://media_source
-          action: media_player.play_media
-    - action: camera.snapshot
-      entity_id: camera.front
-      data:
-        filename: /media/Campainha/{{now().year}}-{{"%02d" | format(now().month)}}-{{"%02d"
-          | format(now().day)}}_{{"%02d" | format(now().hour)}}h{{"%02d" | format(now().minute)}}.jpg
+  - action: script.door_bell_sequence
   mode: single
 - alias: 'Notificar Abertura Portão/Portas '
   id: '1717504841456'
@@ -4551,29 +4469,6 @@
       entity_id: switch.ecoflow
     data: {}
   mode: single
-- id: '1777726085434'
-  alias: Activar venda de excedente
-  description: ''
-  triggers:
-  - trigger: battery.level_crossed_threshold
-    target:
-      entity_id: sensor.deye_inverter_battery
-    options:
-      threshold:
-        type: above
-        value:
-          active_choice: number
-          number: 96
-  conditions:
-  - condition: time
-    before: '17:00:00'
-  actions:
-  - action: switch.turn_on
-    metadata: {}
-    target:
-      entity_id: switch.deye_inverter_solar_sell
-    data: {}
-  mode: single
 - id: '1777742920832'
   alias: Água Quente - Apoio Fotovoltaico Desligar
   description: ''
@@ -5101,7 +4996,7 @@
     entity_id: 624767f641f5eedd318f0a432958ac38
     domain: sensor
     trigger: device
-    below: 40
+    below: 50
   - trigger: battery.level_crossed_threshold
     target:
       entity_id: sensor.deye_inverter_battery
@@ -5110,7 +5005,7 @@
         type: above
         value:
           active_choice: number
-          number: 30
+          number: 40
   conditions: []
   actions:
   - action: switch.turn_on
@@ -5120,7 +5015,7 @@
     data: {}
   mode: single
 - id: '1778684016013'
-  alias: Desactivar venda de excedente
+  alias: Venda de excedente - Desactivar
   description: ''
   triggers:
   - trigger: numeric_state
@@ -5397,7 +5292,7 @@
         type: below
         value:
           active_choice: number
-          number: 50
+          number: 45
   conditions:
   - condition: time
     after: '20:00:00'
@@ -5704,9 +5599,18 @@
       - climate.hall
       temperature_sensor: sensor.temperature_hall
 - id: '1785049940859'
-  alias: Ativar Venda de Excedente e Reduzir Carga da Bateria
+  alias: 'Venda de Excedente - Ativar '
   description: ''
   triggers:
+  - trigger: battery.level_crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 96
   - trigger: power.crossed_threshold
     target:
       entity_id: sensor.deye_inverter_pv_power_average
@@ -5729,16 +5633,52 @@
     options:
       behavior: any
       for: 00:00:00
+  - condition: battery.is_level
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 50
+  - condition: time
+    before: '17:00:00'
+  - condition: or
+    conditions:
+    - condition: battery.is_level
+      target:
+        entity_id: sensor.deye_inverter_battery
+      options:
+        threshold:
+          type: above
+          value:
+            active_choice: number
+            number: 95
+    - condition: numeric_state
+      entity_id: sensor.solar_forecast_today_remaining
+      above: 25
   actions:
   - action: switch.turn_on
     metadata: {}
     target:
       entity_id: switch.deye_inverter_solar_sell
     data: {}
-  - action: number.set_value
-    metadata: {}
-    target:
-      entity_id: number.deye_inverter_maximum_battery_charge_current
-    data:
-      value: '20'
+  - if:
+    - condition: battery.is_level
+      target:
+        entity_id: sensor.deye_inverter_battery
+      options:
+        threshold:
+          type: below
+          value:
+            active_choice: number
+            number: 90
+    then:
+    - action: number.set_value
+      metadata: {}
+      target:
+        entity_id: number.deye_inverter_maximum_battery_charge_current
+      data:
+        value: '20'
   mode: single
