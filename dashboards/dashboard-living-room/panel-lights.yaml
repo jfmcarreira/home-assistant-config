@@ -54,8 +54,10 @@
   variables:
     room_light: light.kitchen
     lights_popup_title: Luzes da Cozinha
-    lights_popup_room: kitchen
-    lights_popup_pattern: light.kitchen_*
+    lights_popup_lights:
+      - light.kitchen_led
+      - light.kitchen_window
+      - light.kitchen_pantry
     automation: automation.lights_motion_kitchen
   triggers_update:
     - automation.lights_motion_kitchen
@@ -69,8 +71,10 @@
   variables:
     room_light: light.living_room_group
     lights_popup_title: Luzes da Sala
-    lights_popup_room: living_room
-    lights_popup_pattern: light.living_room*
+    lights_popup_lights:
+      - light.living_room
+      - light.living_room_window
+      - light.living_room_table
 - type: custom:button-card
   view_layout:
     column: 1
@@ -81,8 +85,9 @@
   variables:
     room_light: light.hallway_group
     lights_popup_title: Luzes do Corredor
-    lights_popup_room: living_room
-    lights_popup_pattern: light.*way
+    lights_popup_lights:
+      - light.doorway
+      - light.hallway
 
 # - type: grid
 #   view_layout:
@@ -199,8 +204,10 @@
   variables:
     room_light: light.stairs_group
     lights_popup_title: Luzes das Escadas
-    lights_popup_room: stairs
-    lights_popup_pattern: light.stairs*
+    lights_popup_lights:
+      - light.stairs_lamp
+      - light.stairs_wall
+      - light.stairs_down
 
 - type: custom:button-card
   view_layout:
@@ -212,8 +219,10 @@
   variables:
     room_light: light.hall_group
     lights_popup_title: Luzes do Sotão
-    lights_popup_room: hall
-    lights_popup_pattern: light.hall*
+    lights_popup_lights:
+      - light.hall_presence
+      - light.hall
+      - light.hall_side
 
 - type: custom:button-card
   view_layout:
@@ -225,8 +234,9 @@
   variables:
     room_light: light.laundry
     lights_popup_title: Luzes da Lavandaria
-    lights_popup_room: laundry
-    lights_popup_pattern: light.laundry_*
+    lights_popup_lights:
+      - light.laundry_main
+      - light.laundry_extra
     automation: automation.lights_motion_laundry
   triggers_update:
     - automation.lights_motion_laundry
@@ -241,8 +251,9 @@
   variables:
     room_light: light.office
     lights_popup_title: Luzes do Escritório
-    lights_popup_room: office
-    lights_popup_pattern: light.office_*
+    lights_popup_lights:
+      - light.office_main
+      - light.office_extra
     automation: automation.lights_motion_office
   triggers_update:
     - automation.lights_motion_office
@@ -257,8 +268,9 @@
   variables:
     room_light: light.bedroom_rc
     lights_popup_title: Luzes do Quarto de Arrumos
-    lights_popup_room: bedroom_rc
-    lights_popup_pattern: light.bedroom_rc_*
+    lights_popup_lights:
+      - light.bedroom_rc_closet
+      - light.bedroom_rc_wall
     automation: automation.lights_motion_bedroom_rc
   triggers_update:
     - automation.lights_motion_bedroom_rc
@@ -276,8 +288,13 @@
     icon_size: "40"
     room_light: light.master_bedroom
     lights_popup_title: Luzes da Suite
-    lights_popup_room: master_bedroom
-    lights_popup_pattern: light.master_bedroom_*
+    lights_popup_lights:
+      - light.master_bedroom_lamp
+      - light.master_bedroom_entry
+      - light.master_bedroom_closet
+      - light.master_bedroom_ceiling
+      - light.master_bedroom_bed_wall
+      - light.master_bedroom_bed_window
 - type: custom:button-card
   view_layout:
     column: 2
@@ -289,8 +306,10 @@
     icon_size: "40"
     room_light: light.bedroom_ricardo
     lights_popup_title: Luzes do Quarto do Ricardo
-    lights_popup_room: bedroom_ricardo
-    lights_popup_pattern: light.bedroom_ricardo_*
+    lights_popup_lights:
+      - light.bedroom_ricardo_ceiling
+      - light.bedroom_ricardo_closet
+      - light.bedroom_ricardo_lamp
   name: Quarto do Ricardo
 - type: custom:button-card
   view_layout:
@@ -303,8 +322,9 @@
     icon_size: "40"
     room_light: light.bedroom_henrique
     lights_popup_title: Luzes do Quarto do Henrique
-    lights_popup_room: bedroom_henrique
-    lights_popup_pattern: light.bedroom_henrique_*
+    lights_popup_lights:
+      - light.bedroom_henrique_ceiling
+      - light.bedroom_henrique_closet
   name: Quarto do Henrique
 - type: custom:button-card
   view_layout:
@@ -318,8 +338,9 @@
     icon_size: "40"
     room_light: light.main_bathroom
     lights_popup_title: Luzes da Casa de Banho Principal
-    lights_popup_room: bathroom_main
-    lights_popup_pattern: light.main_bathroom_*
+    lights_popup_lights:
+      - light.main_bathroom_ceiling
+      - light.main_bathroom_led
 - type: custom:button-card
   view_layout:
     column: 2
@@ -332,8 +353,9 @@
     icon_size: "40"
     room_light: light.master_bedroom_bathroom
     lights_popup_title: Luzes da Casa de Banho da Suite
-    lights_popup_room: master_bedroom_bathroom
-    lights_popup_pattern: light.master_bedroom_bathroom_*
+    lights_popup_lights:
+      - light.master_bedroom_bathroom_ceiling
+      - light.master_bedroom_bathroom_led
 - type: custom:button-card
   view_layout:
     column: 2
@@ -347,8 +369,9 @@
     icon_size: "40"
     room_light: light.bathroom_rc
     lights_popup_title: Luzes da Casa de Banho R/C
-    lights_popup_room: bathroom_rc
-    lights_popup_pattern: light.bathroom_rc_*
+    lights_popup_lights:
+      - light.bathroom_rc_ceiling
+      - light.bathroom_rc_led
     automation: automation.lights_motion_bathroom_rc
   triggers_update:
     - automation.lights_motion_bathroom_rc

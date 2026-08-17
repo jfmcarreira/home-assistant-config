@@ -76,8 +76,10 @@ template-room-light-automatic:
 template-room-light-popup:
   variables:
     lights_popup_title: Luzes da Sala
-    lights_popup_room: living_room
-    lights_popup_pattern: light.living_room*
+    lights_popup_lights:
+      - light.living_room
+      - light.living_room_window
+      - light.living_room_table
   tap_action:
     action: fire-dom-event
     browser_mod:
@@ -86,30 +88,22 @@ template-room-light-popup:
         auto_close: false
         allow_nested_more_info: false
         content:
-          type: custom:auto-entities
-          card:
-            type: vertical-stack
-            title: |
-              [[[ return variables.lights_popup_title ]]]
-          card_param: cards
-          show_empty: true
-          filter:
-            exclude:
-              - entity_id: light.*group*
-            include:
-              - area: |
-                  [[[ return variables.lights_popup_room ]]]
-                entity_id: |
-                  [[[ return variables.lights_popup_pattern ]]]
-                domain: light
-                options:
-                  type: custom:mushroom-light-card
-                  layout: vertical
-                  secondary_info: none
-                  show_brightness_control: true
-                  show_color_temp_control: true
-                  use_light_color: true
-                  collapsible_controls: false
+          type: vertical-stack
+          title: |
+            [[[ return variables.lights_popup_title ]]]
+          cards: |
+            [[[
+              return variables.lights_popup_lights.map((light) => ({
+                type: "custom:mushroom-light-card",
+                entity: light,
+                layout: "vertical",
+                secondary_info: "none",
+                show_brightness_control: true,
+                show_color_temp_control: true,
+                use_light_color: true,
+                collapsible_controls: false,
+              }));
+            ]]]
 
 climate_status:
   variables:
