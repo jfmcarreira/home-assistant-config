@@ -76,17 +76,7 @@ decluttering_cover:
                 vertical: false
                 view_layout:
                   column: 1
-              - type: custom:auto-entities
-                card:
-                  type: entities
-                filter:
-                  include:
-                    - entity_id: input_boolean.cover_control_*_[[room_code_name]]
-                    - entity_id: number.*_position_[[room_code_name]]
-                    - entity_id: input_number.*_position_[[room_code_name]]
-                    - entity_id: select.cover_[[room_code_name]]_last_action
-                view_layout:
-                  column: 2
+
 decluttering_haier_ac:
   card:
     type: tile

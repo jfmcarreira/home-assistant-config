@@ -64,15 +64,6 @@
                     - entity: sensor.device_battery_cover_stairs
                       name: Bateria
                       secondary_info: last-updated
-                - type: custom:auto-entities
-                  card:
-                    type: entities
-                  filter:
-                    include:
-                      - entity_id: input_boolean.cover_control_*_stairs
-                      - entity_id: input_number.*_position_stairs
-                  view_layout:
-                    column: 2
 - type: custom:decluttering-card
   template: decluttering_cover
   variables:

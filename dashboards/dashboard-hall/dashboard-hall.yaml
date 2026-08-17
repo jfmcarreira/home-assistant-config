@@ -8,7 +8,6 @@ views:
     path: main
     icon: mdi:home-roof
     type: custom:horizontal-layout
-
     layout:
       max_cols: 2
       column_widths: 45% 55%
@@ -17,7 +16,6 @@ views:
       reflow: true
     badges: []
     cards:
-
       - type: vertical-stack
         view_layout:
           column: 1

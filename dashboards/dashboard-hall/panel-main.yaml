@@ -312,28 +312,6 @@
     reverse: false
   show_empty: false
 
-- type: custom:auto-entities
-  card:
-    type: vertical-stack
-  card_param: cards
-  filter:
-    exclude:
-      - entity_id: script.routine_dinner_time
-      - entity_id: script.cover_scene_rain_mode
-    include:
-      - entity_id: script.routine*
-        state: "on"
-        options:
-          type: tile
-          features_position: bottom
-          vertical: false
-          tap_action:
-            action: toggle
-          icon_tap_action:
-            action: more-info
-          hide_state: true
-  show_empty: false
-
 - type: conditional
   conditions:
     - condition: state
@@ -346,34 +324,7 @@
     type: alarm-panel
     entity: alarm_control_panel.alarmo
 
-- type: custom:auto-entities
-  card:
-    type: vertical-stack
-  card_param: cards
-  filter:
-    exclude:
-      - entity_id: climate.deye_inverter_cooling_fan
-      - entity_id: climate.office
-      - entity_id: climate.*_vtherm
-      - entity_id: climate.living_room
-      - state: "off"
-      - state: unavailable
-    include:
-      - options:
-          features:
-            - type: target-temperature
-          type: tile
-          features_position: inline
-          state_content:
-            - current_temperature
-            - fan_mode
-            - swing_mode
-            - preset_mode
-          vertical: false
-          icon_tap_action:
-            action: toggle
-        entity_id: climate.*
-  show_empty: false
+
 
 - type: entity-filter
   entities:
@@ -453,15 +404,11 @@
         entity: sensor.temperature_bedrooms
         name: Temperatura
         vertical: false
-        features:
-          - type: trend-graph
         features_position: bottom
       - type: tile
         entity: sensor.average_humidity_bedrooms
         name: Humidade
         vertical: false
-        features:
-          - type: trend-graph
         features_position: bottom
       # - type: custom:mini-graph-card
       #   name: Temperatura Quartos
