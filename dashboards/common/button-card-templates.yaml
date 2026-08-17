@@ -76,10 +76,7 @@ template-room-light-automatic:
 template-room-light-popup:
   variables:
     lights_popup_title: Luzes da Sala
-    lights_popup_lights:
-      - light.living_room
-      - light.living_room_window
-      - light.living_room_table
+    lights_popup_lights: []
   tap_action:
     action: fire-dom-event
     browser_mod:
