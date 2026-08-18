@@ -90,7 +90,7 @@
       }
   card:
     type: grid
-    columns: 2
+    columns: 1
     square: false
     cards:
       - show_name: true
@@ -99,14 +99,6 @@
         entity: light.kitchen_door
         name: Porta da Cozinha
         icon_height: 40px
-      - show_name: true
-        show_icon: true
-        type: button
-        view_layout:
-          column: 2
-        entity: light.exterior_flood_led
-        icon_height: 40px
-
 
 - type: custom:mod-card
   view_layout:
@@ -124,14 +116,48 @@
       - show_name: true
         show_icon: true
         type: button
+        entity: light.exterior_flood_led
+        name: Projector Traseiras
+        icon_height: 40px
+      - show_name: true
+        show_icon: true
+        name: Projector Poente
+        type: button
+        view_layout:
+          column: 2
+        entity: light.exterior_flood_led
+        icon_height: 40px
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: grid
+    columns: 3
+    square: false
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
         entity: light.exterior_wall_back
-        name: Parede Sul
+        name: Parede Traseiras
         icon_height: 40px
       - show_name: true
         show_icon: true
         type: button
         entity: light.exterior_wall_side
         name: Parede Poente
+        icon_height: 40px
+      - show_name: true
+        show_icon: true
+        type: button
+        entity: light.exterior_wall_front
+        name: Parede Frente
         icon_height: 40px
 
 - type: custom:mod-card
