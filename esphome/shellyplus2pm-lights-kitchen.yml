@@ -12,99 +12,126 @@ packages:
   device_base: !include
     file: packages/shelly_plus_2pm.yml
     vars:
-      name: Shelly Plus 2PM Hall
+      name: Shelly Plus 2PM Kitchen
 
   lights_base: !include
     file: packages/shelly_plus_2pm_lights.yml
     vars:
-      Light_1_Name: Hall
-      Light_2_Name: Hall Side
+      Light_1_Name: Kitchen LED
+      Light_2_Name: Kitchen Window
 
 # esp32_ble_tracker:
 #   scan_parameters:
 #     active: true
 
+light:
+  - id: !remove light_1
+
+switch:
+  - platform: output
+    id: light_1
+    name: Kitchen LED SW
+    output: relay_1
+    restore_mode: ALWAYS_OFF
+    device_id: device_light_1
+    
 binary_sensor:
   - platform: homeassistant
-    id: hall_presence_state
-    entity_id: light.hall_presence
+    id: kitchen_led_state
+    entity_id: light.kitchen_led
 
-  - id: !extend sw_1
+  - id: !extend sw_2
     on_multi_click:
       - timing:
           - ON for at most 1000ms
-          - OFF for at least 100ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
+        then:
+          - logger.log:
+              format: "SW 1 short"
+              level: INFO
+          - if:
+              condition:
+                and:
+                  - api.connected:
+              then:
+                - switch.turn_on: light_1
+                - homeassistant.service:
+                    service: light.toggle
+                    data:
+                      entity_id: light.kitchen_led
+              else:
+                - logger.log: "Disconnected! Toggling the SW"
+                - switch.toggle: light_1
+      - timing:
+          - ON for at least 1000ms
         invalid_cooldown: 100ms
         then:
           - if:
               condition:
                 and:
                   - api.connected:
-                  - or:
-                      - binary_sensor.is_on: hall_presence_state
-                      - and:
-                          - light.is_on: light_1
-                          - light.is_on: light_2
               then:
-                - light.turn_off: light_1
-                - light.turn_off: light_2
                 - homeassistant.service:
-                    service: light.turn_off
+                    service: light.toggle
                     data:
-                      entity_id: light.hall_presence
+                      entity_id: light.exterior_wall_back
               else:
-                - light.toggle: light_1
-      - timing:
-          - ON for at least 1000ms
-        invalid_cooldown: 10ms
-        then:
-          - if:
-              condition:
-                - api.connected:
-              then:
-                - homeassistant.action:
-                    action: light.turn_off
-                    data:
-                      floor_id: bedrooms
-                - homeassistant.action:
-                    action: media_player.turn_off
-                    data:
-                      floor_id: bedrooms
+                - light.toggle: light_2
 
-  - id: !extend sw_2
-    on_multi_click:
       - timing:
-          - ON for at most 1000ms
-          - OFF for at least 10ms
-        invalid_cooldown: 10ms
+          - ON for at most 400ms
+          - OFF for at most 400ms
+          - ON for at most 400ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
         then:
           - if:
               condition:
                 and:
                   - api.connected:
-                  - or:
-                      - binary_sensor.is_on: hall_presence_state
-                      - and:
-                          - light.is_on: light_1
-                          - light.is_on: light_2
               then:
-                - light.turn_off: light_1
-                - light.turn_off: light_2
+                #- light.turn_on: light_2
+                - switch.turn_on: light_1
+                - delay: 500ms
                 - homeassistant.service:
-                    service: light.turn_off
+                    service: light.turn_on
                     data:
-                      entity_id: light.hall_presence
-              else:
-                - light.toggle: light_2
+                      entity_id: light.kitchen_led
+                - delay: 500ms
+                - homeassistant.service:
+                    service: scene.turn_on
+                    data:
+                      entity_id: scene.lights_kitchen_day
+
+  - id: !extend sw_1
+    on_multi_click:
       - timing:
-          - ON for at least 1000ms
-        invalid_cooldown: 10ms
+          - ON for at most 1000ms
+          - OFF for at least 500ms
+        invalid_cooldown: 100ms
         then:
           - if:
               condition:
-                - api.connected:
+                and:
+                  - api.connected:
+              then:
+                - light.toggle: light_2
+              else:
+                - light.toggle: light_2
+
+      - timing:
+          - ON for at least 1000ms
+        invalid_cooldown: 100ms
+        then:
+          - if:
+              condition:
+                and:
+                  - api.connected:
               then:
                 - homeassistant.service:
                     service: light.toggle
                     data:
-                      entity_id: light.hall_presence
+                      entity_id: light.exterior_wall_side
+              else:
+                - light.toggle: light_2
