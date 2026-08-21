@@ -69,12 +69,6 @@ condition:
     entity_id: input_boolean.automation_bypass_hvac
     state: "off"
 
-  - condition: state
-    entity_id: !input hvac_unit
-    state:
-      - "heat"
-      - "cool"
-
   - condition: or
     conditions:
       - condition: time
