@@ -1,5 +1,5 @@
 substitutions:
-  devicename: shellyplus2pm-lights-hall
+  devicename: shellyplus2pm-lights-kitchen
 
 esphome:
   friendly_name: Shelly Plus 2PM das Luzes da Cozinha
