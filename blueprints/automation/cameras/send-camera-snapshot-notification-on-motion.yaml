@@ -51,7 +51,7 @@ trigger:
 variables:
   notify_joao: !input notify_joao
   notify_bianca: !input notify_bianca
-  motion_sensor_name: {{ trigger.to_state.name }}
+  motion_sensor_name: "{{ trigger.to_state.name }}"
   camera: !input camera
   notification_title: !input notification_title
   notification_message: !input notification_message
