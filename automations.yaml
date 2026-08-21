@@ -862,7 +862,8 @@
     above: 50
   - condition: state
     entity_id: light.stairs_group
-    state: ''
+    state:
+    - 'on'
   actions:
   - data: {}
     target:
@@ -1998,7 +1999,7 @@
   - id: trigger_gate_close
     entity_id:
     - cover.gate
-    to: close
+    to: closed
     trigger: state
   - id: trigger_house_empty
     entity_id:
@@ -2475,8 +2476,8 @@
         clickAction: /lovelace-subviews/dashboard-ac
     action: notify.mobile_app_all
   mode: single
-- alias: Ar Condicionado - Notificar Janelas Abertas Sala
-  id: '1723937695759'
+- id: '1723937695759'
+  alias: Ar Condicionado - Notificar Janelas Abertas Sala
   description: ''
   triggers:
   - entity_id:
@@ -2488,6 +2489,17 @@
       minutes: 1
       seconds: 0
     from:
+    trigger: state
+  - entity_id:
+    - cover.living_room
+    from:
+    - open
+    to:
+    - closed
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
     trigger: state
   - entity_id:
     - binary_sensor.window_laundry
@@ -2845,7 +2857,7 @@
             - light.exterior_wall_side
           data: {}
         else:
-        - action: light.toggle
+        - action: light.turn_on
           metadata: {}
           target:
             entity_id: light.exterior_flood_led
@@ -3180,6 +3192,12 @@
       preset_mode: sleep
     target:
       entity_id: climate.hall
+  - action: climate.set_swing_mode
+    metadata: {}
+    target:
+      entity_id: climate.hall
+    data:
+      swing_mode: position_1
   mode: single
 - alias: Desligar Coluna da Suite com as Luzes
   id: '1739048652626'
@@ -3545,7 +3563,7 @@
       minutes: 5
       seconds: 0
     trigger: state
-  - id: trigger_gate_open
+  - id: trigger_gate_closing
     entity_id:
     - cover.gate
     to: closing
@@ -3567,6 +3585,11 @@
         tag: notify_gate_open_5min
         dismiss: true
     action: notify.mobile_app_all
+  - if:
+    - condition: trigger
+      id: trigger_gate_close
+    then:
+    - stop: Portão fechado
   - action: notify.mobile_app_radium
     data:
       title: Exterior
@@ -5116,9 +5139,6 @@
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
-  - condition: state
-    entity_id: sensor.time
-    state: []
   actions:
   - data:
       action_to_run: script.cover_open_if_close_with_heat
@@ -5399,6 +5419,12 @@
       preset_mode: sleep
     target:
       entity_id: climate.master_bedroom
+  - action: climate.set_swing_mode
+    metadata: {}
+    target:
+      entity_id: climate.master_bedroom
+    data:
+      swing_mode: position_1
   mode: single
 - id: '1784409320305'
   alias: Solar - Time Of Use Manhã
@@ -5680,5 +5706,5 @@
       target:
         entity_id: number.deye_inverter_maximum_battery_charge_current
       data:
-        value: '20'
+        value: '40'
   mode: single

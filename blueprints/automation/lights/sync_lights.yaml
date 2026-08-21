@@ -24,22 +24,22 @@ blueprint:
           domain: light
     sync_exclusive:
       name: Turn light off when master turns on
-      default: "off"
+      default: false
       selector:
         boolean:
     sync_on:
       name: Turn light on when master turns on
-      default: "off"
+      default: false
       selector:
         boolean:
     sync_off:
       name: Turn light off when master turns off
-      default: "off"
+      default: false
       selector:
         boolean:
     sync_off_from_slave:
       name: Turn light off when slave turns off
-      default: "off"
+      default: false
       selector:
         boolean:
 

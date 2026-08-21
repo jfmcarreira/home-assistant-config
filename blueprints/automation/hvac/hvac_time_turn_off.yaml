@@ -19,13 +19,13 @@ blueprint:
 
     run_on_weekends:
       name: Fim de Semana
-      default: "off"
+      default: false
       selector:
         boolean:
 
     weekend_tomorrow:
       name: Verificar Dia Seguinte
-      default: "off"
+      default: false
       selector:
         boolean:
 

@@ -91,19 +91,19 @@ blueprint:
     only_after_sunset:
       name: Funcionamento Exclusivo de Noite
       description: Apenas executar a automação durante a noite (após o pôr do sol)
-      default: "off"
+      default: false
       selector:
         boolean:
     disable_in_guest:
       name: Desabilitar no Modo de Convidados
       description: Não executar a automação se o modo de convidados estiver ON
-      default: "off"
+      default: false
       selector:
         boolean:
     disable_in_sleep:
       name: Desabilitar no Modo de Dormir
       description: Não executar a automação se o modo de dormir estiver ativo
-      default: "off"
+      default: false
       selector:
         boolean:
     blocker_on_entity:

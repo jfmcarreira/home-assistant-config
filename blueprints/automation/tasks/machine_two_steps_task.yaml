@@ -58,7 +58,7 @@ blueprint:
       name: Código quando a tarefa é executada (Dryer_Machine_Empty)
     send_notification:
       name: Enviar notificações
-      default: "on"
+      default: true
       selector:
         boolean:
     machine_finish_message:
