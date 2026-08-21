@@ -1,14 +1,13 @@
 blueprint:
   name: Notify camera snapshot when motion is detected
-  description:
-    "This automation blueprint creates a camera snapshot if motion is detected  and
-    sends a notification to your phone with the picture.
-    "
+  description: >
+    This automation blueprint creates a camera snapshot if motion is detected
+    and sends a notification to your phone with the picture.
   domain: automation
   input:
     motion_sensor:
       name: Motion sensor
-      description: The sensor wich triggers the snapshot creation
+      description: The sensor which triggers the snapshot creation
       selector:
         entity:
           domain: binary_sensor
@@ -21,13 +20,13 @@ blueprint:
           domain: camera
           multiple: false
     notify_joao:
-      name: Notifcar João
+      name: Notificar João
       description: Alternar para notificar o João
       selector:
         boolean: {}
       default: false
     notify_bianca:
-      name: Notifcar Bianca
+      name: Notificar Bianca
       description: Alternar para notificar a Bianca
       selector:
         boolean: {}
@@ -44,21 +43,22 @@ blueprint:
       default: "{{ motion_sensor_name }}!"
 
 trigger:
-  platform: state
-  entity_id: !input motion_sensor
-  from: "off"
-  to: "on"
+  - platform: state
+    entity_id: !input motion_sensor
+    from: "off"
+    to: "on"
 
 variables:
   notify_joao: !input notify_joao
   notify_bianca: !input notify_bianca
-  motion_sensor: !input motion_sensor
-  motion_sensor_name: "{{ state_attr('binary_sensor.backyard_camera_smart_detection', 'friendly_name') or motion_sensor }}"
+  motion_sensor_name: {{ trigger.to_state.name }}
   camera: !input camera
   notification_title: !input notification_title
   notification_message: !input notification_message
-  snapshot_create_file_path: /config/www/camera/snapshot_{{ states[camera].object_id}}.jpg
-  snapshot_access_file_path: "{{ snapshot_create_file_path | replace('/config/www','/local')}}"
+  snapshot_create_file_path: >
+    /config/www/camera/snapshot_{{ states[camera].object_id }}.jpg
+  snapshot_access_file_path: >
+    {{ snapshot_create_file_path | replace('/config/www', '/local') }}
 
 condition:
   - condition: state
@@ -66,41 +66,45 @@ condition:
     state: "off"
 
 action:
-  - service: camera.snapshot
-    entity_id: !input camera
+  - action: camera.snapshot
+    target:
+      entity_id: !input camera
     data:
       filename: "{{ snapshot_create_file_path }}"
-  - choose:
-      - conditions: "{{ notify_joao }}"
-        sequence:
-          - service: notify.mobile_app_radium
-            data:
-              title: "{{ notification_title }}"
-              message: "{{ notification_message }}"
-              data:
-                channel: Segurança
-                image: "{{ snapshot_access_file_path }}"
-                clickAction: "/lovelace-subviews/dashboard-cctv"
-                priority: high
-                persistent: false
-                ttl: 0
-                sticky: false
-                tag: !input notification_tag
-                group: "Segurança - Cameras"
+  - if:
+      - condition: template
+        value_template: "{{ notify_joao }}"
+    then:
+      - action: notify.mobile_app_radium
+        data:
+          title: "{{ notification_title }}"
+          message: "{{ notification_message }}"
+          data:
+            channel: Segurança
+            image: "{{ snapshot_access_file_path }}"
+            clickAction: "/lovelace-subviews/dashboard-cctv"
+            priority: high
+            persistent: false
+            ttl: 0
+            sticky: false
+            tag: !input notification_tag
+            group: "Segurança - Cameras"
 
-      - conditions: "{{ notify_bianca }}"
-        sequence:
-          - service: notify.mobile_app_calcium
-            data:
-              title: "{{ notification_title }}"
-              message: "{{ notification_message }}"
-              data:
-                channel: Segurança
-                image: "{{ snapshot_access_file_path }}"
-                clickAction: "/lovelace-subviews/dashboard-cctv"
-                priority: high
-                persistent: false
-                ttl: 0
-                sticky: false
-                tag: !input notification_tag
-                group: "Segurança - Cameras"
+  - if:
+      - condition: template
+        value_template: "{{ notify_bianca }}"
+    then:
+      - action: notify.mobile_app_calcium
+        data:
+          title: "{{ notification_title }}"
+          message: "{{ notification_message }}"
+          data:
+            channel: Segurança
+            image: "{{ snapshot_access_file_path }}"
+            clickAction: "/lovelace-subviews/dashboard-cctv"
+            priority: high
+            persistent: false
+            ttl: 0
+            sticky: false
+            tag: !input notification_tag
+            group: "Segurança - Cameras"

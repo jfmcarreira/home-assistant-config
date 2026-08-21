@@ -36,7 +36,7 @@ blueprint:
       name: Único Long Press
       selector:
         boolean:
-      default: []
+      default: false
 
 mode: restart
 max_exceeded: silent
