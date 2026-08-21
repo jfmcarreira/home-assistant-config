@@ -1,6 +1,9 @@
 substitutions:
   devicename: shellyplus2pm-lights-hall
 
+esphome:
+  friendly_name: Shelly 1 Quarto do Ricardo Interruptor da Cama
+
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
