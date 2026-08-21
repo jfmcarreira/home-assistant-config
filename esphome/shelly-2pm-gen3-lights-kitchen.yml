@@ -1,15 +1,9 @@
 substitutions:
-<<<<<<< HEAD
   devicename: shelly-2pm-gen3-lights-kitchen
 
 esphome:
   friendly_name: Shelly 2PM Gen3 das Luzes da Cozinha
-=======
-  devicename: shellyplus2pm-lights-kitchen
 
-esphome:
-  friendly_name: Shelly Plus 2PM das Luzes da Cozinha
->>>>>>> 7a13429 (Add shelly-2pm-gen3-lights-kitchen.yml)
 
 packages:
   esphome_base: !include packages/common.yml
