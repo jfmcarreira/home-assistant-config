@@ -1,6 +1,9 @@
 substitutions:
   devicename: shellyplus2pm-lights-hall
 
+esphome:
+  friendly_name: Shelly Plus 2PM das Luzes do Hall
+
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
