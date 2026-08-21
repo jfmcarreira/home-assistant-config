@@ -1,8 +1,8 @@
 substitutions:
-  devicename: shellyplus2pm-lights-kitchen
+  devicename: shelly-2pm-gen3-lights-kitchen
 
 esphome:
-  friendly_name: Shelly Plus 2PM das Luzes da Cozinha
+  friendly_name: Shelly 2PM Gen3 das Luzes da Cozinha
 
 packages:
   esphome_base: !include packages/common.yml
@@ -10,12 +10,12 @@ packages:
   home_state: !include packages/home_state.yml
 
   device_base: !include
-    file: packages/shelly_plus_2pm.yml
+    file: packages/shelly_2pm_gen3.yml
     vars:
-      name: Shelly Plus 2PM Kitchen
+      name: Shelly 2PM Gen3 Kitchen
 
   lights_base: !include
-    file: packages/shelly_plus_2pm_lights.yml
+    file: packages/shelly_2pm_gen3_lights.yml
     vars:
       Light_1_Name: Kitchen LED
       Light_2_Name: Kitchen Window
@@ -34,7 +34,7 @@ switch:
     output: relay_1
     restore_mode: ALWAYS_OFF
     device_id: device_light_1
-    
+
 binary_sensor:
   - platform: homeassistant
     id: kitchen_led_state
