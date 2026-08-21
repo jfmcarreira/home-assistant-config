@@ -11,24 +11,12 @@ packages:
   home_state: !include packages/home_state.yml
 
   device_base: !include
-<<<<<<< HEAD
-<<<<<<< HEAD:esphome/shelly-2pm-gen3-lights-kitchen.yml
-    file: packages/shelly_2pm_gen3.yml
-=======
     file: packages/shelly_2pm_gen3_lights.yml
->>>>>>> 9f94371 (Edit shellyplus2pm-lights-kitchen.yml):esphome/shellyplus2pm-lights-kitchen.yml
-=======
-    file: packages/shelly_2pm_gen3_lights.yml
->>>>>>> 7a13429 (Add shelly-2pm-gen3-lights-kitchen.yml)
     vars:
       name: Shelly 2PM Gen3 Kitchen
 
   lights_base: !include
-<<<<<<< HEAD
     file: packages/shelly_2pm_gen3_lights.yml
-=======
-    file: packages/shelly_plus_2pm_lights.yml
->>>>>>> 7a13429 (Add shelly-2pm-gen3-lights-kitchen.yml)
     vars:
       Light_1_Name: Kitchen LED
       Light_2_Name: Kitchen Window
