@@ -333,7 +333,7 @@ action:
                 - "{{ automation_was_running }}"
                 - condition: or
                   conditions:
-                    - "{{ house_mode == 'Off' }}"
+                    - "{{ house_mode == 'Desligada' }}"
                     - "{{ states.input_boolean.automation_sw_all_motion_lights.state == 'off' }}"
                     - "{{ not( house_mode_requirement ) }}"
               sequence:

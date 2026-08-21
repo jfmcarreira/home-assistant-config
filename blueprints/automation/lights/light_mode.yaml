@@ -48,7 +48,7 @@ action:
     choose:
       - conditions: "{{ scene_fallback != none and this.attributes.current == 1 }}"
         sequence:
-          - scene: !input scene_day
+          - scene: !input scene_fallback
     default:
       - alias: "Verificar o modo de funcionamento"
         choose:
