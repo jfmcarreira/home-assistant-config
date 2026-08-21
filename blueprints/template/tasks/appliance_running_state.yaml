@@ -27,7 +27,7 @@ binary_sensor:
   availability: >
     {{ states(power_sensor_entity) not in ('unknown', 'unavailable') }}
   state: >
-    {% if is_state('binary_sensor.dish_wash_machine_state', 'on') %}
+    {% if is_state(this.entity_id, 'on') %}
         {%- if ( states(power_sensor_entity) | int(0) ) < 3 %}
             False
         {%- else %}
