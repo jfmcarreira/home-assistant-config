@@ -10,7 +10,11 @@ packages:
   home_state: !include packages/home_state.yml
 
   device_base: !include
+<<<<<<< HEAD:esphome/shelly-2pm-gen3-lights-kitchen.yml
     file: packages/shelly_2pm_gen3.yml
+=======
+    file: packages/shelly_2pm_gen3_lights.yml
+>>>>>>> 9f94371 (Edit shellyplus2pm-lights-kitchen.yml):esphome/shellyplus2pm-lights-kitchen.yml
     vars:
       name: Shelly 2PM Gen3 Kitchen
 
