@@ -100,7 +100,7 @@ condition:
       - condition: not
         conditions:
           - condition: trigger
-            id: "0"
+            id: "trigger_send_notification"
       - condition: and
         conditions:
           - condition: template
