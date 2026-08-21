@@ -100,11 +100,21 @@ condition:
 
   - condition: numeric_state
     entity_id: sensor.deye_inverter_pv_power_average
-    above: 1500
+    above: 2000
 
   - condition: numeric_state
     entity_id: sensor.house_power_consumption_average
     below: 2000
+
+  - condition: template
+    value_template: >
+      {% set energy_left = states('sensor.battery_energy_left_to_charge') | float(0) %}
+      {% set solar_remaining = states('sensor.solar_forecast_today_remaining') | float(0) %}
+      {{ solar_remaining > energy_left * 3.0 }}
+
+  - condition: numeric_state
+    entity_id: sensor.deye_inverter_battery
+    above: 50
 
   - alias: "Window Closed"
     condition: state
@@ -192,6 +202,9 @@ action:
           }}
         for:
           minutes: 10
+      - trigger: numeric_state
+        entity_id: sensor.deye_inverter_battery
+        below: 95
       - trigger: numeric_state
         entity_id: sensor.deye_inverter_pv_power_average
         below: 1500
