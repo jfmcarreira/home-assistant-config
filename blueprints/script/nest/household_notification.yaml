@@ -18,7 +18,7 @@ blueprint:
         text:
     persistent:
       name: Notificação Persistente
-      default: "false"
+      default: false
       selector:
         boolean:
     priority:
