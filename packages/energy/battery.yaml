@@ -34,3 +34,13 @@ template:
             Charging
           {% endif %}
 
+
+      - name: battery_energy_left_to_charge
+        unique_id: battery_energy_left_to_charge
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: measurement
+        state: >-
+          {% set capacity = 11.8 %}
+          {% set soc = states('sensor.deye_inverter_battery') | float(0) %}
+          {{ (capacity * (1 - soc / 100)) | round(2) }}
