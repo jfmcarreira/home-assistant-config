@@ -1,0 +1,17 @@
+substitutions:
+  devicename: shelly25-exterior-flood-lights
+
+packages:
+  esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+
+  device_base: !include
+    file: packages/shelly25.yml
+    vars:
+      name: Shelly25 Exterior Flood Lights
+
+  lights_base: !include
+    file: packages/shelly25_lights.yml
+    vars:
+      Light_1_Name: Exterior Flood Led Back
+      Light_2_Name: Exterior Flood Led Side
