@@ -66,6 +66,12 @@ variables:
 trigger:
   - id: trigger_task_overdue
     entity_id: !input task_needs_attention
+    from: "off"
+    platform: state
+    to: "on"
+
+  - id: trigger_task_done
+    entity_id: !input task_needs_attention
     from: "on"
     platform: state
     to: "off"
@@ -84,6 +90,7 @@ condition:
   - condition: or
     conditions:
       - "{{ trigger.id == 'trigger_task_overdue' }}"
+      - "{{ trigger.id == 'trigger_task_done' }}"
       - "{{ trigger.id == 'trigger_send_notification' }}"
       - condition: state
         entity_id: !input task_needs_attention

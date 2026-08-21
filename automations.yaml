@@ -3550,8 +3550,8 @@
     target:
       entity_id: input_datetime.last_rain
   mode: single
-- alias: Alertar Portão em Movimento
-  id: '1759755648327'
+- id: '1759755648327'
+  alias: Alertar Portão em Movimento
   description: ''
   triggers:
   - id: trigger_gate_open
@@ -3575,7 +3575,7 @@
   - id: trigger_gate_close
     entity_id:
     - cover.gate
-    to: close
+    to: closed
     trigger: state
   conditions: []
   actions:
