@@ -2503,7 +2503,7 @@
     trigger: state
   - entity_id:
     - binary_sensor.window_laundry
-    - cover.living_room
+    - binary_sensor.window_living_room
     - binary_sensor.kitchen_door
     - binary_sensor.front_door
     from: 'off'
@@ -4258,29 +4258,9 @@
     - conditions:
       - condition: trigger
         id:
-        - long_up
-      sequence:
-      - data:
-          skip_condition: true
-        target:
-          entity_id: automation.task_cat_litter_clean
-        action: automation.trigger
-    - conditions:
-      - condition: trigger
-        id:
         - short_down
       sequence:
       - data: {}
-        target:
-          entity_id: automation.task_cat_litter_change
-        action: automation.trigger
-    - conditions:
-      - condition: trigger
-        id:
-        - long_down
-      sequence:
-      - data:
-          skip_condition: true
         target:
           entity_id: automation.task_cat_litter_change
         action: automation.trigger
