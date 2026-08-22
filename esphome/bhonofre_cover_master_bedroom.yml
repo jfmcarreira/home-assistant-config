@@ -18,6 +18,5 @@ packages:
   esphome_web: !include packages/webserver.yml
   cover: !include packages/bhonofre_cover.yml
 
-
-# wifi:
-#   use_address: "10.20.107.94"
+esphome:
+  friendly_name: Bhonofre Estores Suite

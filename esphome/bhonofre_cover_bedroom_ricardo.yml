@@ -17,3 +17,6 @@ packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
   cover: !include packages/bhonofre_cover.yml
+
+esphome:
+  friendly_name: Bhonofre Estores Quarto do Ricardo

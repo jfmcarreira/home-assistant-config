@@ -2,6 +2,9 @@ substitutions:
   devicename: bhpzemmain
   FriendlyName: BHPZEM Main
 
+esphome:
+  friendly_name: BHPZEM Main
+
 # esphome:
 #   # Reset sensor
 #   on_boot:

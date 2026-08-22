@@ -1,6 +1,9 @@
 substitutions:
   devicename: shelly25_bathroom_main
 
+esphome:
+  friendly_name: Shelly 2PM Gen3 da Casa de Banho Principal
+  
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml

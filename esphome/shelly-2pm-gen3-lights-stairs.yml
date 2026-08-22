@@ -1,6 +1,9 @@
 substitutions:
   devicename: shelly-2pm-gen3-lights-stairs
 
+esphome:
+  friendly_name: Shelly 2PM Gen3 das Luzes das Escadas
+  
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
