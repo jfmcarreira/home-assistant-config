@@ -1,5 +1,5 @@
 substitutions:
-  devicename: shelly25_lights_kitchen
+  devicename: shelly25-lights-kitchen
 
 packages:
   esphome_base: !include packages/common.yml
@@ -128,3 +128,7 @@ binary_sensor:
                       entity_id: light.exterior_wall_side
               else:
                 - light.toggle: light_2
+
+
+wifi:
+  use_address: 10.20.107.223
