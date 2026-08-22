@@ -5617,6 +5617,15 @@
         value:
           active_choice: number
           number: 96
+  - trigger: battery.level_crossed_threshold
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 55
   - trigger: power.crossed_threshold
     target:
       entity_id: sensor.deye_inverter_pv_power_average
@@ -5688,3 +5697,37 @@
       data:
         value: '40'
   mode: single
+- id: '1787434704097'
+  alias: 'Estores - Limpar a Última Acção '
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - cover.kitchen
+    - cover.living_room
+    - cover.laundry
+    - cover.bedroom_rc
+    - cover.bathroom
+    - cover.office
+    - cover.stairs
+    - cover.master_bedroom
+    - cover.bedroom_ricardo
+    - cover.bedroom_henrique
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.entity_id == ''cover.stairs'' }}'
+      sequence:
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.cover_stairs_last_action
+        data:
+          option: Manualmente
+    default:
+    - action: select.select_option
+      target:
+        entity_id: select.cover_{{ trigger.entity_id.split('.')[1] }}_last_action
+      data:
+        option: Manualmente
+  mode: parallel
