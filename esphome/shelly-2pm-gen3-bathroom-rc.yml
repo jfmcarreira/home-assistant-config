@@ -25,13 +25,25 @@ packages:
       devicename: ${devicename}
       input_a_light: light_1
       input_b_light: light_2
-      fan:
+
+# fan:
+#   - platform: template
+#     id: bathroom_fan
+#     on_state:
+#       - homeassistant.service:
+#           service: homeassistant.toggle
+#           data:
+#             entity_id: fan.bathroom_rc
+
+espnow:
+  peers:
+    - 2c:f4:32:7d:f0:c3
 
 fan:
   - platform: template
     id: bathroom_fan
+    internal: true
     on_state:
-      - homeassistant.service:
-          service: homeassistant.toggle
-          data:
-            entity_id: fan.bathroom_rc
+      - espnow.send:
+          address: 2c:f4:32:7d:f0:c3
+          data: [0x01]
