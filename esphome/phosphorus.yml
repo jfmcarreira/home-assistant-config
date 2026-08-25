@@ -13,12 +13,12 @@ esp32:
     version: recommended
 
 packages:
-  - !include ../packages/common.yml
-  - !include ../packages/webserver.yml
-  - !include ../packages/home_state.yml
-  - !include deye_hybrid_1p.yaml
-  - !include deye_fan_controller.yaml
-  - !include water_heater_solar_panel.yaml
+  - !include packages/common.yml
+  - !include packages/webserver.yml
+  - !include packages/home_state.yml
+  - !include phosphorus/deye_hybrid_1p.yaml
+  - !include phosphorus/deye_fan_controller.yaml
+  - !include phosphorus/water_heater_solar_panel.yaml
 
 api:
   batch_delay: 10ms
