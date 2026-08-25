@@ -33,4 +33,4 @@ fan:
       - homeassistant.service:
           service: homeassistant.toggle
           data:
-            entity_id: an.bathroom_master_bedroom
+            entity_id: fan.bathroom_master_bedroom
