@@ -1,0 +1,342 @@
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: vertical-stack
+    cards:
+      - type: heading
+        heading: "Areia das Gatas"
+        heading_style: title
+      - type: entity
+        entity: sensor.grocy_stock_cat_litter_sand
+        name: "Stock de Areia"
+        state_color: false
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: binary_sensor.cat_litter_box_need_clean
+            name: "Necessita de Limpeza"
+          - type: tile
+            entity: sensor.cat_litter_box_last_clean
+            name: "Última Limpeza"
+          - type: tile
+            entity: binary_sensor.cat_litter_box_need_change
+            name: "Necessita de Substituição"
+          - type: tile
+            entity: sensor.cat_litter_box_last_change
+            name: "Última Substituição"
+          - type: tile
+            entity: automation.task_cat_litter_clean
+          - type: tile
+            entity: automation.task_cat_litter_change
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: button
+            entity: binary_sensor.cat_litter_box_need_clean
+            name: "Limpar a Areia"
+            icon: mdi:broom
+            icon_height: 35px
+            show_name: true
+            show_icon: true
+            tap_action:
+              action: call-service
+              service: automation.trigger
+              target:
+                entity_id: automation.task_cat_litter_clean
+            hold_action:
+              action: call-service
+              service: automation.trigger
+              data:
+                skip_condition: true
+              target:
+                entity_id: automation.task_cat_litter_clean
+          - type: button
+            entity: binary_sensor.cat_litter_box_need_change
+            name: "Trocar a Areia"
+            icon: mdi:swap-horizontal
+            icon_height: 35px
+            show_name: true
+            show_icon: true
+            tap_action:
+              action: call-service
+              service: automation.trigger
+              target:
+                entity_id: automation.task_cat_litter_change
+            hold_action:
+              action: call-service
+              service: automation.trigger
+              data:
+                skip_condition: true
+              target:
+                entity_id: automation.task_cat_litter_change
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: vertical-stack
+    cards:
+    - type: heading
+      heading: "Filtro da Agua"
+      heading_style: title
+    - type: entity
+      entity: sensor.grocy_stock_water_filters
+      name: "Stock de Filtros"
+      state_color: false
+    - type: tile
+      entity: sensor.water_filter_remaing_days
+      name: "Duração Restante"
+      vertical: false
+      features_position: bottom
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: binary_sensor.water_filter_needs_replacement
+          name: "Substituir Filtro"
+        - type: tile
+          entity: input_number.water_filter_replacement_days
+        - type: tile
+          entity: automation.task_water_filter_replacement
+        - type: tile
+          entity: sensor.water_filter_replacement_last_done
+          name: "Última Substituição"
+    - type: button
+      entity: binary_sensor.water_filter_needs_replacement
+      name: "Trocar o Filtro"
+      icon: mdi:filter
+      icon_height: 20px
+      show_name: true
+      show_icon: true
+      tap_action:
+        action: call-service
+        service: automation.trigger
+        target:
+          entity_id: automation.task_water_filter_replacement
+      hold_action:
+        action: call-service
+        service: automation.trigger
+        data:
+          skip_condition: true
+        target:
+          entity_id: automation.task_water_filter_replacement
+
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: vertical-stack
+    cards:
+    - type: heading
+      heading: "Máquina de Lavar a Roupa"
+      heading_style: title
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: sensor.washing_machine_state
+          name: "Estado"
+        - type: tile
+          entity: sensor.task_washing_clothes_last_done
+          name: "Roupa Lavada"
+        - type: tile
+          entity: binary_sensor.wash_machine_wet_clothes
+          name: "Roupa Para Retirar"
+        - type: tile
+          entity: sensor.task_remove_washing_clothes_last_done
+          name: "Roupa Retirada"
+        - type: tile
+          entity: binary_sensor.washing_machine_door
+          name: "Porta"
+        - type: tile
+          entity: sensor.device_power_washing_machine
+          name: "Potência Consumida"
+        - type: tile
+          entity: automation.task_washing_machine
+        - type: tile
+          entity: sensor.device_energy_washing_machine
+          name: "Energia Total"
+    - type: tile
+      entity: binary_sensor.wash_machine_wet_clothes
+      name: "Retirar Roupa Lavada"
+      icon: mdi:hanger
+      vertical: true
+      features_position: bottom
+      tap_action:
+        action: call-service
+        service: automation.trigger
+        target:
+          entity_id: automation.task_washing_machine
+      icon_tap_action:
+        action: call-service
+        service: automation.trigger
+        target:
+          entity_id: automation.task_washing_machine
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: vertical-stack
+    cards:
+    - type: heading
+      heading: "Máquina de Secar a Roupa"
+      heading_style: title
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: sensor.dryer_machine_state
+          name: "Estado"
+        - type: tile
+          entity: sensor.task_dryer_last_done
+          name: "Secagem da Roupa"
+        - type: tile
+          entity: binary_sensor.dryer_machine_need_emtpy
+          name: "Roupa Para Retirar"
+        - type: tile
+          entity: sensor.task_dryer_empty_last_done
+          name: "Roupa Retirada"
+        - type: tile
+          entity: binary_sensor.dryer_machine_door
+          name: "Porta"
+        - type: tile
+          entity: sensor.device_power_dryer_machine
+          name: "Potência Consumida"
+        - type: tile
+          entity: automation.task_dryer_machine
+        - type: tile
+          entity: sensor.device_energy_dryer_machine
+          name: "Energia Total"
+    - type: tile
+      entity: binary_sensor.dryer_machine_need_emtpy
+      name: "Retirar Roupa Seca"
+      icon: mdi:tshirt-crew
+      vertical: true
+      features_position: bottom
+      tap_action:
+        action: call-service
+        service: automation.trigger
+        target:
+          entity_id: automation.task_dryer_machine
+      icon_tap_action:
+        action: call-service
+        service: automation.trigger
+        target:
+          entity_id: automation.task_dryer_machine
+
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: vertical-stack
+    view_layout:
+      column: 1
+    cards:
+    - type: heading
+      heading: "Máquina de Lavar a Loiça"
+      heading_style: title
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: sensor.dish_wash_machine_state
+          name: "Estado"
+        - type: tile
+          entity: sensor.task_dish_wash_machine_clean_last_done
+          name: "Loiça Lavada"
+        - type: tile
+          entity: binary_sensor.dish_wash_machine_clean
+          name: "Loiça Para Retirar"
+        - type: tile
+          entity: sensor.task_dish_wash_machine_empty_last_done
+          name: "Loiça Retirada"
+        - type: tile
+          entity: binary_sensor.dish_wash_machine_door
+          name: "Porta"
+        - type: tile
+          entity: sensor.device_power_dish_wash_machine
+          name: "Potência Consumida"
+        - type: tile
+          entity: automation.task_dish_wash_machine
+        - type: tile
+          entity: sensor.device_energy_dish_wash_machine
+          name: "Energia Total"
+    - type: tile
+      entity: input_boolean.reminder_dish_washing_machine
+      name: "Lembrete"
+      vertical: true
+    - type: tile
+      entity: binary_sensor.dish_wash_machine_clean
+      name: "Retirar Loiça"
+      icon: mdi:silverware
+      vertical: true
+      features_position: bottom
+      tap_action:
+        action: call-service
+        service: automation.trigger
+        target:
+          entity_id: automation.task_dish_wash_machine
+      icon_tap_action:
+        action: call-service
+        service: automation.trigger
+        target:
+          entity_id: automation.task_dish_wash_machine
+
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: vertical-stack
+    view_layout:
+      column: 1
+    cards:
+    - type: heading
+      heading: "Outras"
+      heading_style: title
+    - type: heading
+      heading: "Ar Condicionados"
+      heading_style: subtitle
+    - type: tile
+      entity: sensor.air_conditioner_filter_change_living_room
+      name: "Sala"
+      vertical: false
+      features_position: bottom

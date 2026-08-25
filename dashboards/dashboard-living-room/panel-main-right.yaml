@@ -1,3 +1,113 @@
+- type: custom:calendar-card-pro
+  card_mod:
+    style: |
+      :host {
+        height: auto !important;
+        min-height: 0 !important;
+      }
+
+      ha-card {
+        height: auto !important;
+        min-height: 0 !important;
+      }
+  days_to_show: 10
+  compact_days_to_show: 10
+  compact_events_complete_days: true
+  entities:
+    - entity: calendar.family
+      show_time: true
+      show_location: false
+      show_description: false
+  filter_duplicates: true
+  first_day_of_week: sunday
+  week_separator_width: 1px
+  today_indicator: dot
+  show_location: false
+  weather:
+    position: event
+    date:
+      show_conditions: true
+      show_high_temp: true
+      show_low_temp: false
+      show_uv_index: false
+      uv_index_threshold: 0
+      icon_size: 14px
+      font_size: 12px
+      color: var(--primary-text-color)
+    event:
+      show_conditions: true
+      show_temp: true
+      show_uv_index: false
+      uv_index_threshold: 0
+      icon_size: 14px
+      font_size: 12px
+      color: var(--primary-text-color)
+    entity: weather.home
+
+
+- type: custom:mod-card
+  view_layout:
+    column: 1
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+    type: custom:auto-entities
+    show_empty: false
+    card:
+      type: grid
+      columns: 2
+      square: false
+    card_param: cards
+    filter:
+      template: |
+        {% set max_items = 2 %}
+        {% set ns = namespace(cards=[]) %}
+
+        {% set candidates = [
+          {
+            'entity': 'input_boolean.extended_away_mode',
+            'show': is_state('input_boolean.extended_away_mode', 'on'),
+            'name': 'Modo Férias'
+          },
+          {
+            'entity': 'input_boolean.gate_automatic_open',
+            'show': is_state('input_boolean.gate_automatic_open', 'off'),
+            'name': 'Abertura Portão'
+          },
+          {
+            'entity': 'input_boolean.walking_routine',
+            'show': is_state('input_boolean.walking_routine', 'on'),
+            'name': 'Modo Caminhada'
+          },
+          {
+            'entity': 'input_boolean.house_guest',
+            'show': true,
+            'name': 'Convidados'
+          },
+          {
+            'entity': 'binary_sensor.rain',
+            'show': true,
+            'name': 'Chuva Detectada'
+          }
+        ] %}
+
+        {% for item in candidates %}
+          {% if ns.cards | count < max_items %}
+            {% if item.show  %}
+              {% set ns.cards = ns.cards + [{
+                'type': 'tile',
+                'entity': item.entity,
+                'name': item.name
+              }] %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {{ ns.cards | tojson }}
+
 # - type: custom:mod-card
 #   view_layout:
 #     column: 2
@@ -413,51 +523,6 @@
     show_header_toggle: true
   show_empty: false
 
-- type: custom:calendar-card-pro
-  card_mod:
-    style: |
-      :host {
-        height: auto !important;
-        min-height: 0 !important;
-      }
-
-      ha-card {
-        height: auto !important;
-        min-height: 0 !important;
-      }
-  days_to_show: 10
-  compact_days_to_show: 10
-  compact_events_complete_days: true
-  entities:
-    - entity: calendar.family
-      show_time: true
-      show_location: false
-      show_description: false
-  filter_duplicates: true
-  first_day_of_week: sunday
-  week_separator_width: 1px
-  today_indicator: dot
-  show_location: false
-  weather:
-    position: event
-    date:
-      show_conditions: true
-      show_high_temp: true
-      show_low_temp: false
-      show_uv_index: false
-      uv_index_threshold: 0
-      icon_size: 14px
-      font_size: 12px
-      color: var(--primary-text-color)
-    event:
-      show_conditions: true
-      show_temp: true
-      show_uv_index: false
-      uv_index_threshold: 0
-      icon_size: 14px
-      font_size: 12px
-      color: var(--primary-text-color)
-    entity: weather.home
 
 - type: custom:auto-entities
   card:

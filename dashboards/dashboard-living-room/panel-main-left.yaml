@@ -84,69 +84,6 @@
   view_layout:
     column: 1
 
-- type: custom:mod-card
-  view_layout:
-    column: 1
-  style:
-    hui-horizontal-stack-card$: |
-      :host {
-        height: auto;
-      }
-  card:
-    type: custom:auto-entities
-    show_empty: false
-    card:
-      type: grid
-      columns: 2
-      square: false
-    card_param: cards
-    filter:
-      template: |
-        {% set max_items = 2 %}
-        {% set ns = namespace(cards=[]) %}
-
-        {% set candidates = [
-          {
-            'entity': 'input_boolean.extended_away_mode',
-            'show': is_state('input_boolean.extended_away_mode', 'on'),
-            'name': 'Modo Férias'
-          },
-          {
-            'entity': 'input_boolean.gate_automatic_open',
-            'show': is_state('input_boolean.gate_automatic_open', 'off'),
-            'name': 'Abertura Portão'
-          },
-          {
-            'entity': 'input_boolean.walking_routine',
-            'show': is_state('input_boolean.walking_routine', 'on'),
-            'name': 'Modo Caminhada'
-          },
-          {
-            'entity': 'input_boolean.house_guest',
-            'show': true,
-            'name': 'Convidados'
-          },
-          {
-            'entity': 'binary_sensor.rain',
-            'show': true,
-            'name': 'Chuva Detectada'
-          }
-        ] %}
-
-        {% for item in candidates %}
-          {% if ns.cards | count < max_items %}
-            {% if item.show  %}
-              {% set ns.cards = ns.cards + [{
-                'type': 'tile',
-                'entity': item.entity,
-                'name': item.name
-              }] %}
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-
-        {{ ns.cards | tojson }}
-
 - type: conditional
   conditions:
     - entity: sensor.salicru_rack_ups_status
@@ -259,6 +196,8 @@
     entities:
       pv:
         entity: sensor.deye_inverter_pv_power
+        tap_action: navigate
+        navigation_path: /lovelace-subviews/dashboard-solar
         labels:
           - entity: sensor.deye_inverter_today_pv_production
             unit: kWh
@@ -312,6 +251,9 @@
     power_unit: W
     subtract_devices_from_home: false
     threshold_mode: calculations
+
+- type: entity
+  entity: sensor.battery_time_left_to_discharge_2
 
 - type: tile
   view_layout:

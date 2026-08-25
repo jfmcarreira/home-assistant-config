@@ -166,7 +166,7 @@
           - show_name: true
             show_icon: true
             type: button
-            entity: light.exterior_flood_led
+            entity: light.exterior_flood_led_back
             name: Projector Traseiras
             icon_height: 50px
           - show_name: true
