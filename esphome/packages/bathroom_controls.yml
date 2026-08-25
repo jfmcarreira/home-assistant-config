@@ -86,10 +86,7 @@ binary_sensor:
         invalid_cooldown: 100ms
         then:
           - logger.log: "Long 1 Press"
-          - homeassistant.service:
-              service: homeassistant.toggle
-              data:
-                entity_id: ${fan}
+          - fan.toggle: bathroom_fan
 
   - id: !extend sw_2
     on_multi_click:

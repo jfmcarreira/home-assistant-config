@@ -2,8 +2,8 @@ substitutions:
   devicename: shelly25_bathroom_main
 
 esphome:
-  friendly_name: Shelly 2PM Gen3 da Casa de Banho Principal
-  
+  friendly_name: Shelly 2.5 da Casa de Banho Principal
+
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
@@ -25,4 +25,12 @@ packages:
       devicename: ${devicename}
       input_a_light: light_2
       input_b_light: light_1
-      fan: fan.main_bathroom
+
+fan:
+  - platform: template
+    id: bathroom_fan
+    on_state:
+      - homeassistant.service:
+          service: homeassistant.toggle
+          data:
+            entity_id: fan.main_bathroom
