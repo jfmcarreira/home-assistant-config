@@ -1,19 +1,19 @@
 substitutions:
-  devicename: sonoff-basic-01
+  devicename: blitzwolf-ss4-bathroom-rc-fan
 
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
 
 esphome:
-  friendly_name: Sonoff Basic Kitchen Pantry
+  friendly_name: BlitzWolf SS4 Bathrom RC Fan
 
 esp8266:
   board: esp01_1m
 
-light:
-  - id: light_1
-    name: Kitchen Pantry
+fan:
+  - id: fan_1
+    name: Bathroom RC
     platform: binary
     output: relay_1
     restore_mode: RESTORE_DEFAULT_OFF
@@ -21,4 +21,4 @@ light:
 output:
   - platform: gpio
     id: relay_1
-    pin: GPIO12
+    pin: GPIO05
