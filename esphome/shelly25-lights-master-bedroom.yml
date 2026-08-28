@@ -1,6 +1,9 @@
 substitutions:
   devicename: shelly25-lights-master-bedroom
 
+esphome:
+  friendly_name: Shelly 2.5 das Luzes da Suite
+    
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml

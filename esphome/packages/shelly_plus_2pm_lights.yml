@@ -12,6 +12,9 @@ light:
     output: relay_1
     restore_mode: RESTORE_DEFAULT_OFF
     device_id: device_light_1
+    on_state:
+      - delay: 1s
+      - component.update: power_meter
 
   - id: light_2
     name: ${Light_2_Name}
@@ -19,10 +22,14 @@ light:
     output: relay_2
     restore_mode: RESTORE_DEFAULT_OFF
     device_id: device_light_2
+    on_state:
+      - delay: 1s
+      - component.update: power_meter
 
 sensor:
   - platform: ade7953_i2c
-    update_interval: 5s
+    id: power_meter
+    update_interval: 60s
     irq_pin: GPIO27 # Prevent overheating by setting this
     voltage:
       id: shelly_voltage
@@ -96,7 +103,6 @@ sensor:
     name: Light Daily Energy ${Light_2_Name}
     power_id: power_channel_b
     unit_of_measurement: Wh
-    restore: false
     state_class: total_increasing
     device_class: energy
     icon: "mdi:meter-electric"

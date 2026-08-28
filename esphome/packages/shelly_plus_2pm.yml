@@ -87,7 +87,6 @@ sensor:
     id: temp_analog_reading
     pin: GPIO35
     attenuation: 12db
-    update_interval: 10s
 
 status_led:
   pin:

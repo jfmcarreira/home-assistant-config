@@ -1,6 +1,9 @@
 substitutions:
   devicename: shelly25-lights-room-henrique
 
+esphome:
+  friendly_name: Shelly 2.5 das Luzes do Quarto do Henrique
+
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml

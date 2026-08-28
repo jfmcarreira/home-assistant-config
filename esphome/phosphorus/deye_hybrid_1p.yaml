@@ -21,6 +21,7 @@ uart:
 modbus:
   - id: modbus_1
     uart_id: uart_modbus
+    turnaround_time: 60ms
     #flow_control_pin: GPIO4 # Uncomment and set appropriate pin if your TTL converter requires it
 
 modbus_controller:
@@ -29,7 +30,7 @@ modbus_controller:
     modbus_id: modbus_1
     setup_priority: -10
     update_interval: 5s
-    command_throttle: 60ms
+
     offline_skip_updates: 3
 
 globals:

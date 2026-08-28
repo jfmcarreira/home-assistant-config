@@ -29,7 +29,7 @@ sensor:
     unit_of_measurement: "L/min"
     id: water_usage
     icon: "mdi:water-pump"
-    update_interval: 1s
+    update_interval: 5s
     count_mode:
       rising_edge: INCREMENT
       falling_edge: DISABLE

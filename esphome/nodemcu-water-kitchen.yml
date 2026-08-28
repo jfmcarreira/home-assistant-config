@@ -29,7 +29,7 @@ sensor:
     name: "Water Flow Dish-washing Machine"
     state_class: measurement
     icon: "mdi:water-pump"
-    update_interval: 1s
+    update_interval: 2s
     count_mode:
       rising_edge: INCREMENT
       falling_edge: DISABLE
@@ -58,7 +58,7 @@ sensor:
     id: water_flow_kitchen_cold
     state_class: measurement
     icon: "mdi:water-pump"
-    update_interval: 1s
+    update_interval: 2s
     count_mode:
       rising_edge: INCREMENT
       falling_edge: DISABLE
@@ -88,7 +88,7 @@ sensor:
     id: water_flow_kitchen_hot
     state_class: measurement
     icon: "mdi:water-pump"
-    update_interval: 1s
+    update_interval: 5s
     count_mode:
       rising_edge: INCREMENT
       falling_edge: DISABLE
@@ -106,23 +106,23 @@ sensor:
       filters:
         - multiply: 0.0015151515
 
-  - platform: template
-    name: "Water Flow Kitchen Sink"
-    unit_of_measurement: "L/min"
-    device_class: volume_flow_rate
-    state_class: measurement
-    icon: "mdi:water-pump"
-    lambda: |-
-      return id(water_flow_kitchen_cold).state + id(water_flow_kitchen_hot).state;
-    update_interval: 1s
+  #- platform: template
+  #  name: "Water Flow Kitchen Sink"
+  #  unit_of_measurement: "L/min"
+  #  device_class: volume_flow_rate
+  #  state_class: measurement
+  #  icon: "mdi:water-pump"
+  #  lambda: |-
+  #    return id(water_flow_kitchen_cold).state + id(water_flow_kitchen_hot).state;
+  #  update_interval: 5s
 
-  - platform: template
-    name: "Water Meter Kitchen Sink"
-    unit_of_measurement: "L"
-    device_class: water
-    state_class: total_increasing
-    icon: mdi:gauge
-    lambda: |-
-      return id(water_meter_kitchen_cold).state + id(water_meter_kitchen_hot).state;
-    update_interval: 1s
+  #- platform: template
+  #  name: "Water Meter Kitchen Sink"
+  #  unit_of_measurement: "L"
+  #  device_class: water
+  #  state_class: total_increasing
+  #  icon: mdi:gauge
+  #  lambda: |-
+  #    return id(water_meter_kitchen_cold).state + id(water_meter_kitchen_hot).state;
+  #  update_interval: 5s
 

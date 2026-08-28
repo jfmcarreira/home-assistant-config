@@ -1,18 +1,19 @@
 esphome:
   name: "${devicename}"
-  on_boot:
-    - priority: -100
-      then:
-        - wait_until:
-            condition:
-              api.connected:
-            timeout: 60s
-        - if:
-            condition:
-              not:
-                api.connected:
-            then:
-              - wifi.disable:
+  # on_boot:
+  #   - priority: -100
+  #     then:
+  #       - wait_until:
+  #           condition:
+  #             api.connected:
+  #           timeout: 60s
+  #       - if:
+  #           condition:
+  #             not:
+  #               api.connected:
+  #           then:
+  #             - wifi.disable:
+
 wifi:
   domain: .home
   ssid: !secret esp_ssid
