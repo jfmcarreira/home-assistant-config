@@ -8,7 +8,8 @@ template:
         state: >-
           {{ (states('sensor.water_flow_washing_machine') | float(0)) +
              (states('sensor.water_flow_dish_washing_machine') | float(0)) +
-             (states('sensor.water_flow_kitchen_sink') | float(0)) +
+             (states('sensor.water_flow_kitchen_sink_hot') | float(0)) +
+             (states('sensor.water_flow_kitchen_sink_cold') | float(0)) +
              (states('sensor.water_flow_garden') | float(0)) +
              (states('sensor.water_flow_cleaning') | float(0))
           }}
@@ -21,7 +22,8 @@ template:
         state: >-
           {{ (states('sensor.water_meter_washing_machine') | float(0)) +
              (states('sensor.water_meter_dish_washing_machine') | float(0)) +
-             (states('sensor.water_meter_kitchen_sink') | float(0)) +
+             (states('sensor.water_meter_kitchen_sink_hot') | float(0)) +
+             (states('sensor.water_meter_kitchen_sink_cold') | float(0)) +
              (states('sensor.water_meter_garden') | float(0)) +
              (states('sensor.water_meter_cleaning') | float(0))
           }}
