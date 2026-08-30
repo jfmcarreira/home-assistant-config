@@ -1,6 +1,8 @@
 substitutions:
   devicename: shelly25-exterior-switches
 
+  
+  
 packages:
   esphome_base: !include packages/common.yml
   esphome_web: !include packages/webserver.yml
@@ -11,6 +13,7 @@ packages:
       name: Shelly25 Exterior Switches
 
 esphome:
+  friendly_name: Shelly 2.5 dos Interruptores da Rua
   devices:
     - id: device_switch_1
       name: gate_door
@@ -18,7 +21,7 @@ esphome:
 button:
   - platform: output
     id: gate_door_open
-    output: relay_1
+    output: relay_2
     duration: 2000ms
 
 lock:
