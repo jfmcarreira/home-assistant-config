@@ -393,15 +393,10 @@
     title: Rés do Chão
   entities:
     - entity: light.kitchen
-      secondary_info: last-changed
     - entity: light.laundry
-      secondary_info: last-changed
     - entity: light.office
-      secondary_info: last-changed
     - entity: light.bedroom_rc
-      secondary_info: last-changed
     - entity: light.bathroom_rc
-      secondary_info: last-changed
   state_filter:
     - "on"
 
@@ -538,6 +533,7 @@
         area: outside
     exclude:
       - entity_id: binary_sensor.driveway_camera_car
+      - entity_id: binary_sensor.backyard_camera_car
   sort:
     method: area
     numeric: false
@@ -562,3 +558,13 @@
       - binary_sensor.frigate_zone_driveway_gate_person
       - binary_sensor.frigate_zone_driveway_gate_car
       - binary_sensor.frigate_zone_kitchen_door_person
+
+- type: logbook
+  title: Atividade
+  hours_to_show: 0.25
+  target:
+    entity_id:
+      - climate.water_heater
+      - climate.portable_dehumidifier
+      - switch.water_heater
+      - switch.dehumidifier

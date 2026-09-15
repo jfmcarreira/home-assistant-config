@@ -232,7 +232,7 @@
         navigation_path: "#panel-media"
       hold_action:
         action: navigate
-        navigation_path: /lovelace-subviews/multimedia
+        navigation_path: /app/d5369777_music_assistant
     - type: custom:button-card
       size: 65%
       state_display: "no"

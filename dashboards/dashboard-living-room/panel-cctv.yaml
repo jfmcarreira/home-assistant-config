@@ -9,7 +9,6 @@
     - entity: binary_sensor.front_camera_motion
     - entity: switch.front_camera_review_alerts
     - entity: switch.front_camera_review_detections
-    - entity: input_boolean.cctv_notify_front_camera
   camera_image: camera.front
   aspect_ratio: "16:9"
 - camera_view: auto
@@ -22,7 +21,6 @@
     - entity: binary_sensor.driveway_camera_motion
     - entity: switch.driveway_camera_review_alerts
     - entity: switch.driveway_camera_review_detections
-    - entity: input_boolean.cctv_notify_driveway_camera
   camera_image: camera.driveway
   title: Entrada
   aspect_ratio: "16:9"
@@ -37,7 +35,6 @@
     - entity: binary_sensor.backyard_camera_motion
     - entity: switch.backyard_camera_review_alerts
     - entity: switch.backyard_camera_review_detections
-    - entity: input_boolean.cctv_notify_backyard_camera
   camera_image: camera.backyard
   aspect_ratio: "16:9"
 - camera_view: auto

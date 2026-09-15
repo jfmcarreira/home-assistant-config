@@ -234,7 +234,7 @@
       - options: {}
         entity_id: light.master_bedroom_bathroom_*
       - options: {}
-        area: IT
+        area: it
   sort:
     method: area
     numeric: false

@@ -35,7 +35,7 @@
       playlists:
         enabled: true
         limit: 25
-        favorites_only: true
+        favorites_only: false
       podcasts:
         enabled: true
         limit: 25

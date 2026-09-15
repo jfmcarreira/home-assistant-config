@@ -201,6 +201,9 @@
         labels:
           - entity: sensor.deye_inverter_today_pv_production
             unit: kWh
+          - entity: sensor.solar_forecast_today_remaining
+            icon: mdi:trending-up
+            unit: kWh
       battery:
         - entity: sensor.deye_inverter_battery_power
           battery_soc: sensor.deye_inverter_battery
@@ -226,6 +229,8 @@
           unit: kWh
         - entity: sensor.deye_inverter_today_battery_charge
           unit: kWh
+        - entity: number.deye_inverter_time_of_use_soc
+          unit: "%"
       devices:
         - entity: sensor.device_group_power_machines
           icon: mdi:washing-machine
@@ -253,7 +258,7 @@
     threshold_mode: calculations
 
 - type: entity
-  entity: sensor.battery_time_left_to_discharge_2
+  entity: sensor.battery_time_left_to_discharge
 
 - type: tile
   view_layout:
