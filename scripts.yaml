@@ -300,15 +300,6 @@ routine_exit_house_to_work_joao:
       action: script.turn_on
     - action: script.sequence_door_open
       data: {}
-    - wait_for_trigger:
-      - trigger: state
-        entity_id:
-        - binary_sensor.radium_is_charging
-        from:
-        - 'off'
-        to:
-        - 'on'
-      continue_on_timeout: false
     - continue_on_error: true
       data: {}
       action: script.turn_on
@@ -602,12 +593,6 @@ routine_exit_house_all_off:
         - stairs
         floor_id: bedrooms
       action: light.turn_off
-    - action: script.device_control_magnesium
-      target: {}
-      data:
-        operation: screen_off
-      continue_on_error: true
-      enabled: false
     - action: media_player.turn_off
       metadata: {}
       data: {}
@@ -789,48 +774,6 @@ routine_night_mode:
   alias: Routina Modo Noite
   description: ''
   fields: {}
-device_control_magnesium:
-  sequence:
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ operation == ''screen_on'' }}'
-      sequence:
-      - action: notify.mobile_app_magnesium
-        data:
-          message: command_screen_on
-    - conditions:
-      - condition: template
-        value_template: '{{ operation == ''screen_off'' }}'
-      sequence:
-      - action: notify.mobile_app_magnesium
-        data:
-          message: command_screen_off_timeout
-          data:
-            command: 30000
-      - action: notify.mobile_app_magnesium
-        data:
-          message: command_launch_app
-          data:
-            package_name: io.homeassistant.companion.android
-    - conditions:
-      - condition: template
-        value_template: '{{ operation == ''reolink'' }}'
-      sequence:
-      - action: notify.mobile_app_magnesium
-        data:
-          message: command_screen_on
-      - action: notify.mobile_app_magnesium
-        data:
-          message: command_launch_app
-          data:
-            package_name: com.mcu.reolink
-  fields:
-    operation:
-      selector:
-        text: {}
-  alias: device_control_magnesium
-  description: ''
 routine_gate_open_auto_close:
   sequence:
   - if:
@@ -1263,3 +1206,60 @@ campainha_notificacao_sonora_google_duplicar:
         url: http://10.20.107.2/local/door_bell.wav
   alias: Campainha - Notificação Sonora Quartos
   description: ''
+cctv_analyse_front_camera:
+  sequence:
+  - action: llmvision.image_analyzer
+    data:
+      provider: 01M1MJWSYWNG2741GD56NMKXTD
+      model: gpt-4o-mini
+      message: 'Resume o que se encontra visível de forma curta, objetiva e em português
+        de Portugal.
+
+        Apresenta tudo como observação direta. Não especules nem acrescentes detalhes
+        irrelevantes.'
+      include_filename: false
+      max_tokens: 200
+      image_entity:
+      - camera.front
+      response_format: text
+    response_variable: response_description
+  - variables:
+      result:
+        description: '{{ response_description.response_text }}'
+  - stop: ''
+    response_variable: result
+  alias: Analisar a Câmara da Frente
+  description: Analisa a imagem atual da câmara da frente e descreve o que está visível.
+    Usa quando o utilizador perguntar o que está na frente da casa.
+analisar_a_camara_da_frente_duplicar:
+  sequence:
+  - action: llmvision.image_analyzer
+    data:
+      provider: 01M1MJWSYWNG2741GD56NMKXTD
+      model: gpt-4o-mini
+      message: 'Resume o que se encontra visível de forma curta, objetiva e em português
+        de Portugal.
+
+        Apresenta tudo como observação direta. Não especules nem acrescentes detalhes
+        irrelevantes.'
+      include_filename: false
+      max_tokens: 200
+      response_format: text
+      image_entity:
+      - camera.driveway
+    response_variable: response_description
+  - variables:
+      result:
+        description: '{{ response_description.response_text }}'
+  - stop: ''
+    response_variable: result
+  alias: Analisar a Câmara da Entrada
+  description: Analisa a imagem atual da câmara da entrada/portão e descreve o que
+    está visível. Usa quando o utilizador perguntar o que está na entrada do portão
+    ou na fachada poente ou junto á cozinha. Oi se perguntar pelos carros
+llm_script_for_music_assistant_voice_requests:
+  alias: LLM Script for Music Assistant voice requests
+  use_blueprint:
+    path: music-assistant/llm_voice_script.yaml
+    input:
+      default_player: media_player.home_assistant_voice_office_ma

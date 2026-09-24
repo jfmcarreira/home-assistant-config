@@ -56,18 +56,6 @@ trigger:
       minutes: 10
 
   - trigger: numeric_state
-    entity_id: sensor.temperature_outside
-    below: input_number.house_target_low_temperature
-    for:
-      minutes: 10
-
-  - trigger: numeric_state
-    entity_id: sensor.temperature_outside
-    above: input_number.house_target_high_temperature
-    for:
-      minutes: 10
-
-  - trigger: numeric_state
     entity_id: sensor.deye_inverter_pv_power_average
     above: 1500
     for:

@@ -447,6 +447,14 @@
   - condition: numeric_state
     entity_id: sensor.sun_solar_elevation
     above: 20
+  - condition: state
+    entity_id: weather.home
+    state:
+    - sunny
+    - clear-night
+    - exceptional
+    - unknown
+    - unavailable
   actions:
   - data:
       action_to_run: cover.close_cover
@@ -487,8 +495,8 @@
     target:
       entity_id: cover.master_bedroom
   mode: single
-- alias: Fechar Estores Fachada Sul
-  id: '1661196402455'
+- id: '1661196402455'
+  alias: Fechar Estores Fachada Sul
   description: ''
   triggers:
   - hours: '10'
@@ -499,12 +507,13 @@
     minutes: '30'
     seconds: '00'
     trigger: time_pattern
-  - entity_id: sensor.temperature_outside
+  - entity_id:
+    - sensor.temperature_outside
     for:
       hours: 0
       minutes: 30
       seconds: 0
-    above: 23
+    above: 25
     trigger: numeric_state
   - trigger: state
     entity_id:
@@ -2793,7 +2802,7 @@
       blocker_on_entity: light.bathroom_rc
       disable_in_sleep: true
       presence_sensor: none
-      no_motion_wait: 10
+      no_motion_wait: 30
       illuminance_cutoff: 110
       illuminance_sensor: sensor.light_bathroom_rc
 - alias: Trigger Abrir Cancela
@@ -2841,27 +2850,14 @@
             entity_id: light.kitchen_door
           data: {}
       button_long:
-      - if:
-        - condition: light.is_on
-          target:
-            entity_id: light.exterior_flood_led
-          options:
-            for: 00:00:00
-        then:
-        - action: light.turn_on
-          metadata: {}
-          target:
-            entity_id:
-            - light.kitchen_door
-            - light.exterior_wall_back
-            - light.exterior_wall_side
-          data: {}
-        else:
-        - action: light.turn_on
-          metadata: {}
-          target:
-            entity_id: light.exterior_flood_led
-          data: {}
+      - action: light.turn_on
+        metadata: {}
+        target:
+          entity_id:
+          - light.kitchen_door
+          - light.exterior_wall_back
+          - light.exterior_wall_side
+        data: {}
 - alias: task_trigger_change_cat_litter
   id: '1735385296449'
   description: ''
@@ -4444,6 +4440,13 @@
             active_choice: number
             number: 50
             unit_of_measurement: °C
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: weather.home
+      state:
+      - sunny
+      - exceptional
   actions:
   - action: switch.turn_on
     metadata: {}
@@ -5025,7 +5028,7 @@
     entity_id:
     - sun.sun
     attribute: elevation
-    below: 25
+    below: 15
   conditions: []
   actions:
   - action: switch.turn_off
@@ -5324,7 +5327,7 @@
     target:
       entity_id: number.deye_inverter_maximum_battery_charge_current
     data:
-      value: '60'
+      value: '100'
   mode: single
 - id: '1782917968041'
   alias: AC Sala - Desligar Quando Pessoas Chegam a Casa
@@ -5474,81 +5477,6 @@
       entity_id: number.deye_inverter_time_of_use_soc
     data:
       value: '30'
-  mode: single
-- id: '1784676590159'
-  alias: Frigate - Controlar Detections
-  description: ''
-  triggers:
-  - trigger: state
-    entity_id: binary_sensor.notify_home
-  conditions: []
-  actions:
-  - if:
-    - condition: occupancy.is_detected
-      target:
-        entity_id: binary_sensor.notify_home
-      options:
-        behavior: any
-        for: 00:00:00
-    then:
-    - action: switch.turn_off
-      metadata: {}
-      target:
-        entity_id:
-        - switch.driveway_camera_review_detections
-        - switch.front_camera_review_detections
-        - switch.backyard_camera_review_detections
-      data: {}
-    else:
-    - action: switch.turn_on
-      metadata: {}
-      target:
-        entity_id:
-        - switch.driveway_camera_review_detections
-        - switch.front_camera_review_detections
-        - switch.backyard_camera_review_detections
-      data: {}
-  mode: single
-- id: '1784676714096'
-  alias: Frigate - Controlar Alerts
-  description: ''
-  triggers:
-  - trigger: state
-    entity_id: binary_sensor.notify_home
-  - trigger: time
-    at: 07:00:00
-  - trigger: time
-    at: '23:00:00'
-  conditions: []
-  actions:
-  - if:
-    - condition: occupancy.is_detected
-      target:
-        entity_id: binary_sensor.notify_home
-      options:
-        behavior: any
-        for: 00:00:00
-    - condition: time
-      before: '23:00:00'
-      after: 07:00:00
-    then:
-    - action: switch.turn_off
-      metadata: {}
-      target:
-        entity_id:
-        - switch.front_camera_review_alerts
-        - switch.driveway_camera_review_alerts
-        - switch.backyard_camera_review_alerts
-      data: {}
-    else:
-    - action: switch.turn_on
-      metadata: {}
-      target:
-        entity_id:
-        - switch.front_camera_review_alerts
-        - switch.driveway_camera_review_alerts
-        - switch.backyard_camera_review_alerts
-      data: {}
   mode: single
 - id: '1784936257030'
   alias: AC Suite -  Arrefecimento Modo Férias
@@ -5731,3 +5659,106 @@
       data:
         option: Manualmente
   mode: parallel
+- id: '1788465709338'
+  alias: cctv_vision_front_garden
+  description: ''
+  use_blueprint:
+    path: valentinfrlch/event_summary.yaml
+    input:
+      camera_entities:
+      - camera.front
+      motion_sensors:
+      - binary_sensor.frigate_zone_front_garden_person
+      provider: 01M1MJWSYWNG2741GD56NMKXTD
+      model: ''
+      message: 'Resume o evento observado de forma curta, objetiva e em português
+        de Portugal. Foca-te apenas em pessoas, animais, veículos e outros elementos
+        em movimento. Descreve ações, deslocações e interações relevantes, ignorando
+        cenário e objetos estáticos.
+
+        Apresenta tudo como observação direta. Nunca menciones imagens, frames, capturas
+        ou o processo de análise.
+
+        Não especules nem acrescentes detalhes irrelevantes. Se houver atividade,
+        descreve apenas o que aconteceu.
+
+
+        Se não houver atividade relevante, responde exatamente:
+
+        "Nenhuma atividade observada."'
+      notify_device:
+      - 41985ed9029605740a11629268909bad
+      notification_delivery: Consolidated
+      notification_time: at {{ now().strftime("%H:%M") }}
+      tap_navigate: /lovelace-subviews/dashboard-cctv
+      run_conditions:
+      - condition: occupancy.is_not_detected
+        target:
+          entity_id: binary_sensor.notify_home
+        options:
+          behavior: any
+          for: 00:00:00
+- id: '1789252945598'
+  alias: 'Parar routinas de fechar o portão '
+  description: ''
+  triggers:
+  - trigger: gate.closed
+    target:
+      entity_id: cover.gate
+    options:
+      for: 00:00:00
+  conditions: []
+  actions:
+  - action: script.turn_off
+    metadata: {}
+    target:
+      entity_id:
+      - script.routine_gate_open_auto_close_sensors
+      - script.routine_gate_open_auto_close_kitchen_door
+    data: {}
+  mode: single
+- id: '1789490148687'
+  alias: cctv_frigate_mode
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: sensor.house_mode
+  - trigger: state
+    entity_id: binary_sensor.notify_home
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state:
+        - Evening
+        - 'On'
+      sequence:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.frigate_profile
+        data:
+          option: home
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state:
+        - Sleep
+        - Night
+      sequence:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.frigate_profile
+        data:
+          option: armed_home
+    default:
+    - action: select.select_option
+      metadata: {}
+      target:
+        entity_id: select.frigate_profile
+      data:
+        option: armed
+  mode: single
