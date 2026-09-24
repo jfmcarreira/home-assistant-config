@@ -1263,3 +1263,45 @@ llm_script_for_music_assistant_voice_requests:
     path: music-assistant/llm_voice_script.yaml
     input:
       default_player: media_player.home_assistant_voice_office_ma
+hvac_solar_living_room:
+  alias: AC Sala - Apoio Solar (Script)
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit: climate.living_room
+      temperature_sensor: sensor.temperature_living_room
+hvac_solar_master_bedroom:
+  alias: AC Suite - Apoio Solar (Script)
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit: climate.master_bedroom
+      temperature_sensor: sensor.temperature_master_bedroom
+hvac_solar_bedroom_henrique:
+  alias: AC Quarto do Henrique - Apoio Solar (Script)
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit: climate.bedroom_henrique
+      temperature_sensor: sensor.temperature_bedroom_henrique
+hvac_solar_bedroom_ricardo:
+  alias: AC Quarto do Ricardo - Apoio Solar (Script)
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit: climate.bedroom_ricardo
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+hvac_solar_office:
+  alias: AC Escritório - Apoio Solar (Script)
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit: climate.office
+      temperature_sensor: sensor.temperature_office
+hvac_solar_hall:
+  alias: AC Hall - Apoio Solar (Script)
+  use_blueprint:
+    path: hvac/hvac_time_turn_on_solar.yaml
+    input:
+      hvac_unit: climate.hall
+      temperature_sensor: sensor.temperature_hall

@@ -27,6 +27,13 @@ blueprint:
           domain: binary_sensor
           device_class: window
 
+    hvac_script:
+      name: Script de Apoio Solar
+      selector:
+        entity:
+          filter:
+            - domain: script
+
 mode: single
 max_exceeded: silent
 
@@ -133,80 +140,4 @@ condition:
             value_template: "{{ (states(temperature_sensor) | float - states('input_number.house_target_high_temperature') | float) > 0 }}"
 
 action:
-  - if:
-      - condition: numeric_state
-        entity_id: !input temperature_sensor
-        below: input_number.house_target_low_temperature
-    then:
-      - action: climate.set_hvac_mode
-        target:
-          entity_id: !input hvac_unit
-        data:
-          hvac_mode: heat
-      - action: climate.set_temperature
-        target:
-          entity_id: !input hvac_unit
-        data:
-          temperature: "{{ states('input_number.house_target_low_temperature') | float(0) }}"
-    else:
-      - action: climate.set_hvac_mode
-        target:
-          entity_id: !input hvac_unit
-        data:
-          hvac_mode: cool
-      - action: climate.set_temperature
-        target:
-          entity_id: !input hvac_unit
-        data:
-          temperature: "{{ states('input_number.house_target_high_temperature') | float(0) }}"
-
-  - action: climate.set_fan_mode
-    data:
-      fan_mode: auto
-    target:
-      entity_id: !input hvac_unit
-
-  - action: climate.set_swing_mode
-    data:
-      swing_mode: swing
-    target:
-      entity_id: !input hvac_unit
-
-  - alias: "Wait for a solar HVAC stop condition"
-    wait_for_trigger:
-      - trigger: template
-        value_template: >-
-          {{
-            states(temperature_sensor) | float(0)
-            >= states('input_number.house_target_low_temperature') | float(0) + 1
-          }}
-        for:
-          minutes: 10
-      - trigger: template
-        value_template: >-
-          {{
-            states(temperature_sensor) | float(0)
-            <= states('input_number.house_target_high_temperature') | float(0) - 1
-          }}
-        for:
-          minutes: 10
-      - trigger: numeric_state
-        entity_id: sensor.deye_inverter_battery
-        below: 95
-      - trigger: numeric_state
-        entity_id: sensor.deye_inverter_pv_power_average
-        below: 1500
-        for:
-          minutes: 10
-      - trigger: state
-        entity_id: binary_sensor.notify_home
-        to: "on"
-        for:
-          seconds: 5
-      - trigger: state
-        entity_id: !input hvac_unit
-        to: "off"
-
-  - action: climate.turn_off
-    target:
-      entity_id: !input hvac_unit
+  - action: !input hvac_script

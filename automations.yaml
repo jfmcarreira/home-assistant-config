@@ -5147,6 +5147,7 @@
       - climate.living_room
       temperature_sensor: sensor.temperature_living_room
       window_sensor: binary_sensor.window_living_room
+      hvac_script: script.hvac_solar_living_room
 - id: '1779569424753'
   alias: AC Suite - Apoio Solar
   description: ''
@@ -5157,6 +5158,7 @@
       - climate.master_bedroom
       temperature_sensor: sensor.temperature_master_bedroom
       window_sensor: binary_sensor.window_master_bedroom
+      hvac_script: script.hvac_solar_master_bedroom
 - id: '1779569459729'
   alias: AC Quarto do Henrique - Apoio Solar
   description: ''
@@ -5167,6 +5169,7 @@
       - climate.bedroom_henrique
       temperature_sensor: sensor.temperature_bedroom_henrique
       window_sensor: binary_sensor.window_bedroom_henrique
+      hvac_script: script.hvac_solar_bedroom_henrique
 - id: '1779569485941'
   alias: AC Quarto do Ricardo - Apoio Solar
   description: ''
@@ -5177,6 +5180,7 @@
       - climate.bedroom_ricardo
       temperature_sensor: sensor.temperature_bedroom_ricardo
       window_sensor: binary_sensor.window_bedroom_ricardo
+      hvac_script: script.hvac_solar_bedroom_ricardo
 - id: '1779569520542'
   alias: AC Escritório - Apoio Solar
   description: ''
@@ -5187,6 +5191,7 @@
       - climate.office
       temperature_sensor: sensor.temperature_office
       window_sensor: binary_sensor.window_office
+      hvac_script: script.hvac_solar_office
 - id: '1779569574241'
   alias: AC Hall - Apoio Solar
   description: ''
@@ -5197,6 +5202,7 @@
       - climate.hall
       temperature_sensor: sensor.temperature_hall
       window_sensor: binary_sensor.window_bedroom_floor
+      hvac_script: script.hvac_solar_hall
 - id: '1779786705961'
   alias: Desligar Ar Condicionados no Modo de Limpeza
   description: ''
