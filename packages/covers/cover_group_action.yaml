@@ -88,58 +88,63 @@ script:
         required: true
         selector:
           text:
+    variables:
+      last_action: >
+        {% set actions = {
+          'open_sunrise': 'Sunrise',
+          'close_sunset': 'Sunset',
+          'close_in_rain': 'Chuva',
+          'close_with_heat': 'Sol'
+        } %}
+        {{ actions.get(control_switch, 'Grupo') }}
+
     sequence:
       - repeat:
           for_each: "{{ covers_list }}"
           sequence:
-            - condition: "{{ is_state('input_boolean.cover_control_' + control_switch + '_' + repeat.item, 'on') }}"
-            - choose:
-                - conditions: "{{ 'script.' in action_to_run }}"
-                  sequence:
-                    - service: "{{ action_to_run }}"
-                      data:
-                        action_cover: "{{ repeat.item }}"
-              default:
-                - service: "{{ action_to_run }}"
-                  target:
-                    entity_id: "cover.{{ repeat.item }}"
-            - delay:
-                seconds: 10
-            - if:
-                - "{{ repeat.item == 'stairs' }}"
-              then:
-                - action: input_select.select_option
-                  data:
-                    option: >
-                      {% if control_switch == "open_sunrise" %}
-                        Sunrise
-                      {% elif control_switch == "close_sunset" %}
-                        Sunset
-                      {% elif control_switch == "close_in_rain" %}
-                        Chuva
-                      {% elif control_switch == "close_with_heat" %}
-                        Sol
-                      {% else %}
-                        Grupo
-                      {% endif %}
-                  target:
-                    entity_id: input_select.cover_stairs_last_action
-              else:
-                - action: select.select_option
-                  data:
-                    option: >
-                      {% if control_switch == "open_sunrise" %}
-                        Sunrise
-                      {% elif control_switch == "close_sunset" %}
-                        Sunset
-                      {% elif control_switch == "close_in_rain" %}
-                        Chuva
-                      {% elif control_switch == "close_with_heat" %}
-                        Sol
-                      {% else %}
-                        Grupo
-                      {% endif %}
-                  target:
-                    entity_id: select.cover_{{ repeat.item }}_last_action
+            - action: script.turn_on
+              target:
+                entity_id: script.cover_group_action_worker
+              data:
+                variables:
+                  cover_name: "{{ repeat.item }}"
+                  action_to_run: "{{ action_to_run }}"
+                  control_switch: "{{ control_switch }}"
+                  last_action: "{{ last_action }}"
 
 
+  cover_group_action_worker:
+    alias: Controlo Individual de Estore
+    mode: parallel
+    max: 20
+    sequence:
+      - condition: "{{ is_state('input_boolean.cover_control_' + control_switch + '_' ~ cover_name,'on') }}"
+
+      - choose:
+          - conditions: "{{ 'script.' in action_to_run }}"
+            sequence:
+              - service: "{{ action_to_run }}"
+                data:
+                  action_cover: "{{ cover_name }}"
+
+        default:
+          - service: "{{ action_to_run }}"
+            target:
+              entity_id: "cover.{{ cover_name }}"
+      - delay:
+          seconds: 10
+      - if:
+          - "{{ cover_name == 'stairs' }}"
+        then:
+          - action: input_select.select_option
+            target:
+              entity_id: input_select.cover_stairs_last_action
+            data:
+              option: "{{ last_action }}"
+
+        else:
+          - action: select.select_option
+            target:
+              entity_id: "select.cover_{{ cover_name }}_last_action"
+            data:
+              option: "{{ last_action }}"
