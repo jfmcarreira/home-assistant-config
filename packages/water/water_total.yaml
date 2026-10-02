@@ -5,6 +5,14 @@ template:
         device_class: volume_flow_rate
         unit_of_measurement: "L/min"
         state_class: measurement
+        availability: >-
+          {{ has_value('sensor.water_flow_washing_machine') and
+            has_value('sensor.water_flow_dish_washing_machine') and
+            has_value('sensor.water_flow_kitchen_sink_hot') and
+            has_value('sensor.water_flow_kitchen_sink_cold') and
+            has_value('sensor.water_flow_garden') and
+            has_value('sensor.water_flow_cleaning')
+          }}
         state: >-
           {{ (states('sensor.water_flow_washing_machine') | float(0)) +
              (states('sensor.water_flow_dish_washing_machine') | float(0)) +
@@ -19,6 +27,14 @@ template:
         device_class: water
         unit_of_measurement: "L"
         state_class: total_increasing
+        availability: >-
+          {{ has_value('sensor.water_meter_washing_machine') and
+            has_value('sensor.water_meter_dish_washing_machine') and
+            has_value('sensor.water_meter_kitchen_sink_hot') and
+            has_value('sensor.water_meter_kitchen_sink_cold') and
+            has_value('sensor.water_meter_garden') and
+            has_value('sensor.water_meter_cleaning')
+          }}
         state: >-
           {{ (states('sensor.water_meter_washing_machine') | float(0)) +
              (states('sensor.water_meter_dish_washing_machine') | float(0)) +
