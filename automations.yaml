@@ -4479,6 +4479,14 @@
   alias: Água Quente - Apoio Fotovoltaico Desligar
   description: ''
   triggers:
+  - trigger: switch.turned_on
+    target:
+      entity_id: switch.water_heater
+    options:
+      for:
+        hours: 0
+        minutes: 10
+        seconds: 0
   - trigger: battery.level_changed
     target:
       entity_id: sensor.deye_inverter_battery
@@ -4537,9 +4545,17 @@
     - condition: numeric_state
       entity_id: sensor.temperature_water_heater_top
       above: input_number.water_heater_solar_excess_temperature
-    - condition: numeric_state
-      entity_id: sensor.deye_inverter_battery
-      below: 95
+    - condition: and
+      conditions:
+      - condition: numeric_state
+        entity_id: sensor.deye_inverter_pv_power_average
+        below: 3000
+      - condition: numeric_state
+        entity_id: sensor.deye_inverter_battery
+        below: 95
+      - condition: numeric_state
+        entity_id: sensor.deye_inverter_battery_power
+        below: 1500
   actions:
   - action: switch.turn_off
     metadata: {}

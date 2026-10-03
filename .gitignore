@@ -29,3 +29,5 @@ zigbee2mqtt/**
 **/__pycache__/
 .cache/**
 solcast_solar/**
+llmvision/events.db
+.opencode_agents_md.sha256
