@@ -1,12 +1,15 @@
 blueprint:
   name: "[Devices] Shelly Device Two Buttons"
   description: >
-    Triggers for Shelly with two buttons
+    Route short and long gestures from two Shelly buttons to supplied sequences,
+    accepting both supported device-trigger spellings. Optionally reuse button1's
+    long action for button2. A new gesture restarts any running sequence.
 
   domain: automation
   input:
     device:
       name: Device
+      description: Shelly device-registry entry supplying button1 and button2 events.
       selector:
         device:
           filter:
@@ -14,26 +17,31 @@ blueprint:
               manufacturer: Shelly
     button_1_short:
       name: Botão 1 (Short)
+      description: Actions for button1 single or single_push triggers.
       selector:
         action:
       default: []
     button_2_short:
       name: Botão 2 (Short)
+      description: Actions for button2 single or single_push triggers.
       selector:
         action:
       default: []
     button_1_long:
       name: Botão 1 (Long)
+      description: Actions for button1 long presses, also used by button2 when merge_long is enabled.
       selector:
         action:
       default: []
     button_2_long:
       name: Botão 2 (Long)
+      description: Actions for button2 long presses when merge_long is disabled.
       selector:
         action:
       default: []
     merge_long:
       name: Único Long Press
+      description: Make either button's long press run button1's long-action sequence.
       selector:
         boolean:
       default: false

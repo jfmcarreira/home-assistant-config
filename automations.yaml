@@ -1,6 +1,6 @@
 - alias: Desligar Tudo se a Casa Estiver Vazia
   id: '1651441102640'
-  description: ''
+  description: Run the house-wide shutdown after household presence has been off for 30 minutes, unless extended-away mode is enabled.
   triggers:
   - trigger: state
     entity_id:
@@ -24,7 +24,7 @@
   mode: single
 - alias: Sincronizar Luzes do Hall
   id: '1652213927460'
-  description: ''
+  description: Turn off the upstairs hall and side lights together when either is switched off; switching one on does not turn on the other.
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
@@ -36,7 +36,7 @@
       sync_off_from_slave: true
 - alias: Controlo da Luz da Despensa com a Porta
   id: '1653347146334'
-  description: ''
+  description: Keep the pantry light on while its door sensor is on, and turn it off on other door-state changes. This control is independent of house mode.
   trigger:
   - trigger: state
     entity_id:
@@ -61,7 +61,7 @@
   mode: single
 - id: '1653354558079'
   alias: Lights Turn On Exterior With Kitchen Door
-  description: ''
+  description: Light the rear exterior when the kitchen door opens at night and the rear light is off. Wait up to two hours for the door to close or the rear light to go off; if the kitchen-door light is still on, allow one further minute before switching off the rear light.
   triggers:
   - entity_id:
     - binary_sensor.kitchen_door
@@ -114,7 +114,7 @@
   mode: single
 - alias: Lights Turn On Kitchen Light
   id: '1653947527310'
-  description: ''
+  description: Turn on the kitchen LED when the kitchen door opens with sun elevation below 5 degrees. No automatic switch-off is performed here.
   trigger:
   - trigger: state
     entity_id:
@@ -134,7 +134,7 @@
   mode: single
 - alias: Tarefa Máquina de Lavar Roupa
   id: '1655079401495'
-  description: ''
+  description: Record washing-cycle completion and energy usage, then record clothes removal when the door opens or the task is acknowledged. Mobile finish reminders are disabled for this instance.
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
     input:
@@ -152,7 +152,7 @@
       notification_action_id: washing_machine_clothes_off
 - id: '1655462775855'
   alias: Tarefa do Filtro da Água
-  description: ''
+  description: Track water-filter replacement, remind residents at home before 21:00 when replacement is due, and consume one filter from Grocy stock when completion is recorded.
   use_blueprint:
     path: tasks/tracked_tasks.yaml
     input:
@@ -171,7 +171,7 @@
           transaction_type: CONSUME
 - alias: Tarefa da Máquina de Secar
   id: '1655496730769'
-  description: ''
+  description: Record dryer-cycle completion and energy usage, then mark emptying when the door opens or the task is acknowledged. Mobile finish reminders are disabled for this instance.
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
     input:
@@ -189,7 +189,7 @@
       task_done_door_time: 0
 - alias: Sincronizar Luzes da Cozinha
   id: '1656374052136'
-  description: ''
+  description: Switch off the kitchen LED and window lights together when either is switched off, without synchronizing their switch-on actions.
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
@@ -201,7 +201,7 @@
       sync_off_from_slave: true
 - alias: Controlar Luz da Sala Day/Night
   id: '1657064426365'
-  description: ''
+  description: Apply the living-room night or day lighting scene when the window light turns on, according to binary_sensor.night_mode.
   trigger:
   - trigger: state
     entity_id:
@@ -228,7 +228,7 @@
   mode: single
 - alias: Luzes por Mov. nas Escadas
   id: '1657408193240'
-  description: ''
+  description: Use stair motion to light the wall below 50 lux in On or Evening mode, with a 30-second no-motion timeout. Sleep blocks activation; manually lit stairs are protected by the shared motion-light controller.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -246,7 +246,7 @@
       presence_sensor: none
 - id: '1657981029516'
   alias: Activar Rotina de Chegar a Casa
-  description: ''
+  description: Start arrival lighting at night when Joao or Bianca returns, or a gate-area camera detects a vehicle while someone is still considered away by the hysteresis sensors. Do not start an already-running arrival script.
   triggers:
   - id: joao_trigger
     entity_id:
@@ -312,7 +312,7 @@
   mode: restart
 - alias: Controlar Luz da Cozinha Day/Night
   id: '1658004941042'
-  description: ''
+  description: Apply the kitchen day or night scene whenever the kitchen LED turns on, using binary_sensor.night_mode to select the lighting level.
   trigger:
   - trigger: state
     entity_id:
@@ -339,7 +339,7 @@
   mode: single
 - id: '1658177571375'
   alias: Tarefa da Máquina de Lavar a Loiça
-  description: ''
+  description: Record dishwasher completion and energy usage, remind residents at home to empty it, and mark emptying after its door stays open for two minutes or the notification is acknowledged.
   use_blueprint:
     path: tasks/machine_two_steps_task.yaml
     input:
@@ -358,7 +358,7 @@
       task_extra_actions: []
 - alias: 'Desligar Luzes da Despensa com Temporizador '
   id: '1659187275200'
-  description: ''
+  description: Switch off the pantry light after it has been on for 30 minutes, provided kitchen motion has been clear for at least two minutes.
   triggers:
   - type: turned_on
     device_id: 157313d13fb325a54a0135d57c4b348d
@@ -385,7 +385,7 @@
   mode: single
 - id: '1661088354800'
   alias: Fechar Estores Fachada Poente
-  description: ''
+  description: Close heat-enabled kitchen and master-bedroom shutters when the house is empty without guests, outside temperature exceeds 25 C, sun azimuth is west of 179 degrees, elevation exceeds 20 degrees, and the weather state permits it.
   triggers:
   - entity_id:
     - sensor.temperature_outside
@@ -466,7 +466,7 @@
   mode: single
 - id: '1661120403152'
   alias: Abrir Estores da Suite Fim de Semana
-  description: ''
+  description: Open the closed master-bedroom shutter at 10:00 on non-workdays or a declared day off, unless extended-away mode is enabled.
   triggers:
   - trigger: time_pattern
     hours: '10'
@@ -497,7 +497,7 @@
   mode: single
 - id: '1661196402455'
   alias: Fechar Estores Fachada Sul
-  description: ''
+  description: Between 10:00 and 16:00, close heat-enabled stairs, ground-floor bedroom and laundry shutters above 25 C while the house is empty, without guests or extended-away mode.
   triggers:
   - hours: '10'
     minutes: '00'
@@ -552,7 +552,7 @@
   mode: single
 - alias: Luzes por Mov. no Escritório
   id: '1661643560066'
-  description: ''
+  description: Automatically light the office below 10 lux while someone is home, except during Sleep. Wait ten seconds after motion clears; notify the ESPHome button controller to prevent a double toggle when automatic lighting starts.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -572,7 +572,7 @@
       disable_switch_button: button.shelly25_lights_office_auto_on
 - alias: Trigger Botões da Cama da Suite
   id: '1665241197738'
-  description: ''
+  description: Short bedside presses toggle the corresponding master-bedroom bed light. A long press turns on the bedroom if the monitored upstairs lights are all off; otherwise it switches off the configured upstairs areas.
   triggers:
   - device_id: 0917b5ae15c6e0fb6aa33f8f6a9fc492
     domain: shelly
@@ -658,7 +658,7 @@
   mode: single
 - id: '1668971106955'
   alias: Desligar Coluna do Hall com as Luzes
-  description: ''
+  description: Stop playback on the upstairs hall speaker when the hall light group turns off.
   triggers:
   - entity_id:
     - light.hall_group
@@ -675,7 +675,7 @@
   mode: single
 - id: Lights Xmas Auto On
   alias: Ligar Luzes da Arvore de Natal Tarde
-  description: ''
+  description: Turn on the Christmas tree when someone is home, sun elevation is below 15 degrees, and the time is between 16:00 and 23:30. Recheck on arrival and when elevation crosses the threshold.
   triggers:
   - entity_id: binary_sensor.notify_home
     to: 'on'
@@ -699,6 +699,7 @@
   mode: restart
 - id: Lights Xmas Auto Off
   alias: Desligar Luzes de Natal
+  description: Switch off the seasonal Christmas-tree light every day at 02:00.
   triggers:
   - at: 02:00:00
     trigger: time
@@ -709,7 +710,7 @@
   mode: restart
 - id: '1669853123196'
   alias: Luzes por Mov. na Cozinha
-  description: ''
+  description: Light the kitchen on motion below 50 lux, with a 30-second no-motion timeout. Guest and Sleep modes block activation; a repeat within ten seconds can keep automatic lighting on.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -728,7 +729,7 @@
       no_motion_wait: 30
 - alias: Termoventilador - Desligar Automáticamente
   id: '1669853572469'
-  description: ''
+  description: Turn off both the portable-heater thermostat and its power switch when the selected bathroom's lights go out, or after one hour of continuous switch operation.
   trigger:
   - trigger: state
     entity_id:
@@ -786,7 +787,7 @@
   mode: single
 - alias: device_toggle_portable_heater_bathroom_main_light_switch
   id: '1669853950698'
-  description: ''
+  description: Toggle the portable-heater thermostat on a long press of button 2 on the main-bathroom ESPHome light controller.
   trigger:
   - trigger: event
     event_type: esphome.button_pressed
@@ -814,7 +815,7 @@
   mode: single
 - id: '1670373784711'
   alias: Xmas Lights Outside
-  description: ''
+  description: Recheck exterior Christmas lighting at sunset, 16:01 and 03:01. Keep it on only after sunset during the 16:00-to-03:00 window; otherwise switch it off.
   triggers:
   - trigger: sun
     event: sunset
@@ -848,7 +849,7 @@
   mode: restart
 - id: '1670674527026'
   alias: Desligar Luzes das Escadas com a Luminosidade
-  description: ''
+  description: Switch off all stair lighting when the top sensor exceeds 60 lux for five minutes, or lights have been on for five minutes and the sensor is above 50 lux.
   triggers:
   - entity_id: sensor.light_stairs_top
     for:
@@ -885,7 +886,7 @@
   mode: single
 - id: '1675112824745'
   alias: Deshumidificador - Desligar Automáticamente
-  description: ''
+  description: Turn off the portable dehumidifier and its power switch at 23:00 and again at 00:30.
   triggers:
   - at: '23:00:00'
     trigger: time
@@ -904,7 +905,7 @@
   mode: single
 - alias: Deshumidificador - Ligar Automáticamente Manhã
   id: '1678915034155'
-  description: ''
+  description: Enable the portable dehumidifier at 07:15 unless extended-away mode is active.
   triggers:
   - at: 07:15:00
     trigger: time
@@ -920,7 +921,7 @@
   mode: single
 - id: '1683763190674'
   alias: Luzes por Mov. na Sala
-  description: ''
+  description: Use stairs/hallway motion to light the hallway presence light below 10 lux while someone is home. Guest and Sleep modes, the TV, and the configured nearby lights block new activation; the shared blueprint controls switch-off.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -959,7 +960,7 @@
           for: 00:00:00
 - alias: lights turn on with gate
   id: '1692141921133'
-  description: ''
+  description: Turn on the side exterior light when the gate starts opening at night. After 30 seconds, wait up to 20 minutes for gate closure, then switch it off only if arrival lighting is not running.
   trigger:
   - trigger: state
     entity_id:
@@ -999,7 +1000,7 @@
   mode: single
 - alias: device_alert_fridge_power
   id: '1696123178186'
-  description: ''
+  description: Send a persistent equipment alert when fridge power remains below 10 W for two hours. The trigger duration, rather than the notification wording, determines the delay.
   trigger:
   - trigger: numeric_state
     entity_id:
@@ -1025,7 +1026,7 @@
   mode: single
 - id: '1696606664632'
   alias: Trigger Botão da Luz de Presença do Corredor
-  description: ''
+  description: Toggle the hallway presence light on a long press of button 2 on the configured Shelly controller.
   triggers:
   - device_id: 65801262e841d379b0b0b71f3ff22624
     domain: shelly
@@ -1041,7 +1042,7 @@
   mode: single
 - alias: Sincronizar Luzes do Corredor
   id: '1696606723356'
-  description: ''
+  description: Switch off the hallway presence light when the main hallway light turns on or off. Switching off the presence light does not switch off the main light, and turning it on does not change the main light.
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
@@ -1053,7 +1054,7 @@
       sync_off_from_slave: false
 - alias: Comutar Deshumidificador Casa de Banho da Suite
   id: '1696716423195'
-  description: ''
+  description: Toggle the dehumidifier from a long press of the suite-bathroom controller's second button. When starting, power its socket first and wait ten seconds; when stopping, disable both the humidifier entity and socket.
   trigger:
   - trigger: event
     event_type: esphome.button_pressed
@@ -1094,7 +1095,7 @@
   mode: single
 - id: '1696854410563'
   alias: Desumidificador - Ajustar valor
-  description: ''
+  description: Raise the dehumidifier humidity setpoint to the outdoor average when that average is more than five percentage points above the current setpoint. This rule does not lower the setpoint.
   triggers:
   - entity_id:
     - sensor.humidity_outside_average
@@ -1114,7 +1115,7 @@
   mode: single
 - alias: Água Quente - Desligar Noite
   id: '1699195635629'
-  description: ''
+  description: Disable the water-heater thermostat every night at 23:45.
   trigger:
   - trigger: time
     at: '23:45:00'
@@ -1127,7 +1128,7 @@
   mode: single
 - alias: AC Desligar Auto - Manhã
   id: '1699342762120'
-  description: ''
+  description: Turn off the six configured air conditioners and portable heater at 09:00 on workdays.
   triggers:
   - at: 09:00:00
     trigger: time
@@ -1150,7 +1151,7 @@
   mode: single
 - alias: 'Desligar Luzes da Rua com Temporizador '
   id: '1699840344840'
-  description: ''
+  description: Restart a one-hour exterior-light shutdown timer whenever a monitored light changes state. Switch off the outside group when it expires, provided guest mode is off both at the trigger and at shutdown.
   trigger:
   - trigger: state
     entity_id:
@@ -1182,7 +1183,7 @@
   mode: restart
 - id: '1701482615616'
   alias: Ligar Luzes da Árvore de Natal de Manhã
-  description: ''
+  description: Turn on the seasonal Christmas-tree light at 07:00 if household presence is on.
   triggers:
   - at: 07:00:00
     trigger: time
@@ -1198,7 +1199,7 @@
   mode: single
 - alias: 'Controlar Luz das Escadas Day/Night '
   id: '1701541427434'
-  description: ''
+  description: Apply the stair day or night scene when the lower stair light turns on, according to binary_sensor.night_mode.
   trigger:
   - trigger: state
     entity_id:
@@ -1225,7 +1226,7 @@
   mode: single
 - alias: Luzes por Mov. na Lavandaria
   id: '1701730252666'
-  description: ''
+  description: Automatically light the laundry below 70 lux while someone is home, except in Guest or Sleep mode. Use the shared no-motion timeout and notify the ESPHome controller to avoid double toggles.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -1244,7 +1245,7 @@
       disable_switch_button: button.shelly25_lights_laundry_auto_on
 - alias: Máq. Lavar Loica - Alertar para iniciar
   id: '1702942175908'
-  description: ''
+  description: Clear the reminder to start the dishwasher as soon as its running-state sensor turns on.
   trigger:
   - trigger: state
     entity_id:
@@ -1260,7 +1261,7 @@
   mode: single
 - alias: AC Quartos - Desligar Noite
   id: '1704843402395'
-  description: ''
+  description: Use the scheduled HVAC shutdown blueprint to stop the three bedroom air conditioners at 01:00, including weekends, subject to its HVAC bypass control.
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
@@ -1272,7 +1273,7 @@
       run_on_weekends: true
 - alias: Alertar UPS activa
   id: '1705111890973'
-  description: ''
+  description: Notify Joao's phone when the rack UPS leaves OL status for five seconds, and also notify his MacBook if it is active at home. The trigger delay is five seconds despite the message mentioning 30 seconds.
   triggers:
   - entity_id:
     - sensor.salicru_rack_ups_status
@@ -1302,7 +1303,7 @@
   mode: single
 - id: '1705326979364'
   alias: AC Sala - Desligar Manhã
-  description: ''
+  description: Stop living-room air conditioning at 08:30 on weekdays using the scheduled shutdown blueprint, with weekend execution disabled.
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
@@ -1318,7 +1319,7 @@
       - fri
 - alias: AC Sala - Desligar Noite
   id: '1705327069565'
-  description: ''
+  description: Stop living-room air conditioning at 03:00 using the scheduled shutdown blueprint, including weekends.
   use_blueprint:
     path: hvac/hvac_time_turn_off.yaml
     input:
@@ -1329,7 +1330,7 @@
       weekend_tomorrow: false
 - id: '1707834041529'
   alias: Abrir Estores da Suite
-  description: ''
+  description: Open the closed master-bedroom shutter at 07:45 on workdays, unless a day off or extended-away mode is selected.
   triggers:
   - hours: '7'
     minutes: '45'
@@ -1355,7 +1356,7 @@
   mode: single
 - id: '1658360353381'
   alias: Tablet Control Motion Detection Living Room
-  description: ''
+  description: Disable living-room tablet motion detection and its screen when the house is empty or mode is Off or Sleep. Otherwise enable motion detection without explicitly switching the screen on.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -1396,7 +1397,7 @@
   mode: queued
 - alias: Tablet Screen Timeout Living Room
   id: '1708474653467'
-  description: ''
+  description: Keep the living-room tablet screen on with a zero timeout in On, Evening and Night modes; use a 120-second screen timeout in other modes.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -1435,7 +1436,7 @@
   mode: single
 - alias: Abrir Estores ao Nascer do Sol
   id: '1652141596083'
-  description: ''
+  description: On workdays between 08:00 and noon, open closed sunrise-enabled shutters after sunrise plus 30 minutes or at 08:01. Require positive sun elevation and at least 18 hours since the previous run.
   triggers:
   - event: sunrise
     offset: 00:30:00
@@ -1478,7 +1479,7 @@
   mode: single
 - alias: Fechar Estores quando chove
   id: '1663526552935'
-  description: ''
+  description: Run the per-shutter rain-position routine while the house is empty and extended-away mode is off. As configured, the numeric trigger checks weather.home's precipitation_unit attribute against 70.
   mode: single
   trigger:
   - trigger: numeric_state
@@ -1510,7 +1511,7 @@
       - office
 - id: '1651018838807'
   alias: Fechar Estores ao Por do Sol
-  description: ''
+  description: Close sunset-enabled shutters after sunset while the house is empty and extended-away mode is off. Retry at sunset plus one hour and hourly from 20:00 to 23:00, with a 12-hour run interval.
   triggers:
   - event: sunset
     offset: 00:00:00
@@ -1561,6 +1562,7 @@
   mode: single
 - id: '1703619934344'
   alias: AC Sala - Ajustar durante a refeição
+  description: While living-room AC is heating or cooling, select quiet fan mode when the dining-table light stays on for ten seconds. Restore the previous fan mode after the light stays off for ten seconds or after one hour and 45 minutes.
   triggers:
   - entity_id:
     - light.living_room_table
@@ -1611,7 +1613,7 @@
   mode: single
 - id: '1665435183140'
   alias: Água Quente - Ligar Manhã (Antes do Nascer do Sol)
-  description: ''
+  description: Between 06:00 and 08:30, enable the water-heater thermostat when solar-thermal heating is inactive and tank-top temperature is below 42 C. Recheck at 06:01 and below 40 C; extended-away mode blocks it.
   triggers:
   - at: 06:01:00
     trigger: time
@@ -1641,7 +1643,7 @@
   mode: single
 - id: '1665435233424'
   alias: Água Quente - Desligar Manhã
-  description: ''
+  description: At 08:00, 08:30 and 09:30, disable electric water-heater thermostat control if weather is sunny, it is a workday without a day off, solar-thermal heating is active, or tank-top temperature exceeds 50 C.
   triggers:
   - at: 08:00:00
     trigger: time
@@ -1677,7 +1679,7 @@
   mode: single
 - alias: Água Quente - Ligar Tarde
   id: '1665435448806'
-  description: ''
+  description: Enable the water-heater thermostat between 15:00 and 22:00 when solar-thermal heating has been inactive for ten minutes and tank-top temperature is below 60 C. Scheduled and solar-stop triggers recheck eligibility; extended absence and a 12-hour run interval apply.
   triggers:
   - event: sunset
     offset: -01:00:00
@@ -1726,7 +1728,7 @@
   mode: single
 - alias: Água Quente - Desligar Presets
   id: '1674085777289'
-  description: ''
+  description: Reset the water-heater preset to none at 22:30 if another preset is selected.
   triggers:
   - at: '22:30:00'
     trigger: time
@@ -1746,7 +1748,7 @@
   mode: single
 - alias: Água Quente - Modo Conforto Manhã
   id: turn_on_confort_mode_weekens
-  description: ''
+  description: On non-workdays or a day off, enable comfort heating when someone is home, weather is not sunny, solar heating and its pump are inactive, and tank temperatures are below 50 C at the top and 30 C at the bottom.
   trigger:
   - trigger: time
     at: '10:30:00'
@@ -1808,6 +1810,7 @@
   mode: single
 - id: '1701641659897'
   alias: Atualizar Localização
+  description: On exterior person/vehicle detection or gate opening, request both residents' phone locations up to five times at ten-second intervals while both home sensors remain off.
   triggers:
   - entity_id:
     - binary_sensor.backyard_camera_person
@@ -1857,7 +1860,7 @@
   mode: restart
 - alias: Abrir Portão João Chegar a Casa
   id: '1701986636577'
-  description: ''
+  description: Open the gate and run arrival lighting when Joao approaches within 200 m or becomes home, while his hysteresis sensor still says away. Require automatic opening enabled, walking mode off, and a gate closed for five minutes.
   triggers:
   - entity_id:
     - sensor.distance_home_joao
@@ -1912,6 +1915,7 @@
   mode: single
 - id: '1701640659897'
   alias: Localização - Atualizar Joao
+  description: Request Joao's phone location every five seconds while his person entity is away, he is moving towards home within 2 km, and walking mode is off.
   triggers:
   - trigger: time_pattern
     seconds: /5
@@ -1937,6 +1941,7 @@
   mode: single
 - alias: Localização - Atualizar Bianca
   id: '1701986497262'
+  description: Request Bianca's phone location every five seconds while her home sensor is off, she is moving towards home within 1 km, and walking mode is off.
   triggers:
   - trigger: time_pattern
     seconds: /5
@@ -1961,7 +1966,7 @@
   mode: single
 - id: '1709598685655'
   alias: Tarefa de Substituição da Areia das Gatas
-  description: ''
+  description: Track cat-litter replacement, remind residents at home before 19:00 when it is due, and consume one unit of litter from Grocy stock when completion is recorded.
   use_blueprint:
     path: tasks/tracked_tasks.yaml
     input:
@@ -1980,7 +1985,7 @@
           transaction_type: CONSUME
 - alias: Tarefa de Limpeza da Areia das Gatas
   id: '1709598896541'
-  description: ''
+  description: Record cat-litter cleaning completion through the tracked-task blueprint and refresh its last-done sensor. Reminder notifications are disabled.
   use_blueprint:
     path: tasks/tracked_tasks.yaml
     input:
@@ -1993,7 +1998,7 @@
       notification_action: Registar Limpeza
 - id: '1709743628443'
   alias: Alertar Portão Aberto com a Casa Vazia
-  description: ''
+  description: Alert Joao when the gate remains open while the house is empty, rechecking after five minutes of gate opening or absence. Notification actions close it or defer the alert by ten minutes; closing the gate does not itself clear this notification in the current sequence.
   triggers:
   - id: trigger_gate_open
     entity_id:
@@ -2094,7 +2099,7 @@
   mode: restart
 - alias: Alertar Alarme Joao Dias de Trabalho
   id: '1711849617966'
-  description: ''
+  description: Remind Joao to set a phone wake-up alarm at half-hour checks from 23:00 to 01:30 when the next alarm is unknown or unavailable and the upcoming morning is a workday without a declared day off.
   trigger:
   - trigger: time
     at: '23:00:00'
@@ -2149,7 +2154,7 @@
   mode: single
 - alias: Controlar Luzes do Portão
   id: '1716079775767'
-  description: ''
+  description: Start the gate-light sequence when the gate-closed sensor changes from on to off; the script handles the night check and switch-off wait.
   triggers:
   - entity_id:
     - binary_sensor.gate_close
@@ -2163,7 +2168,7 @@
   mode: single
 - id: '1716575201372'
   alias: Campainha - Accionar campainha portão
-  description: ''
+  description: Start the doorbell notification sequence when event.gate_doorbell reports a pressed event.
   triggers:
   - trigger: event.received
     target:
@@ -2177,7 +2182,7 @@
   mode: single
 - alias: 'Notificar Abertura Portão/Portas '
   id: '1717504841456'
-  description: ''
+  description: Send a security alert while nobody is home if the front or kitchen door stays open for five seconds, or the gate remains in opening state for one minute.
   triggers:
   - entity_id:
     - binary_sensor.front_door
@@ -2215,7 +2220,7 @@
   mode: single
 - alias: Desligar Modo de Férias
   id: '1717852934831'
-  description: ''
+  description: Clear extended-away mode after household presence has returned for five minutes, provided the mode was enabled for at least eight hours.
   trigger:
   - trigger: state
     entity_id:
@@ -2244,7 +2249,7 @@
   id: '1717889364762'
   trace:
     stored_traces: 40
-  description: ''
+  description: Request fresh locations from both phones when either person arrives home, leaves home, or has remained away for five seconds after departure.
   trigger:
   - trigger: state
     entity_id:
@@ -2291,7 +2296,7 @@
   mode: single
 - alias: Abrir Portão Bianca Chegar a Casa
   id: '1721089640569'
-  description: ''
+  description: Open the gate and run arrival lighting when Bianca approaches within 200 m or becomes home, while her hysteresis sensor still says away. Require automatic opening enabled, walking mode off, and a gate closed for five minutes.
   triggers:
   - entity_id:
     - sensor.distance_home_bianca
@@ -2346,7 +2351,7 @@
   mode: single
 - alias: Abrir Estores ao Nascer do Sol - Modo de Férias
   id: '1723197292654'
-  description: ''
+  description: Open all entities with the covers label 30 minutes after sunrise while the house is empty and extended-away mode is on. This bypasses the normal per-shutter sunrise selection.
   trigger:
   - trigger: sun
     event: sunrise
@@ -2367,7 +2372,7 @@
   mode: single
 - alias: Fechar Estores ao Por do Sol - Modo de Férias
   id: '1723197551703'
-  description: ''
+  description: At sunset during extended absence, close covers-labelled shutters, then set bedroom-floor covers to 30 percent and the laundry shutter to 15 percent.
   trigger:
   - trigger: sun
     event: sunset
@@ -2400,7 +2405,7 @@
   mode: single
 - id: '1723936636115'
   alias: Ar Condicionado - Notificar Janelas Abertas Quartos
-  description: ''
+  description: Alert when any configured upstairs AC is heating or cooling and an upstairs monitored window is open. Recheck on sustained AC/window changes and limit alerts to one per hour; the open window need not belong to the active unit's room.
   triggers:
   - entity_id:
     - climate.master_bedroom
@@ -2487,7 +2492,7 @@
   mode: single
 - id: '1723937695759'
   alias: Ar Condicionado - Notificar Janelas Abertas Sala
-  description: ''
+  description: Alert when living-room or office AC is heating or cooling with a laundry or living-room window open. Other door and cover changes can trigger a recheck, but do not alone satisfy the open-window condition.
   triggers:
   - entity_id:
     - climate.living_room
@@ -2559,7 +2564,7 @@
   mode: single
 - alias: lights_turn_on_kitchen_led_switch
   id: '1724277480761'
-  description: ''
+  description: Restore power to the kitchen LED if it has been unavailable for 30 seconds and its supply switch is off; wait five seconds and switch the light entity off.
   trigger:
   - trigger: state
     entity_id:
@@ -2592,7 +2597,7 @@
   mode: single
 - alias: Modo Caminhada - Desligar Automaticamente
   id: '1724363986092'
-  description: ''
+  description: End walking mode when the pedestrian gate unlocks, vehicle gate starts opening, or kitchen door opens, provided walking mode has been active for five minutes.
   trigger:
   - trigger: state
     entity_id:
@@ -2625,7 +2630,7 @@
   mode: single
 - alias: Modo Caminhada - Terminar
   id: '1724364138858'
-  description: ''
+  description: Switch off gate, side and rear exterior lights when walking mode changes from on to off.
   trigger:
   - trigger: state
     entity_id:
@@ -2645,7 +2650,7 @@
   mode: single
 - alias: Modo de Caminhada - Iniciar
   id: '1724364182177'
-  description: ''
+  description: Turn on gate, side and rear exterior lights when walking mode starts at night.
   triggers:
   - entity_id:
     - input_boolean.walking_routine
@@ -2668,7 +2673,7 @@
   mode: single
 - alias: Tarefa da Vitamina D
   id: '1724969557801'
-  description: ''
+  description: Send the due vitamin-D task reminder to residents at home during the 11:00-to-15:00 window, clear it at 20:00, and record completion in the tasks database when acknowledged. Scheduled triggers are 02:00 and 11:00.
   triggers:
   - id: trigger_send_notification
     minutes: '0'
@@ -2757,7 +2762,7 @@
       action: shell_command.external_my_sql_insert
 - alias: Sincronizar Luzes da Rua
   id: '1727984098644'
-  description: ''
+  description: Switch off the exterior light group when the kitchen-door light turns off. Do not synchronize switch-on or propagate group switch-off back to the kitchen-door light.
   use_blueprint:
     path: lights/sync_lights.yaml
     input:
@@ -2769,7 +2774,7 @@
       sync_off: true
 - id: '1728490959918'
   alias: Localização - Sincronizar Dispositivos João
-  description: ''
+  description: When Joao's Wi-Fi tracker leaves home but his mobile tracker still says home, request phone locations every 20 seconds until they agree, Wi-Fi returns home, or 20 attempts have been made.
   use_blueprint:
     path: location/sync_device_location.yaml
     input:
@@ -2778,7 +2783,7 @@
       mobile_location: device_tracker.radium
 - alias: Localização - Sincronizar Dispositivos Bianca
   id: '1728491015669'
-  description: ''
+  description: When Bianca's Wi-Fi tracker leaves home but her mobile tracker still says home, request phone locations every 20 seconds until they agree, Wi-Fi returns home, or 20 attempts have been made.
   use_blueprint:
     path: location/sync_device_location.yaml
     input:
@@ -2787,7 +2792,7 @@
       mobile_location: device_tracker.calcium
 - id: '1729990082630'
   alias: Luzes por Mov. Casa de Banho de Serviço
-  description: ''
+  description: Light the ground-floor bathroom LED on motion below 110 lux, with a 30-second no-motion timeout. Sleep blocks activation, the bathroom light acts as a blocker, and the ESPHome button is notified to prevent double toggles.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -2807,7 +2812,7 @@
       illuminance_sensor: sensor.light_bathroom_rc
 - alias: Trigger Abrir Cancela
   id: '1731973582356'
-  description: ''
+  description: Unlock the pedestrian gate on a long press of the configured Shelly controller's first button.
   triggers:
   - device_id: c19fefbddb20592f460908bcdb303d5d
     domain: shelly
@@ -2824,7 +2829,7 @@
   mode: single
 - id: '1732671997843'
   alias: Trigger Botão da Luz da Porta da Cozinha
-  description: ''
+  description: A short kitchen-door button press switches off any active house-exterior-labelled lights, or turns on the kitchen-door light if none are on. A long press turns on kitchen-door, rear and side exterior lighting.
   use_blueprint:
     path: devices/shelly_one_button.yaml
     input:
@@ -2860,7 +2865,7 @@
         data: {}
 - alias: task_trigger_change_cat_litter
   id: '1735385296449'
-  description: ''
+  description: Handle the configured Portuguese voice commands for litter replacement by triggering the litter-change automation with its conditions bypassed.
   triggers:
   - trigger: conversation
     command:
@@ -2877,7 +2882,7 @@
   mode: single
 - id: '1735500742595'
   alias: Desligar Coluna da Casa de Banho Principal com as Luzes
-  description: ''
+  description: Stop main-bathroom speaker playback when the upstairs main-bathroom light turns off.
   triggers:
   - entity_id:
     - light.main_bathroom
@@ -2893,7 +2898,7 @@
   mode: single
 - alias: Trigger Botões dos Estores da Cozinha
   id: '1736718854079'
-  description: ''
+  description: Use single top and bottom auxiliary shutter-button presses to turn the kitchen pantry light on and off respectively.
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
     input:
@@ -2912,7 +2917,7 @@
           entity_id: light.kitchen_pantry
 - id: '1736719479439'
   alias: Trigger Botões dos Estores do Quarto do Ricardo
-  description: ''
+  description: Map Ricardo's shutter buttons to lamp on/off on single presses, AC on/off on double presses, and setpoint plus/minus 1 C on triple presses when no guests are present. Long presses adjust lamp brightness.
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
     input:
@@ -2972,7 +2977,7 @@
         type: brightness_decrease
 - alias: Desumidificador - Ligar com a Tomada
   id: '1736764669175'
-  description: ''
+  description: Enable the portable dehumidifier ten seconds after its power socket turns on, if the humidifier entity is still off.
   triggers:
   - trigger: state
     entity_id:
@@ -2996,7 +3001,7 @@
   mode: single
 - alias: Ajustar Volume dos Assistentes
   id: '1736788353807'
-  description: ''
+  description: Set idle or off assistant speakers to the day volume from 08:00 to 21:00, evening volume until 23:45, and night volume otherwise. Recheck at startup, helper changes and configured times without interrupting active playback.
   triggers:
   - event: start
     trigger: homeassistant
@@ -3067,7 +3072,7 @@
   mode: single
 - alias: Alertar MacBook Porta da Cozinha Aberta
   id: '1737152867015'
-  description: ''
+  description: Notify Joao's MacBook when the kitchen door sensor turns on, but only while the MacBook is considered active at home.
   triggers:
   - trigger: state
     entity_id:
@@ -3086,7 +3091,7 @@
   mode: single
 - alias: Alertar MacBook Porta da Frente Aberta
   id: '1737152931894'
-  description: ''
+  description: Notify Joao's MacBook when the front door sensor turns on, but only while the MacBook is considered active at home.
   triggers:
   - trigger: state
     entity_id:
@@ -3105,7 +3110,7 @@
   mode: single
 - alias: Trigger Botões dos Estores do Quarto do Henrique
   id: '1737928610211'
-  description: ''
+  description: Map Henrique's auxiliary shutter-button double presses to AC on/off and triple presses to setpoint plus/minus 1 C when no guests are present. Single and long press actions are intentionally empty in this instance.
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
     input:
@@ -3148,7 +3153,7 @@
       long_bottom_action: []
 - id: '1738114770861'
   alias: AC Hall - Ligar Modo Noturno
-  description: ''
+  description: After 22:00 while someone is home and hall AC is not off, select its sleep preset and position_1 swing setting. Recheck at 22:00, 23:00, 30 minutes after leaving off, and ten minutes after arrival.
   triggers:
   - trigger: time
     at: '22:00:00'
@@ -3197,7 +3202,7 @@
   mode: single
 - alias: Desligar Coluna da Suite com as Luzes
   id: '1739048652626'
-  description: ''
+  description: Turn off the master-bedroom speaker when the master-bedroom light turns off.
   triggers:
   - entity_id:
     - light.master_bedroom
@@ -3213,7 +3218,7 @@
   mode: single
 - id: '1744465759830'
   alias: Fechar o Portão com a Casa Vazia
-  description: ''
+  description: Close the vehicle gate after household occupancy clears for two minutes, provided it is still clear, guest mode is off, and extended-away mode is off.
   triggers:
   - trigger: occupancy.cleared
     target:
@@ -3249,6 +3254,7 @@
   mode: single
 - alias: Tablet Control Hall Screen
   id: '1750634052202'
+  description: Apply upstairs hall tablet settings by house mode. Off, Sleep or absence disables motion detection and the screen with a 60-second timeout; Night disables motion wake with the same timeout; other modes use brighter output and a 1200-second timeout.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -3334,7 +3340,7 @@
   mode: restart
 - id: '1751552957136'
   alias: Fechar Estores Com Temperatura Elevada
-  description: ''
+  description: Close all heat-enabled shutters after outdoor temperature exceeds 30 C for 30 minutes, while the house is empty, guests are absent, and sun elevation exceeds 25 degrees.
   triggers:
   - trigger: numeric_state
     entity_id:
@@ -3373,7 +3379,7 @@
   mode: single
 - id: '1754488924870'
   alias: helper_clear_routine_message
-  description: ''
+  description: Replace the shared routine progress message with a space when a monitored good-night, departure or gate routine stops.
   triggers:
   - trigger: state
     entity_id:
@@ -3396,8 +3402,7 @@
   mode: single
 - alias: Ar Condicionados - Ajustar com a casa vazia
   id: '1755213453554'
-  description: Define o modo da ventoinha para 'auto' e o modo de oscilação para 'swing'
-    em todos os aparelhos de ar condicionado quando a casa está vazia por 10 minutos.
+  description: Set fan mode to auto and swing mode to swing on the six configured air conditioners after household presence has been off for ten minutes.
   triggers:
   - trigger: state
     entity_id:
@@ -3439,7 +3444,7 @@
   mode: single
 - id: '1736719371438'
   alias: Trigger Botões dos Estores da Suite
-  description: ''
+  description: Map suite shutter-button single presses to the two bedside lights and triple presses to AC setpoint plus/minus 1 C when no guests are present. Both configured double-press actions turn the AC switch on.
   use_blueprint:
     path: devices/bhonofre_cover_buttons.yaml
     input:
@@ -3490,7 +3495,7 @@
           entity_id: climate.master_bedroom
 - id: '1756997660207'
   alias: Alertar Disparar do Alarme
-  description: ''
+  description: Send a persistent high-priority security notification to all configured mobile devices when Alarmo reports a triggered alarm.
   triggers:
   - trigger: alarm_control_panel.triggered
     target:
@@ -3511,7 +3516,7 @@
   mode: restart
 - id: '1759091348299'
   alias: Registar Última Chuva
-  description: ''
+  description: Save the last-rain timestamp after sustained rain or at sunrise plus two hours, provided rain has been active for ten minutes and sun elevation exceeds 20 degrees.
   triggers:
   - trigger: state
     entity_id:
@@ -3548,7 +3553,7 @@
   mode: single
 - id: '1759755648327'
   alias: Alertar Portão em Movimento
-  description: ''
+  description: Notify Joao if the gate remains opening or closing for five minutes. Clear the previous movement notification on each run and dismiss it without replacement when the gate closes.
   triggers:
   - id: trigger_gate_open
     entity_id:
@@ -3600,7 +3605,7 @@
   mode: restart
 - id: '1760144253958'
   alias: Alertar o Joao Henrique a Chorar
-  description: ''
+  description: Notify Joao of Henrique's crying while Joao is home, the bedroom light has been off and shutter closed for ten minutes, and the house is not in Sleep. Limit to one alert per 30 minutes and clear it after one minute.
   triggers:
   - trigger: state
     entity_id:
@@ -3664,7 +3669,7 @@
   mode: single
 - id: '1760144554168'
   alias: Alertar o Joao Ricardo a Chorar
-  description: ''
+  description: Notify Joao of Ricardo's crying while Joao is home, the bedroom light has been off and shutter closed for ten minutes, and the house is not in Sleep. Limit to one alert per 30 minutes and clear it after one minute.
   triggers:
   - trigger: state
     entity_id:
@@ -3727,7 +3732,7 @@
   mode: single
 - id: '1762307515538'
   alias: Luzes por Mov. no Quarto de Arrumos
-  description: ''
+  description: Light the ground-floor spare/storage bedroom on motion below 75 lux in On or Evening mode, with a 60-second no-motion timeout. Guest and Sleep modes block activation; this room is distinct from the outdoor storage area.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -3746,7 +3751,7 @@
       illuminance_sensor: sensor.light_bedroom_rc
 - id: '1763600787785'
   alias: Desligar Luz de Presença do Corredor Com as Outras Luzes
-  description: ''
+  description: Turn off the hallway presence light when the living-room group, doorway or main hallway light turns on, and repeat after ten seconds to keep the low-level light from competing with them.
   triggers:
   - trigger: state
     entity_id:
@@ -3776,7 +3781,7 @@
   mode: single
 - id: '1765128555699'
   alias: Desligar Luz da Casa de Banho de Serviço Sem Movimento
-  description: ''
+  description: Turn off all lights in the ground-floor bathroom area after its motion sensor changes to clear and stays clear for ten minutes, including manually lit lights.
   triggers:
   - trigger: state
     entity_id:
@@ -3799,7 +3804,7 @@
   mode: single
 - id: '1765413716782'
   alias: Controlar Estado da Tomada da TV
-  description: ''
+  description: Supply the living-room TV socket while someone is home between 07:00 and 02:00; otherwise turn the TV off, wait 30 seconds, and cut socket power. Only act when the TV is not on and the socket state has been stable for ten minutes.
   triggers:
   - trigger: state
     entity_id:
@@ -3891,7 +3896,7 @@
   mode: single
 - id: '1765502075668'
   alias: baby_monitor_alert_joao_ricardo_moving
-  description: ''
+  description: Send Joao the Ricardo standing alert between 21:30 and 04:00 when he is home, the shutter has been closed for ten minutes and light off for five minutes. The configured trigger is the crying-sound sensor, with a 30-minute alert interval.
   triggers:
   - trigger: state
     entity_id:
@@ -3934,7 +3939,7 @@
   mode: single
 - id: '1765502279075'
   alias: Luzes Por Mov. Traseiras
-  description: ''
+  description: Light the rear wall on camera person detection below 50 lux with a 60-second timeout and the blueprint's sun-elevation restriction. Sleep is allowed, but household presence and the global motion-light switch remain required; the kitchen-door light is a blocker.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -3953,7 +3958,7 @@
       illuminance_sensor: sensor.light_outside
 - id: '1765845791576'
   alias: Desligar Luz da Sala Sem Movimento
-  description: ''
+  description: Switch off the configured living-room, doorway and window lights after living-room group motion has been clear for 60 minutes, including manually lit lights.
   triggers:
   - trigger: state
     entity_id:
@@ -3979,7 +3984,7 @@
   mode: single
 - id: '1765846031339'
   alias: Desligar Luz da Cozinha Sem Movimento
-  description: ''
+  description: Turn off all kitchen-area lights after kitchen motion has been clear for 60 minutes, independently of the shorter automatic-light timeout.
   triggers:
   - trigger: state
     entity_id:
@@ -4002,7 +4007,7 @@
   mode: single
 - id: '1765846195706'
   alias: Desligar Luz do Escritório Sem Movimento
-  description: ''
+  description: Turn off all office-area lights after its motion sensor has remained clear for 60 minutes, including lights switched on manually.
   triggers:
   - trigger: state
     entity_id:
@@ -4023,7 +4028,7 @@
   mode: single
 - id: '1766190630106'
   alias: Test Shelly Buttons
-  description: ''
+  description: Test the configured BTHome button by toggling the office light on a button_1 press.
   triggers:
   - device_id: 6a6e337567ed440bc250b4b9fe39ca3c
     domain: bthome
@@ -4040,7 +4045,7 @@
   mode: single
 - id: '1771197979489'
   alias: Notificar Radium Cameras da Rua
-  description: ''
+  description: Configure Frigate person-event notifications from backyard, driveway and front cameras to Joao's phone, with both residents in the blueprint presence filter, one alert per event and a 30-second cooldown.
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
@@ -4063,7 +4068,7 @@
       final_update: true
 - id: '1771200825381'
   alias: cctv_notify_living_room_tv
-  description: ''
+  description: Show nighttime Frigate person alerts from backyard, driveway and front cameras on the living-room Android TV, using a top-right overlay and a 120-second cooldown without a presence filter.
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
@@ -4095,7 +4100,7 @@
         - below_horizon
 - id: '1771360597612'
   alias: cctv_notify_living_room_tv_front
-  description: ''
+  description: Show nighttime front-camera person alerts on the living-room Android TV only for the front_garden zone, with a top-right overlay and a 120-second cooldown.
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
@@ -4128,7 +4133,7 @@
       zone_filter: true
 - id: '1771360990396'
   alias: Luzes Por Mov. Entrada
-  description: ''
+  description: Light the side exterior wall on driveway camera person detection below 50 lux with a 60-second timeout and the blueprint's sun-elevation restriction. Sleep is allowed, but household presence and global motion lighting are still required.
   use_blueprint:
     path: lights/motion_based_lights_v3.yaml
     input:
@@ -4147,7 +4152,7 @@
       illuminance_sensor: sensor.light_outside
 - id: '1771630873804'
   alias: lights_control_kitchen_lights_all_on
-  description: ''
+  description: Turn the pantry light back off if it comes on while a kitchen LED or window light has been on for less than one second, preventing pantry activation during a simultaneous kitchen-light switch-on.
   triggers:
   - trigger: light.turned_on
     target:
@@ -4203,7 +4208,7 @@
   mode: single
 - id: '1771632199476'
   alias: Controlar Comando Ligar Luz no Escritório
-  description: Substitui o comportamento padrão de ligar tudo no escritório
+  description: Override the configured Portuguese light-on commands from the office Assist satellite so they turn on light.office rather than every light in the office area.
   triggers:
   - command:
     - liga a luz
@@ -4222,7 +4227,7 @@
   mode: single
 - id: '1773602786390'
   alias: cat_litter_buttons
-  description: ''
+  description: Use the litter-area MQTT remote's on action to trigger litter cleaning and its off action to trigger litter replacement.
   triggers:
   - alias: short_up
     domain: mqtt
@@ -4263,7 +4268,7 @@
   mode: single
 - id: '1776213882859'
   alias: Água Quente - Ligar Manhã Pessoas em Casa
-  description: ''
+  description: Between 09:30 and noon, enable the water-heater thermostat when someone is home, tank-top temperature is below 50 C and solar-thermal heating is inactive. Extended-away mode blocks it and runs must be at least 12 hours apart.
   triggers:
   - at: 09:31:00
     trigger: time
@@ -4317,7 +4322,7 @@
   mode: single
 - id: '1776266173921'
   alias: Desumidificador - Ajustar para a Média
-  description: ''
+  description: Set the portable dehumidifier's humidity target to the current outdoor humidity average at sunset and at 20:00, allowing either an increase or decrease.
   triggers:
   - trigger: time
     at: '20:00:00'
@@ -4334,7 +4339,7 @@
   mode: single
 - id: '1777408429775'
   alias: Água Quente - Apoio Fotovoltaico Ligar
-  description: ''
+  description: After noon with sun elevation above 30 degrees, directly enable the heater switch while its thermostat is off and weather is not sunny or exceptional. Require ten minutes off and either tank-top below 50 C or a battery above 95 percent with temperature below the solar-excess target.
   triggers:
   - trigger: state
     entity_id:
@@ -4456,7 +4461,7 @@
   mode: single
 - id: '1777491935590'
   alias: EcoFlow Ligar Saída AC
-  description: ''
+  description: Restore the EcoFlow AC-output switch after the configured output has been off for ten seconds.
   triggers:
   - type: turned_off
     device_id: 028859c507f01453b65c6fe645adc8fc
@@ -4477,7 +4482,7 @@
   mode: single
 - id: '1777742920832'
   alias: Água Quente - Apoio Fotovoltaico Desligar
-  description: ''
+  description: Stop direct photovoltaic water heating after at least ten minutes when the thermostat is off and PV falls below 1000 W, tank-top exceeds the solar-excess target, or the configured battery/PV-power protection conditions are met.
   triggers:
   - trigger: switch.turned_on
     target:
@@ -4565,7 +4570,7 @@
   mode: single
 - id: '1751200610784'
   alias: AC Sala - Ligar de Tarde no Verão
-  description: ''
+  description: Request living-room cooling to 24 C every day in summer between 17:00 and 20:30 when room temperature exceeds 24 C and the scheduled HVAC blueprint's window, target-band and bypass conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4592,7 +4597,7 @@
       window_sensor: binary_sensor.window_ground_floor
 - alias: AC Hall - Ligar de Tarde no Verão (Fim de Semana)
   id: '1751200671929'
-  description: ''
+  description: Request upstairs hall cooling to 24 C on summer weekends between 14:00 and 20:30 when hall temperature exceeds 24 C and the shared scheduled-HVAC conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4614,7 +4619,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - alias: AC Hall - Ligar de Tarde no Verão
   id: '1749604497079'
-  description: ''
+  description: Request upstairs hall cooling to 24 C on summer weekdays between 16:00 and 20:30 when hall temperature exceeds 24 C and the shared scheduled-HVAC conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4639,7 +4644,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1749602497079'
   alias: AC Quarto do Ricardo - Ligar de Tarde no Verão
-  description: ''
+  description: Request Ricardo's bedroom cooling to 25 C on summer weekdays between 16:00 and 20:30 when room temperature exceeds 27 C and the shared scheduled-HVAC conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4664,7 +4669,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1739604497079'
   alias: AC Quarto do Henrique - Ligar de Tarde no Verão
-  description: ''
+  description: Request Henrique's bedroom cooling to 25 C on summer weekdays between 16:00 and 20:30 when room temperature exceeds 27 C and the shared scheduled-HVAC conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4689,7 +4694,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - alias: AC Suite - Ligar de Tarde no Verão
   id: '1749604597079'
-  description: ''
+  description: Request master-bedroom cooling to 25 C on summer weekdays between 16:00 and 20:30 when room temperature exceeds 27 C and the shared scheduled-HVAC conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4714,7 +4719,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1705368431534'
   alias: AC Sala - Ligar de Manhã no Inverno
-  description: ''
+  description: Request living-room heating to 22 C daily in autumn, winter and spring between 06:30 and 08:00 when room and outdoor temperatures are below 21 C. Apply the shared HVAC gates and lower the setpoint by 1 C after one hour.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4743,7 +4748,7 @@
       hvac_delayed_temperature_offset: -1
 - id: '1737768400854'
   alias: AC Hall - Ligar de Manhã no Inverno
-  description: ''
+  description: Request upstairs hall heating to 20 C daily in autumn, winter and spring between 06:00 and 08:00 when room and outdoor temperatures are below 19 C. Apply shared HVAC gates and switch off the AC display after starting.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4778,7 +4783,7 @@
         data: {}
 - id: '1705368338092'
   alias: AC Suite - Ligar de Manhã no Inverno
-  description: ''
+  description: Request master-bedroom heating to 22 C on autumn, winter and spring weekdays between 07:15 and 08:00 when room and outdoor temperatures are below 21 C and shared HVAC gates pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4803,7 +4808,7 @@
       - autumn
 - id: '1705596387713'
   alias: AC Sala - Ligar de Tarde no Inverno
-  description: ''
+  description: Request living-room heating to 21 C on autumn, winter and spring weekdays between 16:30 and 18:00 when room and outdoor temperatures are below 21 C. Apply shared HVAC gates and lower the setpoint by 1 C after one hour.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4830,7 +4835,7 @@
       hvac_delayed_temperature_offset: -1
 - alias: AC Escritório - Ligar de Tarde no Inverno
   id: '1737772761289'
-  description: ''
+  description: Request office heating to 20 C daily in autumn, winter and spring between 16:30 and 20:00 when room and outdoor temperatures are below 19.5 C and shared HVAC gates pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4859,7 +4864,7 @@
       extra_hvac_actions: []
 - alias: AC Quartos - Ligar de Tarde no Inverno
   id: '1737850856162'
-  description: ''
+  description: Request heating to 20 C for the hall and three bedrooms daily in autumn, winter and spring between 16:30 and 20:00, using bedroom-average and outdoor temperatures below 19 C plus the shared HVAC gates.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4891,7 +4896,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1737768630507'
   alias: AC Hall - Ligar de Tarde no Inverno
-  description: ''
+  description: Request hall heating to 21 C daily in autumn, winter and spring between 16:45 and 20:00 when hall and outdoor temperatures are below 21 C. Apply shared HVAC gates and lower the setpoint by 1 C after one hour.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4921,7 +4926,7 @@
       hvac_delayed_temperature_offset: -1
 - id: '1705596272069'
   alias: AC Suite - Ligar de Tarde no Inverno
-  description: ''
+  description: Request master-bedroom heating to 21 C daily in autumn, winter and spring between 17:00 and 20:00 when room and outdoor temperatures are below 21 C. Apply shared HVAC gates and lower the setpoint by 1 C after one hour.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4951,7 +4956,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1705596348371'
   alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
-  description: ''
+  description: Request Ricardo's bedroom heating to 21 C daily in autumn, winter and spring between 17:00 and 20:00 when room and outdoor temperatures are below 21 C. Apply shared HVAC gates and lower the setpoint by 1 C after one hour.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4981,7 +4986,7 @@
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1737770376538'
   alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
-  description: ''
+  description: Request Henrique's bedroom heating to 21 C daily in autumn, winter and spring between 17:00 and 20:00 below 20 C, requiring a 1 C gap from the house low-temperature target. Apply shared HVAC gates and lower the setpoint by 1 C after one hour.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5011,7 +5016,7 @@
       hvac_delayed_temperature_offset: -1
 - id: '1778484821567'
   alias: device_turn_rack_energy_on
-  description: ''
+  description: Enable the configured rack supply plug when EcoFlow battery crosses below 50 percent or the Deye battery crosses above 40 percent.
   triggers:
   - type: battery_level
     device_id: 028859c507f01453b65c6fe645adc8fc
@@ -5038,7 +5043,7 @@
   mode: single
 - id: '1778684016013'
   alias: Venda de excedente - Desactivar
-  description: ''
+  description: Disable Deye solar export when sun elevation crosses below 15 degrees.
   triggers:
   - trigger: numeric_state
     entity_id:
@@ -5055,7 +5060,7 @@
   mode: single
 - id: '1779033865434'
   alias: Fechar Estores dos Quartos ao Por do Sol
-  description: ''
+  description: Close sunset-enabled shutters in the three upstairs bedrooms when sun elevation drops below 3 degrees, someone is home and extended-away mode is off. Limit runs to at least 12 hours apart.
   triggers:
   - trigger: numeric_state
     entity_id:
@@ -5088,7 +5093,7 @@
   mode: single
 - id: '1779568047844'
   alias: Abrir Estores Fechados com o Calor
-  description: ''
+  description: Between 16:00 and 20:30, reopen the configured non-west shutters only if closed with last action Sol and either outside temperature or sun elevation is below 25. Require an empty house without guests or extended absence and an 18-hour run interval.
   triggers:
   - entity_id:
     - sensor.temperature_outside
@@ -5155,7 +5160,7 @@
   mode: single
 - id: '1779569312624'
   alias: AC Sala - Apoio Solar
-  description: ''
+  description: Start the living-room solar HVAC script when its temperature is outside the house target band and the shared PV, battery, forecast, absence and closed-window conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
@@ -5166,7 +5171,7 @@
       hvac_script: script.hvac_solar_living_room
 - id: '1779569424753'
   alias: AC Suite - Apoio Solar
-  description: ''
+  description: Start the master-bedroom solar HVAC script when its temperature is outside the house target band and the shared PV, battery, forecast, absence and closed-window conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
@@ -5177,7 +5182,7 @@
       hvac_script: script.hvac_solar_master_bedroom
 - id: '1779569459729'
   alias: AC Quarto do Henrique - Apoio Solar
-  description: ''
+  description: Start Henrique's bedroom solar HVAC script when its temperature is outside the house target band and the shared PV, battery, forecast, absence and closed-window conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
@@ -5188,7 +5193,7 @@
       hvac_script: script.hvac_solar_bedroom_henrique
 - id: '1779569485941'
   alias: AC Quarto do Ricardo - Apoio Solar
-  description: ''
+  description: Start Ricardo's bedroom solar HVAC script when its temperature is outside the house target band and the shared PV, battery, forecast, absence and closed-window conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
@@ -5199,7 +5204,7 @@
       hvac_script: script.hvac_solar_bedroom_ricardo
 - id: '1779569520542'
   alias: AC Escritório - Apoio Solar
-  description: ''
+  description: Start the office solar HVAC script when its temperature is outside the house target band and the shared PV, battery, forecast, absence and closed-window conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
@@ -5210,7 +5215,7 @@
       hvac_script: script.hvac_solar_office
 - id: '1779569574241'
   alias: AC Hall - Apoio Solar
-  description: ''
+  description: Start the upstairs hall solar HVAC script when hall temperature is outside the house target band and the shared PV, battery, forecast, absence and bedroom-floor closed-window conditions pass.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
@@ -5221,7 +5226,7 @@
       hvac_script: script.hvac_solar_hall
 - id: '1779786705961'
   alias: Desligar Ar Condicionados no Modo de Limpeza
-  description: ''
+  description: Turn off climate devices on the living and bedroom floors when a cleaning-calendar event starts.
   triggers:
   - trigger: calendar.event_started
     target:
@@ -5245,7 +5250,7 @@
   mode: single
 - id: '1780016489060'
   alias: Abrir Estores Poente Fechados com o Calor
-  description: ''
+  description: Between 16:00 and 20:30 while the house is empty without guests, reopen kitchen and master-bedroom shutters only if closed with last action Sol and outside temperature is below 25 C or sun elevation below 10 degrees. Limit runs to 18-hour intervals.
   triggers:
   - entity_id:
     - sensor.temperature_outside
@@ -5303,7 +5308,7 @@
   mode: single
 - id: '1781480620672'
   alias: Desligar Ar Condicionados com Bateria
-  description: ''
+  description: Turn off the six configured air conditioners and portable heater between 20:00 and 09:00 when Deye battery has stayed below 45 percent for five minutes.
   triggers:
   - trigger: battery.level_crossed_threshold
     target:
@@ -5338,7 +5343,7 @@
   mode: single
 - id: '1782640184113'
   alias: Carga da Bateria - Reset
-  description: ''
+  description: Restore the Deye maximum battery charge-current setting to 100 at sunset, undoing the lower setting used by the export routine.
   triggers:
   - trigger: sun.sunset
     options: {}
@@ -5353,7 +5358,7 @@
   mode: single
 - id: '1782917968041'
   alias: AC Sala - Desligar Quando Pessoas Chegam a Casa
-  description: ''
+  description: Stop living-room heating or cooling after household presence returns for five seconds, unless the HVAC automation bypass is on.
   triggers:
   - trigger: occupancy.detected
     target:
@@ -5384,7 +5389,7 @@
     weekend_tomorrow: false
 - id: '1783807595490'
   alias: AC Suite - Ligar Modo Noturno
-  description: ''
+  description: After 22:00 while someone is home and master-bedroom AC is not off, select sleep preset and position_1 swing. Recheck at 22:00, 23:00, 30 minutes after leaving off, and ten minutes after arrival.
   triggers:
   - trigger: time
     at: '22:00:00'
@@ -5433,7 +5438,7 @@
   mode: single
 - id: '1784409320305'
   alias: Solar - Time Of Use Manhã
-  description: ''
+  description: At 05:00, set the Deye time-of-use state-of-charge target to 15 percent if the remaining solar forecast exceeds 10.
   triggers:
   - trigger: time
     at: 05:00:00
@@ -5451,7 +5456,7 @@
   mode: single
 - id: '1784409421712'
   alias: Solar - Time Of Use Anoitecer
-  description: ''
+  description: Set the Deye time-of-use state-of-charge target to 50 percent when sun elevation crosses below 25 degrees.
   triggers:
   - trigger: sun.elevation_crossed_threshold
     options:
@@ -5472,7 +5477,7 @@
   mode: single
 - id: '1784409484271'
   alias: Solar - Time Of Use Noite
-  description: ''
+  description: Set the Deye time-of-use state-of-charge target to 30 percent at 22:00.
   triggers:
   - trigger: time
     at: '22:00:00'
@@ -5487,7 +5492,7 @@
   mode: single
 - id: '1784409525727'
   alias: Solar - Time Of Use Dia
-  description: ''
+  description: Set the Deye time-of-use state-of-charge target to 30 percent at 11:00.
   triggers:
   - trigger: time
     at: '11:00:00'
@@ -5502,7 +5507,7 @@
   mode: single
 - id: '1784936257030'
   alias: AC Suite -  Arrefecimento Modo Férias
-  description: ''
+  description: During extended absence, use the shared solar overheating-protection blueprint to cool the master bedroom to 25 C above 26 C when PV and house-load conditions permit.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar_overheating.yaml
     input:
@@ -5511,7 +5516,7 @@
       temperature_sensor: sensor.temperature_master_bedroom
 - id: '1784936323314'
   alias: AC Sala -  Arrefecimento Modo Férias
-  description: ''
+  description: During extended absence, use the shared solar overheating-protection blueprint to cool the living room to 25 C above 26 C when PV and house-load conditions permit.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar_overheating.yaml
     input:
@@ -5520,7 +5525,7 @@
       temperature_sensor: sensor.temperature_living_room
 - id: '1784936346597'
   alias: AC Escritório -  Arrefecimento Modo Férias
-  description: ''
+  description: During extended absence, use the shared solar overheating-protection blueprint to cool the office to 25 C above 26 C when PV and house-load conditions permit.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar_overheating.yaml
     input:
@@ -5529,7 +5534,7 @@
       temperature_sensor: sensor.temperature_office
 - id: '1784936365274'
   alias: AC Quarto do Henrique -  Arrefecimento Modo Férias
-  description: ''
+  description: During extended absence, use the shared solar overheating-protection blueprint to cool Henrique's bedroom to 25 C above 26 C when PV and house-load conditions permit.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar_overheating.yaml
     input:
@@ -5538,7 +5543,7 @@
       temperature_sensor: sensor.temperature_bedroom_henrique
 - id: '1784936384877'
   alias: AC Quarto do Ricardo -  Arrefecimento Modo Férias
-  description: ''
+  description: During extended absence, use the shared solar overheating-protection blueprint to cool Ricardo's bedroom to 25 C above 26 C when PV and house-load conditions permit.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar_overheating.yaml
     input:
@@ -5547,7 +5552,7 @@
       temperature_sensor: sensor.temperature_bedroom_ricardo
 - id: '1784936404841'
   alias: AC Sótão -  Arrefecimento Modo Férias
-  description: ''
+  description: During extended absence, use the shared solar overheating-protection blueprint for climate.hall and the hall temperature sensor, cooling to 25 C above 26 C when PV and house-load conditions permit.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar_overheating.yaml
     input:
@@ -5556,7 +5561,7 @@
       temperature_sensor: sensor.temperature_hall
 - id: '1785049940859'
   alias: 'Venda de Excedente - Ativar '
-  description: ''
+  description: Before 17:00, enable Deye solar export with battery above 50 percent and either battery above 95 percent or remaining solar forecast above 25. If battery is below 90 percent, reduce maximum charge current to 40.
   triggers:
   - trigger: battery.level_crossed_threshold
     target:
@@ -5649,7 +5654,7 @@
   mode: single
 - id: '1787434704097'
   alias: 'Estores - Limpar a Última Acção '
-  description: ''
+  description: Mark a monitored shutter's last action as Manualmente on any state or attribute change. Stairs use an input_select; other shutters use ESPHome select entities, which group workers overwrite with their action reason after ten seconds.
   triggers:
   - trigger: state
     entity_id:
@@ -5683,7 +5688,7 @@
   mode: parallel
 - id: '1788465709338'
   alias: cctv_vision_front_garden
-  description: ''
+  description: Use the external event-summary blueprint to summarize front-garden person detections while the house is empty and deliver consolidated notifications to Joao's phone. The analysis prompt requests concise European Portuguese observations.
   use_blueprint:
     path: valentinfrlch/event_summary.yaml
     input:
@@ -5722,7 +5727,7 @@
           for: 00:00:00
 - id: '1789252945598'
   alias: 'Parar routinas de fechar o portão '
-  description: ''
+  description: Stop the sensor-based and kitchen-door-based gate auto-close scripts when the gate reports closed.
   triggers:
   - trigger: gate.closed
     target:
@@ -5741,7 +5746,7 @@
   mode: single
 - id: '1789490148687'
   alias: cctv_frigate_mode
-  description: ''
+  description: Select Frigate profile home in On or Evening mode, armed_home in Night or Sleep, and armed otherwise. Recheck on house-mode or household-presence changes.
   triggers:
   - trigger: state
     entity_id: sensor.house_mode

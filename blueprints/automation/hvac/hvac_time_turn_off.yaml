@@ -1,11 +1,15 @@
 blueprint:
   name: "[HVAC] Controlo Horário - Desligar Ar Condicionado"
-  description: Desligar Ar condicionado a uma determinada hora
+  description: >-
+    Stop selected climate units at a scheduled time when HVAC bypass is off.
+    Day eligibility is the selected weekday list OR either enabled workday branch;
+    the weekend flags do not restrict a weekday list that already includes all days.
 
   domain: automation
   input:
     hvac_unit:
       name: Unidade a Controlar
+      description: Climate units receiving the scheduled turn-off command.
       selector:
         entity:
           domain: climate
@@ -13,24 +17,27 @@ blueprint:
 
     schedule:
       name: Horário
-      description: Horário da acção
+      description: Local time at which the shutdown is evaluated.
       selector:
         time:
 
     run_on_weekends:
       name: Fim de Semana
+      description: Enable an additional workday-sensor eligibility branch. Despite this input name, that branch checks workday on, not off.
       default: false
       selector:
         boolean:
 
     weekend_tomorrow:
       name: Verificar Dia Seguinte
+      description: Select tomorrow's workday sensor for the additional enabled branch instead of today's; the explicit weekday list remains an independent alternative.
       default: false
       selector:
         boolean:
 
     weekday:
       name: Dia da Semana
+      description: Explicit eligible weekdays; this OR branch independently permits shutdown regardless of the weekend flags.
       default: [mon, tue, wed, thu, fri, sat, sun]
       selector:
         select:

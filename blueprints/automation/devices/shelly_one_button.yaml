@@ -1,12 +1,15 @@
 blueprint:
   name: "[Devices] Shelly Device One Button"
   description: >
-    Triggers for Shelly with one button
+    Route button1 single/single_push and long/long_push Shelly device triggers
+    to supplied action sequences. Restart mode cancels an earlier running
+    sequence when another gesture arrives.
 
   domain: automation
   input:
     device:
       name: Device
+      description: Shelly device-registry entry supplying button1 triggers.
       selector:
         device:
           filter:
@@ -14,11 +17,13 @@ blueprint:
               manufacturer: Shelly
     button_short:
       name: Short Press
+      description: Actions for either supported short-press trigger spelling.
       selector:
         action:
       default: []
     button_long:
       name: Long Press
+      description: Actions for either supported long-press trigger spelling.
       selector:
         action:
       default: []

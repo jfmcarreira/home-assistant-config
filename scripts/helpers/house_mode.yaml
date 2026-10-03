@@ -1,4 +1,5 @@
 select_next_house_mode:
+  description: Cycle On to Evening to Night to On. From Sleep select Night; from other states select On. This is a manual override of the house-mode selector also managed by AppDaemon.
   sequence:
     - choose:
         - conditions:

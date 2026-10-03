@@ -1,5 +1,6 @@
 sequence_notify_tasks:
   alias: Sequência de Notificar sobre as Tarefas
+  description: Announce the reminder to start the dishwasher on the kitchen speaker when its reminder helper is on. Departure routines call this helper before leaving.
   mode: single
   icon: mdi:alert
   sequence:

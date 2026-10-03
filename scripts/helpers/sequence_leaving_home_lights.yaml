@@ -1,5 +1,6 @@
 sequence_leaving_home_lights:
   alias: Sequência de Ligar as Luzes ao Sair de Casa
+  description: At night, wait up to five minutes for the kitchen door to open and light the rear, side and doorway exit path. After door closure or timeout plus one minute, switch off rear/doorway lights; keep side lighting until gate closure or a further ten-minute timeout.
   mode: single
   trace:
     stored_traces: 1

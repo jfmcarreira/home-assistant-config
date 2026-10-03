@@ -1,16 +1,17 @@
 script:
   cover_group_action_all:
     alias: Controlo Grupo de Estores (Todos)
+    description: Dispatch the requested action and control-helper suffix for all ten configured room shutters through the group controller.
     mode: single
     fields:
       action_to_run:
-        description: Service to run on the covers.
+        description: Action name such as cover.close_cover or script.cover_close_when_raining; script actions receive a room-suffix argument.
         example: cover.open
         required: true
         selector:
           text:
       control_switch:
-        description: Switch name that controls which covers to control
+        description: Policy suffix such as open_sunrise or close_with_heat, used to select each room's cover-control helper.
         example: open_sunrise
         required: true
         selector:
@@ -34,10 +35,11 @@ script:
 
   cover_group_action:
     alias: Controlo Grupo de Estores
+    description: Launch an independent worker for each room suffix in covers_list. Workers honor the corresponding control helper; the group derives a last-action reason from the control-switch suffix and returns without waiting for worker completion.
     mode: single
     fields:
       covers_list:
-        description: List of covers
+        description: Room suffixes, not full cover entity IDs, used to select independent per-room workers.
         example: cover.open
         required: true
         default:
@@ -77,13 +79,13 @@ script:
               - label: Escadas
                 value: stairs
       action_to_run:
-        description: Service to run on the covers.
+        description: Action name called by each enabled room worker; script actions receive action_cover and direct services target cover.<room>.
         example: cover.open
         required: true
         selector:
           text:
       control_switch:
-        description: Switch name that controls which covers to control
+        description: Policy suffix used in input_boolean.cover_control_<policy>_<room> and mapped to the recorded last-action reason.
         example: open_sunrise
         required: true
         selector:
@@ -115,6 +117,7 @@ script:
 
   cover_group_action_worker:
     alias: Controlo Individual de Estore
+    description: Act only if the room's matching cover-control helper is on. Call a script with action_cover or a service targeting the cover, then record the supplied last-action reason after ten seconds. Up to 20 room workers may run concurrently.
     mode: parallel
     max: 20
     sequence:

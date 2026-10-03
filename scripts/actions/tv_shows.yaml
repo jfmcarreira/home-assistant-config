@@ -1,5 +1,6 @@
 show_word_party:
   alias: Festa das Palavras na Televisão
+  description: Ask the Netflix Python-script adapter to play Festa das Palavras using its configured living-room media-center controls.
   mode: single
   sequence:
     - service: python_script.netflix_play_show

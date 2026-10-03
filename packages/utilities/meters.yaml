@@ -57,6 +57,7 @@ input_number:
 
 automation:
   - alias: meters_save_water_meter_counter_to_db
+    description: Append changes of the manual water-meter helper to the external meters_tracking database, timestamped at the start of the current hour. Queue up to 20 writes.
     initial_state: true
     mode: queued
     max: 20
@@ -78,6 +79,7 @@ automation:
             {% endif %}
 
   - alias: meters_save_electricity_meters_counter_to_db
+    description: Append changes of the full, peak and off-peak electricity-meter helpers to their matching external database columns, timestamped at the start of the current hour. Queue up to 20 writes.
     initial_state: true
     mode: queued
     max: 20

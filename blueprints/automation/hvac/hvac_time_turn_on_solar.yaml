@@ -1,11 +1,18 @@
 blueprint:
   name: "[HVAC] Controlo Excedente Solar - Ligar Ar Condicionado"
-  description: Ligar Modo Aquecimento do Ar condicionado com Excedente Solar
+  description: >-
+    Start a supplied solar HVAC script while the house is empty, extended-away
+    and HVAC bypass are off, the units and cleaning calendar are off, and windows
+    are clear. Require PV above 2000 W, house load below 2000 W, battery above
+    50 percent and remaining solar forecast greater than three times the energy
+    needed to charge the battery. Temperature must be outside the house target
+    band, with at least two hours between runs.
 
   domain: automation
   input:
     hvac_unit:
       name: Unidade a Controlar
+      description: Climate units required off before the supplied action script is called.
       selector:
         entity:
           domain: climate
@@ -13,6 +20,7 @@ blueprint:
 
     temperature_sensor:
       name: Sensor de Temperatura
+      description: Room temperature compared with the house low/high target helpers.
       default:
       selector:
         entity:
@@ -21,6 +29,7 @@ blueprint:
 
     window_sensor:
       name: Sensor da Janelas
+      description: Local or floor window sensor required off for solar HVAC eligibility.
       default: []
       selector:
         entity:
@@ -29,6 +38,7 @@ blueprint:
 
     hvac_script:
       name: Script de Apoio Solar
+      description: Script called synchronously after eligibility passes; it owns HVAC setup, waiting and shutdown.
       selector:
         entity:
           filter:

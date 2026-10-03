@@ -1,9 +1,15 @@
 blueprint:
   domain: script
   name: "[HVAC] Dehumidifier Routine"
+  description: >-
+    Request 18 C dry mode and wait up to 90 minutes or for a listed mode change.
+    If still active, stop unless optional heating is enabled and room temperature
+    is not above 20 C. The heating phase uses the house high-temperature target
+    and stops on a listed mode/temperature transition or after 30 minutes.
   input:
     hvac_entitiy:
       name: Ar Condicionado
+      description: Single AC unit used for drying and optional heating; preserve the existing input-key spelling in instances.
       selector:
         entity:
           multiple: false
@@ -11,6 +17,7 @@ blueprint:
             - domain: climate
     temperature_sensor:
       name: Sensor Temperatura
+      description: Room sensor controlling post-drying heating eligibility and the above-20.3 C heating stop trigger.
       selector:
         entity:
           multiple: false
@@ -19,6 +26,7 @@ blueprint:
               device_class: temperature
     heat_after:
       name: Aquecer
+      description: Allow post-drying heating when the room is not above 20 C; false requests shutdown after the drying wait.
       default: false
       selector:
         boolean:

@@ -2,27 +2,31 @@ blueprint:
   domain: script
   name: Notification Script
   description: >-
-    A script to send notification to be who its home
+    Send mobile notifications separately to Joao and Bianca only when each
+    person entity is home. Forward title, message and persistent setting;
+    the priority input is currently not forwarded by the action data.
 
   input:
     title:
       name: "Title"
-      description: "The title of the button shown in the notification."
+      description: "Notification heading, not an action-button label."
       default: ""
       selector:
         text:
     message:
       name: "Message"
-      description: "The message body"
+      description: "Message delivered to each eligible resident's phone."
       selector:
         text:
     persistent:
       name: Notificação Persistente
+      description: Persistent flag passed to the mobile notification data.
       default: false
       selector:
         boolean:
     priority:
       name: Prioridade
+      description: Retained input whose forwarding is commented out; changing it currently does not alter delivered notification priority.
       default: "low"
       selector:
         select:

@@ -57,6 +57,7 @@ input_boolean:
 script:
   roborock_vacuum_selected_rooms:
     alias: "Roborock Vacuum Selected Rooms"
+    description: "Publish a Valetudo segment-cleaning request for the selected upstairs rooms, then clear all room-selection helpers. Ground-floor selection helpers are present but are not included in the current payload."
     sequence:
       - condition: template
         value_template: >

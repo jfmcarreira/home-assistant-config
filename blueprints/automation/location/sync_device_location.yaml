@@ -2,12 +2,15 @@ blueprint:
   domain: automation
   name: "[Location] Sync Device Location"
   description: >-
-    Request GPS location untill it matches wifi information
+    When the Wi-Fi tracker is not home but the mobile tracker remains home,
+    request phone location updates every 20 seconds, up to 20 attempts. Stop
+    when Wi-Fi returns home or the mobile tracker leaves home; do not directly
+    overwrite either tracker state.
 
   input:
     mobile_device:
       name: Device
-      description: Mobile device to track location
+      description: Mobile-app device that receives request_location_update notifications.
       default: ""
       selector:
         device:
@@ -17,12 +20,14 @@ blueprint:
             integration: mobile_app
     wifi_location:
       name: Wifi Tracker
+      description: Wi-Fi tracker whose changes trigger reconciliation; home state prevents or ends requests.
       selector:
         entity:
           filter:
             - domain: device_tracker
     mobile_location:
       name: Mobile Tracker
+      description: Phone location tracker that must still say home for another location request to be sent.
       selector:
         entity:
           filter:

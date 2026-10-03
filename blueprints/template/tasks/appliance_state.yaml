@@ -1,35 +1,41 @@
 blueprint:
   name: appliance_state
-  description: Creates a sensor which holds the state of an appliance
+  description: Create an appliance display sensor combining door, running and pending-task state. An open door takes display precedence; otherwise show running, completed-task or Desligada. Icon selection follows running/task state independently of the door.
   domain: template
   input:
     appliance_running_state:
       name: Maquina
+      description: Running-state binary sensor that also determines availability of the display sensor.
       selector:
         entity:
           domain: binary_sensor
           device_class: plug
     appliance_task:
       name: Tarefa da Máquina
+      description: Binary sensor on when completed contents still require attention, such as emptying the appliance.
       selector:
         entity:
           domain: binary_sensor
           device_class: plug
     appliance_door:
       name: Porta da Máquina
+      description: Door sensor whose on state forces the display text Aberta, even when a running or pending-task state exists.
       selector:
         entity:
           domain: binary_sensor
     appliance_task_running_name:
       name: Tarefa da Máquina a Decorrer
+      description: Display text while the appliance runs with its door closed.
       selector:
         text:
     appliance_task_name:
       name: Tarefa da Máquina Concluída
+      description: Display text for completed contents awaiting attention with the door closed.
       selector:
         text:
     icon:
       name: Icon - Estado Normal
+      description: Base icon used while running; pending and idle states append -alert and -off respectively.
       selector:
         icon:
 variables:

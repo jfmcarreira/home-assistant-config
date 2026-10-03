@@ -1,10 +1,15 @@
 blueprint:
   name: "[HVAC] Controlo Excedente Solar - Acao Ar Condicionado"
-  description: Liga, controla e desliga um ar condicionado com excedente solar.
+  description: >-
+    Select heating below the house low-temperature target or cooling otherwise,
+    set the corresponding house target with auto fan and swing, then wait for a
+    configured temperature, battery, PV, arrival or unit-off transition before
+    shutdown. There is no overall timeout; the calling automation must check solar eligibility.
   domain: script
   input:
     hvac_unit:
       name: Unidade a Controlar
+      description: Single climate unit controlled throughout this script.
       selector:
         entity:
           filter:
@@ -12,6 +17,7 @@ blueprint:
 
     temperature_sensor:
       name: Sensor de Temperatura
+      description: Room temperature used to select heat/cool and by both temperature stop-trigger templates.
       selector:
         entity:
           filter:

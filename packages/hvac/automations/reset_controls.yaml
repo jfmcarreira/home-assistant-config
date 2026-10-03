@@ -1,6 +1,7 @@
 automation:
   - id: ac_reset_living_room
     alias: Ar Condicionado - Reset dos Controlos da Sala
+    description: After living-room AC has been off for ten seconds, reset its setpoint to 18 C in spring/summer or 23 C otherwise, fan to auto and swing to 3D.
     mode: single
     trigger:
       - platform: state
@@ -35,6 +36,7 @@ automation:
 
   - id: ac_reset_master_bedroom
     alias: Ar Condicionado - Reset dos Controlos da Suite
+    description: After master-bedroom AC has been off for 30 seconds, reset its setpoint to 18 C in spring/summer or 23 C otherwise, fan to auto and swing to both.
     mode: single
     trigger:
       - platform: state
@@ -75,6 +77,7 @@ automation:
 
   - id: ac_reset_bedroom_ricardo
     alias: Ar Condicionado - Reset dos Controlos do Quarto do Ricardo
+    description: After Ricardo's bedroom AC has been off for 30 seconds, reset its setpoint to 18 C in spring/summer or 23 C otherwise, fan to auto and swing to both.
     mode: single
     trigger:
       - platform: state

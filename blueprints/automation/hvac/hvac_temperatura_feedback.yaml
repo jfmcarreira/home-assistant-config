@@ -1,13 +1,16 @@
 blueprint:
   name: "[HVAC] Controlo da Temperatura do Ar Condicionado"
   description: >
-    Ajustar a temperatura do Ar Condicionado com base na temperatura da divisão
+    Adjust an AC setpoint by 1 C when measured room temperature differs from the
+    target by more than 0.1 C. Require stable heat/cool mode for 30 minutes and
+    ten minutes between adjustments. Gate adjustments using heat limits
+    of 18-24 C or cooling limits of 16-22 C.
 
   domain: automation
   input:
     temperature_sensor:
       name: Temperatura
-      description: Sensor de Temperatura da divisão
+      description: Measured room-temperature sensor; readings must be above zero for adjustment.
       selector:
         entity:
           domain: sensor
@@ -15,14 +18,14 @@ blueprint:
 
     target_temperature:
       name: Temperatura
-      description: Sensor de Temperatura da divisão
+      description: Input-number helper containing the desired room temperature, not the unit's current setpoint.
       selector:
         entity:
           domain: input_number
 
     hvac_unit:
       name: Unidade a Controlar
-      description: Ar Condicionado a controlar
+      description: Climate unit whose setpoint is incremented or decremented while it has been heating or cooling for 30 minutes.
       selector:
         entity:
           domain: climate

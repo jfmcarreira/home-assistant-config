@@ -6,6 +6,7 @@ homeassistant:
 automation:
   - id: event_remain_task_todo
     alias: event_remain_task_todo
+    description: Emit event_remaind_task_todo at minute 30 of each hour, when either resident arrives home, and when the kitchen door opens. Task blueprints apply their own due-state, notification and do-not-disturb checks.
     mode: single
     trigger:
       - platform: time_pattern

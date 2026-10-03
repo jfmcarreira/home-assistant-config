@@ -1,12 +1,13 @@
 script:
   cover_open_if_close:
     alias: Abrir Estores caso estejam fechados
+    description: Open the requested shutter only when its state is closed. Pass the room suffix, such as kitchen, because the script constructs the cover entity ID.
     mode: parallel
     max: 10
     fields:
       action_cover:
         name: Cover
-        description: Cover to control
+        description: Room suffix such as kitchen; the script prepends cover. to construct the target entity ID.
         example: cover.kitchen
         selector:
           entity:
@@ -23,12 +24,13 @@ script:
 
   cover_middle_pos:
     alias: Colocar Estores a Dois Terços
+    description: Set the requested shutter to 66 percent open. The action_cover argument is the room suffix used to construct its cover entity ID.
     mode: parallel
     max: 10
     fields:
       action_cover:
         name: Cover
-        description: Cover to control
+        description: Room suffix such as kitchen; the script prepends cover. to construct the target entity ID.
         example: cover.kitchen
         selector:
           entity:
@@ -45,12 +47,13 @@ script:
 
   cover_partial_open:
     alias: Colocar Estores a Um Terço
+    description: Set the requested shutter to 30 percent open. The action_cover argument is the room suffix used to construct its cover entity ID.
     mode: parallel
     max: 10
     fields:
       action_cover:
         name: Cover
-        description: Cover to control
+        description: Room suffix such as kitchen; the script prepends cover. to construct the target entity ID.
         example: cover.kitchen
         selector:
           entity:
@@ -67,12 +70,13 @@ script:
 
   cover_open_if_close_with_heat:
     alias: Abrir Estores Fechados com o Calor
+    description: Open a closed shutter only when its last-action select is Sol, so heat recovery does not reopen shutters closed manually or for another reason. Pass its room suffix.
     mode: parallel
     max: 10
     fields:
       action_cover:
         name: Cover
-        description: Cover to control
+        description: Room suffix used to find both cover.<room> and its last-action select; only shutters marked Sol are reopened.
         example: cover.kitchen
         selector:
           entity:
@@ -91,12 +95,13 @@ script:
 
   cover_close_when_raining:
     alias: Fechar Estores Durante a Chuva
+    description: If the shutter is more open than its rainy-position helper, close it fully, wait up to one minute for closed state and then set the rainy position. Pass the room suffix; timeout does not abort the final position command.
     mode: parallel
     max: 10
     fields:
       action_cover:
         name: Cover
-        description: Cover to control
+        description: Room suffix used to find cover.<room> and input_number.cover_rainy_position_<room>.
         example: cover.kitchen
         selector:
           entity:

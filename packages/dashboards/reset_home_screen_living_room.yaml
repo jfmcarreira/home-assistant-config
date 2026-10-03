@@ -1,6 +1,6 @@
 automation:
   - alias: Tablet Reset Home Screen Living Room
-    description: ""
+    description: "Reload the configured living-room dashboard URL after screen-off, Off/Sleep mode, household absence or two minutes of clear motion on any monitored ground-floor/stair sensor. Skip if the current page already matches."
     triggers:
       - entity_id:
           - switch.lenovo_tablet_screen

@@ -1,5 +1,6 @@
 automation:
   - alias: Sonoff RF Bridge Demultiplexer
+    description: Forward each Tasmota RF bridge RfReceived.Data payload to the Python demultiplexer, which publishes per-device MQTT sensor states or an unknown-code topic. Queue up to 100 received messages.
     mode: queued
     max: 100
     trigger:

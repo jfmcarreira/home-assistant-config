@@ -1,19 +1,19 @@
 run_actions_later:
   alias: Executar Ações Mais Tarde
-  description: "Executa uma lista simples de ações depois de um atraso. Não sobrevive a reinícios do Home Assistant."
+  description: "Wait the supplied hours, minutes and seconds, then run simple service calls sequentially. Calls may include entity_id and data; pending runs do not survive Home Assistant restarts."
   mode: parallel
   max: 20
   fields:
     delay:
       name: "Atraso"
-      description: "Tempo a esperar antes de executar as ações."
+      description: "Delay before execution, using hours, minutes and seconds. Other duration fields are not consumed by this script."
       required: true
       example: "{\"hours\": 1, \"minutes\": 0, \"seconds\": 0}"
       selector:
         duration:
     actions:
       name: "Ações"
-      description: "Lista de chamadas simples com action, entity_id opcional e data opcional."
+      description: "Ordered list of service-call objects with action, optional entity_id and optional data. Calls without entity_id are made without a target."
       required: true
       example: "[{\"action\": \"climate.turn_off\", \"entity_id\": \"climate.living_room\"}]"
       selector:

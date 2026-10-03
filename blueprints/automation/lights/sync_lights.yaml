@@ -1,44 +1,47 @@
 blueprint:
   name: "[Lights] Sync Light State"
   description: >
-    Sync On/Off state of the lights
-
-    Required entities:
-      - Main light
-      - Extra light
+    Propagate selected master/extra light switch-off transitions and optionally
+    switch off the extra light when the master turns on. The two master-on choose
+    branches have the same trigger match, so the first branch is selected even
+    when its exclusive flag is false; the later sync_on branch is not reached.
 
   domain: automation
   input:
     master_light:
       name: Master light
-      description: The main light of the room which others will follow state
+      description: Light whose on/off transitions are used to control the extra light.
       selector:
         entity:
           domain: light
     slave_light:
       name: Extra light
-      description: Extra light in the room
+      description: Light controlled from the master; its off transition can optionally switch the master off.
       default:
       selector:
         entity:
           domain: light
     sync_exclusive:
       name: Turn light off when master turns on
+      description: Switch the extra light off on a master-on transition; this does not react to an extra-light on transition.
       default: false
       selector:
         boolean:
     sync_on:
       name: Turn light on when master turns on
+      description: Intended master-on propagation flag; currently shadowed by the preceding master-on choose branch, so it has no effect in this implementation.
       default: false
       selector:
         boolean:
     sync_off:
       name: Turn light off when master turns off
+      description: Switch the extra light off when the master changes from on to off.
       default: false
       selector:
         boolean:
     sync_off_from_slave:
       name: Turn light off when slave turns off
+      description: Switch the master off when the extra light changes from on to off.
       default: false
       selector:
         boolean:

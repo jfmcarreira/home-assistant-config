@@ -1,11 +1,17 @@
 blueprint:
   name: "[HVAC] Controlo Horário - Ligar Ar Condicionado"
-  description: Ligar Modo Aquecimento do Ar condicionado a uma determinada hora
+  description: >-
+    Start heating or cooling within a selected season/day/time window when units
+    are off, windows are clear, HVAC bypass and extended-away mode are off, and
+    measured temperatures satisfy the room threshold and house target band.
+    Require 12 hours between runs. Set auto fan and swing, run optional actions,
+    and optionally offset the setpoint after one hour. The end time does not stop HVAC.
 
   domain: automation
   input:
     hvac_unit:
       name: Unidade a Controlar
+      description: Climate units that must all be off before starting and receive the same mode, target, fan and swing commands.
       selector:
         entity:
           domain: climate
@@ -13,24 +19,26 @@ blueprint:
 
     hvac_mode_heat:
       name: Mode Calor
+      description: Select heating when true or cooling when false; heating also requires outdoor temperature below the room threshold.
       default: true
       selector:
         boolean:
 
     schedule_start:
       name: Horário de ínicio de controlo
-      description: Horário da acção
+      description: Start of the allowed control window and a scheduled trigger time; the strict after condition still applies at evaluation.
       selector:
         time:
 
     schedule_end:
       name: Horário de fim de controlo
-      description: Horário da acção
+      description: End of the allowed start window, not an automatic shutdown time.
       selector:
         time:
 
     weekday:
       name: Dia da Semana
+      description: Days on which new scheduled-HVAC runs are eligible.
       default: [mon, tue, wed, thu, fri, sat, sun]
       selector:
         select:
@@ -54,6 +62,7 @@ blueprint:
 
     hvac_temperature:
       name: Temperatura do AC
+      description: Initial setpoint sent to every selected climate unit, distinct from the measured room-temperature threshold.
       default: 20
       selector:
         number:
@@ -63,12 +72,14 @@ blueprint:
 
     extra_hvac_actions:
       name: Acções Extra
+      description: Actions executed after setting mode, temperature, auto fan and swing, before any delayed setpoint change.
       default: []
       selector:
         action:
 
     hvac_delayed_temperature_offset:
       name: Temperatura do AC Após 1h
+      description: Offset added to the initial setpoint after one hour; zero skips the delay and adjustment.
       default: 0
       selector:
         number:
@@ -78,6 +89,7 @@ blueprint:
 
     temperature_sensor:
       name: Sensor de Temperatura
+      description: Measured room or floor-average temperature used for eligibility and threshold triggers.
       default:
       selector:
         entity:
@@ -86,6 +98,7 @@ blueprint:
 
     window_sensor:
       name: Sensor da Janelas
+      description: Local or floor window sensor required off, in addition to the hard-coded whole-house window check.
       default: []
       selector:
         entity:
@@ -94,6 +107,7 @@ blueprint:
 
     room_temperature:
       name: Temperatura da Divisão
+      description: Measured-temperature threshold for starting; heat requires room and outside below it, while cool requires room above it.
       default: 20
       selector:
         number:
@@ -104,6 +118,7 @@ blueprint:
 
     room_temperature_diff:
       name: Diferença para a Referência
+      description: Minimum room-temperature gap from the house low target for heating or high target for cooling, in C.
       default: 0
       selector:
         number:
@@ -114,6 +129,7 @@ blueprint:
 
     selected_season:
       name: Estação do Ano
+      description: Allowed states of sensor.season for starting the routine.
       default: [spring, summer, autumn, winter]
       selector:
         select:

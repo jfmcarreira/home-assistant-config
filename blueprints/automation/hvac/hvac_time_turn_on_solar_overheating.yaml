@@ -1,11 +1,16 @@
 blueprint:
   name: "[HVAC] Controlo Excedente Solar - Ligar Ar Condicionado Modo Férias"
-  description: Ligar Modo Arrefecer do Ar condicionado com Excedente Solar para prevenir sobre-aquecimento no modo férias
+  description: >-
+    During extended absence with an empty house, cool selected units to 25 C when
+    room temperature exceeds 26 C, PV is above 1500 W, house load is below 2000 W
+    and HVAC bypass is off. Require units off and two hours between runs. Stop
+    after a below-24 C transition sustained for ten minutes or a four-hour timeout.
 
   domain: automation
   input:
     hvac_unit:
       name: Unidade a Controlar
+      description: Climate units required off before receiving the shared cooling, target, fan and swing commands.
       selector:
         entity:
           domain: climate
@@ -13,6 +18,7 @@ blueprint:
 
     temperature_sensor:
       name: Sensor de Temperatura
+      description: Room temperature used for the above-26 C start check and below-24 C stop trigger.
       default:
       selector:
         entity:

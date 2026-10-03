@@ -1,71 +1,87 @@
 blueprint:
   name: "[Devices] Controls for BHOnfre buttons"
   description: >
-    Actions for buttons from the cover controls of BHOnfre using ESPHome
+    Route esphome.button_pressed events from one BHOnofre shutter controller to
+    supplied actions. Main buttons support double/triple events; auxiliary
+    buttons support single/long/double/triple events. Local shutter motion is
+    handled in firmware. Single mode ignores new events while an action is running.
 
   domain: automation
   input:
     device:
       name: Device
+      description: Firmware device-name string matched against the event's device field, not a Home Assistant device-registry ID.
       selector:
         text:
     main_double_top_action:
       name: Cover Double Top
+      description: Actions for a double event on main_top; empty leaves this gesture without an HA action.
       default: []
       selector:
         action:
     main_double_bottom_action:
       name: Cover Double Bottom
+      description: Actions for a double event on main_bottom.
       default: []
       selector:
         action:
     main_triple_top_action:
       name: Cover Triple Top
+      description: Actions for a triple event on main_top.
       default: []
       selector:
         action:
     main_triple_bottom_action:
       name: Cover Triple Bottom
+      description: Actions for a triple event on main_bottom.
       default: []
       selector:
         action:
     single_top_action:
       name: Extra Single Top
+      description: Actions for a single event on extra_top, independently of the main shutter-motion buttons.
       default: []
       selector:
         action:
     single_bottom_action:
       name: Extra Single Bottom
+      description: Actions for a single event on extra_bottom.
       default: []
       selector:
         action:
     double_top_action:
       name: Extra Double Top
+      description: Actions for a double event on extra_top, often used for AC control by room instances.
       default: []
       selector:
         action:
     double_bottom_action:
       name: Extra Double Bottom
+      description: Actions for a double event on extra_bottom.
       default: []
       selector:
         action:
     triple_top_action:
       name: Extra Triple Top
+      description: Actions for a triple event on extra_top; instance actions supply any guest or setpoint conditions.
       default: []
       selector:
         action:
     triple_bottom_action:
       name: Extra Triple Bottom
+      description: Actions for a triple event on extra_bottom.
       default: []
       selector:
         action:
     long_top_action:
       name: Extra Long Top
+      description: Actions for a long event on extra_top, such as a room-specific brightness adjustment.
       default: []
       selector:
         action:
     long_bottom_action:
       name: Extra Long Bottom
+      description: Actions for a long event on extra_bottom.
       default: []
       selector:
         action:

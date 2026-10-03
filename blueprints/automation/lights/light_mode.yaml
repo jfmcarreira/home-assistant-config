@@ -1,25 +1,28 @@
 blueprint:
   name: "[Lights] Configurar Luz com Base no Estado da Casa"
   description: >
-    Configurar temperatura e brilho das luzes com base na hora/modo de funcionamento da casa
+    Apply a scene when the selected light turns on. Use the day scene only in
+    On mode and the night scene in other modes. A retrigger during the five-second
+    running window can select the supplied fallback scene.
 
   domain: automation
   input:
     master_light:
       name: Luz
-      description: Luz a controlar
+      description: Light whose off-to-on transition selects a lighting scene.
       selector:
         entity:
           domain: light
     scene_day:
       name: Cenário de Dia
-      description: Light to follow state
+      description: Scene applied when house mode is On and the fallback branch is not selected.
       default:
       selector:
         entity:
           domain: scene
     scene_night:
       name: Cenário de Noite
+      description: Scene applied in every house mode other than On when the fallback branch is not selected.
       default:
       selector:
         entity:
@@ -27,6 +30,7 @@ blueprint:
 
     scene_fallback:
       name: (OPCIONAL) Cenário em caso de duplo trigger
+      description: Optional scene for a retrigger while the automation is already running during its five-second window.
       default:
       selector:
         entity:

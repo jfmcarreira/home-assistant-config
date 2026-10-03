@@ -1,5 +1,6 @@
 sequence_door_open:
   alias: Sequência Esperar Pela Abertura da Porta da Cozinha
+  description: Show departure progress while waiting up to five minutes for the kitchen door to open if needed, then up to one minute for it to close. Both timeouts continue the sequence, and the progress message is cleared at the end.
   mode: single
   icon: mdi:door
   trace:

@@ -1,45 +1,47 @@
 blueprint:
   name: Notify camera snapshot when motion is detected
   description: >
-    This automation blueprint creates a camera snapshot if motion is detected
-    and sends a notification to your phone with the picture.
+    While the house is empty, capture a selected camera on a monitored sensor's
+    off-to-on transition and send its image to the enabled residents' phones.
+    Each camera uses a fixed snapshot filename replaced by subsequent captures.
   domain: automation
   input:
     motion_sensor:
       name: Motion sensor
-      description: The sensor which triggers the snapshot creation
+      description: Binary sensors whose off-to-on transitions trigger a snapshot while household presence is off.
       selector:
         entity:
           domain: binary_sensor
           multiple: true
     camera:
       name: Camera
-      description: The camera which creates the snapshot
+      description: Camera captured to its per-camera file under /config/www/camera.
       selector:
         entity:
           domain: camera
           multiple: false
     notify_joao:
       name: Notificar João
-      description: Alternar para notificar o João
+      description: Send the snapshot notification to Joao's phone when enabled.
       selector:
         boolean: {}
       default: false
     notify_bianca:
       name: Notificar Bianca
-      description: Alternar para notificar a Bianca
+      description: Send the snapshot notification to Bianca's phone when enabled.
       selector:
         boolean: {}
       default: false
     notification_tag:
       name: Notification tag
+      description: Mobile notification tag used to group or replace alerts from this instance.
     notification_title:
       name: Notification title (Optional)
-      description: 'Default: "Movimento Detectado!"'
+      description: 'Notification heading; the default is the existing Portuguese motion-detected label.'
       default: Movimento Detectado!
     notification_message:
       name: Notification message (Optional)
-      description: 'Default: "{{ motion_sensor_name }}!"'
+      description: 'Notification body; the default renders the triggering sensor name followed by an exclamation mark.'
       default: "{{ motion_sensor_name }}!"
 
 trigger:
