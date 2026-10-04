@@ -1,0 +1,155 @@
+- type: vertical-stack
+  view_layout:
+    column: 1
+  cards:
+    - type: entity
+      entity: sensor.solar_forecast_today_remaining
+      name: Estimativa de Produção Restante
+
+    - type: entity
+      entity: sensor.battery_time_left_to_discharge
+      name: Tempo de Descarga
+
+    - type: horizontal-stack
+      cards:
+        - type: vertical-stack
+          cards:
+            - type: heading
+              heading: Forecast.solar
+              heading_style: subtitle
+
+            - type: tile
+              entity: sensor.solar_forecast_today
+              name: Estim. Total Hoje
+              vertical: false
+              features_position: bottom
+
+            - type: tile
+              entity: sensor.solar_forecast_tomorrow
+              name: Estim. Total Amanhã
+              vertical: false
+              features_position: bottom
+
+        - type: vertical-stack
+          cards:
+            - type: heading
+              heading: Solcast
+              heading_style: subtitle
+
+            - type: tile
+              entity: sensor.solcast_pv_forecast_today
+              name: Estim. Total Hoje
+              vertical: false
+              features_position: bottom
+
+            - type: tile
+              entity: sensor.solcast_pv_forecast_tomorrow
+              name: Estim. Total Amanhã
+              vertical: false
+              features_position: bottom
+
+    - type: horizontal-stack
+      cards:
+        - type: entity
+          entity: sensor.deye_inverter_battery
+          name: Estado da Bateria
+          state_color: true
+
+        - type: tile
+          entity: switch.deye_inverter_solar_sell
+          name: Venda de Excedente
+          icon: mdi:solar-power-variant
+          vertical: true
+          icon_tap_action:
+            action: toggle
+          features_position: bottom
+
+    - type: horizontal-stack
+      cards:
+        - type: tile
+          entity: sensor.deye_inverter_pv_power
+          name: Potência da Bateria
+          vertical: false
+        - type: tile
+          entity: sensor.deye_inverter_battery_power
+          name: Potência da Bateria
+          vertical: false
+
+    - type: custom:mini-graph-card
+      entities:
+      - entity: sensor.house_power_consumption
+        name: Casa
+      - entity: sensor.house_power_grid
+        name: Rede
+      - entity: sensor.deye_inverter_pv_power
+        name: Solar
+      - entity: sensor.deye_inverter_battery_power
+        name: Bateria
+      height: 150
+      hours_to_show: 24
+      line_width: 1
+      points_per_hour: 10
+      lower_bound: 0
+      min_bound_range: 0
+      show:
+        state: false
+
+
+- type: vertical-stack
+  view_layout:
+    column: 2
+  cards:
+    - type: tile
+      entity: number.deye_inverter_max_sell_power
+      vertical: false
+      features:
+        - type: numeric-input
+          style: slider
+          min: 500
+          max: 3800
+      features_position: inline
+
+    - type: tile
+      entity: number.deye_inverter_maximum_battery_charge_current
+      vertical: false
+      features:
+        - type: numeric-input
+          style: slider
+      features_position: inline
+
+    - type: tile
+      entity: number.deye_inverter_time_of_use_soc
+      vertical: false
+      features:
+        - type: numeric-input
+          style: slider
+      features_position: inline
+
+    - type: horizontal-stack
+      cards:
+        - type: tile
+          entity: climate.deye_inverter_cooling_fan
+          name:
+            type: entity
+          vertical: false
+          features:
+            - type: target-temperature
+          features_position: bottom
+
+        - type: tile
+          entity: sensor.deye_inverter_cooling_fan_speed
+
+    - type: custom:auto-entities
+      card:
+        type: entities
+        title: Automações
+        show_header_toggle: false
+        state_color: false
+      filter:
+        include:
+          - entity_id: automation.solar_*
+            options:
+              tap_action:
+                action: more-info
+      sort:
+        method: name

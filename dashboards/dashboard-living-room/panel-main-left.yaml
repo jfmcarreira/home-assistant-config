@@ -197,7 +197,7 @@
       pv:
         entity: sensor.deye_inverter_pv_power
         tap_action: navigate
-        navigation_path: /lovelace-subviews/dashboard-solar
+        navigation_path: "#panel-solar"
         labels:
           - entity: sensor.deye_inverter_today_pv_production
             unit: kWh
