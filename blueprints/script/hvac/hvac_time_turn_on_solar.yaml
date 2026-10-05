@@ -31,43 +31,49 @@ variables:
 
 sequence:
   - if:
-      - condition: numeric_state
-        entity_id: !input temperature_sensor
-        below: input_number.house_target_low_temperature
+      - condition: state
+        entity_id: !input hvac_unit
+        state:
+          - "off"
     then:
-      - action: climate.set_hvac_mode
-        target:
-          entity_id: !input hvac_unit
-        data:
-          hvac_mode: heat
-      - action: climate.set_temperature
-        target:
-          entity_id: !input hvac_unit
-        data:
-          temperature: "{{ states('input_number.house_target_low_temperature') | float(0) }}"
-    else:
-      - action: climate.set_hvac_mode
-        target:
-          entity_id: !input hvac_unit
-        data:
-          hvac_mode: cool
-      - action: climate.set_temperature
-        target:
-          entity_id: !input hvac_unit
-        data:
-          temperature: "{{ states('input_number.house_target_high_temperature') | float(0) }}"
+      - if:
+          - condition: numeric_state
+            entity_id: !input temperature_sensor
+            below: input_number.house_target_low_temperature
+        then:
+          - action: climate.set_hvac_mode
+            target:
+              entity_id: !input hvac_unit
+            data:
+              hvac_mode: heat
+          - action: climate.set_temperature
+            target:
+              entity_id: !input hvac_unit
+            data:
+              temperature: "{{ states('input_number.house_target_low_temperature') | float(0) }}"
+        else:
+          - action: climate.set_hvac_mode
+            target:
+              entity_id: !input hvac_unit
+            data:
+              hvac_mode: cool
+          - action: climate.set_temperature
+            target:
+              entity_id: !input hvac_unit
+            data:
+              temperature: "{{ states('input_number.house_target_high_temperature') | float(0) }}"
 
-  - action: climate.set_fan_mode
-    data:
-      fan_mode: auto
-    target:
-      entity_id: !input hvac_unit
+      - action: climate.set_fan_mode
+        data:
+          fan_mode: auto
+        target:
+          entity_id: !input hvac_unit
 
-  - action: climate.set_swing_mode
-    data:
-      swing_mode: swing
-    target:
-      entity_id: !input hvac_unit
+      - action: climate.set_swing_mode
+        data:
+          swing_mode: swing
+        target:
+          entity_id: !input hvac_unit
 
   - alias: "Wait for a solar HVAC stop condition"
     wait_for_trigger:

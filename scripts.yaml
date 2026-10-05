@@ -1,6 +1,7 @@
 cover_scene_rain_mode:
   alias: Routina Modo de Chuva
-  description: Apply each enabled shutter's rain routine across the house, using its configured rainy position rather than closing every shutter unconditionally.
+  description: Apply each enabled shutter's rain routine across the house, using its
+    configured rainy position rather than closing every shutter unconditionally.
   mode: single
   sequence:
   - service: script.cover_group_action
@@ -20,7 +21,10 @@ cover_scene_rain_mode:
       - office
 lights_arriving_home:
   alias: Routina de Chegar a Casa
-  description: At night, cycle the rear, side and kitchen-door lights off for five seconds and back on. Run exterior cleanup in parallel with an indoor arrival branch that requires the kitchen door to open within two minutes; suppress the living-room light in night mode.
+  description: At night, cycle the rear, side and kitchen-door lights off for five
+    seconds and back on. Run exterior cleanup in parallel with an indoor arrival branch
+    that requires the kitchen door to open within two minutes; suppress the living-room
+    light in night mode.
   mode: restart
   sequence:
   - if:
@@ -150,10 +154,13 @@ lights_control_gate_front_lights:
     data: {}
     action: light.turn_off
   mode: single
-  description: At night, light the gate until the gate-closed sensor turns on for ten seconds, or a one-hour wait expires.
+  description: At night, light the gate until the gate-closed sensor turns on for
+    ten seconds, or a one-hour wait expires.
 gate_notify_door_bell_snapshot:
   alias: Campainha - Notificar App
-  description: Capture the front camera to the fixed web-accessible doorbell snapshot file and send high-priority image notifications to both residents' phones, regardless of presence.
+  description: Capture the front camera to the fixed web-accessible doorbell snapshot
+    file and send high-priority image notifications to both residents' phones, regardless
+    of presence.
   mode: single
   variables:
     snapshot_create_file_path: /config/www/camera/snapshot_front_door.jpg
@@ -184,7 +191,9 @@ gate_notify_door_bell_snapshot:
         action: '{{ repeat.item.device }}'
 gate_display_front_camere_tablet:
   alias: Campainha - Mostrar Camera da Frente Tablet
-  description: Open the front-camera Browser Mod popup on the configured browser. Wait up to five minutes for a door opening, pedestrian unlock or gate opening before issuing the follow-up more-info call to the second configured browser ID.
+  description: Open the front-camera Browser Mod popup on the configured browser.
+    Wait up to five minutes for a door opening, pedestrian unlock or gate opening
+    before issuing the follow-up more-info call to the second configured browser ID.
   mode: single
   sequence:
   - target: {}
@@ -229,7 +238,10 @@ gate_display_front_camere_tablet:
       - browser_mod_d95bc50a_a72ebf8b
 routine_exit_house_to_work_bianca:
   alias: Routina ir Trabalhar - Bianca
-  description: If Joao is away and no day off is selected, launch the all-off departure routine, wait through the kitchen-door sequence and open the gate. Otherwise light the exit path, open the gate for Bianca and close it only once she is away within the ten-minute wait.
+  description: If Joao is away and no day off is selected, launch the all-off departure
+    routine, wait through the kitchen-door sequence and open the gate. Otherwise light
+    the exit path, open the gate for Bianca and close it only once she is away within
+    the ten-minute wait.
   mode: single
   icon: mdi:exit-run
   sequence:
@@ -287,7 +299,10 @@ routine_exit_house_to_work_bianca:
     action: cover.close_cover
 routine_exit_house_to_work_joao:
   alias: Routina ir Trabalhar - Joao
-  description: If Bianca is away and no day off is selected, launch the all-off departure routine and sensor-based gate routine after the kitchen-door sequence. Otherwise light the exit path, start the gate routine and close the gate after Joao leaves or a 20-minute wait expires.
+  description: If Bianca is away and no day off is selected, launch the all-off departure
+    routine and sensor-based gate routine after the kitchen-door sequence. Otherwise
+    light the exit path, start the gate routine and close the gate after Joao leaves
+    or a 20-minute wait expires.
   mode: single
   icon: mdi:exit-run
   sequence:
@@ -346,7 +361,9 @@ routine_exit_house_to_work_joao:
     action: cover.close_cover
 routine_leaving_and_coming_back:
   alias: Vou Ali e Já Venho
-  description: Light the exit path, run the kitchen-door sequence, wait ten seconds and open the gate if either resident is home. Close it after a resident leaves; stop without closing if no departure occurs within ten minutes.
+  description: Light the exit path, run the kitchen-door sequence, wait ten seconds
+    and open the gate if either resident is home. Close it after a resident leaves;
+    stop without closing if no departure occurs within ten minutes.
   mode: single
   icon: mdi:arrow-u-down-left
   sequence:
@@ -407,7 +424,9 @@ routine_leaving_and_coming_back:
       value: ''
 house_turn_all_off:
   alias: Desligar a Casa Toda
-  description: In parallel, switch off lights in the listed indoor and outside areas, media players on both floors, and the portable heater. This helper does not change house mode or turn off every climate device.
+  description: In parallel, switch off lights in the listed indoor and outside areas,
+    media players on both floors, and the portable heater. This helper does not change
+    house mode or turn off every climate device.
   mode: restart
   icon: mdi:home-off
   sequence:
@@ -450,7 +469,10 @@ house_turn_all_off:
       action: climate.turn_off
 routine_good_night:
   alias: Routina de Boa Noite
-  description: Shut down the configured lights, fans, media, portable heater, dehumidifier and selected AC areas, close the gate and clear the alarm reminder. After the parallel phase completes, select Sleep, turn off remaining listed lights, and disable tablet screens after 15 seconds.
+  description: Shut down the configured lights, fans, media, portable heater, dehumidifier
+    and selected AC areas, close the gate and clear the alarm reminder. After the
+    parallel phase completes, select Sleep, turn off remaining listed lights, and
+    disable tablet screens after 15 seconds.
   mode: single
   icon: mdi:sleep
   sequence:
@@ -558,7 +580,9 @@ routine_good_night:
     action: switch.turn_off
 routine_car_exit:
   alias: Routina de Sair de Casa de Carro
-  description: Launch the all-off departure routine asynchronously, run the kitchen-door sequence, wait ten seconds and open the vehicle gate. Gate closure is handled by the departure routine or other gate controls.
+  description: Launch the all-off departure routine asynchronously, run the kitchen-door
+    sequence, wait ten seconds and open the vehicle gate. Gate closure is handled
+    by the departure routine or other gate controls.
   mode: single
   icon: mdi:car
   sequence:
@@ -577,7 +601,10 @@ routine_car_exit:
     action: cover.open_cover
 routine_exit_house_all_off:
   alias: Routina de Sair e Desligar Tudo
-  description: Prepare departure lighting, shut down selected loads, announce a pending dishwasher reminder and warn if oven/hob power exceeds 20 W. After the door sequence, wait up to 20 minutes for an empty house; only then close the gate, select Off and shut down the remaining lights and tablet screens.
+  description: Prepare departure lighting, shut down selected loads, announce a pending
+    dishwasher reminder and warn if oven/hob power exceeds 20 W. After the door sequence,
+    wait up to 20 minutes for an empty house; only then close the gate, select Off
+    and shut down the remaining lights and tablet screens.
   mode: single
   icon: mdi:exit-run
   sequence:
@@ -703,7 +730,8 @@ gps_update_bianca:
       message: request_location_update
   - delay:
       seconds: 5
-  description: Request a fresh location from Bianca's phone through the mobile-app notification service, then wait five seconds before returning.
+  description: Request a fresh location from Bianca's phone through the mobile-app
+    notification service, then wait five seconds before returning.
   mode: single
 gps_update_joao:
   alias: Atualizar Localização João
@@ -713,7 +741,8 @@ gps_update_joao:
       message: request_location_update
   - delay:
       seconds: 5
-  description: Request a fresh location from Joao's phone through the mobile-app notification service, then wait five seconds before returning.
+  description: Request a fresh location from Joao's phone through the mobile-app notification
+    service, then wait five seconds before returning.
 substituir_areia_das_gatas:
   sequence:
   - action: automation.trigger
@@ -723,7 +752,8 @@ substituir_areia_das_gatas:
     target:
       entity_id: automation.task_cat_litter_change
   alias: Substituir Areia das Gatas
-  description: Trigger the litter-replacement task automation with its conditions bypassed, allowing an explicit completion request even before replacement is due.
+  description: Trigger the litter-replacement task automation with its conditions
+    bypassed, allowing an explicit completion request even before replacement is due.
 routine_dinner_time:
   sequence:
   - action: light.turn_on
@@ -737,7 +767,8 @@ routine_dinner_time:
     target:
       entity_id: climate.living_room
   alias: Routina Modo de Refeição
-  description: Turn on the living-room dining-table light and turn off living-room air conditioning for mealtime.
+  description: Turn on the living-room dining-table light and turn off living-room
+    air conditioning for mealtime.
 routine_night_mode:
   sequence:
   - variables:
@@ -783,7 +814,10 @@ routine_night_mode:
       target:
         entity_id: light.office
   alias: Routina Modo Noite
-  description: Select Night and switch off the listed exterior and ground-floor lights. Restore the living-room window light if living-room/table/hallway lighting was active, and restore the office light only if it was previously on, allowing their night-level controls to apply.
+  description: Select Night and switch off the listed exterior and ground-floor lights.
+    Restore the living-room window light if living-room/table/hallway lighting was
+    active, and restore the office light only if it was previously on, allowing their
+    night-level controls to apply.
   fields: {}
 routine_gate_open_auto_close:
   sequence:
@@ -859,10 +893,13 @@ routine_gate_open_auto_close:
       entity_id: cover.gate
     data: {}
   alias: Routina de Abrir e Fechar o Portão com Porta da Cozinha
-  description: Open a closed gate and wait without a timeout for a monitored vehicle-sensor change. Then require the kitchen door to open if needed, close, and a gate-open event before closing the gate; each subsequent wait has an aborting timeout.
+  description: Open a closed gate and wait without a timeout for a monitored vehicle-sensor
+    change. Then require the kitchen door to open if needed, close, and a gate-open
+    event before closing the gate; each subsequent wait has an aborting timeout.
 gate_passagem_pedonal:
   alias: Passagem Pedonal
-  description: Press the gate controller's single-opening button to request pedestrian passage, without waiting for gate completion.
+  description: Press the gate controller's single-opening button to request pedestrian
+    passage, without waiting for gate completion.
   sequence:
   - action: button.press
     metadata: {}
@@ -884,7 +921,8 @@ hvac_run_dehumidifier_heat:
       - script.hvac_routine_dehumidifier_heat_bedroom_henrique
     data: {}
   alias: Routina de Desumidificação (Com Aquecimento)
-  description: Start all six room-specific AC drying scripts asynchronously with optional post-drying heating enabled; each room script manages its own waits and shutdown.
+  description: Start all six room-specific AC drying scripts asynchronously with optional
+    post-drying heating enabled; each room script manages its own waits and shutdown.
 routine_good_night_with_lights:
   sequence:
   - data: {}
@@ -897,9 +935,12 @@ routine_good_night_with_lights:
   alias: Routina de Boa Noite (Com Luz)
   mode: single
   icon: mdi:sleep
-  description: Turn on the stair wall light, then run the normal good-night routine synchronously. The base routine's later shutdown also includes the stair group.
+  description: Turn on the stair wall light, then run the normal good-night routine
+    synchronously. The base routine's later shutdown also includes the stair group.
 hvac_routine_dehumidifier_office:
-  description: Run the office AC drying blueprint with post-drying heating disabled. It requests 18 C dry mode, waits up to 90 minutes or for a mode change, then shuts down if the unit is still active.
+  description: Run the office AC drying blueprint with post-drying heating disabled.
+    It requests 18 C dry mode, waits up to 90 minutes or for a mode change, then shuts
+    down if the unit is still active.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -908,7 +949,8 @@ hvac_routine_dehumidifier_office:
       heat_after: false
   alias: Routina de Desumidificação Escritório
 hvac_routine_dehumidifier_living_room:
-  description: Run living-room AC in the shared drying routine without post-drying heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
+  description: Run living-room AC in the shared drying routine without post-drying
+    heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -917,7 +959,8 @@ hvac_routine_dehumidifier_living_room:
       heat_after: false
   alias: Routina de Desumidificação Sala
 hvac_routine_dehumidifier_hall:
-  description: Run upstairs hall AC in the shared drying routine without post-drying heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
+  description: Run upstairs hall AC in the shared drying routine without post-drying
+    heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -926,7 +969,8 @@ hvac_routine_dehumidifier_hall:
       heat_after: false
   alias: Routina de Desumidificação Sótão
 hvac_routine_dehumidifier_master_bedroom:
-  description: Run master-bedroom AC in the shared drying routine without post-drying heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
+  description: Run master-bedroom AC in the shared drying routine without post-drying
+    heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -935,7 +979,8 @@ hvac_routine_dehumidifier_master_bedroom:
       heat_after: false
   alias: Routina de Desumidificação Suite
 hvac_routine_dehumidifier_bedroom_ricardo:
-  description: Run Ricardo's bedroom AC in the shared drying routine without post-drying heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
+  description: Run Ricardo's bedroom AC in the shared drying routine without post-drying
+    heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -951,9 +996,12 @@ hvac_routine_dehumidifier_bedroom_henrique:
       temperature_sensor: sensor.temperature_bedroom_henrique
       heat_after: false
   alias: Routina de Desumidificação Quarto do Henrique
-  description: Run Henrique's bedroom AC in the shared drying routine without post-drying heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
+  description: Run Henrique's bedroom AC in the shared drying routine without post-drying
+    heating, with an initial 18 C dry request and up to 90 minutes before cleanup.
 hvac_routine_dehumidifier_heat_office:
-  description: Run office AC drying with post-drying heating enabled when room temperature is not above 20 C. The shared blueprint limits the heating phase to 30 minutes and shuts the unit down afterward.
+  description: Run office AC drying with post-drying heating enabled when room temperature
+    is not above 20 C. The shared blueprint limits the heating phase to 30 minutes
+    and shuts the unit down afterward.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -962,7 +1010,9 @@ hvac_routine_dehumidifier_heat_office:
       heat_after: true
   alias: Routina de Desumidificação Escritório (Com Aquecimento)
 hvac_routine_dehumidifier_heat_living_room:
-  description: Run living-room AC drying with optional heating when the room is not above 20 C, followed by the shared heating stop conditions and 30-minute maximum wait.
+  description: Run living-room AC drying with optional heating when the room is not
+    above 20 C, followed by the shared heating stop conditions and 30-minute maximum
+    wait.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -971,7 +1021,9 @@ hvac_routine_dehumidifier_heat_living_room:
       heat_after: true
   alias: Routina de Desumidificação Sala (Com Aquecimento)
 hvac_routine_dehumidifier_heat_hall:
-  description: Run upstairs hall AC drying with optional heating when the room is not above 20 C, followed by the shared heating stop conditions and 30-minute maximum wait.
+  description: Run upstairs hall AC drying with optional heating when the room is
+    not above 20 C, followed by the shared heating stop conditions and 30-minute maximum
+    wait.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -980,7 +1032,9 @@ hvac_routine_dehumidifier_heat_hall:
       heat_after: true
   alias: Routina de Desumidificação Sótão (Com Aquecimento)
 hvac_routine_dehumidifier_heat_master_bedroom:
-  description: Run master-bedroom AC drying with optional heating when the room is not above 20 C, followed by the shared heating stop conditions and 30-minute maximum wait.
+  description: Run master-bedroom AC drying with optional heating when the room is
+    not above 20 C, followed by the shared heating stop conditions and 30-minute maximum
+    wait.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -989,7 +1043,9 @@ hvac_routine_dehumidifier_heat_master_bedroom:
       heat_after: true
   alias: Routina de Desumidificação Suite (Com Aquecimento)
 hvac_routine_dehumidifier_heat_bedroom_ricardo:
-  description: Run Ricardo's bedroom AC drying with optional heating when the room is not above 20 C, followed by the shared heating stop conditions and 30-minute maximum wait.
+  description: Run Ricardo's bedroom AC drying with optional heating when the room
+    is not above 20 C, followed by the shared heating stop conditions and 30-minute
+    maximum wait.
   use_blueprint:
     path: hvac/hvac_dehumidifier_routine.yaml
     input:
@@ -1005,7 +1061,9 @@ hvac_routine_dehumidifier_heat_bedroom_henrique:
       temperature_sensor: sensor.temperature_bedroom_henrique
       heat_after: true
   alias: Routina de Desumidificação Quarto do Henrique (Com Aquecimento)
-  description: Run Henrique's bedroom AC drying with optional heating when the room is not above 20 C, followed by the shared heating stop conditions and 30-minute maximum wait.
+  description: Run Henrique's bedroom AC drying with optional heating when the room
+    is not above 20 C, followed by the shared heating stop conditions and 30-minute
+    maximum wait.
 routina_de_desumidificacao:
   sequence:
   - action: script.turn_on
@@ -1020,7 +1078,8 @@ routina_de_desumidificacao:
       - script.hvac_routine_dehumidifier_bedroom_henrique
     data: {}
   alias: Routina de Desumidificação
-  description: Start the six room-specific AC drying scripts asynchronously without post-drying heating. These use AC dry mode, not the portable dehumidifier.
+  description: Start the six room-specific AC drying scripts asynchronously without
+    post-drying heating. These use AC dry mode, not the portable dehumidifier.
 cover_scene_close_with_heat:
   sequence:
   - if:
@@ -1045,7 +1104,9 @@ cover_scene_close_with_heat:
         - bedroom_rc
         - laundry
   alias: Fechar Estores - Exposição Solar
-  description: Close heat-enabled kitchen and master-bedroom shutters when sun azimuth exceeds 180 degrees; otherwise act on stairs, the ground-floor bedroom and laundry. This manually invoked routine does not itself check outdoor temperature or absence.
+  description: Close heat-enabled kitchen and master-bedroom shutters when sun azimuth
+    exceeds 180 degrees; otherwise act on stairs, the ground-floor bedroom and laundry.
+    This manually invoked routine does not itself check outdoor temperature or absence.
 fechar_todos_os_estores_sol_calor:
   sequence:
   - action: script.cover_group_action
@@ -1064,7 +1125,9 @@ fechar_todos_os_estores_sol_calor:
       - kitchen
       - office
   alias: Fechar Todos os Estores - Sol/Calor
-  description: Close the ten listed shutters through the heat-control group worker, respecting each room's close_with_heat helper and recording Sol as the group action reason.
+  description: Close the ten listed shutters through the heat-control group worker,
+    respecting each room's close_with_heat helper and recording Sol as the group action
+    reason.
 cover_bedroom_middle:
   sequence:
   - action: esphome.bhonofre_cover_bedroom_henrique_middle_open_cover
@@ -1077,7 +1140,8 @@ cover_bedroom_middle:
     metadata: {}
     data: {}
   alias: Estores dos Quartos a Meio
-  description: Call the three bedroom ESPHome middle-opening services, using each device's configured higher opening position rather than a hard-coded 50 percent.
+  description: Call the three bedroom ESPHome middle-opening services, using each
+    device's configured higher opening position rather than a hard-coded 50 percent.
 test_tv_notification:
   use_blueprint:
     path: Trooped/notification.yaml
@@ -1093,7 +1157,8 @@ test_tv_notification:
         metadata: {}
         data: {}
   alias: test_tv_notification
-  description: Test the external TV-notification blueprint with a baby-monitor alert and an action that starts the Henrique camera-feed test.
+  description: Test the external TV-notification blueprint with a baby-monitor alert
+    and an action that starts the Henrique camera-feed test.
 test_camera_feed:
   use_blueprint:
     path: Trooped/camera.yaml
@@ -1102,7 +1167,8 @@ test_camera_feed:
       source_type: entity
       auto_hide: 15
   alias: test_camera_feed
-  description: Test the external TV camera blueprint with Henrique's baby-monitor camera entity and an auto-hide setting of 15.
+  description: Test the external TV camera blueprint with Henrique's baby-monitor
+    camera entity and an auto-hide setting of 15.
 routina_de_abrir_e_fechar_o_portao_com_porta_da_cozinha_duplicar:
   sequence:
   - if:
@@ -1143,7 +1209,9 @@ routina_de_abrir_e_fechar_o_portao_com_porta_da_cozinha_duplicar:
       entity_id: cover.gate
     data: {}
   alias: Routina de Abrir e Fechar o Portão com Sensores
-  description: Open a closed gate, then wait for both parallel branches to finish before closing it. One branch requires a driveway vehicle-sensor change; the other requires a car photocell event plus three seconds. Neither branch has a timeout.
+  description: Open a closed gate, then wait for both parallel branches to finish
+    before closing it. One branch requires a driveway vehicle-sensor change; the other
+    requires a car photocell event plus three seconds. Neither branch has a timeout.
 door_bell_snapshot:
   sequence:
   - action: camera.snapshot
@@ -1152,7 +1220,8 @@ door_bell_snapshot:
       filename: /media/Campainha/{{now().year}}-{{"%02d" | format(now().month)}}-{{"%02d"
         | format(now().day)}}_{{"%02d" | format(now().hour)}}h{{"%02d" | format(now().minute)}}.jpg
   alias: Campainha - Guardar Snapshot
-  description: Save a front-camera doorbell snapshot under /media/Campainha with a date-and-minute filename. Multiple calls within the same minute use the same filename.
+  description: Save a front-camera doorbell snapshot under /media/Campainha with a
+    date-and-minute filename. Multiple calls within the same minute use the same filename.
 door_bell_sound_office:
   sequence:
   - action: music_assistant.play_announcement
@@ -1162,7 +1231,9 @@ door_bell_sound_office:
     data:
       url: http://10.20.107.2/local/door_bell.wav
   alias: Campainha - Notificação Sonora Escritório
-  description: Play the local doorbell audio as a Music Assistant announcement on the office voice player. Eligibility checks are performed by the calling doorbell sequence.
+  description: Play the local doorbell audio as a Music Assistant announcement on
+    the office voice player. Eligibility checks are performed by the calling doorbell
+    sequence.
 door_bell_sound_google_home:
   sequence:
   - action: music_assistant.play_announcement
@@ -1172,7 +1243,8 @@ door_bell_sound_google_home:
     data:
       url: http://10.20.107.2/local/door_bell.wav
   alias: Campainha - Notificação Sonora Google
-  description: Play the local doorbell audio as a Music Assistant announcement on the kitchen Google Home player.
+  description: Play the local doorbell audio as a Music Assistant announcement on
+    the kitchen Google Home player.
 door_bell_sequence:
   sequence:
   - if:
@@ -1205,7 +1277,9 @@ door_bell_sequence:
     target:
       entity_id: script.door_bell_display_front_camera_tablet
   alias: Campainha - Sequência de Notificações
-  description: Start audible doorbell scripts only when someone is home, do-not-disturb is off and doorbell sound is enabled. Always launch the configured mobile snapshot, archival snapshot and tablet-camera scripts asynchronously.
+  description: Start audible doorbell scripts only when someone is home, do-not-disturb
+    is off and doorbell sound is enabled. Always launch the configured mobile snapshot,
+    archival snapshot and tablet-camera scripts asynchronously.
 campainha_notificacao_sonora_google_duplicar:
   sequence:
   - if:
@@ -1227,7 +1301,9 @@ campainha_notificacao_sonora_google_duplicar:
       data:
         url: http://10.20.107.2/local/door_bell.wav
   alias: Campainha - Notificação Sonora Quartos
-  description: Play the doorbell announcement on the upstairs hall speaker only between 09:00 and 21:00 and when both children's bedroom shutters have a position above zero, avoiding a chime when either room is darkened.
+  description: Play the doorbell announcement on the upstairs hall speaker only between
+    09:00 and 21:00 and when both children's bedroom shutters have a position above
+    zero, avoiding a chime when either room is darkened.
 cctv_analyse_front_camera:
   sequence:
   - action: llmvision.image_analyzer
@@ -1251,7 +1327,9 @@ cctv_analyse_front_camera:
   - stop: ''
     response_variable: result
   alias: Analisar a Câmara da Frente
-  description: Analyze the current front-camera image when asked what is in front of the house. Return a description field containing concise European Portuguese observations from LLM Vision.
+  description: Analyze the current front-camera image when asked what is in front
+    of the house. Return a description field containing concise European Portuguese
+    observations from LLM Vision.
 analisar_a_camara_da_frente_duplicar:
   sequence:
   - action: llmvision.image_analyzer
@@ -1275,57 +1353,73 @@ analisar_a_camara_da_frente_duplicar:
   - stop: ''
     response_variable: result
   alias: Analisar a Câmara da Entrada
-  description: Analyze the current driveway camera when asked about the gate entrance, west facade, area near the kitchen or cars. Return a description field containing concise European Portuguese observations from LLM Vision.
+  description: Analyze the current driveway camera when asked about the gate entrance,
+    west facade, area near the kitchen or cars. Return a description field containing
+    concise European Portuguese observations from LLM Vision.
 llm_script_for_music_assistant_voice_requests:
   alias: LLM Script for Music Assistant voice requests
-  description: Use the external Music Assistant voice-script blueprint to resolve and play voice-requested media, with the office Music Assistant voice player as the default target.
+  description: Use the external Music Assistant voice-script blueprint to resolve
+    and play voice-requested media, with the office Music Assistant voice player as
+    the default target.
   use_blueprint:
     path: music-assistant/llm_voice_script.yaml
     input:
       default_player: media_player.home_assistant_voice_office_ma
 hvac_solar_living_room:
-  alias: AC Sala - Apoio Solar (Script)
-  description: Heat or cool the living room to the house target band using the solar HVAC action blueprint, then stop on a configured temperature, battery, PV, arrival or unit-off transition. Solar eligibility is checked by the calling automation.
+  alias: AC Sala - Apoio Solar
+  description: Heat or cool the living room to the house target band using the solar
+    HVAC action blueprint, then stop on a configured temperature, battery, PV, arrival
+    or unit-off transition. Solar eligibility is checked by the calling automation.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit: climate.living_room
       temperature_sensor: sensor.temperature_living_room
 hvac_solar_master_bedroom:
-  alias: AC Suite - Apoio Solar (Script)
-  description: Heat or cool the master bedroom to the house target band, with the shared solar HVAC stop conditions. The calling automation checks solar eligibility before starting this script.
+  alias: AC Suite - Apoio Solar
+  description: Heat or cool the master bedroom to the house target band, with the
+    shared solar HVAC stop conditions. The calling automation checks solar eligibility
+    before starting this script.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit: climate.master_bedroom
       temperature_sensor: sensor.temperature_master_bedroom
 hvac_solar_bedroom_henrique:
-  alias: AC Quarto do Henrique - Apoio Solar (Script)
-  description: Heat or cool Henrique's bedroom to the house target band, with the shared solar HVAC stop conditions. The calling automation checks solar eligibility before starting this script.
+  alias: AC Quarto do Henrique - Apoio Solar
+  description: Heat or cool Henrique's bedroom to the house target band, with the
+    shared solar HVAC stop conditions. The calling automation checks solar eligibility
+    before starting this script.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit: climate.bedroom_henrique
       temperature_sensor: sensor.temperature_bedroom_henrique
 hvac_solar_bedroom_ricardo:
-  alias: AC Quarto do Ricardo - Apoio Solar (Script)
-  description: Heat or cool Ricardo's bedroom to the house target band, with the shared solar HVAC stop conditions. The calling automation checks solar eligibility before starting this script.
+  alias: AC Quarto do Ricardo - Apoio Solar
+  description: Heat or cool Ricardo's bedroom to the house target band, with the shared
+    solar HVAC stop conditions. The calling automation checks solar eligibility before
+    starting this script.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit: climate.bedroom_ricardo
       temperature_sensor: sensor.temperature_bedroom_ricardo
 hvac_solar_office:
-  alias: AC Escritório - Apoio Solar (Script)
-  description: Heat or cool the office to the house target band, with the shared solar HVAC stop conditions. The calling automation checks solar eligibility before starting this script.
+  alias: AC Escritório - Apoio Solar
+  description: Heat or cool the office to the house target band, with the shared solar
+    HVAC stop conditions. The calling automation checks solar eligibility before starting
+    this script.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
       hvac_unit: climate.office
       temperature_sensor: sensor.temperature_office
 hvac_solar_hall:
-  alias: AC Hall - Apoio Solar (Script)
-  description: Heat or cool the upstairs hall to the house target band, with the shared solar HVAC stop conditions. The calling automation checks solar eligibility before starting this script.
+  alias: AC Hall - Apoio Solar
+  description: Heat or cool the upstairs hall to the house target band, with the shared
+    solar HVAC stop conditions. The calling automation checks solar eligibility before
+    starting this script.
   use_blueprint:
     path: hvac/hvac_time_turn_on_solar.yaml
     input:
