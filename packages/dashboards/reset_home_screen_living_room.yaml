@@ -1,5 +1,6 @@
 automation:
-  - alias: Tablet Reset Home Screen Living Room
+  - id: '1791225103983'
+    alias: Tablet Reset Home Screen Living Room
     description: "Reload the configured living-room dashboard URL after screen-off, Off/Sleep mode, household absence or two minutes of clear motion on any monitored ground-floor/stair sensor. Skip if the current page already matches."
     triggers:
       - entity_id:
@@ -22,15 +23,6 @@ automation:
       - entity_id:
           - binary_sensor.notify_home
         to: "off"
-        trigger: state
-      - entity_id:
-          - binary_sensor.motion_sensor_living_room
-          - binary_sensor.motion_sensor_hallway
-          - binary_sensor.motion_sensor_kitchen
-          - binary_sensor.motion_sensor_stairs
-        to: "off"
-        for:
-          minutes: 2
         trigger: state
     conditions:
       - condition: not

@@ -1,5 +1,6 @@
 automation:
-  - alias: Tablet Reset Home Screen Hall
+  - id: '1791225102983'
+    alias: Tablet Reset Home Screen Hall
     description: Reload the configured hall dashboard URL when its tablet screen has been off for six seconds, house mode becomes Off or Sleep, household presence clears, or stair motion clears for two minutes. Skip if the tablet is already on that URL.
     mode: single
     trigger:
@@ -24,12 +25,6 @@ automation:
         entity_id:
           - binary_sensor.notify_home
         to: "off"
-      - platform: state
-        entity_id:
-          - binary_sensor.motion_sensor_stairs
-        to: "off"
-        for:
-          minutes: 2
     condition:
       - condition: not
         conditions:

@@ -30,7 +30,6 @@ recorder:
       - sensor.birthday_*
       - sensor.daily_*
       - sensor.*daily*
-      - sensor.*average
       - sensor.query_*
       - sensor.wifi_*
       - sensor.*_wifi_signal
@@ -42,8 +41,6 @@ recorder:
       - binary_sensor.*_battery_plus_low
       - sensor.*_battery_type
       - select.*
-      - sensor.battery_time_left_to_discharge
-      - sensor.battery_time_left_to_charge
     entities:
       # Helpers
       - binary_sensor.workday
