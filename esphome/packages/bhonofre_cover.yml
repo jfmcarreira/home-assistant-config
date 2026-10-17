@@ -89,14 +89,15 @@ binary_sensor:
     entity_id: binary_sensor.notify_home
 
   - platform: homeassistant
-    id: cover_controls_enabled_home_assistant
-    entity_id: binary_sensor.cover_controls_enabled
+    id: cover_controls_bypass_home_assistant
+    entity_id: input_boolean.cover_controls_bypass
 
   - platform: template
     id: cover_controls_enabled
     lambda: |-
-      return !api::global_api_server->is_connected() ||
-               id(cover_controls_enabled_home_assistant).state;
+      return !api::global_api_server->is_connected()
+          || !id(cover_controls_bypass_home_assistant).has_state()
+          || !id(cover_controls_bypass_home_assistant).state;
 
   - platform: gpio
     id: sw_open
