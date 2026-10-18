@@ -2,7 +2,7 @@ unique_id: lights_living_room_hallway_group
 name: Luzes da Sala/Corredor
 state: >-
   {{
-      is_state('light.lights_living_room_group', 'on') or
+      is_state('light.living_room_group', 'on') or
       is_state('light.doorway', 'on') or
       is_state('light.hallway', 'on') or
       is_state('light.hallway_presence', 'on')
