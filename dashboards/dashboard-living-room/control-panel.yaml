@@ -59,9 +59,6 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-covers"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-covers
 
 - square: false
   columns: 3

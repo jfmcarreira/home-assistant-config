@@ -19,13 +19,13 @@
               heading_style: subtitle
 
             - type: tile
-              entity: sensor.solar_forecast_today
+              entity: sensor.forecast_solar_forecast_today
               name: Estim. Total Hoje
               vertical: false
               features_position: bottom
 
             - type: tile
-              entity: sensor.solar_forecast_tomorrow
+              entity: sensor.forecast_solar_forecast_tomorrow
               name: Estim. Total Amanhã
               vertical: false
               features_position: bottom
