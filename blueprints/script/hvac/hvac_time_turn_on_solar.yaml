@@ -98,7 +98,7 @@ sequence:
         below: 95
       - trigger: numeric_state
         entity_id: sensor.deye_inverter_pv_power_average
-        below: 1500
+        below: 1000
         for:
           minutes: 10
       - trigger: state

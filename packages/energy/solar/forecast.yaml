@@ -1,0 +1,12 @@
+template:
+  - sensor:
+      - name: solar_forecast_today_remaining
+        unique_id: solar_forecast_today_remaining
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: measurement
+        state: >-
+          {{
+            0.6 * (states('sensor.forecast_solar_forecast_today_remaining') | float) +
+            0.4 * (states('sensor.solcast_pv_forecast_today_remaining') | float)
+          }}

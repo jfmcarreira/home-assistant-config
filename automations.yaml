@@ -1214,12 +1214,12 @@
       - climate.portable_heater
     action: climate.turn_off
   mode: single
-- alias: 'Desligar Luzes da Rua com Temporizador '
-  id: '1699840344840'
+- id: '1699840344840'
+  alias: 'Desligar Luzes da Rua com Temporizador '
   description: Restart a one-hour exterior-light shutdown timer whenever a monitored
     light changes state. Switch off the outside group when it expires, provided guest
     mode is off both at the trigger and at shutdown.
-  trigger:
+  triggers:
   - trigger: state
     entity_id:
     - light.kitchen_door
@@ -1229,12 +1229,14 @@
     - light.exterior_wall_east
     - light.front_door
     from:
+    - 'off'
     to:
-  condition:
+    - 'on'
+  conditions:
   - condition: state
     entity_id: binary_sensor.house_guest
     state: 'off'
-  action:
+  actions:
   - delay:
       hours: 1
       minutes: 0
@@ -5279,7 +5281,7 @@
     entity_id: 624767f641f5eedd318f0a432958ac38
     domain: sensor
     trigger: device
-    below: 50
+    below: 55
   - trigger: battery.level_crossed_threshold
     target:
       entity_id: sensor.deye_inverter_battery
@@ -5723,12 +5725,20 @@
   description: At 05:00, set the Deye time-of-use state-of-charge target to 15 percent
     if the remaining solar forecast exceeds 10.
   triggers:
+  - trigger: sun.sunrise
+    options:
+      offset:
+        hours: 1
+        minutes: 0
+        seconds: 0
+        days: 0
+      offset_type: before
   - trigger: time
-    at: 05:00:00
+    at: 07:00:00
   conditions:
   - condition: numeric_state
     entity_id: sensor.solar_forecast_today_remaining
-    above: 10
+    above: 20
   actions:
   - action: number.set_value
     metadata: {}
@@ -5736,28 +5746,6 @@
       entity_id: number.deye_inverter_time_of_use_soc
     data:
       value: '15'
-  mode: single
-- id: '1784409421712'
-  alias: Solar - Time Of Use Anoitecer
-  description: Set the Deye time-of-use state-of-charge target to 50 percent when
-    sun elevation crosses below 25 degrees.
-  triggers:
-  - trigger: sun.elevation_crossed_threshold
-    options:
-      for: 00:00:00
-      threshold:
-        type: below
-        value:
-          active_choice: number
-          number: 25
-  conditions: []
-  actions:
-  - action: number.set_value
-    metadata: {}
-    target:
-      entity_id: number.deye_inverter_time_of_use_soc
-    data:
-      value: '50'
   mode: single
 - id: '1784409484271'
   alias: Solar - Time Of Use Noite
@@ -5779,7 +5767,7 @@
   description: Set the Deye time-of-use state-of-charge target to 30 percent at 11:00.
   triggers:
   - trigger: time
-    at: '11:00:00'
+    at: '12:00:00'
   conditions: []
   actions:
   - action: number.set_value
@@ -5787,7 +5775,7 @@
     target:
       entity_id: number.deye_inverter_time_of_use_soc
     data:
-      value: '30'
+      value: '50'
   mode: single
 - id: '1784936257030'
   alias: AC Suite -  Arrefecimento Modo Férias
@@ -5857,9 +5845,10 @@
       temperature_sensor: sensor.temperature_hall
 - id: '1785049940859'
   alias: 'Venda de Excedente - Ativar '
-  description: Before 17:00, enable Deye solar export with battery above 50 percent
-    and either battery above 95 percent or remaining solar forecast above 25. If battery
-    is below 90 percent, reduce maximum charge current to 40.
+  description: Antes das 17:00, ativa a venda de energia solar se a bateria estiver
+    acima de 50%, e se a bateria estiver acima de 95% ou a previsão solar remanescente
+    for superior a 25. Se a bateria estiver abaixo de 90%, reduz a corrente máxima
+    de carga para 40.
   triggers:
   - trigger: battery.level_crossed_threshold
     target:
@@ -5909,7 +5898,7 @@
         type: above
         value:
           active_choice: number
-          number: 50
+          number: 40
   - condition: time
     before: '17:00:00'
   - condition: or
@@ -5927,11 +5916,15 @@
       entity_id: sensor.solar_forecast_today_remaining
       above: 25
   actions:
-  - action: switch.turn_on
-    metadata: {}
+  - action: retry.action
+    data:
+      action: switch.turn_on
+      state_delay: 5
+      retries: 3
+      expected_state:
+      - 'on'
     target:
       entity_id: switch.deye_inverter_solar_sell
-    data: {}
   - if:
     - condition: battery.is_level
       target:
@@ -5943,12 +5936,15 @@
             active_choice: number
             number: 90
     then:
-    - action: number.set_value
-      metadata: {}
+    - action: retry.action
+      data:
+        action: number.set_value
+        value: '40'
+        state_delay: 5
+        expected_state: '40'
+        retries: 3
       target:
         entity_id: number.deye_inverter_maximum_battery_charge_current
-      data:
-        value: '40'
   mode: single
 - id: '1787434704097'
   alias: 'Estores - Limpar a Última Acção '
@@ -6092,4 +6088,29 @@
         entity_id: select.frigate_profile
       data:
         option: armed
+  mode: single
+- id: '1791767366773'
+  alias: Aumentar Limite de Carga da Bateria
+  description: 'Quando a bateria do inversor atinge acima de 60%, o limite de carga
+    é aumentado para 100%.
+
+    '
+  triggers:
+  - trigger: battery.level_changed
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 60
+  conditions: []
+  actions:
+  - action: number.set_value
+    metadata: {}
+    target:
+      entity_id: number.ef_r30064_battery_charge_limit_max
+    data:
+      value: '100'
   mode: single
