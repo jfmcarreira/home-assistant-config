@@ -1,185 +1,51 @@
-- type: custom:mod-card
-  view_layout:
-    column: 1
-  style:
-    hui-horizontal-stack-card$: |
-      :host {
-        height: auto;
-      }
-  card:
-    type: horizontal-stack
-    cards:
-      - type: custom:mini-graph-card
-        name: Temperatura
-        entities:
-          - entity: sensor.average_temperature
-        line_color: "#e74c3c"
-        line_width: 6
-        font_size: 75
-        height: 90
-        align_icon: left
-        align_state: center
-        hours_to_show: 24
-        points_per_hour: 1
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace-subviews/dashboard-climate
-      - type: custom:mini-graph-card
-        name: Humidade
-        entities:
-          - entity: sensor.average_humidity
-        line_width: 6
-        font_size: 75
-        height: 90
-        align_icon: left
-        align_state: center
-        hours_to_show: 24
-        points_per_hour: 1
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace-subviews/dashboard-climate
-
 - type: conditional
-  conditions:
-    - condition: state
-      entity: sensor.weather_alert
-      state_not: green
-    - condition: state
-      entity: sensor.weather_alert
-      state_not: yellow
-  card:
-    type: custom:button-card
-    name: "[[[ return helpers.localize(states['sensor.weather_alert']); ]]]"
-    label: Alerta Metereológico
-    show_label: true1
-    tap_action:
-      action: none
-    styles:
-      card:
-        - height: 80px
-        - display: flex
-        - flex-direction: column
-        - justify-content: center
-        - align-items: center
-      name:
-        - font-size: 40px
-        - font-weight: 500
-        - line-height: 1.2
-        - margin: "-13px"
-        - padding: 5px
-      label:
-        - font-size: 20px
-        - font-weight: 400
-        - color: gray
-        - margin: 8px
-        - padding: "-10px"
-        - line-height: 1.2
-    visibility:
-      - condition: state
-        entity: sensor.weather_alert
-        state_not: green
-      - condition: state
-        entity: sensor.weather_alert
-        state_not: yellow
   view_layout:
     column: 1
-
-- type: conditional
-  conditions:
-    - entity: sensor.salicru_rack_ups_status
-      state: On Battery
-  card:
-    type: gauge
-    entity: sensor.salicru_rack_ups_battery_charge
-    name: Bateria da UPS
-    unit: "%"
-    min: 0
-    max: 100
-    needle: false
-    severity:
-      green: 60
-      yellow: 20
-      red: 2
-  view_layout:
-    column: 1
-
-- type: conditional
-  conditions:
-    - entity: input_boolean.extended_away_mode
-      state: "on"
-  card:
-    type: tile
-    entity: input_boolean.extended_away_mode
-    name: Modo de Férias
-    tap_action:
-      action: call-service
-      service: input_boolean.turn_off
-      data: {}
-      target:
-        entity_id: input_boolean.extended_away_mode
-    icon_tap_action:
-      action: none
-  view_layout:
-    column: 1
-
-- type: custom:auto-entities
-  card:
-    type: vertical-stack
-  card_param: cards
-  filter:
-    exclude:
-      - options: {}
-        entity_id: script.routine_dinner_time
-      - options: {}
-        entity_id: script.cover_scene_rain_mode
-    include:
-      - options:
-          type: tile
-          features_position: bottom
-          vertical: false
-          tap_action:
-            action: toggle
-          icon_tap_action:
-            action: more-info
-          hide_state: true
-        entity_id: script.routine*
-        state: "on"
-  show_empty: false
-  view_layout:
-    column: 1
-
-- type: conditional
   conditions:
     - condition: state
       entity: alarm_control_panel.alarmo
-      state_not: disarmed
+      state: disarmed
   card:
-    states:
-      - arm_home
-      - arm_away
-    type: alarm-panel
-    entity: alarm_control_panel.alarmo
-  view_layout:
-    column: 1
-
-- type: conditional
-  view_layout:
-    column: 1
-  conditions:
-    - condition: numeric_state
-      entity: sensor.device_battery_cover_stairs
-      below: 20
-  card:
-    type: tile
-    entity: sensor.device_battery_cover_stairs
-    name: Bateria do Motor do Cortinado das Escadas
-    state_content:
-      - state
-      - last_updated
-    vertical: false
-    features:
-      - type: trend-graph
-    features_position: bottom
+    type: custom:mod-card
+    view_layout:
+      column: 1
+    style:
+      hui-horizontal-stack-card$: |
+        :host {
+          height: auto;
+        }
+    card:
+      type: horizontal-stack
+      cards:
+        - type: custom:mini-graph-card
+          name: Temperatura
+          entities:
+            - entity: sensor.average_temperature
+          line_color: "#e74c3c"
+          line_width: 6
+          font_size: 75
+          height: 80
+          align_icon: left
+          align_state: center
+          hours_to_show: 24
+          points_per_hour: 1
+          tap_action:
+            action: navigate
+            navigation_path: /lovelace-subviews/dashboard-climate
+        - type: custom:mini-graph-card
+          name: Humidade
+          entities:
+            - entity: sensor.average_humidity
+          line_width: 6
+          font_size: 75
+          height: 80
+          align_icon: left
+          align_state: center
+          hours_to_show: 24
+          points_per_hour: 1
+          tap_action:
+            action: navigate
+            navigation_path: /lovelace-subviews/dashboard-climate
 
 - type: custom:mod-card
   view_layout:
@@ -251,48 +117,99 @@
     hide_card_background: false
     disable_home_gradient: false
     enable_device_power_lines: true
-    curve_factor: 3
+    curve_factor: 4
     font_size_multiplier: 1.3
     power_unit: W
     subtract_devices_from_home: false
     threshold_mode: calculations
 
-- type: entity
-  entity: sensor.battery_time_left_to_discharge
-
-- type: tile
+- type: conditional
+  conditions:
+    - condition: state
+      entity: alarm_control_panel.alarmo
+      state_not: disarmed
+  card:
+    states:
+      - arm_home
+      - arm_away
+    type: alarm-panel
+    entity: alarm_control_panel.alarmo
   view_layout:
     column: 1
-  entity: climate.living_room
-  state_content:
-    - current_temperature
-    - fan_mode
-    - swing_mode
-    - preset_mode
-  vertical: false
-  features:
-    - style: icons
-      type: climate-hvac-modes
-      hvac_modes:
-        - heat
-        - cool
-        - dry
-        - fan_only
-        - "off"
-    - style: icons
-      type: climate-fan-modes
-    - type: target-temperature
-  features_position: bottom
 
-- type: tile
+- type: conditional
   view_layout:
     column: 1
-  entity: climate.water_heater
-  vertical: false
-  icon_tap_action:
-    action: toggle
-  features:
-    - type: target-temperature
-    - style: icons
-      type: climate-preset-modes
-  features_position: inline
+  conditions:
+    - condition: state
+      entity: alarm_control_panel.alarmo
+      state: disarmed
+  card:
+    type: entity
+    entity: sensor.battery_time_left_to_discharge
+    icon_height: 28px
+    card_mod:
+      style: |
+        :host {
+          display: block;
+          height: 85px !important;
+          min-height: 0 !important;
+        }
+        ha-card {
+          box-sizing: border-box;
+          height: 85px !important;
+          min-height: 0 !important;
+        }
+
+
+
+- type: conditional
+  view_layout:
+    column: 1
+  conditions:
+    - condition: state
+      entity: alarm_control_panel.alarmo
+      state: disarmed
+  card:
+    type: tile
+    view_layout:
+      column: 1
+    entity: climate.living_room
+    state_content:
+      - state
+      - current_temperature
+    vertical: false
+    features:
+      - type: target-temperature
+      - type: climate-hvac-modes
+        style: icons
+        hvac_modes:
+          - heat
+          - cool
+          - dry
+          - fan_only
+          - "off"
+    features_position: bottom
+    tap_action:
+      action: more-info
+
+- type: conditional
+  view_layout:
+    column: 1
+  conditions:
+    - condition: state
+      entity: alarm_control_panel.alarmo
+      state: disarmed
+  card:
+    type: tile
+    view_layout:
+      column: 1
+    entity: climate.water_heater
+    vertical: false
+    icon_tap_action:
+      action: toggle
+    features:
+      - style: icons
+        type: climate-preset-modes
+      - type: target-temperature
+    features_position: inline
