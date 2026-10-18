@@ -17,9 +17,14 @@ node-red/**
 www/**
 .omv_cookies.json
 image/**
+
+# Blueprints
 blueprints/**/homeassistant/**
-blueprints/script/Trooped/**
-blueprints/automation/SgtBatten/**
+blueprints/**/music-assistant/**
+blueprints/**/Trooped/**
+blueprints/**/SgtBatten/**
+blueprints/**/valentinfrlch/**
+
 auth_providers/trusted_networks.yaml
 additional_ca/**
 zha_quirks/__pycache__/**
@@ -31,3 +36,4 @@ zigbee2mqtt/**
 solcast_solar/**
 llmvision/events.db
 .opencode_agents_md.sha256
+.ha_mcp
