@@ -6,7 +6,13 @@ template:
         device_class: energy
         state_class: measurement
         state: >-
-          {{
-            0.6 * (states('sensor.forecast_solar_forecast_today_remaining') | float) +
-            0.4 * (states('sensor.solcast_pv_forecast_today_remaining') | float)
-          }}
+          {% set fs = states('sensor.forecast_solar_forecast_today_remaining') | float(0) %}
+          {% set sc = states('sensor.solcast_pv_forecast_today_remaining') | float(0) %}
+          {% if fs > 0 and sc > 0 %}
+            {{ (0.6 * fs + 0.4 * sc) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+        availability: >-
+          {{ states('sensor.forecast_solar_forecast_today_remaining') | is_number and
+             states('sensor.solcast_pv_forecast_today_remaining') | is_number }}
