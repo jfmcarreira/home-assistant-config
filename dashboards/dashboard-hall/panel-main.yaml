@@ -196,6 +196,8 @@
         floor: living_floor
       - options: {}
         area: outside
+      - entity_id: light.*dashboard_screen
+      - entity_id: light.*dasboard_screen
       - options: {}
         entity_id: light.*presence
       - options: {}
@@ -257,6 +259,8 @@
           supported_features: 40
       - options: {}
         entity_id: light.kitchen_*
+      - entity_id: light.*dashboard_screen
+      - entity_id: light.*dasboard_screen
       - options: {}
         entity_id: light.hallway_group
       - options: {}

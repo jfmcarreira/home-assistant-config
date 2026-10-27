@@ -942,7 +942,12 @@
     trigger: time
   - at: 00:30:00
     trigger: time
-  conditions: []
+  conditions:
+  - condition: humidifier.is_on
+    target:
+      entity_id: humidifier.portable_dehumidifier
+    options:
+      for: 00:00:00
   actions:
   - data: {}
     target:
@@ -1437,8 +1442,7 @@
 - id: '1658360353381'
   alias: Tablet Control Motion Detection Living Room
   description: Disable living-room tablet motion detection and its screen when the
-    house is empty or mode is Off or Sleep. Otherwise enable motion detection without
-    explicitly switching the screen on.
+    house is empty or mode is Off or Sleep.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -1464,59 +1468,69 @@
         data: {}
         target:
           entity_id:
-          - switch.lenovo_tablet_motion_detection
-      - action: switch.turn_off
+          - switch.living_room_dashboard_keep_screen_on
+      - action: light.turn_off
         data: {}
         target:
           entity_id:
-          - switch.lenovo_tablet_screen
+          - light.living_room_dashboard_screen
     default:
     - data: {}
       target:
         entity_id:
-        - switch.lenovo_tablet_motion_detection
+        - switch.living_room_dashboard_keep_screen_on
       action: switch.turn_on
+    - action: light.turn_on
+      data: {}
+      target:
+        entity_id:
+        - light.living_room_dashboard_screen
   mode: queued
-- alias: Tablet Screen Timeout Living Room
-  id: '1708474653467'
-  description: Keep the living-room tablet screen on with a zero timeout in On, Evening
-    and Night modes; use a 120-second screen timeout in other modes.
+- id: '1658360353382'
+  alias: Tablet Control Motion Detection Hall
+  description: Disable hall tablet motion detection and its screen when the
+    house is empty or mode is Off, Night or Sleep.
   triggers:
   - entity_id:
     - input_select.house_mode
+    - binary_sensor.notify_home
     trigger: state
   conditions: []
   actions:
-  - if:
-    - or:
-      - condition: state
-        entity_id: input_select.house_mode
-        state: 'On'
-      - condition: state
-        entity_id: input_select.house_mode
-        state: Evening
-      - condition: state
-        entity_id: input_select.house_mode
-        state: Night
-    then:
-    - target:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: input_select.house_mode
+          state: 'Off'
+        - condition: state
+          entity_id: input_select.house_mode
+          state: Sleep
+        - condition: state
+          entity_id: input_select.house_mode
+          state: Night
+        - condition: state
+          entity_id: binary_sensor.notify_home
+          state: 'off'
+      sequence:
+      - action: switch.turn_off
+        data: {}
+        target:
+          entity_id:
+          - switch.hall_dashboard_keep_screen_on
+      - action: light.turn_off
+        data: {}
+        target:
+          entity_id:
+          - light.hall_dashboard_screen
+    default:
+    - data: {}
+      target:
         entity_id:
-        - number.lenovo_tablet_screen_off_timer
-      data:
-        value: '0'
-      action: number.set_value
-    - type: turn_on
-      device_id: 070256d058f9215d8c746c4242331023
-      entity_id: b856d2fd4dd80e2b1d02e391c347fc75
-      domain: switch
-    else:
-    - target:
-        entity_id:
-        - number.lenovo_tablet_screen_off_timer
-      data:
-        value: '120'
-      action: number.set_value
-  mode: single
+        - switch.hall_dashboard_keep_screen_on
+      action: switch.turn_on
+  mode: queued
 - alias: Abrir Estores ao Nascer do Sol
   id: '1652141596083'
   description: On workdays between 08:00 and noon, open closed sunrise-enabled shutters
@@ -3418,95 +3432,6 @@
     target:
       entity_id: cover.gate
   mode: single
-- alias: Tablet Control Hall Screen
-  id: '1750634052202'
-  description: Apply upstairs hall tablet settings by house mode. Off, Sleep or absence
-    disables motion detection and the screen with a 60-second timeout; Night disables
-    motion wake with the same timeout; other modes use brighter output and a 1200-second
-    timeout.
-  triggers:
-  - entity_id:
-    - input_select.house_mode
-    - binary_sensor.notify_home
-    trigger: state
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: input_select.house_mode
-          state: 'Off'
-        - condition: state
-          entity_id: input_select.house_mode
-          state: Sleep
-        - condition: state
-          entity_id: binary_sensor.notify_home
-          state: 'off'
-      sequence:
-      - device_id: 2ae8ef1981d03f83e4144debe519a697
-        domain: number
-        entity_id: c1fda8db1584b621a11a335919b54d27
-        type: set_value
-        value: 100
-      - action: number.set_value
-        data:
-          value: '60'
-        target:
-          entity_id:
-          - number.fire_tablet_screen_off_timer
-      - action: switch.turn_off
-        data: {}
-        target:
-          entity_id:
-          - switch.fire_tablet_motion_detection
-      - action: switch.turn_off
-        target:
-          entity_id:
-          - switch.fire_tablet_screen
-        data: {}
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: input_select.house_mode
-          state: Night
-      sequence:
-      - device_id: 2ae8ef1981d03f83e4144debe519a697
-        domain: number
-        entity_id: c1fda8db1584b621a11a335919b54d27
-        type: set_value
-        value: 100
-      - action: number.set_value
-        data:
-          value: '60'
-        target:
-          entity_id:
-          - number.fire_tablet_screen_off_timer
-      - action: switch.turn_off
-        data: {}
-        target:
-          entity_id:
-          - switch.fire_tablet_motion_detection
-    default:
-    - device_id: 2ae8ef1981d03f83e4144debe519a697
-      domain: number
-      entity_id: c1fda8db1584b621a11a335919b54d27
-      type: set_value
-      value: 255
-    - action: number.set_value
-      data:
-        value: '1200'
-      target:
-        entity_id:
-        - number.fire_tablet_screen_off_timer
-    - action: switch.turn_on
-      data: {}
-      target:
-        entity_id:
-        - switch.fire_tablet_motion_detection
-  mode: restart
 - id: '1751552957136'
   alias: Fechar Estores Com Temperatura Elevada
   description: Close all heat-enabled shutters after outdoor temperature exceeds 30
@@ -4998,7 +4923,7 @@
       hvac_unit:
       - climate.hall
       hvac_temperature: 20
-      room_temperature: 19
+      room_temperature: 20
       room_temperature_diff: 0
       temperature_sensor: sensor.temperature_hall
       weekday:
@@ -5602,7 +5527,7 @@
         type: below
         value:
           active_choice: number
-          number: 45
+          number: 50
   conditions:
   - condition: time
     after: '20:00:00'
@@ -5745,14 +5670,14 @@
     target:
       entity_id: number.deye_inverter_time_of_use_soc
     data:
-      value: '15'
+      value: '20'
   mode: single
 - id: '1784409484271'
   alias: Solar - Time Of Use Noite
   description: Set the Deye time-of-use state-of-charge target to 30 percent at 22:00.
   triggers:
   - trigger: time
-    at: '22:00:00'
+    at: '21:00:00'
   conditions: []
   actions:
   - action: number.set_value
@@ -6114,3 +6039,39 @@
     data:
       value: '100'
   mode: single
+- id: '1792716185564'
+  alias: 'Assist: Restrict Devices by Time of Day'
+  description: Exposes devices during the day and unexposes them at night
+  triggers:
+  - trigger: time
+    at: '21:30:00'
+    id: night
+  - trigger: time
+    at: 08:00:00
+    id: day
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: night
+      sequence:
+      - action: homeassistant.unexpose_entity
+        data:
+          entity_id:
+          - vacuum.roborock
+          assistants:
+          - conversation
+          - cloud.google_assistant
+          - cloud.alexa
+    - conditions:
+      - condition: trigger
+        id: day
+      sequence:
+      - action: homeassistant.expose_entity
+        data:
+          assistants:
+          - conversation
+          - cloud.alexa
+          - cloud.google_assistant
+          entity_id:
+          - vacuum.roborock

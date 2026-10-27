@@ -668,12 +668,12 @@
       - binary_sensor.frigate_zone_driveway_gate_car
       - binary_sensor.frigate_zone_kitchen_door_person
 
-- type: logbook
-  title: Atividade
-  hours_to_show: 0.25
-  target:
-    entity_id:
-      - climate.water_heater
-      - humidifier.portable_dehumidifier
-      - switch.water_heater
-      - switch.dehumidifier
+# - type: logbook
+#   title: Atividade
+#   hours_to_show: 0.25
+#   target:
+#     entity_id:
+#       - climate.water_heater
+#       - humidifier.portable_dehumidifier
+#       - switch.water_heater
+#       - switch.dehumidifier

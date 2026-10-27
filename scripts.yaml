@@ -575,9 +575,9 @@ routine_good_night:
     data: {}
     target:
       entity_id:
-      - switch.fire_tablet_screen
-      - switch.lenovo_tablet_screen
-    action: switch.turn_off
+      - light.living_room_dashboard_screen
+      - light.hall_dashboard_screen
+    action: light.turn_off
 routine_car_exit:
   alias: Routina de Sair de Casa de Carro
   description: Launch the all-off departure routine asynchronously, run the kitchen-door
@@ -707,14 +707,13 @@ routine_exit_house_all_off:
     target:
       entity_id: input_select.house_mode
     action: input_select.select_option
-  - type: turn_off
-    device_id: 2ae8ef1981d03f83e4144debe519a697
-    entity_id: 2db0a0430a01f1c287b18d9f0b77f5d8
-    domain: switch
-  - type: turn_off
-    device_id: 070256d058f9215d8c746c4242331023
-    entity_id: b856d2fd4dd80e2b1d02e391c347fc75
-    domain: switch
+  - action: light.turn_off
+    metadata: {}
+    target:
+      entity_id:
+      - light.living_room_dashboard_screen
+      - light.hall_dashboard_screen
+    data: {}
   - data: {}
     action: light.turn_off
     target:
@@ -1427,132 +1426,130 @@ hvac_solar_hall:
       temperature_sensor: sensor.temperature_hall
 sequence_door_open:
   alias: Sequência Esperar Pela Abertura da Porta da Cozinha
-  description: Show departure progress while waiting up to five minutes for the kitchen door to open if needed, then up to one minute for it to close. Both timeouts continue the sequence, and the progress message is cleared at the end.
+  description: Show departure progress while waiting up to five minutes for the kitchen
+    door to open if needed, then up to one minute for it to close. Both timeouts continue
+    the sequence, and the progress message is cleared at the end.
   mode: single
   icon: mdi:door
   trace:
     stored_traces: 1
   sequence:
-    - if:
-        - condition: not
-          conditions:
-            - condition: state
-              entity_id: binary_sensor.kitchen_door
-              state: "on"
-      then:
-        - action: input_text.set_value
-          target:
-            entity_id: input_text.script_step_message
-          data:
-            value: Aguardar pela Porta da Cozinha Abrir
-        - wait_for_trigger:
-            - platform: state
-              entity_id: binary_sensor.kitchen_door
-              to: "on"
-          timeout: 00:5:00
-
+  - if:
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.kitchen_door
+        state: 'on'
+    then:
     - action: input_text.set_value
       target:
         entity_id: input_text.script_step_message
       data:
-        value: Aguardar pela Porta da Cozinha Fechar
+        value: Aguardar pela Porta da Cozinha Abrir
     - wait_for_trigger:
-        - platform: state
-          entity_id:
-            - binary_sensor.kitchen_door
-          to: "off"
-      timeout: 00:01:00
-    - action: input_text.set_value
-      target:
-        entity_id: input_text.script_step_message
-      data:
-        value: ""
+      - platform: state
+        entity_id: binary_sensor.kitchen_door
+        to: 'on'
+      timeout: 00:5:00
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.script_step_message
+    data:
+      value: Aguardar pela Porta da Cozinha Fechar
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.kitchen_door
+      to: 'off'
+    timeout: 00:01:00
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.script_step_message
+    data:
+      value: ''
 sequence_leaving_home_lights:
   alias: Sequência de Ligar as Luzes ao Sair de Casa
-  description: At night, wait up to five minutes for the kitchen door to open and light the rear, side and doorway exit path. After door closure or timeout plus one minute, switch off rear/doorway lights; keep side lighting until gate closure or a further ten-minute timeout.
+  description: At night, wait up to five minutes for the kitchen door to open and
+    light the rear, side and doorway exit path. After door closure or timeout plus
+    one minute, switch off rear/doorway lights; keep side lighting until gate closure
+    or a further ten-minute timeout.
   mode: single
   trace:
     stored_traces: 1
   sequence:
+  - condition: state
+    entity_id: binary_sensor.night
+    state: 'on'
+  - if:
     - condition: state
-      entity_id: binary_sensor.night
-      state: 'on'
-
-    - if:
-        - condition: state
-          entity_id: binary_sensor.kitchen_door
-          state: "off"
-      then:
-        - wait_for_trigger:
-            - platform: state
-              entity_id:
-                - binary_sensor.kitchen_door
-              to: "on"
-          timeout: 00:05:00
-          continue_on_timeout: false
-
-    - service: light.turn_on
-      target:
-        entity_id:
-          - light.exterior_wall_back
-          - light.exterior_wall_side
-          - light.kitchen_door
-      data: {}
-
+      entity_id: binary_sensor.kitchen_door
+      state: 'off'
+    then:
     - wait_for_trigger:
-        - platform: state
-          entity_id:
-            - binary_sensor.kitchen_door
-          to: "off"
+      - platform: state
+        entity_id:
+        - binary_sensor.kitchen_door
+        to: 'on'
       timeout: 00:05:00
-      continue_on_timeout: true
-
-    - delay:
-        minutes: 1
-
-    - service: light.turn_off
-      data: {}
-      target:
+      continue_on_timeout: false
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.exterior_wall_back
+      - light.exterior_wall_side
+      - light.kitchen_door
+    data: {}
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.kitchen_door
+      to: 'off'
+    timeout: 00:05:00
+    continue_on_timeout: true
+  - delay:
+      minutes: 1
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id:
+      - light.exterior_wall_back
+      - light.kitchen_door
+  - if:
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: cover.gate
+        state: closed
+    then:
+    - wait_for_trigger:
+      - platform: state
         entity_id:
-          - light.exterior_wall_back
-          - light.kitchen_door
-
-    - if:
-        - condition: not
-          conditions:
-            - condition: state
-              entity_id: cover.gate
-              state: "closed"
-      then:
-        - wait_for_trigger:
-            - platform: state
-              entity_id:
-                - cover.gate
-              to: "closed"
-          timeout: 00:10:00
-
-    - service: light.turn_off
-      target:
-        entity_id:
-          - light.exterior_wall_back
-          - light.exterior_wall_side
-          - light.kitchen_door
-      data: {}
+        - cover.gate
+        to: closed
+      timeout: 00:10:00
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.exterior_wall_back
+      - light.exterior_wall_side
+      - light.kitchen_door
+    data: {}
 sequence_notify_tasks:
   alias: Sequência de Notificar sobre as Tarefas
-  description: Announce the reminder to start the dishwasher on the kitchen speaker when its reminder helper is on. Departure routines call this helper before leaving.
+  description: Announce the reminder to start the dishwasher on the kitchen speaker
+    when its reminder helper is on. Departure routines call this helper before leaving.
   mode: single
   icon: mdi:alert
   sequence:
-    - if:
-        - condition: state
-          entity_id: input_boolean.reminder_dish_washing_machine
-          state: "on"
-      then:
-        - service: tts.cloud_say
-          data:
-            cache: true
-            entity_id:
-              - media_player.ghm_kitchen
-            message: Deve ligar a máquina de lavar a loiça
-            language: pt-PT
+  - if:
+    - condition: state
+      entity_id: input_boolean.reminder_dish_washing_machine
+      state: 'on'
+    then:
+    - service: tts.cloud_say
+      data:
+        cache: true
+        entity_id:
+        - media_player.ghm_kitchen
+        message: Deve ligar a máquina de lavar a loiça
+        language: pt-PT
