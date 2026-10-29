@@ -4,6 +4,12 @@ substitutions:
 
 esphome:
   friendly_name: Bhonofre Luzes da Casa de Arrumos
+  devices:
+    - id: bhonofre_lights_storage_led
+      name: Storage Workbench LED
+    - id: bhonofre_lights_storage_ceiling
+      name: Storage Ceiling
+
 
 esp8266:
   board: nodemcu
@@ -92,12 +98,14 @@ output:
 
 light:
   - id: light_1
+    device_id: bhonofre_lights_storage_led
     name: Storage Workbench LED
     platform: binary
     output: relay_2
     restore_mode: ALWAYS_OFF
 
   - id: light_2
+    device_id: bhonofre_lights_storage_ceiling
     name: Storage Ceiling
     platform: binary
     output: relay_1

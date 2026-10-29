@@ -3,6 +3,10 @@ substitutions:
 
 esphome:
   friendly_name: NodeMCU do Portão
+  devices:
+    - id: nodemcu_gate
+      name: Portão
+
 
 # esp8266:
 #   board: nodemcuv2
@@ -47,6 +51,7 @@ output:
 binary_sensor:
   - platform: gpio
     id: gate_close_sensor
+    device_id: nodemcu_gate
     name: gate_close
     pin:
       inverted: true
@@ -57,6 +62,7 @@ binary_sensor:
 
   - platform: gpio
     id: gate_open_sensor
+    device_id: nodemcu_gate
     name: gate_open
     pin:
       number: GPIO33
@@ -67,6 +73,7 @@ binary_sensor:
 
   - platform: gpio
     id: gate_ir
+    device_id: nodemcu_gate
     name: gate_ir
     pin:
       inverted: false
@@ -135,6 +142,7 @@ button:
 
 cover:
   - platform: sc_cover
+    device_id: nodemcu_gate
     name: "Gate"
     id: gate
     device_class: gate
