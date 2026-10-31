@@ -1,0 +1,89 @@
+substitutions:
+  devicename: sonoff-4ch-pro-exterior-lights
+
+packages:
+  esphome_base: !include packages/common.yml
+  esphome_web: !include packages/webserver.yml
+
+esphome:
+  friendly_name: Sonoff 4CH Pro Exterior Lights
+  devices:
+    - id: exterior_wall_side
+      name: Luz da Parede Poente
+    - id: exterior_wall_back
+      name: Luz da Parede das Traseiras
+    - id: exterior_wall_east
+      name: Luz da Parede Nascente
+    - id: exterior_wall_front
+      name: Luz da Parede da Frente
+
+esp8266:
+  board: esp01_1m
+
+light:
+  - platform: binary
+    name: exterior_wall_side
+    device_id: exterior_wall_side
+    icon: mdi:wall-sconce-flat
+    output: relay_2
+    restore_mode: ALWAYS_OFF
+  - platform: binary
+    name: exterior_wall_back
+    device_id: exterior_wall_back
+    icon: mdi:wall-sconce-flat
+    output: relay_1
+    restore_mode: ALWAYS_OFF
+  - platform: binary
+    name: exterior_wall_east
+    device_id: exterior_wall_east
+    icon: mdi:wall-sconce-flat
+    output: relay_3
+    restore_mode: ALWAYS_OFF
+  - platform: binary
+    name: exterior_wall_front
+    device_id: exterior_wall_front
+    icon: mdi:wall-sconce-flat
+    output: relay_4
+    restore_mode: ALWAYS_OFF
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+  - platform: gpio
+    id: relay_2
+    pin: GPIO5
+  - platform: gpio
+    id: relay_3
+    pin: GPIO4
+  - platform: gpio
+    id: relay_4
+    pin: GPIO15
+
+# binary_sensor:
+#   - platform: gpio
+#     id: button_1
+#     pin:
+#       number: GPIO0
+#       mode: INPUT_PULLUP
+#       inverted: true
+#   - platform: gpio
+#     id: button_2
+#     pin:
+#       number: GPIO9
+#       mode: INPUT_PULLUP
+#       inverted: true
+
+#   - platform: gpio
+#     id: button_3
+#     pin:
+#       number: GPIO10
+#       mode: INPUT_PULLUP
+#       inverted: true
+
+#   - platform: gpio
+#     id: button_4
+#     pin:
+#       number: GPIO14
+#       mode: INPUT_PULLUP
+#       inverted: true
