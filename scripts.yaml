@@ -1355,15 +1355,6 @@ analisar_a_camara_da_frente_duplicar:
   description: Analyze the current driveway camera when asked about the gate entrance,
     west facade, area near the kitchen or cars. Return a description field containing
     concise European Portuguese observations from LLM Vision.
-llm_script_for_music_assistant_voice_requests:
-  alias: LLM Script for Music Assistant voice requests
-  description: Use the external Music Assistant voice-script blueprint to resolve
-    and play voice-requested media, with the office Music Assistant voice player as
-    the default target.
-  use_blueprint:
-    path: music-assistant/llm_voice_script.yaml
-    input:
-      default_player: media_player.home_assistant_voice_office_ma
 hvac_solar_living_room:
   alias: AC Sala - Apoio Solar
   description: Heat or cool the living room to the house target band using the solar

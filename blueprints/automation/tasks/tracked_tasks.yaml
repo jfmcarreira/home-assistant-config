@@ -142,7 +142,7 @@ action:
                 - if:
                     - "{{ is_state(repeat.item.person, 'home') }}"
                   then:
-                    - service: "{{ repeat.item.device }}"
+                    - action: "{{ repeat.item.device }}"
                       data:
                         title: Tarefa Doméstica
                         message: !input notification_message
@@ -158,26 +158,21 @@ action:
                             - action: !input task_done_code_name
                               title: !input notification_action
     default:
-      - service: notify.mobile_app_all
+      - action: notify.mobile_app_all
         data:
           message: clear_notification
           data:
             tag: !input task_done_code_name
             dismiss: true
-      - service: persistent_notification.dismiss
+
+      - action: persistent_notification.dismiss
         data:
           notification_id: !input task_done_code_name
 
-      - service: shell_command.external_my_sql_insert
+      - action: house_tasks.record
         data:
-          table: tasks
-          value: >
-            "{{ task_done_code_name }}"
-          column: task_name
-          date_stamp: >
-            "{{ record_timestamp}}"
-          save_string: "true"
-          save_date_time: "true"
+          task: "{{ task_done_code_name }}"
+          timestamp: "{{ record_timestamp }}"
 
       - sequence: !input task_extra_actions
 

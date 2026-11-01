@@ -942,6 +942,15 @@
     trigger: time
   - at: 00:30:00
     trigger: time
+  - trigger: battery.level_changed
+    target:
+      entity_id: sensor.deye_inverter_battery
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 96
   conditions:
   - condition: humidifier.is_on
     target:
@@ -1488,8 +1497,8 @@
   mode: queued
 - id: '1658360353382'
   alias: Tablet Control Motion Detection Hall
-  description: Disable hall tablet motion detection and its screen when the
-    house is empty or mode is Off, Night or Sleep.
+  description: Disable hall tablet motion detection and its screen when the house
+    is empty or mode is Off, Night or Sleep.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -5232,7 +5241,7 @@
     entity_id:
     - sun.sun
     attribute: elevation
-    below: 15
+    below: 8
   conditions: []
   actions:
   - action: switch.turn_off
@@ -5306,7 +5315,7 @@
     below: 25
   conditions:
   - condition: time
-    after: '16:00:00'
+    after: '14:00:00'
     before: '20:30:00'
   - condition: template
     value_template: '{% set hours = 18 %} {% set last = state_attr(this.entity_id,
@@ -6039,39 +6048,3 @@
     data:
       value: '100'
   mode: single
-- id: '1792716185564'
-  alias: 'Assist: Restrict Devices by Time of Day'
-  description: Exposes devices during the day and unexposes them at night
-  triggers:
-  - trigger: time
-    at: '21:30:00'
-    id: night
-  - trigger: time
-    at: 08:00:00
-    id: day
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id: night
-      sequence:
-      - action: homeassistant.unexpose_entity
-        data:
-          entity_id:
-          - vacuum.roborock
-          assistants:
-          - conversation
-          - cloud.google_assistant
-          - cloud.alexa
-    - conditions:
-      - condition: trigger
-        id: day
-      sequence:
-      - action: homeassistant.expose_entity
-        data:
-          assistants:
-          - conversation
-          - cloud.alexa
-          - cloud.google_assistant
-          entity_id:
-          - vacuum.roborock

@@ -17,7 +17,7 @@ blueprint:
             - domain: climate
     temperature_sensor:
       name: Sensor Temperatura
-      description: Room sensor controlling post-drying heating eligibility and the above-20.3 C heating stop trigger.
+      description: Room sensor controlling post-drying heating eligibility and the above minimum temperature heating stop trigger.
       selector:
         entity:
           multiple: false
@@ -77,6 +77,13 @@ sequence:
 
   - delay: 10
 
+  - action: climate.set_temperature
+    continue_on_error: true
+    data:
+      temperature: "{{ states('input_number.house_target_low_temperature') | float(0) + 1 }}"
+    target:
+      entity_id: !input hvac_entitiy
+
   - if:
       - condition: or
         conditions:
@@ -90,7 +97,7 @@ sequence:
                 type: above
                 value:
                   active_choice: number
-                  number: 20
+                  number: 21
                   unit_of_measurement: °C
               behavior: all
     then:
@@ -104,12 +111,6 @@ sequence:
           hvac_mode: "off"
         target:
           entity_id: !input hvac_entitiy
-      - action: climate.set_temperature
-        continue_on_error: true
-        data:
-          temperature: 20
-        target:
-          entity_id: !input hvac_entitiy
       - stop: ""
 
   - action: climate.set_hvac_mode
@@ -119,13 +120,6 @@ sequence:
       entity_id: !input hvac_entitiy
 
   - delay: 10
-
-  - action: climate.set_temperature
-    continue_on_error: true
-    data:
-      temperature: "{{ states('input_number.house_target_high_temperature') | float(0) }}"
-    target:
-      entity_id: !input hvac_entitiy
 
   - wait_for_trigger:
       - trigger: climate.hvac_mode_changed
@@ -147,7 +141,7 @@ sequence:
             type: above
             value:
               active_choice: number
-              number: 20.3
+              number: 21
               unit_of_measurement: °C
           behavior: all
     timeout:

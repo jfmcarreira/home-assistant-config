@@ -1,0 +1,6 @@
+house_tasks:
+  host: !secret db_external_host
+  port: 3306
+  username: !secret db_custom_user
+  password: !secret db_custom_pass
+  database: home_stats
