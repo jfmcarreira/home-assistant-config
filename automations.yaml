@@ -174,12 +174,8 @@
       notification_max_time: '21:00:00'
       notification_message: O Filtro da Água Necessita de Substuição
       notification_action: Filtro Substituido
-      task_extra_actions:
-      - action: grocy.consume_product_from_stock
-        data:
-          product_id: '99'
-          amount: 1
-          transaction_type: CONSUME
+      consume_stock: true
+      product_id: '99'
 - alias: Tarefa da Máquina de Secar
   id: '1655496730769'
   description: Record dryer-cycle completion and energy usage, then mark emptying
@@ -2109,12 +2105,8 @@
       notification_max_time: '19:00:00'
       notification_message: A Areia das Gatas Necessita de Substituição
       notification_action: Registar Substituição
-      task_extra_actions:
-      - action: grocy.consume_product_from_stock
-        data:
-          product_id: '4'
-          amount: 1
-          transaction_type: CONSUME
+      consume_stock: true
+      product_id: '4'
 - alias: Tarefa de Limpeza da Areia das Gatas
   id: '1709598896541'
   description: Record cat-litter cleaning completion through the tracked-task blueprint

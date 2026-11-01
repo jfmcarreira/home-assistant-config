@@ -22,6 +22,18 @@ blueprint:
         entity:
           integration: sql
           domain: sensor
+    consume_stock:
+      name: Consumir Stock
+      description: Consumir uma unidade de um produto no Grocy quando a tarefa é realizada
+      default: false
+      selector:
+        boolean:
+    product_id:
+      name: ID do Produto no Grocy
+      description: ID do produto a consumir (obrigatório quando Consumir Stock está activo)
+      default: ""
+      selector:
+        text:
     task_extra_actions:
       name: Acções
       description: Acções extra a executar quando a tarefa é realizada
@@ -173,6 +185,13 @@ action:
         data:
           task: "{{ task_done_code_name }}"
           timestamp: "{{ record_timestamp }}"
+
+      - action: grocy.consume_product_from_stock
+        enabled: !input consume_stock
+        data:
+          product_id: !input product_id
+          amount: 1
+          transaction_type: CONSUME
 
       - sequence: !input task_extra_actions
 
