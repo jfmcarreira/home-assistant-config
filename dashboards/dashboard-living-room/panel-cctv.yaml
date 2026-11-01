@@ -3,24 +3,12 @@
   type: picture-glance
   entity: camera.front
   title: Frente
-  entities:
-    - entity: binary_sensor.front_camera_person
-    - entity: binary_sensor.front_camera_car
-    - entity: binary_sensor.front_camera_motion
-    - entity: switch.front_camera_review_alerts
-    - entity: switch.front_camera_review_detections
   camera_image: camera.front
   aspect_ratio: "16:9"
 - camera_view: auto
   fit_mode: cover
   type: picture-glance
   entity: camera.driveway
-  entities:
-    - entity: binary_sensor.driveway_camera_person
-    - entity: binary_sensor.driveway_camera_car
-    - entity: binary_sensor.driveway_camera_motion
-    - entity: switch.driveway_camera_review_alerts
-    - entity: switch.driveway_camera_review_detections
   camera_image: camera.driveway
   title: Entrada
   aspect_ratio: "16:9"
@@ -29,12 +17,6 @@
   type: picture-glance
   entity: camera.backyard
   title: Traseiras
-  entities:
-    - entity: binary_sensor.backyard_camera_person
-    - entity: binary_sensor.backyard_camera_car
-    - entity: binary_sensor.backyard_camera_motion
-    - entity: switch.backyard_camera_review_alerts
-    - entity: switch.backyard_camera_review_detections
   camera_image: camera.backyard
   aspect_ratio: "16:9"
 - camera_view: auto
@@ -43,13 +25,7 @@
   type: picture-glance
   entity: camera.baby_monitor_henrique
   camera_image: camera.baby_monitor_henrique
-  entities:
-    - entity: binary_sensor.baby_monitor_henrique_crying_sound
-    - entity: binary_sensor.baby_monitor_henrique_person
-    - entity: binary_sensor.baby_monitor_henrique_cat
-    - entity: switch.baby_monitor_henrique_review_alerts
-    - entity: switch.baby_monitor_henrique_review_detections
-    - entity: binary_sensor.baby_monitor_henrique_motion
+
   aspect_ratio: "16:9"
 - camera_view: auto
   fit_mode: cover
@@ -57,28 +33,5 @@
   type: picture-glance
   entity: camera.baby_monitor_ricardo
   camera_image: camera.baby_monitor_ricardo
-  entities:
-    - entity: binary_sensor.baby_monitor_ricardo_crying_sound
-    - entity: binary_sensor.baby_monitor_ricardo_person
-    - entity: binary_sensor.baby_monitor_ricardo_cat
-    - entity: switch.baby_monitor_ricardo_review_alerts
-    - entity: switch.baby_monitor_ricardo_review_detections
-    - entity: binary_sensor.baby_monitor_ricardo_motion
   aspect_ratio: "16:9"
 
-- type: logbook
-  view_layout:
-    column: 2
-  title: Atividade
-  hours_to_show: 1
-  target:
-    entity_id:
-      - binary_sensor.front_camera_person
-      - binary_sensor.backyard_camera_person
-      - binary_sensor.driveway_camera_person
-      - binary_sensor.frigate_zone_front_garden_person
-      - binary_sensor.frigate_zone_front_gate_person
-      - binary_sensor.frigate_zone_front_gate_car
-      - binary_sensor.frigate_zone_driveway_gate_car
-      - binary_sensor.frigate_zone_driveway_gate_person
-      - binary_sensor.frigate_zone_kitchen_door_person

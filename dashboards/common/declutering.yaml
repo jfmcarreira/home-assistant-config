@@ -11,7 +11,6 @@ decluttering_cover:
     tap_action:
       action: fire-dom-event
       browser_mod:
-        service: browser_mod.popup
         data:
           auto_close: false
           large: false
@@ -51,7 +50,7 @@ decluttering_cover:
                       tap_action:
                         action: call-service
                         service: >-
-                          esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
+                            esphome.bhonofre_cover_[[room_code_name]]_minimal_open_cover
                     - type: custom:button-card
                       name: A Meio
                       icon: mdi:window-shutter-open
@@ -62,20 +61,39 @@ decluttering_cover:
                       tap_action:
                         action: call-service
                         service: >-
-                          esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
-              - features:
+                            esphome.bhonofre_cover_[[room_code_name]]_middle_open_cover
+
+              - entity: cover.[[room_code_name]]
+                features:
                   - type: cover-open-close
                   - type: cover-position
-                type: tile
+                features_position: bottom
+                icon: mdi:stairs
                 icon_tap_action:
                   action: more-info
-                name: "[[room_name]]"
-                entity: cover.[[room_code_name]]
-                icon: mdi:stairs
-                features_position: bottom
+                name: '[[room_name]]'
+                type: tile
                 vertical: false
                 view_layout:
                   column: 1
+              - card:
+                  type: entities
+                filter:
+                  include:
+                    - entity_id: input_boolean.cover_control_*_[[room_code_name]]
+                    - entity_id: number.*_position_[[room_code_name]]
+                    - entity_id: input_number.*_position_[[room_code_name]]
+                    - entity_id: select.cover_[[room_code_name]]_last_action
+                type: custom:auto-entities
+                view_layout:
+                  column: 2
+            title: '[[details_title]]'
+            type: vertical-stack
+          large: false
+          size: normal
+          style: |
+            --popup-min-width: 450px;
+        service: browser_mod.popup
 
 decluttering_haier_ac:
   card:

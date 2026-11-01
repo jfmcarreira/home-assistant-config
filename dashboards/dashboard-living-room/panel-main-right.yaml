@@ -62,31 +62,7 @@
   view_layout:
     column: 1
 
-- type: custom:auto-entities
-  card:
-    type: vertical-stack
-  card_param: cards
-  filter:
-    exclude:
-      - options: {}
-        entity_id: script.routine_dinner_time
-      - options: {}
-        entity_id: script.cover_scene_rain_mode
-    include:
-      - options:
-          type: tile
-          features_position: bottom
-          vertical: false
-          tap_action:
-            action: toggle
-          icon_tap_action:
-            action: more-info
-          hide_state: true
-        entity_id: script.routine*
-        state: "on"
-  show_empty: false
-  view_layout:
-    column: 1
+
 
 - type: conditional
   view_layout:
@@ -171,51 +147,34 @@
       square: false
     card_param: cards
     filter:
-      template: |
-        {% set max_items = 2 %}
-        {% set ns = namespace(cards=[]) %}
+      include:
+        - entity_id: input_boolean.extended_away_mode
+          state: "on"
+          options:
+            type: tile
+            name: Modo Férias
+        - entity_id: input_boolean.gate_automatic_open
+          state: "off"
+          options:
+            type: tile
+            name: Abertura Portão
+        - entity_id: input_boolean.walking_routine
+          state: "on"
+          options:
+            type: tile
+            name: Modo Caminhada
+        - entity_id: input_boolean.house_guest
+          options:
+            type: tile
+            name: Convidados
+        - entity_id: binary_sensor.rain
+          options:
+            type: tile
+            name: Chuva Detectada
+    sort:
+      method: none
+      count: 2
 
-        {% set candidates = [
-          {
-            'entity': 'input_boolean.extended_away_mode',
-            'show': is_state('input_boolean.extended_away_mode', 'on'),
-            'name': 'Modo Férias'
-          },
-          {
-            'entity': 'input_boolean.gate_automatic_open',
-            'show': is_state('input_boolean.gate_automatic_open', 'off'),
-            'name': 'Abertura Portão'
-          },
-          {
-            'entity': 'input_boolean.walking_routine',
-            'show': is_state('input_boolean.walking_routine', 'on'),
-            'name': 'Modo Caminhada'
-          },
-          {
-            'entity': 'input_boolean.house_guest',
-            'show': true,
-            'name': 'Convidados'
-          },
-          {
-            'entity': 'binary_sensor.rain',
-            'show': true,
-            'name': 'Chuva Detectada'
-          }
-        ] %}
-
-        {% for item in candidates %}
-          {% if ns.cards | count < max_items %}
-            {% if item.show  %}
-              {% set ns.cards = ns.cards + [{
-                'type': 'tile',
-                'entity': item.entity,
-                'name': item.name
-              }] %}
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-
-        {{ ns.cards | tojson }}
 
 # - type: custom:mod-card
 #   view_layout:
@@ -513,21 +472,13 @@
   show_empty: false
   entities:
     - entity: light.hall
-      secondary_info: last-changed
     - entity: light.main_bathroom
-      secondary_info: last-changed
     - entity: light.master_bedroom
-      secondary_info: last-changed
     - entity: light.master_bedroom_bathroom
-      secondary_info: last-changed
     - entity: light.bedroom_ricardo
-      secondary_info: last-changed
     - entity: light.bedroom_henrique
-      secondary_info: last-changed
     - entity: light.stairs_wall
-      secondary_info: last-changed
     - entity: light.stairs_lamp
-      secondary_info: last-changed
   state_filter:
     - "on"
   card:
@@ -650,30 +601,3 @@
   show_empty: false
 
 
-
-- type: logbook
-  title: Atividade da Rua
-  hours_to_show: 0.25
-  state_filter:
-    - "on"
-  target:
-    entity_id:
-      - binary_sensor.front_camera_person
-      - binary_sensor.backyard_camera_person
-      - binary_sensor.driveway_camera_person
-      - binary_sensor.frigate_zone_front_garden_person
-      - binary_sensor.frigate_zone_front_gate_person
-      - binary_sensor.frigate_zone_front_gate_car
-      - binary_sensor.frigate_zone_driveway_gate_person
-      - binary_sensor.frigate_zone_driveway_gate_car
-      - binary_sensor.frigate_zone_kitchen_door_person
-
-# - type: logbook
-#   title: Atividade
-#   hours_to_show: 0.25
-#   target:
-#     entity_id:
-#       - climate.water_heater
-#       - humidifier.portable_dehumidifier
-#       - switch.water_heater
-#       - switch.dehumidifier
