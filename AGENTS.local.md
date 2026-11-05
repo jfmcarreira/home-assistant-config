@@ -1,20 +1,3 @@
-# Your own instructions for OpenCode
-
-Rename this file to `AGENTS.local.md` (drop the `.example`) and OpenCode will read
-it at the start of every session, alongside the add-on's own `AGENTS.md`.
-
-- The add-on **never** writes to `AGENTS.local.md`. Add-on updates cannot overwrite it.
-- Delete the file to stop loading it. There is no setting to toggle.
-- `AGENTS.md` wins if the two ever conflict — safety rules and approval requirements
-  stay in force regardless of what you put here.
-- Everything in this file is sent to the model with **every** request, so keep it
-  short and specific. A page of standing preferences is useful; a diary is not.
-- Never put passwords, tokens, or API keys here. Reference them with `!secret` instead.
-
-Delete the examples below and write your own.
-
----
-
 ## About my setup
 
 - All Zigbee devices go through Zigbee2MQTT, not ZHA. Do not suggest ZHA workflows.

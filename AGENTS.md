@@ -2,6 +2,8 @@
 
 You are working directly within a Home Assistant installation. Your working directory is `/homeassistant`, which is the live Home Assistant configuration directory.
 
+For an offline repository copy, when the user explicitly requests local-only edits, ordinary file-editing tools may be used instead of write_config_safe. Do not modify the live Home Assistant instance. All approval and scope rules still apply.
+
 ## CRITICAL: User Consent and Scope Rules
 
 You MUST follow these rules strictly:
@@ -277,12 +279,12 @@ Dry-run is the default for renames — always preview before `--apply`. The
 
 <!-- ZIGPORTER_LIVE_HELP_START -->
 ```
-                                                                                
- Usage: zigporter [OPTIONS] COMMAND [ARGS]...                                   
-                                                                                
- Migrate Zigbee devices between ZHA and Zigbee2MQTT. Supports both ZHA → Z2M    
- (default) and Z2M → ZHA (--direction z2m-to-zha).                              
-                                                                                
+
+ Usage: zigporter [OPTIONS] COMMAND [ARGS]...
+
+ Migrate Zigbee devices between ZHA and Zigbee2MQTT. Supports both ZHA → Z2M
+ (default) and Z2M → ZHA (--direction z2m-to-zha).
+
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --version             -v        Show version and exit.                       │
 │ --install-completion            Install completion for the current shell.    │

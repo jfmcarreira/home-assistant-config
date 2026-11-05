@@ -2,6 +2,8 @@
 
 You have access to the Home Assistant MCP server which provides deep integration with Home Assistant. Use these tools proactively to help users with their smart home.
 
+Exception: when working on an offline repository copy and the user explicitly requests local-only edits, the write_config_safe requirements in this file do not apply. Use local editing tools and validate what is possible locally. Do not modify or reload the live installation.
+
 ## When to Use MCP Tools
 
 ### Always use MCP tools when the user asks about:
