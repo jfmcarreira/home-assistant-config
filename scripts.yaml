@@ -570,14 +570,6 @@ routine_good_night:
       minutes: 0
       seconds: 15
       milliseconds: 0
-  - continue_on_error: true
-    metadata: {}
-    data: {}
-    target:
-      entity_id:
-      - light.living_room_dashboard_screen
-      - light.hall_dashboard_screen
-    action: light.turn_off
 routine_car_exit:
   alias: Routina de Sair de Casa de Carro
   description: Launch the all-off departure routine asynchronously, run the kitchen-door
@@ -707,13 +699,6 @@ routine_exit_house_all_off:
     target:
       entity_id: input_select.house_mode
     action: input_select.select_option
-  - action: light.turn_off
-    metadata: {}
-    target:
-      entity_id:
-      - light.living_room_dashboard_screen
-      - light.hall_dashboard_screen
-    data: {}
   - data: {}
     action: light.turn_off
     target:
@@ -1420,7 +1405,7 @@ sequence_door_open:
   description: Show departure progress while waiting up to five minutes for the kitchen
     door to open if needed, then up to one minute for it to close. Both timeouts continue
     the sequence, and the progress message is cleared at the end.
-  mode: single
+  mode: parallel
   icon: mdi:door
   trace:
     stored_traces: 1
@@ -1438,9 +1423,9 @@ sequence_door_open:
       data:
         value: Aguardar pela Porta da Cozinha Abrir
     - wait_for_trigger:
-      - platform: state
-        entity_id: binary_sensor.kitchen_door
+      - entity_id: binary_sensor.kitchen_door
         to: 'on'
+        trigger: state
       timeout: 00:5:00
   - action: input_text.set_value
     target:
@@ -1448,23 +1433,24 @@ sequence_door_open:
     data:
       value: Aguardar pela Porta da Cozinha Fechar
   - wait_for_trigger:
-    - platform: state
-      entity_id:
+    - entity_id:
       - binary_sensor.kitchen_door
       to: 'off'
+      trigger: state
     timeout: 00:01:00
   - action: input_text.set_value
     target:
       entity_id: input_text.script_step_message
     data:
       value: ''
+  max: 10
 sequence_leaving_home_lights:
   alias: Sequência de Ligar as Luzes ao Sair de Casa
   description: At night, wait up to five minutes for the kitchen door to open and
     light the rear, side and doorway exit path. After door closure or timeout plus
     one minute, switch off rear/doorway lights; keep side lighting until gate closure
     or a further ten-minute timeout.
-  mode: single
+  mode: restart
   trace:
     stored_traces: 1
   sequence:
@@ -1477,34 +1463,34 @@ sequence_leaving_home_lights:
       state: 'off'
     then:
     - wait_for_trigger:
-      - platform: state
-        entity_id:
+      - entity_id:
         - binary_sensor.kitchen_door
         to: 'on'
+        trigger: state
       timeout: 00:05:00
       continue_on_timeout: false
-  - service: light.turn_on
-    target:
+  - target:
       entity_id:
       - light.exterior_wall_back
       - light.exterior_wall_side
       - light.kitchen_door
     data: {}
+    action: light.turn_on
   - wait_for_trigger:
-    - platform: state
-      entity_id:
+    - entity_id:
       - binary_sensor.kitchen_door
       to: 'off'
+      trigger: state
     timeout: 00:05:00
     continue_on_timeout: true
   - delay:
       minutes: 1
-  - service: light.turn_off
-    data: {}
+  - data: {}
     target:
       entity_id:
       - light.exterior_wall_back
       - light.kitchen_door
+    action: light.turn_off
   - if:
     - condition: not
       conditions:
@@ -1513,18 +1499,18 @@ sequence_leaving_home_lights:
         state: closed
     then:
     - wait_for_trigger:
-      - platform: state
-        entity_id:
+      - entity_id:
         - cover.gate
         to: closed
+        trigger: state
       timeout: 00:10:00
-  - service: light.turn_off
-    target:
+  - target:
       entity_id:
       - light.exterior_wall_back
       - light.exterior_wall_side
       - light.kitchen_door
     data: {}
+    action: light.turn_off
 sequence_notify_tasks:
   alias: Sequência de Notificar sobre as Tarefas
   description: Announce the reminder to start the dishwasher on the kitchen speaker

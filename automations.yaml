@@ -1479,6 +1479,21 @@
         target:
           entity_id:
           - light.living_room_dashboard_screen
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state: 'On'
+      sequence:
+      - action: switch.turn_on
+        data: {}
+        target:
+          entity_id:
+          - switch.living_room_dashboard_keep_screen_on
+      - action: light.turn_on
+        data: {}
+        target:
+          entity_id:
+          - light.living_room_dashboard_screen
     default:
     - data: {}
       target:
@@ -1525,6 +1540,21 @@
           entity_id:
           - switch.hall_dashboard_keep_screen_on
       - action: light.turn_off
+        data: {}
+        target:
+          entity_id:
+          - light.hall_dashboard_screen
+    - conditions:
+      - condition: state
+        entity_id: input_select.house_mode
+        state: 'On'
+      sequence:
+      - action: switch.turn_on
+        data: {}
+        target:
+          entity_id:
+          - switch.hall_dashboard_keep_screen_on
+      - action: light.turn_on
         data: {}
         target:
           entity_id:
