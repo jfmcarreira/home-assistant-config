@@ -1,0 +1,137 @@
+blueprint:
+  name: "[HVAC] Controlo Excedente Solar - Arrefecer"
+  description: >-
+    Start a supplied solar HVAC script while the house is empty, extended-away
+    and HVAC bypass are off, the units and cleaning calendar are off, and windows
+    are clear. Require PV above 2000 W, house load below 2000 W, battery above
+    50 percent and remaining solar forecast greater than three times the energy
+    needed to charge the battery. Temperature must be above the house high target,
+    with at least two hours between cooling runs.
+
+  domain: automation
+  input:
+    hvac_unit:
+      name: Unidade a Controlar
+      description: Climate units required off before the supplied action script is called.
+      selector:
+        entity:
+          domain: climate
+          multiple: true
+
+    temperature_sensor:
+      name: Sensor de Temperatura
+      description: Room temperature compared with the house high target helper.
+      default:
+      selector:
+        entity:
+          domain: sensor
+          device_class: temperature
+
+    window_sensor:
+      name: Sensor da Janelas
+      description: Local or floor window sensor required off for solar HVAC eligibility.
+      default: []
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: window
+
+    hvac_script:
+      name: Script de Apoio Solar
+      description: Script called synchronously after eligibility passes; it owns HVAC setup, waiting and shutdown.
+      selector:
+        entity:
+          filter:
+            - domain: script
+
+mode: single
+max_exceeded: silent
+
+trigger:
+  - trigger: state
+    entity_id: binary_sensor.notify_home
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+
+  - trigger: numeric_state
+    entity_id: !input temperature_sensor
+    above: input_number.house_target_high_temperature
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: sensor.deye_inverter_pv_power_average
+    above: 1500
+    for:
+      minutes: 10
+
+  - trigger: numeric_state
+    entity_id: sensor.house_power_consumption_average
+    below: 2000
+    for:
+      minutes: 10
+
+condition:
+  - condition: state
+    entity_id: input_boolean.automation_bypass_hvac
+    state: "off"
+
+  - condition: state
+    entity_id: binary_sensor.notify_home
+    state: "off"
+
+  - condition: state
+    entity_id: input_boolean.extended_away_mode
+    state:
+      - "off"
+
+  - condition: state
+    entity_id: !input hvac_unit
+    state:
+      - "off"
+
+  - condition: numeric_state
+    entity_id: sensor.deye_inverter_pv_power_average
+    above: 2000
+
+  - condition: numeric_state
+    entity_id: sensor.house_power_consumption_average
+    below: 2000
+
+  - condition: template
+    value_template: >
+      {% set energy_left = states('sensor.battery_energy_left_to_charge') | float(0) %}
+      {% set solar_remaining = states('sensor.solar_forecast_today_remaining') | float(0) %}
+      {{ solar_remaining > energy_left * 3.0 }}
+
+  - condition: numeric_state
+    entity_id: sensor.deye_inverter_battery
+    above: 50
+
+  - alias: "Window Closed"
+    condition: state
+    entity_id: !input window_sensor
+    state: "off"
+
+  - alias: "Not cleaning mode"
+    condition: state
+    entity_id: calendar.cleaning
+    state: "off"
+
+  - alias: "Run once every two hours"
+    condition: template
+    value_template: >
+      {% set hours = 2 %}
+      {% set last = state_attr(this.entity_id, 'last_triggered') %}
+      {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
+
+  - condition: numeric_state
+    entity_id: !input temperature_sensor
+    above: input_number.house_target_high_temperature
+
+action:
+  - action: !input hvac_script

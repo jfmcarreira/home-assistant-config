@@ -5378,83 +5378,149 @@
     action: script.cover_group_action
   mode: single
 - id: '1779569312624'
-  alias: AC Sala - Apoio Solar
-  description: Start the living-room solar HVAC script when its temperature is outside
-    the house target band and the shared PV, battery, forecast, absence and closed-window
-    conditions pass.
+  alias: hvac_solar_heat_living_room
+  description: Start solar heating below the house low target when shared solar,
+    absence and closed-window conditions pass.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit:
       - climate.living_room
       temperature_sensor: sensor.temperature_living_room
       window_sensor: binary_sensor.window_living_room
-      hvac_script: script.hvac_solar_living_room
+      hvac_script: script.hvac_solar_heat_living_room
 - id: '1779569424753'
-  alias: AC Suite - Apoio Solar
-  description: Start the master-bedroom solar HVAC script when its temperature is
-    outside the house target band and the shared PV, battery, forecast, absence and
-    closed-window conditions pass.
+  alias: hvac_solar_heat_master_bedroom
+  description: Start solar heating below the house low target when shared solar,
+    absence and closed-window conditions pass.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit:
       - climate.master_bedroom
       temperature_sensor: sensor.temperature_master_bedroom
       window_sensor: binary_sensor.window_master_bedroom
-      hvac_script: script.hvac_solar_master_bedroom
+      hvac_script: script.hvac_solar_heat_master_bedroom
 - id: '1779569459729'
-  alias: AC Quarto do Henrique - Apoio Solar
-  description: Start Henrique's bedroom solar HVAC script when its temperature is
-    outside the house target band and the shared PV, battery, forecast, absence and
-    closed-window conditions pass.
+  alias: hvac_solar_heat_bedroom_henrique
+  description: Start solar heating below the house low target when shared solar,
+    absence and closed-window conditions pass.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit:
       - climate.bedroom_henrique
       temperature_sensor: sensor.temperature_bedroom_henrique
       window_sensor: binary_sensor.window_bedroom_henrique
-      hvac_script: script.hvac_solar_bedroom_henrique
+      hvac_script: script.hvac_solar_heat_bedroom_henrique
 - id: '1779569485941'
-  alias: AC Quarto do Ricardo - Apoio Solar
-  description: Start Ricardo's bedroom solar HVAC script when its temperature is outside
-    the house target band and the shared PV, battery, forecast, absence and closed-window
-    conditions pass.
+  alias: hvac_solar_heat_bedroom_ricardo
+  description: Start solar heating below the house low target when shared solar,
+    absence and closed-window conditions pass.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit:
       - climate.bedroom_ricardo
       temperature_sensor: sensor.temperature_bedroom_ricardo
       window_sensor: binary_sensor.window_bedroom_ricardo
-      hvac_script: script.hvac_solar_bedroom_ricardo
+      hvac_script: script.hvac_solar_heat_bedroom_ricardo
 - id: '1779569520542'
-  alias: AC Escritório - Apoio Solar
-  description: Start the office solar HVAC script when its temperature is outside
-    the house target band and the shared PV, battery, forecast, absence and closed-window
-    conditions pass.
+  alias: hvac_solar_heat_office
+  description: Start solar heating below the house low target when shared solar,
+    absence and closed-window conditions pass.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit:
       - climate.office
       temperature_sensor: sensor.temperature_office
       window_sensor: binary_sensor.window_office
-      hvac_script: script.hvac_solar_office
+      hvac_script: script.hvac_solar_heat_office
 - id: '1779569574241'
-  alias: AC Hall - Apoio Solar
-  description: Start the upstairs hall solar HVAC script when hall temperature is
-    outside the house target band and the shared PV, battery, forecast, absence and
-    bedroom-floor closed-window conditions pass.
+  alias: hvac_solar_heat_hall
+  description: Start solar heating below the house low target when shared solar,
+    absence and bedroom-floor closed-window conditions pass.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit:
       - climate.hall
       temperature_sensor: sensor.temperature_hall
       window_sensor: binary_sensor.window_bedroom_floor
-      hvac_script: script.hvac_solar_hall
+      hvac_script: script.hvac_solar_heat_hall
+- id: hvac_solar_cool_living_room
+  alias: hvac_solar_cool_living_room
+  description: Start solar cooling above the house high target when shared solar,
+    absence and closed-window conditions pass.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit:
+      - climate.living_room
+      temperature_sensor: sensor.temperature_living_room
+      window_sensor: binary_sensor.window_living_room
+      hvac_script: script.hvac_solar_cool_living_room
+- id: hvac_solar_cool_master_bedroom
+  alias: hvac_solar_cool_master_bedroom
+  description: Start solar cooling above the house high target when shared solar,
+    absence and closed-window conditions pass.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit:
+      - climate.master_bedroom
+      temperature_sensor: sensor.temperature_master_bedroom
+      window_sensor: binary_sensor.window_master_bedroom
+      hvac_script: script.hvac_solar_cool_master_bedroom
+- id: hvac_solar_cool_bedroom_henrique
+  alias: hvac_solar_cool_bedroom_henrique
+  description: Start solar cooling above the house high target when shared solar,
+    absence and closed-window conditions pass.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit:
+      - climate.bedroom_henrique
+      temperature_sensor: sensor.temperature_bedroom_henrique
+      window_sensor: binary_sensor.window_bedroom_henrique
+      hvac_script: script.hvac_solar_cool_bedroom_henrique
+- id: hvac_solar_cool_bedroom_ricardo
+  alias: hvac_solar_cool_bedroom_ricardo
+  description: Start solar cooling above the house high target when shared solar,
+    absence and closed-window conditions pass.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit:
+      - climate.bedroom_ricardo
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+      window_sensor: binary_sensor.window_bedroom_ricardo
+      hvac_script: script.hvac_solar_cool_bedroom_ricardo
+- id: hvac_solar_cool_office
+  alias: hvac_solar_cool_office
+  description: Start solar cooling above the house high target when shared solar,
+    absence and closed-window conditions pass.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit:
+      - climate.office
+      temperature_sensor: sensor.temperature_office
+      window_sensor: binary_sensor.window_office
+      hvac_script: script.hvac_solar_cool_office
+- id: hvac_solar_cool_hall
+  alias: hvac_solar_cool_hall
+  description: Start solar cooling above the house high target when shared solar,
+    absence and bedroom-floor closed-window conditions pass.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit:
+      - climate.hall
+      temperature_sensor: sensor.temperature_hall
+      window_sensor: binary_sensor.window_bedroom_floor
+      hvac_script: script.hvac_solar_cool_hall
 - id: '1779786705961'
   alias: Desligar Ar Condicionados no Modo de Limpeza
   description: Turn off climate devices on the living and bedroom floors when a cleaning-calendar

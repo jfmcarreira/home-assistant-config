@@ -1,8 +1,7 @@
 blueprint:
-  name: "[HVAC] Controlo Excedente Solar - Acao Ar Condicionado"
+  name: "[HVAC] Controlo Excedente Solar - Acao Aquecer"
   description: >-
-    Select heating below the house low-temperature target or cooling otherwise,
-    set the corresponding house target with auto fan and swing, then wait for a
+    Heat to the house low-temperature target with auto fan and swing, then wait for a
     configured temperature, battery, PV, arrival or unit-off transition before
     shutdown. There is no overall timeout; the calling automation must check solar eligibility.
   domain: script
@@ -17,7 +16,7 @@ blueprint:
 
     temperature_sensor:
       name: Sensor de Temperatura
-      description: Room temperature used to select heat/cool and by both temperature stop-trigger templates.
+      description: Room temperature used by the heating temperature stop trigger.
       selector:
         entity:
           filter:
@@ -36,32 +35,16 @@ sequence:
         state:
           - "off"
     then:
-      - if:
-          - condition: numeric_state
-            entity_id: !input temperature_sensor
-            below: input_number.house_target_low_temperature
-        then:
-          - action: climate.set_hvac_mode
-            target:
-              entity_id: !input hvac_unit
-            data:
-              hvac_mode: heat
-          - action: climate.set_temperature
-            target:
-              entity_id: !input hvac_unit
-            data:
-              temperature: "{{ states('input_number.house_target_low_temperature') | float(0) }}"
-        else:
-          - action: climate.set_hvac_mode
-            target:
-              entity_id: !input hvac_unit
-            data:
-              hvac_mode: cool
-          - action: climate.set_temperature
-            target:
-              entity_id: !input hvac_unit
-            data:
-              temperature: "{{ states('input_number.house_target_high_temperature') | float(0) }}"
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: !input hvac_unit
+        data:
+          hvac_mode: heat
+      - action: climate.set_temperature
+        target:
+          entity_id: !input hvac_unit
+        data:
+          temperature: "{{ states('input_number.house_target_low_temperature') | float(0) }}"
 
       - action: climate.set_fan_mode
         data:
@@ -81,15 +64,7 @@ sequence:
         value_template: >-
           {{
             states(temperature_sensor) | float(0)
-            >= states('input_number.house_target_low_temperature') | float(0) + 1
-          }}
-        for:
-          minutes: 10
-      - trigger: template
-        value_template: >-
-          {{
-            states(temperature_sensor) | float(0)
-            <= states('input_number.house_target_high_temperature') | float(0) - 1
+            >= states('input_number.house_target_low_temperature') | float(0) + 2
           }}
         for:
           minutes: 10

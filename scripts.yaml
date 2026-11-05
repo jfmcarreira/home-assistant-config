@@ -1340,63 +1340,111 @@ analisar_a_camara_da_frente_duplicar:
   description: Analyze the current driveway camera when asked about the gate entrance,
     west facade, area near the kitchen or cars. Return a description field containing
     concise European Portuguese observations from LLM Vision.
-hvac_solar_living_room:
-  alias: AC Sala - Apoio Solar
-  description: Heat or cool the living room to the house target band using the solar
-    HVAC action blueprint, then stop on a configured temperature, battery, PV, arrival
-    or unit-off transition. Solar eligibility is checked by the calling automation.
+hvac_solar_heat_living_room:
+  alias: AC Sala - Apoio Solar - Aquecer
+  description: Heat the living room using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit: climate.living_room
       temperature_sensor: sensor.temperature_living_room
-hvac_solar_master_bedroom:
-  alias: AC Suite - Apoio Solar
-  description: Heat or cool the master bedroom to the house target band, with the
-    shared solar HVAC stop conditions. The calling automation checks solar eligibility
-    before starting this script.
+hvac_solar_heat_master_bedroom:
+  alias: AC Suite - Apoio Solar - Aquecer
+  description: Heat the master bedroom using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit: climate.master_bedroom
       temperature_sensor: sensor.temperature_master_bedroom
-hvac_solar_bedroom_henrique:
-  alias: AC Quarto do Henrique - Apoio Solar
-  description: Heat or cool Henrique's bedroom to the house target band, with the
-    shared solar HVAC stop conditions. The calling automation checks solar eligibility
-    before starting this script.
+hvac_solar_heat_bedroom_henrique:
+  alias: AC Quarto do Henrique - Apoio Solar - Aquecer
+  description: Heat Henrique's bedroom using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit: climate.bedroom_henrique
       temperature_sensor: sensor.temperature_bedroom_henrique
-hvac_solar_bedroom_ricardo:
-  alias: AC Quarto do Ricardo - Apoio Solar
-  description: Heat or cool Ricardo's bedroom to the house target band, with the shared
-    solar HVAC stop conditions. The calling automation checks solar eligibility before
-    starting this script.
+hvac_solar_heat_bedroom_ricardo:
+  alias: AC Quarto do Ricardo - Apoio Solar - Aquecer
+  description: Heat Ricardo's bedroom using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit: climate.bedroom_ricardo
       temperature_sensor: sensor.temperature_bedroom_ricardo
-hvac_solar_office:
-  alias: AC Escritório - Apoio Solar
-  description: Heat or cool the office to the house target band, with the shared solar
-    HVAC stop conditions. The calling automation checks solar eligibility before starting
-    this script.
+hvac_solar_heat_office:
+  alias: AC Escritório - Apoio Solar - Aquecer
+  description: Heat the office using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
     input:
       hvac_unit: climate.office
       temperature_sensor: sensor.temperature_office
-hvac_solar_hall:
-  alias: AC Hall - Apoio Solar
-  description: Heat or cool the upstairs hall to the house target band, with the shared
-    solar HVAC stop conditions. The calling automation checks solar eligibility before
-    starting this script.
+hvac_solar_heat_hall:
+  alias: AC Hall - Apoio Solar - Aquecer
+  description: Heat the upstairs hall using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
   use_blueprint:
-    path: hvac/hvac_time_turn_on_solar.yaml
+    path: hvac/hvac_solar_heat.yaml
+    input:
+      hvac_unit: climate.hall
+      temperature_sensor: sensor.temperature_hall
+hvac_solar_cool_living_room:
+  alias: AC Sala - Apoio Solar - Arrefecer
+  description: Cool the living room using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit: climate.living_room
+      temperature_sensor: sensor.temperature_living_room
+hvac_solar_cool_master_bedroom:
+  alias: AC Suite - Apoio Solar - Arrefecer
+  description: Cool the master bedroom using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit: climate.master_bedroom
+      temperature_sensor: sensor.temperature_master_bedroom
+hvac_solar_cool_bedroom_henrique:
+  alias: AC Quarto do Henrique - Apoio Solar - Arrefecer
+  description: Cool Henrique's bedroom using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit: climate.bedroom_henrique
+      temperature_sensor: sensor.temperature_bedroom_henrique
+hvac_solar_cool_bedroom_ricardo:
+  alias: AC Quarto do Ricardo - Apoio Solar - Arrefecer
+  description: Cool Ricardo's bedroom using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit: climate.bedroom_ricardo
+      temperature_sensor: sensor.temperature_bedroom_ricardo
+hvac_solar_cool_office:
+  alias: AC Escritório - Apoio Solar - Arrefecer
+  description: Cool the office using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
+    input:
+      hvac_unit: climate.office
+      temperature_sensor: sensor.temperature_office
+hvac_solar_cool_hall:
+  alias: AC Hall - Apoio Solar - Arrefecer
+  description: Cool the upstairs hall using solar surplus, with shared stop conditions.
+    The calling automation checks solar eligibility.
+  use_blueprint:
+    path: hvac/hvac_solar_cool.yaml
     input:
       hvac_unit: climate.hall
       temperature_sensor: sensor.temperature_hall

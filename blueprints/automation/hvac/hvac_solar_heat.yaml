@@ -1,12 +1,12 @@
 blueprint:
-  name: "[HVAC] Controlo Excedente Solar - Ligar Ar Condicionado"
+  name: "[HVAC] Controlo Excedente Solar - Aquecer"
   description: >-
     Start a supplied solar HVAC script while the house is empty, extended-away
     and HVAC bypass are off, the units and cleaning calendar are off, and windows
     are clear. Require PV above 2000 W, house load below 2000 W, battery above
     50 percent and remaining solar forecast greater than three times the energy
-    needed to charge the battery. Temperature must be outside the house target
-    band, with at least two hours between runs.
+    needed to charge the battery. Temperature must be below the house low target,
+    with at least two hours between heating runs.
 
   domain: automation
   input:
@@ -20,7 +20,7 @@ blueprint:
 
     temperature_sensor:
       name: Sensor de Temperatura
-      description: Room temperature compared with the house low/high target helpers.
+      description: Room temperature compared with the house low target helper.
       default:
       selector:
         entity:
@@ -47,9 +47,6 @@ blueprint:
 mode: single
 max_exceeded: silent
 
-variables:
-  temperature_sensor: !input temperature_sensor
-
 trigger:
   - trigger: state
     entity_id: binary_sensor.notify_home
@@ -63,12 +60,6 @@ trigger:
   - trigger: numeric_state
     entity_id: !input temperature_sensor
     below: input_number.house_target_low_temperature
-    for:
-      minutes: 10
-
-  - trigger: numeric_state
-    entity_id: !input temperature_sensor
-    above: input_number.house_target_high_temperature
     for:
       minutes: 10
 
@@ -138,16 +129,9 @@ condition:
       {% set last = state_attr(this.entity_id, 'last_triggered') %}
       {{ last is none or (now() - last).total_seconds() > hours * 3600 }}
 
-  - condition: or
-    conditions:
-      - condition: and
-        conditions:
-          - condition: template
-            value_template: "{{ (states('input_number.house_target_low_temperature') | float - states(temperature_sensor) | float) > 0  }}"
-      - condition: and
-        conditions:
-          - condition: template
-            value_template: "{{ (states(temperature_sensor) | float - states('input_number.house_target_high_temperature') | float) > 0 }}"
+  - condition: numeric_state
+    entity_id: !input temperature_sensor
+    below: input_number.house_target_low_temperature
 
 action:
   - action: !input hvac_script
