@@ -121,7 +121,7 @@
                   secondary_info: last-updated
             - cards:
                 - type: custom:button-card
-                  entity: automation.hvac_living_room_solar_cooling
+                  entity: automation.hvac_living_room_solar_cool
                   name: Apoio Solar
                   icon: mdi:solar-power
                   tap_action:
@@ -130,7 +130,7 @@
                     data:
                       skip_condition: true
                     target:
-                      entity_id: automation.hvac_living_room_solar_cooling
+                      entity_id: automation.hvac_living_room_solar_cool
                   hold_action:
                     action: more-info
                   styles:
