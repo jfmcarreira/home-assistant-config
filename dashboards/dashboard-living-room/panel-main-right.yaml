@@ -83,51 +83,58 @@
       - type: trend-graph
     features_position: bottom
 
-- type: custom:calendar-card-pro
-  card_mod:
+- type: custom:mod-card
+  style:
     style: |
       :host {
-        height: auto !important;
-        min-height: 0 !important;
+        height: auto;
       }
+  card:
+      type: custom:calendar-card-pro
+      card_mod:
+        style: |
+          :host {
+            height: auto !important;
+            min-height: 0 !important;
+          }
 
-      ha-card {
-        height: auto !important;
-        min-height: 0 !important;
-      }
-  days_to_show: 10
-  compact_days_to_show: 10
-  compact_events_complete_days: true
-  entities:
-    - entity: calendar.family
-      show_time: true
+          ha-card {
+            height: auto !important;
+            min-height: 0 !important;
+          }
+      days_to_show: 10
+      compact_days_to_show: 10
+      compact_events_complete_days: true
+      entities:
+        - entity: calendar.family
+          show_time: true
+          show_location: false
+          show_description: false
+      filter_duplicates: true
+      first_day_of_week: sunday
+      week_separator_width: 1px
+      today_indicator: dot
       show_location: false
-      show_description: false
-  filter_duplicates: true
-  first_day_of_week: sunday
-  week_separator_width: 1px
-  today_indicator: dot
-  show_location: false
-  weather:
-    position: event
-    date:
-      show_conditions: true
-      show_high_temp: true
-      show_low_temp: false
-      show_uv_index: false
-      uv_index_threshold: 0
-      icon_size: 14px
-      font_size: 12px
-      color: var(--primary-text-color)
-    event:
-      show_conditions: true
-      show_temp: true
-      show_uv_index: false
-      uv_index_threshold: 0
-      icon_size: 14px
-      font_size: 12px
-      color: var(--primary-text-color)
-    entity: weather.home
+      weather:
+        position: event
+        date:
+          show_conditions: true
+          show_high_temp: true
+          show_low_temp: false
+          show_uv_index: false
+          uv_index_threshold: 0
+          icon_size: 14px
+          font_size: 12px
+          color: var(--primary-text-color)
+        event:
+          show_conditions: true
+          show_temp: true
+          show_uv_index: false
+          uv_index_threshold: 0
+          icon_size: 14px
+          font_size: 12px
+          color: var(--primary-text-color)
+        entity: weather.home
 
 
 - type: custom:mod-card
@@ -493,36 +500,61 @@
       hold_action:
         action: more-info
 
-
-- type: custom:auto-entities
-  view_layout:
-    column: 2
+- type: entity-filter
+  show_empty: false
+  entities:
+    - entity: light.kitchen_door
+    - entity: light.exterior_flood_led
+    - entity: light.exterior_flood_led_back
+    - entity: light.storage
+    - entity: light.exterior_wall_back
+    - entity: light.exterior_wall_east
+    - entity: light.exterior_wall_front
+    - entity: light.exterior_wall_side
+    - entity: light.front_door
+  state_filter:
+    - "on"
   card:
     type: entities
-    title: Exterior
-  filter:
-    include:
-      - area: outside
-        state: "on"
-        domain: light
-        options:
-          tap_action:
-            action: perform-action
-            perform_action: light.turn_off
-            target:
-              entity_id: this.entity_id
-          hold_action:
-            action: more-info
-    exclude:
-      - options: {}
-        entity_id: light.storage_*
-      - options: {}
-        entity_id: light.*group
-  sort:
-    method: area
-    numeric: false
-    reverse: false
-  show_empty: false
+    title: Luzes da Rua
+    options:
+      tap_action:
+        action: perform-action
+        perform_action: light.turn_off
+        target:
+          entity_id: this.entity_id
+      hold_action:
+        action: more-info
+
+# - type: custom:auto-entities
+#   view_layout:
+#     column: 2
+#   card:
+#     type: entities
+#     title: Exterior
+#   filter:
+#     include:
+#       - area: outside
+#         state: "on"
+#         domain: light
+#         options:
+#           tap_action:
+#             action: perform-action
+#             perform_action: light.turn_off
+#             target:
+#               entity_id: this.entity_id
+#           hold_action:
+#             action: more-info
+#     exclude:
+#       - options: {}
+#         entity_id: light.storage_*
+#       - options: {}
+#         entity_id: light.*group
+#   sort:
+#     method: area
+#     numeric: false
+#     reverse: false
+#   show_empty: false
 
 # - type: conditional
 #   view_layout:

@@ -1,10 +1,13 @@
 - camera_view: auto
+  view_layout:
+    column: 1
   fit_mode: cover
   type: picture-glance
   entity: camera.front
   title: Frente
   camera_image: camera.front
   aspect_ratio: "16:9"
+  entities: []
 - camera_view: auto
   fit_mode: cover
   type: picture-glance
@@ -12,21 +15,43 @@
   camera_image: camera.driveway
   title: Entrada
   aspect_ratio: "16:9"
+  entities: []
+  view_layout:
+    column: 2
 - camera_view: auto
+  view_layout:
+    column: 2
   fit_mode: cover
   type: picture-glance
   entity: camera.backyard
   title: Traseiras
   camera_image: camera.backyard
   aspect_ratio: "16:9"
+  entities: []
+- type: custom:mod-card
+  view_layout:
+    column: 2
+  style:
+    hui-horizontal-stack-card$: |
+      :host {
+        height: auto;
+      }
+  card:
+      type: custom:llmvision-preview-card
+      language: pt
+      time_format: 24h
+      filter_false_positives: true
+
 - camera_view: auto
   fit_mode: cover
   title: Baby Monitor Henrique
   type: picture-glance
   entity: camera.baby_monitor_henrique
   camera_image: camera.baby_monitor_henrique
-
   aspect_ratio: "16:9"
+  entities: []
+  view_layout:
+    column: 1
 - camera_view: auto
   fit_mode: cover
   title: Baby Monitor Ricardo
@@ -34,4 +59,7 @@
   entity: camera.baby_monitor_ricardo
   camera_image: camera.baby_monitor_ricardo
   aspect_ratio: "16:9"
+  entities: []
+  view_layout:
+    column: 1
 

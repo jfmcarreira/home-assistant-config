@@ -410,14 +410,14 @@
         vertical: false
         features_position: bottom
       - type: tile
-        entity: sensor.average_humidity_bedrooms
+        entity: sensor.humidity_average_bedrooms
         name: Humidade
         vertical: false
         features_position: bottom
       # - type: custom:mini-graph-card
       #   name: Temperatura Quartos
       #   entities:
-      #     - entity: sensor.average_temperature_bedrooms
+      #     - entity: sensor.temperature_average_bedrooms
       #   line_color: "#e74c3c"
       #   line_width: 8
       #   font_size: 75
@@ -431,7 +431,7 @@
       # - type: custom:mini-graph-card
       #   name: Humidade Quartos
       #   entities:
-      #     - entity: sensor.average_humidity_bedrooms
+      #     - entity: sensor.humidity_average_bedrooms
       #   line_width: 8
       #   font_size: 75
       #   align_icon: left
