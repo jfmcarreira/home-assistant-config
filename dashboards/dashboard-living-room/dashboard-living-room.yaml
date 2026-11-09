@@ -44,6 +44,48 @@ views:
           entity: hash
           default: panel-main
           states:
+            panel-barcode:
+              type: iframe
+              url: http://nest-assistant.home:8621/screen.php
+              card_mod:
+                style: |
+                  :host {
+                    display: block;
+                    height: calc(100dvh - 12px);
+                    max-height: calc(100dvh - 12px);
+                  }
+                  ha-card {
+                    height: 100%;
+                    max-height: 100%;
+                    box-sizing: border-box;
+                    overflow: hidden;
+                  }
+                  #root {
+                    padding-top: 0 !important;
+                    min-height: 0;
+                    flex: 1;
+                  }
+            panel-barcode-detail:
+              type: iframe
+              url: http://nest-assistant.home:8621/
+              card_mod:
+                style: |
+                  :host {
+                    display: block;
+                    height: calc(100dvh - 12px);
+                    max-height: calc(100dvh - 12px);
+                  }
+                  ha-card {
+                    height: 100%;
+                    max-height: 100%;
+                    box-sizing: border-box;
+                    overflow: hidden;
+                  }
+                  #root {
+                    padding-top: 0 !important;
+                    min-height: 0;
+                    flex: 1;
+                  }
             panel-house:
               type: custom:layout-card
               layout_type: custom:horizontal-layout
@@ -68,6 +110,25 @@ views:
                     99%, 100% { --ks-fade-b: 0px; }
                   }
               cards: !include panel-house.yaml
+            panel-wc:
+              type: custom:mod-card
+              style: |
+                :host {
+                  display: block;
+                  height: calc(100dvh - 12px);
+                  --masonry-view-card-margin: 0px;
+                }
+              card:
+                type: custom:layout-card
+                layout_type: custom:grid-layout
+                layout:
+                  margin: 0px
+                  padding: 0px
+                  grid-template-columns: repeat(3, minmax(0, 1fr))
+                  grid-template-rows: calc(100dvh - 326px) 306px
+                  grid-template-areas: '"principal suite servico" "equipamentos humidade humidade"'
+                  grid-gap: 6px
+                cards: !include panel-wc.yaml
             panel-tasks:
               type: custom:layout-card
               layout_type: custom:horizontal-layout

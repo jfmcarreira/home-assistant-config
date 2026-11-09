@@ -91,26 +91,6 @@
           entity_id: switch.air_conditioner
     - type: custom:button-card
       size: 65%
-      entity: vacuum.roborock
-      show_name: false
-      color_type: icon
-      styles:
-        card:
-          - height: 85px
-      tap_action:
-        action: navigate
-        navigation_path: "#panel-roborock"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-roborock
-      icon: mdi:robot-vacuum
-      state:
-        - value: docked
-          styles:
-            icon:
-              - color: var(--state-icon-color)
-    - type: custom:button-card
-      size: 65%
       color_type: icon
       show_state: false
       icon: mdi:grass
@@ -149,6 +129,22 @@
             - top: 0%
         grid:
           - position: relative
+    - type: custom:button-card
+      size: 65%
+      state_display: "no"
+      styles:
+        card:
+          - height: 85px
+        icon:
+          - color: var(--state-icon-color)
+      icon: mdi:calendar-sync
+      tap_action:
+        action: navigate
+        navigation_path: "#panel-routines"
+- square: false
+  columns: 4
+  type: grid
+  cards:
     - type: custom:button-card
       size: 65%
       color_type: icon
@@ -228,70 +224,29 @@
       tap_action:
         action: navigate
         navigation_path: "#panel-water-heater"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-water-heater
     - type: custom:button-card
       size: 65%
-      state_display: "no"
-      styles:
-        card:
-          - height: 85px
-        icon:
-          - color: var(--state-icon-color)
-      icon: mdi:multimedia
-      tap_action:
-        action: navigate
-        navigation_path: "#panel-media"
-      hold_action:
-        action: navigate
-        navigation_path: /app/d5369777_music_assistant
-    - type: custom:button-card
-      size: 65%
-      state_display: "no"
-      styles:
-        card:
-          - height: 85px
-        icon:
-          - color: var(--state-icon-color)
-      icon: mdi:calendar-sync
-      tap_action:
-        action: navigate
-        navigation_path: "#panel-routines"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/routines
-
-- square: false
-  columns: 4
-  type: grid
-  cards:
-    - type: custom:button-card
-      size: 60%
-      state_display: "no"
-      styles:
-        icon:
-          - color: var(--state-icon-color)
-      icon: mdi:cctv
-      tap_action:
-        action: navigate
-        navigation_path: "#panel-cctv"
-      hold_action:
-        action: navigate
-        navigation_path: /lovelace-subviews/dashboard-cctv
-    - type: custom:button-card
-      size: 60%
-      icon: mdi:shower-head
-      styles:
-        icon:
-          - color: var(--state-icon-color)
+      entity: vacuum.roborock
       show_name: false
-      show_state: false
+      color_type: icon
+      styles:
+        card:
+          - height: 85px
       tap_action:
         action: navigate
-        navigation_path: /lovelace-subviews/dashboard-wc
+        navigation_path: "#panel-roborock"
+      hold_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-roborock
+      icon: mdi:robot-vacuum
+      state:
+        - value: docked
+          styles:
+            icon:
+              - color: var(--state-icon-color)
+
     - type: custom:button-card
-      size: 60%
+      size: 65%
       show_state: false
       show_name: false
       color_type: icon
@@ -319,6 +274,8 @@
               return `<ha-icon icon="mdi:cat"      style="width: 18px; height: 18px;"> </ha-icon>`
           ]]]
       styles:
+        card:
+          - height: 85px
         custom_fields:
           wet_clothes:
             - color: var(--state-icon-color)
@@ -347,9 +304,11 @@
         navigation_path: "#panel-tasks"
 
     - type: custom:button-card
-      size: 60%
+      size: 65%
       state_display: "no"
       styles:
+        card:
+          - height: 85px
         icon:
           - color: var(--state-icon-color)
       entity: sensor.house_mode
@@ -360,3 +319,76 @@
       hold_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-house
+    # - type: custom:button-card
+    #   size: 65%
+    #   state_display: "no"
+    #   styles:
+    #     card:
+    #       - height: 85px
+    #     icon:
+    #       - color: var(--state-icon-color)
+    #   icon: mdi:calendar-sync
+    #   tap_action:
+    #     action: navigate
+    #     navigation_path: "#panel-routines"
+
+
+- square: false
+  columns: 4
+  type: grid
+  cards:
+    - type: custom:button-card
+      size: 60%
+      state_display: "no"
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      icon: mdi:cctv
+      tap_action:
+        action: navigate
+        navigation_path: "#panel-cctv"
+      hold_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-cctv
+    - type: custom:button-card
+      size: 60%
+      icon: mdi:shower-head
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      show_name: false
+      show_state: false
+      tap_action:
+        action: navigate
+        navigation_path: "#panel-wc"
+      hold_action:
+        action: navigate
+        navigation_path: /lovelace-subviews/dashboard-wc
+    - type: custom:button-card
+      size: 60%
+      state_display: "no"
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      icon: mdi:barcode-scan
+      tap_action:
+        action: navigate
+        navigation_path: "#panel-barcode"
+      hold_action:
+        action: navigate
+        navigation_path: "#panel-barcode-detail"
+    - type: custom:button-card
+      size: 60%
+      state_display: "no"
+      styles:
+        icon:
+          - color: var(--state-icon-color)
+      icon: mdi:multimedia
+      tap_action:
+        action: navigate
+        navigation_path: "#panel-media"
+      hold_action:
+        action: navigate
+        navigation_path: /app/d5369777_music_assistant
+
+

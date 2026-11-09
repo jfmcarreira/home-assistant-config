@@ -1,0 +1,261 @@
+- type: vertical-stack
+  view_layout:
+    grid-area: principal
+  cards:
+    - type: heading
+      heading: Principal
+      heading_style: title
+      icon: mdi:shower-head
+    - type: custom:mushroom-light-card
+      card_mod:
+        style: "ha-card { height: 56px; box-sizing: border-box; }"
+      entity: light.main_bathroom_ceiling
+      name: Luz do Teto
+      fill_container: true
+      use_light_color: false
+    - type: custom:mushroom-light-card
+      card_mod:
+        style: "ha-card { height: 56px; box-sizing: border-box; }"
+      entity: light.main_bathroom_led
+      name: "Retro-Iluminação"
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: custom:mushroom-fan-card
+          layout: vertical
+          entity: fan.main_bathroom
+          name: Ventoinha
+        - type: custom:mushroom-entity-card
+          layout: vertical
+          entity: switch.auto_fan_main_bathroom
+          name: "Automático"
+          primary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.humidity_main_bathroom
+          name: Humidade
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.humidity_main_bathroom_average
+          name: "Média (24h)"
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.temperature_main_bathroom
+          name: Temperatura
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.mold_main_bathroom
+          secondary_info: name
+          primary_info: state
+          icon: mdi:cloud-percent
+          name: Bolor
+- type: vertical-stack
+  view_layout:
+    grid-area: suite
+  cards:
+    - type: heading
+      heading: Suite
+      heading_style: title
+      icon: mdi:shower-head
+    - type: custom:mushroom-light-card
+      card_mod:
+        style: "ha-card { height: 56px; box-sizing: border-box; }"
+      entity: light.master_bedroom_bathroom_ceiling
+      name: Luz do Teto
+      fill_container: true
+      use_light_color: false
+    - type: custom:mushroom-light-card
+      card_mod:
+        style: "ha-card { height: 56px; box-sizing: border-box; }"
+      entity: light.master_bedroom_bathroom_led
+      name: "Retro-Iluminação"
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: custom:mushroom-fan-card
+          layout: vertical
+          entity: fan.bathroom_master_bedroom
+          name: Ventoinha
+        - type: custom:mushroom-entity-card
+          layout: vertical
+          entity: switch.auto_fan_master_bedroom_bathroom
+          name: "Automático"
+          primary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.humidity_master_bedroom_bathroom
+          name: Humidade
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.humidity_master_bedroom_bathroom_average
+          name: "Média (24h)"
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.temperature_master_bedroom_bathroom
+          name: Temperatura
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.mold_master_bedroom_bathroom
+          secondary_info: name
+          primary_info: state
+          icon: mdi:cloud-percent
+          name: Bolor
+- type: vertical-stack
+  view_layout:
+    grid-area: servico
+  cards:
+    - type: heading
+      heading: "Serviço"
+      heading_style: title
+      icon: mdi:shower-head
+    - type: custom:mushroom-light-card
+      card_mod:
+        style: "ha-card { height: 56px; box-sizing: border-box; }"
+      entity: light.bathroom_rc_ceiling
+      name: Luz do Teto
+      fill_container: true
+      use_light_color: false
+    - type: custom:mushroom-light-card
+      card_mod:
+        style: "ha-card { height: 56px; box-sizing: border-box; }"
+      entity: light.bathroom_rc_led
+      name: "Retro-Iluminação"
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: custom:mushroom-fan-card
+          layout: vertical
+          entity: fan.bathroom_rc
+          name: Ventoinha
+        - type: custom:mushroom-entity-card
+          layout: vertical
+          entity: switch.auto_fan_bathroom_rc
+          name: "Automático"
+          primary_info: name
+          icon: mdi:fan-auto
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.humidity_bathroom_rc
+          name: Humidade
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.humidity_bathroom_rc_average
+          name: "Média (24h)"
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.temperature_bathroom_rc
+          name: Temperatura
+          primary_info: state
+          secondary_info: name
+        - type: custom:mushroom-entity-card
+          layout: horizontal
+          icon_type: none
+          entity: sensor.mold_bathroom_rc
+          secondary_info: name
+          primary_info: state
+          icon: mdi:cloud-percent
+          name: Bolor
+- type: vertical-stack
+  view_layout:
+    grid-area: equipamentos
+  cards:
+    - type: conditional
+      conditions:
+        - condition: or
+          conditions:
+            - condition: state
+              entity: input_select.portable_heater_location
+              state: Casa de Banho Principal
+            - condition: state
+              entity: input_select.portable_heater_location
+              state: Casa de Banho da Suite
+      card:
+        features:
+          - type: target-temperature
+        type: tile
+        entity: climate.portable_heater
+        state_content:
+          - current_temperature
+          - temperature
+        name: Aquecedor
+        features_position: bottom
+        vertical: false
+        card_mod:
+          style: "ha-card { height: 150px; box-sizing: border-box; }"
+    - type: conditional
+      conditions:
+        - condition: or
+          conditions:
+            - condition: state
+              entity: input_select.dehumidifier_location
+              state: Casa de Banho Principal
+            - condition: state
+              entity: input_select.dehumidifier_location
+              state: Casa de Banho da Suite
+      card:
+        features:
+          - type: target-humidity
+        type: tile
+        entity: humidifier.portable_dehumidifier
+        state_content:
+          - current_humidity
+          - humidity
+        name: Desumidificador
+        features_position: bottom
+        vertical: false
+        card_mod:
+          style: "ha-card { height: 150px; box-sizing: border-box; }"
+- type: custom:mini-graph-card
+  view_layout:
+    grid-area: humidade
+  name: "Humidade · 24 horas"
+  icon: mdi:water-percent
+  entities:
+    - entity: sensor.humidity_main_bathroom
+      name: Principal
+    - entity: sensor.humidity_master_bedroom_bathroom
+      name: Suite
+    - entity: sensor.humidity_bathroom_rc
+      name: "Serviço"
+  hours_to_show: 24
+  points_per_hour: 2
+  height: 160
+  line_width: 2
+  animate: false
+  show:
+    state: false
+    legend: true
+    labels: true
+    fill: false
+  card_mod:
+    style: "ha-card { height: 306px; box-sizing: border-box; }"
