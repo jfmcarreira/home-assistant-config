@@ -13,7 +13,7 @@
       ]]]
   styles:
     card:
-      - height: 140px
+      - height: 143px
     name:
       - font-size: 48px
       - font-weight: 400
@@ -39,6 +39,8 @@
     - type: custom:button-card
       size: 58%
       styles:
+        card:
+          - height: 114px
         icon:
           - color: var(--state-icon-color)
       show_state: false
@@ -52,6 +54,8 @@
     - type: custom:button-card
       size: 58%
       styles:
+        card:
+          - height: 114px
         icon:
           - color: var(--state-icon-color)
       show_state: false
@@ -69,6 +73,9 @@
       show_name: false
       icon: mdi:radiator
       entity: switch.air_conditioner
+      styles:
+        card:
+          - height: 85px
       state:
         - value: "off"
           styles:
@@ -87,6 +94,9 @@
       entity: vacuum.roborock
       show_name: false
       color_type: icon
+      styles:
+        card:
+          - height: 85px
       tap_action:
         action: navigate
         navigation_path: "#panel-roborock"
@@ -122,6 +132,8 @@
               return `<ha-icon icon="mdi:gate-open"      style="width: 18px; height: 18px;"> </ha-icon>`
           ]]]
       styles:
+        card:
+          - height: 85px
         icon:
           - color: var(--state-icon-color)
         custom_fields:
@@ -191,6 +203,8 @@
               return `<ha-icon icon="mdi:thermometer-plus"      style="width: 18px; height: 18px;"> </ha-icon>`
           ]]]
       styles:
+        card:
+          - height: 85px
         icon: null
         custom_fields:
           heating:
@@ -221,6 +235,8 @@
       size: 65%
       state_display: "no"
       styles:
+        card:
+          - height: 85px
         icon:
           - color: var(--state-icon-color)
       icon: mdi:multimedia
@@ -234,6 +250,8 @@
       size: 65%
       state_display: "no"
       styles:
+        card:
+          - height: 85px
         icon:
           - color: var(--state-icon-color)
       icon: mdi:calendar-sync
@@ -337,5 +355,8 @@
       entity: sensor.house_mode
       show_name: false
       tap_action:
+        action: navigate
+        navigation_path: "#panel-house"
+      hold_action:
         action: navigate
         navigation_path: /lovelace-subviews/dashboard-house

@@ -11,123 +11,391 @@ views:
       max_cols: 2
       column_widths: 30% 70%
       max_width: 300px
+      margin: 0px 3px 0px 3px
+      padding: 3px 0px 2px 0px
+      card_margin: 3px
     badges: []
     cards:
-      - type: vertical-stack
+      - type: custom:mod-card
         view_layout:
           column: 1
-        cards: !include control-panel.yaml
-      - type: custom:state-switch
-        entity: hash
-        default: panel-main
+        style: |
+          :host {
+            --stack-card-gap: 6px;
+            --vertical-stack-card-gap: 6px;
+            --horizontal-stack-card-gap: 6px;
+            --grid-card-gap: 6px;
+          }
+        card:
+          type: vertical-stack
+          cards: !include control-panel.yaml
+      - type: custom:mod-card
         view_layout:
           column: 2
-        states:
-          panel-tasks:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_cols: 2
-              height: 695px
-            cards: !include panel-tasks.yaml
-          panel-ac:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              margin: 0px 0px 0px 0px
-              max_cols: 2
-            cards: !include panel-ac.yaml
-          panel-solar:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              margin: 0px 0px 0px 0px
-              max_cols: 2
-              height: 695px
-            cards: !include panel-solar.yaml
-          panel-covers:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_cols: 2
-            cards: !include panel-covers.yaml
-          panel-lights:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_cols: 2
-            cards: !include panel-lights.yaml
-          panel-media:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_cols: 2
-              column_widths: 40% 60%
-              max_width: 2000px
-              height: 695px
-            cards: !include panel-media.yaml
+        style: |
+          :host {
+            --stack-card-gap: 6px;
+            --vertical-stack-card-gap: 6px;
+            --horizontal-stack-card-gap: 6px;
+            --grid-card-gap: 6px;
+          }
+        card:
+          type: custom:state-switch
+          entity: hash
+          default: panel-main
+          states:
+            panel-house:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-house.yaml
+            panel-tasks:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-tasks.yaml
+            panel-ac:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-ac.yaml
+            panel-solar:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-solar.yaml
+            panel-covers:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-covers.yaml
+            panel-lights:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-lights.yaml
+            panel-media:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+                column_widths: 40% 60%
+                max_width: 2000px
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-media.yaml
+            panel-roborock:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-roborock.yaml
+            panel-water-heater:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-water-heater.yaml
+            panel-routines:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_width: 2000px
+                column_widths: 100%
+                max_cols: 1
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-routines.yaml
+            panel-cctv:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_cols: 2
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-cctv.yaml
+            panel-exterior:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: -6px -3px
+                padding: 0px
+                card_margin: 6px 3px
+                height: 100dvh
+                max_width: 2000px
+                column_widths: 100%
+                max_cols: 1
+              card_mod:
+                style: |
+                  #columns {
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                    scrollbar-width: none;
+                    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                    animation: ks-fade-bottom linear both;
+                    animation-timeline: scroll(self);
+                  }
+                  @keyframes ks-fade-bottom {
+                    0%, 97% { --ks-fade-b: 36px; }
+                    99%, 100% { --ks-fade-b: 0px; }
+                  }
+              cards: !include panel-exterior.yaml
+            panel-main:
+              type: custom:layout-card
+              layout_type: custom:horizontal-layout
+              layout:
+                margin: 0px -3px
+                padding: 0px
+                card_margin: 0px 3px
+                max_cols: 2
+              cards:
+                - type: custom:layout-card
+                  view_layout:
+                    column: 1
+                  layout_type: custom:horizontal-layout
+                  layout:
+                    margin: -6px -3px
+                    padding: 0px
+                    card_margin: 6px 3px
+                    height: 100dvh
+                    max_cols: 1
+                  card_mod:
+                    style: |
+                      #columns {
+                        overflow-x: hidden;
+                        overscroll-behavior: contain;
+                        scrollbar-width: none;
+                        mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                        animation: ks-fade-bottom linear both;
+                        animation-timeline: scroll(self);
+                      }
+                      @keyframes ks-fade-bottom {
+                        0%, 97% { --ks-fade-b: 36px; }
+                        99%, 100% { --ks-fade-b: 0px; }
+                      }
+                  cards: !include panel-main-left.yaml
 
-          panel-roborock:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_cols: 2
-            cards: !include panel-roborock.yaml
+                - type: custom:layout-card
+                  view_layout:
+                    column: 2
+                  layout_type: custom:horizontal-layout
+                  layout:
+                    margin: -6px -3px
+                    padding: 0px
+                    card_margin: 6px 3px
+                    height: 100dvh
+                    max_cols: 1
+                  card_mod:
+                    style: |
+                      #columns {
+                        overflow-x: hidden;
+                        overscroll-behavior: contain;
+                        scrollbar-width: none;
+                        mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ks-fade-b, 0px)), transparent);
+                        animation: ks-fade-bottom linear both;
+                        animation-timeline: scroll(self);
+                      }
+                      @keyframes ks-fade-bottom {
+                        0%, 97% { --ks-fade-b: 36px; }
+                        99%, 100% { --ks-fade-b: 0px; }
+                      }
+                  cards: !include panel-main-right.yaml
 
-          panel-water-heater:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_cols: 2
-            cards: !include panel-water-heater.yaml
-
-          panel-routines:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_width: 2000px
-              column_widths: 100%
-              max_cols: 1
-            cards: !include panel-routines.yaml
-
-          panel-cctv:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_cols: 2
-              height: 695px
-            cards: !include panel-cctv.yaml
-          panel-exterior:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              max_width: 2000px
-              column_widths: 100%
-              max_cols: 1
-            cards: !include panel-exterior.yaml
-
-          panel-main:
-            type: custom:layout-card
-            layout_type: custom:horizontal-layout
-            layout:
-              margin: -7px 0px 0px 0px
-              max_cols: 2
-              #height: 700px
-            cards:
-              - type: custom:layout-card
-                view_layout:
-                  column: 1
-                layout_type: custom:horizontal-layout
-                layout:
-                  margin: -7px 0px 0px 0px
-                  max_cols: 1
-                cards: !include panel-main-left.yaml
-              - type: custom:layout-card
-                view_layout:
-                  column: 2
-                layout_type: custom:horizontal-layout
-                layout:
-                  margin: -7px 0px 0px 0px
-                  max_cols: 1
-                  height: 695px
-                cards: !include panel-main-right.yaml

@@ -24,7 +24,7 @@
           line_color: "#e74c3c"
           line_width: 6
           font_size: 75
-          height: 80
+          height: 120
           align_icon: left
           align_state: center
           hours_to_show: 24
@@ -38,7 +38,7 @@
             - entity: sensor.average_humidity
           line_width: 6
           font_size: 75
-          height: 80
+          height: 120
           align_icon: left
           align_state: center
           hours_to_show: 24
@@ -145,21 +145,44 @@
       entity: alarm_control_panel.alarmo
       state: disarmed
   card:
-    type: entity
+    type: custom:button-card
     entity: sensor.battery_time_left_to_discharge
-    icon_height: 28px
-    card_mod:
-      style: |
-        :host {
-          display: block;
-          height: 85px !important;
-          min-height: 0 !important;
-        }
-        ha-card {
-          box-sizing: border-box;
-          height: 85px !important;
-          min-height: 0 !important;
-        }
+    name: Bateria - Tempo de Descarga
+    icon: mdi:battery-clock-outline
+    show_state: true
+    state_display: |
+      [[[
+        const v = parseFloat(entity.state);
+        if (isNaN(v)) return entity.state;
+        const total = Math.round(v * 60);
+        const h = Math.floor(total / 60);
+        const m = total % 60;
+        return h > 0 ? h + ' h ' + m + ' min' : m + ' min';
+      ]]]
+    tap_action:
+      action: more-info
+    styles:
+      card:
+        - height: 82px
+        - padding: 10px 14px
+      grid:
+        - grid-template-areas: '"i n" "i s"'
+        - grid-template-columns: 52px 1fr
+        - grid-template-rows: min-content 1fr
+        - align-items: center
+      icon:
+        - width: 36px
+        - color: var(--state-icon-color)
+      name:
+        - justify-self: start
+        - font-size: 14px
+        - font-weight: 400
+        - color: var(--secondary-text-color)
+      state:
+        - justify-self: start
+        - font-size: 42px
+        - font-weight: 500
+        - line-height: 1.1
 
 
 

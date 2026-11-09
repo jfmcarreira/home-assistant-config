@@ -1,0 +1,364 @@
+- type: vertical-stack
+  view_layout:
+    column: 1
+  cards:
+    - type: heading
+      heading: Modos da Casa
+      heading_style: subtitle
+      icon: mdi:home-edit
+    - type: entities
+      entities:
+        - input_select.house_mode
+    - type: custom:state-switch
+      default: remaining
+      entity: template
+      template: |-
+        {% if now().time().hour >= 5 and now().time().hour < 21 %}
+          daytime
+        {% elif now().time().hour >= 0 and now().time().hour < 5 %}
+          sleeptime
+        {% else %}
+          nighttime
+        {% endif %}
+      states:
+        nighttime:
+          square: false
+          columns: 2
+          type: grid
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: call-service
+                service: input_select.select_option
+                data:
+                  option: Evening
+                  entity_id: input_select.house_mode
+              entity: input_select.house_mode
+              icon: mdi:weather-sunset
+              name: Ativar Modo Anoitecer
+              icon_height: "36px"
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: call-service
+                service: input_select.select_option
+                data:
+                  option: Night
+                  entity_id: input_select.house_mode
+              entity: input_select.house_mode
+              icon: mdi:weather-night
+              name: Ativar Modo Noite
+              icon_height: "36px"
+        sleeptime:
+          square: false
+          columns: 2
+          type: grid
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: call-service
+                service: input_select.select_option
+                data:
+                  option: Night
+                  entity_id: input_select.house_mode
+              entity: input_select.house_mode
+              icon: mdi:weather-night
+              name: Ativar Modo Noite
+              icon_height: "36px"
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: call-service
+                service: input_select.select_option
+                data:
+                  option: Sleep
+                  entity_id: input_select.house_mode
+              entity: input_select.house_mode
+              icon: mdi:sleep
+              name: Ativar Modo Dormir
+              icon_height: "36px"
+        daytime:
+          square: false
+          columns: 2
+          type: grid
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: call-service
+                service: input_select.select_option
+                data:
+                  option: Evening
+                  entity_id: input_select.house_mode
+              entity: input_select.house_mode
+              icon: mdi:weather-sunset
+              name: Ativar Modo Amanhecer
+              icon_height: "36px"
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: call-service
+                service: input_select.select_option
+                data:
+                  option: "On"
+                  entity_id: input_select.house_mode
+              entity: input_select.house_mode
+              icon: mdi:weather-sunny
+              name: Ativar Modo Dia
+              icon_height: "36px"
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: binary_sensor.house_guest
+          hide_state: false
+          vertical: false
+          icon_tap_action:
+            action: perform-action
+            perform_action: input_boolean.toggle
+            target:
+              entity_id: input_boolean.house_guest
+          features_position: bottom
+        - type: tile
+          entity: input_boolean.walking_routine
+          name: Caminhada
+          vertical: false
+          features_position: bottom
+    - type: heading
+      heading: "Notificações"
+      heading_style: subtitle
+      icon: mdi:bell-outline
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: input_boolean.notification_active_non_disturb
+          vertical: false
+          hide_state: true
+        - type: tile
+          entity: input_boolean.door_bell_sound
+          vertical: false
+          hide_state: true
+    - type: heading
+      heading: "Férias / Ausente"
+      heading_style: subtitle
+      icon: mdi:palm-tree
+    - type: vertical-stack
+      cards:
+        - type: tile
+          entity: input_boolean.day_off_work
+          name: "Férias"
+          hide_state: false
+          vertical: false
+          features_position: bottom
+        - type: grid
+          columns: 2
+          square: false
+          cards:
+            - type: tile
+              entity: input_boolean.extended_away_mode
+              name: "Férias (Fora de Casa)"
+              hide_state: true
+              vertical: false
+              features_position: bottom
+            - type: tile
+              features_position: inline
+              vertical: false
+              entity: switch.presence_simulation
+              state_content:
+                - state
+                - last_changed
+    - type: heading
+      heading: Servidor
+      heading_style: subtitle
+      icon: mdi:server
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: sensor.it_helium_server_utilizacao_da_cpu
+          name: CPU
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: sensor.it_helium_server_memoria_em_uso
+          name: "Memória"
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+- type: vertical-stack
+  view_layout:
+    column: 2
+  cards:
+    - type: heading
+      heading: Tablets
+      heading_style: subtitle
+      icon: mdi:tablet-dashboard
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: light.living_room_dashboard_screen
+          features_position: bottom
+          vertical: false
+          name: "Ecrã Sala"
+        - type: tile
+          entity: light.hall_dashboard_screen
+          vertical: false
+          features_position: bottom
+          name: "Ecrã Hall"
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: switch.living_room_dashboard_keep_screen_on
+          vertical: false
+          features_position: bottom
+          name: Sala sempre ligado
+        - type: tile
+          entity: switch.hall_dashboard_keep_screen_on
+          vertical: false
+          features_position: bottom
+          name: Hall sempre ligado
+    - type: heading
+      heading: Natal
+      heading_style: subtitle
+      icon: mdi:pine-tree
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          visibility:
+            - condition: state
+              entity: light.xmas_tree
+              state_not: unavailable
+          entity: light.xmas_tree
+          vertical: false
+          features_position: bottom
+        - type: tile
+          entity: light.xmas_outside
+          vertical: false
+          features_position: bottom
+    - type: heading
+      heading: Portas / Janelas
+      heading_style: subtitle
+      icon: mdi:door-open
+    - type: grid
+      columns: 2
+      square: false
+      cards:
+        - type: tile
+          entity: binary_sensor.kitchen_door
+          name: Cozinha
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.front_door
+          name: Frente
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.kitchen_pantry_door
+          name: Despensa
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_living_room
+          name: Sala
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_laundry
+          name: Lavandaria
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_office
+          name: "Escritório"
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_bedroom_rc
+          name: Quarto de Arrumos
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_bathroom_rc
+          name: "Casa de Banho de Serviço"
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_master_bedroom
+          name: Suite
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_main_bathroom
+          name: Casa de Banho Principal
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_bedroom_ricardo
+          name: Quarto do Ricardo
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
+        - type: tile
+          entity: binary_sensor.window_bedroom_henrique
+          name: Quarto Henrique
+          vertical: false
+          tap_action:
+            action: more-info
+          icon_tap_action:
+            action: more-info
