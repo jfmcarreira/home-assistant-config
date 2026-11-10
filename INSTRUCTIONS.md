@@ -1,394 +1,102 @@
-# Home Assistant MCP Integration
-
-You have access to the Home Assistant MCP server which provides deep integration with Home Assistant. Use these tools proactively to help users with their smart home.
-
-Exception: when working on an offline repository copy and the user explicitly requests local-only edits, the write_config_safe requirements in this file do not apply. Use local editing tools and validate what is possible locally. Do not modify or reload the live installation.
-
-## When to Use MCP Tools
-
-### Always use MCP tools when the user asks about:
-- Entity states ("What's the temperature?", "Are the lights on?")
-- Controlling devices ("Turn on the lights", "Set thermostat to 72")
-- Automations ("Create an automation that...")
-- Troubleshooting ("Why isn't my sensor working?")
-- Home status ("What's happening in my home?")
-- **Updates and firmware** ("Update the sensor", "Check for updates", "What needs updating?")
-
-### Preferred Tool Selection
-
-1. **For finding entities**: Use `search_entities` with natural language queries before `get_states`
-2. **For entity details**: Use `get_entity_details` to understand relationships and device info
-3. **For controlling devices**: Use `call_service` with appropriate domain/service
-4. **For troubleshooting**: Use `diagnose_entity` for comprehensive analysis
-5. **For overview**: Use `get_states` with `summarize: true` for human-readable summaries
-
-## Add-on Development Folder Access
-
-When enabled by the user, `/addons` and `/addon_configs` may be available for Home Assistant add-on development. Only inspect or modify these folders when the user explicitly asks. Treat `/addon_configs` as sensitive because it can contain configuration data for other add-ons.
-
-## Update Management
-
-### Firmware Updates (ESPHome, WLED, Zigbee, etc.)
-**ALWAYS use `watch_firmware_update` for device firmware updates.** This tool provides:
-- Real-time visual progress timeline with timestamps
-- Automatic polling until completion
-- Optional `start_update: true` to initiate the update
-- Clear success/failure status with version info
-
-```
-# Update a device with real-time monitoring
-watch_firmware_update(entity_id="update.garage_sensor_firmware", start_update=true)
-```
-
-### System Updates (Core, OS, Supervisor, Apps)
-Use these tools for Home Assistant system updates:
-
-| Tool | Purpose |
-|------|---------|
-| `get_available_updates` | Check what updates are available |
-| `get_addon_changelog` | View app changelog before updating |
-| `update_component` | Start an update (returns job_id) |
-| `get_update_progress` | Monitor update progress by job_id |
-| `get_running_jobs` | List all active Supervisor jobs |
-
-```
-# Check for updates
-get_available_updates()
-
-# Update Home Assistant Core
-update_component(component="core", backup=true)
-
-# Monitor the update
-get_update_progress(job_id="...")
-```
-
-## Intelligence Features
-
-### Anomaly Detection
-Proactively use `detect_anomalies` when:
-- User asks about home status
-- User reports something isn't working
-- Before suggesting automations
-
-### Automation Suggestions
-Use `get_suggestions` when:
-- User wants to automate something
-- User asks for optimization ideas
-- After reviewing their setup
-
-### Semantic Search
-The `search_entities` tool understands natural language:
-- "bedroom lights" finds light.bedroom_*
-- "motion sensors" finds binary_sensor.*motion*
-- "front door" finds relevant door sensors
-
-## Documentation Currency (CRITICAL)
-
-Your training data may be outdated. Home Assistant releases monthly updates with breaking changes.
-
-### ALWAYS Check Docs Before Writing Configuration
-Use the documentation tools proactively:
-
-| Tool | When to Use |
-|------|-------------|
-| `get_integration_docs` | **Before writing ANY integration config** |
-| `get_breaking_changes` | When config stopped working, or checking compatibility |
-| `check_config_syntax` | Before presenting YAML to user |
-| `write_config_safe` | **ALWAYS use this to write config files** — blocks accidental content loss (see below) |
-
-### Common Deprecations to Watch For
-- **Template sensors**: `platform: template` under `sensor:` -> use top-level `template:`
-- **Entity namespace**: `entity_namespace:` is deprecated -> use `unique_id`
-- **Time/date sensors**: `platform: time_date` -> use template sensors
-- **White value**: `white_value` in lights -> use `white`
-- **MQTT legacy platform**: `platform: mqtt` under `sensor:` -> use top-level `mqtt:` key
-- **Direct state access**: `states.sensor.x.state` -> use `states('sensor.x')`
-- **entity_id in data**: `data: entity_id:` -> use `target: entity_id:`
-- **hassio service domain**: `hassio.` services -> use `homeassistant.` domain
-
-### MANDATORY Workflow for Configuration Tasks
-
-**Use `write_config_safe` as the primary tool for writing configuration files.** This tool automatically validates before committing to disk and restores the original file if validation fails.
-
-```
-1. get_config()                                        -> Know the HA version
-2. get_integration_docs("name")                        -> Get CURRENT syntax
-3. read_file(path)                                     -> Read the EXISTING file content first
-4. Draft config: include ALL existing content + new changes
-5. write_config_safe(path, yaml, dry_run=true)         -> Pre-validate everything
-6. If errors: fix and repeat step 5
-7. Show user the validated config and get approval
-8. write_config_safe(path, yaml)                       -> Write for real (validated + backed up)
-```
-
-**CRITICAL: Always read the target file BEFORE writing to it.** The draft must include all existing content plus your changes. Never write only the new content — this will overwrite and destroy existing configuration.
-
-The `write_config_safe` tool performs these checks automatically:
-- **Content protection** — blocks writes that would remove list entries, drop top-level keys, or significantly shrink the file
-- **Deprecation scanning** — 20+ patterns, auto-updated from GitHub between add-on releases
-- **Jinja2 template validation** — sends every template through HA's own engine
-- **Structural validation** — checks for missing required keys in automations, scripts, etc.
-- **YAML lint checks** — tabs, comma-separated entity lists, etc.
-- **HA Repair issues** — queries your installation's active repair/deprecation warnings via HA Core's repairs API
-- **HA Alerts** — checks alerts.home-assistant.io for known integration issues affecting your config
-- **Full HA config validation** — calls HA Core's check_config (same as `ha core check`)
-- **Automatic backup/restore** — if validation fails after writing, restores the original file
-- **Backup retention** — `.bak` files are kept as a recovery point even after successful writes
-
-**If validation fails, the original file is automatically restored. The multi-layered validation pipeline is designed to prevent invalid config from reaching your HA instance.**
-
-### How Validation Data Stays Current
-
-The validation system uses multiple data sources that update automatically:
-1. **Bundled patterns** — Ship with the add-on, always available offline
-2. **GitHub remote patterns** — Fetched hourly from the repo, allowing pattern updates between add-on releases
-3. **HA Core config check** — Always reflects your exact HA version's validation rules
-4. **HA Repairs API** — Live deprecation warnings specific to your installation
-5. **HA Alerts feed** — Global integration issues from alerts.home-assistant.io
-
-### Legacy Workflow (still available)
-For quick checks without writing files, you can still use:
-```
-1. check_config_syntax(yaml)       -> Catch deprecations (regex-based, fast)
-2. validate_config()               -> Full HA check (validates on-disk files)
-3. get_error_log(lines=100)        -> Read errors if validation fails
-```
-
-**Never rely solely on training data for YAML syntax. Always verify with docs.**
-
-## Guided Workflows (Prompts)
-
-Use these prompts for complex tasks:
-- `troubleshoot_entity` - When debugging entity issues
-- `create_automation` - When building new automations
-- `energy_audit` - For energy optimization
-- `scene_builder` - For creating scenes
-- `security_review` - For security analysis
-- `morning_routine` - For routine automations
-
-## Best Practices
-
-1. **Check before changing**: Use `get_states` before `call_service` to verify current state
-2. **Always read before writing**: Read the existing file first, then include ALL existing content plus your changes
-3. **Always use write_config_safe**: This is the safest way to write config — it validates, protects against content loss, and auto-restores on failure
-4. **Pre-validate with dry_run**: Use `write_config_safe(path, yaml, dry_run=true)` before presenting config to the user
-4. **Use history for debugging**: Use `get_history` when troubleshooting intermittent issues
-5. **Leverage relationships**: Use `get_entity_details` to find related entities
-6. **Be specific with services**: Always specify `entity_id` in the target for `call_service`
-7. **Verify syntax is current**: Use `get_integration_docs` before writing configuration
-8. **Check for deprecations**: The LSP and `write_config_safe` catch these automatically, but `check_config_syntax` is available for quick ad-hoc checks
-
-
-## hab_run Tool (Home Assistant Builder)
-
-The `hab_run` MCP tool provides access to the full Home Assistant admin CLI. It wraps the `hab` (Home Assistant Builder) CLI as a native MCP tool.
-
-`hab` outputs human-readable text by default. Use `--json` on any command for structured JSON output that is easier to parse programmatically.
-
-### When to Use hab_run vs Other MCP Tools
-
-- **Use existing MCP tools** for: safe config writing, anomaly detection, entity diagnostics, firmware updates, history queries
-- **Use hab_run** for: dashboard management, area/floor/zone/person/category CRUD, helper creation, automation/script/scene CRUD via API, todo and notification management, integration control, repair issues, event firing, template rendering, backups, blueprints, search
-
-### Common hab_run Commands
-
-```
-# List entities (--json for structured output)
-hab_run(command="entity list --domain light --json")
-hab_run(command="entity get light.living_room --json")
-hab_run(command="entity logbook sensor.power --start 2h --json")
-
-# Call actions
-hab_run(command='action call light.turn_on --entity light.living_room --data \'{"brightness": 200}\'')
-
-# Manage automations
-hab_run(command="automation list --json")
-hab_run(command="automation get my-automation")
-
-# Manage scenes
-hab_run(command="scene list --json")
-hab_run(command='scene activate "Movie Time"')
-
-# Manage dashboards
-hab_run(command="dashboard list --json")
-
-# Manage areas
-hab_run(command="area list --json")
-hab_run(command="area create Kitchen")
-
-# Manage people
-hab_run(command="person list --json")
-hab_run(command='person create --name "Alice"')
-
-# Manage helpers
-hab_run(command='helper create input_boolean --name "Guest Mode"')
-
-# To-do lists
-hab_run(command="todo list --json")
-hab_run(command="todo item list todo.shopping --json")
-hab_run(command='todo item add todo.shopping "Buy milk"')
-hab_run(command="todo item complete todo.shopping <uid>")
-
-# Notifications
-hab_run(command="notification list --json")
-hab_run(command='notification create --message "Backup done" --title "Status"')
-hab_run(command="notification dismiss <notification_id>")
-
-# Integration management
-hab_run(command="integration list --json")
-hab_run(command="integration reload hue")
-hab_run(command="integration disable mqtt")
-
-# Repair issues
-hab_run(command="repairs list --json")
-hab_run(command="repairs ignore <issue_id>")
-
-# Fire events
-hab_run(command="event list --json")
-hab_run(command='event fire my_custom_event --data \'{"key": "value"}\'')
-
-# Render templates
-hab_run(command="template render --expression \"{{ states('sensor.temperature') }}\"")
-
-# Backups
-hab_run(command="backup list --json")
-hab_run(command="backup create")
-
-# System info
-hab_run(command="system info --json")
-hab_run(command="system health --json")
-hab_run(command="overview --json")
-
-# See all available commands
-hab_run(command="help")
-```
-
-Auth is pre-configured via Supervisor token — no login required.
-
-## zigporter_run Tool (Zigbee Toolkit)
-
-The `zigporter_run` MCP tool provides access to zigporter — a Zigbee device management CLI for Home Assistant. It wraps the `zigporter` CLI as a native MCP tool.
-
-### When to Use zigporter_run vs Other Tools
-
-- **Use zigporter_run** for: cascade entity/device renames (patches automations, scripts, scenes, dashboards), Zigbee device inspection across integrations, stale device cleanup, Z2M device listing, mesh visualization
-- **Use hab_run** for: simple entity/device renames (single registry update, no cascade), dashboard CRUD, area management, helpers, backups
-- **Use MCP tools** for: entity state queries, service calls, config writing, history, diagnostics
-
-### Key difference: cascade rename
-
-`hab` can rename an entity or device in the HA registry, but references in automations, scripts, scenes, and dashboards are NOT updated. `zigporter` patches ALL references atomically — this is its unique value.
-
-### Common zigporter_run Commands
-
-```
-# List all HA devices with structured output
-zigporter_run(command="list-devices --json")
-
-# List Zigbee2MQTT devices (requires Z2M config)
-zigporter_run(command="list-z2m --json")
-
-# Inspect a device (by name, entity ID, or IEEE address)
-zigporter_run(command='inspect "Kitchen Plug" --json')
-zigporter_run(command="inspect sensor.kitchen_plug --json")
-
-# Preview a cascade entity rename (dry-run, no --apply)
-zigporter_run(command="rename-entity light.old_name light.new_name")
-
-# Apply a cascade entity rename
-zigporter_run(command="rename-entity light.old_name light.new_name --apply")
-
-# Preview a cascade device rename
-zigporter_run(command='rename-device "Old Name" "New Name"')
-
-# Apply a cascade device rename
-zigporter_run(command='rename-device "Old Name" "New Name" --apply')
-
-# Manage stale/offline devices
-zigporter_run(command='stale "Offline Device" --action remove')
-zigporter_run(command='stale "Offline Device" --action ignore')
-zigporter_run(command='stale "Offline Device" --action mark-stale --note "Replaced"')
-
-# Fix post-migration entity suffix conflicts
-zigporter_run(command='fix-device "Migrated Device" --apply')
-
-# Check HA + Z2M connectivity
-zigporter_run(command="check")
-
-# Zigbee mesh as a text table
-zigporter_run(command="network-map --format table")
-```
-
-### Important: Rename safety
-
-1. **Always dry-run first**: Omit `--apply` to see the full diff before committing
-2. **Jinja2 templates are NOT patched**: After a rename, zigporter prints warnings listing automations/scripts that contain `{{ states('old.id') }}` patterns — inform the user these need manual review
-3. **Do NOT use the `migrate` command** — it requires physical device interaction (factory resets, button presses) and is not suitable for AI-driven workflows
-
-The tool returns structured JSON when `--json` is used, or diff/confirmation text for rename operations. Auth is pre-configured via Supervisor token.
-
-## Example Patterns
-
-### Turn on a light
-```
-1. search_entities("living room light")
-2. call_service(domain="light", service="turn_on", target={entity_id: "light.living_room"})
-```
-
-### Check home status
-```
-1. get_states(summarize=true)
-2. detect_anomalies()
-```
-
-### Troubleshoot an entity
-```
-1. diagnose_entity(entity_id="sensor.problem_sensor")
-2. get_history(entity_id="sensor.problem_sensor")
-3. get_error_log(lines=50)
-```
-
-### Create an automation
-```
-1. search_entities() to find relevant entities
-2. get_services() to understand available services
-3. read_file("automations.yaml")                              -> Read ALL existing automations
-4. Draft automation YAML including ALL existing + new
-5. write_config_safe("automations.yaml", yaml, dry_run=true)  -> Pre-validate
-6. Show user and get approval
-7. write_config_safe("automations.yaml", yaml)                -> Write safely
-```
-
-### Write configuration for an integration (IMPORTANT!)
-```
-1. get_config()                              -> Check HA version
-2. get_integration_docs(integration="mqtt")  -> Get current syntax
-3. read_file(path)                           -> Read the EXISTING file content
-4. Draft config: include ALL existing content + new changes
-5. write_config_safe(path, yaml, dry_run=true)  -> Pre-validate (deprecations + templates + HA check)
-6. If errors: fix and repeat step 5
-7. Present validated config to user
-8. write_config_safe(path, yaml)             -> Write for real (auto backup + validation)
-```
-
-### User reports "config stopped working after update"
-```
-1. get_config()                              -> Check current HA version
-2. get_breaking_changes(integration="...")   -> Check for relevant changes
-3. get_error_log(lines=100)                  -> Look for deprecation warnings
-4. Review their configuration
-5. Suggest updates based on breaking changes
-```
-
-### Update a device firmware (ESPHome, WLED, Zigbee, etc.)
-```
-1. watch_firmware_update(entity_id="update.device_firmware", start_update=true)
-   -> Single tool call handles everything: starts update, monitors progress, reports result
-```
-
-### Check and install system updates
-```
-1. get_available_updates()                   -> See what's available
-2. update_component(component="core")        -> Start update, get job_id
-3. get_update_progress(job_id="...")         -> Monitor progress
-```
+# Home Assistant Tool Workflows
+
+Follow the project preferences, protected paths, and approval rules in `AGENTS.md`.
+This file describes how to discover capabilities and verify Home Assistant work.
+
+## Discover tools before using them
+
+- Inspect both Home Assistant MCP servers: `ha-mcp` and `homeassistant`.
+  Discover their actual tools and argument schemas rather than inventing names
+  or assuming tools from another installation are present.
+- In Code Mode, use `search` inside `execute`, then call the exact returned
+  `tools["ha-mcp"].…` or `tools.homeassistant.…` path inside `execute`.
+- Use MCP tools for live states, device control, automations, troubleshooting,
+  home status, and updates. Prefer scoped queries to broad state dumps.
+- If an expected tool is absent, report it and do not work around its absence.
+  Do not assume the cause is a reduced profile. Never bypass permission controls.
+- Do not assume tool exposure proves every feature works; some operations need
+  additional integrations, permissions, or installation-specific support.
+
+## Skills and current documentation
+
+- Before Home Assistant work, call `ha_get_skill_guide` on `ha-mcp` without a
+  file argument. Read the reference files its task table requires, not all files.
+- Load other matching skills only if they are actually available. Do not require
+  specialist skills or MCP prompts merely because another installation had them.
+- Before proposing integration configuration, consult current official Home
+  Assistant documentation, using Context7 where applicable. Check the running
+  version when behavior depends on the release.
+- Follow server-provided tool instructions and required best-practice acknowledgments.
+  Skills do not relax this project's consent or safety rules.
+- Do not maintain a hard-coded deprecation/migration table here. Verify each
+  proposed migration against current documentation and the installed version.
+
+## Choose the appropriate capability
+
+These are discovery starting points, not an exhaustive or permanent tool catalog.
+Read the current schema before calling any tool.
+
+| Task | `ha-mcp` tools | `homeassistant` tools |
+|---|---|---|
+| Discover entities | `ha_search` | `homeassistant__GetLiveContext` |
+| State and registry metadata | `ha_get_state`, `ha_get_entity`, `ha_get_device` | `homeassistant__GetLiveContext` |
+| Home overview and areas | `ha_get_overview`, `ha_list_floors_areas` | Filtered live context |
+| Device control | `ha_call_service`, dedicated tools | Exposed intent and domain controls |
+| History and logs | `ha_get_history`, `ha_get_logs` | Discover if needed |
+| Automation/script debugging | `ha_get_automation_traces`, `ha_eval_template` | Discover if needed |
+| Automations, scripts, scenes | Corresponding `ha_config_get_*` / `ha_config_set_*` tools | Explicitly exposed household scripts |
+| Dashboards | `ha_config_get_dashboard`, `ha_config_set_dashboard`, `ha_get_dashboard_screenshot` | Discover if needed |
+| Helpers and integrations | `ha_config_list_helpers`, `ha_config_set_helper`, `ha_get_integration`, `ha_set_integration` | Discover if needed |
+| Files and YAML | `ha_read_file`, `ha_write_file`, `ha_config_get_yaml`, `ha_config_set_yaml` | Discover if needed |
+| Validation and health | `ha_get_system_health` | Discover if needed |
+| Backups and updates | `ha_manage_backup`, `ha_manage_updates` | Discover if needed |
+| Calendar and to-do data | `ha_config_get_calendar_events`, `ha_get_todo` | `calendar__get_events`, `todo__get_items` |
+
+Other exposed capabilities can include labels, categories, energy preferences,
+HACS, themes, media search/playback, broadcasts, and vacuum area cleaning.
+Discover only what the task needs; do not invoke household scripts to test access.
+
+## Local CLI
+
+- `hab` is installed locally, but verify availability and authentication in each
+  environment. Do not assume Supervisor-token authentication or a `hab_run` tool.
+- Use `hab --help` and the relevant subcommand help rather than copied command
+  listings. Use `--json` for structured output.
+- CLI availability does not authorize changes or bypass an absent MCP capability.
+
+## Read, propose, validate, and verify
+
+1. Discover entities with scoped search. Read their state and relevant metadata
+   before proposing control actions. Use history for intermittent problems and
+   traces/logs for automation failures; do not assume an all-in-one diagnostic exists.
+2. Read existing configuration before writing. Include all existing content plus
+   the approved changes when replacing a file; preserve unrelated user work.
+3. Before renaming an entity, identify its consumers in automations, scripts,
+   scenes, dashboards, templates, and helper/integration configuration. Do not
+   assume a registry rename cascades or updates every reference.
+4. Present the exact proposed change and obtain approval as required by `AGENTS.md`.
+5. Always specify `entity_id` when calling `ha_call_service`. Its schema uses an
+   `entity_id` argument, not the old `target={...}` wrapper. Discover service fields
+   with `ha_list_services`; explicitly request response data when needed.
+6. Validate using the tools actually available. For the live configuration,
+   `ha_get_system_health(include="config_check")` exposes HA's configuration check.
+   A live check does not validate un-deployed repository edits. Distinguish syntax
+   checking from runtime validation; never claim a check that was not performed.
+7. After an approved change and any approved reload/restart, read back the
+   configuration or state. Use screenshots for dashboard verification when available.
+   Report the outcome and wait for user verification before the next change.
+
+Use timestamps with `Z` or a UTC offset for history and calendar requests.
+
+## Updates and recovery
+
+- Discover pending updates with `ha_manage_updates(action="list")`; inspect each
+  target and available release notes before proposing installation.
+- Follow the tool's current workflow for firmware and system updates. Do not
+  assume a `watch_firmware_update` tool, job IDs, or continuous progress monitoring.
+- Obtain explicit approval before installing updates, restoring or deleting
+  backups, or restarting Home Assistant. Explain the concrete impact first.
+- Offer a backup before major changes; do not create a full backup without consent.
+  Read the backup guide before selecting the scope of a backup or restore.
+- A timeout does not prove an update failed. Re-read the target's status before
+  retrying; report interruptions and verify the installed version afterward.

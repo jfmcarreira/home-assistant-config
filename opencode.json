@@ -2,8 +2,14 @@
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "homeassistant": {
-      "enabled": true,
+      "enabled": true
+    },
+    "ha-mcp": {
+      "enabled": true
     }
   },
-  "instructions": ["INSTRUCTIONS.md", "AGENTS.md"]
+  "instructions": [
+    "INSTRUCTIONS.md",
+    "AGENTS.md"
+  ]
 }

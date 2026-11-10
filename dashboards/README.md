@@ -9,8 +9,10 @@
 
 Each `dashboard-*.yaml` entry point includes a control panel and feature panels.
 Navigation uses `custom:state-switch` with the URL hash, rather than separate
-Lovelace views for each feature. Kiosk mode hides the header; layouts are tuned
-to tablet dimensions.
+Lovelace views for each feature. Kiosk mode hides the header. The living-room
+dashboard is designed for **landscape** orientation on the Lenovo tablet
+(about 1172 x 733 CSS px); its control-panel column must fit the viewport height
+without scrolling.
 
 ## Shared components
 
