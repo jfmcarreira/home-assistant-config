@@ -32,6 +32,15 @@ If the files conflict, these consent, scope, and safety rules take precedence.
   or `motion_sensor_office`.
 - Leave everything under `custom_components/` alone; it is managed through HACS.
 
+## Delayed actions
+
+- Use the existing `script.run_actions_later` (“Executar Ações Mais Tarde”)
+  for requests to run simple service calls after a delay.
+- Supply `delay` using hours, minutes, and seconds, and an ordered `actions`
+  list. Each call uses `action`, with optional `entity_id` and `data`.
+- Pending runs do not survive Home Assistant restarts; warn the user.
+- Scheduling actions follows the same consent rules as immediate control.
+
 ## Consent and scope
 
 1. Do exactly what the user requests. Do not add features, refactor working
