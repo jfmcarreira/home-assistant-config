@@ -6,7 +6,10 @@ state: >-
       is_state('light.front_door', 'on') or
       is_state('light.exterior_wall_east', 'on') or
       is_state('light.exterior_wall_side', 'on') or
-      is_state('light.exterior_wall_back', 'on')
+      is_state('light.exterior_wall_back', 'on') or
+      is_state('light.exterior_wall_front', 'on') or
+      is_state('light.exterior_flood_led_back', 'on') or
+      is_state('light.exterior_flood_led', 'on')
   }}
 turn_on:
   - service: light.turn_on
