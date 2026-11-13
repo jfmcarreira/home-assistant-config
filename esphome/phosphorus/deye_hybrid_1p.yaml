@@ -722,7 +722,7 @@ number:
     unit_of_measurement: "%"
     address: 273
     min_value: 10
-    max_value: 80
+    max_value: 100
     step: 1
     value_type: U_WORD
     mode: box
