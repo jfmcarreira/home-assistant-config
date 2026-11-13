@@ -195,8 +195,13 @@
           ]]]
         heating: |
           [[[
-            if (states['switch.water_heater'].state == "on")
-              return `<ha-icon icon="mdi:thermometer-plus"      style="width: 18px; height: 18px;"> </ha-icon>`
+            const power = parseFloat(states['sensor.device_power_water_heater']?.state);
+
+            if (power > 100)
+              return `<ha-icon icon="mdi:thermometer-plus"
+                style="width: 18px; height: 18px;"></ha-icon>`;
+
+            return '';
           ]]]
       styles:
         card:

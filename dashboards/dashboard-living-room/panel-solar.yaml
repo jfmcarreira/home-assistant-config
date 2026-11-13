@@ -54,15 +54,20 @@
           entity: sensor.deye_inverter_battery
           name: Estado da Bateria
           state_color: true
-
-        - type: tile
-          entity: switch.deye_inverter_solar_sell
-          name: Venda de Excedente
-          icon: mdi:solar-power-variant
-          vertical: true
-          icon_tap_action:
-            action: toggle
-          features_position: bottom
+        - type: vertical-stack
+          cards:
+            - type: tile
+              entity: switch.deye_inverter_battery_grid_charging
+              name: Carregar da Rede
+              icon: mdi:transmission-tower-import
+              vertical: false
+              features_position: bottom
+            - type: tile
+              entity: switch.deye_inverter_solar_sell
+              name: Venda de Excedente
+              icon: mdi:solar-power-variant
+              vertical: false
+              features_position: bottom
 
     - type: horizontal-stack
       cards:
