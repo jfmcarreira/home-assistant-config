@@ -84,8 +84,8 @@ binary_sensor:
       - delayed_off: 750ms
     on_multi_click:
       - timing:
-          - ON for 5s to 20s
-          - OFF for at least 2s
+          - ON for 4s to 40s
+          - OFF for at least 4s
         then:
           - event.trigger:
               id: gate_ir_event
