@@ -277,7 +277,6 @@
     trigger: state
   - id: car_trigger
     entity_id:
-    - binary_sensor.front_camera_reolink_vehicle
     - binary_sensor.driveway_camera_reolink_vehicle
     - binary_sensor.frigate_zone_front_gate_car
     - binary_sensor.frigate_zone_driveway_gate_car
@@ -887,7 +886,8 @@
   mode: restart
 - id: '1670674527026'
   alias: Desligar Luzes das Escadas com a Luminosidade
-  description: Turn off stair lighting when sufficient daylight is available and the hall lights are off.
+  description: Turn off stair lighting when sufficient daylight is available and the
+    hall lights are off.
   triggers:
   - entity_id: sensor.light_stairs_top
     for:
@@ -929,7 +929,8 @@
   mode: single
 - id: '1675112824745'
   alias: Deshumidificador - Desligar Automáticamente
-  description: Turn off the active portable dehumidifier and its power switch on schedule or when the house battery runs low.
+  description: Turn off the active portable dehumidifier and its power switch on schedule
+    or when the house battery runs low.
   triggers:
   - at: '23:00:00'
     trigger: time
@@ -1223,7 +1224,8 @@
   mode: single
 - id: '1699840344840'
   alias: 'Desligar Luzes da Rua com Temporizador '
-  description: Turn off exterior lighting after a delay, restarting the countdown when a monitored light turns on and respecting guest mode.
+  description: Turn off exterior lighting after a delay, restarting the countdown
+    when a monitored light turns on and respecting guest mode.
   triggers:
   - trigger: state
     entity_id:
@@ -1441,7 +1443,8 @@
   mode: single
 - id: '1658360353381'
   alias: Tablet Control Motion Detection Living Room
-  description: Control the living-room tablet screen and keep-screen-on setting according to household presence and house mode.
+  description: Control the living-room tablet screen and keep-screen-on setting according
+    to household presence and house mode.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -1502,7 +1505,8 @@
   mode: queued
 - id: '1658360353382'
   alias: Tablet Control Motion Detection Hall
-  description: Control the hall tablet screen and keep-screen-on setting according to household presence and house mode.
+  description: Control the hall tablet screen and keep-screen-on setting according
+    to household presence and house mode.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -1604,25 +1608,32 @@
       - office
     action: script.cover_group_action
   mode: single
-- alias: Fechar Estores quando chove
-  id: '1663526552935'
+- id: '1663526552935'
+  alias: Fechar Estores quando chove
   description: Run the per-shutter rain-position routine while the house is empty
     and extended-away mode is off. As configured, the numeric trigger checks weather.home's
     precipitation_unit attribute against 70.
-  mode: single
-  trigger:
-  - trigger: numeric_state
-    entity_id: weather.home
-    attribute: precipitation_unit
-    above: 70
-  condition:
+  triggers:
+  - trigger: moisture.detected
+    target:
+      entity_id: binary_sensor.rain
+    options:
+      behavior: each
+      for:
+        hours: 0
+        minutes: 2
+        seconds: 0
+  conditions:
+  - condition: time
+    after: 09:00:00
+    before: '21:00:00'
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'off'
   - condition: state
     entity_id: input_boolean.extended_away_mode
     state: 'off'
-  action:
+  actions:
   - action: script.cover_group_action
     data:
       action_to_run: script.cover_close_when_raining
@@ -1638,6 +1649,7 @@
       - laundry
       - kitchen
       - office
+  mode: single
 - id: '1651018838807'
   alias: Fechar Estores ao Por do Sol
   description: Close sunset-enabled shutters after sunset while the house is empty
@@ -4942,7 +4954,8 @@
       hvac_delayed_temperature_offset: -1
 - id: '1737768400854'
   alias: AC Hall - Ligar de Manhã no Inverno
-  description: Start upstairs hall heating on cold mornings during the cooler seasons and turn off the AC display.
+  description: Start upstairs hall heating on cold mornings during the cooler seasons
+    and turn off the AC display.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5227,7 +5240,8 @@
       hvac_delayed_temperature_offset: -1
 - id: '1778484821567'
   alias: Rack Ligar Tomada de Alimentação
-  description: Enable rack mains power when the EcoFlow battery is low or the house battery has sufficient charge.
+  description: Enable rack mains power when the EcoFlow battery is low or the house
+    battery has sufficient charge.
   triggers:
   - type: battery_level
     device_id: 028859c507f01453b65c6fe645adc8fc
@@ -5306,7 +5320,9 @@
   mode: single
 - id: '1779568047844'
   alias: Abrir Estores Fechados com o Calor
-  description: Reopen selected shutters previously closed for heat protection when outdoor conditions ease and the house is empty, respecting guest and extended-away modes.
+  description: Reopen selected shutters previously closed for heat protection when
+    outdoor conditions ease and the house is empty, respecting guest and extended-away
+    modes.
   triggers:
   - entity_id:
     - sensor.temperature_outside
@@ -5603,7 +5619,8 @@
   mode: single
 - id: '1781480620672'
   alias: Desligar Ar Condicionados com Bateria
-  description: Turn off the configured air conditioners and portable heater overnight when the house battery runs low.
+  description: Turn off the configured air conditioners and portable heater overnight
+    when the house battery runs low.
   triggers:
   - trigger: battery.level_crossed_threshold
     target:
@@ -5737,7 +5754,8 @@
   mode: single
 - id: '1784409320305'
   alias: Solar - Time Of Use Manhã
-  description: Adjust the inverter's morning battery reserve target when the remaining solar forecast is favorable.
+  description: Adjust the inverter's morning battery reserve target when the remaining
+    solar forecast is favorable.
   triggers:
   - trigger: sun.sunrise
     options:
@@ -5859,7 +5877,8 @@
       temperature_sensor: sensor.temperature_hall
 - id: '1785049940859'
   alias: 'Venda de Excedente - Ativar '
-  description: Ativa a venda de excedente solar quando a carga da bateria e a previsão solar o permitem, ajustando a corrente de carga quando necessário.
+  description: Ativa a venda de excedente solar quando a carga da bateria e a previsão
+    solar o permitem, ajustando a corrente de carga quando necessário.
   triggers:
   - trigger: battery.level_crossed_threshold
     target:
@@ -6102,7 +6121,8 @@
   mode: single
 - id: '1791767366773'
   alias: Aumentar Limite de Carga da Bateria
-  description: Aumenta o limite de carga da EcoFlow quando a bateria do inversor tem carga suficiente.
+  description: Aumenta o limite de carga da EcoFlow quando a bateria do inversor tem
+    carga suficiente.
   triggers:
   - trigger: battery.level_changed
     target:
