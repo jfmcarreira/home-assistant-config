@@ -51,31 +51,23 @@ sequence:
       entity_id: !input hvac_entitiy
 
   - wait_for_trigger:
-      - trigger: climate.hvac_mode_changed
-        target:
-          entity_id: !input hvac_entitiy
-        options:
-          behavior: all
-          hvac_mode:
-            - heat
-            - heat_cool
-            - cool
-            - "off"
-            - fan_only
+      - trigger: state
+        entity_id: !input hvac_entitiy
+        from: dry
     timeout:
       hours: 1
       minutes: 30
     continue_on_timeout: true
 
-  - condition: not
-    conditions:
-      - condition: climate.is_off
-        options:
-          behavior: all
-        target:
-          entity_id: !input hvac_entitiy
+  - condition: state
+    entity_id: !input hvac_entitiy
+    state: dry
 
   - delay: 10
+
+  - condition: state
+    entity_id: !input hvac_entitiy
+    state: dry
 
   - action: climate.set_temperature
     continue_on_error: true
@@ -121,18 +113,14 @@ sequence:
 
   - delay: 10
 
+  - condition: state
+    entity_id: !input hvac_entitiy
+    state: heat
+
   - wait_for_trigger:
-      - trigger: climate.hvac_mode_changed
-        target:
-          entity_id: !input hvac_entitiy
-        options:
-          behavior: all
-          hvac_mode:
-            - heat
-            - heat_cool
-            - cool
-            - "off"
-            - fan_only
+      - trigger: state
+        entity_id: !input hvac_entitiy
+        from: heat
       - trigger: temperature.crossed_threshold
         target:
           entity_id: !input temperature_sensor
@@ -147,6 +135,10 @@ sequence:
     timeout:
       minutes: 30
     continue_on_timeout: true
+
+  - condition: state
+    entity_id: !input hvac_entitiy
+    state: heat
 
   - action: climate.turn_off
     target:
