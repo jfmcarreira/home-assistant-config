@@ -85,7 +85,12 @@ script:
 
     variables:
       cover_entity: cover.{{ action_cover }}
-      last_action_entitiy: select.cover_{{ action_cover }}_last_action
+      last_action_entitiy: >-
+        {% if action_cover == 'stairs' %}
+          input_select.cover_stairs_last_action
+        {% else %}
+          select.cover_{{ action_cover }}_last_action
+        {% endif %}
     sequence:
       - condition: "{{ is_state(cover_entity, 'closed') }}"
       - condition: "{{ is_state(last_action_entitiy, 'Sol') }}"
