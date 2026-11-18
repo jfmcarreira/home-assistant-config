@@ -72,6 +72,9 @@ sequence:
         entity_id: sensor.deye_inverter_battery
         below: 95
       - trigger: numeric_state
+        entity_id: sensor.deye_inverter_battery
+        below: 50
+      - trigger: numeric_state
         entity_id: sensor.deye_inverter_pv_power_average
         below: 1000
         for:
