@@ -1166,27 +1166,24 @@ routina_de_abrir_e_fechar_o_portao_com_porta_da_cozinha_duplicar:
       target:
         entity_id: cover.gate
       data: {}
-  - parallel:
-    - sequence:
-      - wait_for_trigger:
-        - trigger: state
-          entity_id:
-          - sensor.driveway_car_active_count
-          - sensor.driveway_car_count
-          - binary_sensor.driveway_camera_car
-    - sequence:
-      - wait_for_trigger:
-        - trigger: event.received
-          target:
-            entity_id: event.gate_photocell_events
-          options:
-            event_type:
-            - car
-      - delay:
-          hours: 0
-          minutes: 0
-          seconds: 3
-          milliseconds: 0
+  - wait_for_trigger:
+    - trigger: event.received
+      target:
+        entity_id: event.gate_photocell_events
+      options:
+        event_type:
+        - car
+    timeout:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: false
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
   - action: cover.close_cover
     metadata: {}
     target:
@@ -1378,8 +1375,8 @@ hvac_solar_heat_bedroom_ricardo:
       temperature_sensor: sensor.temperature_bedroom_ricardo
 hvac_solar_heat_office:
   alias: AC Escritório - Apoio Solar - Aquecer
-  description: Heat the office using solar surplus, with shared stop conditions.
-    The calling automation checks solar eligibility.
+  description: Heat the office using solar surplus, with shared stop conditions. The
+    calling automation checks solar eligibility.
   use_blueprint:
     path: hvac/hvac_solar_heat.yaml
     input:
@@ -1432,8 +1429,8 @@ hvac_solar_cool_bedroom_ricardo:
       temperature_sensor: sensor.temperature_bedroom_ricardo
 hvac_solar_cool_office:
   alias: AC Escritório - Apoio Solar - Arrefecer
-  description: Cool the office using solar surplus, with shared stop conditions.
-    The calling automation checks solar eligibility.
+  description: Cool the office using solar surplus, with shared stop conditions. The
+    calling automation checks solar eligibility.
   use_blueprint:
     path: hvac/hvac_solar_cool.yaml
     input:

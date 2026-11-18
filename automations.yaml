@@ -3517,8 +3517,12 @@
     - script.routine_exit_house_to_work_joao
     - script.routine_leaving_and_coming_back
     - script.routine_gate_open_auto_close_sensors
-    from: 'on'
-    to: 'off'
+    - script.lights_arriving_home
+    - script.routine_car_exit
+    from:
+    - 'on'
+    to:
+    - 'off'
   conditions: []
   actions:
   - action: input_text.set_value
@@ -4587,7 +4591,7 @@
   - condition: numeric_state
     entity_id: sun.sun
     attribute: elevation
-    above: 30
+    above: 18
   - condition: or
     conditions:
     - condition: and
@@ -4612,16 +4616,25 @@
             value:
               active_choice: number
               number: 95
-    - condition: temperature.is_value
-      target:
-        entity_id: sensor.temperature_water_heater_top
-      options:
-        threshold:
-          type: below
-          value:
-            active_choice: number
-            number: 50
-            unit_of_measurement: °C
+    - condition: and
+      conditions:
+      - condition: temperature.is_value
+        target:
+          entity_id: sensor.temperature_water_heater_top
+        options:
+          threshold:
+            type: below
+            value:
+              active_choice: number
+              number: 50
+              unit_of_measurement: °C
+      - condition: template
+        value_template: '{% set energy_left = (states(''sensor.battery_energy_left_to_charge'')
+          | float(0)) + (states(''sensor.battery_remaining_energy_until_sunset'')
+          | float(0)) %} {% set solar_remaining = states(''sensor.solar_forecast_today_remaining'')
+          | float(0) %} {{ solar_remaining > (energy_left * 1.5) }}
+
+          '
   - condition: not
     conditions:
     - condition: state
@@ -6135,4 +6148,21 @@
       entity_id: number.ef_r30064_battery_charge_limit_max
     data:
       value: '100'
+  mode: single
+- id: '1794233345441'
+  alias: Water heater switch on — one-off 9 Nov 2026 14:18:55
+  description: Turn on switch.water_heater 10 minutes after request; disable this
+    automation after running. Cancel by disabling this automation.
+  triggers:
+  - trigger: time
+    at: '14:18:55'
+  actions:
+  - action: switch.turn_on
+    target:
+      entity_id: switch.water_heater
+  - action: automation.turn_off
+    target:
+      entity_id: automation.water_heater_switch_on_one_off_9_nov_2026_14_18_55
+    data:
+      stop_actions: false
   mode: single

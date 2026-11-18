@@ -104,9 +104,9 @@ condition:
 
   - condition: template
     value_template: >
-      {% set energy_left = states('sensor.battery_energy_left_to_charge') | float(0) %}
+      {% set energy_left = (states('sensor.battery_energy_left_to_charge') | float(0)) + (states('sensor.battery_remaining_energy_until_sunset') | float(0)) %}
       {% set solar_remaining = states('sensor.solar_forecast_today_remaining') | float(0) %}
-      {{ solar_remaining > energy_left * 3.0 }}
+      {{ solar_remaining > (energy_left * 1.5) }}
 
   - condition: numeric_state
     entity_id: sensor.deye_inverter_battery
