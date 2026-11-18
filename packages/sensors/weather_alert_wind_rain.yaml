@@ -1,0 +1,24 @@
+template:
+- sensor:
+  - name: "Alerta Meteorológico - Vento e Chuva"
+    unique_id: weather_alert_wind_rain
+    default_entity_id: sensor.weather_alert_wind_rain
+    availability: "{{ has_value('sensor.weather_alert') }}"
+    state: >
+      {% set type = state_attr('sensor.weather_alert', 'awarenessTypeName') %}
+      {{ states('sensor.weather_alert')
+         if type in ['Vento', 'Precipitação'] else 'no_alert' }}
+    attributes: >
+      {% set source = 'sensor.weather_alert' %}
+      {% if state_attr(source, 'awarenessTypeName') in ['Vento', 'Precipitação'] %}
+        {{ {
+          'text': state_attr(source, 'text'),
+          'awarenessTypeName': state_attr(source, 'awarenessTypeName'),
+          'awarenessLevelID': state_attr(source, 'awarenessLevelID'),
+          'idAreaAviso': state_attr(source, 'idAreaAviso'),
+          'startTime': state_attr(source, 'startTime'),
+          'endTime': state_attr(source, 'endTime')
+        } }}
+      {% else %}
+        {{ {} }}
+      {% endif %}
