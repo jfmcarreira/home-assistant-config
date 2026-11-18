@@ -887,9 +887,7 @@
   mode: restart
 - id: '1670674527026'
   alias: Desligar Luzes das Escadas com a Luminosidade
-  description: Switch off all stair lighting when the top sensor exceeds 60 lux for
-    five minutes, or lights have been on for five minutes and the sensor is above
-    50 lux.
+  description: Turn off stair lighting when sufficient daylight is available and the hall lights are off.
   triggers:
   - entity_id: sensor.light_stairs_top
     for:
@@ -931,8 +929,7 @@
   mode: single
 - id: '1675112824745'
   alias: Deshumidificador - Desligar Automáticamente
-  description: Turn off the portable dehumidifier and its power switch at 23:00 and
-    again at 00:30.
+  description: Turn off the active portable dehumidifier and its power switch on schedule or when the house battery runs low.
   triggers:
   - at: '23:00:00'
     trigger: time
@@ -1226,9 +1223,7 @@
   mode: single
 - id: '1699840344840'
   alias: 'Desligar Luzes da Rua com Temporizador '
-  description: Restart a one-hour exterior-light shutdown timer whenever a monitored
-    light changes state. Switch off the outside group when it expires, provided guest
-    mode is off both at the trigger and at shutdown.
+  description: Turn off exterior lighting after a delay, restarting the countdown when a monitored light turns on and respecting guest mode.
   triggers:
   - trigger: state
     entity_id:
@@ -1446,8 +1441,7 @@
   mode: single
 - id: '1658360353381'
   alias: Tablet Control Motion Detection Living Room
-  description: Disable living-room tablet motion detection and its screen when the
-    house is empty or mode is Off or Sleep.
+  description: Control the living-room tablet screen and keep-screen-on setting according to household presence and house mode.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -1508,8 +1502,7 @@
   mode: queued
 - id: '1658360353382'
   alias: Tablet Control Motion Detection Hall
-  description: Disable hall tablet motion detection and its screen when the house
-    is empty or mode is Off, Night or Sleep.
+  description: Control the hall tablet screen and keep-screen-on setting according to household presence and house mode.
   triggers:
   - entity_id:
     - input_select.house_mode
@@ -4955,9 +4948,7 @@
       hvac_delayed_temperature_offset: -1
 - id: '1737768400854'
   alias: AC Hall - Ligar de Manhã no Inverno
-  description: Request upstairs hall heating to 20 C daily in autumn, winter and spring
-    between 06:00 and 08:00 when room and outdoor temperatures are below 19 C. Apply
-    shared HVAC gates and switch off the AC display after starting.
+  description: Start upstairs hall heating on cold mornings during the cooler seasons and turn off the AC display.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5242,8 +5233,7 @@
       hvac_delayed_temperature_offset: -1
 - id: '1778484821567'
   alias: Rack Ligar Tomada de Alimentação
-  description: Enable the configured rack supply plug when EcoFlow battery crosses
-    below 50 percent or the Deye battery crosses above 40 percent.
+  description: Enable rack mains power when the EcoFlow battery is low or the house battery has sufficient charge.
   triggers:
   - type: battery_level
     device_id: 028859c507f01453b65c6fe645adc8fc
@@ -5270,7 +5260,7 @@
   mode: single
 - id: '1778684016013'
   alias: Venda de excedente - Desactivar
-  description: Disable Deye solar export when sun elevation crosses below 15 degrees.
+  description: Disable solar energy export as daylight fades.
   triggers:
   - trigger: numeric_state
     entity_id:
@@ -5322,10 +5312,7 @@
   mode: single
 - id: '1779568047844'
   alias: Abrir Estores Fechados com o Calor
-  description: Between 16:00 and 20:30, reopen the configured non-west shutters only
-    if closed with last action Sol and either outside temperature or sun elevation
-    is below 25. Require an empty house without guests or extended absence and an
-    18-hour run interval.
+  description: Reopen selected shutters previously closed for heat protection when outdoor conditions ease and the house is empty, respecting guest and extended-away modes.
   triggers:
   - entity_id:
     - sensor.temperature_outside
@@ -5622,8 +5609,7 @@
   mode: single
 - id: '1781480620672'
   alias: Desligar Ar Condicionados com Bateria
-  description: Turn off the six configured air conditioners and portable heater between
-    20:00 and 09:00 when Deye battery has stayed below 45 percent for five minutes.
+  description: Turn off the configured air conditioners and portable heater overnight when the house battery runs low.
   triggers:
   - trigger: battery.level_crossed_threshold
     target:
@@ -5757,8 +5743,7 @@
   mode: single
 - id: '1784409320305'
   alias: Solar - Time Of Use Manhã
-  description: At 05:00, set the Deye time-of-use state-of-charge target to 15 percent
-    if the remaining solar forecast exceeds 10.
+  description: Adjust the inverter's morning battery reserve target when the remaining solar forecast is favorable.
   triggers:
   - trigger: sun.sunrise
     options:
@@ -5784,7 +5769,7 @@
   mode: single
 - id: '1784409484271'
   alias: Solar - Time Of Use Noite
-  description: Set the Deye time-of-use state-of-charge target to 30 percent at 22:00.
+  description: Apply the inverter's nighttime battery reserve target.
   triggers:
   - trigger: time
     at: '21:00:00'
@@ -5799,7 +5784,7 @@
   mode: single
 - id: '1784409525727'
   alias: Solar - Time Of Use Dia
-  description: Set the Deye time-of-use state-of-charge target to 30 percent at 11:00.
+  description: Apply the inverter's daytime battery reserve target.
   triggers:
   - trigger: time
     at: '12:00:00'
@@ -5880,10 +5865,7 @@
       temperature_sensor: sensor.temperature_hall
 - id: '1785049940859'
   alias: 'Venda de Excedente - Ativar '
-  description: Antes das 17:00, ativa a venda de energia solar se a bateria estiver
-    acima de 50%, e se a bateria estiver acima de 95% ou a previsão solar remanescente
-    for superior a 25. Se a bateria estiver abaixo de 90%, reduz a corrente máxima
-    de carga para 40.
+  description: Ativa a venda de excedente solar quando a carga da bateria e a previsão solar o permitem, ajustando a corrente de carga quando necessário.
   triggers:
   - trigger: battery.level_crossed_threshold
     target:
@@ -6126,10 +6108,7 @@
   mode: single
 - id: '1791767366773'
   alias: Aumentar Limite de Carga da Bateria
-  description: 'Quando a bateria do inversor atinge acima de 60%, o limite de carga
-    é aumentado para 100%.
-
-    '
+  description: Aumenta o limite de carga da EcoFlow quando a bateria do inversor tem carga suficiente.
   triggers:
   - trigger: battery.level_changed
     target:
