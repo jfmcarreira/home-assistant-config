@@ -199,17 +199,43 @@ variables:
   ## House Mode
   disable_in_guest: !input disable_in_guest
   disable_in_sleep: !input disable_in_sleep
-  house_mode: "{{ states.sensor.house_mode.state }}"
+  house_mode: >
+    {{ {
+      'On': 'Ligada',
+      'Evening': 'Amanhecer/Anoitecer',
+      'Night': 'Noite',
+      'Sleep': 'Dormir'
+    }.get(states('input_select.house_mode'), 'Desligada') }}
   required_house_mode: !input required_house_mode
   house_mode_requirement: >
     {{
       required_house_mode == "Todos" or
       required_house_mode == house_mode or
-      ( required_house_mode == "Anoitecer+Noite" and ( states.sensor.house_mode.state == "Amanhecer/Anoitecer" or states.sensor.house_mode.state == "Noite" ) ) or
-      ( required_house_mode == "Dia+Anoitecer" and ( states.sensor.house_mode.state == "Amanhecer/Anoitecer" or states.sensor.house_mode.state == "Ligada" ) )
+      ( required_house_mode == "Anoitecer+Noite" and house_mode in ["Amanhecer/Anoitecer", "Noite"] ) or
+      ( required_house_mode == "Dia+Anoitecer" and house_mode in ["Amanhecer/Anoitecer", "Ligada"] )
+    }}
+  control_trigger: >
+    {{ trigger.id in [
+      'house_mode_trigger',
+      'motion_light_sw_state_trigger',
+      'notify_home_trigger'
+    ] }}
+  shutdown_requested: >
+    {{
+      automation_was_running and control_trigger and (
+        house_mode == 'Desligada' or
+        is_state('input_boolean.automation_sw_all_motion_lights', 'off') or
+        not house_mode_requirement or
+        (disable_in_sleep and is_state('input_select.house_mode', 'Sleep'))
+      )
     }}
 
 condition:
+  # Ignore non-shutdown control events before restart can cancel the active timer.
+  - alias: "Preserve active lighting unless control requires shutdown"
+    condition: template
+    value_template: "{{ not control_trigger or shutdown_requested }}"
+
   - alias: "Only check light trigger if running"
     condition: or
     conditions:
@@ -220,20 +246,27 @@ condition:
         for:
           seconds: 3
 
-  # Do not run if house is empty
-  - condition: state
-    entity_id: binary_sensor.notify_home
-    state: "on"
+  # Activation requires presence; automatic shutdown must remain possible.
+  - condition: or
+    conditions:
+      - "{{ shutdown_requested }}"
+      - condition: state
+        entity_id: binary_sensor.notify_home
+        state: "on"
 
-  # Do not run if automation controller is off
-  - condition: state
-    entity_id: input_boolean.automation_sw_all_motion_lights
-    state: "on"
+  # Allow the global-off trigger to shut down automatically controlled lighting.
+  - condition: or
+    conditions:
+      - "{{ shutdown_requested }}"
+      - condition: state
+        entity_id: input_boolean.automation_sw_all_motion_lights
+        state: "on"
 
   # Do not run in guest mode if set
   - alias: "Desabilitar no modo de convidados"
     condition: or
     conditions:
+      - "{{ shutdown_requested }}"
       - "{{ disable_in_guest == false }}"
       - condition: state
         entity_id: binary_sensor.house_guest
@@ -242,6 +275,7 @@ condition:
   - alias: "Desabilitar no modo Dormir"
     condition: or
     conditions:
+      - "{{ shutdown_requested }}"
       - "{{ disable_in_sleep == false }}"
       - condition: not
         conditions:
@@ -326,19 +360,10 @@ action:
       - conditions: "{{ trigger.id == 'light_trigger'  }}"
         sequence:
           - stop:
-      - conditions: "{{ trigger.id == 'house_mode_trigger' or trigger.id == 'motion_light_sw_state_trigger' or trigger.id == 'notify_home_trigger' }}"
+      - conditions: "{{ shutdown_requested }}"
         sequence:
-          - choose:
-              conditions:
-                - "{{ automation_was_running }}"
-                - condition: or
-                  conditions:
-                    - "{{ house_mode == 'Desligada' }}"
-                    - "{{ states.input_boolean.automation_sw_all_motion_lights.state == 'off' }}"
-                    - "{{ not( house_mode_requirement ) }}"
-              sequence:
-                - service: light.turn_off
-                  entity_id: !input target_entity
+          - service: light.turn_off
+            entity_id: !input target_entity
           - stop:
 
   - alias: "Check if motion is ON"
