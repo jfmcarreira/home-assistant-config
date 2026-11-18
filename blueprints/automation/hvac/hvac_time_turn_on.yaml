@@ -153,6 +153,7 @@ variables:
   hvac_mode_heat: !input hvac_mode_heat
   hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
   room_temperature: !input room_temperature
+  temperature_sensor: !input temperature_sensor
   room_temperature_diff: !input room_temperature_diff
 
 trigger:
