@@ -651,11 +651,7 @@ routine_exit_house_all_off:
       entity_id: input_text.script_step_message
     data:
       value: Aguardar alguém sair de casa
-  - wait_for_trigger:
-    - entity_id:
-      - binary_sensor.notify_home
-      to: 'off'
-      trigger: state
+  - wait_template: "{{ is_state('binary_sensor.notify_home', 'off') }}"
     timeout: 00:20:00
     continue_on_timeout: false
   - action: input_text.set_value

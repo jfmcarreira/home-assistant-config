@@ -894,7 +894,7 @@
       hours: 0
       minutes: 5
       seconds: 0
-    above: 60
+    above: 100
     trigger: numeric_state
   - entity_id:
     - light.stairs_group
@@ -2337,9 +2337,7 @@
   mode: single
 - alias: 'Notificar Abertura Portão/Portas '
   id: '1717504841456'
-  description: Send a security alert while nobody is home if the front or kitchen
-    door stays open for five seconds, or the gate remains in opening state for one
-    minute.
+  description: Alert residents to front or kitchen door opening, or the gate starting to open, while nobody is home.
   triggers:
   - entity_id:
     - binary_sensor.front_door
@@ -2356,10 +2354,6 @@
     from: closed
     to: opening
     trigger: state
-    for:
-      hours: 0
-      minutes: 1
-      seconds: 0
   conditions:
   - condition: state
     entity_id: binary_sensor.notify_home
@@ -5573,7 +5567,7 @@
   - trigger: numeric_state
     entity_id:
     - sensor.sun_solar_elevation
-    below: 25
+    below: 10
   conditions:
   - condition: template
     value_template: '{% set hours = 18 %} {% set last = state_attr(this.entity_id,
