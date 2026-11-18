@@ -81,13 +81,6 @@ trigger:
     from: "off"
     platform: state
     to: "on"
-
-  - id: trigger_task_done
-    entity_id: !input task_needs_attention
-    from: "on"
-    platform: state
-    to: "off"
-
   - id: trigger_send_notification
     platform: event
     event_type: event_remaind_task_todo
@@ -102,7 +95,6 @@ condition:
   - condition: or
     conditions:
       - "{{ trigger.id == 'trigger_task_overdue' }}"
-      - "{{ trigger.id == 'trigger_task_done' }}"
       - "{{ trigger.id == 'trigger_send_notification' }}"
       - condition: state
         entity_id: !input task_needs_attention
