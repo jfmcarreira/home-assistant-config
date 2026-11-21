@@ -33,6 +33,12 @@ blueprint:
       selector:
         entity:
           domain: binary_sensor
+    product_id:
+      name: ID do Produto no Grocy
+      description: ID do produto a consumir quando a máquina termina. Deixar vazio para não consumir.
+      default: ""
+      selector:
+        text:
     task_extra_actions:
       name: Acções - Máquina
       description: Acções extra a executar quando a máquina termina
@@ -88,6 +94,7 @@ mode: restart
 max_exceeded: silent
 
 variables:
+  product_id: !input product_id
   task_machine_code_name: !input task_machine_code_name
   task_done_code_name: !input task_done_code_name
   record_timestamp: "{{ now().timestamp() | timestamp_custom('%Y-%m-%d %H:%M:%S') }}"
@@ -180,6 +187,15 @@ action:
               date_stamp: >
                 "{{ record_timestamp }}"
               save_date_time: "true"
+          - if:
+              - "{{ product_id | string | trim != '' }}"
+            then:
+              - action: grocy.consume_product_from_stock
+                data:
+                  product_id: !input product_id
+                  amount: 1
+                  transaction_type: CONSUME
+
           - sequence: !input task_extra_actions
 
   - choose:
