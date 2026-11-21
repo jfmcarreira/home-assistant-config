@@ -15,29 +15,28 @@
       yellow: 20
       red: 2
 
+
 - type: conditional
   conditions:
     - condition: state
-      entity: sensor.weather_alert
-      state_not: green
-    - condition: state
-      entity: sensor.weather_alert
-      state_not: yellow
+      entity: sensor.weather_alert_wind_rain
+      state:
+        - yellow
+        - orange
+        - red
   card:
-    type: custom:mushroom-entity-card
-    entity: sensor.weather_alert
-    name: Alerta Metereológico
-    primary_info: state
-    secondary_info: name
-    icon_type: none
-    fill_container: false
-    layout: vertical
-    card_mod:
-      style: |
-        ha-card {
-          --card-primary-font-size: 28px;
-          --card-secondary-font-size: 14px;
-        }
+    type: markdown
+    content: |
+      {% set nivel = states('sensor.weather_alert_wind_rain') %}
+      {% set tipo = state_attr('sensor.weather_alert', 'awarenessTypeName') %}
+      {% set niveis = {
+        'yellow': 'Amarelo',
+        'orange': 'Laranja',
+        'red': 'Vermelho'
+      } %}
+      ### Alerta {{ niveis.get(nivel, 'Indisponível') }} · {{ tipo or 'Meteorológico' }}
+      {{ state_attr('sensor.weather_alert', 'text') or 'Sem detalhes disponíveis.' }}
+
 - type: conditional
   conditions:
     - entity: input_boolean.extended_away_mode
