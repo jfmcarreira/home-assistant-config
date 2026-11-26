@@ -4939,7 +4939,7 @@
   alias: AC Sala - Ligar de Manhã no Inverno
   description: Request living-room heating to 22 C daily in autumn, winter and spring
     between 06:30 and 08:00 when room and outdoor temperatures are below 21 C. Apply
-    the shared HVAC gates and lower the setpoint by 1 C after one hour.
+    the shared HVAC gates and temperature-based setpoint adjustment.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -4965,7 +4965,6 @@
       - winter
       - autumn
       - spring
-      hvac_delayed_temperature_offset: -1
 - id: '1737768400854'
   alias: AC Hall - Ligar de Manhã no Inverno
   description: Start upstairs hall heating on cold mornings during the cooler seasons
@@ -4994,7 +4993,6 @@
       - winter
       - autumn
       - spring
-      hvac_delayed_temperature_offset: 0
       window_sensor: binary_sensor.window_bedroom_floor
       extra_hvac_actions:
       - action: switch.turn_off
@@ -5033,7 +5031,7 @@
   alias: AC Sala - Ligar de Tarde no Inverno
   description: Request living-room heating to 21 C on autumn, winter and spring weekdays
     between 16:30 and 18:00 when room and outdoor temperatures are below 21 C. Apply
-    shared HVAC gates and lower the setpoint by 1 C after one hour.
+    shared HVAC gates and temperature-based setpoint adjustment.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5057,7 +5055,6 @@
       - winter
       - spring
       window_sensor: binary_sensor.window_ground_floor
-      hvac_delayed_temperature_offset: -1
 - alias: AC Escritório - Ligar de Tarde no Inverno
   id: '1737772761289'
   description: Request office heating to 20 C daily in autumn, winter and spring between
@@ -5087,7 +5084,6 @@
       - autumn
       - winter
       - spring
-      hvac_delayed_temperature_offset: 0
       extra_hvac_actions: []
 - alias: AC Quartos - Ligar de Tarde no Inverno
   id: '1737850856162'
@@ -5127,7 +5123,7 @@
   alias: AC Hall - Ligar de Tarde no Inverno
   description: Request hall heating to 21 C daily in autumn, winter and spring between
     16:45 and 20:00 when hall and outdoor temperatures are below 21 C. Apply shared
-    HVAC gates and lower the setpoint by 1 C after one hour.
+    HVAC gates and temperature-based setpoint adjustment.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5154,12 +5150,11 @@
       - spring
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-      hvac_delayed_temperature_offset: -1
 - id: '1705596272069'
   alias: AC Suite - Ligar de Tarde no Inverno
   description: Request master-bedroom heating to 21 C daily in autumn, winter and
     spring between 17:00 and 20:00 when room and outdoor temperatures are below 21
-    C. Apply shared HVAC gates and lower the setpoint by 1 C after one hour.
+    C. Apply shared HVAC gates and temperature-based setpoint adjustment.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5184,14 +5179,13 @@
       - autumn
       - winter
       - spring
-      hvac_delayed_temperature_offset: -1
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1705596348371'
   alias: AC Quarto do Ricardo - Ligar de Tarde no Inverno
   description: Request Ricardo's bedroom heating to 21 C daily in autumn, winter and
     spring between 17:00 and 20:00 when room and outdoor temperatures are below 21
-    C. Apply shared HVAC gates and lower the setpoint by 1 C after one hour.
+    C. Apply shared HVAC gates and temperature-based setpoint adjustment.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5216,15 +5210,14 @@
       - autumn
       - winter
       - spring
-      hvac_delayed_temperature_offset: 0
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1737770376538'
   alias: AC Quarto do Henrique - Ligar de Tarde no Inverno
   description: Request Henrique's bedroom heating to 21 C daily in autumn, winter
     and spring between 17:00 and 20:00 below 20 C, requiring a 1 C gap from the house
-    low-temperature target. Apply shared HVAC gates and lower the setpoint by 1 C
-    after one hour.
+    low-temperature target. Apply shared HVAC gates and temperature-based setpoint
+    adjustment.
   use_blueprint:
     path: hvac/hvac_time_turn_on.yaml
     input:
@@ -5251,7 +5244,6 @@
       - spring
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
-      hvac_delayed_temperature_offset: -1
 - id: '1778484821567'
   alias: Rack Ligar Tomada de Alimentação
   description: Enable rack mains power when the EcoFlow battery is low or the house

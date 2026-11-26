@@ -5,7 +5,10 @@ blueprint:
     are off, windows are clear, HVAC bypass and extended-away mode are off, and
     measured temperatures satisfy the room threshold and house target band.
     Require 12 hours between runs. Set auto fan and swing, run optional actions,
-    and optionally offset the setpoint after one hour. The end time does not stop HVAC.
+    and adjust the setpoint once when room temperature exceeds the initial target
+    by 0.5 C in heating or falls below it by 0.5 C in cooling. Wait at most two hours;
+    lower the heating setpoint by 1 C or raise the cooling setpoint by 1 C.
+    On timeout, leave the setpoint unchanged. The end time does not stop HVAC.
 
   domain: automation
   input:
@@ -72,20 +75,10 @@ blueprint:
 
     extra_hvac_actions:
       name: Acções Extra
-      description: Actions executed after setting mode, temperature, auto fan and swing, before any delayed setpoint change.
+      description: Actions executed after setting mode, temperature, auto fan and swing, before waiting for the temperature-based setpoint adjustment.
       default: []
       selector:
         action:
-
-    hvac_delayed_temperature_offset:
-      name: Temperatura do AC Após 1h
-      description: Offset added to the initial setpoint after one hour; zero skips the delay and adjustment.
-      default: 0
-      selector:
-        number:
-          mode: box
-          min: -2
-          max: +2
 
     temperature_sensor:
       name: Sensor de Temperatura
@@ -149,9 +142,9 @@ mode: restart
 max_exceeded: silent
 
 variables:
+  hvac_unit: !input hvac_unit
   hvac_temperature: !input hvac_temperature
   hvac_mode_heat: !input hvac_mode_heat
-  hvac_delayed_temperature_offset: !input hvac_delayed_temperature_offset
   room_temperature: !input room_temperature
   temperature_sensor: !input temperature_sensor
   room_temperature_diff: !input room_temperature_diff
@@ -281,14 +274,24 @@ action:
 
   - sequence: !input extra_hvac_actions
 
-  - condition: template
-    value_template: "{{ (hvac_delayed_temperature_offset | int | abs) > 0  }}"
+  - wait_template: >-
+      {% set room = states(temperature_sensor) %}
+      {{ (expand(hvac_unit) | selectattr('state', 'eq', 'off') | list | count > 0)
+         or (is_number(room) and
+             ((hvac_mode_heat and (room | float) > hvac_temperature + 0.5)
+              or (not hvac_mode_heat and (room | float) < hvac_temperature - 0.5))) }}
+    timeout:
+      hours: 2
+    continue_on_timeout: false
 
-  - delay:
-      hours: 1
+  - condition: state
+    entity_id: !input hvac_unit
+    state:
+      - heat
+      - cool
 
   - action: climate.set_temperature
     target:
       entity_id: !input hvac_unit
     data:
-      temperature: "{{ hvac_temperature + hvac_delayed_temperature_offset }}"
+      temperature: "{{ hvac_temperature + (-1 if hvac_mode_heat else 1) }}"
