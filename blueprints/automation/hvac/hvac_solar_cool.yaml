@@ -93,6 +93,9 @@ condition:
     entity_id: !input hvac_unit
     state:
       - "off"
+  - condition: numeric_state
+    entity_id: sensor.solar_forecast_today_remaining
+    above: 2
 
   - condition: numeric_state
     entity_id: sensor.deye_inverter_pv_power_average

@@ -70,7 +70,7 @@ sequence:
           minutes: 10
       - trigger: numeric_state
         entity_id: sensor.deye_inverter_battery
-        below: 95
+        below: 90
       - trigger: numeric_state
         entity_id: sensor.deye_inverter_battery
         below: 50

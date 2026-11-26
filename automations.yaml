@@ -373,6 +373,7 @@
       notification_action_id: task_dish_wash_empty
       task_done_door_time: 2
       task_extra_actions: []
+      product_id: '98'
 - alias: 'Desligar Luzes da Despensa com Temporizador '
   id: '1659187275200'
   description: Switch off the pantry light after it has been on for 30 minutes, provided
@@ -490,8 +491,8 @@
     a declared day off, unless extended-away mode is enabled.
   triggers:
   - trigger: time_pattern
-    hours: '10'
-    minutes: '00'
+    hours: '9'
+    minutes: '30'
   conditions:
   - condition: or
     conditions:
@@ -1269,10 +1270,15 @@
     entity_id: binary_sensor.notify_home
     state: 'on'
   actions:
-  - target:
+  - action: retry.action
+    metadata: {}
+    target:
       entity_id: light.xmas_tree
-    data: {}
-    action: light.turn_on
+    data:
+      action: light.turn_on
+      expected_state:
+      - 'on'
+      state_delay: 2
   mode: single
 - alias: 'Controlar Luz das Escadas Day/Night '
   id: '1701541427434'
@@ -1774,7 +1780,7 @@
     state: 'off'
   - condition: time
     after: 06:00:00
-    before: 08:30:00
+    before: 08:00:00
   actions:
   - condition: state
     entity_id: binary_sensor.water_heater_panel_heating
@@ -2349,7 +2355,8 @@
   mode: single
 - alias: 'Notificar Abertura Portão/Portas '
   id: '1717504841456'
-  description: Alert residents to front or kitchen door opening, or the gate starting to open, while nobody is home.
+  description: Alert residents to front or kitchen door opening, or the gate starting
+    to open, while nobody is home.
   triggers:
   - entity_id:
     - binary_sensor.front_door
@@ -3364,6 +3371,14 @@
     after leaving off, and ten minutes after arrival.
   triggers:
   - trigger: time
+    at: '21:30:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - sun
+  - trigger: time
     at: '22:00:00'
   - trigger: time
     at: '23:00:00'
@@ -3390,7 +3405,7 @@
       entity_id: climate.hall
       state: 'off'
   - condition: time
-    after: '22:00:00'
+    after: '21:30:00'
   - condition: state
     entity_id: binary_sensor.notify_home
     state: 'on'
@@ -4588,9 +4603,8 @@
       hvac_mode:
       - 'off'
   - condition: numeric_state
-    entity_id: sun.sun
-    attribute: elevation
-    above: 18
+    entity_id: sensor.solar_forecast_today_remaining
+    above: 2
   - condition: or
     conditions:
     - condition: and
@@ -5202,7 +5216,7 @@
       - autumn
       - winter
       - spring
-      hvac_delayed_temperature_offset: -1
+      hvac_delayed_temperature_offset: 0
       extra_hvac_actions: []
       window_sensor: binary_sensor.window_bedroom_floor
 - id: '1737770376538'

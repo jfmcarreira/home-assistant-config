@@ -101,8 +101,17 @@ condition:
       - "off"
 
   - condition: numeric_state
-    entity_id: sensor.deye_inverter_pv_power_average
-    above: 2000
+    entity_id: sensor.solar_forecast_today_remaining
+    above: 2
+
+  - condition: or
+    conditions:
+    - condition: numeric_state
+      entity_id: sensor.deye_inverter_battery
+      above: 96
+    - condition: numeric_state
+      entity_id: sensor.deye_inverter_pv_power_average
+      above: 2000
 
   - condition: numeric_state
     entity_id: sensor.house_power_consumption_average
